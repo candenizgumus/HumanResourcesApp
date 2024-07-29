@@ -1,4 +1,4 @@
-package com.candenizgumus.humanresourcesapp;
+package com.humanresourcesapp;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

@@ -23,14 +23,17 @@ public class User extends BaseEntity
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     Long companyId;
+    Long authId;
     String email;
     String password;
     String name;
     String surname;
-    EUserType userType;
     String activationCode;
     Long birthdate;
     Long hireDate;
+    @Enumerated(EnumType.STRING)
+    EUserType userType;
+    @Enumerated(EnumType.STRING)
     EPosition position;
 
 }

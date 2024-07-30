@@ -11,14 +11,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import static com.humanresourcesapp.constants.Endpoints.*;
+
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/breaks")
+@RequestMapping(ROOT+BREAK)
 @CrossOrigin("*")
 public class BreakController {
     private final BreakService breakService;
 
-    @PostMapping("/save")
+    @PostMapping(SAVE)
     public ResponseEntity<BreakSaveResponseDto> save(BreakSaveRequestDto dto) {
         return ResponseEntity.ok(breakService.save(dto));
     }

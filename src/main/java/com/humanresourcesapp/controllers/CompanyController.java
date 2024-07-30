@@ -9,15 +9,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-@RequestMapping("/company")
+import static com.humanresourcesapp.constants.Endpoints.*;
+@RequestMapping(ROOT+COMPANY)
 @RequiredArgsConstructor
 @RestController
 public class CompanyController
 {
     private final CompanyService companyService;
 
-    @PostMapping("/save")
+    @PostMapping(SAVE)
     public ResponseEntity<Company> save(Company company)
     {
         return ResponseEntity.ok(companyService.save(company));

@@ -15,7 +15,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @Data
 @Entity
-@Table(name = "tbluser")
+@Table(name = "users")
 
 public class User extends BaseEntity
 {

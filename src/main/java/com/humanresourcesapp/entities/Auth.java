@@ -20,7 +20,7 @@ import java.util.Collections;
 @SuperBuilder
 @Data
 @Entity
-@Table(name = "tblauth")
+@Table(name = "auths")
 public class Auth extends BaseEntity implements UserDetails
 {
     @Id

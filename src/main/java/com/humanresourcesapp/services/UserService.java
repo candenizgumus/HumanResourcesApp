@@ -8,6 +8,8 @@ import com.humanresourcesapp.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class UserService
@@ -22,5 +24,14 @@ public class UserService
 
         userRepository.save(user);
         return user;
+    }
+
+    public Optional<User> findByPhone(String phone)
+    {
+        return userRepository.findByPhone(phone);
+    }
+    public Optional<User> findByEmail(String email)
+    {
+        return userRepository.findByEmail(email);
     }
 }

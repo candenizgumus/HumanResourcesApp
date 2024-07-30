@@ -1,9 +1,7 @@
 package com.humanresourcesapp.entities;
 
 import com.humanresourcesapp.entities.enums.EStatus;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,15 +15,18 @@ import java.time.LocalDateTime;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@SuperBuilder
 @Data
+@SuperBuilder
 @MappedSuperclass
 public abstract class BaseEntity
 {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    Long id;
     @CreationTimestamp
-    private LocalDateTime createdAt;
+    LocalDateTime createdAt;
     @UpdateTimestamp
-    private LocalDateTime updatedAt;
+    LocalDateTime updatedAt;
     @Enumerated(EnumType.STRING)
     @Builder.Default
     EStatus status = EStatus.PENDING;

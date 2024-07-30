@@ -19,4 +19,6 @@ public class Assignment extends BaseEntity
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
+
+    //Assignment comment
 }

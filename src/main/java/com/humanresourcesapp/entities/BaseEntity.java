@@ -1,26 +1,33 @@
 package com.humanresourcesapp.entities;
 
 import com.humanresourcesapp.entities.enums.EStatus;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+
+import java.time.LocalDateTime;
 
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 @Data
-public abstract class BaseEntity
+@SuperBuilder
+@MappedSuperclass
+public class BaseEntity
 {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    Long id;
     @CreationTimestamp
-    private Long createdAt;
+    LocalDateTime createdAt;
     @UpdateTimestamp
-    private Long updatedAt;
+    LocalDateTime updatedAt;
     @Enumerated(EnumType.STRING)
-    EStatus status;
+    @Builder.Default
+    EStatus status = EStatus.PENDING;
 }

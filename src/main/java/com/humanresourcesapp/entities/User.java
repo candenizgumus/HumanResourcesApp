@@ -25,10 +25,8 @@ public class User extends BaseEntity
     Long companyId;
     Long authId;
     String email;
-    String password;
     String name;
     String surname;
-    String activationCode;
     Long birthdate;
     Long hireDate;
     @Enumerated(EnumType.STRING)

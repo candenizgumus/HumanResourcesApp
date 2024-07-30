@@ -1,11 +1,7 @@
 package com.humanresourcesapp.entities;
 
-
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 @EqualsAndHashCode(callSuper = true)
@@ -14,13 +10,12 @@ import lombok.experimental.SuperBuilder;
 @Data
 @Entity
 @Table(name = "companyitems")
-public class Leave extends BaseEntity {
-
+public class CompanyItem extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long employeeId;
-    private Long startDate;
-    private Long endDate;
+    private Long companyId;
+    private String name;
+    private String description;
 
 }

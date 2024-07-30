@@ -1,9 +1,12 @@
 package com.humanresourcesapp.entities;
 
-import com.humanresourcesapp.entities.enums.ENotificationType;
+import com.humanresourcesapp.entities.enums.EDocumentType;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.time.LocalDateTime;
 
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
@@ -11,15 +14,14 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @Data
 @Entity
-@Table(name = "notifications")
-public class Notification extends BaseEntity
-{
+@Table(name = "personaldocuments")
+public class PersonalDocument extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
-    Long userId;
+    Long employeeId;
     @Enumerated(EnumType.STRING)
-    ENotificationType notificationType;
-    String notificationText;
-    Boolean isRead;
+    EDocumentType documentType;
+    String documentFile;
+
 }

@@ -25,7 +25,17 @@ export default function Register() {
             }}
         >
             <CssBaseline />
-            <Grid item xs={12} sm={10} md={8} lg={6}>
+            <Grid item xs={12} sm={10} md={8} lg={6}
+                  sx={{
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      height: '100%',
+                      maxWidth: 500, // Adjusted max width for larger screens
+                      width: '100%',
+                      padding: 2,
+                      boxSizing: 'border-box',
+                  }}>
                 <Box
                     sx={{
                         display: 'flex',

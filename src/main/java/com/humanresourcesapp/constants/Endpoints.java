@@ -12,7 +12,7 @@ public class Endpoints
     public static final String ROOT = DEV + VERSION;
 
     //controllers
-    public static final String ASSIGNMENT = "/assignment";
+    public static final String ASSIGNMENT = "/assignmenut";
     public static final String AUTH = "/auth";
     public static final String BREAK = "/break";
     public static final String COMMENT = "/comment";

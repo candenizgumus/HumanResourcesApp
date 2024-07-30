@@ -57,6 +57,7 @@ export default function LoginCard() {
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
+                    justifyContent: 'center',
                 }}
             >
                 <Avatar sx={{m: 1, bgcolor: '#606c38'}}>

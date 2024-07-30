@@ -1,5 +1,23 @@
 package com.humanresourcesapp.entities;
 
-public class Break
+import jakarta.persistence.*;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
+
+@EqualsAndHashCode(callSuper = true)
+@Data
+@RequiredArgsConstructor
+@AllArgsConstructor
+@Entity
+@Table(name = "breaks")
+@SuperBuilder
+public class Break extends BaseEntity
 {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
+    private Long shiftId;
+    private Long breakStartTime;
+    private Long breakEndTime;
 }

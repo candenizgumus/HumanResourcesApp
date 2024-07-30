@@ -13,8 +13,7 @@ import lombok.experimental.SuperBuilder;
 @Data
 @Entity
 @Table(name = "tblassignment")
-@SuperBuilder
-public class Assignment extends BaseEntity
+public class Assignment
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -2,7 +2,6 @@ package com.humanresourcesapp.services;
 
 import com.humanresourcesapp.entities.LeaveRequest;
 import com.humanresourcesapp.repositories.LeaveRequestRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

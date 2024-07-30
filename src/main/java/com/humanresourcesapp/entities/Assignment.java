@@ -12,7 +12,7 @@ import lombok.experimental.SuperBuilder;
 @Builder
 @Data
 @Entity
-@Table(name = "tblassignment")
+@Table(name = "assignments")
 public class Assignment
 {
     @Id

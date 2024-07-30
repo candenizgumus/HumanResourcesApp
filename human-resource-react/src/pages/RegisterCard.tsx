@@ -10,29 +10,15 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { SportsTennis } from '@mui/icons-material';
-import { AppDispatch, useAppSelector } from '../../store';
-import { useDispatch } from 'react-redux';
-import { fetchRegister } from '../../store/feature/authSlice';
-
-
-function Copyright(props: any) {
-    return (
-        <Typography variant="body2" color="text.secondary" align="center" {...props}>
-            {'Copyright © '}
-            <Link color="inherit" to="https://www.linkedin.com/in/emir-esen-767452148/">
-                Emir Esen
-            </Link>{' '}
-            {new Date().getFullYear()}
-            {'.'}
-        </Typography>
-    );
-}
+// import { AppDispatch, useAppSelector } from '../../store';
+// import { useDispatch } from 'react-redux';
+// import { fetchRegister } from '../../store/feature/authSlice';
 
 
 export default function RegisterCard() {
 
-    const dispatch: AppDispatch = useDispatch();
-    const { data, message } = useAppSelector((state) => state.auth);
+    // const dispatch: AppDispatch = useDispatch();
+    // const { data, message } = useAppSelector((state) => state.auth);
     const navigate = useNavigate();
 
     const [formData, setFormData] = React.useState({
@@ -57,29 +43,29 @@ export default function RegisterCard() {
         }
     };
 
-    const register = () => {
-        dispatch(fetchRegister({
-            firstname: formData.firstname,
-            lastname: formData.lastname,
-            email: formData.email,
-            password: formData.password
-        })).then((returnData) => {
-            if (returnData.payload) {
-                navigate('/login');
-            }
-        });
-    }
+    // const register = () => {
+    //     dispatch(fetchRegister({
+    //         firstname: formData.firstname,
+    //         lastname: formData.lastname,
+    //         email: formData.email,
+    //         password: formData.password
+    //     })).then((returnData) => {
+    //         if (returnData.payload) {
+    //             navigate('/login');
+    //         }
+    //     });
+    // }
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         if (!isPasswordMatch) {
             return;
         }
-        register();
+        // register();
     };
 
     return (
-        <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+        <Paper elevation={6} square sx={{ width: '100%', maxWidth: 400}}>
             <Box
                 sx={{
                     my: 8,
@@ -133,11 +119,8 @@ export default function RegisterCard() {
                         label="Email Address"
                         name="email"
                         autoComplete="email"
-                        autoFocus
                         value={formData.email}
                         onChange={handleChange}
-                        error={!data}
-                        helperText={!data ? message : ''}
                     />
                     <TextField
                         margin="normal"
@@ -191,9 +174,8 @@ export default function RegisterCard() {
                             </Typography>
                         </Grid>
                     </Grid>
-                    <Copyright sx={{ mt: 5 }} />
                 </Box>
             </Box>
-        </Grid>
+        </Paper>
     );
 }

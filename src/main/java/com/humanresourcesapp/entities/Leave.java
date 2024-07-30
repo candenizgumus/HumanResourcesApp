@@ -13,7 +13,7 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @Data
 @Entity
-@Table(name = "companyitems")
+@Table(name = "leaves")
 public class Leave extends BaseEntity {
 
     @Id

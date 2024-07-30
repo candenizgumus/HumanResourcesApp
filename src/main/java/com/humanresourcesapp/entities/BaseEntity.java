@@ -18,8 +18,8 @@ import java.time.LocalDateTime;
 @Data
 @SuperBuilder
 @MappedSuperclass
-public abstract class BaseEntity
-{
+public abstract class BaseEntity {
+
     @CreationTimestamp
     LocalDateTime createdAt;
     @UpdateTimestamp

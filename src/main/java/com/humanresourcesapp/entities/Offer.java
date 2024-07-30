@@ -1,13 +1,12 @@
 package com.humanresourcesapp.entities;
 
-import com.humanresourcesapp.entities.enums.EPosition;
-import com.humanresourcesapp.entities.enums.EStatus;
 import com.humanresourcesapp.entities.enums.EUserType;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-
-
 
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
@@ -15,26 +14,20 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @Data
 @Entity
-@Table(name = "users")
-
-public class User extends BaseEntity
+@Table(name = "tbloffer")
+public class Offer extends BaseEntity
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
-    Long companyId;
-    Long authId;
-    String email;
     String name;
     String surname;
+    String email;
     String phone;
-    Long birthdate;
-    Long hireDate;
-    @Enumerated(EnumType.STRING)
+    String companyName;
+    String title;
+    String numberOfEmployee;
     EUserType userType;
-    @Enumerated(EnumType.STRING)
-    EPosition position;
+    Boolean approvalText;
 
 }
-
-

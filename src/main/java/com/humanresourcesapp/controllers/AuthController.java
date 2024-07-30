@@ -1,5 +1,6 @@
 package com.humanresourcesapp.controllers;
 
+import com.humanresourcesapp.dto.requests.AuthRegisterRequestDto;
 import com.humanresourcesapp.entities.Auth;
 import com.humanresourcesapp.services.AuthService;
 import lombok.RequiredArgsConstructor;
@@ -17,8 +18,14 @@ public class AuthController
 {
     private final AuthService authService;
 
-    @PostMapping("/register")
-    public ResponseEntity<Boolean> register(Auth auth)
+   /* @PostMapping("/send-offer")
+    public ResponseEntity<Boolean> register(AuthRegisterRequestDto dto)
+    {
+        return ResponseEntity.ok(authService.register(dto));
+    }*/
+
+    @PostMapping("/login")
+    public ResponseEntity<String> login(Auth auth)
     {
         return ResponseEntity.ok(authService.login(auth));
     }

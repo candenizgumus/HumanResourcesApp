@@ -15,6 +15,7 @@ public class UserService
     private final UserRepository userRepository;
     private final CompanyService companyService;
 
+
     public User save(User user)
     {
         companyService.findById(user.getCompanyId()).orElseThrow(() -> new HumanResourcesAppException(ErrorType.COMPANY_NOT_FOUND));

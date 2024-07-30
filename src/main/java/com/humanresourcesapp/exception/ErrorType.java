@@ -23,7 +23,8 @@ public enum ErrorType
     AUTH_NOT_FOUND(1012,"Auth bulunamadı." , HttpStatus.BAD_REQUEST),
     ACTIVATIONCODE_WRONG(1013,"Aktivasyon kodu hatalı." , HttpStatus.BAD_REQUEST),
     ACCOUNT_STATUS_ERROR(1014   ,"hesap statü hatası" ,HttpStatus.BAD_REQUEST ),
-    COMPANY_NOT_FOUND(1015,"Company Not Found" ,HttpStatus.BAD_REQUEST);
+    COMPANY_NOT_FOUND(1015,"Company Not Found" ,HttpStatus.BAD_REQUEST),
+    USER_NOT_FOUND(1016,"User Not Found" ,      HttpStatus.BAD_REQUEST);
     private Integer code;
     private String message;
     private HttpStatus httpStatus;

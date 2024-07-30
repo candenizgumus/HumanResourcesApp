@@ -25,7 +25,7 @@ export default function Register() {
             }}
         >
             <CssBaseline />
-            <Grid item xs={12} sm={10} md={8} lg={6}>
+            <Grid item>
                 <Box
                     sx={{
                         display: 'flex',

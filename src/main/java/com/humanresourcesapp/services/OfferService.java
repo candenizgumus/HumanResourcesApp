@@ -8,11 +8,14 @@ import com.humanresourcesapp.entities.User;
 import com.humanresourcesapp.entities.enums.EStatus;
 import com.humanresourcesapp.exception.ErrorType;
 import com.humanresourcesapp.exception.HumanResourcesAppException;
+import com.humanresourcesapp.model.MailModel;
 import com.humanresourcesapp.repositories.OfferRepository;
+import com.humanresourcesapp.utility.EmailService;
 import com.humanresourcesapp.utility.JwtTokenManager;
 import com.humanresourcesapp.utility.PasswordEncoder;
 import com.humanresourcesapp.utility.PasswordGenerator;
 import com.humanresourcesapp.views.VwGetAllOffer;
+import jakarta.validation.constraints.Email;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +31,7 @@ public class OfferService
     private final AuthService authService;
     private final CompanyService companyService;
     private final PasswordEncoder passwordEncoder;
+    private final EmailService emailService;
 
 
     public Boolean save(OfferSaveRequestDto dto)
@@ -74,21 +78,18 @@ public class OfferService
         offerRepository.save(offer);
 
         //Generating new password for customer
-        //TODO we need to hash the password in the database
         String newPassword = PasswordGenerator.generatePassword();
         String encodedPassword = passwordEncoder.bCryptPasswordEncoder().encode(newPassword);
 
-        //TODO Sending new password to customer. Need EmailService
-
-
-
+        //Send email with new password
+        emailService.send(MailModel.builder().to(offer.getEmail()).subject("Your new password").message("Your new password is: " + newPassword).build());
 
         //Creating new auth,user and company entities
         //TODO we need to determine what we are going to do with activationCode
         Auth auth = authService.save(Auth
                 .builder()
                 .email(offer.getEmail())
-                .password(newPassword)
+                .password(encodedPassword)
                 .userType(offer.getUserType())
                 .status(EStatus.ACTIVE)
                 .build()

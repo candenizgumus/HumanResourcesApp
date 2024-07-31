@@ -1,12 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
 import {
-    authSlice
+    authSlice, featureSlice
 } from "./feature";
 
 const store = configureStore({
     reducer:{
         auth: authSlice,
-
+        feature: featureSlice
     }
 });
 

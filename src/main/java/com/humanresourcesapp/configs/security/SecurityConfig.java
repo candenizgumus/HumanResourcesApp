@@ -20,7 +20,7 @@ import java.util.Collections;
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-@EnableMethodSecurity(prePostEnabled = true)
+@EnableMethodSecurity
 public class SecurityConfig
 {
     private final JwtTokenFilter jwtTokenFilter;
@@ -35,15 +35,7 @@ public class SecurityConfig
                 .csrf(csrf-> csrf.disable())
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/swagger-ui/**","/v3/api-docs/**").permitAll()
-                        .requestMatchers("/company/**").permitAll()
-                        .requestMatchers("/user/**").permitAll()
-                        .requestMatchers("dev/v1/company/**").permitAll()
-                        .requestMatchers("dev/v1/offer/**").permitAll()
                         .requestMatchers("dev/v1/**").permitAll()
-                        .requestMatchers("/company/**").permitAll()
-                        .requestMatchers("/company-item/**").permitAll()
-                        .requestMatchers("auth/login/**","auth/register/**","auth/registerwithrabbit/**").permitAll()
-                        .requestMatchers("auth/activationwithrabbit/**","auth/passwordresetmail/**","auth/changepasswordwithresetcode/**").permitAll()
                         .anyRequest().authenticated())
                 .authenticationProvider(authProvider());
                 //.formLogin(Customizer.withDefaults());

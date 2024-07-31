@@ -40,7 +40,6 @@ public class SecurityConfig
                 .authenticationProvider(authProvider());
                 //.formLogin(Customizer.withDefaults());
 
-
         return httpSecurity.build();
     }
     @Bean

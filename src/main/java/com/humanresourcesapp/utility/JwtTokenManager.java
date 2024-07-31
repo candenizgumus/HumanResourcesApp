@@ -61,9 +61,6 @@ public class JwtTokenManager
 
     public Optional<Long> getAuthIdFromToken(String token)
     {
-
-
-
         try
         {
             Algorithm algorithm = Algorithm.HMAC512(secretKey);
@@ -87,7 +84,6 @@ public class JwtTokenManager
             throw new HumanResourcesAppException(ErrorType.TOKEN_VERIFY_FAILED);
         }
 
-
     }
 
     public Optional<String> getUserTypeFromToken(String token)
@@ -104,7 +100,6 @@ public class JwtTokenManager
                 return Optional.empty();
 
             }
-
 
             return Optional.of(decodedJWT.getClaim("userType").asString());
         } catch (IllegalArgumentException e)

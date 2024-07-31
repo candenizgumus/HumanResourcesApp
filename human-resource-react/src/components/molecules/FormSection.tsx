@@ -3,7 +3,7 @@ import { Container, Typography, Box, TextField, Button, Grid, Paper, FormControl
 import { useDispatch } from "react-redux";
 import { HumanResources } from "../../store";
 import { fetchCreateOffer } from "../../store/feature/getOfferSlice";
-import Swal from 'sweetalert2';
+import Swal from "sweetalert2";
 
 const FormSection = () => {
     const dispatch = useDispatch<HumanResources>();
@@ -13,12 +13,12 @@ const FormSection = () => {
     const [email, setEmail] = useState('');
     const [phone, setPhone] = useState('');
     const [title, setTitle] = useState('');
-    const [numberOfEmployee, setNumberOfEmployee] = useState('');
+    const [numberOfEmployees, setNumberOfEmployees] = useState('');
     const [companyName, setCompanyName] = useState('');
     const [agreedToTerms, setAgreedToTerms] = useState(false);
 
     const handleSubmit = () => {
-        if (!name || !surname || !email || !phone || !title || !numberOfEmployee || !companyName) {
+        if (!name || !surname || !email || !phone || !title || !numberOfEmployees || !companyName) {
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
@@ -42,7 +42,7 @@ const FormSection = () => {
             email,
             phone,
             title,
-            numberOfEmployee,
+            numberOfEmployees,
             companyName
         }))
             .then(() => {
@@ -116,11 +116,11 @@ const FormSection = () => {
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <TextField
-                                onChange={(e) => setNumberOfEmployee(e.target.value)}
+                                onChange={(e) => setNumberOfEmployees(e.target.value)}
                                 fullWidth
                                 label="Employee Count"
                                 variant="outlined"
-                                value={numberOfEmployee}
+                                value={numberOfEmployees}
                             />
                         </Grid>
                         <Grid item xs={12}>

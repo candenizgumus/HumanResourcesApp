@@ -27,7 +27,7 @@ export const fetchCreateOffer = createAsyncThunk(
                     'email': payload.email,
                     'phone': payload.phone,
                     'title': payload.title,
-                    'numberOfEmployee': payload.numberOfEmployee,
+                    'numberOfEmployees': payload.numberOfEmployees,
                     'companyName': payload.companyName
                 })
             });

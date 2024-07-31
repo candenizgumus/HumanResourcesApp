@@ -29,6 +29,7 @@ public class Endpoints
     public static final String SHIFT = "/shift";
     public static final String SHIFT_ASSIGNMENT = "/shift-assignment";
     public static final String USER = "/user";
+    public static final String FEATURE = "/feature";
 
     //methods
     public static final String SAVE = "/save";

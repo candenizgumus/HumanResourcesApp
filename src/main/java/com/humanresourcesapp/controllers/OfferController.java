@@ -21,7 +21,6 @@ public class OfferController
     private final OfferService offerService;
 
     @PostMapping(SAVE)
-    @PreAuthorize("permitAll()")
     public ResponseEntity<Boolean> save(@RequestBody OfferSaveRequestDto dto)
     {
         return ResponseEntity.ok(offerService.save(dto));

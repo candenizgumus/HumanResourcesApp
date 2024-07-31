@@ -10,6 +10,7 @@ import com.humanresourcesapp.exception.ErrorType;
 import com.humanresourcesapp.exception.HumanResourcesAppException;
 import com.humanresourcesapp.repositories.OfferRepository;
 import com.humanresourcesapp.utility.JwtTokenManager;
+import com.humanresourcesapp.utility.PasswordEncoder;
 import com.humanresourcesapp.utility.PasswordGenerator;
 import com.humanresourcesapp.views.VwGetAllOffer;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,7 @@ public class OfferService
     private final JwtTokenManager jwtTokenManager;
     private final AuthService authService;
     private final CompanyService companyService;
+    private final PasswordEncoder passwordEncoder;
 
 
     public Boolean save(OfferSaveRequestDto dto)
@@ -74,6 +76,8 @@ public class OfferService
         //Generating new password for customer
         //TODO we need to hash the password in the database
         String newPassword = PasswordGenerator.generatePassword();
+        String encodedPassword = passwordEncoder.bCryptPasswordEncoder().encode(newPassword);
+
         //TODO Sending new password to customer. Need EmailService
 
 
@@ -86,6 +90,7 @@ public class OfferService
                 .email(offer.getEmail())
                 .password(newPassword)
                 .userType(offer.getUserType())
+                .status(EStatus.ACTIVE)
                 .build()
         );
 
@@ -93,6 +98,7 @@ public class OfferService
         Company company = companyService.save(Company
                 .builder()
                 .name(offer.getCompanyName())
+                .status(EStatus.ACTIVE)
                 .build());
 
         userService.save(User
@@ -104,6 +110,7 @@ public class OfferService
                 .surname(offer.getSurname())
                 .companyId(company.getId())
                 .userType(offer.getUserType())
+                .status(EStatus.ACTIVE)
                 .build());
 
         return true;

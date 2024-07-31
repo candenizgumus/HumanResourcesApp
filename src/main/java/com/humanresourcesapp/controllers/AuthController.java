@@ -7,6 +7,7 @@ import com.humanresourcesapp.entities.Auth;
 import com.humanresourcesapp.services.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -19,6 +20,7 @@ public class AuthController
 
 
     @PostMapping(LOGIN)
+    @PreAuthorize("permitAll()")
     public ResponseEntity<String> login(@RequestBody AuthLoginRequestDto dto)
     {
         return ResponseEntity.ok(authService.login(dto));

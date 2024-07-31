@@ -67,7 +67,10 @@ export const NavBar = ({ featuresRef }) => {
 
     // Function to scroll to the Features section
     const scrollToFeatures = () => {
-        if (featuresRef.current) {
+        if(featuresRef.current === null){
+            navigate('/features');
+        }
+        else if (featuresRef.current) {
             featuresRef.current.scrollIntoView({ behavior: 'smooth' });
         }
     };
@@ -77,7 +80,7 @@ export const NavBar = ({ featuresRef }) => {
     };
 
     const navigateToGetOffer = () => {
-        navigate('/getoffer');
+        navigate('/get-offer');
     };
 
     const navigateToHome = () => {

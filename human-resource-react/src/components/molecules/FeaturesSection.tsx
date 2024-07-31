@@ -1,9 +1,13 @@
-import React from 'react';
+import React, {useEffect, useRef} from 'react';
 import { Container, Typography, Grid, Box, Paper, Avatar } from '@mui/material';
 import SecurityIcon from '@mui/icons-material/Security';
 import AppsIcon from '@mui/icons-material/Apps';
 import LocalOfferIcon from '@mui/icons-material/LocalOffer';
 import SupportIcon from '@mui/icons-material/Support';
+import FeatureCard from "./FeatureCard";
+import {HumanResources, RootState} from "../../store";
+import {useDispatch, useSelector} from "react-redux";
+import {fetchGetFeatures} from "../../store/feature/featureSlice";
 
 const features = [
     { icon: <SecurityIcon fontSize="large" />, title: 'High Data Security', description: 'With Kolay IK, all data communication between users is protected with SSL certificates in accordance with international security standards.' },
@@ -13,29 +17,30 @@ const features = [
 ];
 
 const FeaturesSection = () => {
+    const dispatch: HumanResources = useDispatch();
+    const featureList = useSelector((state: RootState) => state.feature.featuresList);
+    const featuresRef = useRef<HTMLDivElement>(null);
+
+
+    useEffect(() => {
+        dispatch(fetchGetFeatures());
+    }, [dispatch]);
     return (
         <Box sx={{ py: 8, bgcolor: 'background.paper' }}>
             <Container maxWidth="lg">
-                <Typography variant="h4" align="center" gutterBottom>
-                    Additional features
-                </Typography>
-                <Grid container spacing={4}>
-                    {features.map((feature, index) => (
-                        <Grid item xs={12} md={3} key={index}>
-                            <Paper elevation={3} sx={{ p: 2, textAlign: 'center' }}>
-                                <Avatar sx={{ bgcolor: 'primary.main', mb: 2, width: 56, height: 56 }}>
-                                    {feature.icon}
-                                </Avatar>
-                                <Typography variant="h5" component="h2" gutterBottom>
-                                    {feature.title}
-                                </Typography>
-                                <Typography variant="body2" component="p">
-                                    {feature.description}
-                                </Typography>
-                            </Paper>
-                        </Grid>
-                    ))}
-                </Grid>
+                    <Typography component="h1" variant="h4" align="center" color="primary.main" gutterBottom sx={{ paddingBottom: 5 }}>
+                        Features
+                    </Typography>
+                    <Grid container spacing={4}>
+                        {featureList.map((feature) => (
+                            <FeatureCard
+                                key={feature.id}
+                                name={feature.name}
+                                shortDescription={feature.shortDescription}
+                                iconPath={feature.iconPath}
+                            />
+                        ))}
+                    </Grid>
             </Container>
         </Box>
     );

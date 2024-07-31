@@ -1,17 +1,18 @@
-
+import React from "react";
 import CssBaseline from '@mui/material/CssBaseline';
 import Grid from '@mui/material/Grid';
 import backgroundImage from '../../src/images/Screenshot 2024-07-30 at 16.28.41 2.png'
 import LoginCard from './LoginCard';
 import Box from "@mui/material/Box";
-
-import React from "react";
-
-import {NavBar} from "./NavBar";
-
+import RegisterCard from "./RegisterCard";
+import {AppBar, Button, Toolbar, Typography} from "@mui/material";
+import React, {useRef} from "react";
+import {useNavigate} from "react-router-dom";
+import {NavBar} from "../components/molecules/NavBar";
 
 export default function Login() {
-
+    // Create a ref for the Features section
+    const featuresRef = useRef<HTMLDivElement>(null);
   return (
       <Grid
 
@@ -28,7 +29,7 @@ export default function Login() {
               alignItems: 'center',
           }}
       >
-
+          <NavBar featuresRef={featuresRef} />
           <CssBaseline />
           <Grid item xs={12} sm={10} md={8} lg={6}
                 sx={{
@@ -36,7 +37,7 @@ export default function Login() {
                     justifyContent: 'center',
                     alignItems: 'center',
                     height: '100%',
-                    maxWidth: 500, // Adjusted max width for larger screens
+                    maxWidth: 500,
                     width: '100%',
                     padding: 2,
                     boxSizing: 'border-box',
@@ -47,7 +48,7 @@ export default function Login() {
                       justifyContent: 'center',
                       alignItems: 'center',
                       height: '100%',
-                      maxWidth: 500, // Adjusted max width for larger screens
+                      maxWidth: 500,
                       width: '100%',
                       padding: 2,
                       boxSizing: 'border-box',

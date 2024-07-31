@@ -17,15 +17,12 @@ public class AuthController
 {
     private final AuthService authService;
 
-   /* @PostMapping("/send-offer")
-    public ResponseEntity<Boolean> register(AuthRegisterRequestDto dto)
-    {
-        return ResponseEntity.ok(authService.register(dto));
-    }*/
 
     @PostMapping(ROOT+LOGIN)
     public ResponseEntity<String> login(@RequestBody AuthLoginRequestDto dto)
     {
         return ResponseEntity.ok(authService.login(dto));
     }
+
+
 }

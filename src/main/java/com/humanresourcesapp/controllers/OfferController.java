@@ -32,4 +32,11 @@ public class OfferController
     {
         return ResponseEntity.ok(offerService.getAllOffer(token));
     }
+
+    @PostMapping(APPROVE_OFFER_AND_REGISTER_AUTH_AND_USER)
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    public ResponseEntity<Boolean> approveOfferAndRegisterAuthAndUser(Long offerId){
+
+        return ResponseEntity.ok(offerService.approveOfferAndRegisterAuthAndUser(offerId));
+    }
 }

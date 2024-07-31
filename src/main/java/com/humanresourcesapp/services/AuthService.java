@@ -24,13 +24,11 @@ public class AuthService
         return authRepository.findById(id);
     }
 
-    public Boolean register(AuthLoginRequestDto dto)
+    public Auth save(Auth auth)
     {
-
-       //TODO BURASI ADMIN TARAFINDAN ONAYLANACAK VE REGISTER OLACAK
-
-        return true;
+        return authRepository.save(auth);
     }
+
 
     public String login(AuthLoginRequestDto dto)
     {

@@ -4,7 +4,7 @@ export interface IGetOffer {
     email: string;
     phone: string;
     title: string;
-    numberOfEmployee: string;
+    numberOfEmployees: string;
     companyName: string;
     //token: string;
 }

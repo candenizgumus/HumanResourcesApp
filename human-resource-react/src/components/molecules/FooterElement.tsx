@@ -1,9 +1,9 @@
 import React from 'react';
 import { Box, Typography, Container, Link } from '@mui/material';
 
-const Footer = () => {
+const FooterElement = () => {
     return (
-        <Box sx={{ bgcolor: 'primary.main', color: 'white', py: 6 }}>
+        <Box sx={{ bgcolor: 'primary.main', color: 'white', py: 6}}>
             <Container maxWidth="lg">
                 <Typography variant="h6" align="center" gutterBottom>
                     KolayIK
@@ -23,4 +23,4 @@ const Footer = () => {
     );
 };
 
-export default Footer;
+export default FooterElement;

@@ -9,10 +9,12 @@ import {
 import { styled } from '@mui/material/styles';
 import { useDispatch, useSelector } from 'react-redux';
 import { HumanResources, RootState } from '../store';
-import FeatureCard from './FeatureCard';
+import FeatureCard from '../components/molecules/FeatureCard';
 import { fetchGetFeatures } from '../store/feature/featureSlice';
 import Dashboard from '../images/default_dashboard.webp';
-import { NavBar } from './NavBar';
+import { NavBar } from '../components/molecules/NavBar';
+import {useLocation} from "react-router-dom";
+import FooterElement from '../components/molecules/FooterElement';
 
 const Root = styled('div')(({ theme }) => ({
     flexGrow: 1,
@@ -28,15 +30,14 @@ const CardGrid = styled(Container)(({ theme }) => ({
 }));
 
 const Footer = styled('footer')(({ theme }) => ({
-    padding: theme.spacing(6),
+    padding: theme.spacing(0),
 }));
 
 function LandingPage() {
     const dispatch: HumanResources = useDispatch();
     const featureList = useSelector((state: RootState) => state.feature.featuresList);
-
-    // Create a ref for the Features section
     const featuresRef = useRef<HTMLDivElement>(null);
+
 
     useEffect(() => {
         dispatch(fetchGetFeatures());
@@ -88,12 +89,8 @@ function LandingPage() {
             </main>
 
             <Footer>
-                <Typography variant="h6" align="center" gutterBottom>
-                    Kolay İK
-                </Typography>
-                <Typography variant="subtitle1" align="center" color="textSecondary">
-                    Making your work easier, one step at a time.
-                </Typography>
+                <CssBaseline />
+                <FooterElement/>
             </Footer>
         </Root>
     );

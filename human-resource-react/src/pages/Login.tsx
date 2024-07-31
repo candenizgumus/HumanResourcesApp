@@ -6,13 +6,14 @@ import LoginCard from './LoginCard';
 import Box from "@mui/material/Box";
 import RegisterCard from "./RegisterCard";
 import {AppBar, Button, Toolbar, Typography} from "@mui/material";
-import React from "react";
+import React, {useRef} from "react";
 import {useNavigate} from "react-router-dom";
-import {NavBar} from "./NavBar";
+import {NavBar} from "../components/molecules/NavBar";
 
 
 export default function Login() {
-
+    // Create a ref for the Features section
+    const featuresRef = useRef<HTMLDivElement>(null);
   return (
       <Grid
 
@@ -29,7 +30,7 @@ export default function Login() {
               alignItems: 'center',
           }}
       >
-
+          <NavBar featuresRef={featuresRef} />
           <CssBaseline />
           <Grid item xs={12} sm={10} md={8} lg={6}
                 sx={{

@@ -41,6 +41,5 @@ public class Endpoints
     public static final String REGISTER = "/register";
     public static final String FORGOT_PASSWORD = "/forgot-password";
     public static final String RESET_PASSWORD = "/reset-password";
-
-
+    public static final String APPROVE_OFFER_AND_REGISTER_AUTH_AND_USER = "/approve-offer-and-register-auth-and-user";
 }

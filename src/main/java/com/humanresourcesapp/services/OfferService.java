@@ -1,6 +1,5 @@
 package com.humanresourcesapp.services;
 
-import com.humanresourcesapp.dto.requests.AuthRegisterRequestDto;
 import com.humanresourcesapp.dto.requests.OfferSaveRequestDto;
 import com.humanresourcesapp.entities.Offer;
 import com.humanresourcesapp.exception.ErrorType;

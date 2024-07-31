@@ -1,11 +1,11 @@
 package com.humanresourcesapp.services;
 
-import com.humanresourcesapp.dto.requests.AuthRegisterRequestDto;
+import com.humanresourcesapp.dto.requests.AuthLoginRequestDto;
 import com.humanresourcesapp.entities.Auth;
-import com.humanresourcesapp.entities.User;
 import com.humanresourcesapp.exception.ErrorType;
 import com.humanresourcesapp.exception.HumanResourcesAppException;
 import com.humanresourcesapp.repositories.AuthRepository;
+import com.humanresourcesapp.utility.JwtTokenManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +16,7 @@ import java.util.Optional;
 public class AuthService
 {
     private final AuthRepository authRepository;
+    private final JwtTokenManager jwtTokenManager;
 
 
     public Optional<Auth> findById(Long id)
@@ -23,7 +24,7 @@ public class AuthService
         return authRepository.findById(id);
     }
 
-    public Boolean register(AuthRegisterRequestDto dto)
+    public Boolean register(AuthLoginRequestDto dto)
     {
 
        //TODO BURASI ADMIN TARAFINDAN ONAYLANACAK VE REGISTER OLACAK
@@ -31,9 +32,10 @@ public class AuthService
         return true;
     }
 
-    public String login(Auth auth)
+    public String login(AuthLoginRequestDto dto)
     {
-        return null;
+        Auth auth = authRepository.findByEmailAndPassword(dto.email(), dto.password()).orElseThrow(() -> new HumanResourcesAppException(ErrorType.EMAIL_OR_PASSWORD_WRONG));
+        return jwtTokenManager.createTokenFromAuth(auth).orElseThrow(() -> new HumanResourcesAppException(ErrorType.TOKEN_CREATION_FAILED));
     }
 
     public Optional<Auth> findByEmail(String email)

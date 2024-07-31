@@ -1,5 +1,6 @@
 package com.humanresourcesapp.services;
 
+import com.humanresourcesapp.dto.requests.CompanySaveRequestDto;
 import com.humanresourcesapp.dto.requests.OfferSaveRequestDto;
 import com.humanresourcesapp.entities.Auth;
 import com.humanresourcesapp.entities.Company;
@@ -98,11 +99,7 @@ public class OfferService
         );
 
 
-        Company company = companyService.save(Company
-                .builder()
-                .name(offer.getCompanyName())
-                .status(EStatus.ACTIVE)
-                .build());
+        Company company = companyService.save(new CompanySaveRequestDto(offer.getCompanyName(),null));
 
         userService.save(User
                 .builder()

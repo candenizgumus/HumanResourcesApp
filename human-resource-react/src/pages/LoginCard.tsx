@@ -11,37 +11,32 @@ import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import {SportsTennis} from "@mui/icons-material";
+import {useDispatch} from "react-redux";
+import {fetchLogin} from "../store/feature/authSlice";
 
 
 export default function LoginCard() {
 
-    // const dispatch: AppDispatch = useDispatch();
-    const [formData, setFormData] = React.useState({
-        email: '',
-        password: '',
-    });
+    const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const {name, value} = e.target;
-        setFormData({
-            ...formData,
-            [name]: value
-        });
+    const [email, setEmail] = React.useState('');
+    const [password, setPassword] = React.useState('');
+    const [userType, setUserType] = React.useState('MANAGER');
 
+
+
+    const handleLogin = () => {
+        // @ts-ignore
+        dispatch(fetchLogin({
+            email: email,
+            password: password,
+            userType: userType
+        }))
+
+        console.log('loggedin')
     };
 
-    // const login = () => {
-    //     dispatch(fetchLogin({
-    //         email: formData.email,
-    //         password: formData.password
-    //     })).then((returnData) => {
-    //         console.log(returnData)
-    //         if (returnData.payload) {
-    //             navigate('/');
-    //         }
-    //     });
-    // }
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -77,8 +72,8 @@ export default function LoginCard() {
                             name="email"
                             autoComplete="email"
                             autoFocus
-                            value={formData.email}
-                            onChange={handleChange}
+
+                            onChange={event => setEmail(event.target.value)}
                         />
                         <TextField
                             margin="normal"
@@ -89,8 +84,8 @@ export default function LoginCard() {
                             type="password"
                             id="password"
                             autoComplete="current-password"
-                            value={formData.password}
-                            onChange={handleChange}
+
+                            onChange={event => setPassword(event.target.value)}
                         />
                         <FormControlLabel
                             control={<Checkbox value="remember" color="primary"/>}
@@ -101,6 +96,7 @@ export default function LoginCard() {
                             fullWidth
                             variant="contained"
                             sx={{mt: 3, mb: 2}}
+                            onClick={() => handleLogin()}
                         >
                             Log In
                         </Button>

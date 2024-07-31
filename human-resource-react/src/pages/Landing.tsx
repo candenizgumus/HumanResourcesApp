@@ -12,6 +12,8 @@ import {
     CssBaseline,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import {useNavigate} from "react-router-dom";
+import {NavBar} from "./NavBar";
 
 const Root = styled('div')(({ theme }) => ({
     flexGrow: 1,
@@ -41,18 +43,12 @@ const Footer = styled('footer')(({ theme }) => ({
 }));
 
 function LandingPage() {
+
+
     return (
         <Root>
             <CssBaseline />
-            <AppBar position="static">
-                <Toolbar>
-                    <Typography variant="h6" style={{ flexGrow: 1 }}>
-                        Kolay İK
-                    </Typography>
-                    <Button color="inherit">Giriş Yap</Button>
-                    <Button color="inherit">Teklif Alın</Button>
-                </Toolbar>
-            </AppBar>
+            <NavBar/>
 
             <main>
                 <Header>

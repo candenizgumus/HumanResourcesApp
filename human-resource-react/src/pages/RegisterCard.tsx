@@ -12,7 +12,7 @@ import Typography from '@mui/material/Typography';
 import { SportsTennis } from '@mui/icons-material';
 // import { AppDispatch, useAppSelector } from '../../store';
 // import { useDispatch } from 'react-redux';
-// import { fetchRegister } from '../../store/feature/authSlice';
+// import { fetchRegister } from '../../store/feature/authSlice.tsx';
 
 
 export default function RegisterCard() {

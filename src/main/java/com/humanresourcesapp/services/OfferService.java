@@ -5,8 +5,12 @@ import com.humanresourcesapp.entities.Offer;
 import com.humanresourcesapp.exception.ErrorType;
 import com.humanresourcesapp.exception.HumanResourcesAppException;
 import com.humanresourcesapp.repositories.OfferRepository;
+import com.humanresourcesapp.utility.JwtTokenManager;
+import com.humanresourcesapp.views.VwGetAllOffer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -14,6 +18,7 @@ public class OfferService
 {
     private final OfferRepository offerRepository;
     private final UserService userService;
+    private final JwtTokenManager jwtTokenManager;
 
 
     public Boolean save(OfferSaveRequestDto dto)
@@ -43,5 +48,12 @@ public class OfferService
 
 
         return true;
+    }
+
+    public List<VwGetAllOffer> getAllOffer(String token)
+    {
+        jwtTokenManager.getAuthIdFromToken(token).orElseThrow(() -> new HumanResourcesAppException(ErrorType.INVALID_TOKEN));
+        jwtTokenManager.getUserTypeFromToken(token).orElseThrow(() -> new HumanResourcesAppException(ErrorType.NOT_AUTHORIZED));
+        return offerRepository.getAllOffer(token);
     }
 }

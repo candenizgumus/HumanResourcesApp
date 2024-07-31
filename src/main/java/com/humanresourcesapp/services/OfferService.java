@@ -67,8 +67,9 @@ public class OfferService
     {
         Offer offer = offerRepository.findById(offerId).orElseThrow(() -> new HumanResourcesAppException(ErrorType.OFFER_NOT_FOUND));
         //Generating new password for customer
+        //TODO we need to hash the password in the database
         String newPassword = PasswordGenerator.generatePassword();
-        //TODO Sending new password to customer
+        //TODO Sending new password to customer. Need EmailService
 
 
 

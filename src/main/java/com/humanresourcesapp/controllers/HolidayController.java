@@ -23,11 +23,11 @@ public class HolidayController {
 
     @PostMapping(DELETE + "/{holidayId}")
     public ResponseEntity<Holiday> delete(@PathVariable Long holidayId) {
-        return ResponseEntity.ok(holidayService.delete(holidayId));
+         return ResponseEntity.ok(holidayService.delete(holidayId));
     }
 
     @PostMapping(UPDATE)
-    public ResponseEntity<Void> update(Holiday holiday) {
-        return ResponseEntity.ok(holidayService.save(holiday));
+    public ResponseEntity<Holiday> update(Long holidayId, HolidaySaveRequestDto holidaySaveRequestDto) {
+        return ResponseEntity.ok(holidayService.update(holidayId, holidaySaveRequestDto));
     }
 }

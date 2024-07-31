@@ -28,7 +28,7 @@ public class Auth extends BaseEntity implements UserDetails
     Long id;
     String email;
     String password;
-    String activationCode;
+    //String activationCode;
     @Enumerated(EnumType.STRING)
     EUserType userType;
 

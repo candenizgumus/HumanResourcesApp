@@ -1,5 +1,6 @@
 package com.humanresourcesapp.entities;
 
+import com.humanresourcesapp.entities.enums.EHolidayType;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -17,5 +18,10 @@ public class Holiday extends BaseEntity
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     String holidayName;
-    Long holidayDate;
+    @Enumerated(EnumType.STRING)
+    EHolidayType holidayType;
+    Long holidayStartDate;
+    Long holidayEndDate;
 }
+
+

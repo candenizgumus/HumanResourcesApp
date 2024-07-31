@@ -40,7 +40,7 @@ const authSlice = createSlice({
             state.token = action.payload;
             state.isAuth = true;
         })
-        },
+    },
 
 });
 export default authSlice.reducer;

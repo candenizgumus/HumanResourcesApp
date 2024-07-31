@@ -7,16 +7,23 @@ import com.humanresourcesapp.exception.HumanResourcesAppException;
 import com.humanresourcesapp.repositories.AuthRepository;
 import com.humanresourcesapp.utility.JwtTokenManager;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class AuthService
+public class AuthService implements UserDetailsService
 {
     private final AuthRepository authRepository;
-    private final JwtTokenManager jwtTokenManager;
+
 
 
     public Optional<Auth> findById(Long id)
@@ -32,12 +39,16 @@ public class AuthService
 
     public String login(AuthLoginRequestDto dto)
     {
-        Auth auth = authRepository.findByEmailAndPassword(dto.email(), dto.password()).orElseThrow(() -> new HumanResourcesAppException(ErrorType.EMAIL_OR_PASSWORD_WRONG));
-        return jwtTokenManager.createTokenFromAuth(auth).orElseThrow(() -> new HumanResourcesAppException(ErrorType.TOKEN_CREATION_FAILED));
+        return null;
     }
 
     public Optional<Auth> findByEmail(String email)
     {
         return authRepository.findByEmail(email);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        return findByEmail(email).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
     }
 }

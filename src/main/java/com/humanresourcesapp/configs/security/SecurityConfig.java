@@ -49,9 +49,35 @@ public class SecurityConfig
         return httpSecurity.build();
     }
     @Bean
+    public AuthenticationManager authenticationManager() {
+        ProviderManager authenticationManager = new ProviderManager(Collections.singletonList(daoAuthenticationProvider()));
+        authenticationManager.setAuthenticationEventPublisher(authenticationEventPublisher());
+        return authenticationManager;
+    }
+
+    @Bean
+    public DaoAuthenticationProvider daoAuthenticationProvider() {
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setPasswordEncoder(bCryptPasswordEncoder);
+        provider.setUserDetailsService(authService);
+        return provider;
+    }
+
+    @Bean
     public AuthenticationProvider authProvider() {
         final DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
+        authenticationProvider.setUserDetailsService(userDetailsService());
         authenticationProvider.setPasswordEncoder(bCryptPasswordEncoder);
         return authenticationProvider;
+    }
+
+    @Bean
+    public AuthenticationEventPublisher authenticationEventPublisher() {
+        return new DefaultAuthenticationEventPublisher();
+    }
+
+    @Bean
+    public UserDetailsService userDetailsService() {
+        return authService;
     }
 }

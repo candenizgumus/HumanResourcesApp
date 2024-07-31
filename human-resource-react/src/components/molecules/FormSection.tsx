@@ -1,11 +1,11 @@
-import React, {useState} from 'react';
-import { Container, Typography, Box, TextField, Button, Grid, Paper } from '@mui/material';
-import {useDispatch, useSelector} from "react-redux";
-import {HumanResources, useAppSelector} from "../../store";
-import {fetchCreateOffer} from "../../store/feature/getOfferSlice";
+import React, { useState } from 'react';
+import { Container, Typography, Box, TextField, Button, Grid, Paper, FormControlLabel, Checkbox } from '@mui/material';
+import { useDispatch } from "react-redux";
+import { HumanResources } from "../../store";
+import { fetchCreateOffer } from "../../store/feature/getOfferSlice";
+import Swal from 'sweetalert2';
 
 const FormSection = () => {
-
     const dispatch = useDispatch<HumanResources>();
 
     const [name, setName] = useState('');
@@ -15,21 +15,51 @@ const FormSection = () => {
     const [title, setTitle] = useState('');
     const [numberOfEmployee, setNumberOfEmployee] = useState('');
     const [companyName, setCompanyName] = useState('');
-    //const token = useAppSelector((state) => state.auth.token);
+    const [agreedToTerms, setAgreedToTerms] = useState(false);
 
     const handleSubmit = () => {
-        dispatch(fetchCreateOffer({
-            name: name,
-            surname: surname,
-            email: email,
-            phone: phone,
-            title: title,
-            numberOfEmployee: numberOfEmployee,
-            companyName: companyName
-            //token: token
-        }))
-    }
+        if (!name || !surname || !email || !phone || !title || !numberOfEmployee || !companyName) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Please fill all the fields!',
+            });
+            return;
+        }
 
+        if (!agreedToTerms) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Warning',
+                text: 'You must agree to the terms before submitting.',
+            });
+            return;
+        }
+
+        dispatch(fetchCreateOffer({
+            name,
+            surname,
+            email,
+            phone,
+            title,
+            numberOfEmployee,
+            companyName
+        }))
+            .then(() => {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success!',
+                    text: 'Your offer has been submitted successfully.',
+                });
+            })
+            .catch(() => {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'There was an error submitting your offer. Please try again later.',
+                });
+            });
+    };
 
     return (
         <Box sx={{ py: 8, bgcolor: 'background.default' }}>
@@ -40,28 +70,90 @@ const FormSection = () => {
                     </Typography>
                     <Grid container spacing={2}>
                         <Grid item xs={12} sm={6}>
-                            <TextField onChange={(e) => setName(e.target.value)} fullWidth label="Name" variant="outlined" />
+                            <TextField
+                                onChange={(e) => setName(e.target.value)}
+                                fullWidth
+                                label="Name"
+                                variant="outlined"
+                                value={name}
+                            />
                         </Grid>
                         <Grid item xs={12} sm={6}>
-                            <TextField onChange={(e) => setSurname(e.target.value)} fullWidth label="Surname" variant="outlined" />
+                            <TextField
+                                onChange={(e) => setSurname(e.target.value)}
+                                fullWidth
+                                label="Surname"
+                                variant="outlined"
+                                value={surname}
+                            />
                         </Grid>
                         <Grid item xs={12} sm={6}>
-                            <TextField onChange={(e) => setEmail(e.target.value)} fullWidth label="E-mail" variant="outlined" />
+                            <TextField
+                                onChange={(e) => setEmail(e.target.value)}
+                                fullWidth
+                                label="E-mail"
+                                variant="outlined"
+                                value={email}
+                            />
                         </Grid>
                         <Grid item xs={12} sm={6}>
-                            <TextField onChange={(e) => setPhone(e.target.value)} fullWidth label="Phone" variant="outlined" />
+                            <TextField
+                                onChange={(e) => setPhone(e.target.value)}
+                                fullWidth
+                                label="Phone"
+                                variant="outlined"
+                                value={phone}
+                            />
                         </Grid>
                         <Grid item xs={12} sm={6}>
-                            <TextField onChange={(e) => setTitle(e.target.value)} fullWidth label="Title" variant="outlined" />
+                            <TextField
+                                onChange={(e) => setTitle(e.target.value)}
+                                fullWidth
+                                label="Title"
+                                variant="outlined"
+                                value={title}
+                            />
                         </Grid>
                         <Grid item xs={12} sm={6}>
-                            <TextField onChange={(e) => setNumberOfEmployee(e.target.value)} fullWidth label="Employee Count" variant="outlined" />
+                            <TextField
+                                onChange={(e) => setNumberOfEmployee(e.target.value)}
+                                fullWidth
+                                label="Employee Count"
+                                variant="outlined"
+                                value={numberOfEmployee}
+                            />
                         </Grid>
                         <Grid item xs={12}>
-                            <TextField onChange={(e) => setCompanyName(e.target.value)} fullWidth label="Company Name" variant="outlined" />
+                            <TextField
+                                onChange={(e) => setCompanyName(e.target.value)}
+                                fullWidth
+                                label="Company Name"
+                                variant="outlined"
+                                value={companyName}
+                            />
                         </Grid>
                         <Grid item xs={12}>
-                            <Button onClick={handleSubmit} fullWidth variant="contained" color="primary" size="large">GET YOUR OFFER</Button>
+                            <FormControlLabel
+                                control={
+                                    <Checkbox
+                                        checked={agreedToTerms}
+                                        onChange={(e) => setAgreedToTerms(e.target.checked)}
+                                        color="primary"
+                                    />
+                                }
+                                label="I agree to the legal terms"
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Button
+                                onClick={handleSubmit}
+                                fullWidth
+                                variant="contained"
+                                color="primary"
+                                size="large"
+                            >
+                                GET YOUR OFFER
+                            </Button>
                         </Grid>
                     </Grid>
                 </Paper>

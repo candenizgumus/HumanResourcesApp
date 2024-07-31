@@ -5,16 +5,21 @@ import backgroundImage from '../../src/images/Screenshot 2024-07-30 at 16.28.41 
 import LoginCard from './LoginCard';
 import Box from "@mui/material/Box";
 import RegisterCard from "./RegisterCard";
+import {AppBar, Button, Toolbar, Typography} from "@mui/material";
+import React from "react";
+import {useNavigate} from "react-router-dom";
+import {NavBar} from "./NavBar";
 
 
 export default function Login() {
 
   return (
       <Grid
+
           container
           component="main"
           sx={{
-              height: '100vh',
+              height: '90vh',
               backgroundImage: `url(${backgroundImage})`,
               backgroundColor: (t) =>
                   t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
@@ -24,6 +29,7 @@ export default function Login() {
               alignItems: 'center',
           }}
       >
+            <NavBar/>
           <CssBaseline />
           <Grid item xs={12} sm={10} md={8} lg={6}
                 sx={{

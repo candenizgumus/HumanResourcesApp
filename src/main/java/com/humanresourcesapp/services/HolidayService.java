@@ -24,12 +24,28 @@ public class HolidayService {
                 .build());
     }
 
-    public void delete(Long holidayId) {
+    public Holiday delete(Long holidayId) {
         Optional<Holiday> optionalHoliday = holidayRepository.findById(holidayId);
         if (optionalHoliday.isPresent()) {
             holidayRepository.delete(optionalHoliday.get());
+            return optionalHoliday.get();
         } else {
             throw new HumanResourcesAppException(ErrorType.ID_NOT_FOUND);
         }
     }
+
+    public Holiday update(Long holidayId, HolidaySaveRequestDto holidaySaveRequestDto) {
+        Optional<Holiday> optionalHoliday = holidayRepository.findById(holidayId);
+        if (optionalHoliday.isPresent()) {
+            Holiday holiday = optionalHoliday.get();
+            holiday.setHolidayName(holidaySaveRequestDto.holidayName());
+            holiday.setHolidayType(holidaySaveRequestDto.holidayType());
+            holiday.setHolidayStartDate(holidaySaveRequestDto.startDate());
+            holiday.setHolidayEndDate(holidaySaveRequestDto.endDate());
+            return holidayRepository.save(holiday);
+        } else {
+            throw new HumanResourcesAppException(ErrorType.ID_NOT_FOUND);
+        }
+    }
+
 }

@@ -62,8 +62,8 @@ export default function LoginCard() {
                 <Typography component="h1" variant="h5">
                     Login
                 </Typography>
-                <Box component="form" noValidate onSubmit={handleSubmit} sx={{mt: 1}}>
-                    <Box component="form" noValidate onSubmit={handleSubmit} sx={{mt: 1}}>
+
+
                         <TextField
                             margin="normal"
                             required
@@ -116,8 +116,8 @@ export default function LoginCard() {
                             </Grid>
                         </Grid>
                     </Box>
-                </Box>
-            </Box>
+
+
         </Paper>
     );
 }

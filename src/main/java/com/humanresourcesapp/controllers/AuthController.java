@@ -28,7 +28,6 @@ public class AuthController
 
 
     @PostMapping(LOGIN)
-    @PreAuthorize("permitAll()")
     public ResponseEntity<String> login(@RequestBody AuthLoginRequestDto dto)
     {
         try {

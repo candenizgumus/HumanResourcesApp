@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.*;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -19,6 +20,7 @@ import java.util.Collections;
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
+@EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig
 {
     private final JwtTokenFilter jwtTokenFilter;
@@ -39,12 +41,12 @@ public class SecurityConfig
                         .requestMatchers("dev/v1/offer/**").permitAll()
                         .requestMatchers("dev/v1/**").permitAll()
                         .requestMatchers("/company/**").permitAll()
+                        .requestMatchers("/company-item/**").permitAll()
                         .requestMatchers("auth/login/**","auth/register/**","auth/registerwithrabbit/**").permitAll()
                         .requestMatchers("auth/activationwithrabbit/**","auth/passwordresetmail/**","auth/changepasswordwithresetcode/**").permitAll()
                         .anyRequest().authenticated())
                 .authenticationProvider(authProvider());
                 //.formLogin(Customizer.withDefaults());
-
 
         return httpSecurity.build();
     }

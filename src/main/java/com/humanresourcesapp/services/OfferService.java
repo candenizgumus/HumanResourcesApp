@@ -5,6 +5,7 @@ import com.humanresourcesapp.entities.Auth;
 import com.humanresourcesapp.entities.Company;
 import com.humanresourcesapp.entities.Offer;
 import com.humanresourcesapp.entities.User;
+import com.humanresourcesapp.entities.enums.EStatus;
 import com.humanresourcesapp.exception.ErrorType;
 import com.humanresourcesapp.exception.HumanResourcesAppException;
 import com.humanresourcesapp.repositories.OfferRepository;
@@ -66,6 +67,10 @@ public class OfferService
     public Boolean approveOfferAndRegisterAuthAndUser(Long offerId)
     {
         Offer offer = offerRepository.findById(offerId).orElseThrow(() -> new HumanResourcesAppException(ErrorType.OFFER_NOT_FOUND));
+        //Setting status to active
+        offer.setStatus(EStatus.ACTIVE);
+        offerRepository.save(offer);
+
         //Generating new password for customer
         //TODO we need to hash the password in the database
         String newPassword = PasswordGenerator.generatePassword();

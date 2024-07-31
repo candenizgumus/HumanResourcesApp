@@ -27,6 +27,7 @@ public class Offer extends BaseEntity
     String companyName;
     String title;
     String numberOfEmployee;
+    @Enumerated(EnumType.STRING)
     EUserType userType;
     Boolean approvalText;
 

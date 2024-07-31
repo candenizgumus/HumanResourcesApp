@@ -28,7 +28,8 @@ public enum ErrorType
     PHONE_TAKEN(      1017, "Phone Number Is Taken" , HttpStatus.BAD_REQUEST),
     EMAIL_OR_PASSWORD_WRONG(1018,"Email or Password Wrong" ,HttpStatus.BAD_REQUEST),
     NOT_AUTHORIZED(1019,"Not Authorized" ,HttpStatus.BAD_REQUEST),
-    OFFER_NOT_FOUND(1020,"Offer Not Found" ,HttpStatus.BAD_REQUEST);
+    OFFER_NOT_FOUND(1020,"Offer Not Found" ,HttpStatus.BAD_REQUEST),
+    MAIL_SEND_FAIL(3003,"Failed to send email." , HttpStatus.INTERNAL_SERVER_ERROR);
     private Integer code;
     private String message;
     private HttpStatus httpStatus;

@@ -43,4 +43,6 @@ public class Endpoints
     public static final String FORGOT_PASSWORD = "/forgot-password";
     public static final String RESET_PASSWORD = "/reset-password";
     public static final String APPROVE_OFFER_AND_REGISTER_AUTH_AND_USER = "/approve-offer-and-register-auth-and-user";
+    public static final String GET_ALL_USERS_OF_MANAGER_BY_COMPANY_ID = "/get-all-users-of-manager-by-company-id";
+    public static final String FIND_BY_ID ="/find-by-id";
 }

@@ -14,6 +14,7 @@ public class Endpoints
     //controllers
     public static final String ASSIGNMENT = "/assignmenut";
     public static final String AUTH = "/auth";
+    public static final String OFFER = "/offer";
     public static final String BREAK = "/break";
     public static final String COMMENT = "/comment";
     public static final String COMPANY = "/company";
@@ -40,5 +41,6 @@ public class Endpoints
     public static final String REGISTER = "/register";
     public static final String FORGOT_PASSWORD = "/forgot-password";
     public static final String RESET_PASSWORD = "/reset-password";
+
 
 }

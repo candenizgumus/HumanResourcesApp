@@ -25,7 +25,8 @@ public enum ErrorType
     ACCOUNT_STATUS_ERROR(1014   ,"hesap statü hatası" ,HttpStatus.BAD_REQUEST ),
     COMPANY_NOT_FOUND(1015,"Company Not Found" ,HttpStatus.BAD_REQUEST),
     USER_NOT_FOUND(1016,"User Not Found" ,      HttpStatus.BAD_REQUEST),
-    PHONE_TAKEN(      1017, "Phone Number Is Taken" , HttpStatus.BAD_REQUEST);
+    PHONE_TAKEN(      1017, "Phone Number Is Taken" , HttpStatus.BAD_REQUEST),
+    EMAIL_OR_PASSWORD_WRONG(1018,"Email or Password Wrong" ,HttpStatus.BAD_REQUEST);
     private Integer code;
     private String message;
     private HttpStatus httpStatus;

@@ -1,18 +1,17 @@
 package com.humanresourcesapp.controllers;
 
-import com.humanresourcesapp.dto.requests.AuthRegisterRequestDto;
+import static com.humanresourcesapp.constants.Endpoints.*;
+
+import com.humanresourcesapp.dto.requests.AuthLoginRequestDto;
 import com.humanresourcesapp.entities.Auth;
 import com.humanresourcesapp.services.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/auth")
+@RequestMapping(ROOT+AUTH)
 @CrossOrigin("*")
 public class AuthController
 {
@@ -24,9 +23,9 @@ public class AuthController
         return ResponseEntity.ok(authService.register(dto));
     }*/
 
-    @PostMapping("/login")
-    public ResponseEntity<String> login(Auth auth)
+    @PostMapping(ROOT+LOGIN)
+    public ResponseEntity<String> login(@RequestBody AuthLoginRequestDto dto)
     {
-        return ResponseEntity.ok(authService.login(auth));
+        return ResponseEntity.ok(authService.login(dto));
     }
 }

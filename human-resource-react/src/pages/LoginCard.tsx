@@ -13,11 +13,12 @@ import Typography from '@mui/material/Typography';
 import {SportsTennis} from "@mui/icons-material";
 import {useDispatch} from "react-redux";
 import {fetchLogin} from "../store/feature/authSlice";
+import {HumanResources} from "../store";
 
 
 export default function LoginCard() {
 
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<HumanResources>();
     const navigate = useNavigate();
 
     const [email, setEmail] = React.useState('');
@@ -27,7 +28,7 @@ export default function LoginCard() {
 
 
     const handleLogin = () => {
-        // @ts-ignore
+
         dispatch(fetchLogin({
             email: email,
             password: password,
@@ -92,7 +93,7 @@ export default function LoginCard() {
                             label="Remember me"
                         />
                         <Button
-                            type="submit"
+                            type="button"
                             fullWidth
                             variant="contained"
                             sx={{mt: 3, mb: 2}}

@@ -9,9 +9,9 @@ public record OfferSaveRequestDto(
         String phone,
         String companyName,
         String title,
-        String numberOfEmployees,
+        String numberOfEmployees
 
-        EUserType userType
+
 )
 {
 }

@@ -6,6 +6,7 @@ import com.humanresourcesapp.entities.Company;
 import com.humanresourcesapp.entities.Offer;
 import com.humanresourcesapp.entities.User;
 import com.humanresourcesapp.entities.enums.EStatus;
+import com.humanresourcesapp.entities.enums.EUserType;
 import com.humanresourcesapp.exception.ErrorType;
 import com.humanresourcesapp.exception.HumanResourcesAppException;
 import com.humanresourcesapp.model.MailModel;
@@ -46,6 +47,7 @@ public class OfferService
             throw  new HumanResourcesAppException(ErrorType.PHONE_TAKEN);
         }
 
+        //EUsertype set to the manager for now. Maybe we can change it later...
         offerRepository.save(
                 Offer
                         .builder()
@@ -56,7 +58,7 @@ public class OfferService
                         .companyName(dto.companyName())
                         .title(dto.title())
                         .numberOfEmployee(dto.numberOfEmployees())
-                        .userType(dto.userType())
+                        .userType(EUserType.MANAGER)
                         .build());
 
 

@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useRef} from "react";
 import CssBaseline from '@mui/material/CssBaseline';
 import Grid from '@mui/material/Grid';
 import backgroundImage from '../../src/images/Screenshot 2024-07-30 at 16.28.41 2.png'
@@ -6,7 +6,6 @@ import LoginCard from './LoginCard';
 import Box from "@mui/material/Box";
 import RegisterCard from "./RegisterCard";
 import {AppBar, Button, Toolbar, Typography} from "@mui/material";
-import React, {useRef} from "react";
 import {useNavigate} from "react-router-dom";
 import {NavBar} from "../components/molecules/NavBar";
 

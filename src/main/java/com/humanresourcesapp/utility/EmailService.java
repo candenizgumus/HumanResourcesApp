@@ -5,6 +5,8 @@ import com.humanresourcesapp.exception.HumanResourcesAppException;
 import com.humanresourcesapp.model.MailModel;
 
 import jakarta.mail.MessagingException;
+import jakarta.mail.internet.AddressException;
+import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 import lombok.AllArgsConstructor;
 
@@ -33,4 +35,6 @@ public class EmailService {
             throw new HumanResourcesAppException(ErrorType.MAIL_SEND_FAIL);
         }
     }
+
+
 }

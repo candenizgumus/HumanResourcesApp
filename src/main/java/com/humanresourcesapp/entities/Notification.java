@@ -21,5 +21,6 @@ public class Notification extends BaseEntity
     @Enumerated(EnumType.STRING)
     ENotificationType notificationType;
     String notificationText;
-    Boolean isRead;
+    @Builder.Default
+    Boolean isRead = false;
 }

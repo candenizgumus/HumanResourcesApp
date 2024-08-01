@@ -65,11 +65,10 @@ public class OfferService
         return true;
     }
 
-    public List<VwGetAllOffer> getAllOffer(String token)
+    public List<VwGetAllOffer> getAllOffer()
     {
-        jwtTokenManager.getAuthIdFromToken(token).orElseThrow(() -> new HumanResourcesAppException(ErrorType.INVALID_TOKEN));
-        jwtTokenManager.getUserTypeFromToken(token).orElseThrow(() -> new HumanResourcesAppException(ErrorType.NOT_AUTHORIZED));
-        return offerRepository.getAllOffer(token);
+
+        return offerRepository.getAllOffer();
     }
 
     public Boolean approveOfferAndRegisterAuthAndUser(Long offerId)

@@ -23,7 +23,7 @@ export default function LoginCard() {
         return Array.isArray(userData) ? userData : [userData];
     });
 
-    const token = useAppSelector(state => state.auth.token);
+
     const dispatch = useDispatch<HumanResources>();
     const navigate = useNavigate();
 
@@ -33,26 +33,31 @@ export default function LoginCard() {
 
 
 
-    const handleLogin = () => {
-        dispatch(fetchLogin({ email, password }))
-            .then(() => {
-                // Login işlemi tamamlandıktan sonra kullanıcıyı bul
-                return dispatch(fetchFindUserByToken());
-            })
-            .then(() => {
+    const handleLogin = async () => {
 
+            const result = await dispatch(fetchLogin({ email, password })).unwrap();
 
-                // User kontrolü ve userType kontrolü
+            // `result` içinde `code` özelliği olup olmadığını kontrol edin
+            if (result.code) {
+                alert('Username or Password wrong');
+                return; // İşlemi sonlandırarak sonraki then bloklarına geçişi engeller.
+            }
 
-                    if (user[0].userType === 'ADMIN') {
+            // `token`'ı kullanarak kullanıcıyı bul
+            dispatch(fetchFindUserByToken(result.token))
+
+                .then(data => {
+                    if (data.payload.userType === 'ADMIN') {
                         navigate('/admin-page');
                     } else {
                         console.log('User is not an ADMIN.');
                     }
-
-            })
+                });
 
     };
+
+
+
 
 
     return (

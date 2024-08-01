@@ -38,6 +38,7 @@ public class AuthController
         } catch (AuthenticationException e) {
             throw new HumanResourcesAppException(ErrorType.EMAIL_OR_PASSWORD_WRONG);
         }
+
         final Auth auth = (Auth)authService.loadUserByUsername(dto.email());
         if (auth != null) {
             return ResponseEntity.ok(jwtTokenManager.createTokenFromAuth(auth).orElseThrow(() -> new HumanResourcesAppException(ErrorType.TOKEN_CREATION_FAILED)));

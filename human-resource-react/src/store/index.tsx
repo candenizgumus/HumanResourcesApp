@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import {
-    authSlice, featureSlice
+    authSlice, companySlice, featureSlice
 } from "./feature";
 import getOfferSlice from "./feature/getOfferSlice";
 import {useSelector} from "react-redux";
@@ -9,7 +9,8 @@ const store = configureStore({
     reducer:{
         auth: authSlice,
         feature: featureSlice,
-        getOffer: getOfferSlice
+        getOffer: getOfferSlice,
+        company: companySlice
 
     }
 });

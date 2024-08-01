@@ -27,7 +27,6 @@ public class UserService
 {
     private final UserRepository userRepository;
     private final CompanyService companyService;
-    private final JwtTokenManager jwtTokenManager;
     private final AuthService authService;
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
@@ -35,7 +34,10 @@ public class UserService
 
     public User save(User user)
     {
-        companyService.findById(user.getCompanyId()).orElseThrow(() -> new HumanResourcesAppException(ErrorType.COMPANY_NOT_FOUND));
+        if (user.getCompanyId() != null)
+        {
+            companyService.findById(user.getCompanyId()).orElseThrow(() -> new HumanResourcesAppException(ErrorType.COMPANY_NOT_FOUND));
+        }
 
         userRepository.save(user);
         return user;

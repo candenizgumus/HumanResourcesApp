@@ -106,6 +106,7 @@ public class UserService
                 .birthDate(dto.birtDate())
                 .managerId(manager.getId())
                 .status(EStatus.ACTIVE)
+                .position(dto.ePosition())
                 .build());
 
         return userRepository.save(employee);

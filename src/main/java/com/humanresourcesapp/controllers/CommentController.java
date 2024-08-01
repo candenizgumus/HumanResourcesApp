@@ -1,14 +1,15 @@
 package com.humanresourcesapp.controllers;
 
 import com.humanresourcesapp.dto.requests.CommentSaveRequestDto;
+import com.humanresourcesapp.dto.responses.CommentResponseDto;
 import com.humanresourcesapp.entities.Comment;
 import com.humanresourcesapp.services.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
 import static com.humanresourcesapp.constants.Endpoints.*;
 @RestController
 @RequiredArgsConstructor
@@ -19,6 +20,11 @@ public class CommentController {
     @PostMapping(SAVE)
     public ResponseEntity<Comment> save(CommentSaveRequestDto dto) {
         return ResponseEntity.ok(commentService.save(dto));
+    }
+
+    @GetMapping(GET_ALL)
+    public ResponseEntity<List<CommentResponseDto>> getAll() {
+        return ResponseEntity.ok(commentService.getAll());
     }
 
 }

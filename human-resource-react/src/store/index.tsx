@@ -3,6 +3,7 @@ import {
     authSlice, companySlice, featureSlice
 } from "./feature";
 import getOfferSlice from "./feature/getOfferSlice";
+import userStorySlice from "./feature/userStorySlice";
 import {useSelector} from "react-redux";
 
 const store = configureStore({
@@ -10,7 +11,8 @@ const store = configureStore({
         auth: authSlice,
         feature: featureSlice,
         getOffer: getOfferSlice,
-        company: companySlice
+        company: companySlice,
+        userStory: userStorySlice
 
     }
 });

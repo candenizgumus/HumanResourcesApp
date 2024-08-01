@@ -1,38 +1,34 @@
-import React, {useRef} from 'react';
-import {Container, Typography, Box, Grid, CssBaseline} from '@mui/material';
+import {styled} from "@mui/material/styles";
+import React, {useRef} from "react";
+import {Container, CssBaseline} from "@mui/material";
+import {NavBar} from "../components/molecules/NavBar";
 import HeroSection from "../components/molecules/HeroSection";
 import FormSection from "../components/molecules/FormSection";
 import FeaturesSection from "../components/molecules/FeaturesSection";
 import FAQSection from "../components/molecules/FAQSection";
 import FooterElement from "../components/molecules/FooterElement";
-import { NavBar } from '../components/molecules/NavBar';
-import {styled} from "@mui/material/styles";
-const Root = styled('div')(({ theme }) => ({
+import UserStoryCard from "../components/molecules/UserStoryCard";
+
+const Root = styled('div')(({theme}) => ({
     flexGrow: 1,
 }));
-const Footer = styled('footer')(({ theme }) => ({
+const Footer = styled('footer')(({theme}) => ({
     padding: theme.spacing(0),
 }));
-const GetOffer = () => {
+const UserStories = () => {
     const featuresRef = useRef<HTMLDivElement>(null);
     return (
         <Root>
             <CssBaseline/>
             <NavBar featuresRef={featuresRef}/>
             <main>
-                <Container maxWidth="lg" sx={{mt: 4}}>
-                    <HeroSection/>
-                    <FormSection/>
-                    <FeaturesSection/>
-                    <FAQSection/>
-
-                </Container>
+                <UserStoryCard/>
             </main>
             <Footer>
                 <FooterElement/>
             </Footer>
         </Root>
-);
+    );
 };
 
-export default GetOffer;
+export default UserStories;

@@ -19,11 +19,9 @@ public class AdminUserGenerator
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
 
-    @PostConstruct
-    public void init() {
-        createAdminUser();
-    }
 
+
+    @PostConstruct
     public void createAdminUser()
     {
         String adminEmail = "admin";
@@ -45,7 +43,7 @@ public class AdminUserGenerator
                     .builder()
                     .status(EStatus.ACTIVE)
                     .email(adminEmail)
-                    .authId(auth.getId())
+                    .authId(auth.getId()) // Set the retrieved ID from saved Auth
                     .userType(EUserType.ADMIN)
                     .build();
             userService.save(user);

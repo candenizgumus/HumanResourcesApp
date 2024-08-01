@@ -1,6 +1,7 @@
 package com.humanresourcesapp.controllers;
 
 import com.humanresourcesapp.dto.requests.AddEmployeeToManagerRequestDto;
+import com.humanresourcesapp.dto.requests.PageRequestDto;
 import com.humanresourcesapp.entities.User;
 import com.humanresourcesapp.services.UserService;
 import lombok.RequiredArgsConstructor;
@@ -26,16 +27,17 @@ public class UserController
 
     @GetMapping(GET_ALL)
     @PreAuthorize("hasAnyAuthority('ADMIN')")
-    public ResponseEntity<List<User>> getAll()
+    public ResponseEntity<List<User>> getAll(@RequestBody PageRequestDto dto)
     {
-        return ResponseEntity.ok(userService.getAll());
+        return ResponseEntity.ok(userService.getAll(dto));
     }
 
+    //TODO BURAYI YAP
     @GetMapping(GET_ALL_USERS_OF_MANAGER_BY_COMPANY_ID)
     @PreAuthorize("hasAnyAuthority('MANAGER')")
-    public ResponseEntity<List<User>> getAllUsersOfManagerByCompanyId(String token)
+    public ResponseEntity<List<User>> getAllUsersOfManagerByCompanyId()
     {
-        return ResponseEntity.ok(userService.getAllUsersOfManagerByCompanyId(token));
+        return ResponseEntity.ok(userService.getAllUsersOfManagerByCompanyId());
     }
 
     @GetMapping(FIND_BY_ID)

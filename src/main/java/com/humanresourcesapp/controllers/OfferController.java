@@ -1,6 +1,7 @@
 package com.humanresourcesapp.controllers;
 
 import com.humanresourcesapp.dto.requests.OfferSaveRequestDto;
+import com.humanresourcesapp.dto.requests.PageRequestDto;
 import com.humanresourcesapp.services.OfferService;
 import com.humanresourcesapp.views.VwGetAllOffer;
 import lombok.RequiredArgsConstructor;
@@ -28,9 +29,9 @@ public class OfferController
 
     @GetMapping(GET_ALL)
     @PreAuthorize("hasAnyAuthority('ADMIN')")
-    public ResponseEntity<List<VwGetAllOffer>> getAllOffer()
+    public ResponseEntity<List<VwGetAllOffer>> getAllOffer(@RequestBody PageRequestDto dto)
     {
-        return ResponseEntity.ok(offerService.getAllOffer());
+        return ResponseEntity.ok(offerService.getAllOffer(dto));
     }
 
     @PostMapping(APPROVE_OFFER_AND_REGISTER_AUTH_AND_USER)

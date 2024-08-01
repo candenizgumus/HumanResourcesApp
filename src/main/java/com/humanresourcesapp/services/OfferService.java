@@ -2,6 +2,7 @@ package com.humanresourcesapp.services;
 
 import com.humanresourcesapp.dto.requests.CompanySaveRequestDto;
 import com.humanresourcesapp.dto.requests.OfferSaveRequestDto;
+import com.humanresourcesapp.dto.requests.PageRequestDto;
 import com.humanresourcesapp.entities.Auth;
 import com.humanresourcesapp.entities.Company;
 import com.humanresourcesapp.entities.Offer;
@@ -19,8 +20,10 @@ import com.humanresourcesapp.utility.PasswordGenerator;
 import com.humanresourcesapp.views.VwGetAllOffer;
 import jakarta.validation.constraints.Email;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.awt.print.Pageable;
 import java.util.List;
 
 @Service
@@ -29,7 +32,6 @@ public class OfferService
 {
     private final OfferRepository offerRepository;
     private final UserService userService;
-    private final JwtTokenManager jwtTokenManager;
     private final AuthService authService;
     private final CompanyService companyService;
     private final PasswordEncoder passwordEncoder;
@@ -66,10 +68,10 @@ public class OfferService
         return true;
     }
 
-    public List<VwGetAllOffer> getAllOffer()
+    public List<VwGetAllOffer> getAllOffer(PageRequestDto dto)
     {
 
-        return offerRepository.getAllOffer();
+        return offerRepository.getAllOffer(PageRequest.of(dto.page(), dto.pageSize()));
     }
 
     public Boolean approveOfferAndRegisterAuthAndUser(Long offerId)

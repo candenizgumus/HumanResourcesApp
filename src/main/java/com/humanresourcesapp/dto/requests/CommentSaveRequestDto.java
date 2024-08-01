@@ -1,4 +1,4 @@
 package com.humanresourcesapp.dto.requests;
 
-public record CommentSaveRequestDto(Long companyId, String commentText) {
+public record CommentSaveRequestDto(Long companyId, String commentText, String photo) {
 }

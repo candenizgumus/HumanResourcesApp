@@ -4,6 +4,7 @@ import Login from './Login';
 import Register from './Register';
 import GetOffer from './GetOffer';
 import LandingPage from "./Landing";
+import UserStories from "./UserStories";
 import AdminPage from './AdminPage';
 
 
@@ -16,6 +17,7 @@ const RouterPage = () => {
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/get-offer" element={<GetOffer />} />
+                <Route path="/user-stories" element={<UserStories />} />
                 <Route path="/admin-page" element={<AdminPage />} />
 
             </Routes>

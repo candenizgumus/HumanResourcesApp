@@ -34,9 +34,5 @@ public class NotificationService {
         } else {
             return notificationRepository.findAllByUserId(userId);
         }
-
-
-//        List<Notification> allNotificationsByUserId = notificationRepository.findAllByUserId(userId);
-//        return allNotificationsByUserId.isEmpty() ? Collections.emptyList() : allNotificationsByUserId;
     }
 }

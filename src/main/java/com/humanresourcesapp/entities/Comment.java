@@ -18,5 +18,5 @@ public class Comment extends BaseEntity{
     private Long id;
     private Long companyId;
     private String commentText;
-    private Long commentDate;
+    String photo;
 }

@@ -28,9 +28,9 @@ public class OfferController
 
     @GetMapping(GET_ALL)
     @PreAuthorize("hasAnyAuthority('ADMIN')")
-    public ResponseEntity<List<VwGetAllOffer>> getAllOffer(String token)
+    public ResponseEntity<List<VwGetAllOffer>> getAllOffer()
     {
-        return ResponseEntity.ok(offerService.getAllOffer(token));
+        return ResponseEntity.ok(offerService.getAllOffer());
     }
 
     @PostMapping(APPROVE_OFFER_AND_REGISTER_AUTH_AND_USER)

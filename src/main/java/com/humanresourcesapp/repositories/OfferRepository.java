@@ -10,5 +10,5 @@ import java.util.List;
 public interface OfferRepository extends JpaRepository<Offer, Long>
 {
     @Query("select new com.humanresourcesapp.views.VwGetAllOffer(o.id,o.name,o.surname,o.email,o.phone,o.companyName,o.title,o.numberOfEmployee,o.userType,o.approvalText) from Offer o ")
-    List<VwGetAllOffer> getAllOffer(String userName);
+    List<VwGetAllOffer> getAllOffer();
 }

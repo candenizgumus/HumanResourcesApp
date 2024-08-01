@@ -5,8 +5,8 @@ import com.humanresourcesapp.entities.enums.EUserType;
 public record AuthLoginRequestDto(
 
                                   String password,
-                                  String email,
-                                  EUserType userType
+                                  String email
+
 )
 {
 }

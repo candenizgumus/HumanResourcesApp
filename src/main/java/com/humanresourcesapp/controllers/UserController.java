@@ -53,4 +53,10 @@ public class UserController
     {
         return ResponseEntity.ok(userService.addEmployeeToManager(dto));
     }
+
+    @GetMapping(FIND_BY_TOKEN)
+    @CrossOrigin("*")
+    public ResponseEntity<User> findUserByToken(String token){
+        return ResponseEntity.ok(userService.findByToken(token));
+    }
 }

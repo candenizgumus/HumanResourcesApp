@@ -3,6 +3,7 @@ package com.humanresourcesapp.controllers;
 import static com.humanresourcesapp.constants.Endpoints.*;
 
 import com.humanresourcesapp.dto.requests.AuthLoginRequestDto;
+import com.humanresourcesapp.dto.responses.LoginResponseDto;
 import com.humanresourcesapp.entities.Auth;
 import com.humanresourcesapp.exception.ErrorType;
 import com.humanresourcesapp.exception.HumanResourcesAppException;
@@ -31,7 +32,7 @@ public class AuthController
 
 
     @PostMapping(LOGIN)
-    public ResponseEntity<String> login(@RequestBody AuthLoginRequestDto dto)
+    public ResponseEntity<LoginResponseDto> login(@RequestBody AuthLoginRequestDto dto)
     {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(dto.email(), dto.password()));
@@ -41,7 +42,9 @@ public class AuthController
 
         final Auth auth = (Auth)authService.loadUserByUsername(dto.email());
         if (auth != null) {
-            return ResponseEntity.ok(jwtTokenManager.createTokenFromAuth(auth).orElseThrow(() -> new HumanResourcesAppException(ErrorType.TOKEN_CREATION_FAILED)));
+            String token = jwtTokenManager.createTokenFromAuth(auth).orElseThrow(() -> new HumanResourcesAppException(ErrorType.TOKEN_CREATION_FAILED));
+            LoginResponseDto loginResponseDto = new LoginResponseDto(token);
+            return ResponseEntity.ok(loginResponseDto);
         }
         return ResponseEntity.badRequest().build();
     }

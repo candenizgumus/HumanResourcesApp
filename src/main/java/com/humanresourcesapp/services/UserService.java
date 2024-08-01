@@ -3,7 +3,6 @@ package com.humanresourcesapp.services;
 import com.humanresourcesapp.dto.requests.AddEmployeeToManagerRequestDto;
 import com.humanresourcesapp.dto.requests.PageRequestDto;
 import com.humanresourcesapp.entities.Auth;
-import com.humanresourcesapp.entities.Company;
 import com.humanresourcesapp.entities.User;
 import com.humanresourcesapp.entities.enums.EStatus;
 import com.humanresourcesapp.entities.enums.EUserType;
@@ -13,9 +12,9 @@ import com.humanresourcesapp.model.MailModel;
 import com.humanresourcesapp.repositories.UserRepository;
 import com.humanresourcesapp.utility.*;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
+
 import org.springframework.data.domain.PageRequest;
-import org.springframework.security.core.context.SecurityContextHolder;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,6 +29,7 @@ public class UserService
     private final AuthService authService;
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
+    private final JwtTokenManager jwtTokenManager;
 
 
     public User save(User user)
@@ -117,5 +117,11 @@ public class UserService
                 .build());
 
         return userRepository.save(employee);
+    }
+
+    public User findByToken(String token)
+    {
+        Long authId = jwtTokenManager.getAuthIdFromToken(token).orElseThrow(() -> new HumanResourcesAppException(ErrorType.INVALID_TOKEN));
+        return userRepository.findByAuthId(authId).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
     }
 }

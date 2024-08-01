@@ -1,13 +1,21 @@
-import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
+import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {ILogin} from "../../models/ILogin";
 import DataTable from "../../components/molecules/DataTable";
+import {IUser} from "../../models/IUser";
 
-const initalAuthState  = {
+interface IAuthState{
+    user: IUser[],
+    token: string,
+    isAuth: boolean,
+    pageState: JSX.Element
+}
+
+const initalAuthState: IAuthState  = {
     user: [],
     token: '',
     isAuth : false,
     pageState:<DataTable/>,
-    
+
 }
 
 export const fetchLogin = createAsyncThunk(
@@ -22,7 +30,7 @@ export const fetchLogin = createAsyncThunk(
                 body: JSON.stringify({
                     'email': payload.email,
                     'password': payload.password,
-                    'userType': payload.userType
+
                 })
             }).then(data=> data.json())
             return response;
@@ -34,6 +42,35 @@ export const fetchLogin = createAsyncThunk(
     }
 );
 
+export const fetchFindUserByToken = createAsyncThunk(
+    'user/fetchFindUserByToken',
+    async (_, { getState }) => {
+        try {
+            const state = getState() as { auth: IAuthState };
+            const token = state.auth.token; // token değerini al
+
+            console.log("Token: ", token); // Token'ı konsola yazdır
+
+            const response = await fetch(`http://localhost:9090/dev/v1/user/find-by-token?token=${token}`)
+                .then(data => data.json());
+
+
+
+
+
+            return response;
+
+        } catch (err) {
+            console.log('hata...: ', err);
+            throw err; // Hata varsa fırlat
+        }
+    }
+);
+
+
+
+
+
 const authSlice = createSlice({
     name: 'auth',
     initialState: initalAuthState,
@@ -44,8 +81,13 @@ const authSlice = createSlice({
     },
     extraReducers: (build)=>{
         build.addCase(fetchLogin.fulfilled, (state, action)=>{
-            state.token = action.payload;
+            state.token = action.payload.token;
             state.isAuth = true;
+        })
+        build.addCase(fetchFindUserByToken.fulfilled, (state, action: PayloadAction<IUser[]>)=>{
+
+            state.user = action.payload;
+
         })
     },
 

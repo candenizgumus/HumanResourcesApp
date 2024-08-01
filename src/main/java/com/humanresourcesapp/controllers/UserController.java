@@ -1,14 +1,12 @@
 package com.humanresourcesapp.controllers;
 
+import com.humanresourcesapp.dto.requests.AddEmployeeToManagerRequestDto;
 import com.humanresourcesapp.entities.User;
 import com.humanresourcesapp.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -45,5 +43,12 @@ public class UserController
     public ResponseEntity<User> findById(Long id){
 
         return ResponseEntity.ok(userService.findById(id));
+    }
+
+    @PostMapping(ADD_EMPLOYEE_TO_MANAGER)
+    @PreAuthorize("hasAnyAuthority('MANAGER')")
+    public ResponseEntity<User> addEmployeeToManager(@RequestBody AddEmployeeToManagerRequestDto dto)
+    {
+        return ResponseEntity.ok(userService.addEmployeeToManager(dto));
     }
 }

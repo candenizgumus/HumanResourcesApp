@@ -1,11 +1,16 @@
 package com.humanresourcesapp.services;
 
+import com.humanresourcesapp.dto.requests.AddEmployeeToManagerRequestDto;
+import com.humanresourcesapp.entities.Auth;
 import com.humanresourcesapp.entities.Company;
 import com.humanresourcesapp.entities.User;
+import com.humanresourcesapp.entities.enums.EStatus;
+import com.humanresourcesapp.entities.enums.EUserType;
 import com.humanresourcesapp.exception.ErrorType;
 import com.humanresourcesapp.exception.HumanResourcesAppException;
+import com.humanresourcesapp.model.MailModel;
 import com.humanresourcesapp.repositories.UserRepository;
-import com.humanresourcesapp.utility.JwtTokenManager;
+import com.humanresourcesapp.utility.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +24,9 @@ public class UserService
     private final UserRepository userRepository;
     private final CompanyService companyService;
     private final JwtTokenManager jwtTokenManager;
+    private final AuthService authService;
+    private final PasswordEncoder passwordEncoder;
+    private final EmailService emailService;
 
 
     public User save(User user)
@@ -54,5 +62,52 @@ public class UserService
     public User findById(Long id)
     {
         return userRepository.findById(id).orElseThrow(() -> new HumanResourcesAppException(ErrorType.ID_NOT_FOUND));
+    }
+
+    public User addEmployeeToManager(AddEmployeeToManagerRequestDto dto)
+    {
+        String userEmail = UserInfoSecurityContext.getUserInfoFromSecurityContext();
+        User manager = userRepository.findByEmail(userEmail).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
+
+        //Checking email and phone
+        if (userRepository.findByEmailAndPhone(dto.email(), dto.phone()).isPresent())
+        {
+            throw new HumanResourcesAppException(ErrorType.EMAIL_OR_PHONE_TAKEN);
+        }
+
+        //Generating new password for customer
+        String newPassword = PasswordGenerator.generatePassword();
+        String encodedPassword = passwordEncoder.bCryptPasswordEncoder().encode(newPassword);
+
+        //Send email with new password
+        emailService.send(MailModel.builder().to(dto.email()).subject("Your new password").message("Your new password is: " + newPassword).build());
+
+        //Creating new auth and user entities for new employee.
+
+        Auth auth = authService.save(Auth
+                .builder()
+                .email(dto.email())
+                .password(encodedPassword)
+                .userType(EUserType.EMPLOYEE)
+                .status(EStatus.ACTIVE)
+                .build()
+        );
+
+        User employee = userRepository.save(User
+                .builder()
+                .authId(auth.getId())
+                .email(dto.email())
+                .phone(dto.phone())
+                .name(dto.name())
+                .surname(dto.surname())
+                .companyId(manager.getCompanyId())
+                .userType(EUserType.EMPLOYEE)
+                .hireDate(dto.hireDate())
+                .birthDate(dto.birtDate())
+                .managerId(manager.getId())
+                .status(EStatus.ACTIVE)
+                .build());
+
+        return userRepository.save(employee);
     }
 }

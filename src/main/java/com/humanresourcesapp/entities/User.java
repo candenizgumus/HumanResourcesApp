@@ -24,11 +24,12 @@ public class User extends BaseEntity
     Long id;
     Long companyId;
     Long authId;
+    Long managerId;
     String email;
     String name;
     String surname;
     String phone;
-    Long birthdate;
+    Long birthDate;
     Long hireDate;
     @Enumerated(EnumType.STRING)
     EUserType userType;

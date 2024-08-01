@@ -44,19 +44,10 @@ export const fetchLogin = createAsyncThunk(
 
 export const fetchFindUserByToken = createAsyncThunk(
     'user/fetchFindUserByToken',
-    async (_, { getState }) => {
+    async (token: string) => {
         try {
-            const state = getState() as { auth: IAuthState };
-            const token = state.auth.token; // token değerini al
-
-            console.log("Token: ", token); // Token'ı konsola yazdır
-
             const response = await fetch(`http://localhost:9090/dev/v1/user/find-by-token?token=${token}`)
                 .then(data => data.json());
-
-
-
-
 
             return response;
 

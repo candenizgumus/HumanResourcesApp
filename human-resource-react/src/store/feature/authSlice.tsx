@@ -1,10 +1,13 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import {ILogin} from "../../models/ILogin";
+import DataTable from "../../components/molecules/DataTable";
 
 const initalAuthState  = {
     user: [],
     token: '',
-    isAuth : false
+    isAuth : false,
+    pageState:<DataTable/>,
+    
 }
 
 export const fetchLogin = createAsyncThunk(
@@ -34,7 +37,11 @@ export const fetchLogin = createAsyncThunk(
 const authSlice = createSlice({
     name: 'auth',
     initialState: initalAuthState,
-    reducers:{},
+    reducers:{
+        changePageState(state, action){
+            state.pageState = action.payload
+        }
+    },
     extraReducers: (build)=>{
         build.addCase(fetchLogin.fulfilled, (state, action)=>{
             state.token = action.payload;
@@ -43,4 +50,6 @@ const authSlice = createSlice({
     },
 
 });
+
+export const {changePageState} = authSlice.actions
 export default authSlice.reducer;

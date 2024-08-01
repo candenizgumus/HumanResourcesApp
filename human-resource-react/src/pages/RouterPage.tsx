@@ -4,7 +4,8 @@ import Login from './Login';
 import Register from './Register';
 import GetOffer from './GetOffer';
 import LandingPage from "./Landing";
-import { AdminPage } from './AdminPage';
+import AdminPage from './AdminPage';
+
 
 
 const RouterPage = () => {

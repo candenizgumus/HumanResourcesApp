@@ -4,6 +4,7 @@ import Login from './Login';
 import Register from './Register';
 import GetOffer from './GetOffer';
 import LandingPage from "./Landing";
+import Dashboard from "./Dashboard";
 
 const RouterPage = () => {
     return (
@@ -13,6 +14,7 @@ const RouterPage = () => {
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/get-offer" element={<GetOffer />} />
+                <Route path="/dashboard" element={<Dashboard />} />
             </Routes>
         </Router>
     );

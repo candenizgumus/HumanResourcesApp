@@ -12,37 +12,48 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import {SportsTennis} from "@mui/icons-material";
 import {useDispatch} from "react-redux";
-import {fetchLogin} from "../store/feature/authSlice";
-import {HumanResources} from "../store";
+import {fetchFindUserByToken, fetchLogin} from "../store/feature/authSlice";
+import {HumanResources, useAppSelector} from "../store";
+import {IUser} from "../models/IUser";
 
 
 export default function LoginCard() {
+    const user = useAppSelector(state => {
+        const userData = state.auth.user;
+        return Array.isArray(userData) ? userData : [userData];
+    });
 
+    const token = useAppSelector(state => state.auth.token);
     const dispatch = useDispatch<HumanResources>();
     const navigate = useNavigate();
 
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
-    const [userType, setUserType] = React.useState('MANAGER');
+
 
 
 
     const handleLogin = () => {
+        dispatch(fetchLogin({ email, password }))
+            .then(() => {
+                // Login işlemi tamamlandıktan sonra kullanıcıyı bul
+                return dispatch(fetchFindUserByToken());
+            })
+            .then(() => {
 
-        dispatch(fetchLogin({
-            email: email,
-            password: password,
-            userType: userType
-        }))
 
-        console.log('loggedin')
+                // User kontrolü ve userType kontrolü
+
+                    if (user[0].userType === 'ADMIN') {
+                        navigate('/admin-page');
+                    } else {
+                        console.log('User is not an ADMIN.');
+                    }
+
+            })
+
     };
 
-
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        // login();
-    };
 
     return (
         <Paper elevation={6} square sx={{width: '100%', maxWidth: 400}}>

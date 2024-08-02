@@ -16,6 +16,7 @@ import {HumanResources} from "../store";
 
 import {useState} from "react";
 import {Alert, AlertTitle} from "@mui/material";
+import getUserTypeFromToken from '../util/getUserTypeFromToken';
 
 export default function LoginCard() {
     const dispatch = useDispatch<HumanResources>();
@@ -33,16 +34,12 @@ export default function LoginCard() {
             setError(result.message);
             return; // İşlemi sonlandırarak sonraki then bloklarına geçişi engeller.
         }
-
-        // `token`'ı kullanarak kullanıcıyı bul
-        dispatch(fetchFindUserByToken(result.token))
-            .then(data => {
-                if (data.payload.userType === 'ADMIN') {
-                    navigate('/admin-page');
-                } else {
-                    console.log('User is not an ADMIN.');
-                }
-            });
+        const userType = getUserTypeFromToken(result.token)
+        if ( userType === 'ADMIN') {
+            navigate('/admin-page');
+        } else {
+            console.log('User is not an ADMIN.');
+        }
     };
 
     return (

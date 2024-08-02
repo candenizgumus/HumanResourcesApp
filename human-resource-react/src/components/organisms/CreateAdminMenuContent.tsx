@@ -1,5 +1,8 @@
-import React, { useState, ChangeEvent, FormEvent } from 'react';
+import React, {useState, ChangeEvent, FormEvent, useEffect} from 'react';
 import { TextField, Button, Box } from '@mui/material';
+import {useDispatch} from "react-redux";
+import {HumanResources, useAppSelector} from "../../store";
+import {fetchFindUserByToken} from "../../store/feature/authSlice";
 
 interface FormData {
   email: string;
@@ -29,6 +32,8 @@ const UserForm: React.FC = () => {
     // Handle form submission
     console.log('Form submitted:', formData);
   };
+
+
 
   return (
     <Box

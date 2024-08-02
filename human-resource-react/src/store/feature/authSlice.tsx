@@ -2,16 +2,17 @@ import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {ILogin} from "../../models/ILogin";
 import OfferList from "../../components/molecules/OfferList";
 import {IUser} from "../../models/IUser";
+import {useDispatch} from "react-redux";
 
 interface IAuthState{
-    user: IUser[],
+    user: IUser,
     token: string,
     isAuth: boolean,
     pageState: string
 }
 
 const initalAuthState: IAuthState  = {
-    user: {} as IUser[],
+    user: {} as IUser,
     token: '',
     isAuth : false,
     pageState:'',
@@ -58,6 +59,24 @@ export const fetchFindUserByToken = createAsyncThunk(
     }
 );
 
+export const fetchFindCompanyNameAndManagerNameOfUser = createAsyncThunk(
+    'user/fetchFindCompanyNameAndManagerNameOfUser',
+    async (token: string) => {
+
+
+        const response = await fetch('http://localhost:9090/dev/v1/user/find-company-name-and-manager-name-of-user', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ` + token // Adding Bearer token
+            }
+        }).then(data => data.json());
+
+        return response;
+
+    }
+
+);
 
 
 
@@ -84,10 +103,14 @@ const authSlice = createSlice({
             localStorage.setItem('token', action.payload.token);
             state.isAuth = true;
         })
-        build.addCase(fetchFindUserByToken.fulfilled, (state, action: PayloadAction<IUser[]>)=>{
+        build.addCase(fetchFindUserByToken.fulfilled, (state, action: PayloadAction<IUser>)=>{
 
             state.user = action.payload;
 
+        })
+        build.addCase(fetchFindCompanyNameAndManagerNameOfUser.rejected, (state, action)=>{
+            const dispatch = useDispatch();
+            dispatch(clearToken())
         })
     },
 

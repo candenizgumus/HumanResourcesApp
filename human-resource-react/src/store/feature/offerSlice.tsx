@@ -1,6 +1,8 @@
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 import { IGetOffer } from '../../models/IGetOffer';
 import {IOfferList} from "../../models/IOfferList";
+import {useDispatch} from "react-redux";
+import {clearToken} from "./authSlice";
 
 const initialOfferState = {
     offers: [] as IOfferList[],
@@ -100,6 +102,10 @@ const offerSlice = createSlice({
             .addCase(fetchGetOffers.fulfilled, (state, action: PayloadAction<IOfferList[]>) => {
                 state.offers = action.payload;
                 state.status = 'ACTIVE';
+            })
+            .addCase(fetchGetOffers.rejected, (state, action) => {
+                const dispatch = useDispatch();
+                dispatch(clearToken())
             })
 
     }

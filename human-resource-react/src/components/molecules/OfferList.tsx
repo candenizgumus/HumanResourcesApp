@@ -93,7 +93,7 @@ export default function OfferList() {
                     pageSize: 50
                 })).catch(() => {
 
-                    console.log('burası calisti')
+
                     localStorage.removeItem('token');
                     dispatch(clearToken());
 

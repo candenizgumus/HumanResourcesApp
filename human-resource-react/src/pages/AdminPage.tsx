@@ -25,6 +25,7 @@ import { changePageState } from '../store/feature/authSlice';
 import {NotificationIcon} from "../components/atoms/NotificationIcon";
 import {AdminMenuContents} from "../components/organisms/AdminMenuContents";
 import { useNavigate } from 'react-router-dom';
+import ProfileMenu from "../components/molecules/ProfileMenu";
 
 
 const drawerWidth = 240;
@@ -125,6 +126,8 @@ export default function AdminPage() {
         </Typography>
             <Box sx={{ flexGrow: 1 }} />
             <NotificationIcon />
+            <ProfileMenu />
+
         </Toolbar>
       </AppBar>
       <Drawer

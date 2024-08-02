@@ -6,6 +6,7 @@ import {
     Container,
     CssBaseline,
     IconButton,
+    Box,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { useDispatch, useSelector } from 'react-redux';
@@ -56,11 +57,6 @@ const Logos = styled('div')(({ theme }) => ({
     width: 'fit-content',
 }));
 
-const Logo = styled('img')(({ theme }) => ({
-    height: '50px',
-    width: 'auto',
-    margin: theme.spacing(2),
-}));
 
 function LandingPage() {
     const dispatch: HumanResources = useDispatch();
@@ -90,38 +86,35 @@ function LandingPage() {
         ...companyList.slice(0, Math.max(0, (currentIndex + 5) - companyList.length))
     ];
 
-    const imageStyle = {
-        position: 'absolute',
-        top: '60%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-    };
-
     return (
         <Root>
             <CssBaseline />
             <NavBar featuresRef={featuresRef} />
 
             <main>
-                <Header sx={{ bgcolor: 'primary.main', height: '60vh', width: '100%', paddingTop: '30px' }}>
-                    <Container maxWidth="sm" sx={{ bgcolor: 'primary.main', paddingTop: 4, paddingBottom: 4 }}>
-                        <Typography component="h1" variant="h3" align="center" color="white" gutterBottom>
-                            Making your work easier one step at a time
-                        </Typography>
-                        <Grid container spacing={4} justifyContent="center">
-                            <Grid item>
-                                <Button variant="contained" sx={{ borderRadius: '20px', bgcolor: '#57B375', color: 'white' }}>
-                                    Book Demo
-                                </Button>
-                            </Grid>
-                            <Grid item sx={imageStyle}>
+                <Header sx={{ bgcolor: 'primary.main', width: '100%', paddingTop: '0.5%' }}>
+                    <Container maxWidth="sm" sx={{ paddingTop: 4, paddingBottom: 4 }}>
+                        <Box sx={{ height: '100%', width: '100%' }}>
+                            <Box sx={{bgcolor: 'primary.main', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: 2 }}>
+                                <Typography component="h1" variant="h3" align="center" color="white" gutterBottom>
+                                    Making your work easier one step at a time
+                                </Typography>
+                                <Grid container spacing={4} justifyContent="center">
+                                    <Grid item>
+                                        <Button variant="contained" sx={{ borderRadius: '20px', bgcolor: '#57B375', color: 'white' }}>
+                                            Book Demo
+                                        </Button>
+                                    </Grid>
+                                </Grid>
+                            </Box>
+                            <Box sx={{display: 'flex', justifyContent: 'center', alignItems: 'center', padding: 0 }}>
                                 <img
                                     src={Dashboard}
+                                    style={{ width: '900px' }}
                                     alt="Description of the image"
-                                    style={{ maxHeight: '500px', objectFit: 'contain' }}
                                 />
-                            </Grid>
-                        </Grid>
+                            </Box>
+                        </Box>
                     </Container>
                 </Header>
                 <Body sx={{ width: '100%', marginTop: '35vh' }}>

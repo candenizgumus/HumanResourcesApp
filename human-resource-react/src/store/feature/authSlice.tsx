@@ -68,11 +68,15 @@ const authSlice = createSlice({
     reducers:{
         changePageState(state, action:PayloadAction<string>){
             state.pageState = action.payload
+        },
+        setToken(state, action:PayloadAction<string>){
+            state.token = action.payload
         }
     },
     extraReducers: (build)=>{
         build.addCase(fetchLogin.fulfilled, (state, action)=>{
             state.token = action.payload.token;
+            localStorage.setItem('token', action.payload.token);
             state.isAuth = true;
         })
         build.addCase(fetchFindUserByToken.fulfilled, (state, action: PayloadAction<IUser[]>)=>{
@@ -84,5 +88,5 @@ const authSlice = createSlice({
 
 });
 
-export const {changePageState} = authSlice.actions
+export const {changePageState,setToken} = authSlice.actions
 export default authSlice.reducer;

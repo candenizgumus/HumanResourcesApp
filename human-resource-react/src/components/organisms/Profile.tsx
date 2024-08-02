@@ -15,7 +15,7 @@ interface UpdateProfile {
     managerName: string;
 }
 
-const UserForm: React.FC = () => {
+const Profile: React.FC = () => {
   const [formData, setFormData] = useState<UpdateProfile>({
     name: '',
     surname: '',
@@ -161,4 +161,4 @@ const UserForm: React.FC = () => {
   );
 };
 
-export default UserForm;
+export default Profile;

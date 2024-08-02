@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import { fetchGetOffers } from "../../store/feature/offerSlice";
 import { useEffect, useState } from "react";
 import { IOfferList } from "../../models/IOfferList";
+import {clearToken} from "../../store/feature/authSlice";
 
 const columns: GridColDef[] = [
     { field: 'id', headerName: 'ID', width: 70 },
@@ -47,15 +48,20 @@ export default function OfferList() {
     const token = useAppSelector(state => state.auth.token);
 
     useEffect(() => {
+
         dispatch(fetchGetOffers({
             token: token,
             page: 0,
             pageSize: 10
-        }))
-            .then(() => {
-                console.log(offerList);
-            });
-    }, [dispatch, token]);
+        })).catch(() => {
+
+                console.log('burası calisti')
+                localStorage.removeItem('token');
+                dispatch(clearToken());
+
+        })
+
+    }, []);
 
     const handleRowSelection = (newSelectionModel: GridRowSelectionModel) => {
         setSelectedRowIds(newSelectionModel as number[]);

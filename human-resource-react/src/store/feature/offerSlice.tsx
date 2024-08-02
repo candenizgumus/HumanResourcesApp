@@ -72,7 +72,7 @@ export const fetchGetOffers = createAsyncThunk(
 
             })
         }).then(data => data.json());
-        console.log(response);
+
         return response;
 
     }

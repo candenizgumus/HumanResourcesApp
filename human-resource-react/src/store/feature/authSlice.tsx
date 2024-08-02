@@ -69,8 +69,14 @@ const authSlice = createSlice({
         changePageState(state, action:PayloadAction<string>){
             state.pageState = action.payload
         },
-        setToken(state, action:PayloadAction<string>){
-            state.token = action.payload
+        setToken(state,action: PayloadAction<string>){
+            state.isAuth = true;
+            state.token = action.payload;
+        },
+        clearToken(state){
+
+            state.isAuth = false;
+            state.token = '';
         }
     },
     extraReducers: (build)=>{
@@ -88,5 +94,5 @@ const authSlice = createSlice({
 
 });
 
-export const {changePageState,setToken} = authSlice.actions
+export const {changePageState,setToken,clearToken} = authSlice.actions
 export default authSlice.reducer;

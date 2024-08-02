@@ -1,22 +1,10 @@
 // `src/store/feature/holidaySlice.ts`
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { IHoliday } from '../../models/IHoliday';
 
-export interface IHolidayResponse {
-    id: number;
-    holidayName: string;
-    holidayType: string;
-    holidayDate: number;
-    holidayStartDate: number;
-    holidayEndDate: number;
-}
 
-interface HolidayState {
-    holidayList: IHolidayResponse[];
-    isLoading: boolean;
-}
-
-const initialState: HolidayState = {
-    holidayList: [],
+const initialHolidayState = {
+    holidayList: [] as IHoliday[],
     isLoading: false
 };
 
@@ -39,7 +27,7 @@ export const fetchHolidays = createAsyncThunk(
 
 const holidaySlice = createSlice({
     name: 'holiday',
-    initialState,
+    initialState: initialHolidayState,
     reducers: {},
     extraReducers: (builder) => {
         builder
@@ -49,6 +37,7 @@ const holidaySlice = createSlice({
             .addCase(fetchHolidays.fulfilled, (state, action) => {
                 state.holidayList = action.payload;
                 state.isLoading = false;
+                console.log('Holiday List:', state.holidayList); // Log the holiday list
             })
             .addCase(fetchHolidays.rejected, (state, action) => {
                 state.isLoading = false;

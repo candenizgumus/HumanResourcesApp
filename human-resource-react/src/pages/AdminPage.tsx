@@ -18,14 +18,13 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
-import {  Grid} from '@mui/material';
-
+import { Grid} from '@mui/material';
+import { HumanResources} from '../store';
+import { useDispatch } from 'react-redux';
+import { changePageState } from '../store/feature/authSlice';
 import {NotificationIcon} from "../components/atoms/NotificationIcon";
 import {AdminMenuContents} from "../components/organisms/AdminMenuContents";
-import HolidayTable from "../components/molecules/HolidayTable";
-import {HumanResources} from "../store";
-import {changePageState} from "../store/feature/authSlice";
-import {useDispatch} from "react-redux";
+import { useNavigate } from 'react-router-dom';
 
 
 const drawerWidth = 240;
@@ -80,9 +79,10 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 }));
 
 export default function AdminPage() {
+  const navigate = useNavigate();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
-
+  const [selectedIndex, setSelectedIndex] = React.useState<string>('Inbox');
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -93,12 +93,9 @@ export default function AdminPage() {
   };
 
   const dispatch = useDispatch<HumanResources>();
-  const changePageStateToOffer = () => {
-    dispatch(changePageState('OfferList'));
-  };
-
-  const changePageStateToHolidayTable = () => {
-    dispatch(changePageState('HolidayTable'));
+  const handleListItemClick = (text: string) => {
+    setSelectedIndex(text);
+    dispatch(changePageState(text));
   };
   return (
     <Box sx={{ display: 'flex'  }}>
@@ -141,39 +138,22 @@ export default function AdminPage() {
         </DrawerHeader>
         <Divider />
         <List>
-
-            <ListItem key='OfferList' disablePadding>
-              <ListItemButton onClick={() => changePageStateToOffer()} >
+          {['Offers', 'Create Admin', 'Create Feature', 'Holidays'].map((text, index) => (
+            <ListItem key={text} disablePadding>
+              <ListItemButton onClick={() => handleListItemClick(text)}>
                 <ListItemIcon>
-                   <InboxIcon />
+                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
                 </ListItemIcon>
-                <ListItemText primary='OfferList' />
+                <ListItemText primary={text} />
               </ListItemButton>
             </ListItem>
-
-            <ListItem key='Users' disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                   <InboxIcon />
-                </ListItemIcon>
-                <ListItemText primary='Users' />
-              </ListItemButton>
-            </ListItem>
-          <ListItem key='HolidayTable' disablePadding>
-            <ListItemButton   onClick={() => changePageStateToHolidayTable()}>
-              <ListItemIcon>
-                <InboxIcon />
-              </ListItemIcon>
-              <ListItemText primary='HolidayTable' />
-            </ListItemButton>
-          </ListItem>
-
+          ))}
         </List>
         <Divider />
         <List>
-          {['All mail', 'Trash', 'Spam'].map((text, index) => (
+          {['Empty', 'Empty', 'Empty'].map((text, index) => (
             <ListItem key={text} disablePadding>
-              <ListItemButton>
+              <ListItemButton onClick={() => handleListItemClick(text)}>
                 <ListItemIcon>
                   {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
                 </ListItemIcon>
@@ -186,14 +166,8 @@ export default function AdminPage() {
       <Main open={open}>
         <DrawerHeader />
         <Grid container spacing={2}>
-            {/* TODO: BURAYI CONTENT YAPCAZ. Daha sonra düzenlenecek.!!! */}
-            <AdminMenuContents />
-
+          <AdminMenuContents/>
         </Grid>
-
-
-
-
       </Main>
     </Box>
   );

@@ -1,4 +1,4 @@
-# KolayIK Project
+# EasyHR Project
 
 This project is a web application developed based on the [Kolayik](https://kolayik.com/) website. It utilizes Java for the backend, and React with TypeScript for the frontend.
 

@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import {
-    authSlice, companySlice, featureSlice, offerSlice, userStorySlice
+    authSlice, companySlice, featureSlice, offerSlice, userStorySlice, holidaySlice
 } from "./feature";
 
 
@@ -12,7 +12,8 @@ const store = configureStore({
         feature: featureSlice,
         offer: offerSlice,
         company: companySlice,
-        userStory: userStorySlice
+        userStory: userStorySlice,
+        holiday: holidaySlice
 
     }
 });

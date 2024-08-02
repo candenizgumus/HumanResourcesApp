@@ -25,6 +25,7 @@ import { changePageState } from '../store/feature/authSlice';
 import DataTable2 from '../components/molecules/DataTable2';
 import {NotificationIcon} from "../components/atoms/NotificationIcon";
 import {AdminMenuContents} from "../components/organisms/AdminMenuContents";
+import HolidayTable from "../components/molecules/HolidayTable";
 
 
 const drawerWidth = 240;
@@ -172,8 +173,8 @@ export default function AdminPage() {
         <Grid container spacing={2}>
             {/* TODO: BURAYI CONTENT YAPCAZ. Daha sonra düzenlenecek.!!! */}
             <AdminMenuContents />
-
-    </Grid>
+            <HolidayTable />
+        </Grid>
 
 
 

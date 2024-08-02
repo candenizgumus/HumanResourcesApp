@@ -2,6 +2,7 @@ import authSlice from "./authSlice";
 import featureSlice from "./featureSlice";
 import companySlice from "./companySlice";
 import userStorySlice from "./userStorySlice";
+import holidaySlice from "./holidaySlice";
 import offerSlice from "./offerSlice";
 
 
@@ -12,5 +13,6 @@ export{
     featureSlice,
     companySlice,
     userStorySlice,
+    holidaySlice,
     offerSlice
 }

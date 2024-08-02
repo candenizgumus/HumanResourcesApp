@@ -22,7 +22,6 @@ export const fetchGetCompanies = createAsyncThunk(
     async()=>{
         const result = await fetch('http://localhost:9090/dev/v1/company/get-all')
             .then(data=>data.json());
-        console.log(result)
         return result;
     }
 );

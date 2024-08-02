@@ -1,5 +1,9 @@
-import * as React from 'react';
+
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import {HumanResources, useAppSelector} from "../../store";
+import {useDispatch} from "react-redux";
+import {fetchGetOffers} from "../../store/feature/offerSlice";
+import {useEffect} from "react";
 
 const columns: GridColDef[] = [
   { field: 'id', headerName: 'ID', width: 70 },
@@ -49,7 +53,28 @@ const rows = [
   {id:9, lastName: 'Roxie', firstName: 'Harvey', email: 'uZJbG@example.com', phone: '123456789', companyName: 'Facebook', title: 'Software Engineer', numberOfEmployee: 65 }
 ];
 
-export default function DataTable() {
+
+
+
+export default function OfferList() {
+
+    const offerList = useAppSelector(state => state.offer.offers);
+    const dispatch = useDispatch<HumanResources>();
+    const token = useAppSelector(state => state.auth.token);
+
+    useEffect(() => {
+      dispatch(fetchGetOffers(
+          {
+            token: token,
+            page: 0,
+            pageSize: 10
+          }
+      ))
+          .then(() => {
+            console.log(offerList)
+          })
+    }, [])
+
   return (
     <div style={{ height: 400, width: 'inherit'  }}>
       <DataGrid

@@ -1,11 +1,8 @@
 import {styled} from "@mui/material/styles";
 import React, {useRef} from "react";
-import {Container, CssBaseline} from "@mui/material";
+import { CssBaseline} from "@mui/material";
 import {NavBar} from "../components/molecules/NavBar";
-import HeroSection from "../components/molecules/HeroSection";
-import FormSection from "../components/molecules/FormSection";
-import FeaturesSection from "../components/molecules/FeaturesSection";
-import FAQSection from "../components/molecules/FAQSection";
+
 import FooterElement from "../components/molecules/FooterElement";
 import UserStoryCard from "../components/molecules/UserStoryCard";
 

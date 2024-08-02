@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Container, Typography, Box, TextField, Button, Grid, Paper, FormControlLabel, Checkbox } from '@mui/material';
 import { useDispatch } from "react-redux";
 import { HumanResources } from "../../store";
-import { fetchCreateOffer } from "../../store/feature/getOfferSlice";
+import { fetchCreateOffer } from "../../store/feature/offerSlice";
 import Swal from "sweetalert2";
 
 const FormSection = () => {

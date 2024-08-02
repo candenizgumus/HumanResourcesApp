@@ -11,7 +11,7 @@ interface IAuthState{
 }
 
 const initalAuthState: IAuthState  = {
-    user: [],
+    user: {} as IUser[],
     token: '',
     isAuth : false,
     pageState:<DataTable/>,

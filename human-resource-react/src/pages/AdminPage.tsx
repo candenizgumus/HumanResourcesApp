@@ -18,12 +18,14 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
-import DataTable from '../components/molecules/DataTable';
-import { Button, Grid, Input } from '@mui/material';
+import { Button, Grid} from '@mui/material';
 import { HumanResources, useAppSelector } from '../store';
 import { useDispatch } from 'react-redux';
 import { changePageState } from '../store/feature/authSlice';
 import DataTable2 from '../components/molecules/DataTable2';
+import {NotificationIcon} from "../components/atoms/NotificationIcon";
+import {AdminMenuContents} from "../components/organisms/AdminMenuContents";
+
 
 const drawerWidth = 240;
 
@@ -80,6 +82,7 @@ export default function AdminPage() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
 
+
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -88,13 +91,7 @@ export default function AdminPage() {
     setOpen(false);
   };
 
-  const page = useAppSelector((state) => state.auth.pageState);
-  const dispatch = useDispatch<HumanResources>();
-  const handlePageState = () => {
-    dispatch(changePageState( <DataTable2 />   ));
-  };
 
-  console.log('page', page);
   return (
     <Box sx={{ display: 'flex'  }}>
       <CssBaseline />
@@ -112,6 +109,8 @@ export default function AdminPage() {
           <Typography variant="h6" noWrap component="div">
             EASY HK
           </Typography>
+            <Box sx={{ flexGrow: 1 }} />
+            <NotificationIcon />
         </Toolbar>
       </AppBar>
       <Drawer
@@ -134,11 +133,11 @@ export default function AdminPage() {
         </DrawerHeader>
         <Divider />
         <List>
-          
+
             <ListItem key='Offers' disablePadding>
               <ListItemButton>
                 <ListItemIcon>
-                   <InboxIcon /> 
+                   <InboxIcon />
                 </ListItemIcon>
                 <ListItemText primary='Offers' />
               </ListItemButton>
@@ -147,12 +146,12 @@ export default function AdminPage() {
             <ListItem key='Users' disablePadding>
               <ListItemButton>
                 <ListItemIcon>
-                   <InboxIcon /> 
+                   <InboxIcon />
                 </ListItemIcon>
                 <ListItemText primary='Users' />
               </ListItemButton>
             </ListItem>
-          
+
         </List>
         <Divider />
         <List>
@@ -171,19 +170,14 @@ export default function AdminPage() {
       <Main open={open}>
         <DrawerHeader />
         <Grid container spacing={2}>
-            <Grid item xs={6}>
-            {page}
+            {/* TODO: BURAYI CONTENT YAPCAZ. Daha sonra düzenlenecek.!!! */}
+            <AdminMenuContents />
 
-            <Button onClick={handlePageState} variant="outlined" color="primary" sx={{ mr: 2 }}>Change datas to data table 2</Button>
-            </Grid>
-            <Grid item xs={6}>
-                Column 223
-      </Grid>
     </Grid>
-        
-        
-        
-        
+
+
+
+
       </Main>
     </Box>
   );

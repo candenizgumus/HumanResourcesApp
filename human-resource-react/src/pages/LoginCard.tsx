@@ -13,22 +13,20 @@ import Typography from '@mui/material/Typography';
 import {SportsTennis} from "@mui/icons-material";
 import {useDispatch} from "react-redux";
 import {fetchFindUserByToken, fetchLogin} from "../store/feature/authSlice";
-import {HumanResources, useAppSelector} from "../store";
-import {IUser} from "../models/IUser";
+import {HumanResources} from "../store";
+
+import {useState} from "react";
 
 
 export default function LoginCard() {
-    const user = useAppSelector(state => {
-        const userData = state.auth.user;
-        return Array.isArray(userData) ? userData : [userData];
-    });
+
 
 
     const dispatch = useDispatch<HumanResources>();
     const navigate = useNavigate();
 
-    const [email, setEmail] = React.useState('');
-    const [password, setPassword] = React.useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
 
 
 

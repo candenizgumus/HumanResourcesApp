@@ -18,7 +18,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
-import { Grid} from '@mui/material';
+import { Button, Grid} from '@mui/material';
 import { HumanResources} from '../store';
 import { useDispatch } from 'react-redux';
 import { changePageState } from '../store/feature/authSlice';
@@ -48,6 +48,11 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
   }),
 }));
 
+const logoStyle = {
+  flexGrow: 1,
+  color: 'white',
+  transition: 'color 0.3s ease',
+};
 interface AppBarProps extends MuiAppBarProps {
   open?: boolean;
 }
@@ -91,7 +96,9 @@ export default function AdminPage() {
   const handleDrawerClose = () => {
     setOpen(false);
   };
-
+  const navigateToHome = () => {
+    dispatch(changePageState('Admin Home'));
+  };
   const dispatch = useDispatch<HumanResources>();
   const handleListItemClick = (text: string) => {
     setSelectedIndex(text);
@@ -111,9 +118,11 @@ export default function AdminPage() {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div">
-            EASY HK
-          </Typography>
+          <Typography variant="h6" sx={logoStyle}>
+            <Button style={{ marginRight: '20px' }} onClick={navigateToHome} color="inherit">
+                Kolay IK
+            </Button>
+        </Typography>
             <Box sx={{ flexGrow: 1 }} />
             <NotificationIcon />
         </Toolbar>

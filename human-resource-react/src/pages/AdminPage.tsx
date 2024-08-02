@@ -24,6 +24,7 @@ import { useDispatch } from 'react-redux';
 import { changePageState } from '../store/feature/authSlice';
 import DataTable2 from '../components/molecules/DataTable2';
 import {NotificationIcon} from "../components/atoms/NotificationIcon";
+import {AdminMenuContents} from "../components/organisms/AdminMenuContents";
 
 
 const drawerWidth = 240;
@@ -90,15 +91,7 @@ export default function AdminPage() {
     setOpen(false);
   };
 
-  const page = useAppSelector((state) => state.auth.pageState);
-  const dispatch = useDispatch<HumanResources>();
-  const handlePageState = () => {
-    dispatch(changePageState( <DataTable2 />   ));
-  };
 
-
-
-  console.log('page', page);
   return (
     <Box sx={{ display: 'flex'  }}>
       <CssBaseline />
@@ -177,14 +170,9 @@ export default function AdminPage() {
       <Main open={open}>
         <DrawerHeader />
         <Grid container spacing={2}>
-            <Grid item xs={6}>
-            {page}
+            {/* TODO: BURAYI CONTENT YAPCAZ. Daha sonra düzenlenecek.!!! */}
+            <AdminMenuContents />
 
-            <Button onClick={handlePageState} variant="outlined" color="primary" sx={{ mr: 2 }}>Change datas to data table 2</Button>
-            </Grid>
-            <Grid item xs={6}>
-                Column 223
-      </Grid>
     </Grid>
 
 

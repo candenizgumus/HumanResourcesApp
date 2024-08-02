@@ -67,7 +67,7 @@ export default function OfferList() {
 
         })
 
-    }, []);
+    }, [token]);
 
     const handleRowSelection = (newSelectionModel: GridRowSelectionModel) => {
         setSelectedRowIds(newSelectionModel as number[]);

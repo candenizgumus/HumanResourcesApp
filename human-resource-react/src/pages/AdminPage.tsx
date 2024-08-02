@@ -150,7 +150,7 @@ export default function AdminPage() {
         </DrawerHeader>
         <Divider />
         <List>
-          {['Offers', 'Create Admin', 'Create Feature', 'Holidays'].map((text, index) => (
+          {['Offers', 'Create Admin', 'Create Feature', 'Holidays', 'Profile'].map((text, index) => (
             <ListItem key={text} disablePadding>
               <ListItemButton onClick={() => handleListItemClick(text)}>
                 <ListItemIcon>

@@ -1,15 +1,20 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import { Avatar, IconButton, Menu, MenuItem, Tooltip } from '@mui/material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import {useDispatch} from "react-redux";
-import {HumanResources} from "../../store";
-import {clearToken} from "../../store/feature/authSlice";
+import {HumanResources, useAppSelector} from "../../store";
+import {
+    clearToken,
+    fetchFindCompanyNameAndManagerNameOfUser,
+    fetchFindUserByToken
+} from "../../store/feature/authSlice";
 import {useNavigate} from "react-router-dom";
 
 export default function ProfileMenu() {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const dispatch = useDispatch<HumanResources>();
     const navigate = useNavigate();
+
 
     const handleMenuOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
@@ -30,6 +35,8 @@ export default function ProfileMenu() {
         navigate('/')
         handleMenuClose();
     };
+
+
 
     return (
         <div>

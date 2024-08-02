@@ -2,6 +2,7 @@ package com.humanresourcesapp.controllers;
 
 import com.humanresourcesapp.dto.requests.AddEmployeeToManagerRequestDto;
 import com.humanresourcesapp.dto.requests.PageRequestDto;
+import com.humanresourcesapp.dto.responses.CompanyAndManagerNameResponseDto;
 import com.humanresourcesapp.entities.User;
 import com.humanresourcesapp.services.UserService;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,7 @@ public class UserController
     private final UserService userService;
 
     @PostMapping(SAVE)
+    @CrossOrigin("*")
     public ResponseEntity<User> save(User user)
     {
         return ResponseEntity.ok(userService.save(user));
@@ -27,6 +29,7 @@ public class UserController
 
     @GetMapping(GET_ALL)
     @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @CrossOrigin("*")
     public ResponseEntity<List<User>> getAll(@RequestBody PageRequestDto dto)
     {
         return ResponseEntity.ok(userService.getAll(dto));
@@ -35,6 +38,7 @@ public class UserController
     //TODO BURAYI YAP
     @GetMapping(GET_ALL_USERS_OF_MANAGER_BY_COMPANY_ID)
     @PreAuthorize("hasAnyAuthority('MANAGER')")
+    @CrossOrigin("*")
     public ResponseEntity<List<User>> getAllUsersOfManagerByCompanyId()
     {
         return ResponseEntity.ok(userService.getAllUsersOfManagerByCompanyId());
@@ -42,6 +46,7 @@ public class UserController
 
     @GetMapping(FIND_BY_ID)
     @PreAuthorize("hasAnyAuthority('MANAGER','ADMIN')")
+    @CrossOrigin("*")
     public ResponseEntity<User> findById(Long id){
 
         return ResponseEntity.ok(userService.findById(id));
@@ -49,6 +54,7 @@ public class UserController
 
     @PostMapping(ADD_EMPLOYEE_TO_MANAGER)
     @PreAuthorize("hasAnyAuthority('MANAGER')")
+    @CrossOrigin("*")
     public ResponseEntity<User> addEmployeeToManager(@RequestBody AddEmployeeToManagerRequestDto dto)
     {
         return ResponseEntity.ok(userService.addEmployeeToManager(dto));
@@ -58,5 +64,11 @@ public class UserController
     @CrossOrigin("*")
     public ResponseEntity<User> findUserByToken(String token){
         return ResponseEntity.ok(userService.findByToken(token));
+    }
+
+    @PostMapping(FIND_COMPANY_NAME_AND_MANAGER_NAME_OF_USER)
+    @CrossOrigin("*")
+    public ResponseEntity<CompanyAndManagerNameResponseDto> findCompanyNameAndManagerNameOfUser(){
+        return ResponseEntity.ok(userService.findCompanyNameAndManagerNameOfUser());
     }
 }

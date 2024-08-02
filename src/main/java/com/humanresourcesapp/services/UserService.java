@@ -2,7 +2,9 @@ package com.humanresourcesapp.services;
 
 import com.humanresourcesapp.dto.requests.AddEmployeeToManagerRequestDto;
 import com.humanresourcesapp.dto.requests.PageRequestDto;
+import com.humanresourcesapp.dto.responses.CompanyAndManagerNameResponseDto;
 import com.humanresourcesapp.entities.Auth;
+import com.humanresourcesapp.entities.Company;
 import com.humanresourcesapp.entities.User;
 import com.humanresourcesapp.entities.enums.EStatus;
 import com.humanresourcesapp.entities.enums.EUserType;
@@ -123,5 +125,26 @@ public class UserService
     {
         Long authId = jwtTokenManager.getAuthIdFromToken(token).orElseThrow(() -> new HumanResourcesAppException(ErrorType.INVALID_TOKEN));
         return userRepository.findByAuthId(authId).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
+    }
+
+    public CompanyAndManagerNameResponseDto findCompanyNameAndManagerNameOfUser()
+    {
+
+        String email = UserInfoSecurityContext.getUserInfoFromSecurityContext();
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
+        if (user.getManagerId() != null && user.getCompanyId() != null)
+        {
+            Company company = companyService.findById(user.getCompanyId()).orElseThrow(() -> new HumanResourcesAppException(ErrorType.COMPANY_NOT_FOUND));
+            User manager = userRepository.findByAuthId(user.getManagerId()).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
+            return new CompanyAndManagerNameResponseDto(company.getName(), manager.getName() + " " + manager.getSurname());
+        }
+        else
+        {
+            return new CompanyAndManagerNameResponseDto("Empty", "Empty");
+        }
+
+
+
+
     }
 }

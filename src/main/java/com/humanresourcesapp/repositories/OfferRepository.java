@@ -8,9 +8,12 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.awt.print.Pageable;
 import java.util.List;
+import java.util.Optional;
 
 public interface OfferRepository extends JpaRepository<Offer, Long>
 {
-    @Query("select new com.humanresourcesapp.views.VwGetAllOffer(o.id,o.name,o.surname,o.email,o.phone,o.companyName,o.title,o.numberOfEmployee,o.userType,o.approvalText) from Offer o ")
+    @Query("select new com.humanresourcesapp.views.VwGetAllOffer(o.id,o.name,o.surname,o.email,o.phone,o.companyName,o.title,o.numberOfEmployee,o.userType,o.approvalText) from Offer o  where o.status = 'PENDING'")
     List<VwGetAllOffer> getAllOffer(PageRequest pageRequest);
+
+    Optional<Offer> findByEmail (String email);
 }

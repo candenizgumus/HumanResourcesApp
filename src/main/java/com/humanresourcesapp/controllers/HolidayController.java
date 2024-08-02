@@ -19,21 +19,26 @@ public class HolidayController {
     private final HolidayService holidayService;
 
     @PostMapping(SAVE)
-    public ResponseEntity<Holiday> save(HolidaySaveRequestDto holidaySaveRequestDto) {
+    @CrossOrigin("*")
+    public ResponseEntity<Holiday> save(@RequestBody HolidaySaveRequestDto holidaySaveRequestDto) {
+        System.out.println("controller:"+holidaySaveRequestDto);
         return ResponseEntity.ok(holidayService.save(holidaySaveRequestDto));
     }
 
-    @PostMapping(DELETE + "/{holidayId}")
+    @DeleteMapping(DELETE + "/{holidayId}")
+    @CrossOrigin("*")
     public ResponseEntity<Holiday> delete(@PathVariable Long holidayId) {
          return ResponseEntity.ok(holidayService.delete(holidayId));
     }
 
     @PostMapping(UPDATE)
+    @CrossOrigin("*")
     public ResponseEntity<Holiday> update(Long holidayId, HolidaySaveRequestDto holidaySaveRequestDto) {
         return ResponseEntity.ok(holidayService.update(holidayId, holidaySaveRequestDto));
     }
 
     @GetMapping(GET_ALL)
+    @CrossOrigin("*")
     public ResponseEntity<List<HolidayResponseDto>> getAll() {
         return ResponseEntity.ok(holidayService.findAll());
     }

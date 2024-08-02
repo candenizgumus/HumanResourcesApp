@@ -80,6 +80,7 @@ export const fetchGetOffers = createAsyncThunk(
     }
 
 );
+
 interface fetchApproveOffers {
     token: string;
     offerId: number;

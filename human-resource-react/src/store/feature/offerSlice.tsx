@@ -80,6 +80,29 @@ export const fetchGetOffers = createAsyncThunk(
     }
 
 );
+interface fetchApproveOffers {
+    token: string;
+    offerId: number;
+
+}
+export const fetchApproveOffers = createAsyncThunk(
+    'offer/fetchApproveOffers',
+    async (payload: fetchApproveOffers) => {
+
+
+        const response = await fetch('http://localhost:9090/dev/v1/offer/approve-offer-and-register-auth-and-user?offerId='+payload.offerId, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ` + payload.token // Adding Bearer token
+            }
+        }).then(data => data.json());
+
+        return response;
+
+    }
+
+);
 
 
 const offerSlice = createSlice({
@@ -104,6 +127,13 @@ const offerSlice = createSlice({
                 state.status = 'ACTIVE';
             })
             .addCase(fetchGetOffers.rejected, (state, action) => {
+                const dispatch = useDispatch();
+                dispatch(clearToken())
+            })
+            .addCase(fetchApproveOffers.fulfilled, (state, action: PayloadAction<IOfferList[]>) => {
+
+            })
+            .addCase(fetchApproveOffers.rejected, (state, action) => {
                 const dispatch = useDispatch();
                 dispatch(clearToken())
             })

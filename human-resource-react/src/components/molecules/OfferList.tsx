@@ -2,10 +2,11 @@ import { DataGrid, GridColDef, GridRowSelectionModel } from '@mui/x-data-grid';
 import { Button, Grid } from '@mui/material';
 import { HumanResources, useAppSelector } from "../../store";
 import { useDispatch } from "react-redux";
-import { fetchGetOffers } from "../../store/feature/offerSlice";
+import {fetchApproveOffers, fetchGetOffers} from "../../store/feature/offerSlice";
 import { useEffect, useState } from "react";
 import { IOfferList } from "../../models/IOfferList";
 import {clearToken} from "../../store/feature/authSlice";
+import Swal from 'sweetalert2';
 
 const columns: GridColDef[] = [
     { field: 'id', headerName: 'ID', width: 70 , headerAlign: 'center', },
@@ -73,9 +74,33 @@ export default function OfferList() {
     };
 
     const handleConfirmSelection = () => {
-        // Burada seçilen ID'lerle yapılacak işlemleri belirleyebilirsiniz
-        console.log('Selected Row IDs:', selectedRowIds);
-        // Örneğin, bu ID'lerle bir API çağrısı yapabilirsiniz.
+        selectedRowIds.forEach((id) => {
+            dispatch(fetchApproveOffers({
+                token: token,
+                offerId: id
+            })).then(() => {
+                Swal.fire({
+                    title: 'Success',
+                    text: 'Offer has been approved',
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                });
+            }).then(() => {
+
+                dispatch(fetchGetOffers({
+                    token: token,
+                    page: 0,
+                    pageSize: 50
+                })).catch(() => {
+
+                    console.log('burası calisti')
+                    localStorage.removeItem('token');
+                    dispatch(clearToken());
+
+                })
+
+            })
+        })
     };
 
     return (

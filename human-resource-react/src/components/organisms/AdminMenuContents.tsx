@@ -13,6 +13,7 @@ export const AdminMenuContents = () => {
                 {page === 'Offers' && <OfferList />}
                 {page === 'Create Admin' && <CreateAdminMenuContent />}
                 {page === 'Holidays' && <HolidayTable />}
+                {page === 'Admin Home' && <></>}
             </Grid>
         </>
     );

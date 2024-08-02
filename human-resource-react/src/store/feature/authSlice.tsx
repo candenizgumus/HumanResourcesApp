@@ -2,8 +2,8 @@ import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {ILogin} from "../../models/ILogin";
 import OfferList from "../../components/molecules/OfferList";
 import {IUser} from "../../models/IUser";
+import {ICreateAdmin} from '../../models/ICreateAdmin';
 import {useDispatch} from "react-redux";
-
 interface IAuthState{
     user: IUser,
     token: string,
@@ -78,6 +78,29 @@ export const fetchFindCompanyNameAndManagerNameOfUser = createAsyncThunk(
 
 );
 
+export const fetchCreateAdmin = createAsyncThunk(
+    'user/fetchCreateAdmin',
+    async (payload: ICreateAdmin) => {
+        try {
+            await fetch(`http://localhost:9090/dev/v1/auth/save-admin`,{
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer `+ payload.token
+                },
+                body: JSON.stringify({
+                    'email': payload.email,
+                    'password': payload.password
+                })
+            })
+        } catch (err) {
+            console.log('hata...: ', err);
+            throw err; // Hata varsa fırlat
+        }
+    }
+)
+
+
 
 
 const authSlice = createSlice({
@@ -102,11 +125,14 @@ const authSlice = createSlice({
             state.token = action.payload.token;
             localStorage.setItem('token', action.payload.token);
             state.isAuth = true;
+            state.pageState = 'Admin Home'
         })
         build.addCase(fetchFindUserByToken.fulfilled, (state, action: PayloadAction<IUser>)=>{
-
             state.user = action.payload;
-
+        })
+        build.addCase(fetchCreateAdmin.rejected, (state, action) => {
+            const dispatch = useDispatch();
+            dispatch(clearToken())
         })
         build.addCase(fetchFindCompanyNameAndManagerNameOfUser.rejected, (state, action)=>{
             const dispatch = useDispatch();

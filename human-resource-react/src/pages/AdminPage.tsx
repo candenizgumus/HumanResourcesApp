@@ -163,7 +163,7 @@ export default function AdminPage() {
         </List>
         <Divider />
         <List>
-          {['Empty', 'Empty', 'Empty'].map((text, index) => (
+          {['Empty1', 'Empty2', 'Empty3'].map((text, index) => (
             <ListItem key={text} disablePadding>
               <ListItemButton onClick={() => handleListItemClick(text)}>
                 <ListItemIcon>

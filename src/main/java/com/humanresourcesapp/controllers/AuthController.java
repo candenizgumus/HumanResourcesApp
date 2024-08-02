@@ -51,7 +51,11 @@ public class AuthController
 
 
 
-
+    @PostMapping(SAVE_ADMIN)
+    public ResponseEntity<Auth> save(@RequestBody Auth auth)
+    {
+        return ResponseEntity.ok(authService.saveAdmin(auth));
+    }
 
 
 

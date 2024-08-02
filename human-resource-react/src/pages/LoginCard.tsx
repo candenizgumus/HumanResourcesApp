@@ -27,7 +27,7 @@ export default function LoginCard() {
     const [error, setError] = useState(false);
 
     const handleLogin = async () => {
-        const result = await dispatch(fetchLogin({ email, password })).unwrap();
+        let result = await dispatch(fetchLogin({ email, password })).unwrap();
 
         // `result` içinde `code` özelliği olup olmadığını kontrol edin
         if (result.code) {

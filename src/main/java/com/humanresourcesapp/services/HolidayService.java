@@ -52,15 +52,17 @@ public class HolidayService {
     }
 
     public List<HolidayResponseDto> findAll() {
-        List<Holiday> allHolidays = holidayRepository.findAll();
-        List<HolidayResponseDto> holidayResponseDtos = new ArrayList<>();
-        for (Holiday holiday : allHolidays) {
-            holidayResponseDtos.add(new HolidayResponseDto(
+        List<Holiday> holidayList = holidayRepository.findAll();
+        List<HolidayResponseDto> holidayResponseDtoList = new ArrayList<>();
+        for (Holiday holiday: holidayList) {
+            holidayResponseDtoList.add(new HolidayResponseDto(
+                    holiday.getId(),
                     holiday.getHolidayName(),
                     holiday.getHolidayType(),
                     holiday.getHolidayStartDate(),
-                    holiday.getHolidayEndDate()));
+                    holiday.getHolidayEndDate()
+            ));
         }
-        return holidayResponseDtos;
+        return holidayResponseDtoList;
     }
 }

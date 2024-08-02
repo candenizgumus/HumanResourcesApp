@@ -18,14 +18,14 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
-import { Button, Grid} from '@mui/material';
-import { HumanResources, useAppSelector } from '../store';
-import { useDispatch } from 'react-redux';
-import { changePageState } from '../store/feature/authSlice';
-import DataTable2 from '../components/molecules/DataTable2';
+import {  Grid} from '@mui/material';
+
 import {NotificationIcon} from "../components/atoms/NotificationIcon";
 import {AdminMenuContents} from "../components/organisms/AdminMenuContents";
 import HolidayTable from "../components/molecules/HolidayTable";
+import {HumanResources} from "../store";
+import {changePageState} from "../store/feature/authSlice";
+import {useDispatch} from "react-redux";
 
 
 const drawerWidth = 240;
@@ -92,7 +92,14 @@ export default function AdminPage() {
     setOpen(false);
   };
 
+  const dispatch = useDispatch<HumanResources>();
+  const changePageStateToOffer = () => {
+    dispatch(changePageState('OfferList'));
+  };
 
+  const changePageStateToHolidayTable = () => {
+    dispatch(changePageState('HolidayTable'));
+  };
   return (
     <Box sx={{ display: 'flex'  }}>
       <CssBaseline />
@@ -135,12 +142,12 @@ export default function AdminPage() {
         <Divider />
         <List>
 
-            <ListItem key='Offers' disablePadding>
-              <ListItemButton>
+            <ListItem key='OfferList' disablePadding>
+              <ListItemButton onClick={() => changePageStateToOffer()} >
                 <ListItemIcon>
                    <InboxIcon />
                 </ListItemIcon>
-                <ListItemText primary='Offers' />
+                <ListItemText primary='OfferList' />
               </ListItemButton>
             </ListItem>
 
@@ -152,6 +159,14 @@ export default function AdminPage() {
                 <ListItemText primary='Users' />
               </ListItemButton>
             </ListItem>
+          <ListItem key='HolidayTable' disablePadding>
+            <ListItemButton   onClick={() => changePageStateToHolidayTable()}>
+              <ListItemIcon>
+                <InboxIcon />
+              </ListItemIcon>
+              <ListItemText primary='HolidayTable' />
+            </ListItemButton>
+          </ListItem>
 
         </List>
         <Divider />
@@ -173,7 +188,7 @@ export default function AdminPage() {
         <Grid container spacing={2}>
             {/* TODO: BURAYI CONTENT YAPCAZ. Daha sonra düzenlenecek.!!! */}
             <AdminMenuContents />
-            <HolidayTable />
+
         </Grid>
 
 

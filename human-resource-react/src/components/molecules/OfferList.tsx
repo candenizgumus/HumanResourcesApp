@@ -8,12 +8,13 @@ import { IOfferList } from "../../models/IOfferList";
 import {clearToken} from "../../store/feature/authSlice";
 
 const columns: GridColDef[] = [
-    { field: 'id', headerName: 'ID', width: 70 },
-    { field: 'name', headerName: 'First name', width: 160 },
-    { field: 'surname', headerName: 'Last name', width: 160 },
+    { field: 'id', headerName: 'ID', width: 70 , headerAlign: 'center', },
+    { field: 'name', headerName: 'First name', width: 160 , headerAlign: 'center', },
+    { field: 'surname', headerName: 'Last name', width: 160 , headerAlign: 'center',},
     {
         field: 'email',
         headerName: 'Email',
+        headerAlign: 'center',
         width: 300,
     },
     {
@@ -21,23 +22,27 @@ const columns: GridColDef[] = [
         headerName: 'Phone',
         description: 'This column has a value getter and is not sortable.',
         sortable: false,
+        headerAlign: 'center',
         width: 160,
     },
     {
         field: 'companyName',
         headerName: 'Company Name',
         width: 130,
+        headerAlign: 'center',
     },
     {
         field: 'title',
         headerName: 'Title',
         width: 130,
+        headerAlign: 'center',
     },
     {
         field: 'numberOfEmployee',
         headerName: 'Employee Count',
         type: 'number',
         width: 120,
+        headerAlign: 'center',
     },
 ];
 
@@ -52,7 +57,7 @@ export default function OfferList() {
         dispatch(fetchGetOffers({
             token: token,
             page: 0,
-            pageSize: 10
+            pageSize: 50
         })).catch(() => {
 
                 console.log('burası calisti')
@@ -80,17 +85,28 @@ export default function OfferList() {
                 columns={columns}
                 initialState={{
                     pagination: {
-                        paginationModel: { page: 1, pageSize: 10 },
+                        paginationModel: { page: 1, pageSize: 5 },
                     },
                 }}
-                pageSizeOptions={[10, 10]}
+                pageSizeOptions={[5, 10]}
                 checkboxSelection
                 onRowSelectionModelChange={handleRowSelection}
-
+                sx={{
+                    '& .MuiDataGrid-columnHeaders': {
+                        backgroundColor: 'rgba(224, 224, 224, 1)',
+                    },
+                    '& .MuiDataGrid-columnHeaderTitle': {
+                        textAlign: 'center',
+                        fontWeight: 'bold',
+                    },
+                    '& .MuiDataGrid-cell': {
+                        textAlign: 'center',
+                    },
+                }}
 
             />
-            <Grid container spacing={2} style={{ marginTop: 16 }}>
-                <Grid item xs={12}>
+            <Grid  container spacing={2} style={{ marginTop: 16 }}>
+                <Grid  item xs={12}>
                     <Button
                         onClick={handleConfirmSelection}
                         variant="contained"

@@ -40,7 +40,7 @@ public class OfferService
 
     public Boolean save(OfferSaveRequestDto dto)
     {
-
+        //User check
         if (userService.findByEmail(dto.email()).isPresent())
         {
             throw  new HumanResourcesAppException(ErrorType.EMAIL_TAKEN);
@@ -48,6 +48,10 @@ public class OfferService
         if (userService.findByPhone(dto.phone()).isPresent())
         {
             throw  new HumanResourcesAppException(ErrorType.PHONE_TAKEN);
+        }
+        //offer check
+        if (offerRepository.findByEmail(dto.email()).isPresent()){
+            throw  new HumanResourcesAppException(ErrorType.EMAIL_TAKEN);
         }
 
         //EUsertype set to the manager for now. Maybe we can change it later...

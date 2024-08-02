@@ -1,15 +1,15 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 import { IGetOffer } from '../../models/IGetOffer';
+import {IOfferList} from "../../models/IOfferList";
 
-const initialGetOfferState = {
-    offers: [],
+const initialOfferState = {
+    offers: [] as IOfferList[],
     status: 'idle',
-    //token: '',
     error: null as string | null
 };
 
 export const fetchCreateOffer = createAsyncThunk(
-    'getOffer/fetchCreateOffer',
+    'offer/fetchCreateOffer',
     async (payload: IGetOffer) => {
         console.log('Payload:', payload);
         try {
@@ -50,9 +50,39 @@ export const fetchCreateOffer = createAsyncThunk(
     }
 );
 
-const getOfferSlice = createSlice({
-    name: 'getOffer',
-    initialState: initialGetOfferState,
+interface fetchGetOffersPayload {
+    token: string;
+    page: number;
+    pageSize: number;
+}
+export const fetchGetOffers = createAsyncThunk(
+    'offer/fetchGetOffers',
+    async (payload: fetchGetOffersPayload) => {
+
+
+        const response = await fetch('http://localhost:9090/dev/v1/offer/get-all', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ` + payload.token // Adding Bearer token
+            }, body: JSON.stringify({
+
+                'page': payload.page,
+                'pageSize': payload.pageSize,
+
+            })
+        }).then(data => data.json());
+        console.log(response);
+        return response;
+
+    }
+
+);
+
+
+const offerSlice = createSlice({
+    name: 'offer',
+    initialState: initialOfferState,
     reducers: {},
     extraReducers: (builder) => {
         builder
@@ -66,8 +96,13 @@ const getOfferSlice = createSlice({
             .addCase(fetchCreateOffer.rejected, (state, action) => {
                 state.status = 'failed';
                 state.error = action.error.message ?? null;
-            });
+            })
+            .addCase(fetchGetOffers.fulfilled, (state, action: PayloadAction<IOfferList[]>) => {
+                state.offers = action.payload;
+                state.status = 'ACTIVE';
+            })
+
     }
 });
 
-export default getOfferSlice.reducer;
+export default offerSlice.reducer;

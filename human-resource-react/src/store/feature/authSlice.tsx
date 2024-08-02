@@ -1,6 +1,6 @@
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {ILogin} from "../../models/ILogin";
-import DataTable from "../../components/molecules/DataTable";
+import OfferList from "../../components/molecules/OfferList";
 import {IUser} from "../../models/IUser";
 
 interface IAuthState{
@@ -14,7 +14,7 @@ const initalAuthState: IAuthState  = {
     user: {} as IUser[],
     token: '',
     isAuth : false,
-    pageState:<DataTable/>,
+    pageState:<OfferList/>,
 
 }
 

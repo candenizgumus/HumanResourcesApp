@@ -27,7 +27,7 @@ public class OfferController
         return ResponseEntity.ok(offerService.save(dto));
     }
 
-    @GetMapping(GET_ALL)
+    @PostMapping(GET_ALL)
     @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<List<VwGetAllOffer>> getAllOffer(@RequestBody PageRequestDto dto)
     {

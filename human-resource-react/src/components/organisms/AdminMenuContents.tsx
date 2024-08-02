@@ -3,6 +3,7 @@ import {useAppSelector} from "../../store";
 import OfferList from "../molecules/OfferList";
 import HolidayTable from "./HolidayTable";
 import CreateAdminMenuContent  from "./CreateAdminMenuContent";
+import AdminHomeContent  from "./AdminHomeContent";
 import Profile from "./Profile";
 
 export const AdminMenuContents = () => {
@@ -14,7 +15,7 @@ export const AdminMenuContents = () => {
                 {page === 'Offers' && <OfferList />}
                 {page === 'Create Admin' && <CreateAdminMenuContent />}
                 {page === 'Holidays' && <HolidayTable />}
-                {page === 'Admin Home' && <></>}
+                {page === 'Admin Home' && <AdminHomeContent/>}
                 {page === 'Profile' && <Profile/>}
             </Grid>
         </>

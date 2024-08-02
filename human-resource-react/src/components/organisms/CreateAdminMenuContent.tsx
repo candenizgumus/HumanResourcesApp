@@ -1,39 +1,42 @@
-import React, {useState, ChangeEvent, FormEvent, useEffect} from 'react';
+import React, { useState, ChangeEvent, FormEvent } from 'react';
 import { TextField, Button, Box } from '@mui/material';
-import {useDispatch} from "react-redux";
-import {HumanResources, useAppSelector} from "../../store";
-import {fetchFindUserByToken} from "../../store/feature/authSlice";
+import { useDispatch } from 'react-redux';
+import { fetchCreateAdmin } from '../../store/feature/authSlice';
+import { HumanResources } from '../../store';
+import Swal from "sweetalert2";
 
 interface FormData {
   email: string;
-  name: string;
-  surname: string;
-  phone: string;
+  password: string;
+  token: string;
 }
 
 const UserForm: React.FC = () => {
-  const [formData, setFormData] = useState<FormData>({
-    email: '',
-    name: '',
-    surname: '',
-    phone: '',
-  });
-
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
+    const dispatch = useDispatch<HumanResources>();
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Handle form submission
-    console.log('Form submitted:', formData);
+    dispatch(fetchCreateAdmin({
+        email: email,
+        password: password,
+        token: localStorage.getItem('token') ?? ''
+    })).then(() => {
+      Swal.fire({
+          icon: 'success',
+          title: 'Success!',
+          text: 'Admin Account Created.',
+      });
+  })
+  .catch(() => {
+      Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'There was an error creating new admin account. Please try again later.',
+      });
+  });
   };
-
-
 
   return (
     <Box
@@ -51,32 +54,16 @@ const UserForm: React.FC = () => {
       <TextField
         label="Email"
         name="email"
-        value={formData.email}
-        onChange={handleChange}
+        value={email}
+        onChange={e => setEmail(e.target.value)}
         fullWidth
         required
       />
       <TextField
-        label="Name"
-        name="name"
-        value={formData.name}
-        onChange={handleChange}
-        fullWidth
-        required
-      />
-      <TextField
-        label="Surname"
-        name="surname"
-        value={formData.surname}
-        onChange={handleChange}
-        fullWidth
-        required
-      />
-      <TextField
-        label="Phone"
-        name="phone"
-        value={formData.phone}
-        onChange={handleChange}
+        label="Password"
+        name="password"
+        value={password}
+        onChange={e => setPassword(e.target.value)}
         fullWidth
         required
       />

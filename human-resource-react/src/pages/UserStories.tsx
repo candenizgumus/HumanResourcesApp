@@ -12,7 +12,7 @@ const Root = styled('div')(({theme}) => ({
 const Footer = styled('footer')(({theme}) => ({
     padding: theme.spacing(0),
 }));
-const UserStories = () => {
+export default function UserStories ()  {
     const featuresRef = useRef<HTMLDivElement>(null);
     return (
         <Root>
@@ -28,4 +28,4 @@ const UserStories = () => {
     );
 };
 
-export default UserStories;
+

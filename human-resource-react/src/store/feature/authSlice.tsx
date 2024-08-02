@@ -7,14 +7,14 @@ interface IAuthState{
     user: IUser[],
     token: string,
     isAuth: boolean,
-    pageState: JSX.Element
+    pageState: string
 }
 
 const initalAuthState: IAuthState  = {
     user: {} as IUser[],
     token: '',
     isAuth : false,
-    pageState:<OfferList/>,
+    pageState:'',
 
 }
 
@@ -66,7 +66,7 @@ const authSlice = createSlice({
     name: 'auth',
     initialState: initalAuthState,
     reducers:{
-        changePageState(state, action){
+        changePageState(state, action:PayloadAction<string>){
             state.pageState = action.payload
         }
     },

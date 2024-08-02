@@ -4,6 +4,7 @@ import {HumanResources, useAppSelector} from "../../store";
 import {useDispatch} from "react-redux";
 import {fetchGetOffers} from "../../store/feature/offerSlice";
 import {useEffect} from "react";
+import {IOfferList} from "../../models/IOfferList";
 
 const columns: GridColDef[] = [
   { field: 'id', headerName: 'ID', width: 70 },
@@ -58,7 +59,7 @@ const rows = [
 
 export default function OfferList() {
 
-    const offerList = useAppSelector(state => state.offer.offers);
+    const offerList: IOfferList[] = useAppSelector(state => state.offer.offers);
     const dispatch = useDispatch<HumanResources>();
     const token = useAppSelector(state => state.auth.token);
 

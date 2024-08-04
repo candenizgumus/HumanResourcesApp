@@ -1,8 +1,12 @@
 import React, {useState, ChangeEvent, FormEvent, useEffect} from 'react';
-import {TextField, Button, Box, Grid} from '@mui/material';
+import {TextField, Button, Box, Grid, InputLabel, Select, MenuItem, FormControl} from '@mui/material';
 import {HumanResources, useAppSelector} from "../../store";
 import {IUser} from "../../models/IUser";
-import {fetchFindCompanyNameAndManagerNameOfUser, fetchFindUserByToken} from "../../store/feature/authSlice";
+import {
+    fetchFindCompanyNameAndManagerNameOfUser,
+    fetchFindUserByToken,
+    fetchGetPositions
+} from "../../store/feature/authSlice";
 import {useDispatch} from "react-redux";
 
 interface UpdateProfile {
@@ -43,6 +47,10 @@ const Profile: React.FC = () => {
   const user:IUser = useAppSelector((state) => state.auth.user);
     const token = useAppSelector((state) => state.auth.token);
     const dispatch = useDispatch<HumanResources>();
+    const [positions, setPositions] = useState([]);
+    const [selectedPositions, setSelectedPositions] = useState<string>('');
+
+
     useEffect(() => {
         dispatch(fetchFindUserByToken(token))
         dispatch(fetchFindCompanyNameAndManagerNameOfUser(token))
@@ -54,7 +62,12 @@ const Profile: React.FC = () => {
                         managerName: data.payload.managerName ?? ''
                     }
                 )
-            })
+            }).then(() => {
+            dispatch(fetchGetPositions())
+                .then(data => {
+                    setPositions(data.payload)
+                })
+        })
 
 
     },[])
@@ -102,6 +115,20 @@ const Profile: React.FC = () => {
                           fullWidth
                           required
                       />
+                      <FormControl variant="outlined">
+                          <InputLabel>{user.position ?? 'Please Select Your Position'}</InputLabel>
+                          <Select
+                              value={selectedPositions}
+                              onChange={event => setSelectedPositions(event.target.value as string)}
+                              label="Position"
+                          >
+                              {positions.map((position) => (
+                                  <MenuItem key={position} value={position}>
+                                      {position}
+                                  </MenuItem>
+                              ))}
+                          </Select>
+                      </FormControl>
 
                   </Box>
               </Grid>
@@ -145,6 +172,7 @@ const Profile: React.FC = () => {
                           fullWidth
                           disabled
                       />
+
                       <Button type="button" variant="contained" color="primary">
                           Update Profile
                       </Button>

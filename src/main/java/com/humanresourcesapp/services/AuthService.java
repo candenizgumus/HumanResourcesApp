@@ -68,6 +68,8 @@ public class AuthService implements UserDetailsService
                 .password(encodedPassword)
                 .status(EStatus.ACTIVE)
                 .build();
+
+
         return authRepository.save(saveAuth);
     }
 }

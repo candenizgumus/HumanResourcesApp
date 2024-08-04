@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { IOfferList } from "../../models/IOfferList";
 import {clearToken} from "../../store/feature/authSlice";
 import Swal from 'sweetalert2';
+import TextField from "@mui/material/TextField";
 
 const columns: GridColDef[] = [
     { field: 'id', headerName: 'ID', width: 70 , headerAlign: 'center', },
@@ -45,6 +46,13 @@ const columns: GridColDef[] = [
         width: 120,
         headerAlign: 'center',
     },
+    {
+        field: 'sector',
+        headerName: 'Sector',
+        type: 'string',
+        width: 250,
+        headerAlign: 'center',
+    },
 ];
 
 export default function OfferList() {
@@ -52,13 +60,15 @@ export default function OfferList() {
     const offerList: IOfferList[] = useAppSelector(state => state.offer.offers);
     const dispatch = useDispatch<HumanResources>();
     const token = useAppSelector(state => state.auth.token);
+    const [searchText, setSearchText] = useState('');
 
     useEffect(() => {
 
         dispatch(fetchGetOffers({
             token: token,
             page: 0,
-            pageSize: 50
+            pageSize: 50,
+            email: searchText
         })).catch(() => {
 
                 console.log('burası calisti')
@@ -67,7 +77,7 @@ export default function OfferList() {
 
         })
 
-    }, [token]);
+    }, [dispatch, searchText, token]);
 
     const handleRowSelection = (newSelectionModel: GridRowSelectionModel) => {
         setSelectedRowIds(newSelectionModel as number[]);
@@ -90,7 +100,8 @@ export default function OfferList() {
                 dispatch(fetchGetOffers({
                     token: token,
                     page: 0,
-                    pageSize: 50
+                    pageSize: 50,
+                    email: searchText
                 })).catch(() => {
 
 
@@ -102,10 +113,18 @@ export default function OfferList() {
             })
         })
     };
-
+    //TODO buraya arama motoru yap. dto ya email ekle. if else koyma
     return (
         <div style={{ height: 400, width: 'inherit' }}>
+            <TextField
+                label="Email"
+                variant="outlined"
+                onChange={event => setSearchText(event.target.value)}
+                value={searchText}
+                style={{ marginBottom: '10px' }}
+            />
             <DataGrid
+
                 rows={offerList}
                 columns={columns}
                 initialState={{

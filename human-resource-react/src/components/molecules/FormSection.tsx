@@ -1,9 +1,25 @@
-import React, { useState } from 'react';
-import { Container, Typography, Box, TextField, Button, Grid, Paper, FormControlLabel, Checkbox } from '@mui/material';
+import React, {useEffect, useState} from 'react';
+import {
+    Container,
+    Typography,
+    Box,
+    TextField,
+    Button,
+    Grid,
+    Paper,
+    FormControlLabel,
+    Checkbox,
+    InputLabel, Select, MenuItem, FormControl
+} from '@mui/material';
 import { useDispatch } from "react-redux";
 import { HumanResources } from "../../store";
 import { fetchCreateOffer } from "../../store/feature/offerSlice";
 import Swal from "sweetalert2";
+import {
+    fetchFindCompanyNameAndManagerNameOfUser,
+    fetchFindUserByToken,
+    fetchGetPositions, fetchGetSectors
+} from "../../store/feature/authSlice";
 
 const FormSection = () => {
     const dispatch = useDispatch<HumanResources>();
@@ -16,6 +32,8 @@ const FormSection = () => {
     const [numberOfEmployees, setNumberOfEmployees] = useState('');
     const [companyName, setCompanyName] = useState('');
     const [agreedToTerms, setAgreedToTerms] = useState(false);
+    const [sector, setSector] = useState([]);
+    const [selectedSector, setSelectedSector] = useState<string>('');
 
     const handleSubmit = () => {
         if (!name || !surname || !email || !phone || !title || !numberOfEmployees || !companyName) {
@@ -37,13 +55,15 @@ const FormSection = () => {
         }
 
         dispatch(fetchCreateOffer({
+
             name,
             surname,
             email,
             phone,
             title,
             numberOfEmployees,
-            companyName
+            companyName,
+            sector: selectedSector
         }))
             .then(() => {
                 Swal.fire({
@@ -60,6 +80,13 @@ const FormSection = () => {
                 });
             });
     };
+
+    useEffect(() => {
+        dispatch(fetchGetSectors())
+            .then(data => {
+                setSector(data.payload);
+            });
+    }, []);
 
     return (
         <Box sx={{ py: 8, bgcolor: 'background.default' }}>
@@ -123,7 +150,7 @@ const FormSection = () => {
                                 value={numberOfEmployees}
                             />
                         </Grid>
-                        <Grid item xs={12}>
+                        <Grid item xs={12} sm={6}>
                             <TextField
                                 onChange={(e) => setCompanyName(e.target.value)}
                                 fullWidth
@@ -131,6 +158,22 @@ const FormSection = () => {
                                 variant="outlined"
                                 value={companyName}
                             />
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <FormControl fullWidth variant="outlined">
+                                <InputLabel>{'Please Select Your Sector'}</InputLabel>
+                                <Select
+                                    value={selectedSector}
+                                    onChange={event => setSelectedSector(event.target.value as string)}
+                                    label="Position"
+                                >
+                                    {sector.map((sector) => (
+                                        <MenuItem key={sector} value={sector}>
+                                            {sector}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
                         </Grid>
                         <Grid item xs={12}>
                             <FormControlLabel

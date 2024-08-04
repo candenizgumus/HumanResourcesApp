@@ -6,5 +6,5 @@ export interface IGetOffer {
     title: string;
     numberOfEmployees: string;
     companyName: string;
-    //token: string;
+    sector:string
 }

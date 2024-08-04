@@ -1,5 +1,6 @@
 package com.humanresourcesapp.views;
 
+import com.humanresourcesapp.entities.enums.ESectors;
 import com.humanresourcesapp.entities.enums.EUserType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,5 +22,6 @@ public class VwGetAllOffer
     String title;
     String numberOfEmployee;
     EUserType userType;
+    ESectors sector;
     Boolean approvalText;
 }

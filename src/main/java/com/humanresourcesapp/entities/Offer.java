@@ -1,5 +1,6 @@
 package com.humanresourcesapp.entities;
 
+import com.humanresourcesapp.entities.enums.ESectors;
 import com.humanresourcesapp.entities.enums.EUserType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -29,6 +30,8 @@ public class Offer extends BaseEntity
     String numberOfEmployee;
     @Enumerated(EnumType.STRING)
     EUserType userType;
+    @Enumerated(EnumType.STRING)
+    ESectors sector;
     Boolean approvalText;
 
 }

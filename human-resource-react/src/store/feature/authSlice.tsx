@@ -4,11 +4,13 @@ import OfferList from "../../components/molecules/OfferList";
 import {IUser} from "../../models/IUser";
 import {ICreateAdmin} from '../../models/ICreateAdmin';
 import {useDispatch} from "react-redux";
+import getUserTypeFromToken from "../../util/getUserTypeFromToken";
 interface IAuthState{
     user: IUser,
     token: string,
     isAuth: boolean,
-    pageState: string
+    pageState: string,
+    userType: string | null
 }
 
 const initalAuthState: IAuthState  = {
@@ -16,7 +18,7 @@ const initalAuthState: IAuthState  = {
     token: '',
     isAuth : false,
     pageState:'',
-
+    userType:''
 }
 
 export const fetchLogin = createAsyncThunk(
@@ -124,8 +126,8 @@ const authSlice = createSlice({
         build.addCase(fetchLogin.fulfilled, (state, action)=>{
             state.token = action.payload.token;
             localStorage.setItem('token', action.payload.token);
+            state.userType = getUserTypeFromToken(action.payload.token)
             state.isAuth = true;
-            state.pageState = 'Admin Home'
         })
         build.addCase(fetchFindUserByToken.fulfilled, (state, action: PayloadAction<IUser>)=>{
             state.user = action.payload;

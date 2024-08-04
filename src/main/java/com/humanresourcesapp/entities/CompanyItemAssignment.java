@@ -15,6 +15,7 @@ public class CompanyItemAssignment extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private Long companyId;
     private Long companyItemId;
     private Long employeeId;

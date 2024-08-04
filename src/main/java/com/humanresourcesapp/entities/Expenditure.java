@@ -16,6 +16,7 @@ public class Expenditure extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private Long employeeId;
     private String description;
     private Double price;

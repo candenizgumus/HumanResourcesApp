@@ -11,12 +11,12 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import {SportsTennis} from "@mui/icons-material";
 import {useDispatch} from "react-redux";
-import {fetchFindUserByToken, fetchLogin} from "../store/feature/authSlice";
-import {HumanResources} from "../store";
+import {fetchFindUserByToken, fetchLogin} from "../../store/feature/authSlice";
+import {HumanResources, useAppSelector} from "../../store";
 
 import {useState} from "react";
 import {Alert, AlertTitle} from "@mui/material";
-import getUserTypeFromToken from '../util/getUserTypeFromToken';
+import getUserTypeFromToken from '../../util/getUserTypeFromToken';
 
 export default function LoginCard() {
     const dispatch = useDispatch<HumanResources>();
@@ -25,7 +25,7 @@ export default function LoginCard() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState(false);
-
+    const userType = useAppSelector((state) => state.auth.userType);
     const handleLogin = async () => {
         let result = await dispatch(fetchLogin({ email, password })).unwrap();
 
@@ -34,12 +34,7 @@ export default function LoginCard() {
             setError(result.message);
             return; // İşlemi sonlandırarak sonraki then bloklarına geçişi engeller.
         }
-        const userType = getUserTypeFromToken(result.token)
-        if ( userType === 'ADMIN') {
-            navigate('/admin-page');
-        } else {
-            console.log('User is not an ADMIN.');
-        }
+        navigate('/main-page');
     };
 
     return (

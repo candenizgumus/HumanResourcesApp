@@ -17,6 +17,7 @@ public class Holiday extends BaseEntity
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
+
     String holidayName;
     @Enumerated(EnumType.STRING)
     EHolidayType holidayType;

@@ -17,7 +17,10 @@ public class Break extends BaseEntity
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
+
+    private Long employeeId;
     private Long shiftId;
+
     private Long breakStartTime;
     private Long breakEndTime;
 }

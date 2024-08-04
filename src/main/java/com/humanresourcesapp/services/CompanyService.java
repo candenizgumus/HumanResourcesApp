@@ -30,4 +30,8 @@ public class CompanyService
     public List<Company> getAll() {
         return companyRepository.findAll();
     }
+
+    public void saveAll(List<Company> companyList) {
+        companyRepository.saveAll(companyList);
+    }
 }

@@ -22,6 +22,14 @@ public class Company extends BaseEntity
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
+
     String name;
     String logo;
+    String numberOfEmployee;
+    String description;
+
+    @Enumerated(EnumType.STRING)
+    ESubscriptionType subscriptionType;
+    Long subscriptionStartDate;
+    Long subscriptionEndDate;
 }

@@ -19,6 +19,7 @@ public class Leave extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private Long employeeId;
     private Long startDate;
     private Long endDate;

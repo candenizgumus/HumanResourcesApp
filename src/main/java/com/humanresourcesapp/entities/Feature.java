@@ -19,6 +19,7 @@ public class Feature {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
+
     private String name;
     private String shortDescription;
     private String iconPath;

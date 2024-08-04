@@ -50,5 +50,6 @@ public class Endpoints
     public static final String FIND_COMPANY_NAME_AND_MANAGER_NAME_OF_USER = "/find-company-name-and-manager-name-of-user";
     public static final String SAVE_ADMIN = "/save-admin";
     public static final String GET_POSITIONS = "/get-positions";
+    public static final String GET_SECTORS = "/get-sectors";
     ;
 }

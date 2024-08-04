@@ -5,6 +5,7 @@ import com.humanresourcesapp.dto.requests.PageRequestDto;
 import com.humanresourcesapp.dto.responses.CompanyAndManagerNameResponseDto;
 import com.humanresourcesapp.entities.User;
 import com.humanresourcesapp.entities.enums.EPosition;
+import com.humanresourcesapp.entities.enums.ESectors;
 import com.humanresourcesapp.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -40,6 +41,13 @@ public class UserController
     public ResponseEntity<EPosition[]> getPositions()
     {
         return ResponseEntity.ok(EPosition.values());
+    }
+
+    @GetMapping(GET_SECTORS)
+    @CrossOrigin("*")
+    public ResponseEntity<ESectors[]> getSectors()
+    {
+        return ResponseEntity.ok(ESectors.values());
     }
 
     @GetMapping(GET_ALL)

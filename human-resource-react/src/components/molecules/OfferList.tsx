@@ -46,6 +46,13 @@ const columns: GridColDef[] = [
         width: 120,
         headerAlign: 'center',
     },
+    {
+        field: 'sector',
+        headerName: 'Sector',
+        type: 'string',
+        width: 250,
+        headerAlign: 'center',
+    },
 ];
 
 export default function OfferList() {

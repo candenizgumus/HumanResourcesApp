@@ -1,6 +1,7 @@
 package com.humanresourcesapp.entities;
 
 import com.humanresourcesapp.entities.enums.EPosition;
+import com.humanresourcesapp.entities.enums.ESectors;
 import com.humanresourcesapp.entities.enums.EStatus;
 import com.humanresourcesapp.entities.enums.EUserType;
 import jakarta.persistence.*;
@@ -35,6 +36,8 @@ public class User extends BaseEntity
     EUserType userType;
     @Enumerated(EnumType.STRING)
     EPosition position;
+    @Enumerated(EnumType.STRING)
+    ESectors sector;
 
 }
 

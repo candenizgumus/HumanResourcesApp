@@ -20,4 +20,8 @@ public class FeatureService {
     public List<Feature> getAll() {
         return featureRepository.findAll();
     }
+
+    public void saveAll(List<Feature> featureList) {
+        featureRepository.saveAll(featureList);
+    }
 }

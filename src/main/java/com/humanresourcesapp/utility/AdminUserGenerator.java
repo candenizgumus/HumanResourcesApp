@@ -48,6 +48,6 @@ public class AdminUserGenerator
                     .build();
             userService.save(user);
         }
-
     }
+
 }

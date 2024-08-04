@@ -1,13 +1,12 @@
 import React, {useRef} from "react";
 import CssBaseline from '@mui/material/CssBaseline';
 import Grid from '@mui/material/Grid';
-import backgroundImage from '../../src/images/Screenshot 2024-07-30 at 16.28.41 2.png'
 import LoginCard from './LoginCard';
 import Box from "@mui/material/Box";
 import RegisterCard from "./RegisterCard";
 import {AppBar, Button, Toolbar, Typography} from "@mui/material";
 import {useNavigate} from "react-router-dom";
-import {NavBar} from "../components/molecules/NavBar";
+import {NavBar} from "../../components/molecules/NavBar";
 
 export default function Login() {
     // Create a ref for the Features section
@@ -19,7 +18,6 @@ export default function Login() {
           component="main"
           sx={{
               height: '90vh',
-              backgroundImage: `url(${backgroundImage})`,
               backgroundColor: (t) =>
                   t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
               backgroundSize: 'cover',

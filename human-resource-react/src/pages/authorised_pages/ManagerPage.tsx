@@ -19,13 +19,13 @@ import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 import { Button, Grid} from '@mui/material';
-import { HumanResources} from '../store';
+import { HumanResources} from '../../store';
 import { useDispatch } from 'react-redux';
-import { changePageState } from '../store/feature/authSlice';
-import {NotificationIcon} from "../components/atoms/NotificationIcon";
-import {AdminMenuContents} from "../components/organisms/AdminMenuContents";
+import { changePageState } from '../../store/feature/authSlice';
+import {NotificationIcon} from "../../components/atoms/NotificationIcon";
+import {AdminMenuContents} from "../../components/organisms/AdminMenuContents";
 import { useNavigate } from 'react-router-dom';
-import ProfileMenu from "../components/molecules/ProfileMenu";
+import ProfileMenu from "../../components/molecules/ProfileMenu";
 
 
 const drawerWidth = 240;
@@ -150,7 +150,7 @@ export default function AdminPage() {
         </DrawerHeader>
         <Divider />
         <List>
-          {['Offers', 'Create Admin', 'Create Feature', 'Holidays', 'Profile'].map((text, index) => (
+          {['Employees', 'Add Employee', 'Profile'].map((text, index) => (
             <ListItem key={text} disablePadding>
               <ListItemButton onClick={() => handleListItemClick(text)}>
                 <ListItemIcon>

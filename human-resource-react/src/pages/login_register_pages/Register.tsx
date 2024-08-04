@@ -1,7 +1,6 @@
 
 import CssBaseline from '@mui/material/CssBaseline';
 import Grid from '@mui/material/Grid';
-import backgroundImage from '../../src/images/Screenshot 2024-07-30 at 16.28.41 2.png'
 import RegisterCard from './RegisterCard';
 import Box from "@mui/material/Box";
 
@@ -15,7 +14,6 @@ export default function Register() {
             component="main"
             sx={{
                 height: '100vh',
-                backgroundImage: `url(${backgroundImage})`,
                 backgroundColor: (t) =>
                     t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
                 backgroundSize: 'cover',

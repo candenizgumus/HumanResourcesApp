@@ -2,8 +2,11 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 export interface IUserStoryResponse {
     id: number,
-    photo: string,
-    commentText: string
+    managerName: string,
+    companyName: string,
+    title: string,
+    commentText: string,
+    photo: string
 }
 
 interface IInitialUserStory{

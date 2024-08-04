@@ -32,6 +32,7 @@ export default function ProfileMenu() {
 
     const handleLogout = () => {
         dispatch(clearToken())
+
         navigate('/')
         handleMenuClose();
     };

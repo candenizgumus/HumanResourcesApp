@@ -25,7 +25,6 @@ export default function LoginCard() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState(false);
-    const userType = useAppSelector((state) => state.auth.userType);
     const handleLogin = async () => {
         let result = await dispatch(fetchLogin({ email, password })).unwrap();
 

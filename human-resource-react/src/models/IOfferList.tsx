@@ -9,4 +9,5 @@ export interface IOfferList {
     numberOfEmployee: string
     userType: string
     approvalText: string
+    sector:string
 }

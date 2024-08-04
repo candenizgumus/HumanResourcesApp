@@ -66,6 +66,7 @@ public class OfferService
                         .title(dto.title())
                         .numberOfEmployee(dto.numberOfEmployees())
                         .userType(EUserType.MANAGER)
+                        .sector(dto.sector())
                         .build());
 
 
@@ -106,6 +107,7 @@ public class OfferService
                 .password(encodedPassword)
                 .userType(offer.getUserType())
                 .status(EStatus.ACTIVE)
+
                 .build()
         );
 
@@ -122,6 +124,7 @@ public class OfferService
                 .companyId(company.getId())
                 .userType(offer.getUserType())
                 .status(EStatus.ACTIVE)
+                .sector(offer.getSector())
                 .build());
 
         return true;

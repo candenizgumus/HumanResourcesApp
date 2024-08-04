@@ -75,6 +75,8 @@ public class User extends BaseEntity
     // ALL USERS
     @Enumerated(EnumType.STRING)
     EPosition position;
+    
+    //
     @Enumerated(EnumType.STRING)
     ESectors sector;
 

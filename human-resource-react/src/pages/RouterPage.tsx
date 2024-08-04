@@ -9,21 +9,21 @@ import AdminPage from './authorised_pages/AdminPage';
 import ManagerPage from './authorised_pages/ManagerPage'; // Import ManagerPage
 import { useDispatch } from "react-redux";
 import { HumanResources, useAppSelector } from "../store";
-import { setToken } from "../store/feature/authSlice";
+import { fetchFindUserByToken, setToken } from "../store/feature/authSlice";
 import AboutUsPage from './pre_autorize_pages/AboustUs';
 import ContactPage from './pre_autorize_pages/ContactPage';
 
 const RouterPage = () => {
     const dispatch = useDispatch<HumanResources>();
     const isAuth = useAppSelector((state) => state.auth.isAuth);
-    const userType = useAppSelector((state) => state.auth.userType);
-
+    const user = useAppSelector((state) => state.auth.user);
+    const token = localStorage.getItem('token');
     useEffect(() => {
-        const token = localStorage.getItem('token');
         if (token) {
+            dispatch(fetchFindUserByToken(token));
             dispatch(setToken(token));
         }
-    }, [dispatch]);
+    }, [token]);
 
     return (
         <Router>
@@ -35,12 +35,13 @@ const RouterPage = () => {
                 <Route path="/user-stories" element={<UserStoriesPage />} />
                 <Route path="/about-us" element={<AboutUsPage />} />
                 <Route path="/contact" element={<ContactPage />} />
-                <Route path="/admin-page" element={isAuth ? <AdminPage /> : <LandingPage />} />
                 <Route 
                     path='/main-page' 
-                    element={isAuth ? (
-                        userType === 'ADMIN' ? <AdminPage /> : userType === 'MANAGER' ? <ManagerPage /> : <LandingPage />
-                    ) : <LandingPage />} 
+                    element={
+                        token ? (
+                            user.userType === 'ADMIN' ? <AdminPage /> : user.userType === 'MANAGER' ? <ManagerPage /> : <LandingPage/>
+                        ) : <LandingPage />
+                    } 
                 />
             </Routes>
         </Router>

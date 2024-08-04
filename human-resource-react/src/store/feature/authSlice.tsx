@@ -10,15 +10,13 @@ interface IAuthState{
     token: string,
     isAuth: boolean,
     pageState: string,
-    userType: string | null
 }
 
 const initalAuthState: IAuthState  = {
     user: {} as IUser,
     token: '',
     isAuth : false,
-    pageState:'',
-    userType:''
+    pageState:''
 }
 
 export const fetchLogin = createAsyncThunk(
@@ -135,16 +133,15 @@ const authSlice = createSlice({
             state.token = action.payload;
         },
         clearToken(state){
-
             state.isAuth = false;
             state.token = '';
+            localStorage.removeItem('token');
         }
     },
     extraReducers: (build)=>{
         build.addCase(fetchLogin.fulfilled, (state, action)=>{
             state.token = action.payload.token;
             localStorage.setItem('token', action.payload.token);
-            state.userType = getUserTypeFromToken(action.payload.token)
             state.isAuth = true;
         })
         build.addCase(fetchFindUserByToken.fulfilled, (state, action: PayloadAction<IUser>)=>{

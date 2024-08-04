@@ -2,7 +2,9 @@ package com.humanresourcesapp.dto.requests;
 
 public record
     PageRequestDto(int page,
-               int pageSize)
+               int pageSize,
+                String email
+)
 {
 
 }

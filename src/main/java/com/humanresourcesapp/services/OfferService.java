@@ -74,8 +74,14 @@ public class OfferService
 
     public List<VwGetAllOffer> getAllOffer(PageRequestDto dto)
     {
+        if (dto.email() == null)
+        {
+            return offerRepository.getAllOffer(PageRequest.of(dto.page(), dto.pageSize()));
+        }
+        else {
+            return offerRepository.getAllOfferByEmailSearch(dto.email(),PageRequest.of(dto.page(), dto.pageSize()));
+        }
 
-        return offerRepository.getAllOffer(PageRequest.of(dto.page(), dto.pageSize()));
     }
 
     public Boolean approveOfferAndRegisterAuthAndUser(Long offerId)

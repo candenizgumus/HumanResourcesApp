@@ -1,5 +1,7 @@
 package com.humanresourcesapp.dto.requests;
 
+import com.humanresourcesapp.entities.enums.EPosition;
+import com.humanresourcesapp.entities.enums.ESectors;
 import com.humanresourcesapp.entities.enums.EUserType;
 
 public record OfferSaveRequestDto(
@@ -9,7 +11,8 @@ public record OfferSaveRequestDto(
         String phone,
         String companyName,
         String title,
-        String numberOfEmployees
+        String numberOfEmployees,
+        ESectors sector
 
 
 )

@@ -30,7 +30,8 @@ export const fetchCreateOffer = createAsyncThunk(
                     'phone': payload.phone,
                     'title': payload.title,
                     'numberOfEmployees': payload.numberOfEmployees,
-                    'companyName': payload.companyName
+                    'companyName': payload.companyName,
+                    'sector' : payload.sector
                 })
             });
 
@@ -56,6 +57,7 @@ interface fetchGetOffersPayload {
     token: string;
     page: number;
     pageSize: number;
+    email: string;
 }
 export const fetchGetOffers = createAsyncThunk(
     'offer/fetchGetOffers',
@@ -71,6 +73,7 @@ export const fetchGetOffers = createAsyncThunk(
 
                 'page': payload.page,
                 'pageSize': payload.pageSize,
+                'email': payload.email
 
             })
         }).then(data => data.json());

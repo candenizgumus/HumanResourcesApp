@@ -4,6 +4,8 @@ import com.humanresourcesapp.dto.requests.AddEmployeeToManagerRequestDto;
 import com.humanresourcesapp.dto.requests.PageRequestDto;
 import com.humanresourcesapp.dto.responses.CompanyAndManagerNameResponseDto;
 import com.humanresourcesapp.entities.User;
+import com.humanresourcesapp.entities.enums.EPosition;
+import com.humanresourcesapp.entities.enums.ESectors;
 import com.humanresourcesapp.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +29,27 @@ public class UserController
         return ResponseEntity.ok(userService.save(user));
     }
 
+  /*  @PutMapping(UPDATE)
+    @CrossOrigin("*")
+    public ResponseEntity<User> update(User user)
+    {
+        return ResponseEntity.ok(userService.update(user));
+    }*/
+
+    @GetMapping(GET_POSITIONS)
+    @CrossOrigin("*")
+    public ResponseEntity<EPosition[]> getPositions()
+    {
+        return ResponseEntity.ok(EPosition.values());
+    }
+
+    @GetMapping(GET_SECTORS)
+    @CrossOrigin("*")
+    public ResponseEntity<ESectors[]> getSectors()
+    {
+        return ResponseEntity.ok(ESectors.values());
+    }
+
     @GetMapping(GET_ALL)
     @PreAuthorize("hasAnyAuthority('ADMIN')")
     @CrossOrigin("*")
@@ -35,7 +58,7 @@ public class UserController
         return ResponseEntity.ok(userService.getAll(dto));
     }
 
-    //TODO BURAYI YAP
+
     @GetMapping(GET_ALL_USERS_OF_MANAGER_BY_COMPANY_ID)
     @PreAuthorize("hasAnyAuthority('MANAGER')")
     @CrossOrigin("*")

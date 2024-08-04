@@ -61,6 +61,24 @@ export const fetchFindUserByToken = createAsyncThunk(
     }
 );
 
+export const fetchGetPositions = createAsyncThunk(
+    'user/fetchGetPositions',
+    async()=>{
+        const result = await fetch('http://localhost:9090/dev/v1/user/get-positions')
+            .then(data=>data.json());
+        return result;
+    }
+);
+
+export const fetchGetSectors = createAsyncThunk(
+    'user/fetchGetPositions',
+    async()=>{
+        const result = await fetch('http://localhost:9090/dev/v1/user/get-sectors')
+            .then(data=>data.json());
+        return result;
+    }
+);
+
 export const fetchFindCompanyNameAndManagerNameOfUser = createAsyncThunk(
     'user/fetchFindCompanyNameAndManagerNameOfUser',
     async (token: string) => {

@@ -66,6 +66,7 @@ public class OfferService
                         .title(dto.title())
                         .numberOfEmployee(dto.numberOfEmployees())
                         .userType(EUserType.MANAGER)
+                        .sector(dto.sector())
                         .build());
 
 
@@ -74,8 +75,14 @@ public class OfferService
 
     public List<VwGetAllOffer> getAllOffer(PageRequestDto dto)
     {
+        if (dto.email() == null)
+        {
+            return offerRepository.getAllOffer(PageRequest.of(dto.page(), dto.pageSize()));
+        }
+        else {
+            return offerRepository.getAllOfferByEmailSearch(dto.email(),PageRequest.of(dto.page(), dto.pageSize()));
+        }
 
-        return offerRepository.getAllOffer(PageRequest.of(dto.page(), dto.pageSize()));
     }
 
     public Boolean approveOfferAndRegisterAuthAndUser(Long offerId)
@@ -100,6 +107,7 @@ public class OfferService
                 .password(encodedPassword)
                 .userType(offer.getUserType())
                 .status(EStatus.ACTIVE)
+
                 .build()
         );
 
@@ -116,6 +124,7 @@ public class OfferService
                 .companyId(company.getId())
                 .userType(offer.getUserType())
                 .status(EStatus.ACTIVE)
+                .sector(offer.getSector())
                 .build());
 
         return true;

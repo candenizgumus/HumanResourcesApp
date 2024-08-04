@@ -14,4 +14,5 @@ export interface IUser{
     hireDate:number ;
     userType:string ;
     position:string ;
+    sector:string ;
 }

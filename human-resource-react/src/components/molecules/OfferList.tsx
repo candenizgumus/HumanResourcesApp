@@ -28,6 +28,7 @@ export default function OfferList() {
     const offerList: IOfferList[] = useAppSelector(state => state.offer.offers);
     const dispatch = useDispatch<HumanResources>();
     const token = useAppSelector(state => state.auth.token);
+    const [ESubscriptionType, setESubscriptionType] = useState('');
 
     useEffect(() => {
         dispatch(fetchGetOffers({
@@ -47,7 +48,7 @@ export default function OfferList() {
     const handleConfirmSelection = () => {
         setLoading(true);
         selectedRowIds.forEach((id) => {
-            dispatch(fetchApproveOffers({ token: token, offerId: id }))
+            dispatch(fetchApproveOffers({ token: token, offerId: id , ESubscriptionType: ESubscriptionType}))
                 .then(() => {
                     Swal.fire({
                         title: 'Success',

@@ -1,6 +1,7 @@
 package com.humanresourcesapp.services;
 
 import com.humanresourcesapp.dto.requests.CompanySaveRequestDto;
+import com.humanresourcesapp.dto.requests.OfferApproveRequestDto;
 import com.humanresourcesapp.dto.requests.OfferSaveRequestDto;
 import com.humanresourcesapp.dto.requests.PageRequestDto;
 import com.humanresourcesapp.entities.Auth;
@@ -8,6 +9,7 @@ import com.humanresourcesapp.entities.Company;
 import com.humanresourcesapp.entities.Offer;
 import com.humanresourcesapp.entities.User;
 import com.humanresourcesapp.entities.enums.EStatus;
+import com.humanresourcesapp.entities.enums.ESubscriptionType;
 import com.humanresourcesapp.entities.enums.EUserType;
 import com.humanresourcesapp.exception.ErrorType;
 import com.humanresourcesapp.exception.HumanResourcesAppException;
@@ -83,9 +85,9 @@ public class OfferService
 
     }
 
-    public Boolean approveOfferAndRegisterAuthAndUser(Long offerId)
+    public Boolean approveOfferAndRegisterAuthAndUser(OfferApproveRequestDto dto)
     {
-        Offer offer = offerRepository.findById(offerId).orElseThrow(() -> new HumanResourcesAppException(ErrorType.OFFER_NOT_FOUND));
+        Offer offer = offerRepository.findById(dto.offerId()).orElseThrow(() -> new HumanResourcesAppException(ErrorType.OFFER_NOT_FOUND));
         //Setting status to active
         offer.setStatus(EStatus.ACTIVE);
         offerRepository.save(offer);
@@ -105,7 +107,7 @@ public class OfferService
                 .password(encodedPassword)
                 .userType(offer.getUserType())
                 .status(EStatus.ACTIVE)
-
+                .subscriptionType(dto.ESubscriptionType())
                 .build()
         );
 
@@ -123,6 +125,9 @@ public class OfferService
                 .userType(offer.getUserType())
                 .status(EStatus.ACTIVE)
                 .sector(offer.getSector())
+                .subscriptionType(dto.ESubscriptionType())
+                        .subscriptionStartDate(auth.getSubscriptionStartDate())
+                        .subscriptionEndDate(auth.getSubscriptionEndDate())
                 .build());
 
         return true;

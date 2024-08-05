@@ -1,16 +1,15 @@
 package com.humanresourcesapp.entities;
 
+import com.humanresourcesapp.entities.enums.ESubscriptionType;
 import com.humanresourcesapp.entities.enums.EUserType;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -31,7 +30,12 @@ public class Auth extends BaseEntity implements UserDetails
     //String activationCode;
     @Enumerated(EnumType.STRING)
     EUserType userType;
-
+    // MANAGER and EMPLOYEE
+    @Enumerated(EnumType.STRING)
+    ESubscriptionType subscriptionType;
+    @Builder.Default
+    LocalDate subscriptionStartDate = LocalDate.now();
+    LocalDate subscriptionEndDate;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities()
@@ -46,4 +50,20 @@ public class Auth extends BaseEntity implements UserDetails
 
         return email;
     }
+
+    @PrePersist
+    public void prePersist()
+    {
+        if (subscriptionType == ESubscriptionType.MONTHLY)
+        {
+            subscriptionEndDate = subscriptionStartDate.plusDays(30);
+        }
+        if (subscriptionType == ESubscriptionType.YEARLY)
+        {
+            subscriptionEndDate = subscriptionStartDate.plusYears(1);
+        }
+
+    }
+
+
 }

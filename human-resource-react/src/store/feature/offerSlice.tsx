@@ -82,6 +82,7 @@ export const fetchGetOffers = createAsyncThunk(
 interface fetchApproveOffersPayload {
     token: string;
     offerId: number;
+    ESubscriptionType: string;
 }
 
 // Thunk for approving offers
@@ -94,7 +95,9 @@ export const fetchApproveOffers = createAsyncThunk(
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ` + payload.token
-                }
+                },body: JSON.stringify({
+                    'ESubscriptionType': payload.ESubscriptionType
+                })
             });
 
             if (!response.ok) {

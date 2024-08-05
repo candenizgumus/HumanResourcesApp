@@ -15,7 +15,7 @@ export const AdminMenuContents = () => {
                 {page === 'Offers' && <OfferList />}
                 {page === 'Create Admin' && <CreateAdminMenuContent />}
                 {page === 'Holidays' && <HolidayTable />}
-                {page === 'Admin Home' && <AdminHomeContent/>}
+                {page === 'Home' && <AdminHomeContent/>}
                 {page === 'Profile' && <Profile/>}
             </Grid>
         </>

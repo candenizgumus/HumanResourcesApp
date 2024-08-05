@@ -98,7 +98,7 @@ export default function AdminPage() {
     setOpen(false);
   };
   const navigateToHome = () => {
-    dispatch(changePageState('Admin Home'));
+    dispatch(changePageState('Home'));
   };
   const dispatch = useDispatch<HumanResources>();
   const handleListItemClick = (text: string) => {

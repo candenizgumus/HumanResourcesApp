@@ -16,7 +16,7 @@ const initalAuthState: IAuthState  = {
     user: {} as IUser,
     token: '',
     isAuth : false,
-    pageState:''
+    pageState:'Home'
 }
 
 export const fetchLogin = createAsyncThunk(

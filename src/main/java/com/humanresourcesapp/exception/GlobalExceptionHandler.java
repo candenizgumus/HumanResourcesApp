@@ -2,6 +2,8 @@ package com.humanresourcesapp.exception;
 
 // Bu sınıf tüm controller sınıfları için merkezi bir şekilde hata yönetimi sağlayacaktır.
 
+import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.humanresourcesapp.utility.JwtTokenManager;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -41,6 +43,7 @@ public class GlobalExceptionHandler
                 errorType),
                 errorType.getHttpStatus());
     }
+
 
     private ErrorMessage createErrorMessage(Exception ex, ErrorType errorType)
     {

@@ -24,23 +24,25 @@ export default function LoginCard() {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [error, setError] = useState(false);
+    const [error, setError] = useState('');
     const handleLogin = async () => {
-        let result = await dispatch(fetchLogin({ email, password })).unwrap();
 
-        // `result` içinde `code` özelliği olup olmadığını kontrol edin
-        if (result.code) {
-            setError(result.message);
-            return; // İşlemi sonlandırarak sonraki then bloklarına geçişi engeller.
-        }
-        const userType = getUserTypeFromToken(result.token)
-        if ( userType === 'ADMIN') {
-            navigate('/admin-home')
-        } else if (userType === 'MANAGER'){
-            navigate('/manager-home')
-        } else {
-            navigate('/')
-        }
+            let result = await dispatch(fetchLogin({ email, password })).unwrap();
+
+            // `result` içinde `code` özelliği olup olmadığını kontrol edin
+            if (result.code) {
+                setError(result.message);
+                return; // İşlemi sonlandırarak sonraki then bloklarına geçişi engeller.
+            }
+            const userType = getUserTypeFromToken(result.token);
+            if (userType === 'ADMIN') {
+                navigate('/admin-home');
+            } else if (userType === 'MANAGER') {
+                navigate('/manager-home');
+            } else {
+                navigate('/');
+            }
+
     };
 
     return (

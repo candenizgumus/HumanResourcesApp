@@ -11,11 +11,7 @@ const root = ReactDOM.createRoot(
 );
 root.render(
     <Provider store={store}>
-        <DevSupport ComponentPreviews={ComponentPreviews}
-                    useInitialHook={useInitial}
-        >
-            <RouterPage/>
-        </DevSupport>
+        <RouterPage/>
     </Provider>
 );
 

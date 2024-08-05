@@ -20,56 +20,58 @@ interface UpdateProfile {
 }
 
 const Profile: React.FC = () => {
-  const [formData, setFormData] = useState<UpdateProfile>({
-    name: '',
-    surname: '',
-    phone: '',
-      password : '',
-      repassword: '',
-      companyName: '',
-      managerName: '',
-  });
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    // Handle form submission
-    console.log('Form submitted:', formData);
-  };
-
-  const user:IUser = useAppSelector((state) => state.auth.user);
+  const [name, setName] = useState<string>('');
+  const [surname, setSurname] = useState<string>('');
+  const [phone, setPhone] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [repassword, setRePassword] = useState<string>('');
+  const [companyName, setCompanyName] = useState<string>('');
+  const [managerName, setManagerName] = useState<string>('');
+    const user:IUser = useAppSelector((state) => state.auth.user);
     const token = useAppSelector((state) => state.auth.token);
     const dispatch = useDispatch<HumanResources>();
     const [positions, setPositions] = useState([]);
     const [selectedPositions, setSelectedPositions] = useState<string>('');
 
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    // Handle form submission
+    console.log('Form submitted:', );
+  };
 
-    useEffect(() => {
-        dispatch(fetchFindUserByToken(token))
-        dispatch(fetchFindCompanyNameAndManagerNameOfUser(token))
+  const handleLogin = async () => {
+    try {
+        dispatch(fetchFindUserByToken(token));
+
+        let result = await dispatch(fetchFindCompanyNameAndManagerNameOfUser(token)).unwrap();
+        console.log('Company and Manager Response:', result);  // Log the response
+
+        if (result.code) {
+            return; // Stop further execution if there's an error
+        }
+
+        setCompanyName(result.companyName ?? '');
+        setManagerName(result.managerName ?? '');
+
+        dispatch(fetchGetPositions())
             .then(data => {
-                setFormData(
-                    {
-                        ...formData,
-                        companyName: data.payload.companyName ?? '',
-                        managerName: data.payload.managerName ?? ''
-                    }
-                )
-            }).then(() => {
-            dispatch(fetchGetPositions())
-                .then(data => {
-                    setPositions(data.payload)
-                })
-        })
+                console.log('Positions Response:', data);  // Log the response
+                setPositions(data.payload);
+            })
+            .catch(error => {
+                console.error('Error fetching positions:', error);  // Handle fetch errors
+            });
 
+    } catch (error) {
+        console.error('Error in handleLogin:', error);  // Handle other errors
+    }
+};
 
+    
+    useEffect(() => {
+        handleLogin();
     },[])
 
   return (
@@ -95,7 +97,7 @@ const Profile: React.FC = () => {
                           label='Name'
                           name="name"
                           value={user.name}
-                          onChange={handleChange}
+                          onChange={event => setName(event.target.value)}
                           fullWidth
                           required
                       />
@@ -103,7 +105,7 @@ const Profile: React.FC = () => {
                           label='Surname'
                           name="surname"
                           value={user.surname}
-                          onChange={handleChange}
+                          onChange={event => setSurname(event.target.value)}
                           fullWidth
                           required
                       />
@@ -111,7 +113,7 @@ const Profile: React.FC = () => {
                           label='Phone'
                           name="phone"
                           value={user.phone}
-                          onChange={handleChange}
+                          onChange={event => setPhone(event.target.value)}
                           fullWidth
                           required
                       />
@@ -148,27 +150,25 @@ const Profile: React.FC = () => {
 
                       <TextField
                           label="User Type"
-                          name="name"
+                          name="userType"
                           value={user.userType}
-                          onChange={handleChange}
                           fullWidth
-
                           disabled={true}
                       />
-                      <TextField
-                          label="Company Name"
-                          name="surname"
-                          value={formData.companyName}
-                          onChange={handleChange}
-                          fullWidth
+                      {companyName && (
+                          <TextField
+                              label="Company Name"
+                              name="companyName"
+                              value={companyName}
+                              fullWidth
+                              disabled
+                          />
+                      )}
 
-                          disabled={true}
-                      />
                       <TextField
                           label="Manager Name"
                           name="phone"
-                          value={formData.managerName}
-                          onChange={handleChange}
+                          value={managerName}
                           fullWidth
                           disabled
                       />

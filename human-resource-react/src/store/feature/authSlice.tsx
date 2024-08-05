@@ -1,29 +1,29 @@
-import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {ILogin} from "../../models/ILogin";
-import OfferList from "../../components/molecules/OfferList";
-import {IUser} from "../../models/IUser";
-import {ICreateAdmin} from '../../models/ICreateAdmin';
-import {useDispatch} from "react-redux";
-import getUserTypeFromToken from "../../util/getUserTypeFromToken";
-interface IAuthState{
-    user: IUser,
-    token: string,
-    isAuth: boolean,
-    pageState: string,
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { ILogin } from "../../models/ILogin";
+import { IUser } from "../../models/IUser";
+import { ICreateAdmin } from '../../models/ICreateAdmin';
+
+interface IAuthState {
+    user: IUser;
+    token: string;
+    isAuth: boolean;
+    pageState: string;
+    userType: string;
 }
 
-const initalAuthState: IAuthState  = {
+const initalAuthState: IAuthState = {
     user: {} as IUser,
     token: '',
-    isAuth : false,
-    pageState:'Home'
-}
+    isAuth: false,
+    pageState: 'Home',
+    userType: ''
+};
 
 export const fetchLogin = createAsyncThunk(
     'auth/fetchLogin',
-    async(payload: ILogin)=>{
-        try{
-            const response =  await fetch('http://localhost:9090/dev/v1/auth/login',{
+    async (payload: ILogin, { rejectWithValue }) => {
+        try {
+            const response = await fetch('http://localhost:9090/dev/v1/auth/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -31,133 +31,196 @@ export const fetchLogin = createAsyncThunk(
                 body: JSON.stringify({
                     'email': payload.email,
                     'password': payload.password,
-
                 })
-            }).then(data=> data.json())
-            return response;
-
-        }catch(err){
-            console.log('hata...: ', err);
+            });
+            const data = await response.json();
+            if (!response.ok) {
+                throw new Error(data.message || 'Login failed');
+            }
+            return data;
+        } catch (err) {
+            console.log('Error: ', err);
+            if (err instanceof Error) {
+                return rejectWithValue(err.message);
+            } else {
+                return rejectWithValue('An unknown error occurred');
+            }
         }
-
     }
 );
 
 export const fetchFindUserByToken = createAsyncThunk(
     'user/fetchFindUserByToken',
-    async (token: string) => {
+    async (token: string, { rejectWithValue }) => {
         try {
-            const response = await fetch(`http://localhost:9090/dev/v1/user/find-by-token?token=${token}`)
-                .then(data => data.json());
-
-            return response;
-
+            const response = await fetch(`http://localhost:9090/dev/v1/user/find-by-token?token=${token}`);
+            const data = await response.json();
+            if (!response.ok) {
+                throw new Error(data.message || 'Fetching user by token failed');
+            }
+            return data;
         } catch (err) {
-            console.log('hata...: ', err);
-            throw err; // Hata varsa fırlat
+            console.log('Error: ', err);
+            if (err instanceof Error) {
+                return rejectWithValue(err.message);
+            } else {
+                return rejectWithValue('An unknown error occurred');
+            }
         }
     }
 );
 
 export const fetchGetPositions = createAsyncThunk(
     'user/fetchGetPositions',
-    async()=>{
-        const result = await fetch('http://localhost:9090/dev/v1/user/get-positions')
-            .then(data=>data.json());
-        return result;
+    async (_, { rejectWithValue }) => {
+        try {
+            const response = await fetch('http://localhost:9090/dev/v1/user/get-positions');
+            const data = await response.json();
+            if (!response.ok) {
+                throw new Error(data.message || 'Fetching positions failed');
+            }
+            return data;
+        } catch (err) {
+            console.log('Error: ', err);
+            if (err instanceof Error) {
+                return rejectWithValue(err.message);
+            } else {
+                return rejectWithValue('An unknown error occurred');
+            }
+        }
     }
 );
 
 export const fetchGetSectors = createAsyncThunk(
-    'user/fetchGetPositions',
-    async()=>{
-        const result = await fetch('http://localhost:9090/dev/v1/user/get-sectors')
-            .then(data=>data.json());
-        return result;
+    'user/fetchGetSectors',
+    async (_, { rejectWithValue }) => {
+        try {
+            const response = await fetch('http://localhost:9090/dev/v1/user/get-sectors');
+            const data = await response.json();
+            if (!response.ok) {
+                throw new Error(data.message || 'Fetching sectors failed');
+            }
+            return data;
+        } catch (err) {
+            console.log('Error: ', err);
+            if (err instanceof Error) {
+                return rejectWithValue(err.message);
+            } else {
+                return rejectWithValue('An unknown error occurred');
+            }
+        }
     }
 );
 
 export const fetchFindCompanyNameAndManagerNameOfUser = createAsyncThunk(
     'user/fetchFindCompanyNameAndManagerNameOfUser',
-    async (token: string) => {
-
-
-        const response = await fetch('http://localhost:9090/dev/v1/user/find-company-name-and-manager-name-of-user', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ` + token // Adding Bearer token
+    async (token: string, { rejectWithValue }) => {
+        try {
+            const response = await fetch('http://localhost:9090/dev/v1/user/find-company-name-and-manager-name-of-user', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ` + token
+                }
+            });
+            const data = await response.json();
+            if (!response.ok) {
+                throw new Error(data.message || 'Fetching company and manager name failed');
             }
-        }).then(data => data.json());
-
-        return response;
-
+            return data;
+        } catch (err) {
+            console.log('Error: ', err);
+            if (err instanceof Error) {
+                return rejectWithValue(err.message);
+            } else {
+                return rejectWithValue('An unknown error occurred');
+            }
+        }
     }
-
 );
 
 export const fetchCreateAdmin = createAsyncThunk(
     'user/fetchCreateAdmin',
-    async (payload: ICreateAdmin) => {
+    async (payload: ICreateAdmin, { rejectWithValue }) => {
         try {
-            await fetch(`http://localhost:9090/dev/v1/auth/save-admin`,{
+            const response = await fetch(`http://localhost:9090/dev/v1/auth/save-admin`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer `+ payload.token
+                    'Authorization': `Bearer ` + payload.token
                 },
                 body: JSON.stringify({
                     'email': payload.email,
                     'password': payload.password
                 })
-            })
+            });
+            const data = await response.json();
+            if (!response.ok) {
+                throw new Error(data.message || 'Creating admin failed');
+            }
+            return data;
         } catch (err) {
-            console.log('hata...: ', err);
-            throw err; // Hata varsa fırlat
+            console.log('Error: ', err);
+            if (err instanceof Error) {
+                return rejectWithValue(err.message);
+            } else {
+                return rejectWithValue('An unknown error occurred');
+            }
         }
     }
-)
-
-
-
+);
 
 const authSlice = createSlice({
     name: 'auth',
     initialState: initalAuthState,
-    reducers:{
-        changePageState(state, action:PayloadAction<string>){
-            state.pageState = action.payload
+    reducers: {
+        changePageState(state, action: PayloadAction<string>) {
+            state.pageState = action.payload;
         },
-        setToken(state,action: PayloadAction<string>){
+        setToken(state, action: PayloadAction<string>) {
             state.isAuth = true;
             state.token = action.payload;
         },
-        clearToken(state){
+        clearToken(state) {
             state.isAuth = false;
             state.token = '';
             localStorage.removeItem('token');
+            state.pageState = ''
+        },
+        setUserType(state, action: PayloadAction<string>) {
+            state.userType = action.payload;
         }
     },
-    extraReducers: (build)=>{
-        build.addCase(fetchLogin.fulfilled, (state, action)=>{
-            state.token = action.payload.token;
-            localStorage.setItem('token', action.payload.token);
-            state.isAuth = true;
-        })
-        build.addCase(fetchFindUserByToken.fulfilled, (state, action: PayloadAction<IUser>)=>{
-            state.user = action.payload;
-        })
-        build.addCase(fetchCreateAdmin.rejected, (state, action) => {
-            const dispatch = useDispatch();
-            dispatch(clearToken())
-        })
-        build.addCase(fetchFindCompanyNameAndManagerNameOfUser.rejected, (state, action)=>{
-            const dispatch = useDispatch();
-            dispatch(clearToken())
-        })
+    extraReducers: (builder) => {
+        builder
+            .addCase(fetchLogin.fulfilled, (state, action) => {
+                state.token = action.payload.token;
+                state.isAuth = true;
+                localStorage.setItem('token', action.payload.token);
+            })
+            .addCase(fetchFindUserByToken.fulfilled, (state, action: PayloadAction<IUser>) => {
+                state.user = action.payload;
+            })
+            .addCase(fetchCreateAdmin.rejected, (state) => {
+                
+            })
+            .addCase(fetchFindCompanyNameAndManagerNameOfUser.rejected, (state) => {
+                
+            })
+            .addCase(fetchFindUserByToken.rejected, (state) => {
+                
+            })
+            .addMatcher(
+                (action) => action.type.endsWith('/rejected'),
+                (state) => {
+                    state.isAuth = false;
+                    state.token = '';
+                    state.pageState = '';
+                    localStorage.removeItem('token');
+                }
+            );
     },
-
 });
 
-export const {changePageState,setToken,clearToken} = authSlice.actions
+export const { changePageState, setToken, clearToken, setUserType } = authSlice.actions;
 export default authSlice.reducer;

@@ -21,7 +21,7 @@ import MailIcon from '@mui/icons-material/Mail';
 import { Button, Grid} from '@mui/material';
 import { HumanResources} from '../../store';
 import { useDispatch } from 'react-redux';
-import { changePageState } from '../../store/feature/authSlice';
+import { changePageState, fetchFindUserByToken, setToken } from '../../store/feature/authSlice';
 import {NotificationIcon} from "../../components/atoms/NotificationIcon";
 import {AdminMenuContents} from "../../components/organisms/AdminMenuContents";
 import { useNavigate } from 'react-router-dom';
@@ -89,6 +89,8 @@ export default function AdminPage() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const [selectedIndex, setSelectedIndex] = React.useState<string>('Inbox');
+  const dispatch = useDispatch<HumanResources>();
+  
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -98,9 +100,9 @@ export default function AdminPage() {
     setOpen(false);
   };
   const navigateToHome = () => {
-    dispatch(changePageState('Admin Home'));
+    dispatch(changePageState('Home'));
   };
-  const dispatch = useDispatch<HumanResources>();
+  
   const handleListItemClick = (text: string) => {
     setSelectedIndex(text);
     dispatch(changePageState(text));

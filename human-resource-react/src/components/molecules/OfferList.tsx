@@ -70,12 +70,9 @@ export default function OfferList() {
             pageSize: 50,
             email: searchText
         })).catch(() => {
-
-                console.log('burası calisti')
-                localStorage.removeItem('token');
-                dispatch(clearToken());
-
-        })
+            console.log('burası calisti')
+            dispatch(clearToken());
+    })
 
     }, [dispatch, searchText, token]);
 

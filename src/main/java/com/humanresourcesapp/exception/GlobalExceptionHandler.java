@@ -3,6 +3,7 @@ package com.humanresourcesapp.exception;
 // Bu sınıf tüm controller sınıfları için merkezi bir şekilde hata yönetimi sağlayacaktır.
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -25,6 +26,15 @@ public class GlobalExceptionHandler
 
     @ExceptionHandler(HumanResourcesAppException.class)
     public ResponseEntity<ErrorMessage> handleDemoException(HumanResourcesAppException ex)
+    {
+        ErrorType errorType = ex.getErrorType();
+        return new ResponseEntity(createErrorMessage(ex,
+                errorType),
+                errorType.getHttpStatus());
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ErrorMessage> handleAccess(HumanResourcesAppException ex)
     {
         ErrorType errorType = ex.getErrorType();
         return new ResponseEntity(createErrorMessage(ex,

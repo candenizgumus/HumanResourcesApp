@@ -11,7 +11,7 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import {SportsTennis} from "@mui/icons-material";
 import {useDispatch} from "react-redux";
-import {fetchFindUserByToken, fetchLogin} from "../../store/feature/authSlice";
+import {fetchFindUserByToken, fetchLogin, setToken, setUserType} from "../../store/feature/authSlice";
 import {HumanResources, useAppSelector} from "../../store";
 
 import {useState} from "react";
@@ -33,7 +33,14 @@ export default function LoginCard() {
             setError(result.message);
             return; // İşlemi sonlandırarak sonraki then bloklarına geçişi engeller.
         }
-        navigate('/main-page');
+        const userType = getUserTypeFromToken(result.token)
+        if ( userType === 'ADMIN') {
+            navigate('/admin-home')
+        } else if (userType === 'MANAGER'){
+            navigate('/manager-home')
+        } else {
+            navigate('/')
+        }
     };
 
     return (

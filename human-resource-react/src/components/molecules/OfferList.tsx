@@ -2,78 +2,42 @@ import { DataGrid, GridColDef, GridRowSelectionModel } from '@mui/x-data-grid';
 import { Button, Grid } from '@mui/material';
 import { HumanResources, useAppSelector } from "../../store";
 import { useDispatch } from "react-redux";
-import {fetchApproveOffers, fetchGetOffers} from "../../store/feature/offerSlice";
+import { fetchApproveOffers, fetchGetOffers } from "../../store/feature/offerSlice";
 import { useEffect, useState } from "react";
 import { IOfferList } from "../../models/IOfferList";
-import {clearToken} from "../../store/feature/authSlice";
+import { clearToken } from "../../store/feature/authSlice";
 import Swal from 'sweetalert2';
 import TextField from "@mui/material/TextField";
 
 const columns: GridColDef[] = [
-    { field: 'id', headerName: 'ID', width: 70 , headerAlign: 'center', },
-    { field: 'name', headerName: 'First name', width: 160 , headerAlign: 'center', },
-    { field: 'surname', headerName: 'Last name', width: 160 , headerAlign: 'center',},
-    {
-        field: 'email',
-        headerName: 'Email',
-        headerAlign: 'center',
-        width: 300,
-    },
-    {
-        field: 'phone',
-        headerName: 'Phone',
-        description: 'This column has a value getter and is not sortable.',
-        sortable: false,
-        headerAlign: 'center',
-        width: 160,
-    },
-    {
-        field: 'companyName',
-        headerName: 'Company Name',
-        width: 130,
-        headerAlign: 'center',
-    },
-    {
-        field: 'title',
-        headerName: 'Title',
-        width: 130,
-        headerAlign: 'center',
-    },
-    {
-        field: 'numberOfEmployee',
-        headerName: 'Employee Count',
-        type: 'number',
-        width: 120,
-        headerAlign: 'center',
-    },
-    {
-        field: 'sector',
-        headerName: 'Sector',
-        type: 'string',
-        width: 250,
-        headerAlign: 'center',
-    },
+    { field: 'id', headerName: 'ID', width: 70, headerAlign: 'center' },
+    { field: 'name', headerName: 'First name', width: 160, headerAlign: 'center' },
+    { field: 'surname', headerName: 'Last name', width: 160, headerAlign: 'center' },
+    { field: 'email', headerName: 'Email', headerAlign: 'center', width: 300 },
+    { field: 'phone', headerName: 'Phone', description: 'This column has a value getter and is not sortable.', sortable: false, headerAlign: 'center', width: 160 },
+    { field: 'companyName', headerName: 'Company Name', width: 130, headerAlign: 'center' },
+    { field: 'title', headerName: 'Title', width: 130, headerAlign: 'center' },
+    { field: 'numberOfEmployee', headerName: 'Employee Count', type: 'number', width: 120, headerAlign: 'center' },
+    { field: 'sector', headerName: 'Sector', type: 'string', width: 250, headerAlign: 'center' },
 ];
 
 export default function OfferList() {
     const [selectedRowIds, setSelectedRowIds] = useState<number[]>([]);
+    const [loading, setLoading] = useState(false);
+    const [searchText, setSearchText] = useState('');
     const offerList: IOfferList[] = useAppSelector(state => state.offer.offers);
     const dispatch = useDispatch<HumanResources>();
     const token = useAppSelector(state => state.auth.token);
-    const [searchText, setSearchText] = useState('');
 
     useEffect(() => {
-
         dispatch(fetchGetOffers({
             token: token,
             page: 0,
             pageSize: 50,
             email: searchText
         })).catch(() => {
-            console.log('burası calisti')
             dispatch(clearToken());
-    })
-
+        });
     }, [dispatch, searchText, token]);
 
     const handleRowSelection = (newSelectionModel: GridRowSelectionModel) => {
@@ -81,36 +45,34 @@ export default function OfferList() {
     };
 
     const handleConfirmSelection = () => {
+        setLoading(true);
         selectedRowIds.forEach((id) => {
-            dispatch(fetchApproveOffers({
-                token: token,
-                offerId: id
-            })).then(() => {
-                Swal.fire({
-                    title: 'Success',
-                    text: 'Offer has been approved',
-                    icon: 'success',
-                    confirmButtonText: 'OK'
-                });
-            }).then(() => {
-
-                dispatch(fetchGetOffers({
-                    token: token,
-                    page: 0,
-                    pageSize: 50,
-                    email: searchText
-                })).catch(() => {
-
-
-                    localStorage.removeItem('token');
-                    dispatch(clearToken());
-
+            dispatch(fetchApproveOffers({ token: token, offerId: id }))
+                .then(() => {
+                    Swal.fire({
+                        title: 'Success',
+                        text: 'Offer has been approved',
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                    });
                 })
-
-            })
-        })
+                .then(() => {
+                    dispatch(fetchGetOffers({
+                        token: token,
+                        page: 0,
+                        pageSize: 50,
+                        email: searchText
+                    })).catch(() => {
+                        localStorage.removeItem('token');
+                        dispatch(clearToken());
+                    });
+                })
+                .finally(() => {
+                    setLoading(false);
+                });
+        });
     };
-    //TODO buraya arama motoru yap. dto ya email ekle. if else koyma
+
     return (
         <div style={{ height: 400, width: 'inherit' }}>
             <TextField
@@ -121,7 +83,6 @@ export default function OfferList() {
                 style={{ marginBottom: '10px' }}
             />
             <DataGrid
-
                 rows={offerList}
                 columns={columns}
                 initialState={{
@@ -144,16 +105,16 @@ export default function OfferList() {
                         textAlign: 'center',
                     },
                 }}
-
             />
-            <Grid  container spacing={2} style={{ marginTop: 16 }}>
-                <Grid  item xs={12}>
+            <Grid container spacing={2} style={{ marginTop: 16 }}>
+                <Grid item xs={12}>
                     <Button
                         onClick={handleConfirmSelection}
                         variant="contained"
                         color="primary"
+                        disabled={loading}
                     >
-                        Confirm Selection
+                        {loading ? 'Processing...' : 'Confirm Selection'}
                     </Button>
                 </Grid>
             </Grid>

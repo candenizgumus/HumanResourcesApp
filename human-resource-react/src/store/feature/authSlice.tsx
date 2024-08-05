@@ -15,7 +15,7 @@ const initalAuthState: IAuthState = {
     user: {} as IUser,
     token: '',
     isAuth: false,
-    pageState: 'Home',
+    pageState: '',
     userType: ''
 };
 

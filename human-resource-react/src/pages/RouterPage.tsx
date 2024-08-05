@@ -10,7 +10,7 @@ import { HumanResources, useAppSelector } from "../store";
 import { clearToken, fetchFindUserByToken, setToken } from "../store/feature/authSlice";
 import AboutUsPage from './pre_autorize_pages/AboustUs';
 import ContactPage from './pre_autorize_pages/ContactPage';
-
+import Loader from '../components/atoms/loader/Loader';
 const AdminPage = lazy(() => import('./authorised_pages/AdminPage'));
 const ManagerPage = lazy(() => import('./authorised_pages/ManagerPage'));
 const RouterPage = () => {
@@ -27,7 +27,7 @@ const RouterPage = () => {
     
     return (
         <Router>
-            <Suspense fallback={<div>Loading...</div>}>
+            <Suspense fallback={<Loader/>}>
             <Routes>
                 <Route path="/" element={<LandingPage />} />
                 <Route path="/login" element={<Login />} />

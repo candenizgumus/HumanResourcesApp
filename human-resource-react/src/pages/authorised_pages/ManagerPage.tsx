@@ -19,14 +19,14 @@ import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 import { Button, Grid} from '@mui/material';
-import { HumanResources} from '../../store';
-import { useDispatch } from 'react-redux';
+import { HumanResources, RootState} from '../../store';
+import { useDispatch, useSelector } from 'react-redux';
 import { changePageState } from '../../store/feature/authSlice';
 import {NotificationIcon} from "../../components/atoms/NotificationIcon";
 import {AdminMenuContents} from "../../components/organisms/AdminMenuContents";
 import { useNavigate } from 'react-router-dom';
 import ProfileMenu from "../../components/molecules/ProfileMenu";
-
+import AdminHomeContent  from "../../components/organisms/AdminHomeContent"
 
 const drawerWidth = 240;
 
@@ -89,6 +89,7 @@ export default function AdminPage() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const [selectedIndex, setSelectedIndex] = React.useState<string>('Inbox');
+  const pageState = useSelector((state: RootState) => state.auth.pageState);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -98,7 +99,7 @@ export default function AdminPage() {
     setOpen(false);
   };
   const navigateToHome = () => {
-    dispatch(changePageState('Admin Home'));
+    dispatch(changePageState(''));
   };
   const dispatch = useDispatch<HumanResources>();
   const handleListItemClick = (text: string) => {
@@ -178,7 +179,7 @@ export default function AdminPage() {
       <Main open={open}>
         <DrawerHeader />
         <Grid container spacing={2}>
-          <AdminMenuContents/>
+          { pageState=== '' ? <AdminHomeContent/> : <AdminMenuContents/>}
         </Grid>
       </Main>
     </Box>

@@ -21,7 +21,7 @@ public class JwtTokenManager
     String secretKey  = "KOXSfvS1nc3D1drMlHMjtdIXYnqQWlFQ1ebrwT1SQAFBQWOQRw";
 
     String issuer  = "HumanResourcesApp";
-    Long expireTime = 1000L * 5; //60 dakikalık zaman
+    Long expireTime = 1000L * 60 * 60; //60 dakikalık zaman
 
     //1. token üretmeli.
     public Optional<String> createTokenFromAuth(Auth auth)

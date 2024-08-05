@@ -38,6 +38,7 @@ public class OfferController
     }
 
     @PostMapping(APPROVE_OFFER_AND_REGISTER_AUTH_AND_USER)
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<Boolean> approveOfferAndRegisterAuthAndUser(@RequestBody OfferApproveRequestDto dto){
 
         return ResponseEntity.ok(offerService.approveOfferAndRegisterAuthAndUser(dto));

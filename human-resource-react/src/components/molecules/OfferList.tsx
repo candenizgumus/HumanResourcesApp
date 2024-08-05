@@ -28,7 +28,6 @@ export default function OfferList() {
     const offerList: IOfferList[] = useAppSelector(state => state.offer.offers);
     const dispatch = useDispatch<HumanResources>();
     const token = useAppSelector(state => state.auth.token);
-    const [ESubscriptionType, setESubscriptionType] = useState('');
 
     useEffect(() => {
         dispatch(fetchGetOffers({
@@ -45,33 +44,50 @@ export default function OfferList() {
         setSelectedRowIds(newSelectionModel as number[]);
     };
 
-    const handleConfirmSelection = () => {
+    const handleConfirmSelection = async () => {
         setLoading(true);
-        selectedRowIds.forEach((id) => {
-            dispatch(fetchApproveOffers({ token: token, offerId: id , ESubscriptionType: ESubscriptionType}))
-                .then(() => {
-                    Swal.fire({
+
+        for (let id of selectedRowIds) {
+            try {
+                const result = await Swal.fire({
+                    title: 'Abonelik Türünü Seç',
+                    showCancelButton: false,
+                    confirmButtonText: 'Onayla',
+                    input: 'radio',
+                    inputOptions: {
+                        '0': 'Monthly',
+                        '1': 'Yearly'
+                    },
+                    preConfirm: (value) => {
+                        return value === '0' ? 'MONTHLY' : 'YEARLY';
+                    }
+                });
+
+                if (result.isConfirmed) {
+                    const ESubscriptionType = result.value as string;
+
+                    await dispatch(fetchApproveOffers({ token, offerId: id, ESubscriptionType }));
+
+                    await Swal.fire({
                         title: 'Success',
                         text: 'Offer has been approved',
                         icon: 'success',
                         confirmButtonText: 'OK'
                     });
-                })
-                .then(() => {
-                    dispatch(fetchGetOffers({
-                        token: token,
+
+                    await dispatch(fetchGetOffers({
+                        token,
                         page: 0,
                         pageSize: 50,
                         email: searchText
-                    })).catch(() => {
-                        localStorage.removeItem('token');
-                        dispatch(clearToken());
-                    });
-                })
-                .finally(() => {
-                    setLoading(false);
-                });
-        });
+                    }));
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        setLoading(false);
     };
 
     return (

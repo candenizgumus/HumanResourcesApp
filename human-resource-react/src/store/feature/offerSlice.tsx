@@ -90,12 +90,13 @@ export const fetchApproveOffers = createAsyncThunk(
     'offer/fetchApproveOffers',
     async (payload: fetchApproveOffersPayload, { dispatch }) => {
 
-            const response = await fetch(`http://localhost:9090/dev/v1/offer/approve-offer-and-register-auth-and-user?offerId=${payload.offerId}`, {
+            const response = await fetch(`http://localhost:9090/dev/v1/offer/approve-offer-and-register-auth-and-user`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ` + payload.token
                 },body: JSON.stringify({
+                    'offerId': payload.offerId,
                     'ESubscriptionType': payload.ESubscriptionType
                 })
             });

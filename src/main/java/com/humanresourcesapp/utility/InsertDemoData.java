@@ -1,7 +1,9 @@
 package com.humanresourcesapp.utility;
 
+import com.humanresourcesapp.dto.requests.OfferSaveRequestDto;
 import com.humanresourcesapp.entities.*;
 import com.humanresourcesapp.entities.enums.EHolidayType;
+import com.humanresourcesapp.entities.enums.ESectors;
 import com.humanresourcesapp.entities.enums.EStatus;
 import com.humanresourcesapp.entities.enums.EUserType;
 import com.humanresourcesapp.services.*;
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 @RequiredArgsConstructor
 @Service
@@ -22,6 +25,7 @@ public class InsertDemoData {
     private final AuthService authService;
     private final CommentService commentService;
     private final HolidayService holidayService;
+    private final OfferService offerService;
 
     @PostConstruct
     public void insert() {
@@ -29,6 +33,7 @@ public class InsertDemoData {
         insertFeatureDemoData();
         insertCommentDemoData();
         insertHolidayDemoData();
+        instertOfferDemoData();
     }
 
     // Company demo data insertion
@@ -250,5 +255,177 @@ public class InsertDemoData {
                     .build();
             userService.save(user);
         }
+    }
+
+    private void instertOfferDemoData()
+    {
+
+
+        offerService.save(new OfferSaveRequestDto(
+                "Alice",
+                "Johnson",
+                "alice.johnson@example.com",
+                "111111111",
+                "Tech Corp",
+                "Backend Developer",
+                "8",
+                ESectors.TECHNOLOGY
+        ));
+
+        offerService.save(new OfferSaveRequestDto(
+                "Bob",
+                "Smith",
+                "bob.smith@example.com",
+                "222222222",
+                "Creative Studio",
+                "Graphic Designer",
+                "5",
+                ESectors.AGRICULTURAL_SERVICES
+        ));
+
+        offerService.save(new OfferSaveRequestDto(
+                "Charlie",
+                "Brown",
+                "charlie.brown@example.com",
+                "333333333",
+                "Health Solutions",
+                "Nurse",
+                "12",
+                ESectors.HEALTHCARE
+        ));
+
+        offerService.save(new OfferSaveRequestDto(
+                "David",
+                "Clark",
+                "david.clark@example.com",
+                "444444444",
+                "Finance World",
+                "Financial Analyst",
+                "7",
+                ESectors.ACCOUNTING_SERVICES
+        ));
+
+        offerService.save(new OfferSaveRequestDto(
+                "Eva",
+                "Martin",
+                "eva.martin@example.com",
+                "555555555",
+                "Marketing Pro",
+                "Marketing Manager",
+                "9",
+                ESectors.MARKETING
+        ));
+
+        offerService.save(new OfferSaveRequestDto(
+                "Frank",
+                "Garcia",
+                "frank.garcia@example.com",
+                "666666666",
+                "Eco Energy",
+                "Environmental Engineer",
+                "6",
+                ESectors.CONSTRUCTION
+        ));
+
+        offerService.save(new OfferSaveRequestDto(
+                "Grace",
+                "Lee",
+                "grace.lee@example.com",
+                "777777777",
+                "Retail Masters",
+                "Store Manager",
+                "11",
+                ESectors.RETAIL
+        ));
+
+        offerService.save(new OfferSaveRequestDto(
+                "Hank",
+                "Moore",
+                "hank.moore@example.com",
+                "888888888",
+                "Edu Innovators",
+                "Teacher",
+                "10",
+                ESectors.EDUCATION
+        ));
+
+        offerService.save(new OfferSaveRequestDto(
+                "Ivy",
+                "Taylor",
+                "ivy.taylor@example.com",
+                "999999999",
+                "Construction Hub",
+                "Civil Engineer",
+                "8",
+                ESectors.CONSTRUCTION
+        ));
+
+        offerService.save(new OfferSaveRequestDto(
+                "Jack",
+                "Anderson",
+                "jack.anderson@example.com",
+                "101010101",
+                "Legal Experts",
+                "Lawyer",
+                "15",
+                ESectors.LEGAL
+        ));
+
+        offerService.save(new OfferSaveRequestDto(
+                "Kate",
+                "Thomas",
+                "kate.thomas@example.com",
+                "202020202",
+                "Foodie World",
+                "Chef",
+                "5",
+                ESectors.INVESTMENT_MANAGEMENT
+        ));
+
+        offerService.save(new OfferSaveRequestDto(
+                "Leo",
+                "Martinez",
+                "leo.martinez@example.com",
+                "303030303",
+                "Travel Bliss",
+                "Travel Agent",
+                "7",
+                ESectors.JOURNALISM
+        ));
+
+        offerService.save(new OfferSaveRequestDto(
+                "Mia",
+                "Harris",
+                "mia.harris@example.com",
+                "404040404",
+                "Auto Experts",
+                "Automotive Technician",
+                "6",
+                ESectors.AUTOMOTIVE
+        ));
+
+        offerService.save(new OfferSaveRequestDto(
+                "Noah",
+                "Nelson",
+                "noah.nelson@example.com",
+                "505050505",
+                "Media World",
+                "Journalist",
+                "9",
+                ESectors.MEDIA
+        ));
+
+        offerService.save(new OfferSaveRequestDto(
+                "Olivia",
+                "Scott",
+                "olivia.scott@example.com",
+                "606060606",
+                "Beauty Bliss",
+                "Cosmetologist",
+                "10",
+                ESectors.TOURISM
+        ));
+
+
     }
 }

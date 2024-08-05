@@ -1,7 +1,7 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { ILogin } from "../../models/ILogin";
-import { IUser } from "../../models/IUser";
-import { ICreateAdmin } from '../../models/ICreateAdmin';
+import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {ILogin} from "../../models/ILogin";
+import {IUser} from "../../models/IUser";
+import {ICreateAdmin} from '../../models/ICreateAdmin';
 
 interface IAuthState {
     user: IUser;
@@ -21,31 +21,20 @@ const initalAuthState: IAuthState = {
 
 export const fetchLogin = createAsyncThunk(
     'auth/fetchLogin',
-    async (payload: ILogin, { rejectWithValue }) => {
-        try {
-            const response = await fetch('http://localhost:9090/dev/v1/auth/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    'email': payload.email,
-                    'password': payload.password,
-                })
-            });
-            const data = await response.json();
-            if (!response.ok) {
-                throw new Error(data.message || 'Login failed');
-            }
-            return data;
-        } catch (err) {
-            console.log('Error: ', err);
-            if (err instanceof Error) {
-                return rejectWithValue(err.message);
-            } else {
-                return rejectWithValue('An unknown error occurred');
-            }
-        }
+    async (payload: ILogin) => {
+
+        const response = await fetch('http://localhost:9090/dev/v1/auth/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                'email': payload.email,
+                'password': payload.password,
+            })
+        });
+        return response.json();
+
     }
 );
 
@@ -199,16 +188,8 @@ const authSlice = createSlice({
                 localStorage.setItem('token', action.payload.token);
             })
             .addCase(fetchFindUserByToken.fulfilled, (state, action: PayloadAction<IUser>) => {
+
                 state.user = action.payload;
-            })
-            .addCase(fetchCreateAdmin.rejected, (state) => {
-                
-            })
-            .addCase(fetchFindCompanyNameAndManagerNameOfUser.rejected, (state) => {
-                
-            })
-            .addCase(fetchFindUserByToken.rejected, (state) => {
-                
             })
             .addMatcher(
                 (action) => action.type.endsWith('/rejected'),

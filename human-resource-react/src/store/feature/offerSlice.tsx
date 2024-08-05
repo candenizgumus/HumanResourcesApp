@@ -70,8 +70,8 @@ interface fetchGetOffersPayload {
 // Thunk for getting offers
 export const fetchGetOffers = createAsyncThunk(
     'offer/fetchGetOffers',
-    async (payload: fetchGetOffersPayload, { dispatch, rejectWithValue }) => {
-        try {
+    async (payload: fetchGetOffersPayload, { dispatch }) => {
+
             const response = await fetch('http://localhost:9090/dev/v1/offer/get-all', {
                 method: 'POST',
                 headers: {
@@ -86,19 +86,12 @@ export const fetchGetOffers = createAsyncThunk(
             });
 
             if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+                console.log(response)
+                dispatch(clearToken());
             }
 
             return await response.json();
-        } catch (err) {
-            console.log('Error:', err);
-            dispatch(clearToken());
-            if (isError(err)) {
-                return rejectWithValue(err.message);
-            } else {
-                return rejectWithValue('An unknown error occurred');
-            }
-        }
+
     }
 );
 
@@ -110,8 +103,8 @@ interface fetchApproveOffersPayload {
 // Thunk for approving offers
 export const fetchApproveOffers = createAsyncThunk(
     'offer/fetchApproveOffers',
-    async (payload: fetchApproveOffersPayload, { dispatch, rejectWithValue }) => {
-        try {
+    async (payload: fetchApproveOffersPayload, { dispatch }) => {
+
             const response = await fetch(`http://localhost:9090/dev/v1/offer/approve-offer-and-register-auth-and-user?offerId=${payload.offerId}`, {
                 method: 'POST',
                 headers: {
@@ -121,19 +114,12 @@ export const fetchApproveOffers = createAsyncThunk(
             });
 
             if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+                dispatch(clearToken());
             }
 
             return await response.json();
-        } catch (err) {
-            console.log('Error:', err);
-            dispatch(clearToken());
-            if (isError(err)) {
-                return rejectWithValue(err.message);
-            } else {
-                return rejectWithValue('An unknown error occurred');
-            }
-        }
+
+
     }
 );
 
@@ -144,37 +130,10 @@ const offerSlice = createSlice({
     reducers: {},
     extraReducers: (builder) => {
         builder
-            .addCase(fetchCreateOffer.pending, (state) => {
-                state.status = 'loading';
-            })
-            .addCase(fetchCreateOffer.fulfilled, (state) => {
-                state.status = 'succeeded';
-            })
-            .addCase(fetchCreateOffer.rejected, (state, action) => {
-                state.status = 'failed';
-                state.error = action.payload as string;
-            })
-            .addCase(fetchGetOffers.pending, (state) => {
-                state.status = 'loading';
-            })
             .addCase(fetchGetOffers.fulfilled, (state, action: PayloadAction<IOfferList[]>) => {
                 state.offers = action.payload;
-                state.status = 'ACTIVE';
+
             })
-            .addCase(fetchGetOffers.rejected, (state, action) => {
-                state.status = 'failed';
-                state.error = action.payload as string;
-            })
-            .addCase(fetchApproveOffers.pending, (state) => {
-                state.status = 'loading';
-            })
-            .addCase(fetchApproveOffers.fulfilled, (state) => {
-                state.status = 'succeeded';
-            })
-            .addCase(fetchApproveOffers.rejected, (state, action) => {
-                state.status = 'failed';
-                state.error = action.payload as string;
-            });
     }
 });
 

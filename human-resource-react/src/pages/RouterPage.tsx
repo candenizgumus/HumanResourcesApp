@@ -15,7 +15,7 @@ import ContactPage from './pre_autorize_pages/ContactPage';
 
 const RouterPage = () => {
     const dispatch = useDispatch<HumanResources>();
-    const isAuth = useAppSelector((state) => state.auth.isAuth);
+    //const isAuth = useAppSelector((state) => state.auth.isAuth);
     const user = useAppSelector((state) => state.auth.user);
     const token = localStorage.getItem('token');
     useEffect(() => {

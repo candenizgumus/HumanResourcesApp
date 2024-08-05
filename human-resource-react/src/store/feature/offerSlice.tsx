@@ -19,12 +19,12 @@ function isError(error: unknown): error is Error {
 export const fetchCreateOffer = createAsyncThunk(
     'offer/fetchCreateOffer',
     async (payload: IGetOffer, { rejectWithValue }) => {
-        try {
+
             const response = await fetch('http://localhost:9090/dev/v1/offer/save', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    //'Authorization': `Bearer `+ payload.token // Adding Bearer token
+
                 },
                 body: JSON.stringify({
                     'name': payload.name,
@@ -36,27 +36,11 @@ export const fetchCreateOffer = createAsyncThunk(
                     'companyName': payload.companyName,
                     'sector': payload.sector
                 })
-            });
+            }).then(data => data.json());
 
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
+           return response;
 
-            const responseText = await response.text();
-            try {
-                return JSON.parse(responseText);
-            } catch (err) {
-                console.error('Failed to parse JSON:', responseText);
-                throw new Error('Invalid JSON response');
-            }
-        } catch (err) {
-            console.log('Error:', err);
-            if (isError(err)) {
-                return rejectWithValue(err.message);
-            } else {
-                return rejectWithValue('An unknown error occurred');
-            }
-        }
+
     }
 );
 

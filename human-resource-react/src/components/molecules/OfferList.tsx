@@ -62,6 +62,7 @@ export default function OfferList() {
     const token = useAppSelector(state => state.auth.token);
     const [searchText, setSearchText] = useState('');
 
+
     useEffect(() => {
 
         dispatch(fetchGetOffers({
@@ -72,7 +73,7 @@ export default function OfferList() {
         })).catch(() => {
             console.log('burası calisti')
             dispatch(clearToken());
-    })
+    },)
 
     }, [dispatch, searchText, token]);
 
@@ -81,6 +82,7 @@ export default function OfferList() {
     };
 
     const handleConfirmSelection = () => {
+
         selectedRowIds.forEach((id) => {
             dispatch(fetchApproveOffers({
                 token: token,
@@ -109,8 +111,9 @@ export default function OfferList() {
 
             })
         })
+
     };
-    //TODO buraya arama motoru yap. dto ya email ekle. if else koyma
+
     return (
         <div style={{ height: 400, width: 'inherit' }}>
             <TextField
@@ -152,6 +155,7 @@ export default function OfferList() {
                         onClick={handleConfirmSelection}
                         variant="contained"
                         color="primary"
+
                     >
                         Confirm Selection
                     </Button>

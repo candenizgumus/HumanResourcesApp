@@ -2,6 +2,8 @@ package com.humanresourcesapp.controllers;
 
 import com.humanresourcesapp.dto.requests.OfferSaveRequestDto;
 import com.humanresourcesapp.dto.requests.PageRequestDto;
+import com.humanresourcesapp.exception.ErrorType;
+import com.humanresourcesapp.exception.HumanResourcesAppException;
 import com.humanresourcesapp.services.OfferService;
 import com.humanresourcesapp.views.VwGetAllOffer;
 import lombok.RequiredArgsConstructor;

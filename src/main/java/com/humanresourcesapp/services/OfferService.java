@@ -14,17 +14,15 @@ import com.humanresourcesapp.exception.HumanResourcesAppException;
 import com.humanresourcesapp.model.MailModel;
 import com.humanresourcesapp.repositories.OfferRepository;
 import com.humanresourcesapp.utility.EmailService;
-import com.humanresourcesapp.utility.JwtTokenManager;
 import com.humanresourcesapp.utility.PasswordEncoder;
 import com.humanresourcesapp.utility.PasswordGenerator;
 import com.humanresourcesapp.views.VwGetAllOffer;
-import jakarta.validation.constraints.Email;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import java.awt.print.Pageable;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -128,5 +126,10 @@ public class OfferService
                 .build());
 
         return true;
+    }
+
+    public Optional<Offer> findByEmail(String email)
+    {
+        return offerRepository.findByEmail(email);
     }
 }

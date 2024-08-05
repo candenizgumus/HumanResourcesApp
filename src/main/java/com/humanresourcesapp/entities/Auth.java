@@ -43,6 +43,7 @@ public class Auth extends BaseEntity implements UserDetails
     @Override
     public String getUsername()
     {
+
         return email;
     }
 }

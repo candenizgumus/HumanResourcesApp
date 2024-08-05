@@ -1,6 +1,7 @@
 package com.humanresourcesapp.utility;
 
 import com.humanresourcesapp.entities.*;
+import com.humanresourcesapp.entities.enums.EHolidayType;
 import com.humanresourcesapp.entities.enums.EStatus;
 import com.humanresourcesapp.entities.enums.EUserType;
 import com.humanresourcesapp.services.*;
@@ -20,11 +21,14 @@ public class InsertDemoData {
     private final PasswordEncoder passwordEncoder;
     private final AuthService authService;
     private final CommentService commentService;
+    private final HolidayService holidayService;
+
     @PostConstruct
     public void insert() {
         insertCompanyDemoData();
         insertFeatureDemoData();
         insertCommentDemoData();
+        insertHolidayDemoData();
     }
 
     // Company demo data insertion
@@ -160,6 +164,61 @@ public class InsertDemoData {
 
                 .build());
         commentService.saveAll(commentList);
+    }
+
+    private void insertHolidayDemoData() {
+        List <Holiday> holidayList = new ArrayList<>();
+
+        holidayList.add(Holiday.builder()
+                .holidayName("29 EKİM")
+                .holidayType(EHolidayType.NATIONAL)
+                .holidayStartDate(1730182819L)
+                .holidayEndDate(1730269219L)
+                .build());
+
+        holidayList.add(Holiday.builder()
+                .holidayName("KURBAN BAYRAMI")
+                .holidayType(EHolidayType.RELIGIOUS)
+                .holidayStartDate(1749190819L)
+                .holidayEndDate(1749450019L)
+                .build());
+
+        holidayList.add(Holiday.builder()
+                .holidayName("RAMAZAN BAYRAMI")
+                .holidayType(EHolidayType.RELIGIOUS)
+                .holidayStartDate(1743315619L)
+                .holidayEndDate(1743488419L)
+                .build());
+
+        holidayList.add(Holiday.builder()
+                .holidayName("YILBAŞI")
+                .holidayType(EHolidayType.INTERNATIONAL)
+                .holidayStartDate(1735626019L)
+                .holidayEndDate(1735712419L)
+                .build());
+
+        holidayList.add(Holiday.builder()
+                .holidayName("23 NİSAN")
+                .holidayType(EHolidayType.NATIONAL)
+                .holidayStartDate(1745389219L)
+                .holidayEndDate(1745475619L)
+                .build());
+
+        holidayList.add(Holiday.builder()
+                .holidayName("30 AĞUSTOS")
+                .holidayType(EHolidayType.NATIONAL)
+                .holidayStartDate(1756534819L)
+                .holidayEndDate(1756621219L)
+                .build());
+
+        holidayList.add(Holiday.builder()
+                .holidayName("1 MAYIS")
+                .holidayType(EHolidayType.NATIONAL)
+                .holidayStartDate(1746080419L)
+                .holidayEndDate(1746166819L)
+                .build());
+
+        holidayService.saveAll(holidayList);
     }
 
     private void createManagerUser()

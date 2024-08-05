@@ -21,7 +21,6 @@ public class HolidayController {
     @PostMapping(SAVE)
     @CrossOrigin("*")
     public ResponseEntity<Holiday> save(@RequestBody HolidaySaveRequestDto holidaySaveRequestDto) {
-        System.out.println("controller:"+holidaySaveRequestDto);
         return ResponseEntity.ok(holidayService.save(holidaySaveRequestDto));
     }
 

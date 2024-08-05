@@ -19,7 +19,6 @@ public class HolidayService {
     private final HolidayRepository holidayRepository;
 
     public Holiday save(HolidaySaveRequestDto holidaySaveRequestDto) {
-        System.out.println("servis: "+holidaySaveRequestDto);
         return holidayRepository.save(Holiday.builder()
                 .holidayName(holidaySaveRequestDto.holidayName())
                 .holidayType(holidaySaveRequestDto.holidayType())
@@ -65,5 +64,9 @@ public class HolidayService {
             ));
         }
         return holidayResponseDtoList;
+    }
+
+    public void saveAll(List<Holiday> holidayList) {
+        holidayRepository.saveAll(holidayList);
     }
 }

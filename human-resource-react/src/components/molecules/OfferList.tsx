@@ -83,7 +83,8 @@ export default function OfferList() {
                     }));
                 }
             } catch (error) {
-                console.error(error);
+                localStorage.removeItem('token');
+                dispatch(clearToken());
             }
         }
 

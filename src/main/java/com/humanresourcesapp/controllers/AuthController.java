@@ -21,6 +21,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(ROOT+AUTH)
@@ -40,11 +42,16 @@ public class AuthController
         } catch (AuthenticationException e) {
             throw new HumanResourcesAppException(ErrorType.EMAIL_OR_PASSWORD_WRONG);
         }
-
         final Auth auth = (Auth)authService.loadUserByUsername(dto.email());
+
         if(auth.getStatus() != EStatus.ACTIVE){
             throw new HumanResourcesAppException(ErrorType.INVALID_ACCOUNT);
         }
+        if (auth.getSubscriptionEndDate() != null && auth.getSubscriptionEndDate().isBefore(LocalDate.now()))
+        {
+            throw new HumanResourcesAppException(ErrorType.SUBSCRIPTION_EXPIRED);
+        }
+
         if (auth != null) {
             String token = jwtTokenManager.createTokenFromAuth(auth).orElseThrow(() -> new HumanResourcesAppException(ErrorType.TOKEN_CREATION_FAILED));
             LoginResponseDto loginResponseDto = new LoginResponseDto(token);

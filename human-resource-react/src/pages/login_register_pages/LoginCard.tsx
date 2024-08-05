@@ -10,13 +10,14 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import {SportsTennis} from "@mui/icons-material";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {fetchFindUserByToken, fetchLogin, setToken, setUserType} from "../../store/feature/authSlice";
-import {HumanResources, useAppSelector} from "../../store";
+import {HumanResources, RootState, useAppSelector} from "../../store";
 
 import {useState} from "react";
 import {Alert, AlertTitle} from "@mui/material";
 import getUserTypeFromToken from '../../util/getUserTypeFromToken';
+import { IUser } from '../../models/IUser';
 
 export default function LoginCard() {
     const dispatch = useDispatch<HumanResources>();
@@ -25,15 +26,17 @@ export default function LoginCard() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const user = useSelector((state: RootState) => state.auth.user);
+
     const handleLogin = async () => {
 
             let result = await dispatch(fetchLogin({ email, password })).unwrap();
-
             // `result` içinde `code` özelliği olup olmadığını kontrol edin
             if (result.code) {
                 setError(result.message);
                 return; // İşlemi sonlandırarak sonraki then bloklarına geçişi engeller.
             }
+            
             const userType = getUserTypeFromToken(result.token);
             if (userType === 'ADMIN') {
                 navigate('/admin-home');

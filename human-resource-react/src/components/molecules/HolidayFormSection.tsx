@@ -1,18 +1,19 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { HumanResources } from '../../store';
-import {fetchCreateHoliday, fetchHolidays} from '../../store/feature/holidaySlice';
+import { fetchCreateHoliday, fetchHolidays } from '../../store/feature/holidaySlice';
 import Swal from 'sweetalert2';
-import {Box, TextField, Button, Grid, FormControl, InputLabel, Select, MenuItem} from '@mui/material';
+import { Box, TextField, Button, Grid, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
-
-const HolidayFormSection = () => {
+const HolidayFormSection: React.FC = () => {
     const dispatch = useDispatch<HumanResources>();
 
-    const [holidayName, setHolidayName] = useState('');
-    const [holidayType, setHolidayType] = useState('');
-    const [holidayStartDate, setHolidayStartDate] = useState(0);
-    const [holidayEndDate, setHolidayEndDate] = useState(0);
+    const [holidayName, setHolidayName] = useState<string>('');
+    const [holidayType, setHolidayType] = useState<string>('');
+    const [holidayStartDate, setHolidayStartDate] = useState<Date | null>(null);
+    const [holidayEndDate, setHolidayEndDate] = useState<Date | null>(null);
 
     const handleSubmit = () => {
         if (!holidayName || !holidayType || !holidayStartDate || !holidayEndDate) {
@@ -23,12 +24,15 @@ const HolidayFormSection = () => {
             });
             return;
         }
-        console.log('Holiday Start Date:', holidayStartDate);
+
+        const startEpoch = holidayStartDate.getTime();
+        const endEpoch = holidayEndDate.getTime();
+
         dispatch(fetchCreateHoliday({
             holidayName,
             holidayType,
-            holidayStartDate,
-            holidayEndDate
+            holidayStartDate: startEpoch,
+            holidayEndDate: endEpoch
         }))
             .then(() => {
                 Swal.fire({
@@ -36,8 +40,6 @@ const HolidayFormSection = () => {
                     title: 'Success!',
                     text: 'Holiday has been submitted successfully.',
                 });
-            })
-            .then(() => {
                 dispatch(fetchHolidays());
             })
             .catch(() => {
@@ -59,6 +61,7 @@ const HolidayFormSection = () => {
                         onChange={(e) => setHolidayName(e.target.value)}
                         fullWidth
                         required
+                        autoComplete="off"
                     />
                 </Grid>
                 <Grid item xs={12}>
@@ -66,7 +69,7 @@ const HolidayFormSection = () => {
                         <InputLabel>Holiday Type</InputLabel>
                         <Select
                             value={holidayType}
-                            onChange={(e) => setHolidayType(e.target.value)}
+                            onChange={(e) => setHolidayType(e.target.value as string)}
                         >
                             <MenuItem value="PUBLIC">PUBLIC</MenuItem>
                             <MenuItem value="RELIGIOUS">RELIGIOUS</MenuItem>
@@ -77,27 +80,21 @@ const HolidayFormSection = () => {
                     </FormControl>
                 </Grid>
                 <Grid item xs={12}>
-                    <TextField
-                        label="Holiday Start Date"
-                        value={holidayStartDate}
-                        onChange={(e) => setHolidayStartDate(Number(e.target.value))}
-                        fullWidth
-                        required
-                        InputLabelProps={{
-                            shrink: true,
-                        }}
+                    <DatePicker
+                        selected={holidayStartDate}
+                        onChange={(date: Date | null) => setHolidayStartDate(date)}
+                        dateFormat="yyyy-MM-dd"
+                        placeholderText="Select start date"
+                        customInput={<TextField fullWidth required autoComplete="off" />}
                     />
                 </Grid>
                 <Grid item xs={12}>
-                    <TextField
-                        label="Holiday End Date"
-                        value={holidayEndDate}
-                        onChange={(e) => setHolidayEndDate(Number(e.target.value))}
-                        fullWidth
-                        required
-                        InputLabelProps={{
-                            shrink: true,
-                        }}
+                    <DatePicker
+                        selected={holidayEndDate}
+                        onChange={(date: Date | null) => setHolidayEndDate(date)}
+                        dateFormat="yyyy-MM-dd"
+                        placeholderText="Select end date"
+                        customInput={<TextField fullWidth required autoComplete="off" />}
                     />
                 </Grid>
                 <Grid item xs={12}>
@@ -112,8 +109,6 @@ const HolidayFormSection = () => {
             </Grid>
         </Box>
     );
-}
+};
 
 export default HolidayFormSection;
-
-

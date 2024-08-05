@@ -48,10 +48,25 @@ export default function OfferList() {
         setLoading(true);
 
         for (let id of selectedRowIds) {
+            const selectedOffer = offerList.find(offer => offer.id === id);
+            if (!selectedOffer) continue;
+
             try {
                 const result = await Swal.fire({
                     title: 'Abonelik Türünü Seç',
-                    showCancelButton: false,
+                    html: `
+                        <div>
+                            <p><strong>Name:</strong> ${selectedOffer.name}</p>
+                            <p><strong>Surname:</strong> ${selectedOffer.surname}</p>
+                            <p><strong>Email:</strong> ${selectedOffer.email}</p>
+                            <p><strong>Phone:</strong> ${selectedOffer.phone}</p>
+                            <p><strong>Company Name:</strong> ${selectedOffer.companyName}</p>
+                            <p><strong>Title:</strong> ${selectedOffer.title}</p>
+                            <p><strong>Employee Count:</strong> ${selectedOffer.numberOfEmployee}</p>
+                            <p><strong>Sector:</strong> ${selectedOffer.sector}</p>
+                        </div>
+                    `,
+                    showCancelButton: true,
                     confirmButtonText: 'Onayla',
                     input: 'radio',
                     inputOptions: {

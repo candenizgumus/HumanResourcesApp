@@ -25,8 +25,8 @@ const HolidayFormSection: React.FC = () => {
             return;
         }
 
-        const startEpoch = holidayStartDate.getTime();
-        const endEpoch = holidayEndDate.getTime();
+        const startEpoch = holidayStartDate.getTime() / 1000;
+        const endEpoch = holidayEndDate.getTime() / 1000;
 
         dispatch(fetchCreateHoliday({
             holidayName,
@@ -85,7 +85,10 @@ const HolidayFormSection: React.FC = () => {
                         onChange={(date: Date | null) => setHolidayStartDate(date)}
                         dateFormat="yyyy-MM-dd"
                         placeholderText="Select start date"
-                        customInput={<TextField fullWidth required autoComplete="off" />}
+                        customInput={<TextField
+                            fullWidth
+                            required
+                            autoComplete="off" />}
                     />
                 </Grid>
                 <Grid item xs={12}>
@@ -94,7 +97,10 @@ const HolidayFormSection: React.FC = () => {
                         onChange={(date: Date | null) => setHolidayEndDate(date)}
                         dateFormat="yyyy-MM-dd"
                         placeholderText="Select end date"
-                        customInput={<TextField fullWidth required autoComplete="off" />}
+                        customInput={<TextField
+                            fullWidth
+                            required
+                            autoComplete="off" />}
                     />
                 </Grid>
                 <Grid item xs={12}>

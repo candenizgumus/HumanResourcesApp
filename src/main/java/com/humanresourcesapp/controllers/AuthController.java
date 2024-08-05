@@ -5,6 +5,7 @@ import static com.humanresourcesapp.constants.Endpoints.*;
 import com.humanresourcesapp.dto.requests.AuthLoginRequestDto;
 import com.humanresourcesapp.dto.responses.LoginResponseDto;
 import com.humanresourcesapp.entities.Auth;
+import com.humanresourcesapp.entities.enums.EStatus;
 import com.humanresourcesapp.exception.ErrorType;
 import com.humanresourcesapp.exception.HumanResourcesAppException;
 import com.humanresourcesapp.services.AuthService;
@@ -41,6 +42,9 @@ public class AuthController
         }
 
         final Auth auth = (Auth)authService.loadUserByUsername(dto.email());
+        if(auth.getStatus() != EStatus.ACTIVE){
+            throw new HumanResourcesAppException(ErrorType.INVALID_ACCOUNT);
+        }
         if (auth != null) {
             String token = jwtTokenManager.createTokenFromAuth(auth).orElseThrow(() -> new HumanResourcesAppException(ErrorType.TOKEN_CREATION_FAILED));
             LoginResponseDto loginResponseDto = new LoginResponseDto(token);

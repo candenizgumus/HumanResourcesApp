@@ -36,7 +36,7 @@ const FormSection = () => {
     const [selectedSector, setSelectedSector] = useState<string>('');
 
     const handleSubmit = () => {
-        if (!name || !surname || !email || !phone || !title || !numberOfEmployees || !companyName) {
+        if (!name || !surname || !email || !phone || !title || !numberOfEmployees || !companyName || !selectedSector) {
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
@@ -65,20 +65,22 @@ const FormSection = () => {
             companyName,
             sector: selectedSector
         }))
-            .then(() => {
+            .then((data) => {
+                if (data.payload.code) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: data.payload.message,
+                    });
+                    return;
+                }
                 Swal.fire({
                     icon: 'success',
                     title: 'Success!',
                     text: 'Your offer has been submitted successfully.',
                 });
             })
-            .catch(() => {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'There was an error submitting your offer. Please try again later.',
-                });
-            });
+
     };
 
     useEffect(() => {

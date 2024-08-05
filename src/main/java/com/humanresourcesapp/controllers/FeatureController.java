@@ -2,6 +2,8 @@ package com.humanresourcesapp.controllers;
 
 import com.humanresourcesapp.dto.requests.FeatureSaveRequest;
 import com.humanresourcesapp.entities.Feature;
+import com.humanresourcesapp.exception.ErrorType;
+import com.humanresourcesapp.exception.HumanResourcesAppException;
 import com.humanresourcesapp.services.FeatureService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -22,12 +24,14 @@ public class FeatureController {
 
     @PostMapping(SAVE)
     public ResponseEntity<Feature> save(@RequestBody FeatureSaveRequest dto) {
+
         return ResponseEntity.ok(featureService.save(dto));
     }
 
     @GetMapping(GET_ALL)
     @PreAuthorize("permitAll()")
     public ResponseEntity<List<Feature>> getAll() {
+
         return ResponseEntity.ok(featureService.getAll());
     }
 }

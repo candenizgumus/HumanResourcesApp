@@ -1,7 +1,10 @@
 package com.humanresourcesapp.controllers;
 
+import com.humanresourcesapp.dto.requests.OfferApproveRequestDto;
 import com.humanresourcesapp.dto.requests.OfferSaveRequestDto;
 import com.humanresourcesapp.dto.requests.PageRequestDto;
+import com.humanresourcesapp.exception.ErrorType;
+import com.humanresourcesapp.exception.HumanResourcesAppException;
 import com.humanresourcesapp.services.OfferService;
 import com.humanresourcesapp.views.VwGetAllOffer;
 import lombok.RequiredArgsConstructor;
@@ -35,8 +38,8 @@ public class OfferController
     }
 
     @PostMapping(APPROVE_OFFER_AND_REGISTER_AUTH_AND_USER)
-    public ResponseEntity<Boolean> approveOfferAndRegisterAuthAndUser(Long offerId){
+    public ResponseEntity<Boolean> approveOfferAndRegisterAuthAndUser(@RequestBody OfferApproveRequestDto dto){
 
-        return ResponseEntity.ok(offerService.approveOfferAndRegisterAuthAndUser(offerId));
+        return ResponseEntity.ok(offerService.approveOfferAndRegisterAuthAndUser(dto));
     }
 }

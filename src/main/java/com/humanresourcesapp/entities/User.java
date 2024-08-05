@@ -1,14 +1,11 @@
 package com.humanresourcesapp.entities;
 
-import com.humanresourcesapp.entities.enums.EEmployeeType;
-import com.humanresourcesapp.entities.enums.EPosition;
-import com.humanresourcesapp.entities.enums.ESectors;
-import com.humanresourcesapp.entities.enums.EStatus;
-import com.humanresourcesapp.entities.enums.EUserType;
+import com.humanresourcesapp.entities.enums.*;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
+import java.time.LocalDate;
 
 
 @EqualsAndHashCode(callSuper = true)
@@ -67,6 +64,14 @@ public class User extends BaseEntity
 
     // MANAGER and EMPLOYEE
     String photo;
+
+    // MANAGER and EMPLOYEE
+    @Enumerated(EnumType.STRING)
+    ESubscriptionType subscriptionType;
+
+    // MANAGER and EMPLOYEE
+    LocalDate subscriptionStartDate;
+    LocalDate subscriptionEndDate;
 
     // ALL USERS
     @Enumerated(EnumType.STRING)

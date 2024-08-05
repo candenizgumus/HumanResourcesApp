@@ -50,4 +50,33 @@ public class AdminUserGenerator
         }
     }
 
+    @PostConstruct
+    public void createInactiveAdmin()
+    {
+        String adminEmail = "admin2";
+        String password = "123";
+
+        if (authService.findByEmail(adminEmail).isEmpty())
+        {
+            String encodedPassword = passwordEncoder.bCryptPasswordEncoder().encode(password);
+
+            Auth auth = authService.save(Auth.
+                    builder()
+                    .status(EStatus.INACTIVE)
+                    .email(adminEmail)
+                    .password(encodedPassword)
+                    .userType(EUserType.ADMIN)
+                    .build());
+
+            User user = User
+                    .builder()
+                    .status(EStatus.INACTIVE)
+                    .email(adminEmail)
+                    .authId(auth.getId()) // Set the retrieved ID from saved Auth
+                    .userType(EUserType.ADMIN)
+                    .build();
+            userService.save(user);
+        }
+    }
+
 }

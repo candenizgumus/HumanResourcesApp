@@ -36,6 +36,7 @@ export default function LoginCard() {
                 setError(result.message);
                 return; // İşlemi sonlandırarak sonraki then bloklarına geçişi engeller.
             }
+            
             const userType = getUserTypeFromToken(result.token);
             if (userType === 'ADMIN') {
                 navigate('/admin-home');

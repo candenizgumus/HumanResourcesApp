@@ -53,7 +53,7 @@ public class UserService {
 
     public List<User> getAll(PageRequestDto dto) {
 
-        return userRepository.findAll(PageRequest.of(dto.page(), dto.pageSize())).getContent();
+        return userRepository.getAllOfferByEmailSearch(dto.searchText(),PageRequest.of(dto.page(), dto.pageSize()));
     }
 
     public List<User> getAllUsersOfManagerByCompanyId() {

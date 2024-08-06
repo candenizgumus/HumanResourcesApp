@@ -30,6 +30,7 @@ public class Endpoints
     public static final String SHIFT_ASSIGNMENT = "/shift-assignment";
     public static final String USER = "/user";
     public static final String FEATURE = "/feature";
+    public static final String PASSWORD_RESET = "/password-reset";
     public static final String EMAIL = "/email";
 
     //methods
@@ -52,5 +53,6 @@ public class Endpoints
     public static final String SAVE_ADMIN = "/save-admin";
     public static final String GET_POSITIONS = "/get-positions";
     public static final String GET_SECTORS = "/get-sectors";
+    public static final String SEND_PASSWORD_RESET_EMAIL = "/send-password-reset-email";
     ;
 }

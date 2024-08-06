@@ -25,11 +25,6 @@ public class Company extends BaseEntity
 
     String name;
     String logo;
-    String numberOfEmployee;
     String description;
-
-    @Enumerated(EnumType.STRING)
-    ESubscriptionType subscriptionType;
-    Long subscriptionStartDate;
-    Long subscriptionEndDate;
+    Integer numberOfEmployee;
 }

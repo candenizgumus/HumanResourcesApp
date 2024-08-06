@@ -16,7 +16,7 @@ import { fetchGetFeatures } from '../../store/feature/featureSlice';
 import Dashboard from '../../images/default_dashboard.webp';
 import { NavBar } from '../../components/molecules/NavBar';
 import FooterElement from '../../components/molecules/FooterElement';
-import { fetchGetCompanies } from "../../store/feature/companySlice";
+import { fetchGetCompanies, fetchGetCompanyLogos } from "../../store/feature/companySlice";
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import LogoCard from "../../components/molecules/LogoCard";
@@ -77,14 +77,14 @@ const Logos = styled('div')(({ theme }) => ({
 function LandingPage() {
   const dispatch: HumanResources = useDispatch();
   const featureList = useSelector((state: RootState) => state.feature.featuresList);
-  const companyList = useSelector((state: RootState) => state.company.companiesList);
+  const logoList = useSelector((state: RootState) => state.company.logoList);
   const featuresRef = useRef<HTMLDivElement>(null);
 
   const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
     dispatch(fetchGetFeatures());
-    dispatch(fetchGetCompanies());
+    dispatch(fetchGetCompanyLogos());
   }, [dispatch]);
 
   useEffect(() => {
@@ -95,18 +95,18 @@ function LandingPage() {
   }, [currentIndex]);
 
   const handleNext = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % companyList.length);
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % logoList.length);
   };
 
   const handlePrev = () => {
     setCurrentIndex((prevIndex) =>
-      (prevIndex - 1 + companyList.length) % companyList.length
+      (prevIndex - 1 + logoList.length) % logoList.length
     );
   };
 
   const visibleLogos = [
-    ...companyList.slice(currentIndex, currentIndex + 5),
-    ...companyList.slice(0, Math.max(0, (currentIndex + 5) - companyList.length)),
+    ...logoList.slice(currentIndex, currentIndex + 5),
+    ...logoList.slice(0, Math.max(0, (currentIndex + 5) - logoList.length)),
   ];
 
   return (

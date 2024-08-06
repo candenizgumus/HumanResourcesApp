@@ -9,6 +9,7 @@ import { useEffect } from "react";
 import { clearToken, fetchFindUserByToken } from "../../store/feature/authSlice";
 import { useDispatch } from "react-redux";
 import SideBarUsers from "../molecules/SideBarUsers";
+import CompanyList from "../molecules/CompanyList";
 
 export const AdminMenuContents = () => {
     const page = useAppSelector((state) => state.auth.pageState);
@@ -20,6 +21,7 @@ export const AdminMenuContents = () => {
                 {page === 'Create Admin' && <CreateAdminMenuContent />}
                 {page === 'Holidays' && <HolidayTable />}
                 {page === 'Profile' && <Profile/>}
+                {page === 'Companies' && <CompanyList/>}
                 {page === 'Users' && <SideBarUsers/>}
             </Grid>
         </>

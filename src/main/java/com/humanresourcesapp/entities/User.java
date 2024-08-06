@@ -57,10 +57,10 @@ public class User extends BaseEntity
     String phone;
 
     // MANAGER and EMPLOYEE
-    Long birthDate;
+    LocalDate birthDate;
 
     // MANAGER and EMPLOYEE
-    Long hireDate;
+    LocalDate hireDate;
 
     // MANAGER and EMPLOYEE
     String photo;

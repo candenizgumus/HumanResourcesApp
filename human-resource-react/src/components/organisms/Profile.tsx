@@ -9,6 +9,12 @@ import {
 } from "../../store/feature/authSlice";
 import {useDispatch} from "react-redux";
 
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import dayjs from "dayjs";
+
+
 interface UpdateProfile {
   name: string;
   surname: string;
@@ -21,17 +27,27 @@ interface UpdateProfile {
 
 const Profile: React.FC = () => {
 
-
-  const [name, setName] = useState<string>('');
-  const [surname, setSurname] = useState<string>('');
-  const [phone, setPhone] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
-  const [repassword, setRePassword] = useState<string>('');
-  const [companyName, setCompanyName] = useState<string>('');
-  const [managerName, setManagerName] = useState<string>('');
     const user:IUser = useAppSelector((state) => state.auth.user);
     const token = useAppSelector((state) => state.auth.token);
     const dispatch = useDispatch<HumanResources>();
+  const [name, setName] = useState<string>(user.name ?? '');
+  const [surname, setSurname] = useState<string>(user.surname ?? '');
+    const [phone, setPhone] = useState<string>(user.phone ?? '');
+    const [birthDate, setBirthDate] = useState<Date | null>(user.birthDate);
+    const [hireDate, setHireDate] = useState(user.hireDate ?? '');
+    const [userType, setUserType] = useState<string>(user.userType ?? '');
+    const [position, setPosition] = useState<string>(user.position ?? '');
+    const [sector, setSector] = useState<string>(user.sector ?? '');
+    const [location, setLocation] = useState<string>(user.location ?? '') ;
+    const [employeeType, setEmployeeType] = useState<string>(user.employeeType ?? '');
+    const [subscriptionType, setSubscriptionType] = useState<string>(user.subscriptionType ?? '');
+    const [subscriptionStartDate, setSubscriptionStartDate] = useState(user.subscriptionStartDate ?? '');
+    const [subscriptionEndDate, setSubscriptionEndDate] = useState(user.subscriptionEndDate ?? '');
+    const [password, setPassword] = useState<string>('');
+    const [repassword, setRePassword] = useState<string>('');
+  const [companyName, setCompanyName] = useState<string>('');
+  const [managerName, setManagerName] = useState<string>('');
+
     const [positions, setPositions] = useState([]);
     const [selectedPositions, setSelectedPositions] = useState<string>('');
 
@@ -41,7 +57,7 @@ const Profile: React.FC = () => {
     console.log('Form submitted:', );
   };
 
-  const handleLogin = async () => {
+  const setUserInfos = async () => {
     try {
         dispatch(fetchFindUserByToken(token));
 
@@ -68,10 +84,10 @@ const Profile: React.FC = () => {
         console.error('Error in handleLogin:', error);  // Handle other errors
     }
 };
+    console.log(birthDate);
 
-    
     useEffect(() => {
-        handleLogin();
+        setUserInfos();
     },[])
 
   return (
@@ -96,7 +112,7 @@ const Profile: React.FC = () => {
                       <TextField
                           label='Name'
                           name="name"
-                          value={user.name}
+                          value={name}
                           onChange={event => setName(event.target.value)}
                           fullWidth
                           required
@@ -104,7 +120,7 @@ const Profile: React.FC = () => {
                       <TextField
                           label='Surname'
                           name="surname"
-                          value={user.surname}
+                          value={surname}
                           onChange={event => setSurname(event.target.value)}
                           fullWidth
                           required
@@ -112,11 +128,30 @@ const Profile: React.FC = () => {
                       <TextField
                           label='Phone'
                           name="phone"
-                          value={user.phone}
+                          value={phone}
                           onChange={event => setPhone(event.target.value)}
                           fullWidth
                           required
                       />
+                      <TextField
+                          label='Location'
+                          name="location"
+                          value={location}
+                          onChange={event => setLocation(event.target.value)}
+                          fullWidth
+                          required
+                      />
+
+                      <LocalizationProvider dateAdapter={AdapterDayjs}>
+                          <DatePicker
+                              label="Birth Date"
+                              value={birthDate ? dayjs(birthDate) : null}
+
+                              onChange={(newValue) => setBirthDate(newValue ? newValue.toDate() : null)}
+
+                          />
+                      </LocalizationProvider>
+
                       <FormControl variant="outlined">
                           <InputLabel>{user.position ?? 'Please Select Your Position'}</InputLabel>
                           <Select
@@ -167,8 +202,29 @@ const Profile: React.FC = () => {
 
                       <TextField
                           label="Manager Name"
-                          name="phone"
+                          name="managerName"
                           value={managerName}
+                          fullWidth
+                          disabled
+                      />
+                      <TextField
+                          label="Subscription Type"
+                          name="subscriptionType"
+                          value={subscriptionType}
+                          fullWidth
+                          disabled
+                      />
+                      <TextField
+                          label="Subscription Start Date"
+                          name="subscriptionStartDate"
+                          value={subscriptionStartDate}
+                          fullWidth
+                          disabled
+                      />
+                      <TextField
+                          label="Subscription End Date"
+                          name= "subscriptionEndDate"
+                          value={subscriptionEndDate}
                           fullWidth
                           disabled
                       />

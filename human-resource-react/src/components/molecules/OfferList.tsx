@@ -149,14 +149,14 @@ export default function OfferList() {
             await dispatch(
                 fetchSendOfferEmail({
                     token: token,
-                    userId: id,
+                    offerEmail: selectedOffer.email,
                     emailText: emailText,
                 })
             ).then(data => {
                 if (data.payload === true) {
                     Swal.fire({
                         title: "Success",
-                        text: "Email has been sent",
+                        text: "Email has been sent to: " + selectedOffer.email ,
                         icon: "success",
                         confirmButtonText: "OK",
                     });
@@ -226,7 +226,7 @@ export default function OfferList() {
             <Modal open={open} onClose={handleClose}>
                 <Box sx={style}>
                     <Typography variant="h6" component="h2">
-                        E-Mail Text
+                        Send Email to
                     </Typography>
                     <TextField
                         label="Please type your offer"

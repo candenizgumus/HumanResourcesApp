@@ -27,6 +27,16 @@ import {AdminMenuContents} from "../../components/organisms/AdminMenuContents";
 import { useNavigate } from 'react-router-dom';
 import ProfileMenu from "../../components/molecules/ProfileMenu";
 import AdminHomeContent  from "../../components/organisms/AdminHomeContent"
+import {
+  AccountBox,
+  AdminPanelSettings,
+  Apartment,
+  FeaturedPlayList,
+  LocalOffer,
+  Person,
+  Weekend
+} from "@mui/icons-material";
+import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 
 const drawerWidth = 240;
 
@@ -153,11 +163,17 @@ export default function AdminPage() {
         </DrawerHeader>
         <Divider />
         <List>
-          {['Offers', 'Create Admin', 'Create Feature', 'Holidays', 'Profile','Companies'].map((text, index) => (
+          {['Offers', 'Users', 'Create Admin', 'Create Feature', 'Holidays', 'Profile','Companies'].map((text, index) => (
             <ListItem key={text} disablePadding>
               <ListItemButton onClick={() => handleListItemClick(text)}>
                 <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                  { index === 0 && <LocalOfferIcon />}
+                  {index  === 1 && <Person />}
+                  {index  === 2 && <AdminPanelSettings />}
+                  {index  === 3 && <FeaturedPlayList /> }
+                  {index  === 4 && <Weekend /> }
+                  {index  === 5 && <AccountBox /> }
+                  {index  === 6 && <Apartment /> }
                 </ListItemIcon>
                 <ListItemText primary={text} />
               </ListItemButton>
@@ -165,18 +181,6 @@ export default function AdminPage() {
           ))}
         </List>
         <Divider />
-        <List>
-          {['Empty1', 'Empty2', 'Empty3'].map((text, index) => (
-            <ListItem key={text} disablePadding>
-              <ListItemButton onClick={() => handleListItemClick(text)}>
-                <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
       </Drawer>
       <Main open={open}>
         <DrawerHeader />

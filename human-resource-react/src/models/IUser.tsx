@@ -12,6 +12,7 @@ export interface IUser{
     phone:string ;
     birthDate:Date  ;
     hireDate:Date ;
+    title:string;
     photo:string ;
     userType:string ;
     position:string ;

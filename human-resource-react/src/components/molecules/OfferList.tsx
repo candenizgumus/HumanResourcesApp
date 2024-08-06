@@ -147,7 +147,7 @@ export default function OfferList() {
                         color="primary"
                         disabled={loading}
                     >
-                        {loading ? 'Processing...' : 'Confirm Selection'}
+                        {loading ? 'Processing...' : 'Approve Selected Offers'}
                     </Button>
                 </Grid>
             </Grid>

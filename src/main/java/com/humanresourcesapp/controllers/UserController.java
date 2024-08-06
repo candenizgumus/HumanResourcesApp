@@ -2,6 +2,7 @@ package com.humanresourcesapp.controllers;
 
 import com.humanresourcesapp.dto.requests.AddEmployeeToManagerRequestDto;
 import com.humanresourcesapp.dto.requests.PageRequestDto;
+import com.humanresourcesapp.dto.requests.UpdateUserRequestDto;
 import com.humanresourcesapp.dto.responses.CompanyAndManagerNameResponseDto;
 import com.humanresourcesapp.entities.User;
 import com.humanresourcesapp.entities.enums.EPosition;
@@ -29,12 +30,12 @@ public class UserController
         return ResponseEntity.ok(userService.save(user));
     }
 
-  /*  @PutMapping(UPDATE)
+    @PutMapping(UPDATE)
     @CrossOrigin("*")
-    public ResponseEntity<User> update(User user)
+    public ResponseEntity<User> update(@RequestBody UpdateUserRequestDto dto)
     {
-        return ResponseEntity.ok(userService.update(user));
-    }*/
+        return ResponseEntity.ok(userService.update(dto));
+    }
 
     @GetMapping(GET_POSITIONS)
     @CrossOrigin("*")

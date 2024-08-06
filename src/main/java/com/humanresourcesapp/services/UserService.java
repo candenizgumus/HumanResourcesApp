@@ -2,6 +2,7 @@ package com.humanresourcesapp.services;
 
 import com.humanresourcesapp.dto.requests.AddEmployeeToManagerRequestDto;
 import com.humanresourcesapp.dto.requests.PageRequestDto;
+import com.humanresourcesapp.dto.requests.UpdateUserRequestDto;
 import com.humanresourcesapp.dto.responses.CompanyAndManagerNameResponseDto;
 import com.humanresourcesapp.entities.Auth;
 import com.humanresourcesapp.entities.Company;
@@ -145,6 +146,44 @@ public class UserService
 
 
 
+
+    }
+
+    public User update(UpdateUserRequestDto dto)
+    {
+        String userEmail = UserInfoSecurityContext.getUserInfoFromSecurityContext();
+        User user = userRepository.findByEmail(userEmail).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
+
+        if (dto.name() != null)
+        {
+            user.setName(dto.name());
+        }
+        if (dto.surname() != null)
+        {
+            user.setSurname(dto.surname());
+        }
+        if (dto.phone() != null)
+        {
+            user.setPhone(dto.phone());
+        }
+        if (dto.title() != null)
+        {
+            user.setTitle(dto.title());
+        }
+        if (dto.birthDate() != null)
+        {
+            user.setBirthDate(dto.birthDate());
+        }
+        if (dto.position() != null)
+        {
+            user.setPosition(dto.position());
+        }
+        if (dto.location() != null)
+        {
+            user.setLocation(dto.location());
+        }
+
+        return userRepository.save(user);
 
     }
 }

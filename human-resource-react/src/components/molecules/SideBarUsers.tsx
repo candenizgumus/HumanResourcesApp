@@ -42,9 +42,9 @@ const style = {
 
 export default function SideBarUsers() {
     const [selectedRowIds, setSelectedRowIds] = useState<number[]>([]);
-    const [searchText, setSearchText] = useState("");
+    const [searchText, setSearchText] = useState('');
 
-    const offerList: IOfferList[] = useAppSelector((state) => state.offer.offers);
+
     const dispatch = useDispatch<HumanResources>();
     const token = useAppSelector((state) => state.auth.token);
     const userList = useAppSelector((state) => state.auth.userList);
@@ -56,6 +56,7 @@ export default function SideBarUsers() {
                 token: token,
                 page: 0,
                 pageSize: 100,
+                searchText: searchText,
             })
         ).catch(() => {
             dispatch(clearToken());

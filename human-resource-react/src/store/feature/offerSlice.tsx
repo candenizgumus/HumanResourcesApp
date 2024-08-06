@@ -141,6 +141,31 @@ export const fetchApproveOffers = createAsyncThunk(
 
     }
 );
+interface IfetchDeclineOffers {
+    token: string;
+    offerId: number;
+}
+export const fetchDeclineOffers = createAsyncThunk(
+    'offer/fetchApproveOffers',
+    async (payload: IfetchDeclineOffers, { dispatch }) => {
+
+        const response = await fetch(`http://localhost:9090/dev/v1/offer/decline-offer?offerId=${payload.offerId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ` + payload.token
+            }
+        });
+
+        if (!response.ok) {
+            dispatch(clearToken());
+        }
+
+        return await response.json();
+
+
+    }
+);
 
 // Offer slice
 const offerSlice = createSlice({

@@ -206,6 +206,7 @@ interface IfetchGetAllUsers {
     token: string;
     page: number;
     pageSize: number;
+    searchText: string;
 
 }
 export const fetchGetAllUsers = createAsyncThunk(
@@ -219,6 +220,7 @@ export const fetchGetAllUsers = createAsyncThunk(
             },body: JSON.stringify({
                 'page': payload.page,
                 'pageSize': payload.pageSize,
+                'searchText': payload.searchText
             })
         });
 

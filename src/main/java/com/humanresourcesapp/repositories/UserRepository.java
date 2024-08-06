@@ -1,7 +1,10 @@
 package com.humanresourcesapp.repositories;
 
 import com.humanresourcesapp.entities.User;
+import com.humanresourcesapp.views.VwGetAllOffer;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,4 +20,8 @@ public interface UserRepository extends JpaRepository<User,Long>
     Optional<User> findByAuthId(Long authId);
 
     Optional<User> findByEmailAndPhone(String email, String phone);
+
+
+    @Query("select u from User u  where  u.email like %?1%")
+    List<User> getAllOfferByEmailSearch(String email ,PageRequest pageRequest);
 }

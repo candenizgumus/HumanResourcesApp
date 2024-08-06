@@ -15,7 +15,7 @@ import {
 import { HumanResources, useAppSelector } from "../../store";
 import { useDispatch } from "react-redux";
 import {
-    fetchApproveOffers,
+    fetchApproveOffers, fetchDeclineOffers,
     fetchGetOffers, fetchSendOfferEmail,
 } from "../../store/feature/offerSlice";
 import { IOfferList } from "../../models/IOfferList";
@@ -55,6 +55,7 @@ export default function OfferList() {
     const dispatch = useDispatch<HumanResources>();
     const token = useAppSelector((state) => state.auth.token);
     const [isSendTrue, setIsSendTrue] = useState(false);
+    const [isSendFalse, setIsSendFalse] = useState(false);
  
     useEffect(() => {
         dispatch(
@@ -82,7 +83,7 @@ export default function OfferList() {
 
             try {
                 const result = await Swal.fire({
-                    title: "Abonelik Türünü Seç",
+                    title: "Choose Subscription Type",
                     html: `
             <div>
               <p><strong>Name:</strong> ${selectedOffer.name}</p>
@@ -137,6 +138,65 @@ export default function OfferList() {
         }
 
         setLoading(false);
+    };
+
+    const handleDeclineOffers = async () => {
+        setIsSendFalse(true);
+
+        for (let id of selectedRowIds) {
+            const selectedOffer = offerList.find((offer) => offer.id === id);
+            if (!selectedOffer) continue;
+
+            try {
+                const result = await Swal.fire({
+                    title: "Confirm Decline",
+                    html: `
+            <div>
+              <p><strong>Name:</strong> ${selectedOffer.name}</p>
+              <p><strong>Surname:</strong> ${selectedOffer.surname}</p>
+              <p><strong>Email:</strong> ${selectedOffer.email}</p>
+              <p><strong>Phone:</strong> ${selectedOffer.phone}</p>
+              <p><strong>Company Name:</strong> ${selectedOffer.companyName}</p>
+              <p><strong>Title:</strong> ${selectedOffer.title}</p>
+              <p><strong>Employee Count:</strong> ${selectedOffer.numberOfEmployee}</p>
+              <p><strong>Sector:</strong> ${selectedOffer.sector}</p>
+            </div>
+          `,
+                    showCancelButton: true,
+                    confirmButtonText: "Confirm",
+                    input: "radio",
+                });
+
+                if (result.isConfirmed) {
+
+
+                    await dispatch(
+                        fetchDeclineOffers({ token, offerId: id })
+                    );
+
+                    await Swal.fire({
+                        title: "Success",
+                        text: "Offer has been approved",
+                        icon: "success",
+                        confirmButtonText: "OK",
+                    });
+
+                    await dispatch(
+                        fetchGetOffers({
+                            token,
+                            page: 0,
+                            pageSize: 50,
+                            searchText: searchText,
+                        })
+                    );
+                }
+            } catch (error) {
+                localStorage.removeItem("token");
+                dispatch(clearToken());
+            }
+        }
+
+        setIsSendFalse(false);
     };
 
     const handleSendEmail = async (id: number) => {
@@ -218,6 +278,16 @@ export default function OfferList() {
                         disabled={loading || selectedRowIds.length === 0}
                     >
                         {loading ? "Processing..." : "Approve Offers"}
+                    </Button>
+                </Grid>
+                <Grid item>
+                    <Button
+                        variant="contained"
+                        color="error"
+                        onClick={handleDeclineOffers}
+                        disabled={selectedRowIds.length === 0 || isSendFalse}
+                    >
+                        Decline Offer
                     </Button>
                 </Grid>
                 <Grid item>

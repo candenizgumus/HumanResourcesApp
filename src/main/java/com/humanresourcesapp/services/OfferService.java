@@ -136,4 +136,13 @@ public class OfferService
     {
         return offerRepository.findByEmail(email);
     }
+
+    public Boolean delete(Long offerId)
+    {
+        Offer offer = offerRepository.findById(offerId).orElseThrow(() -> new HumanResourcesAppException(ErrorType.OFFER_NOT_FOUND));
+        offer.setStatus(EStatus.DECLINED);
+        offerRepository.save(offer);
+        return true;
+    }
+
 }

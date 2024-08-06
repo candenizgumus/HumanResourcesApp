@@ -43,4 +43,11 @@ public class OfferController
 
         return ResponseEntity.ok(offerService.approveOfferAndRegisterAuthAndUser(dto));
     }
+
+    @DeleteMapping(DECLINE_OFFER)
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    public ResponseEntity<Boolean> delete( Long offerId)
+    {
+        return ResponseEntity.ok(offerService.delete(offerId));
+    }
 }

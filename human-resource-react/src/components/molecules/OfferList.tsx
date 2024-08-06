@@ -39,7 +39,7 @@ const style = {
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
-    width: 1200,
+    width: 600,
     bgcolor: "background.paper",
     boxShadow: 24,
     p: 4,
@@ -49,15 +49,13 @@ export default function OfferList() {
     const [selectedRowIds, setSelectedRowIds] = useState<number[]>([]);
     const [loading, setLoading] = useState(false);
     const [searchText, setSearchText] = useState("");
-    const [open, setOpen] = useState(false);
-    const [emailText, setEmailText] = useState("");
+    const [currentModalIndex, setCurrentModalIndex] = useState<number | null>(null);
+    const [emailText, setEmailText] = useState<string>("");
     const offerList: IOfferList[] = useAppSelector((state) => state.offer.offers);
     const dispatch = useDispatch<HumanResources>();
     const token = useAppSelector((state) => state.auth.token);
-
-    const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
-
+    const [isSendTrue, setIsSendTrue] = useState(false);
+ 
     useEffect(() => {
         dispatch(
             fetchGetOffers({
@@ -141,36 +139,41 @@ export default function OfferList() {
         setLoading(false);
     };
 
-    const handleSendEmail = async () => {
-        for (let id of selectedRowIds) {
-            const selectedOffer = offerList.find((offer) => offer.id === id);
-            if (!selectedOffer) continue;
+    const handleSendEmail = async (id: number) => {
+        const selectedOffer = offerList.find((offer) => offer.id === id);
+        if (!selectedOffer) return;
+        setIsSendTrue(true)
 
-            await dispatch(
-                fetchSendOfferEmail({
-                    token: token,
-                    offerEmail: selectedOffer.email,
-                    emailText: emailText,
-                })
-            ).then(data => {
-                if (data.payload === true) {
-                    Swal.fire({
-                        title: "Success",
-                        text: "Email has been sent to: " + selectedOffer.email ,
-                        icon: "success",
-                        confirmButtonText: "OK",
-                    });
-                } else {
-                    Swal.fire({
-                        title: "Error",
-                        text: "Email has not been sent",
-                        icon: "error",
-                        confirmButtonText: "OK",
-                    });
-                }
+        await dispatch(
+            fetchSendOfferEmail({
+                token: token,
+                offerEmail: selectedOffer.email,
+                emailText: emailText,
             })
-        }
-        handleClose();
+        ).then(data => {
+            if (data.payload === true) {
+                Swal.fire({
+                    title: "Success",
+                    text: "Email has been sent",
+                    icon: "success",
+                    timer: 1500
+                });
+            } else {
+                Swal.fire({
+                    title: "Error",
+                    text: "Email has not been sent",
+                    icon: "error",
+                    confirmButtonText: "OK",
+                });
+            }
+        });
+
+        setCurrentModalIndex((prevIndex) => (prevIndex !== null && prevIndex + 1 < selectedRowIds.length ? prevIndex + 1 : null));
+        setIsSendTrue(false)
+    };
+
+    const handleOpenEmailModals = () => {
+        setCurrentModalIndex(0); // Start from the first selected offer
     };
 
     return (
@@ -206,48 +209,60 @@ export default function OfferList() {
                     },
                 }}
             />
-            <Grid container spacing={2} style={{ marginTop: 16 }}>
-                <Grid item xs={12}>
+            <Grid container spacing={1} style={{ marginTop: 16 }} direction="row">
+                <Grid item>
                     <Button
                         onClick={handleConfirmSelection}
                         variant="contained"
                         color="primary"
-                        disabled={loading}
+                        disabled={loading || selectedRowIds.length === 0}
                     >
                         {loading ? "Processing..." : "Approve Offers"}
                     </Button>
                 </Grid>
-                <Grid item xs={12}>
-                    <Button variant="contained" color="secondary" onClick={handleOpen}>
+                <Grid item>
+                    <Button
+                        variant="contained"
+                        color="secondary"
+                        onClick={handleOpenEmailModals}
+                        disabled={selectedRowIds.length === 0 || selectedRowIds.length >1}
+                    >
                         Send Email
                     </Button>
                 </Grid>
             </Grid>
-            <Modal open={open} onClose={handleClose}>
-                <Box sx={style}>
-                    <Typography variant="h6" component="h2">
-                        Send Email to
-                    </Typography>
-                    <TextField
-                        label="Please type your offer"
-                        multiline
-                        rows={14}
-                        variant="outlined"
-                        fullWidth
-                        value={emailText}
-                        onChange={(e) => setEmailText(e.target.value)}
-                        style={{ marginTop: "16px" }}
-                    />
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={handleSendEmail}
-                        style={{ marginTop: "16px" }}
-                    >
-                        Send
-                    </Button>
-                </Box>
-            </Modal>
+            {currentModalIndex !== null && (
+                <Modal
+                    open={true}
+                    onClose={() => setCurrentModalIndex(null)}
+                >
+                    <Box sx={style}>
+                        <Typography variant="h6" component="h2">
+                            E-Mail Text for {offerList.find((offer) => offer.id === selectedRowIds[currentModalIndex])?.email}
+                        </Typography>
+                        <TextField
+                            label="Please type your offer"
+                            multiline
+                            rows={14}
+                            variant="outlined"
+                            fullWidth
+                            required
+                            value = {emailText}
+                            onChange={(e) => setEmailText(e.target.value)}
+                            style={{ marginTop: "16px" }}
+                        />
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            disabled = {isSendTrue || emailText === ''}
+                            onClick={() => handleSendEmail(selectedRowIds[currentModalIndex])}
+                            style={{ marginTop: "16px" }}
+                        >
+                            {isSendTrue ? "Processing..." : "Send"}
+                        </Button>
+                    </Box>
+                </Modal>
+            )}
         </div>
     );
 }

@@ -51,7 +51,7 @@ public class UserController
         return ResponseEntity.ok(ESectors.values());
     }
 
-    @GetMapping(GET_ALL)
+    @PostMapping(GET_ALL)
     @PreAuthorize("hasAnyAuthority('ADMIN')")
     @CrossOrigin("*")
     public ResponseEntity<List<User>> getAll(@RequestBody PageRequestDto dto)

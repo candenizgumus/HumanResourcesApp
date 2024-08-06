@@ -5,6 +5,7 @@ import {ICreateAdmin} from '../../models/ICreateAdmin';
 
 interface IAuthState {
     user: IUser;
+    userList: IUser[];
     token: string;
     isAuth: boolean;
     pageState: string;
@@ -13,6 +14,7 @@ interface IAuthState {
 
 const initalAuthState: IAuthState = {
     user: {} as IUser,
+    userList: [],
     token: '',
     isAuth: false,
     pageState: '',
@@ -200,7 +202,35 @@ export const fetchUpdateUser = createAsyncThunk(
     }
 );
 
+interface IfetchGetAllUsers {
+    token: string;
+    page: number;
+    pageSize: number;
 
+}
+export const fetchGetAllUsers = createAsyncThunk(
+    'user/fetchGetAllUsers',
+    async (payload: IfetchGetAllUsers, { dispatch }) => {
+        const response = await fetch('http://localhost:9090/dev/v1/user/get-all', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ` + payload.token
+            },body: JSON.stringify({
+                'page': payload.page,
+                'pageSize': payload.pageSize,
+            })
+        });
+
+        if (!response.ok) {
+            console.log(response)
+            dispatch(clearToken());
+        }
+
+        return await response.json();
+
+    }
+);
 const authSlice = createSlice({
     name: 'auth',
     initialState: initalAuthState,
@@ -236,6 +266,10 @@ const authSlice = createSlice({
             .addCase(fetchUpdateUser.fulfilled, (state, action: PayloadAction<IUser>) => {
 
                 state.user = action.payload;
+            })
+            .addCase(fetchGetAllUsers.fulfilled, (state, action: PayloadAction<IUser[]>) => {
+
+                state.userList = action.payload;
             })
             .addMatcher(
                 (action) => action.type.endsWith('/rejected'),

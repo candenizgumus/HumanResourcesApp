@@ -48,7 +48,7 @@ interface fetchGetOffersPayload {
     token: string;
     page: number;
     pageSize: number;
-    email: string;
+    searchText: string;
 }
 
 // Thunk for getting offers
@@ -65,7 +65,7 @@ export const fetchGetOffers = createAsyncThunk(
                 body: JSON.stringify({
                     'page': payload.page,
                     'pageSize': payload.pageSize,
-                    'email': payload.email
+                    'searchText': payload.searchText
                 })
             });
 

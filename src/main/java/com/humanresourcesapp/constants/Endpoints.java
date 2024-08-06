@@ -54,5 +54,6 @@ public class Endpoints
     public static final String GET_POSITIONS = "/get-positions";
     public static final String GET_SECTORS = "/get-sectors";
     public static final String SEND_PASSWORD_RESET_EMAIL = "/send-password-reset-email";
+    public static final String GET_ALL_COMPANY_LOGOS = "/get-all-company-logos";
     ;
 }

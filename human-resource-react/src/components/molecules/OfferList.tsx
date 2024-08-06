@@ -62,7 +62,7 @@ export default function OfferList() {
                 token: token,
                 page: 0,
                 pageSize: 50,
-                email: searchText,
+                searchText: searchText,
             })
         ).catch(() => {
             dispatch(clearToken());
@@ -126,7 +126,7 @@ export default function OfferList() {
                             token,
                             page: 0,
                             pageSize: 50,
-                            email: searchText,
+                            searchText: searchText,
                         })
                     );
                 }

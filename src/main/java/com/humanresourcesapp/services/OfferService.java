@@ -9,7 +9,6 @@ import com.humanresourcesapp.entities.Company;
 import com.humanresourcesapp.entities.Offer;
 import com.humanresourcesapp.entities.User;
 import com.humanresourcesapp.entities.enums.EStatus;
-import com.humanresourcesapp.entities.enums.ESubscriptionType;
 import com.humanresourcesapp.entities.enums.EUserType;
 import com.humanresourcesapp.exception.ErrorType;
 import com.humanresourcesapp.exception.HumanResourcesAppException;
@@ -75,12 +74,12 @@ public class OfferService
 
     public List<VwGetAllOffer> getAllOffer(PageRequestDto dto)
     {
-        if (dto.email() == null)
+        if (dto.searchText() == null)
         {
             return offerRepository.getAllOffer(PageRequest.of(dto.page(), dto.pageSize()));
         }
         else {
-            return offerRepository.getAllOfferByEmailSearch(dto.email(),PageRequest.of(dto.page(), dto.pageSize()));
+            return offerRepository.getAllOfferByEmailSearch(dto.searchText(),PageRequest.of(dto.page(), dto.pageSize()));
         }
 
     }
@@ -96,7 +95,7 @@ public class OfferService
         String newPassword = PasswordGenerator.generatePassword();
         String encodedPassword = passwordEncoder.bCryptPasswordEncoder().encode(newPassword);
 
-        //Send email with new password
+        //Send searchText with new password
         emailService.send(MailModel.builder().to(offer.getEmail()).subject("Your new password").message("Your new password is: " + newPassword).build());
 
         //Creating new auth,user and company entities
@@ -112,7 +111,7 @@ public class OfferService
         );
 
 
-        Company company = companyService.save(new CompanySaveRequestDto(offer.getCompanyName(),null));
+        Company company = companyService.save(CompanySaveRequestDto.builder().name(offer.getCompanyName()).logo("").build());
 
         userService.save(User
                 .builder()

@@ -1,11 +1,11 @@
 import React, {useRef} from 'react';
 import {Container, Typography, Box, Grid, CssBaseline} from '@mui/material';
-import HeroSection from '../molecules/HeroSection';
-import FormSection from "../molecules/FormSection";
-import FeaturesSection from "../molecules/FeaturesSection";
-import FAQSection from "../molecules/FAQSection";
-import FooterElement from "../molecules/FooterElement";
-import { NavBar } from '../molecules/NavBar';
+import HeroSection from '../../components/molecules/HeroSection'
+import FormSection from "../../components/molecules/FormSection";
+import FeaturesSection from "../../components/molecules/FeaturesSection";
+import FAQSection from "../../components/molecules/FAQSection";
+import FooterElement from "../../components/molecules/FooterElement";
+import { NavBar } from '../../components/molecules/NavBar';
 import {styled} from "@mui/material/styles";
 const Root = styled('div')(({ theme }) => ({
     flexGrow: 1,

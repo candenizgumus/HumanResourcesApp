@@ -120,7 +120,7 @@ public class InsertDemoData {
             List<Feature> featureList = new ArrayList<>();
             featureList.add(Feature.builder()
                     .name("Recruitment")
-                    .iconPath("target.png")
+                    .iconPath("recruitment.png")
                     .shortDescription("Manage your recruitment processes from a single platform.")
                     .build());
 
@@ -134,6 +134,24 @@ public class InsertDemoData {
                     .name("Shift")
                     .iconPath("shift.png")
                     .shortDescription("Plan and manage your working time in the most efficient way.")
+                    .build());
+
+            featureList.add(Feature.builder()
+                    .name("Wage Evaluation")
+                    .iconPath("salary.png")
+                    .shortDescription("Update, manage and report employee salaries.")
+                    .build());
+
+            featureList.add(Feature.builder()
+                    .name("HR Analytics")
+                    .iconPath("analytics.png")
+                    .shortDescription("Track your instant HR data on a single platform, make data-driven decisions.")
+                    .build());
+
+            featureList.add(Feature.builder()
+                    .name("Staff")
+                    .iconPath("staff.png")
+                    .shortDescription("Manage all employee information in one application.")
                     .build());
 
             featureService.saveAll(featureList);

@@ -158,6 +158,48 @@ export const fetchCreateAdmin = createAsyncThunk(
         }
     }
 );
+interface UpdateProfile {
+    token : string;
+    name: string;
+    surname: string;
+    phone: string;
+    title: string;
+    birthDate: Date | null;
+    position: string;
+    location: string;
+
+}
+export const fetchUpdateUser = createAsyncThunk(
+    'user/fetchUpdateUser',
+    async (payload: UpdateProfile, { dispatch }) => {
+
+        const response = await fetch('http://localhost:9090/dev/v1/user/update', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ` + payload.token
+            },
+            body: JSON.stringify({
+                'name': payload.name,
+                'surname': payload.surname,
+                'phone': payload.phone,
+                'title': payload.title,
+                'birthDate': payload.birthDate,
+                'position': payload.position,
+                'location': payload.location
+            })
+        });
+
+        if (!response.ok) {
+            console.log(response)
+            dispatch(clearToken());
+        }
+
+        return await response.json();
+
+    }
+);
+
 
 const authSlice = createSlice({
     name: 'auth',
@@ -188,6 +230,10 @@ const authSlice = createSlice({
                 localStorage.setItem('token', action.payload.token);
             })
             .addCase(fetchFindUserByToken.fulfilled, (state, action: PayloadAction<IUser>) => {
+
+                state.user = action.payload;
+            })
+            .addCase(fetchUpdateUser.fulfilled, (state, action: PayloadAction<IUser>) => {
 
                 state.user = action.payload;
             })

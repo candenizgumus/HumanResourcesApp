@@ -32,9 +32,6 @@ public class User extends BaseEntity
     Long managerId;
 
     // EMPLOYEE
-    String department;
-
-    // EMPLOYEE
     String title;
 
     // EMPLOYEE

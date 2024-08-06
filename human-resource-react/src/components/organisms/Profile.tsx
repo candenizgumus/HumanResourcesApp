@@ -1,11 +1,11 @@
 import React, {useState, ChangeEvent, FormEvent, useEffect} from 'react';
-import {TextField, Button, Box, Grid, InputLabel, Select, MenuItem, FormControl} from '@mui/material';
+import {TextField, Button, Box, Grid, InputLabel, Select, MenuItem, FormControl, Avatar} from '@mui/material';
 import {HumanResources, useAppSelector} from "../../store";
 import {IUser} from "../../models/IUser";
 import {
     fetchFindCompanyNameAndManagerNameOfUser,
     fetchFindUserByToken,
-    fetchGetPositions
+    fetchGetPositions, fetchUpdateUser
 } from "../../store/feature/authSlice";
 import {useDispatch} from "react-redux";
 
@@ -13,52 +13,44 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from "dayjs";
+import sweetalert2 from "sweetalert2";
+import Swal from "sweetalert2";
 
 
-interface UpdateProfile {
-  name: string;
-  surname: string;
-  phone: string;
-  password : string;
-  repassword : string;
-    companyName: string;
-    managerName: string;
-}
+
 
 const Profile: React.FC = () => {
 
     const user:IUser = useAppSelector((state) => state.auth.user);
     const token = useAppSelector((state) => state.auth.token);
     const dispatch = useDispatch<HumanResources>();
-  const [name, setName] = useState<string>(user.name ?? '');
-  const [surname, setSurname] = useState<string>(user.surname ?? '');
+    const [name, setName] = useState<string>(user.name ?? '');
+    const [surname, setSurname] = useState<string>(user.surname ?? '');
     const [phone, setPhone] = useState<string>(user.phone ?? '');
+    const [title, setTitle] = useState<string>(user.title ?? '');
     const [birthDate, setBirthDate] = useState<Date | null>(user.birthDate);
+    const [photo, setPhoto] = useState<string>(user.photo ?? 'https://cdn4.iconfinder.com/data/icons/gray-business-1/512/xxx010-512.png');
     const [hireDate, setHireDate] = useState(user.hireDate ?? '');
     const [userType, setUserType] = useState<string>(user.userType ?? '');
-    const [position, setPosition] = useState<string>(user.position ?? '');
     const [sector, setSector] = useState<string>(user.sector ?? '');
     const [location, setLocation] = useState<string>(user.location ?? '') ;
     const [employeeType, setEmployeeType] = useState<string>(user.employeeType ?? '');
     const [subscriptionType, setSubscriptionType] = useState<string>(user.subscriptionType ?? '');
     const [subscriptionStartDate, setSubscriptionStartDate] = useState(user.subscriptionStartDate ?? '');
     const [subscriptionEndDate, setSubscriptionEndDate] = useState(user.subscriptionEndDate ?? '');
-    const [password, setPassword] = useState<string>('');
-    const [repassword, setRePassword] = useState<string>('');
-  const [companyName, setCompanyName] = useState<string>('');
-  const [managerName, setManagerName] = useState<string>('');
+
+    const [companyName, setCompanyName] = useState<string>('');
+    const [managerName, setManagerName] = useState<string>('');
 
     const [positions, setPositions] = useState([]);
-    const [selectedPositions, setSelectedPositions] = useState<string>('');
+    const [selectedPositions, setSelectedPositions] = useState<string>(user.position ?? '');
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     // Handle form submission
     console.log('Form submitted:', );
   };
-    const formatDate = (date: Date | null) => {
-        return date ? dayjs(date).format('YYYY-MM-DD') : null;
-    };
+
   const setUserInfos = async () => {
     try {
         dispatch(fetchFindUserByToken(token));
@@ -86,17 +78,68 @@ const Profile: React.FC = () => {
         console.error('Error in handleLogin:', error);  // Handle other errors
     }
 };
-    console.log(formatDate(birthDate));
 
     useEffect(() => {
         setUserInfos();
     },[])
 
+    console.log(name, surname, phone, title, birthDate, selectedPositions, location);
+    const updateUserProfile = () => {
+
+        if (!name || !surname  || !phone || !title  || !birthDate  || !selectedPositions || !location) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Please fill all the fields!',
+            });
+            return;
+        }
+        dispatch(fetchUpdateUser({
+            token: token,
+            name: name,
+            surname: surname,
+            phone: phone,
+            title: title,
+            birthDate: birthDate,
+            position: selectedPositions,
+            location: location
+
+        })).then((data) => {
+            if (data.payload) {
+                sweetalert2.fire({
+                    icon: 'success',
+                    title: 'Your profile has been updated successfully',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+            }
+        })
+    }
+
   return (
 
 
           <Grid container spacing={2}>
+                <Grid item xs ={12}>
+                    <Box
+                        component="form"
+                        onSubmit={handleSubmit}
+                        sx={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            maxWidth: 800,
+                            margin: 'auto',
+                            alignItems: 'center',
+                        }}
+                    >
+                        <Avatar
+                            alt="Remy Sharp"
+                            src={photo}
+                            sx={{ width: 150, height: 150 }}
+                        />
+                    </Box>
 
+                </Grid>
               <Grid item xs={6}>
                   <Box
                       component="form"
@@ -134,6 +177,16 @@ const Profile: React.FC = () => {
                           onChange={event => setPhone(event.target.value)}
                           fullWidth
                           required
+                          type={"number"}
+                      />
+
+                      <TextField
+                          label='Title'
+                          name="title"
+                          value={title}
+                          onChange={event => setTitle(event.target.value)}
+                          fullWidth
+                          required
                       />
                       <TextField
                           label='Location'
@@ -155,7 +208,7 @@ const Profile: React.FC = () => {
                       </LocalizationProvider>
 
                       <FormControl variant="outlined">
-                          <InputLabel>{user.position ?? 'Please Select Your Position'}</InputLabel>
+                          <InputLabel>{'Please Select Your Position'}</InputLabel>
                           <Select
                               value={selectedPositions}
                               onChange={event => setSelectedPositions(event.target.value as string)}
@@ -168,7 +221,7 @@ const Profile: React.FC = () => {
                               ))}
                           </Select>
                       </FormControl>
-                      <Button sx={{mt: 5}} type="button" variant="contained" color="primary">
+                      <Button onClick={updateUserProfile} sx={{mt: 5}} type="button" variant="contained" color="primary">
                           Update Profile
                       </Button>
                   </Box>
@@ -194,16 +247,20 @@ const Profile: React.FC = () => {
                           fullWidth
                           disabled={true}
                       />
-                      {companyName && (
-                          <TextField
-                              label="Company Name"
-                              name="companyName"
-                              value={companyName}
-                              fullWidth
-                              disabled
-                          />
-                      )}
-
+                      <TextField
+                          label="Sector"
+                          name="sector"
+                          value={sector}
+                          fullWidth
+                          disabled
+                      />
+                      <TextField
+                          label="Company Name"
+                          name="companyName"
+                          value={companyName}
+                          fullWidth
+                          disabled
+                      />
                       <TextField
                           label="Manager Name"
                           name="managerName"

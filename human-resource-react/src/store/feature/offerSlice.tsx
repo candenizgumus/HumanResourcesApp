@@ -81,7 +81,7 @@ export const fetchGetOffers = createAsyncThunk(
 
 interface fetchSendOfferEmailPayload {
     token: string;
-    userId: number;
+    offerEmail: string;
     emailText: string;
 }
 export const fetchSendOfferEmail = createAsyncThunk(
@@ -95,7 +95,7 @@ export const fetchSendOfferEmail = createAsyncThunk(
                 'Authorization': `Bearer ` + payload.token
             },
             body: JSON.stringify({
-                'userId': payload.userId,
+                'offerEmail': payload.offerEmail,
                 'emailText': payload.emailText
             })
         });

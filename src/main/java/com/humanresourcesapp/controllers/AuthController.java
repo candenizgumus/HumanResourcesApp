@@ -6,6 +6,7 @@ import com.humanresourcesapp.dto.requests.AuthLoginRequestDto;
 import com.humanresourcesapp.dto.responses.LoginResponseDto;
 import com.humanresourcesapp.entities.Auth;
 import com.humanresourcesapp.entities.enums.EStatus;
+import com.humanresourcesapp.entities.enums.EUserType;
 import com.humanresourcesapp.exception.ErrorType;
 import com.humanresourcesapp.exception.HumanResourcesAppException;
 import com.humanresourcesapp.services.AuthService;
@@ -37,6 +38,7 @@ public class AuthController
     @PostMapping(LOGIN)
     public ResponseEntity<LoginResponseDto> login(@RequestBody AuthLoginRequestDto dto)
     {
+
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(dto.email(), dto.password()));
         } catch (AuthenticationException e) {
@@ -44,10 +46,12 @@ public class AuthController
         }
         final Auth auth = (Auth)authService.loadUserByUsername(dto.email());
 
+        //Check if account is active
         if(auth.getStatus() != EStatus.ACTIVE){
             throw new HumanResourcesAppException(ErrorType.INVALID_ACCOUNT);
         }
-        if (auth.getSubscriptionEndDate() != null && auth.getSubscriptionEndDate().isBefore(LocalDate.now()))
+        //Check if subscription is expired.
+        if (auth.getUserType() != EUserType.ADMIN && auth.getSubscriptionEndDate() != null && auth.getSubscriptionEndDate().isBefore(LocalDate.now()))
         {
             throw new HumanResourcesAppException(ErrorType.SUBSCRIPTION_EXPIRED);
         }

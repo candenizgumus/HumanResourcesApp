@@ -35,14 +35,14 @@ public class GlobalExceptionHandler
                 errorType.getHttpStatus());
     }
 
-    @ExceptionHandler(AccessDeniedException.class)
+   /* @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<ErrorMessage> handleAccess(HumanResourcesAppException ex)
     {
         ErrorType errorType = ex.getErrorType();
         return new ResponseEntity(createErrorMessage(ex,
                 errorType),
                 errorType.getHttpStatus());
-    }
+    }*/
 
 
     private ErrorMessage createErrorMessage(Exception ex, ErrorType errorType)

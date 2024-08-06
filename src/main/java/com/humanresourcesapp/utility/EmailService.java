@@ -1,5 +1,6 @@
 package com.humanresourcesapp.utility;
 
+import com.humanresourcesapp.dto.requests.SendOfferToCustomerRequestDto;
 import com.humanresourcesapp.exception.ErrorType;
 import com.humanresourcesapp.exception.HumanResourcesAppException;
 import com.humanresourcesapp.model.MailModel;
@@ -35,6 +36,7 @@ public class EmailService {
             throw new HumanResourcesAppException(ErrorType.MAIL_SEND_FAIL);
         }
     }
+
 
 
 }

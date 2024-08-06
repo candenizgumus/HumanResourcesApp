@@ -25,8 +25,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class UserService
-{
+public class UserService {
     private final UserRepository userRepository;
     private final CompanyService companyService;
     private final AuthService authService;
@@ -35,10 +34,8 @@ public class UserService
     private final JwtTokenManager jwtTokenManager;
 
 
-    public User save(User user)
-    {
-        if (user.getCompanyId() != null)
-        {
+    public User save(User user) {
+        if (user.getCompanyId() != null) {
             companyService.findById(user.getCompanyId()).orElseThrow(() -> new HumanResourcesAppException(ErrorType.COMPANY_NOT_FOUND));
         }
 
@@ -46,42 +43,36 @@ public class UserService
         return user;
     }
 
-    public Optional<User> findByPhone(String phone)
-    {
+    public Optional<User> findByPhone(String phone) {
         return userRepository.findByPhone(phone);
     }
-    public Optional<User> findByEmail(String email)
-    {
+
+    public Optional<User> findByEmail(String email) {
         return userRepository.findByEmail(email);
     }
 
-    public List<User> getAll(PageRequestDto dto)
-    {
+    public List<User> getAll(PageRequestDto dto) {
 
         return userRepository.findAll(PageRequest.of(dto.page(), dto.pageSize())).getContent();
     }
 
-    public List<User> getAllUsersOfManagerByCompanyId()
-    {
+    public List<User> getAllUsersOfManagerByCompanyId() {
 
         String email = UserInfoSecurityContext.getUserInfoFromSecurityContext();
         User user = userRepository.findByEmail(email).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
         return userRepository.findAllByCompanyId(user.getCompanyId());
     }
 
-    public User findById(Long id)
-    {
+    public User findById(Long id) {
         return userRepository.findById(id).orElseThrow(() -> new HumanResourcesAppException(ErrorType.ID_NOT_FOUND));
     }
 
-    public User addEmployeeToManager(AddEmployeeToManagerRequestDto dto)
-    {
+    public User addEmployeeToManager(AddEmployeeToManagerRequestDto dto) {
         String userEmail = UserInfoSecurityContext.getUserInfoFromSecurityContext();
         User manager = userRepository.findByEmail(userEmail).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
 
         //Checking email and phone
-        if (userRepository.findByEmailAndPhone(dto.email(), dto.phone()).isPresent())
-        {
+        if (userRepository.findByEmailAndPhone(dto.email(), dto.phone()).isPresent()) {
             throw new HumanResourcesAppException(ErrorType.EMAIL_OR_PHONE_TAKEN);
         }
 
@@ -122,31 +113,31 @@ public class UserService
         return userRepository.save(employee);
     }
 
-    public User findByToken(String token)
-    {
+    public User findByToken(String token) {
         Long authId = jwtTokenManager.getAuthIdFromToken(token).orElseThrow(() -> new HumanResourcesAppException(ErrorType.INVALID_TOKEN));
         return userRepository.findByAuthId(authId).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
     }
 
-    public CompanyAndManagerNameResponseDto findCompanyNameAndManagerNameOfUser()
-    {
+    public CompanyAndManagerNameResponseDto findCompanyNameAndManagerNameOfUser() {
 
         String email = UserInfoSecurityContext.getUserInfoFromSecurityContext();
         User user = userRepository.findByEmail(email).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
-        if (user.getManagerId() != null && user.getCompanyId() != null)
-        {
+        if (user.getManagerId() != null && user.getCompanyId() != null) {
             Company company = companyService.findById(user.getCompanyId()).orElseThrow(() -> new HumanResourcesAppException(ErrorType.COMPANY_NOT_FOUND));
             User manager = userRepository.findByAuthId(user.getManagerId()).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
             return new CompanyAndManagerNameResponseDto(company.getName(), manager.getName() + " " + manager.getSurname());
-        }
-        else
-        {
+        } else {
             return new CompanyAndManagerNameResponseDto("Empty", "Empty");
         }
+    }
 
 
-
-
+    public void updatePassword(String email, String newPassword) {
+        userRepository.findByEmail(email).ifPresent(user -> {
+            Auth auth = authService.findById(user.getAuthId()).orElseThrow(() -> new HumanResourcesAppException(ErrorType.AUTH_NOT_FOUND));
+            auth.setPassword(passwordEncoder.bCryptPasswordEncoder().encode(newPassword));
+            authService.save(auth);
+        });
     }
 
     public User update(UpdateUserRequestDto dto)

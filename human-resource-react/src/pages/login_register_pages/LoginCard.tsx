@@ -18,6 +18,7 @@ import {useState} from "react";
 import {Alert, AlertTitle} from "@mui/material";
 import getUserTypeFromToken from '../../util/getUserTypeFromToken';
 import { IUser } from '../../models/IUser';
+import PasswordResetPage from "./PasswordResetPage";
 
 export default function LoginCard() {
     const dispatch = useDispatch<HumanResources>();
@@ -47,6 +48,7 @@ export default function LoginCard() {
             }
 
     };
+
 
     return (
         <Paper elevation={6} square sx={{width: '100%', maxWidth: 400}}>
@@ -122,14 +124,11 @@ export default function LoginCard() {
                 </Button>
                 <Grid container>
                     <Grid item xs>
-                        {/* <Link href="#" variant="body2">
-                            Forgot password?
-                        </Link> */}
                     </Grid>
                     <Grid item>
                         <Typography variant='body2'>
-                            <Link to={'/register'}>
-                                {"Don't have an account? Sign Up"}
+                            <Link to={'/password-reset'}>
+                                Forgot password?
                             </Link>
                         </Typography>
                     </Grid>

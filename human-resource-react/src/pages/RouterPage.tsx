@@ -11,6 +11,7 @@ import { clearToken, fetchFindUserByToken, setToken } from "../store/feature/aut
 import AboutUsPage from './pre_autorize_pages/AboustUs';
 import ContactPage from './pre_autorize_pages/ContactPage';
 import Loader from '../components/atoms/loader/Loader';
+import PasswordResetPage from "./login_register_pages/PasswordResetPage";
 import Features from "./pre_autorize_pages/features/Features"
 import FeatureRecruitment from "./pre_autorize_pages/features/FeatureRecruitment"
 import FeaturePerformance from "./pre_autorize_pages/features/FeaturePerformance"
@@ -47,6 +48,7 @@ const RouterPage = () => {
                 <Route path="/contact" element={<ContactPage />} />
                 <Route path='/admin-home' element={ isAuth ?  <AdminPage /> : <LandingPage />} />
                 <Route path='/manager-home' element={ isAuth ?  <ManagerPage /> : <LandingPage />} />
+                <Route path={'/password-reset'} element={<PasswordResetPage />} />
             </Routes>
             </Suspense>
         </Router>

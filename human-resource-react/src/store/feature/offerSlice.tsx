@@ -79,6 +79,37 @@ export const fetchGetOffers = createAsyncThunk(
     }
 );
 
+interface fetchSendOfferEmailPayload {
+    token: string;
+    userId: number;
+    emailText: string;
+}
+export const fetchSendOfferEmail = createAsyncThunk(
+    'email/fetchSendOfferEmail',
+    async (payload: fetchSendOfferEmailPayload, { dispatch }) => {
+
+        const response = await fetch('http://localhost:9090/dev/v1/email/save', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ` + payload.token
+            },
+            body: JSON.stringify({
+                'userId': payload.userId,
+                'emailText': payload.emailText
+            })
+        });
+
+        if (!response.ok) {
+            console.log(response)
+            dispatch(clearToken());
+        }
+
+        return await response.json();
+
+    }
+);
+
 interface fetchApproveOffersPayload {
     token: string;
     offerId: number;

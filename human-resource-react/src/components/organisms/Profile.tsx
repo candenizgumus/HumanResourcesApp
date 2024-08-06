@@ -56,7 +56,9 @@ const Profile: React.FC = () => {
     // Handle form submission
     console.log('Form submitted:', );
   };
-
+    const formatDate = (date: Date | null) => {
+        return date ? dayjs(date).format('YYYY-MM-DD') : null;
+    };
   const setUserInfos = async () => {
     try {
         dispatch(fetchFindUserByToken(token));
@@ -84,7 +86,7 @@ const Profile: React.FC = () => {
         console.error('Error in handleLogin:', error);  // Handle other errors
     }
 };
-    console.log(birthDate);
+    console.log(formatDate(birthDate));
 
     useEffect(() => {
         setUserInfos();
@@ -166,7 +168,9 @@ const Profile: React.FC = () => {
                               ))}
                           </Select>
                       </FormControl>
-
+                      <Button sx={{mt: 5}} type="button" variant="contained" color="primary">
+                          Update Profile
+                      </Button>
                   </Box>
               </Grid>
               <Grid item xs={6}>
@@ -228,10 +232,15 @@ const Profile: React.FC = () => {
                           fullWidth
                           disabled
                       />
+                      <TextField
+                          label="Hired Date"
+                          name= "hireDate"
+                          value={hireDate}
+                          fullWidth
+                          disabled
+                      />
 
-                      <Button type="button" variant="contained" color="primary">
-                          Update Profile
-                      </Button>
+
                   </Box>
               </Grid>
           </Grid>

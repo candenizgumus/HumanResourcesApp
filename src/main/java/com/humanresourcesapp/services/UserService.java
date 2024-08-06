@@ -56,7 +56,7 @@ public class UserService
 
     public List<User> getAll(PageRequestDto dto)
     {
-        //TODO BURAYA ARAMA MOTORU YAP. DTO YA email ekle. İF ELSE KOY.
+
         return userRepository.findAll(PageRequest.of(dto.page(), dto.pageSize())).getContent();
     }
 
@@ -112,7 +112,7 @@ public class UserService
                 .companyId(manager.getCompanyId())
                 .userType(EUserType.EMPLOYEE)
                 .hireDate(dto.hireDate())
-                .birthDate(dto.birtDate())
+                .birthDate(dto.birthDate())
                 .managerId(manager.getId())
                 .status(EStatus.ACTIVE)
                 .position(dto.ePosition())

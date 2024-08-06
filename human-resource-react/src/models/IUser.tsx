@@ -10,9 +10,15 @@ export interface IUser{
     name:string ;
     surname:string ;
     phone:string ;
-    birthDate:number ;
-    hireDate:number ;
+    birthDate:Date  ;
+    hireDate:Date ;
+    photo:string ;
     userType:string ;
     position:string ;
     sector:string ;
+    location:string ;
+    employeeType:string;
+    subscriptionType:string;
+    subscriptionStartDate:Date;
+    subscriptionEndDate:Date;
 }

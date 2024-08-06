@@ -2,7 +2,7 @@ import React, { lazy, Suspense, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Login from './login_register_pages/Login';
 import Register from './login_register_pages/Register';
-import GetOffer from '../components/organisms/GetOffer';
+import GetOffer from '../pages/pre_autorize_pages/GetOffer'
 import LandingPage from "./pre_autorize_pages/Landing";
 import UserStoriesPage from "./pre_autorize_pages/UserStoriesPage";
 import { useDispatch } from "react-redux";
@@ -11,8 +11,13 @@ import { clearToken, fetchFindUserByToken, setToken } from "../store/feature/aut
 import AboutUsPage from './pre_autorize_pages/AboustUs';
 import ContactPage from './pre_autorize_pages/ContactPage';
 import Loader from '../components/atoms/loader/Loader';
+import Features from "./pre_autorize_pages/features/Features"
+import FeatureRecruitment from "./pre_autorize_pages/features/FeatureRecruitment"
+import FeaturePerformance from "./pre_autorize_pages/features/FeaturePerformance"
+import FeatureShift from "./pre_autorize_pages/features/FeatureShift"
 const AdminPage = lazy(() => import('./authorised_pages/AdminPage'));
 const ManagerPage = lazy(() => import('./authorised_pages/ManagerPage'));
+
 const RouterPage = () => {
     const dispatch = useDispatch<HumanResources>();
     
@@ -34,6 +39,10 @@ const RouterPage = () => {
                 <Route path="/register" element={<Register />} />
                 <Route path="/get-offer" element={<GetOffer />} />
                 <Route path="/user-stories" element={<UserStoriesPage />} />
+                <Route path="/features" element={<Features />} />
+                <Route path="/features/Recruitment" element={<FeatureRecruitment />} />
+                <Route path="/features/Performance" element={<FeaturePerformance />} />
+                <Route path="/features/Shift" element={<FeatureShift />} />
                 <Route path="/about-us" element={<AboutUsPage />} />
                 <Route path="/contact" element={<ContactPage />} />
                 <Route path='/admin-home' element={ isAuth ?  <AdminPage /> : <LandingPage />} />

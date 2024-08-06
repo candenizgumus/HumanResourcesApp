@@ -19,7 +19,7 @@ export default function FeatureCard(props: IFeature) {
     const navigate = useNavigate();
 
     const handleEditClick = () => {
-        navigate("/features");
+        navigate(`/features/${encodeURIComponent(name)}`);
     };
 
     return (

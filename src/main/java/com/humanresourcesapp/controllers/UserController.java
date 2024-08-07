@@ -1,6 +1,7 @@
 package com.humanresourcesapp.controllers;
 
 import com.humanresourcesapp.dto.requests.AddEmployeeToManagerRequestDto;
+import com.humanresourcesapp.dto.requests.PageCountRequestDto;
 import com.humanresourcesapp.dto.requests.PageRequestDto;
 import com.humanresourcesapp.dto.requests.UpdateUserRequestDto;
 import com.humanresourcesapp.dto.responses.CompanyAndManagerNameResponseDto;
@@ -78,7 +79,7 @@ public class UserController
 
     @GetMapping(FIND_BY_ID)
     @PreAuthorize("hasAnyAuthority('MANAGER','ADMIN')")
-    @CrossOrigin("*")
+
     public ResponseEntity<User> findById(Long id){
 
         return ResponseEntity.ok(userService.findById(id));
@@ -102,5 +103,13 @@ public class UserController
     @CrossOrigin("*")
     public ResponseEntity<CompanyAndManagerNameResponseDto> findCompanyNameAndManagerNameOfUser(){
         return ResponseEntity.ok(userService.findCompanyNameAndManagerNameOfUser());
+    }
+
+    @PostMapping(GET_COUNT)
+    @CrossOrigin("*")
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
+    public ResponseEntity<Long> getCount(@RequestBody PageCountRequestDto dto)
+    {
+        return ResponseEntity.ok(userService.getCount(dto));
     }
 }

@@ -7,7 +7,8 @@ import { clearToken } from "./authSlice";
 const initialOfferState = {
     offers: [] as IOfferList[],
     status: 'idle',
-    error: null as string | null
+    error: null as string | null,
+    offerRowCount: 0
 };
 
 // Type guard to check if error is an instance of Error
@@ -55,7 +56,6 @@ interface fetchGetOffersPayload {
 export const fetchGetOffers = createAsyncThunk(
     'offer/fetchGetOffers',
     async (payload: fetchGetOffersPayload, { dispatch }) => {
-
             const response = await fetch('http://localhost:9090/dev/v1/offer/get-all', {
                 method: 'POST',
                 headers: {
@@ -65,6 +65,35 @@ export const fetchGetOffers = createAsyncThunk(
                 body: JSON.stringify({
                     'page': payload.page,
                     'pageSize': payload.pageSize,
+                    'searchText': payload.searchText
+                })
+            });
+
+            if (!response.ok) {
+                console.log(response)
+                dispatch(clearToken());
+            }
+
+            return await response.json();
+
+    }
+);
+
+interface fetchGetOfferCountPayload {
+    token: string;
+    searchText: string;
+}
+
+export const fetchGetOfferCount = createAsyncThunk(
+    'offer/fetchGetOfferCount',
+    async (payload: fetchGetOfferCountPayload, { dispatch }) => {
+            const response = await fetch('http://localhost:9090/dev/v1/offer/get-count', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ` + payload.token
+                },
+                body: JSON.stringify({
                     'searchText': payload.searchText
                 })
             });
@@ -167,6 +196,7 @@ export const fetchDeclineOffers = createAsyncThunk(
     }
 );
 
+
 // Offer slice
 const offerSlice = createSlice({
     name: 'offer',
@@ -177,6 +207,10 @@ const offerSlice = createSlice({
             .addCase(fetchGetOffers.fulfilled, (state, action: PayloadAction<IOfferList[]>) => {
                 state.offers = action.payload;
 
+            })
+            .addCase(fetchGetOfferCount.fulfilled,(state,action)=>{
+                state.offerRowCount = action.payload
+                console.log(action.payload);
             })
     }
 });

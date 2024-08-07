@@ -80,16 +80,24 @@ export const fetchGetCompanies = createAsyncThunk(
     }
 );
 
+interface fetchGetCompanyCountPayload {
+    token: string;
+    searchText: string;
+}
+
 export const fetchGetCompanyCount = createAsyncThunk(
     'offer/fetchGetCompanyCount',
-    async (payload: string, { dispatch }) => {
+    async (payload: fetchGetCompanyCountPayload, { dispatch }) => {
 
             const response = await fetch('http://localhost:9090/dev/v1/company/get-count', {
-                method: 'GET',
+                method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ` + payload
-                }
+                    'Authorization': `Bearer ` + payload.token
+                },
+                body: JSON.stringify({
+                    'searchText': payload.searchText
+                })
             });
 
             if (!response.ok) {

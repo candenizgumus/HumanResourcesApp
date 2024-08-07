@@ -1,6 +1,7 @@
 package com.humanresourcesapp.controllers;
 
 import com.humanresourcesapp.dto.requests.CompanySaveRequestDto;
+import com.humanresourcesapp.dto.requests.PageCountRequestDto;
 import com.humanresourcesapp.dto.requests.PageRequestDto;
 import com.humanresourcesapp.entities.Company;
 import com.humanresourcesapp.services.CompanyService;
@@ -41,18 +42,17 @@ public class CompanyController
         return ResponseEntity.ok(companyService.getAllByPage(dto));
     }
 
-    @GetMapping(GET_COUNT)
+    @PostMapping(GET_COUNT)
     @PreAuthorize("hasAnyAuthority('ADMIN')")
-    public ResponseEntity<Long> getCount()
+    public ResponseEntity<Long> getCount(@RequestBody PageCountRequestDto dto)
     {
-        return ResponseEntity.ok(companyService.getCount());
+        return ResponseEntity.ok(companyService.getCount(dto));
     }
 
     @PostMapping(UPDATE)
     @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<Company> update(@RequestBody CompanySaveRequestDto dto)
     {
-        System.out.println(dto);
         return ResponseEntity.ok(companyService.update(dto));
     }
 }

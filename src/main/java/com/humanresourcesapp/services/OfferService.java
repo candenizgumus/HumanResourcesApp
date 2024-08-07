@@ -1,9 +1,6 @@
 package com.humanresourcesapp.services;
 
-import com.humanresourcesapp.dto.requests.CompanySaveRequestDto;
-import com.humanresourcesapp.dto.requests.OfferApproveRequestDto;
-import com.humanresourcesapp.dto.requests.OfferSaveRequestDto;
-import com.humanresourcesapp.dto.requests.PageRequestDto;
+import com.humanresourcesapp.dto.requests.*;
 import com.humanresourcesapp.entities.Auth;
 import com.humanresourcesapp.entities.Company;
 import com.humanresourcesapp.entities.Offer;
@@ -74,14 +71,7 @@ public class OfferService
 
     public List<VwGetAllOffer> getAllOffer(PageRequestDto dto)
     {
-        if (dto.searchText() == null)
-        {
-            return offerRepository.getAllOffer(PageRequest.of(dto.page(), dto.pageSize()));
-        }
-        else {
-            return offerRepository.getAllOfferByEmailSearch(dto.searchText(),PageRequest.of(dto.page(), dto.pageSize()));
-        }
-
+        return offerRepository.getAllOfferByEmailSearch(dto.searchText(),PageRequest.of(dto.page(), dto.pageSize()));
     }
 
     public Boolean approveOfferAndRegisterAuthAndUser(OfferApproveRequestDto dto)
@@ -145,4 +135,7 @@ public class OfferService
         return true;
     }
 
+    public Long getCount(PageCountRequestDto dto) {
+        return offerRepository.getAllOfferByEmailSearchCount(dto.searchText());
+    }
 }

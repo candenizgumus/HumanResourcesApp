@@ -1,6 +1,7 @@
 package com.humanresourcesapp.services;
 
 import com.humanresourcesapp.dto.requests.AddEmployeeToManagerRequestDto;
+import com.humanresourcesapp.dto.requests.PageCountRequestDto;
 import com.humanresourcesapp.dto.requests.PageRequestDto;
 import com.humanresourcesapp.dto.requests.UpdateUserRequestDto;
 import com.humanresourcesapp.dto.responses.CompanyAndManagerNameResponseDto;
@@ -53,7 +54,7 @@ public class UserService {
 
     public List<User> getAll(PageRequestDto dto) {
 
-        return userRepository.getAllOfferByEmailSearch(dto.searchText(),PageRequest.of(dto.page(), dto.pageSize()));
+        return userRepository.getAllUserByEmailSearch(dto.searchText(),PageRequest.of(dto.page(), dto.pageSize()));
     }
 
     public List<User> getAllUsersOfManagerByCompanyId(PageRequestDto dto) {
@@ -195,5 +196,9 @@ public class UserService {
 
         return userRepository.save(user);
 
+    }
+
+    public Long getCount(PageCountRequestDto dto) {
+        return userRepository.getAllUserByEmailSearchCount(dto.searchText());
     }
 }

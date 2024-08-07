@@ -15,4 +15,7 @@ public interface CompanyRepository extends JpaRepository<Company,Long>
 
     @Query("select new com.humanresourcesapp.views.VwGetCompanyLogos(c.id, c.name, c.logo) from Company c")
     List<VwGetCompanyLogos> findAllCompanyLogos();
+
+    @Query("select Count(c) from Company c  where c.name like %?1%")
+    Long getAllByPageBySearchCount(String name);
 }

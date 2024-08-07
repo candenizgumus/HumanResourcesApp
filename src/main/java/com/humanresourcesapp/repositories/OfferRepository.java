@@ -18,4 +18,7 @@ public interface OfferRepository extends JpaRepository<Offer, Long>
     List<VwGetAllOffer> getAllOfferByEmailSearch(String email ,PageRequest pageRequest);
 
     Optional<Offer> findByEmail (String email);
+
+    @Query("select Count(o) from Offer o  where o.status = 'PENDING' AND o.email like %?1%")
+    Long getAllOfferByEmailSearchCount(String email);
 }

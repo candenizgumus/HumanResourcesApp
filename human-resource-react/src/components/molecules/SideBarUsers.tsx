@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import {
     DataGrid,
     GridColDef,
+    GridPaginationModel,
     GridRowSelectionModel,
 } from "@mui/x-data-grid";
 import {
@@ -13,7 +14,7 @@ import { HumanResources, useAppSelector } from "../../store";
 import { useDispatch } from "react-redux";
 
 import { IOfferList } from "../../models/IOfferList";
-import {clearToken, fetchGetAllUsers} from "../../store/feature/authSlice";
+import {clearToken, fetchGetAllUsers, fetchGetUserCount} from "../../store/feature/authSlice";
 
 const columns: GridColDef[] = [
     { field: "id", headerName: "ID", width: 70, headerAlign: "center" },
@@ -49,23 +50,42 @@ export default function SideBarUsers() {
     const dispatch = useDispatch<HumanResources>();
     const token = useAppSelector((state) => state.auth.token);
     const userList = useAppSelector((state) => state.auth.userList);
+    const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({
+        page: 0,
+        pageSize: 5,
+    });
+    const [rowCount, setRowCount] = useState<number>(0);
 
- 
     useEffect(() => {
-        dispatch(
-            fetchGetAllUsers({
-                token: token,
-                page: 0,
-                pageSize: 100,
-                searchText: searchText,
-            })
-        ).catch(() => {
-            dispatch(clearToken());
-        });
-    }, [dispatch, searchText, token]);
+        const fetchData = async () => {
+            try {
+                const response = await dispatch(fetchGetAllUsers({
+                    token: token,
+                    page: paginationModel.page,
+                    pageSize: paginationModel.pageSize,
+                    searchText: searchText,
+                }));
+
+                const count = await dispatch(fetchGetUserCount({
+                    token: token,
+                    searchText: searchText,
+                }))
+                setRowCount(count.payload)
+            } catch {
+                dispatch(clearToken());
+            }
+        };
+
+        fetchData();
+    }, [dispatch, searchText, token, paginationModel]);
+
 
     const handleRowSelection = (newSelectionModel: GridRowSelectionModel) => {
         setSelectedRowIds(newSelectionModel as number[]);
+    };
+
+    const handlePaginationModelChange = (model: GridPaginationModel) => {
+        setPaginationModel(model);
     };
 
     return (
@@ -79,12 +99,14 @@ export default function SideBarUsers() {
             />
             <DataGrid
                 rows={userList}
+
+                rowCount={rowCount}
                 columns={columns}
-                initialState={{
-                    pagination: {
-                        paginationModel: { page: 1, pageSize: 5 },
-                    },
-                }}
+                paginationMode="server"
+                pagination
+                paginationModel={paginationModel}
+                onPaginationModelChange={handlePaginationModelChange}
+
                 pageSizeOptions={[5, 10]}
                 checkboxSelection
                 onRowSelectionModelChange={handleRowSelection}

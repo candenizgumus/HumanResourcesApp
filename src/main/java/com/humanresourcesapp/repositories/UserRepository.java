@@ -23,8 +23,11 @@ public interface UserRepository extends JpaRepository<User,Long>
 
 
     @Query("select u from User u  where  u.email like %?1%")
-    List<User> getAllOfferByEmailSearch(String email ,PageRequest pageRequest);
+    List<User> getAllUserByEmailSearch(String email ,PageRequest pageRequest);
 
     @Query("select u from User u  where  u.email like %?1%  AND u.userType = 'EMPLOYEE' AND u.managerId = ?2")
     List<User> findAllUsersByEmailAndManagerId(String email ,Long managerId ,PageRequest pageRequest);
+
+    @Query("select Count(u) from User u  where  u.email like %?1%")
+    Long getAllUserByEmailSearchCount(String email);
 }

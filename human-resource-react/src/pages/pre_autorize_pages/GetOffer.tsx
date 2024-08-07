@@ -18,7 +18,7 @@ const GetOffer = () => {
     return (
         <Root>
             <CssBaseline/>
-            <NavBar featuresRef={featuresRef}/>
+            <NavBar/>
             <main>
                 <Container maxWidth="lg" sx={{mt: 4}}>
                     <HeroSection/>

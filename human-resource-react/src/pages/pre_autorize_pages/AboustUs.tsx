@@ -40,7 +40,7 @@ function AboutUsPage() {
   return (
     <Root>
       <CssBaseline />
-      <NavBar featuresRef={featuresRef} />
+      <NavBar/>
       <Header>
         <Container maxWidth="lg">
           <Box py={5}>

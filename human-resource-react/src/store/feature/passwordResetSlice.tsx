@@ -1,4 +1,12 @@
-import {createAsyncThunk} from "@reduxjs/toolkit";
+import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
+
+interface IPasswordReset {
+    isResetCodeSend: boolean
+}
+
+const initalPasswordResetState: IPasswordReset = {
+    isResetCodeSend: false
+};
 
 export const fetchGetPasswordResetCode = createAsyncThunk(
     'getPasswordResetCode/fetchPasswordReset',
@@ -36,3 +44,19 @@ export const fetchResetPassword = createAsyncThunk(
     }
 )
 
+
+
+const passwordResetSlice = createSlice({
+    name: 'passwordReset',
+    initialState: initalPasswordResetState,
+    reducers: {
+        setIsCodeSend(state, action: PayloadAction<boolean>){
+            state.isResetCodeSend = action.payload;
+        }
+    },
+    extraReducers: (builder) => {  
+    },
+});
+
+export const { setIsCodeSend } = passwordResetSlice.actions;
+export default passwordResetSlice.reducer;

@@ -40,13 +40,12 @@ public class PasswordResetService {
             throw new HumanResourcesAppException(ErrorType.USER_NOT_FOUND);
         }
         PasswordReset passwordReset = createPasswordResetToken(email);
-        MailModel mailModel = MailModel.builder()
-                .to(passwordReset.getEmail())
-                .subject("Password reset")
-                .message("Your password reset code is: " + passwordReset.getToken() + " , available for 1 hour!")
-                .build();
-
-        emailService.send(mailModel);
+            MailModel mailModel = MailModel.builder()
+                    .to(passwordReset.getEmail())
+                    .subject("Password reset")
+                    .message("Your password reset code is: " + passwordReset.getToken() + " , available for 1 hour!")
+                    .build();
+            emailService.send(mailModel);
     }
 
     public void resetPassword(ResetPasswordRequestDto resetPasswordRequestDto) {

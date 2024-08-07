@@ -26,7 +26,7 @@ export default function Login() {
               alignItems: 'center',
           }}
       >
-          <NavBar featuresRef={featuresRef} />
+          <NavBar />
           <CssBaseline />
           <Grid item xs={12} sm={10} md={8} lg={6}
                 sx={{

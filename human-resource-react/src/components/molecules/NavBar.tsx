@@ -3,7 +3,7 @@ import { AppBar, Button, Toolbar, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 // @ts-ignore
-export const NavBar = ({ featuresRef }) => {
+export const NavBar = () => {
     const navigate = useNavigate();
     const [scrolled, setScrolled] = useState(false);
 
@@ -70,6 +70,7 @@ export const NavBar = ({ featuresRef }) => {
         transition: 'color 0.3s ease',
     };
 
+    /*
     const scrollToFeatures = () => {
         if (featuresRef.current === null) {
             navigate('/features');
@@ -77,6 +78,7 @@ export const NavBar = ({ featuresRef }) => {
             featuresRef.current.scrollIntoView({ behavior: 'smooth' });
         }
     };
+    */
 
     return (
         <AppBar position="sticky" sx={appBarStyle}>
@@ -87,7 +89,7 @@ export const NavBar = ({ featuresRef }) => {
                     </Button>
                 </Typography>
                 <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'nowrap' }}>
-                    <Button style={{ marginRight: '20px' }} sx={navigationsStyle} onClick={scrollToFeatures} color="inherit">
+                    <Button style={{ marginRight: '20px' }} sx={navigationsStyle} onClick={() => navigate('/features')} color="inherit">
                         Features
                     </Button>
                     <Button style={{ marginRight: '20px' }} sx={navigationsStyle} onClick={() => navigate('/user-stories')} color="inherit">

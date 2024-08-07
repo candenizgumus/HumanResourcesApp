@@ -11,10 +11,12 @@ import {NavBar} from "../../components/molecules/NavBar";
 import CssBaseline from "@mui/material/CssBaseline";
 import LoginCard from "./LoginCard";
 import {useRef} from "react";
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
 
 export default function PasswordResetPage() {
     const featuresRef = useRef<HTMLDivElement>(null);
-
+    const isResetCodeSend = useSelector((state: RootState) => state.passwordReset.isResetCodeSend);
 
     return (
         <Grid
@@ -30,7 +32,7 @@ export default function PasswordResetPage() {
                 alignItems: 'center',
             }}
         >
-            <NavBar featuresRef={featuresRef}/>
+            <NavBar/>
             <CssBaseline/>
             <Grid item xs={12} sm={10} md={8} lg={6}
                   sx={{
@@ -56,7 +58,8 @@ export default function PasswordResetPage() {
                 >
                     <Paper elevation={6} square sx={{width: '100%', maxWidth: 400}}>
                         <PasswordResetRequestForm/>
-                        <PasswordResetForm/>
+                        {isResetCodeSend ? <PasswordResetForm/> : ''}
+                            
                     </Paper>
                 </Box>
             </Grid>

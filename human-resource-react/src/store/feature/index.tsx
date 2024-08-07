@@ -4,7 +4,8 @@ import companySlice from "./companySlice";
 import userStorySlice from "./userStorySlice";
 import holidaySlice from "./holidaySlice";
 import offerSlice from "./offerSlice";
-
+import passwordResetSlice from "./passwordResetSlice";
+ 
 
 
 
@@ -14,5 +15,6 @@ export{
     companySlice,
     userStorySlice,
     holidaySlice,
-    offerSlice
+    offerSlice,
+    passwordResetSlice
 }

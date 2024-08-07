@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Typography,
   Button,
@@ -27,16 +27,10 @@ const Root = styled('div')(({ theme }) => ({
   minHeight: '100vh',
 }));
 
-const HeaderContainer = styled('div')({
-  display: 'flex',
-  flexDirection: 'column',
-  height: '100vh',
-});
-
 const Header = styled('header')(({ theme }) => ({
-  flex: '1',
   display: 'flex',
   flexDirection: 'column',
+  height: 'calc(100vh - 64px)',
   justifyContent: 'center',
   alignItems: 'center',
   backgroundColor: theme.palette.primary.main,
@@ -78,21 +72,27 @@ function LandingPage() {
   const dispatch: HumanResources = useDispatch();
   const featureList = useSelector((state: RootState) => state.feature.featuresList);
   const logoList = useSelector((state: RootState) => state.company.logoList);
-  const featuresRef = useRef<HTMLDivElement>(null);
 
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    dispatch(fetchGetFeatures());
-    dispatch(fetchGetCompanyLogos());
+    const fetchData = async () => {
+      await dispatch(fetchGetFeatures());
+      await dispatch(fetchGetCompanyLogos());
+      setLoading(false);
+    };
+    fetchData();
   }, [dispatch]);
 
   useEffect(() => {
-    const intervalId = setInterval(() => {
-      handleNext();
-    }, 3000);
-    return () => clearInterval(intervalId);
-  }, [currentIndex]);
+    if (!loading) {
+      const intervalId = setInterval(() => {
+        handleNext();
+      }, 3000);
+      return () => clearInterval(intervalId);
+    }
+  }, [loading, currentIndex]);
 
   const handleNext = () => {
     setCurrentIndex((prevIndex) => (prevIndex + 1) % logoList.length);
@@ -112,51 +112,51 @@ function LandingPage() {
   return (
     <Root>
       <CssBaseline />
-      <HeaderContainer>
-        <NavBar featuresRef={featuresRef} />
-        <Header>
-          <Container maxWidth="sm">
-            <Box sx={{ textAlign: 'center' }}>
-              <Typography component="h1" variant="h3" align="center" color="white" gutterBottom>
-                Making your work easier one step at a time
-              </Typography>
-              <Grid container spacing={4} justifyContent="center">
-                <Grid item>
-                  <Button variant="contained" sx={{ borderRadius: '20px', bgcolor: '#57B375', color: 'white' }}>
-                    Book Demo
-                  </Button>
-                </Grid>
+      <NavBar />
+      <Header>
+        <Container maxWidth="sm">
+          <Box sx={{ textAlign: 'center' }}>
+            <Typography component="h1" variant="h3" align="center" color="white" gutterBottom>
+              Making your work easier one step at a time
+            </Typography>
+            <Grid container spacing={4} justifyContent="center">
+              <Grid item>
+                <Button variant="contained" sx={{ borderRadius: '20px', bgcolor: '#57B375', color: 'white' }}>
+                  Book Demo
+                </Button>
               </Grid>
-              <Box sx={{ mt: 4 }}>
-                <img
-                  src={Dashboard}
-                  style={{ width: '100%' }}
-                  alt="Description of the image"
-                />
-              </Box>
-            </Box>
-          </Container>
-        </Header>
-      </HeaderContainer>
-      <Body>
-        <LogoContainer sx={{marginBottom:'5%', marginTop:'5%'}}>
-          <IconButton onClick={handlePrev}>
-            <ArrowBackIosIcon />
-          </IconButton>
-          <Logos>
-            {visibleLogos.map((company, index) => (
-              <LogoCard
-                key={index}
-                logoSrc={company.logo}
-                altText={company.name}
+            </Grid>
+            <Box sx={{ mt: 4 }}>
+              <img
+                src={Dashboard}
+                style={{ width: '100%' }}
+                alt="Description of the image"
               />
-            ))}
-          </Logos>
-          <IconButton onClick={handleNext}>
-            <ArrowForwardIosIcon />
-          </IconButton>
-        </LogoContainer>
-        <CardGrid maxWidth="md" ref={featuresRef} sx={{marginBottom:'5%'}}>
+            </Box>
+          </Box>
+        </Container>
+      </Header>
+      <Body>
+        {!loading && (
+          <LogoContainer sx={{ marginBottom: '5%', marginTop: '5%' }}>
+            <IconButton onClick={handlePrev}>
+              <ArrowBackIosIcon />
+            </IconButton>
+            <Logos>
+              {visibleLogos.map((company, index) => (
+                <LogoCard
+                  key={index}
+                  logoSrc={company.logo}
+                  altText={company.name}
+                />
+              ))}
+            </Logos>
+            <IconButton onClick={handleNext}>
+              <ArrowForwardIosIcon />
+            </IconButton>
+          </LogoContainer>
+        )}
+        <CardGrid maxWidth="md" sx={{ marginBottom: '5%' }}>
           <Typography component="h1" variant="h4" align="center" color="primary.main" gutterBottom sx={{ paddingBottom: 5 }}>
             Features
           </Typography>

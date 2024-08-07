@@ -41,7 +41,7 @@ export default function UserStoriesPage() {
     return (
         <Root>
             <CssBaseline />
-            <NavBar featuresRef={featuresRef} />
+            <NavBar/>
             <Header sx={{ bgcolor: 'primary.main', width: '100%', padding: '2%' }}>
                 <Container maxWidth="lg">
                     <Box sx={{ height: '100%', width: '100%' }}>

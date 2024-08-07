@@ -1,4 +1,3 @@
-import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
@@ -9,16 +8,14 @@ import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
-import {SportsTennis} from "@mui/icons-material";
+import LoginIcon from '@mui/icons-material/Login';
 import {useDispatch, useSelector} from "react-redux";
-import {fetchFindUserByToken, fetchLogin, setToken, setUserType} from "../../store/feature/authSlice";
-import {HumanResources, RootState, useAppSelector} from "../../store";
+import {fetchLogin} from "../../store/feature/authSlice";
+import {HumanResources, RootState} from "../../store";
 
 import {useState} from "react";
-import {Alert, AlertTitle} from "@mui/material";
+import {Alert} from "@mui/material";
 import getUserTypeFromToken from '../../util/getUserTypeFromToken';
-import { IUser } from '../../models/IUser';
-import PasswordResetPage from "./PasswordResetPage";
 
 export default function LoginCard() {
     const dispatch = useDispatch<HumanResources>();
@@ -63,7 +60,7 @@ export default function LoginCard() {
                 }}
             >
                 <Avatar sx={{m: 1, bgcolor: '#606c38'}}>
-                    <SportsTennis/>
+                    <LoginIcon/>
                 </Avatar>
                 <Typography component="h1" variant="h5">
                     Login

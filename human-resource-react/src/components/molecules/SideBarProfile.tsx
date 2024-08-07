@@ -248,13 +248,18 @@ const SideBarProfile: React.FC = () => {
                           fullWidth
                           disabled
                       />
-                      <TextField
-                          label="Sector"
-                          name="sector"
-                          value={sector}
-                          fullWidth
-                          disabled
-                      />
+                      {
+                          user.sector && (
+                              <TextField
+                                  label="Sector"
+                                  name="sector"
+                                  value={sector}
+                                  fullWidth
+                                  disabled
+                              />
+                          )
+                      }
+
                       {
                           user.companyId &&
                           (
@@ -278,27 +283,41 @@ const SideBarProfile: React.FC = () => {
                               />
                           )
                       }
-                      <TextField
-                          label="Subscription Type"
-                          name="subscriptionType"
-                          value={subscriptionType}
-                          fullWidth
-                          disabled
-                      />
-                      <TextField
-                          label="Subscription Start Date"
-                          name="subscriptionStartDate"
-                          value={subscriptionStartDate}
-                          fullWidth
-                          disabled
-                      />
-                      <TextField
-                          label="Subscription End Date"
-                          name= "subscriptionEndDate"
-                          value={subscriptionEndDate}
-                          fullWidth
-                          disabled
-                      />
+                      {
+                          user.subscriptionType && (
+                              <TextField
+                                  label="Subscription Type"
+                                  name="subscriptionType"
+                                  value={subscriptionType}
+                                  fullWidth
+                                  disabled
+                              />
+                          )
+                      }
+                      {
+                          user.subscriptionStartDate && (
+                              <TextField
+                                  label="Subscription Start Date"
+                                  name="subscriptionStartDate"
+                                  value={subscriptionStartDate}
+                                  fullWidth
+                                  disabled
+                              />
+                          )
+                      }
+
+                      {
+                          user.subscriptionEndDate && (
+                              <TextField
+                                  label="Subscription End Date"
+                                  name="subscriptionEndDate"
+                                  value={subscriptionEndDate}
+                                  fullWidth
+                                  disabled
+                              />
+                          )
+                      }
+
                       {
                           user.hireDate && (
                               <TextField

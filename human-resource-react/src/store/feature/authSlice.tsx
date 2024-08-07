@@ -320,10 +320,7 @@ export const fetchAddEmployeeToManager = createAsyncThunk(
             })
         });
 
-        if (!response.ok) {
-            console.log(response)
-            dispatch(clearToken());
-        }
+
 
         return await response.json();
 

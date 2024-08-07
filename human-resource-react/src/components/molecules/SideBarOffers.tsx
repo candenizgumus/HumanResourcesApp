@@ -27,9 +27,9 @@ const columns: GridColDef[] = [
     { field: "name", headerName: "First name", width: 160, headerAlign: "center" },
     { field: "surname", headerName: "Last name", width: 160, headerAlign: "center" },
     { field: "email", headerName: "Email", headerAlign: "center", width: 200 },
-    { field: "phone", headerName: "Phone", description: "This column has a value getter and is not sortable.", sortable: false, headerAlign: "center", width: 160 },
+    { field: "phone", headerName: "Phone", type: "number", sortable: false, headerAlign: "center", width: 160 },
     { field: "companyName", headerName: "Company Name", width: 130, headerAlign: "center" },
-    { field: "title", headerName: "Title", width: 130, headerAlign: "center" },
+    { field: "title", headerName: "Title", width: 160, headerAlign: "center" },
     { field: "numberOfEmployee", headerName: "Employee Count", type: "number", width: 120, headerAlign: "center" },
     { field: "sector", headerName: "Sector", type: "string", width: 250, headerAlign: "center" },
 ];

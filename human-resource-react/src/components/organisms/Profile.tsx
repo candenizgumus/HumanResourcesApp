@@ -45,6 +45,7 @@ const Profile: React.FC = () => {
     const [positions, setPositions] = useState([]);
     const [selectedPositions, setSelectedPositions] = useState<string>(user.position ?? '');
 
+    console.log(user);
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     // Handle form submission
@@ -243,9 +244,9 @@ const Profile: React.FC = () => {
                       <TextField
                           label="User Type"
                           name="userType"
-                          value={user.userType}
+                          value={userType}
                           fullWidth
-                          disabled={true}
+                          disabled
                       />
                       <TextField
                           label="Sector"
@@ -254,20 +255,29 @@ const Profile: React.FC = () => {
                           fullWidth
                           disabled
                       />
-                      <TextField
-                          label="Company Name"
-                          name="companyName"
-                          value={companyName}
-                          fullWidth
-                          disabled
-                      />
-                      <TextField
-                          label="Manager Name"
-                          name="managerName"
-                          value={managerName}
-                          fullWidth
-                          disabled
-                      />
+                      {
+                          user.companyId &&
+                          (
+                              <TextField
+                                  label="Company Name"
+                                  name="companyName"
+                                  value={companyName}
+                                  fullWidth
+                                  disabled
+                              />
+                          )
+                      }
+                      {
+                          user.managerId && (
+                              <TextField
+                                  label="Manager Name"
+                                  name="managerName"
+                                  value={managerName}
+                                  fullWidth
+                                  disabled
+                              />
+                          )
+                      }
                       <TextField
                           label="Subscription Type"
                           name="subscriptionType"
@@ -289,13 +299,17 @@ const Profile: React.FC = () => {
                           fullWidth
                           disabled
                       />
-                      <TextField
-                          label="Hired Date"
-                          name= "hireDate"
-                          value={hireDate}
-                          fullWidth
-                          disabled
-                      />
+                      {
+                          user.hireDate && (
+                              <TextField
+                                  label="Hired Date"
+                                  name= "hireDate"
+                                  value={hireDate}
+                                  fullWidth
+                                  disabled
+                              />
+                          )
+                      }
 
 
                   </Box>

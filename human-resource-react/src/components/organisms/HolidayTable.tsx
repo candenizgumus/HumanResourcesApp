@@ -25,18 +25,20 @@ function epochToHumanReadableWithoutTime(epochTime: number): string {
 
 // Define the columns
 const columns: GridColDef[] = [
-    { field: 'id', headerName: 'ID', width: 70 },
-    { field: 'holidayName', headerName: 'Holiday', width: 250 },
-    { field: 'holidayType', headerName: 'Type', width: 160 },
+    { field: 'id', headerName: 'ID', width: 70 , headerAlign: "center"},
+    { field: 'holidayName', headerName: 'Holiday', width: 250 , headerAlign: "center"},
+    { field: 'holidayType', headerName: 'Type', width: 160 , headerAlign: "center"},
     {
         field: 'holidayStartDate',
         headerName: 'Start Date',
-        width: 200,
+        width: 200
+    , headerAlign: "center"
     },
     {
         field: 'holidayEndDate',
         headerName: 'End Date',
-        width: 200,
+        width: 200
+        , headerAlign: "center"
     },
 ];
 
@@ -90,15 +92,15 @@ export default function HolidayTable() {
                             checkboxSelection
                             onRowSelectionModelChange={handleRowSelection}
                             sx={{
-                                '& .MuiDataGrid-columnHeaders': {
-                                    backgroundColor: 'rgba(224, 224, 224, 1)',
+                                "& .MuiDataGrid-columnHeaders": {
+                                    backgroundColor: "rgba(224, 224, 224, 1)",
                                 },
-                                '& .MuiDataGrid-columnHeaderTitle': {
-                                    textAlign: 'center',
-                                    fontWeight: 'bold',
+                                "& .MuiDataGrid-columnHeaderTitle": {
+                                    textAlign: "center",
+                                    fontWeight: "bold",
                                 },
-                                '& .MuiDataGrid-cell': {
-                                    textAlign: 'center',
+                                "& .MuiDataGrid-cell": {
+                                    textAlign: "center",
                                 },
                             }}
                         />

@@ -10,6 +10,7 @@ import { clearToken, fetchFindUserByToken } from "../../store/feature/authSlice"
 import { useDispatch } from "react-redux";
 import SideBarUsers from "../molecules/SideBarUsers";
 import CompanyList from "../molecules/CompanyList";
+import SideBarAddEmployee from "../molecules/ManagerComponents/SideBarAddEmployee";
 
 export const AdminMenuContents = () => {
     const page = useAppSelector((state) => state.auth.pageState);
@@ -23,6 +24,7 @@ export const AdminMenuContents = () => {
                 {page === 'Profile' && <Profile/>}
                 {page === 'Companies' && <CompanyList/>}
                 {page === 'Users' && <SideBarUsers/>}
+                {page === 'Add Employee' && <SideBarAddEmployee/>}
             </Grid>
         </>
     );

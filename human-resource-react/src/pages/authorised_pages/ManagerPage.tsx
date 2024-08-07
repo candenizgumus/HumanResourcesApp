@@ -27,6 +27,8 @@ import {AdminMenuContents} from "../../components/organisms/AdminMenuContents";
 import { useNavigate } from 'react-router-dom';
 import ProfileMenu from "../../components/molecules/ProfileMenu";
 import AdminHomeContent  from "../../components/organisms/AdminHomeContent"
+import {AccountBox, AdminPanelSettings, FeaturedPlayList, Person, PersonAdd} from "@mui/icons-material";
+import Badge from "@mui/material/Badge";
 
 const drawerWidth = 240;
 
@@ -155,7 +157,9 @@ export default function AdminPage() {
             <ListItem key={text} disablePadding>
               <ListItemButton onClick={() => handleListItemClick(text)}>
                 <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                  {index  === 0 && <Person/>}
+                  {index  === 1 && <PersonAdd />}
+                  {index  === 2 && <AccountBox /> }
                 </ListItemIcon>
                 <ListItemText primary={text} />
               </ListItemButton>
@@ -163,18 +167,6 @@ export default function AdminPage() {
           ))}
         </List>
         <Divider />
-        <List>
-          {['Empty1', 'Empty2', 'Empty3'].map((text, index) => (
-            <ListItem key={text} disablePadding>
-              <ListItemButton onClick={() => handleListItemClick(text)}>
-                <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
       </Drawer>
       <Main open={open}>
         <DrawerHeader />

@@ -5,6 +5,7 @@ import com.humanresourcesapp.dto.requests.PageRequestDto;
 import com.humanresourcesapp.dto.requests.UpdateUserRequestDto;
 import com.humanresourcesapp.dto.responses.CompanyAndManagerNameResponseDto;
 import com.humanresourcesapp.entities.User;
+import com.humanresourcesapp.entities.enums.EEmployeeType;
 import com.humanresourcesapp.entities.enums.EPosition;
 import com.humanresourcesapp.entities.enums.ESectors;
 import com.humanresourcesapp.services.UserService;
@@ -49,6 +50,12 @@ public class UserController
     public ResponseEntity<ESectors[]> getSectors()
     {
         return ResponseEntity.ok(ESectors.values());
+    }
+    @GetMapping(GET_EMPLOYEE_TYPES)
+    @CrossOrigin("*")
+    public ResponseEntity<EEmployeeType[]> getEmployeeTypes()
+    {
+        return ResponseEntity.ok(EEmployeeType.values());
     }
 
     @PostMapping(GET_ALL)

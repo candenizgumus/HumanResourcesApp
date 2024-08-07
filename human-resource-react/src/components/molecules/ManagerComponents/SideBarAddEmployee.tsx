@@ -102,19 +102,20 @@ const SideBarAddEmployee: React.FC = () => {
             eEmployeeType: selectedEmployeeType,
             email: email
         })).then((data) => {
-            if (data.payload) {
-                sweetalert2.fire({
-                    icon: 'success',
-                    title: 'Your profile has been updated successfully',
-                    showConfirmButton: false,
-                    timer: 1500
-                })
-            }else{
+            if (data.payload.message) {
                 sweetalert2.fire({
                     icon: 'error',
                     title: 'Oops...',
                     text: data.payload.message ?? 'Failed to add employee',
                     showConfirmButton: true
+                })
+
+            }else{
+                sweetalert2.fire({
+                    icon: 'success',
+                    title: 'Your profile has been updated successfully',
+                    showConfirmButton: false,
+                    timer: 1500
                 })
             }
         })

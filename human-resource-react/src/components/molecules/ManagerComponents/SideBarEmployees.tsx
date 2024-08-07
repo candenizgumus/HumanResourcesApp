@@ -22,22 +22,12 @@ const columns: GridColDef[] = [
     { field: "email", headerName: "Email", headerAlign: "center", width: 250 },
     { field: "phone", headerName: "Phone", sortable: false, headerAlign: "center", width: 140 },
     { field: "position", headerName: "Position", type: "string", width: 220, headerAlign: "center" },
-    { field: "userType", headerName: "User Type", width: 120, headerAlign: "center" },
-    { field: "employeeType", headerName: "Employee Type", width: 120, headerAlign: "center" },
+    { field: "userType", headerName: "User Type", width: 150, headerAlign: "center" },
+    { field: "employeeType", headerName: "Employee Type", width: 150, headerAlign: "center" },
     { field: "status", headerName: "Status", width: 120, headerAlign: "center" },
 
 ];
 
-const style = {
-    position: "absolute" as "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    width: 600,
-    bgcolor: "background.paper",
-    boxShadow: 24,
-    p: 4,
-};
 
 export default function SideBarEmployees() {
     const [selectedRowIds, setSelectedRowIds] = useState<number[]>([]);

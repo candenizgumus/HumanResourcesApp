@@ -1,6 +1,7 @@
 package com.humanresourcesapp.services;
 
 import com.humanresourcesapp.dto.requests.CompanySaveRequestDto;
+import com.humanresourcesapp.dto.requests.PageCountRequestDto;
 import com.humanresourcesapp.dto.requests.PageRequestDto;
 import com.humanresourcesapp.entities.Company;
 import com.humanresourcesapp.exception.ErrorType;
@@ -39,13 +40,7 @@ public class CompanyService
     }
 
     public List<Company> getAllByPage(PageRequestDto dto) {
-        if (dto.searchText() == null)
-        {
-            return companyRepository.findAll(PageRequest.of(dto.page(), dto.pageSize())).getContent();
-        }
-        else {
-            return companyRepository.getAllByPageBySearch(dto.searchText(),PageRequest.of(dto.page(), dto.pageSize()));
-        }
+        return companyRepository.getAllByPageBySearch(dto.searchText(),PageRequest.of(dto.page(), dto.pageSize()));
     }
 
     public Company update (CompanySaveRequestDto dto){
@@ -76,7 +71,7 @@ public class CompanyService
         return str == null || str.trim().isEmpty();
     }
 
-    public Long getCount() {
-        return companyRepository.count();
+    public Long getCount(PageCountRequestDto dto) {
+        return companyRepository.getAllByPageBySearchCount(dto.searchText());
     }
 }

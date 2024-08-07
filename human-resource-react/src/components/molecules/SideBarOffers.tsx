@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import {
     DataGrid,
     GridColDef,
+    GridPaginationModel,
     GridRowSelectionModel,
 } from "@mui/x-data-grid";
 import {
@@ -11,16 +12,20 @@ import {
     Modal,
     Box,
     Typography,
+    Backdrop,
+    CircularProgress
 } from "@mui/material";
 import { HumanResources, useAppSelector } from "../../store";
 import { useDispatch } from "react-redux";
 import {
     fetchApproveOffers, fetchDeclineOffers,
+    fetchGetOfferCount,
     fetchGetOffers, fetchSendOfferEmail,
 } from "../../store/feature/offerSlice";
 import { IOfferList } from "../../models/IOfferList";
 import { clearToken } from "../../store/feature/authSlice";
 import Swal from "sweetalert2";
+import Loader from "../atoms/loader/Loader";
 
 const columns: GridColDef[] = [
     { field: "id", headerName: "ID", width: 70, headerAlign: "center" },
@@ -57,19 +62,32 @@ export default function SideBarOffers() {
     const token = useAppSelector((state) => state.auth.token);
     const [isSendTrue, setIsSendTrue] = useState(false);
     const [isSendFalse, setIsSendFalse] = useState(false);
-
+    const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({
+        page: 0,
+        pageSize: 5,
+    });
+    const [rowCount, setRowCount] = useState<number>(0);
     useEffect(() => {
-        dispatch(
-            fetchGetOffers({
-                token: token,
-                page: 0,
-                pageSize: 50,
-                searchText: searchText,
-            })
-        ).catch(() => {
-            dispatch(clearToken());
-        });
-    }, [dispatch, searchText, token]);
+        const fetchData = async () => {
+            try {
+                const response = await dispatch(fetchGetOffers({
+                    token: token,
+                    page: paginationModel.page,
+                    pageSize: paginationModel.pageSize,
+                    searchText: searchText,
+                }));
+                const count = await dispatch(fetchGetOfferCount({
+                    token: token,
+                    searchText: searchText,
+                }))
+                setRowCount(count.payload);
+            } catch {
+                dispatch(clearToken());
+            }
+        };
+
+        fetchData();
+    }, [dispatch, searchText, token, paginationModel,rowCount]);
 
     const handleRowSelection = (newSelectionModel: GridRowSelectionModel) => {
         setSelectedRowIds(newSelectionModel as number[]);
@@ -125,12 +143,18 @@ export default function SideBarOffers() {
 
                     await dispatch(
                         fetchGetOffers({
-                            token,
-                            page: 0,
-                            pageSize: 50,
+                            token: token,
+                            page: paginationModel.page,
+                            pageSize: paginationModel.pageSize,
                             searchText: searchText,
                         })
                     );
+
+                    const count = await dispatch(fetchGetOfferCount({
+                        token: token,
+                        searchText: searchText,
+                    }))
+                    setRowCount(count.payload);
                 }
             } catch (error) {
                 localStorage.removeItem("token");
@@ -181,15 +205,19 @@ export default function SideBarOffers() {
                         icon: "success",
                         confirmButtonText: "OK",
                     });
-
                     await dispatch(
                         fetchGetOffers({
-                            token,
-                            page: 0,
-                            pageSize: 50,
+                            token: token,
+                            page: paginationModel.page,
+                            pageSize: paginationModel.pageSize,
                             searchText: searchText,
                         })
                     );
+                    const count = await dispatch(fetchGetOfferCount({
+                        token: token,
+                        searchText: searchText,
+                    }))
+                    setRowCount(count.payload);
                 }
             } catch (error) {
                 localStorage.removeItem("token");
@@ -237,6 +265,10 @@ export default function SideBarOffers() {
         setCurrentModalIndex(0); // Start from the first selected offer
     };
 
+    const handlePaginationModelChange = (model: GridPaginationModel) => {
+        setPaginationModel(model);
+    };
+
     return (
         <div style={{ height: 400, width: "inherit" }}>
             <TextField
@@ -248,13 +280,14 @@ export default function SideBarOffers() {
             />
             <DataGrid
                 rows={offerList}
+                rowCount={rowCount}
                 columns={columns}
-                initialState={{
-                    pagination: {
-                        paginationModel: { page: 0, pageSize: 5 },
-                    },
-                }}
+                paginationMode="server"
+                pagination
+                paginationModel={paginationModel}
+                onPaginationModelChange={handlePaginationModelChange}
                 pageSizeOptions={[5, 10]}
+
                 checkboxSelection
                 onRowSelectionModelChange={handleRowSelection}
                 sx={{
@@ -337,6 +370,9 @@ export default function SideBarOffers() {
                     </Box>
                 </Modal>
             )}
+            <Backdrop open={loading}>
+                <Loader/>
+            </Backdrop>
         </div>
     );
 }

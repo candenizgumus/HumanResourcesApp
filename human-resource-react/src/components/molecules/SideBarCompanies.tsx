@@ -55,6 +55,7 @@ export default function OfferList() {
     const dispatch = useDispatch<HumanResources>();
     const token = useAppSelector((state) => state.auth.token);
     const [rowCount, setRowCount] = useState<number>(0);
+    
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -65,7 +66,10 @@ export default function OfferList() {
                     searchText: searchText,
                 }));
 
-                const count = await dispatch(fetchGetCompanyCount(token))
+                const count = await dispatch(fetchGetCompanyCount({
+                    token: token,
+                    searchText: searchText,
+                }))
                 setRowCount(count.payload)
             } catch {
                 dispatch(clearToken());

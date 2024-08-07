@@ -2,6 +2,7 @@ package com.humanresourcesapp.controllers;
 
 import com.humanresourcesapp.dto.requests.OfferApproveRequestDto;
 import com.humanresourcesapp.dto.requests.OfferSaveRequestDto;
+import com.humanresourcesapp.dto.requests.PageCountRequestDto;
 import com.humanresourcesapp.dto.requests.PageRequestDto;
 import com.humanresourcesapp.exception.ErrorType;
 import com.humanresourcesapp.exception.HumanResourcesAppException;
@@ -49,5 +50,13 @@ public class OfferController
     public ResponseEntity<Boolean> delete( Long offerId)
     {
         return ResponseEntity.ok(offerService.delete(offerId));
+    }
+
+
+    @PostMapping(GET_COUNT)
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    public ResponseEntity<Long> getCount(@RequestBody PageCountRequestDto dto)
+    {
+        return ResponseEntity.ok(offerService.getCount(dto));
     }
 }

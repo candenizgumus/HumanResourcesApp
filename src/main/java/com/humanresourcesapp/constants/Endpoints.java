@@ -59,4 +59,5 @@ public class Endpoints
 
     public static final String GET_EMPLOYEE_TYPES = "/get-employee-types";
     public static final String GET_COUNT = "/get-count";
+    public static final String COUNT_BY_MONTH = "/count-by-month";
 }

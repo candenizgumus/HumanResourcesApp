@@ -69,7 +69,7 @@ const Dashboard = () => {
             <Card>
               <CardContent>
 
-                <BarChart sx = {{ width: "100%" }}
+                <BarChart
                     xAxis={[
                       {
                         scaleType: 'band',

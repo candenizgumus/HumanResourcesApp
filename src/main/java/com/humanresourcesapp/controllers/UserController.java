@@ -113,9 +113,10 @@ public class UserController
         return ResponseEntity.ok(userService.getCount(dto));
     }
 
-    @PostMapping("/count-by-month")
+    @PostMapping(COUNT_BY_MONTH)
     @CrossOrigin("*")
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
+    //TODO DAHA SONRA MANAGER I SILELIM
     public ResponseEntity<List<Long>> getCountByMonth()
     {
 

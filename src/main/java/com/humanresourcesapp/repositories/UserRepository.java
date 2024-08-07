@@ -1,11 +1,13 @@
 package com.humanresourcesapp.repositories;
 
+import com.humanresourcesapp.entities.Company;
 import com.humanresourcesapp.entities.User;
 import com.humanresourcesapp.views.VwGetAllOffer;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,4 +32,7 @@ public interface UserRepository extends JpaRepository<User,Long>
 
     @Query("select Count(u) from User u  where  u.email like %?1%")
     Long getAllUserByEmailSearchCount(String email);
+
+    @Query("select Count(u) from User u  where  u.createdAt BETWEEN ?1 and ?2 AND u.userType = 'MANAGER'")
+    Long countByCreatedAtBetween(LocalDateTime start, LocalDateTime end);
 }

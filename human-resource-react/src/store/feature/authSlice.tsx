@@ -357,6 +357,23 @@ export const fetchGetUserCount = createAsyncThunk(
     }
 );
 
+export const fetchGetCustomerByMonth = createAsyncThunk(
+    'offer/fetchGetUserCount',
+    async (payload: string, { dispatch }) => {
+
+        const response = await fetch('http://localhost:9090/dev/v1/user/count-by-month', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ` + payload
+            }
+        });
+
+        return await response.json();
+
+    }
+);
+
 
 const authSlice = createSlice({
     name: 'auth',

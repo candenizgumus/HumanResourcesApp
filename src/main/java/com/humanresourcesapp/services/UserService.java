@@ -21,6 +21,9 @@ import org.springframework.data.domain.PageRequest;
 
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.Year;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -200,5 +203,36 @@ public class UserService {
 
     public Long getCount(PageCountRequestDto dto) {
         return userRepository.getAllUserByEmailSearchCount(dto.searchText());
+    }
+
+    public List<Long> getCountByMonth()
+    {
+        List<Long> countList = new ArrayList<>();
+        Long january = userRepository.countByCreatedAtBetween(LocalDateTime.of(Year.now().getValue(), 1, 1, 0, 0), LocalDateTime.of(Year.now().getValue(), 1, 30, 0, 0));
+        Long February = userRepository.countByCreatedAtBetween(LocalDateTime.of(Year.now().getValue(), 2, 1, 0, 0), LocalDateTime.of(Year.now().getValue(), 2, 28, 0, 0));
+        Long march = userRepository.countByCreatedAtBetween(LocalDateTime.of(Year.now().getValue(), 3, 1, 0, 0), LocalDateTime.of(Year.now().getValue(), 3, 30, 0, 0));
+        Long april = userRepository.countByCreatedAtBetween(LocalDateTime.of(Year.now().getValue(), 4, 1, 0, 0), LocalDateTime.of(Year.now().getValue(), 4, 30, 0, 0));
+        Long may = userRepository.countByCreatedAtBetween(LocalDateTime.of(Year.now().getValue(), 5, 1, 0, 0), LocalDateTime.of(Year.now().getValue(), 5, 30, 0, 0));
+        Long june = userRepository.countByCreatedAtBetween(LocalDateTime.of(Year.now().getValue(), 6, 1, 0, 0), LocalDateTime.of(Year.now().getValue(), 6, 30, 0, 0));
+        Long july = userRepository.countByCreatedAtBetween(LocalDateTime.of(Year.now().getValue(), 7, 1, 0, 0), LocalDateTime.of(Year.now().getValue(), 7, 30, 0, 0));
+        Long august = userRepository.countByCreatedAtBetween(LocalDateTime.of(Year.now().getValue(), 8, 1, 0, 0), LocalDateTime.of(Year.now().getValue(), 8, 30, 0, 0));
+        Long september = userRepository.countByCreatedAtBetween(LocalDateTime.of(Year.now().getValue(), 9, 1, 0, 0), LocalDateTime.of(Year.now().getValue(), 9, 30, 0, 0));
+        Long october = userRepository.countByCreatedAtBetween(LocalDateTime.of(Year.now().getValue(), 10, 1, 0, 0), LocalDateTime.of(Year.now().getValue(), 10, 30, 0, 0));
+        Long november = userRepository.countByCreatedAtBetween(LocalDateTime.of(Year.now().getValue(), 11, 1, 0, 0), LocalDateTime.of(Year.now().getValue(), 11, 30, 0, 0));
+        Long december = userRepository.countByCreatedAtBetween(LocalDateTime.of(Year.now().getValue(), 12, 1, 0, 0), LocalDateTime.of(Year.now().getValue(), 12, 30, 0, 0));
+
+        countList.add(january);
+        countList.add(February);
+        countList.add(march);
+        countList.add(april);
+        countList.add(may);
+        countList.add(june);
+        countList.add(july);
+        countList.add(august);
+        countList.add(september);
+        countList.add(october);
+        countList.add(november);
+        countList.add(december);
+        return countList;
     }
 }

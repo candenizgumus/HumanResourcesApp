@@ -122,13 +122,21 @@ public class UserService {
 
         String email = UserInfoSecurityContext.getUserInfoFromSecurityContext();
         User user = userRepository.findByEmail(email).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
-        if (user.getManagerId() != null && user.getCompanyId() != null) {
-            Company company = companyService.findById(user.getCompanyId()).orElseThrow(() -> new HumanResourcesAppException(ErrorType.COMPANY_NOT_FOUND));
-            User manager = userRepository.findByAuthId(user.getManagerId()).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
-            return new CompanyAndManagerNameResponseDto(company.getName(), manager.getName() + " " + manager.getSurname());
-        } else {
-            return new CompanyAndManagerNameResponseDto("Empty", "Empty");
+        String companyName = null;
+        String managerName = null;
+        if ( user.getCompanyId() != null) {
+            Company company = companyService.findById(user.getCompanyId()).get();
+            companyName = company.getName();
+
+
         }
+        if (user.getManagerId() != null )
+        {
+            User manager = userRepository.findByAuthId(user.getManagerId()).get();
+            managerName = manager.getName() + " " + manager.getSurname();
+        }
+
+        return new CompanyAndManagerNameResponseDto(companyName, managerName );
     }
 
 

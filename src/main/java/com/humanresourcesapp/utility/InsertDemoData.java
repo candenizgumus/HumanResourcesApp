@@ -2,15 +2,13 @@ package com.humanresourcesapp.utility;
 
 import com.humanresourcesapp.dto.requests.OfferSaveRequestDto;
 import com.humanresourcesapp.entities.*;
-import com.humanresourcesapp.entities.enums.EHolidayType;
-import com.humanresourcesapp.entities.enums.ESectors;
-import com.humanresourcesapp.entities.enums.EStatus;
-import com.humanresourcesapp.entities.enums.EUserType;
+import com.humanresourcesapp.entities.enums.*;
 import com.humanresourcesapp.services.*;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -259,16 +257,28 @@ public class InsertDemoData {
                     .email(managerEmail)
                     .password(encodedPassword)
                     .userType(EUserType.MANAGER)
+                            .subscriptionType(ESubscriptionType.MONTHLY)
                     .build());
+
 
             User user = User
                     .builder()
                     .status(EStatus.ACTIVE)
                     .email(managerEmail)
                     .name("Snovid Sibiga")
+                    .surname("Easy")
                     .authId(auth.getId())
+                    .subscriptionType(ESubscriptionType.MONTHLY)
+                    .subscriptionStartDate(auth.getSubscriptionStartDate())
+                    .subscriptionEndDate(auth.getSubscriptionEndDate())
+                    .location("Turkey")
+                    .birthDate(LocalDate.of(1989, 1, 1))
+                    .position(EPosition.CARTOGRAPHER)
                     .companyId(1L)
+                    .phone("5555555555")
+                    .photo("https://t4.ftcdn.net/jpg/03/64/21/11/360_F_364211147_1qgLVxv1Tcq0Ohz3FawUfrtONzz8nq3e.jpg")
                     .userType(EUserType.MANAGER)
+                    .sector(ESectors.TECHNOLOGY)
                     .title("Turkey Operations Manager")
                     .build();
             userService.save(user);

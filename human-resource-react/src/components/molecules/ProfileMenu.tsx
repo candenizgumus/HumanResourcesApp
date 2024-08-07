@@ -4,6 +4,7 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import {useDispatch} from "react-redux";
 import {HumanResources, useAppSelector} from "../../store";
 import {
+    changePageState,
     clearToken,
     fetchFindCompanyNameAndManagerNameOfUser,
     fetchFindUserByToken
@@ -16,6 +17,7 @@ export default function ProfileMenu() {
     const navigate = useNavigate();
 
 
+
     const handleMenuOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
     };
@@ -25,8 +27,7 @@ export default function ProfileMenu() {
     };
 
     const handleProfile = () => {
-        // Handle profile click
-        console.log('Profile clicked');
+        dispatch(changePageState('Profile'));
         handleMenuClose();
     };
 

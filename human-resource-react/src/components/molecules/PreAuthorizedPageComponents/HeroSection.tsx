@@ -1,6 +1,6 @@
 import React from 'react';
 import { Container, Typography, Box, Grid } from '@mui/material';
-import image from '../../images/istockphoto-962351120-612x612.jpg';
+import image from '../../../images/istockphoto-962351120-612x612.jpg';
 
 const HeroSection = () => {
     return (

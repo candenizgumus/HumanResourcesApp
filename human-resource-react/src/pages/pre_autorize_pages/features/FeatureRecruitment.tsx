@@ -9,8 +9,8 @@ import {
     CardMedia,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { NavBar } from '../../../components/molecules/NavBar';
-import FooterElement from '../../../components/molecules/FooterElement';
+import { NavBar } from '../../../components/molecules/PreAuthorizedPageComponents/NavBar';
+import FooterElement from '../../../components/molecules/PreAuthorizedPageComponents/FooterElement';
 import image from "../../../images/manage_your_recruitment_processes_from_a_single_platform.png";
 import RetargetImg from "../../../images/retargeting.png";
 import ReportsImg from "../../../images/generate_reports.png";

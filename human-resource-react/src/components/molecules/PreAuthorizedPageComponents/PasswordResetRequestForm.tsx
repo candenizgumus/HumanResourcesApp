@@ -1,8 +1,8 @@
 import { Box, Button, TextField } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { fetchGetPasswordResetCode, setIsCodeSend } from "../../store/feature/passwordResetSlice";
+import { fetchGetPasswordResetCode, setIsCodeSend } from "../../../store/feature/passwordResetSlice";
 import { useDispatch } from "react-redux";
-import { HumanResources } from "../../store";
+import { HumanResources } from "../../../store";
 import Swal from "sweetalert2";
 import Typography from "@mui/material/Typography";
 import Avatar from "@mui/material/Avatar";

@@ -9,8 +9,8 @@ import {
     CardMedia,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { NavBar } from '../../../components/molecules/NavBar';
-import FooterElement from '../../../components/molecules/FooterElement';
+import { NavBar } from '../../../components/molecules/PreAuthorizedPageComponents/NavBar';
+import FooterElement from '../../../components/molecules/PreAuthorizedPageComponents/FooterElement';
 import Image from '../../../images/involve_employees_in_online_performance_appraisal.png'
 import RetargetImg from "../../../images/retargeting.png";
 const Root = styled('div')(({ theme }) => ({

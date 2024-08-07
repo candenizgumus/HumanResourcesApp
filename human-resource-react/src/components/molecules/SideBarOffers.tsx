@@ -45,7 +45,7 @@ const style = {
     p: 4,
 };
 
-export default function OfferList() {
+export default function SideBarOffers() {
     const [selectedRowIds, setSelectedRowIds] = useState<number[]>([]);
     const [loading, setLoading] = useState(false);
     const [searchText, setSearchText] = useState("");
@@ -250,7 +250,7 @@ export default function OfferList() {
                 columns={columns}
                 initialState={{
                     pagination: {
-                        paginationModel: { page: 1, pageSize: 5 },
+                        paginationModel: { page: 0, pageSize: 5 },
                     },
                 }}
                 pageSizeOptions={[5, 10]}

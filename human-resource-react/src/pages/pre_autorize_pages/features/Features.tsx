@@ -9,9 +9,9 @@ import {
     Avatar,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { NavBar } from '../../../components/molecules/NavBar';
-import FooterElement from '../../../components/molecules/FooterElement';
-import FeatureCard from '../../../components/molecules/FeatureCard';
+import { NavBar } from '../../../components/molecules/PreAuthorizedPageComponents/NavBar';
+import FooterElement from '../../../components/molecules/PreAuthorizedPageComponents/FooterElement';
+import FeatureCard from '../../../components/molecules/PreAuthorizedPageComponents/FeatureCard';
 import { HumanResources, RootState } from '../../../store';
 import { useDispatch, useSelector } from 'react-redux';
 

@@ -5,9 +5,9 @@ import AppsIcon from '@mui/icons-material/Apps';
 import LocalOfferIcon from '@mui/icons-material/LocalOffer';
 import SupportIcon from '@mui/icons-material/Support';
 import FeatureCard from "./FeatureCard";
-import {HumanResources, RootState} from "../../store";
+import {HumanResources, RootState} from "../../../store";
 import {useDispatch, useSelector} from "react-redux";
-import {fetchGetFeatures} from "../../store/feature/featureSlice";
+import {fetchGetFeatures} from "../../../store/feature/featureSlice";
 
 const features = [
     { icon: <SecurityIcon fontSize="large" />, title: 'High Data Security', description: 'With Kolay IK, all data communication between users is protected with SSL certificates in accordance with international security standards.' },

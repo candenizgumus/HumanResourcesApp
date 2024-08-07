@@ -11,7 +11,7 @@ import {
 } from "../../store/feature/authSlice";
 import {useNavigate} from "react-router-dom";
 
-export default function ProfileMenu() {
+export default function NavbarProfile() {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const dispatch = useDispatch<HumanResources>();
     const navigate = useNavigate();

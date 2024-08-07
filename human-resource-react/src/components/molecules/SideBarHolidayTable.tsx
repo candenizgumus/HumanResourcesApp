@@ -6,7 +6,7 @@ import { HumanResources, RootState, useAppSelector } from '../../store';
 import { fetchDeleteHoliday, fetchHolidays } from '../../store/feature/holidaySlice';
 import { IHoliday } from '../../models/IHoliday';
 import { Button, Grid, Box, Divider } from '@mui/material';
-import HolidayFormSection from "../molecules/HolidayFormSection";
+import SideBarHolidayForm from "./SideBarHolidayForm";
 import { IHolidayFormatted } from "../../models/IHolidayFormatted";
 
 // Helper function to format epoch timestamp to human-readable date
@@ -42,7 +42,7 @@ const columns: GridColDef[] = [
     },
 ];
 
-export default function HolidayTable() {
+export default function SideBarHolidayTable() {
     const holidays: IHoliday[] = useAppSelector((state: RootState) => state.holiday.holidayList);
     const dispatch = useDispatch<HumanResources>();
     const [selectedRowIds, setSelectedRowIds] = useState<number[]>([]);
@@ -130,7 +130,7 @@ export default function HolidayTable() {
                     <Divider sx={{ my: 4 }} />
                 </Grid>
                 <Grid item xs={12}>
-                    <HolidayFormSection />
+                    <SideBarHolidayForm />
                 </Grid>
             </Grid>
         </Box>

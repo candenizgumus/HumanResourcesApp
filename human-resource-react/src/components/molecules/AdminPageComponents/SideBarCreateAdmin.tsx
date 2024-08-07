@@ -1,15 +1,11 @@
 import React, { useState, ChangeEvent, FormEvent } from 'react';
 import { TextField, Button, Box } from '@mui/material';
 import { useDispatch } from 'react-redux';
-import { fetchCreateAdmin } from '../../store/feature/authSlice';
-import { HumanResources } from '../../store';
+import { fetchCreateAdmin } from '../../../store/feature/authSlice';
+import { HumanResources } from '../../../store';
 import Swal from "sweetalert2";
 
-interface FormData {
-  email: string;
-  password: string;
-  token: string;
-}
+
 
 const UserForm: React.FC = () => {
     const dispatch = useDispatch<HumanResources>();

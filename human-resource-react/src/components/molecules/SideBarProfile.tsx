@@ -19,7 +19,7 @@ import Swal from "sweetalert2";
 
 
 
-const Profile: React.FC = () => {
+const SideBarProfile: React.FC = () => {
 
     const user:IUser = useAppSelector((state) => state.auth.user);
     const token = useAppSelector((state) => state.auth.token);
@@ -325,4 +325,4 @@ const Profile: React.FC = () => {
   );
 };
 
-export default Profile;
+export default SideBarProfile;

@@ -1,15 +1,15 @@
 import {Button, Grid} from "@mui/material";
 import {HumanResources, useAppSelector} from "../../store";
-import OfferList from "../molecules/OfferList";
-import HolidayTable from "./HolidayTable";
-import CreateAdminMenuContent  from "./CreateAdminMenuContent";
+import SideBarOffers from "../molecules/SideBarOffers";
+import SideBarHolidayTable from "../molecules/SideBarHolidayTable";
+import CreateAdminMenuContent  from "../molecules/AdminPageComponents/SideBarCreateAdmin";
 import AdminHomeContent  from "./AdminHomeContent";
-import Profile from "./Profile";
+import SideBarProfile from "../molecules/SideBarProfile";
 import { useEffect } from "react";
 import { clearToken, fetchFindUserByToken } from "../../store/feature/authSlice";
 import { useDispatch } from "react-redux";
 import SideBarUsers from "../molecules/SideBarUsers";
-import CompanyList from "../molecules/CompanyList";
+import CompanyList from "../molecules/SideBarCompanies";
 import SideBarAddEmployee from "../molecules/ManagerComponents/SideBarAddEmployee";
 
 export const AdminMenuContents = () => {
@@ -18,10 +18,10 @@ export const AdminMenuContents = () => {
     return (
         <>
             <Grid item xs={12}>
-                {page === 'Offers' && <OfferList />}
+                {page === 'Offers' && <SideBarOffers />}
                 {page === 'Create Admin' && <CreateAdminMenuContent />}
-                {page === 'Holidays' && <HolidayTable />}
-                {page === 'Profile' && <Profile/>}
+                {page === 'Holidays' && <SideBarHolidayTable />}
+                {page === 'Profile' && <SideBarProfile/>}
                 {page === 'Companies' && <CompanyList/>}
                 {page === 'Users' && <SideBarUsers/>}
                 {page === 'Add Employee' && <SideBarAddEmployee/>}

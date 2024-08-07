@@ -6,7 +6,7 @@ import Box from "@mui/material/Box";
 import RegisterCard from "./RegisterCard";
 import {AppBar, Button, Toolbar, Typography} from "@mui/material";
 import {useNavigate} from "react-router-dom";
-import {NavBar} from "../../components/molecules/NavBar";
+import {NavBar} from "../../components/molecules/PreAuthorizedPageComponents/NavBar";
 
 export default function Login() {
     // Create a ref for the Features section

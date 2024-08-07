@@ -9,8 +9,8 @@ import {
     CardMedia,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { NavBar } from '../../../components/molecules/NavBar';
-import FooterElement from '../../../components/molecules/FooterElement';
+import { NavBar } from '../../../components/molecules/PreAuthorizedPageComponents/NavBar';
+import FooterElement from '../../../components/molecules/PreAuthorizedPageComponents/FooterElement';
 import HeaderImage from '../../../images/plan_and_manage_your_working_time_in_the_most_efficient_way.png'
 import RetargetImg from "../../../images/retargeting.png";
 

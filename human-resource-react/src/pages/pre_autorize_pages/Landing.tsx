@@ -11,15 +11,15 @@ import {
 import { styled } from '@mui/material/styles';
 import { useDispatch, useSelector } from 'react-redux';
 import { HumanResources, RootState } from '../../store';
-import FeatureCard from '../../components/molecules/FeatureCard';
+import FeatureCard from '../../components/molecules/PreAuthorizedPageComponents/FeatureCard';
 import { fetchGetFeatures } from '../../store/feature/featureSlice';
 import Dashboard from '../../images/default_dashboard.webp';
-import { NavBar } from '../../components/molecules/NavBar';
-import FooterElement from '../../components/molecules/FooterElement';
+import { NavBar } from '../../components/molecules/PreAuthorizedPageComponents/NavBar';
+import FooterElement from '../../components/molecules/PreAuthorizedPageComponents/FooterElement';
 import { fetchGetCompanies, fetchGetCompanyLogos } from "../../store/feature/companySlice";
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import LogoCard from "../../components/molecules/LogoCard";
+import LogoCard from "../../components/molecules/PreAuthorizedPageComponents/LogoCard";
 
 const Root = styled('div')(({ theme }) => ({
   display: 'flex',

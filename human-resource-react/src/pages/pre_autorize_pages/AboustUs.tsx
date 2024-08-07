@@ -9,8 +9,8 @@ import {
   Avatar,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { NavBar } from '../../components/molecules/NavBar';
-import FooterElement from '../../components/molecules/FooterElement';
+import { NavBar } from '../../components/molecules/PreAuthorizedPageComponents/NavBar';
+import FooterElement from '../../components/molecules/PreAuthorizedPageComponents/FooterElement';
 
 const Root = styled('div')(({ theme }) => ({
   display: 'flex',

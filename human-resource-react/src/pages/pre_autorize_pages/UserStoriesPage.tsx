@@ -1,9 +1,9 @@
 import { styled } from "@mui/material/styles";
 import React, { useRef } from "react";
 import { CssBaseline } from "@mui/material";
-import { NavBar } from "../../components/molecules/NavBar";
-import FooterElement from "../../components/molecules/FooterElement";
-import UserStoryCard from "../../components/molecules/UserStoryCard";
+import { NavBar } from "../../components/molecules/PreAuthorizedPageComponents/NavBar";
+import FooterElement from "../../components/molecules/PreAuthorizedPageComponents/FooterElement";
+import UserStoryCard from "../../components/molecules/PreAuthorizedPageComponents/UserStoryCard";
 import { Container, Grid, Typography, TextField, Box } from "@mui/material";
 
 const Root = styled('div')(({ theme }) => ({

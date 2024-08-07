@@ -8,10 +8,10 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import {PasswordRounded, SportsTennis} from "@mui/icons-material";
 import {useDispatch} from "react-redux";
-import {HumanResources} from "../../store";
+import {HumanResources} from "../../../store";
 import {useState} from "react";
-import getUserTypeFromToken from '../../util/getUserTypeFromToken';
-import {fetchGetPasswordResetCode, fetchResetPassword} from "../../store/feature/passwordResetSlice";
+import getUserTypeFromToken from '../../../util/getUserTypeFromToken';
+import {fetchGetPasswordResetCode, fetchResetPassword} from "../../../store/feature/passwordResetSlice";
 import Swal from "sweetalert2";
 import {Grid} from "@mui/material";
 

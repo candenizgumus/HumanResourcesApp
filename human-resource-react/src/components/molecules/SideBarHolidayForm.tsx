@@ -7,7 +7,7 @@ import { Box, TextField, Button, Grid, FormControl, InputLabel, Select, MenuItem
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
-const HolidayFormSection: React.FC = () => {
+const SideBarHolidayForm: React.FC = () => {
     const dispatch = useDispatch<HumanResources>();
 
     const [holidayName, setHolidayName] = useState<string>('');
@@ -117,4 +117,4 @@ const HolidayFormSection: React.FC = () => {
     );
 };
 
-export default HolidayFormSection;
+export default SideBarHolidayForm;

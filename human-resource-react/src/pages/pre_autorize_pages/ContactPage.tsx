@@ -10,8 +10,8 @@ import {
   Paper,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { NavBar } from '../../components/molecules/NavBar';
-import FooterElement from '../../components/molecules/FooterElement';
+import { NavBar } from '../../components/molecules/PreAuthorizedPageComponents/NavBar';
+import FooterElement from '../../components/molecules/PreAuthorizedPageComponents/FooterElement';
 import Swal from 'sweetalert2';
 
 const Root = styled('div')(({ theme }) => ({

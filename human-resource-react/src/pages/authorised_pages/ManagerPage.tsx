@@ -25,7 +25,7 @@ import { changePageState } from '../../store/feature/authSlice';
 import {NotificationIcon} from "../../components/atoms/NotificationIcon";
 import {AdminMenuContents} from "../../components/organisms/AdminMenuContents";
 import { useNavigate } from 'react-router-dom';
-import ProfileMenu from "../../components/molecules/ProfileMenu";
+import NavbarProfile from "../../components/atoms/NavbarProfile";
 import AdminHomeContent  from "../../components/organisms/AdminHomeContent"
 import {AccountBox, AdminPanelSettings, FeaturedPlayList, Person, PersonAdd} from "@mui/icons-material";
 import Badge from "@mui/material/Badge";
@@ -129,7 +129,7 @@ export default function AdminPage() {
         </Typography>
             <Box sx={{ flexGrow: 1 }} />
             <NotificationIcon />
-            <ProfileMenu />
+            <NavbarProfile />
 
         </Toolbar>
       </AppBar>

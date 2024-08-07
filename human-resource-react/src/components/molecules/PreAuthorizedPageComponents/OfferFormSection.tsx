@@ -12,16 +12,16 @@ import {
     InputLabel, Select, MenuItem, FormControl
 } from '@mui/material';
 import { useDispatch } from "react-redux";
-import { HumanResources } from "../../store";
-import { fetchCreateOffer } from "../../store/feature/offerSlice";
+import { HumanResources } from "../../../store";
+import { fetchCreateOffer } from "../../../store/feature/offerSlice";
 import Swal from "sweetalert2";
 import {
     fetchFindCompanyNameAndManagerNameOfUser,
     fetchFindUserByToken,
     fetchGetPositions, fetchGetSectors
-} from "../../store/feature/authSlice";
+} from "../../../store/feature/authSlice";
 
-const FormSection = () => {
+const OfferFormSection = () => {
     const dispatch = useDispatch<HumanResources>();
 
     const [name, setName] = useState('');
@@ -207,4 +207,4 @@ const FormSection = () => {
     );
 };
 
-export default FormSection;
+export default OfferFormSection;

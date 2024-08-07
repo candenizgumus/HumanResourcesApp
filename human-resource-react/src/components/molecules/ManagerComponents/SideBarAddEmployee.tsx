@@ -113,7 +113,7 @@ const SideBarAddEmployee: React.FC = () => {
                 sweetalert2.fire({
                     icon: 'error',
                     title: 'Oops...',
-                    text: 'Something went wrong!',
+                    text: data.payload.message ?? 'Failed to add employee',
                     showConfirmButton: true
                 })
             }

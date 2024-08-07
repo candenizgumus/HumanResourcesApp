@@ -3,7 +3,7 @@ import {HumanResources, useAppSelector} from "../../store";
 import SideBarOffers from "../molecules/SideBarOffers";
 import SideBarHolidayTable from "../molecules/SideBarHolidayTable";
 import CreateAdminMenuContent  from "../molecules/AdminPageComponents/SideBarCreateAdmin";
-import AdminHomeContent  from "./AdminHomeContent";
+import AdminHomeContent  from "../molecules/AdminPageComponents/AdminHomeContent";
 import SideBarProfile from "../molecules/SideBarProfile";
 import { useEffect } from "react";
 import { clearToken, fetchFindUserByToken } from "../../store/feature/authSlice";
@@ -11,8 +11,9 @@ import { useDispatch } from "react-redux";
 import SideBarUsers from "../molecules/SideBarUsers";
 import CompanyList from "../molecules/SideBarCompanies";
 import SideBarAddEmployee from "../molecules/ManagerComponents/SideBarAddEmployee";
+import SideBarEmployees from "../molecules/ManagerComponents/SideBarEmployees";
 
-export const AdminMenuContents = () => {
+export const AdminMenuContentRenderer = () => {
     const page = useAppSelector((state) => state.auth.pageState);
 
     return (
@@ -25,6 +26,7 @@ export const AdminMenuContents = () => {
                 {page === 'Companies' && <CompanyList/>}
                 {page === 'Users' && <SideBarUsers/>}
                 {page === 'Add Employee' && <SideBarAddEmployee/>}
+                {page === 'Employees' && <SideBarEmployees/>}
             </Grid>
         </>
     );

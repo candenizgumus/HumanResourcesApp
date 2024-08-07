@@ -32,7 +32,7 @@ const style = {
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
-    width: 400,
+    width: 700,
     bgcolor: "background.paper",
     border: "2px solid #000",
     boxShadow: 24,
@@ -174,8 +174,8 @@ export default function OfferList() {
                         Edit Company
                     </Typography>
                     {selectedCompany && (
-                        <form>
-                            <TextField
+                        <form >
+                            <TextField sx={{ marginTop: "25px" }}
                                 label="Company Name"
                                 name="name"
                                 variant="outlined"
@@ -209,7 +209,7 @@ export default function OfferList() {
                                 value={selectedCompany.numberOfEmployee}
                                 onChange={handleInputChange}
                                 fullWidth
-                                style={{ marginBottom: "10px" }}
+                                style={{ marginBottom: "35px" }}
                             />
                             <Button
                                 onClick={handleUpdateCompany}

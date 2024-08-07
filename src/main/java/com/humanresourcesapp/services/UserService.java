@@ -56,11 +56,11 @@ public class UserService {
         return userRepository.getAllOfferByEmailSearch(dto.searchText(),PageRequest.of(dto.page(), dto.pageSize()));
     }
 
-    public List<User> getAllUsersOfManagerByCompanyId() {
+    public List<User> getAllUsersOfManagerByCompanyId(PageRequestDto dto) {
 
         String email = UserInfoSecurityContext.getUserInfoFromSecurityContext();
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
-        return userRepository.findAllByCompanyId(user.getCompanyId());
+        User manager = userRepository.findByEmail(email).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
+        return userRepository.findAllUsersByEmailAndManagerId(dto.searchText(), manager.getId(), PageRequest.of(dto.page(), dto.pageSize()));
     }
 
     public User findById(Long id) {

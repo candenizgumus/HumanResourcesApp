@@ -2,8 +2,8 @@ import React from 'react';
 import { Box, Card, CardContent, Typography, Grid } from '@mui/material';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 import { useDispatch } from 'react-redux';
-import { HumanResources } from '../../store';
-import { fetchFindUserByToken } from '../../store/feature/authSlice';
+import { HumanResources } from '../../../store';
+import { fetchFindUserByToken } from '../../../store/feature/authSlice';
 
 const data = [
   { month: 'Jan', customers: 30 },

@@ -16,19 +16,17 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
 import { Button, Grid} from '@mui/material';
 import { HumanResources, RootState} from '../../store';
 import { useDispatch, useSelector } from 'react-redux';
 import { changePageState } from '../../store/feature/authSlice';
 import {NotificationIcon} from "../../components/atoms/NotificationIcon";
-import {AdminMenuContents} from "../../components/organisms/AdminMenuContents";
+import {AdminMenuContentRenderer} from "../../components/organisms/AdminMenuContentRenderer";
 import { useNavigate } from 'react-router-dom';
 import NavbarProfile from "../../components/atoms/NavbarProfile";
-import AdminHomeContent  from "../../components/organisms/AdminHomeContent"
-import {AccountBox, AdminPanelSettings, FeaturedPlayList, Person, PersonAdd} from "@mui/icons-material";
-import Badge from "@mui/material/Badge";
+import AdminHomeContent  from "../../components/molecules/AdminPageComponents/AdminHomeContent"
+import {AccountBox, Person, PersonAdd} from "@mui/icons-material";
+
 
 const drawerWidth = 240;
 
@@ -171,7 +169,7 @@ export default function AdminPage() {
       <Main open={open}>
         <DrawerHeader />
         <Grid container spacing={2}>
-          { pageState=== '' ? <AdminHomeContent/> : <AdminMenuContents/>}
+          { pageState=== '' ? <AdminHomeContent/> : <AdminMenuContentRenderer/>}
         </Grid>
       </Main>
     </Box>

@@ -11,7 +11,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Month;
 import java.util.List;
+import java.util.Map;
 
 import static com.humanresourcesapp.constants.Endpoints.*;
 @RequestMapping(ROOT+COMPANY)
@@ -54,5 +56,12 @@ public class CompanyController
     public ResponseEntity<Company> update(@RequestBody CompanySaveRequestDto dto)
     {
         return ResponseEntity.ok(companyService.update(dto));
+    }
+
+    @GetMapping("/getCompanyCountByMonth")
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    public ResponseEntity<Map<Integer, Long>> getAy()
+    {
+        return ResponseEntity.ok(companyService.getCompanyCountByMonthForCurrentYear());
     }
 }

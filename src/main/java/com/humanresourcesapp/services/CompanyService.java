@@ -3,23 +3,32 @@ package com.humanresourcesapp.services;
 import com.humanresourcesapp.dto.requests.CompanySaveRequestDto;
 import com.humanresourcesapp.dto.requests.PageCountRequestDto;
 import com.humanresourcesapp.dto.requests.PageRequestDto;
+import com.humanresourcesapp.entities.BaseEntity;
 import com.humanresourcesapp.entities.Company;
 import com.humanresourcesapp.exception.ErrorType;
 import com.humanresourcesapp.exception.HumanResourcesAppException;
 import com.humanresourcesapp.repositories.CompanyRepository;
 import com.humanresourcesapp.views.VwGetCompanyLogos;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.Month;
+import java.time.Year;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class CompanyService
 {
     private final CompanyRepository companyRepository;
+    private final EntityManager entityManager;
 
     public Company save(CompanySaveRequestDto dto)
     {
@@ -74,4 +83,16 @@ public class CompanyService
     public Long getCount(PageCountRequestDto dto) {
         return companyRepository.getAllByPageBySearchCount(dto.searchText());
     }
+
+    public Map<Integer, Long> getCompanyCountByMonthForCurrentYear() {
+        int currentYear = LocalDate.now().getYear();
+        List<Object[]> results = companyRepository.countCompaniesByMonthForYear(currentYear);
+
+        return results.stream()
+                .collect(Collectors.toMap(
+                        result -> ((Number) result[0]).intValue(),
+                        result -> ((Number) result[1]).longValue()
+                ));
+    }
+
 }

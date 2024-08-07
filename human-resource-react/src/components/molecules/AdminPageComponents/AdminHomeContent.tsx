@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Box, Card, CardContent, Typography, Grid } from '@mui/material';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 import { useDispatch } from 'react-redux';
-import { HumanResources } from '../../../store';
+import { HumanResources, useAppSelector } from '../../../store';
 import { fetchFindUserByToken } from '../../../store/feature/authSlice';
+import { fetchCompanyCountByMonth } from '../../../store/feature/companySlice';
 
 const data = [
   { month: 'Jan', customers: 30 },
@@ -21,16 +22,12 @@ const data = [
 ];
 
 const Dashboard = () => {
+  const dispatch = useDispatch<HumanResources>();
   const totalCustomers = 240; // Replace with dynamic data
   const totalDevelopers = 10; // Replace with dynamic data
-  const dispatch = useDispatch<HumanResources>();
+  const companyCountByMonth = useAppSelector((state) => state.company.companyCountByMonth);
+  const token = useAppSelector((state) => state.auth.token);
 
-  React.useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      dispatch(fetchFindUserByToken(token))
-    }
-  }, []);
   return (
     <Box p={4}>
       <Grid container spacing={4}>

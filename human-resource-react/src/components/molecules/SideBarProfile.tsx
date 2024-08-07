@@ -20,10 +20,9 @@ import Swal from "sweetalert2";
 
 
 const SideBarProfile: React.FC = () => {
-
-    const user:IUser = useAppSelector((state) => state.auth.user);
-    const token = useAppSelector((state) => state.auth.token);
     const dispatch = useDispatch<HumanResources>();
+    const token = useAppSelector((state) => state.auth.token);
+    const user:IUser = useAppSelector((state) => state.auth.user);
     const [name, setName] = useState<string>(user.name ?? '');
     const [surname, setSurname] = useState<string>(user.surname ?? '');
     const [phone, setPhone] = useState<string>(user.phone ?? '');
@@ -44,45 +43,73 @@ const SideBarProfile: React.FC = () => {
 
     const [positions, setPositions] = useState([]);
     const [selectedPositions, setSelectedPositions] = useState<string>(user.position ?? '');
+    const [loading, setLoading] = useState(true);
 
-    console.log(user);
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    // Handle form submission
-    console.log('Form submitted:', );
-  };
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        // Handle form submission
+    };
 
-  const setUserInfos = async () => {
-    try {
-        dispatch(fetchFindUserByToken(token));
+    const setUserInfos = async () => {
+        try {
+            await dispatch(fetchFindUserByToken(token)).unwrap();
 
-        let result = await dispatch(fetchFindCompanyNameAndManagerNameOfUser(token)).unwrap();
-        console.log('Company and Manager Response:', result);  // Log the response
+            let result = await dispatch(fetchFindCompanyNameAndManagerNameOfUser(token)).unwrap();
+            if (result.code) {
+                return;
+            }
 
-        if (result.code) {
-            return; // Stop further execution if there's an error
+            setCompanyName(result.companyName ?? '');
+            setManagerName(result.managerName ?? '');
+
+            const positionsResult = await dispatch(fetchGetPositions()).unwrap();
+            setPositions(positionsResult);
+
+            setName(user.name ?? '');
+            setSurname(user.surname ?? '');
+            setPhone(user.phone ?? '');
+            setTitle(user.title ?? '');
+            setBirthDate(user.birthDate);
+            setPhoto(user.photo ?? 'https://cdn4.iconfinder.com/data/icons/gray-business-1/512/xxx010-512.png');
+            setHireDate(user.hireDate ?? '');
+            setUserType(user.userType ?? '');
+            setSector(user.sector ?? '');
+            setLocation(user.location ?? '');
+            setEmployeeType(user.employeeType ?? '');
+            setSubscriptionType(user.subscriptionType ?? '');
+            setSubscriptionStartDate(user.subscriptionStartDate ?? '');
+            setSubscriptionEndDate(user.subscriptionEndDate ?? '');
+            setSelectedPositions(user.position ?? '');
+        } catch (error) {
+            console.error('Error in setUserInfos:', error);
+        } finally {
+            setLoading(false);
         }
-
-        setCompanyName(result.companyName ?? '');
-        setManagerName(result.managerName ?? '');
-
-        dispatch(fetchGetPositions())
-            .then(data => {
-                console.log('Positions Response:', data);  // Log the response
-                setPositions(data.payload);
-            })
-            .catch(error => {
-                console.error('Error fetching positions:', error);  // Handle fetch errors
-            });
-
-    } catch (error) {
-        console.error('Error in handleLogin:', error);  // Handle other errors
-    }
-};
+    };
 
     useEffect(() => {
         setUserInfos();
-    },[])
+    }, [token]);
+
+    useEffect(() => {
+        if (user && !loading) {
+            setName(user.name ?? '');
+            setSurname(user.surname ?? '');
+            setPhone(user.phone ?? '');
+            setTitle(user.title ?? '');
+            setBirthDate(user.birthDate);
+            setPhoto(user.photo ?? 'https://cdn4.iconfinder.com/data/icons/gray-business-1/512/xxx010-512.png');
+            setHireDate(user.hireDate ?? '');
+            setUserType(user.userType ?? '');
+            setSector(user.sector ?? '');
+            setLocation(user.location ?? '');
+            setEmployeeType(user.employeeType ?? '');
+            setSubscriptionType(user.subscriptionType ?? '');
+            setSubscriptionStartDate(user.subscriptionStartDate ?? '');
+            setSubscriptionEndDate(user.subscriptionEndDate ?? '');
+            setSelectedPositions(user.position ?? '');
+        }
+    }, [user, loading]);
 
     console.log(name, surname, phone, title, birthDate, selectedPositions, location);
     const updateUserProfile = () => {
@@ -116,7 +143,7 @@ const SideBarProfile: React.FC = () => {
             }
         })
     }
-
+    console.log(loading)
   return (
 
 

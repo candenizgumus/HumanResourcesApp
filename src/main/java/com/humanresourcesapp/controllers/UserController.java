@@ -66,6 +66,7 @@ public class UserController
         return ResponseEntity.ok(userService.getAll(dto));
     }
 
+    
 
     @PostMapping(GET_ALL_USERS_OF_MANAGER_BY_COMPANY_ID)
     @PreAuthorize("hasAnyAuthority('MANAGER')")

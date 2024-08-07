@@ -80,6 +80,28 @@ export const fetchGetCompanies = createAsyncThunk(
     }
 );
 
+export const fetchGetCompanyCount = createAsyncThunk(
+    'offer/fetchGetCompanyCount',
+    async (payload: string, { dispatch }) => {
+
+            const response = await fetch('http://localhost:9090/dev/v1/company/get-count', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ` + payload
+                }
+            });
+
+            if (!response.ok) {
+                console.log(response)
+                dispatch(clearToken());
+            }
+
+            return await response.json();
+
+    }
+);
+
 export const fetchUpdateCompany = createAsyncThunk(
     'offer/fetchUpdateCompany',
     async (payload: IUpdateCompany, { dispatch }) => {
@@ -123,6 +145,9 @@ const companySlice = createSlice({
             state.isCompanyListLoading= false;
         })
         build.addCase(fetchUpdateCompany.fulfilled,(state,action)=>{
+            console.log(action.payload);
+        })
+        build.addCase(fetchGetCompanyCount.fulfilled,(state,action)=>{
             console.log(action.payload);
         })
     }

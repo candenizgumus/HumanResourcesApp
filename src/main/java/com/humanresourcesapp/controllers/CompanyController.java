@@ -41,6 +41,13 @@ public class CompanyController
         return ResponseEntity.ok(companyService.getAllByPage(dto));
     }
 
+    @GetMapping(GET_COUNT)
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    public ResponseEntity<Long> getCount()
+    {
+        return ResponseEntity.ok(companyService.getCount());
+    }
+
     @PostMapping(UPDATE)
     @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<Company> update(@RequestBody CompanySaveRequestDto dto)

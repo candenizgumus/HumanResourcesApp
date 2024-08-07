@@ -76,4 +76,7 @@ public class CompanyService
         return str == null || str.trim().isEmpty();
     }
 
+    public Long getCount() {
+        return companyRepository.count();
+    }
 }

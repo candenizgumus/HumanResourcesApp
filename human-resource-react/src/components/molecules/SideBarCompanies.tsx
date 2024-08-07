@@ -3,6 +3,8 @@ import {
     DataGrid,
     GridColDef,
     GridRowSelectionModel,
+    GridPaginationModelApi,
+    GridPaginationModel,
 } from "@mui/x-data-grid";
 import {
     Button,
@@ -14,7 +16,7 @@ import {
 } from "@mui/material";
 import { HumanResources, useAppSelector } from "../../store";
 import { useDispatch } from "react-redux";
-import { fetchGetCompanies, fetchUpdateCompany, ICompany } from "../../store/feature/companySlice";
+import { fetchGetCompanies, fetchGetCompanyCount, fetchUpdateCompany, ICompany } from "../../store/feature/companySlice";
 import { clearToken } from "../../store/feature/authSlice";
 import Swal from "sweetalert2";
 
@@ -45,20 +47,33 @@ export default function OfferList() {
     const [searchText, setSearchText] = useState("");
     const [open, setOpen] = useState(false);
     const [selectedCompany, setSelectedCompany] = useState<ICompany | null>(null);
+    const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({
+        page: 0,
+        pageSize: 5,
+    });
     const companyList: ICompany[] = useAppSelector((state) => state.company.companyList);
     const dispatch = useDispatch<HumanResources>();
     const token = useAppSelector((state) => state.auth.token);
-
+    const [rowCount, setRowCount] = useState<number>(0);
     useEffect(() => {
-        dispatch(fetchGetCompanies({
-            token: token,
-            page: 0,
-            pageSize: 50,
-            searchText: searchText,
-        })).catch(() => {
-            dispatch(clearToken());
-        });
-    }, [dispatch, searchText, token]);
+        const fetchData = async () => {
+            try {
+                const response = await dispatch(fetchGetCompanies({
+                    token: token,
+                    page: paginationModel.page,
+                    pageSize: paginationModel.pageSize,
+                    searchText: searchText,
+                }));
+
+                const count = await dispatch(fetchGetCompanyCount(token))
+                setRowCount(count.payload)
+            } catch {
+                dispatch(clearToken());
+            }
+        };
+
+        fetchData();
+    }, [dispatch, searchText, token, paginationModel]);
 
     const handleRowSelection = (newSelectionModel: GridRowSelectionModel) => {
         setSelectedRowIds(newSelectionModel as number[]);
@@ -104,8 +119,8 @@ export default function OfferList() {
                 // Fetch updated companies
                 await dispatch(fetchGetCompanies({
                     token: token,
-                    page: 0,
-                    pageSize: 50,
+                    page: paginationModel.page,
+                    pageSize: paginationModel.pageSize,
                     searchText: searchText,
                 }));
             } catch (error) {
@@ -115,6 +130,10 @@ export default function OfferList() {
                 handleClose();
             }
         }
+    };
+
+    const handlePaginationModelChange = (model: GridPaginationModel) => {
+        setPaginationModel(model);
     };
 
     return (
@@ -128,12 +147,13 @@ export default function OfferList() {
             />
             <DataGrid
                 rows={companyList}
+                rowCount={rowCount}
                 columns={columns}
-                initialState={{
-                    pagination: {
-                        paginationModel: { page: 1, pageSize: 5 },
-                    },
-                }}
+                paginationMode="server"
+                pagination
+                paginationModel={paginationModel}
+                onPaginationModelChange={handlePaginationModelChange}
+
                 pageSizeOptions={[5, 10]}
                 checkboxSelection
                 onRowSelectionModelChange={handleRowSelection}

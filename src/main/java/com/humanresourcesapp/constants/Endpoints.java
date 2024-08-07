@@ -57,4 +57,5 @@ public class Endpoints
     public static final String GET_ALL_COMPANY_LOGOS = "/get-all-company-logos";
     public static final String DECLINE_OFFER = "/decline-offer";
 
+    public static final String GET_EMPLOYEE_TYPES = "/get-employee-types";
 }

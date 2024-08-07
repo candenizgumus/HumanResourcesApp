@@ -103,6 +103,27 @@ export const fetchGetSectors = createAsyncThunk(
     }
 );
 
+export const fetchGetEmployeeTypes = createAsyncThunk(
+    'user/fetchGetEmployeeTypes',
+    async (_, { rejectWithValue }) => {
+        try {
+            const response = await fetch('http://localhost:9090/dev/v1/user/get-employee-types');
+            const data = await response.json();
+            if (!response.ok) {
+                throw new Error(data.message || 'Fetching sectors failed');
+            }
+            return data;
+        } catch (err) {
+            console.log('Error: ', err);
+            if (err instanceof Error) {
+                return rejectWithValue(err.message);
+            } else {
+                return rejectWithValue('An unknown error occurred');
+            }
+        }
+    }
+);
+
 export const fetchFindCompanyNameAndManagerNameOfUser = createAsyncThunk(
     'user/fetchFindCompanyNameAndManagerNameOfUser',
     async (token: string, { rejectWithValue }) => {
@@ -221,6 +242,50 @@ export const fetchGetAllUsers = createAsyncThunk(
                 'page': payload.page,
                 'pageSize': payload.pageSize,
                 'searchText': payload.searchText
+            })
+        });
+
+        if (!response.ok) {
+            console.log(response)
+            dispatch(clearToken());
+        }
+
+        return await response.json();
+
+    }
+);
+interface IfetchAddEmployeeToManager {
+    token: string;
+    email:string;
+    name:string;
+    surname:string;
+    phone:string;
+    title:string;
+    location:string;
+    birthDate:Date;
+    hireDate:Date;
+    ePosition:string;
+    eEmployeeType:string;
+}
+export const fetchAddEmployeeToManager = createAsyncThunk(
+    'user/fetchAddEmployeeToManager',
+    async (payload: IfetchAddEmployeeToManager, { dispatch }) => {
+        const response = await fetch('http://localhost:9090/dev/v1/user/add-employee-to-manager', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ` + payload.token
+            },body: JSON.stringify({
+                'email': payload.email,
+                'name': payload.name,
+                'surname': payload.surname,
+                'phone': payload.phone,
+                'title': payload.title,
+                'location': payload.location,
+                'birthDate': payload.birthDate,
+                'hireDate': payload.hireDate,
+                'ePosition': payload.ePosition,
+                'eEmployeeType': payload.eEmployeeType
             })
         });
 

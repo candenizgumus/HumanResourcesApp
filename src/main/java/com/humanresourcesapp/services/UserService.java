@@ -91,6 +91,9 @@ public class UserService {
                 .password(encodedPassword)
                 .userType(EUserType.EMPLOYEE)
                 .status(EStatus.ACTIVE)
+                        .subscriptionType(manager.getSubscriptionType())
+                        .subscriptionStartDate(manager.getSubscriptionStartDate())
+                        .subscriptionEndDate(manager.getSubscriptionEndDate())
                 .build()
         );
 
@@ -107,7 +110,15 @@ public class UserService {
                 .birthDate(dto.birthDate())
                 .managerId(manager.getId())
                 .status(EStatus.ACTIVE)
+
                 .position(dto.ePosition())
+                        .location(dto.location())
+                        .title(dto.title())
+                        .sector(manager.getSector())
+                        .employeeType(dto.eEmployeeType())
+                .subscriptionType(manager.getSubscriptionType())
+                .subscriptionStartDate(manager.getSubscriptionStartDate())
+                .subscriptionEndDate(manager.getSubscriptionEndDate())
                 .build());
 
         return userRepository.save(employee);

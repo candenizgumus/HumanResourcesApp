@@ -28,13 +28,19 @@ export interface IUpdateCompany {
 interface IInitialCompany{
     companyList: ICompany[],
     logoList: ICompanyLogo[];
-    isCompanyListLoading: boolean
+    companyCountByMonth: any;
+    isCompanyListLoading: boolean;
+    islogoListLoading: boolean;
+    isCompanyCountLoading: boolean;
 }
 
 const initialCompanyState: IInitialCompany = {
     companyList: [],
     logoList: [],
-    isCompanyListLoading: true
+    isCompanyListLoading: false,
+    islogoListLoading: false,
+    isCompanyCountLoading: false,
+    companyCountByMonth: null
 }
 
 
@@ -139,6 +145,27 @@ export const fetchUpdateCompany = createAsyncThunk(
     }
 );
 
+export const fetchCompanyCountByMonth = createAsyncThunk(
+    'companyCount/fetchCompanyCountByMonth',
+    async (token: string, { dispatch }) => {
+
+        const response = await fetch('http://localhost:9090/dev/v1/company/getCompanyCountByMonth',{
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ` + token
+            }
+        });
+
+        if (!response.ok) {
+                console.log(response)
+                dispatch(clearToken());
+            }
+            return await response.json();
+    }
+  );
+
+
 const companySlice = createSlice({
     name: 'company',
     initialState: initialCompanyState,
@@ -158,6 +185,10 @@ const companySlice = createSlice({
         build.addCase(fetchGetCompanyCount.fulfilled,(state,action)=>{
             console.log(action.payload);
         })
+        build.addCase(fetchCompanyCountByMonth.fulfilled, (state, action) => {
+            state.companyCountByMonth = action.payload;
+            console.log(action.payload)
+          })
     }
 });
 

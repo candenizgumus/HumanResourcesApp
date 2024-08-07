@@ -1,37 +1,45 @@
-import React, { useEffect } from 'react';
+import React, {useEffect} from 'react';
 import { Box, Card, CardContent, Typography, Grid } from '@mui/material';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 import { useDispatch } from 'react-redux';
-import { HumanResources, useAppSelector } from '../../../store';
-import { fetchFindUserByToken } from '../../../store/feature/authSlice';
-import { fetchCompanyCountByMonth } from '../../../store/feature/companySlice';
+import { HumanResources } from '../../../store';
+import { fetchGetCustomerByMonth} from '../../../store/feature/authSlice';
+import {BarChart} from "@mui/x-charts";
 
-const data = [
-  { month: 'Jan', customers: 30 },
-  { month: 'Feb', customers: 45 },
-  { month: 'Mar', customers: 60 },
-  { month: 'Apr', customers: 80 },
-  { month: 'May', customers: 100 },
-  { month: 'Jun', customers: 120 },
-  { month: 'Jul', customers: 140 },
-  { month: 'Aug', customers: 160 },
-  { month: 'Sep', customers: 180 },
-  { month: 'Oct', customers: 200 },
-  { month: 'Nov', customers: 220 },
-  { month: 'Dec', customers: 240 },
-];
 
 const Dashboard = () => {
-  const dispatch = useDispatch<HumanResources>();
   const totalCustomers = 240; // Replace with dynamic data
   const totalDevelopers = 10; // Replace with dynamic data
-  const companyCountByMonth = useAppSelector((state) => state.company.companyCountByMonth);
-  const token = useAppSelector((state) => state.auth.token);
+  const dispatch = useDispatch<HumanResources>();
+  const [monthlyCustomerCount , setMonthlyCustomerCount] = React.useState([]);
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      dispatch(fetchGetCustomerByMonth(token)).then(data => {
+        setMonthlyCustomerCount(data.payload)
+      })
+    }
+  }, []);
+
+  const data = [
+    { month: 'Jan', customers: monthlyCustomerCount[0] },
+    { month: 'Feb', customers: monthlyCustomerCount[1] },
+    { month: 'Mar', customers: monthlyCustomerCount[2] },
+    { month: 'Apr', customers: monthlyCustomerCount[3] },
+    { month: 'May', customers: monthlyCustomerCount[4] },
+    { month: 'Jun', customers: monthlyCustomerCount[5] },
+    { month: 'Jul', customers: monthlyCustomerCount[6] },
+    { month: 'Aug', customers: monthlyCustomerCount[7] },
+    { month: 'Sep', customers: monthlyCustomerCount[8] },
+    { month: 'Oct', customers: monthlyCustomerCount[9] },
+    { month: 'Nov', customers: monthlyCustomerCount[10] },
+    { month: 'Dec', customers: monthlyCustomerCount[11] },
+  ];
 
   return (
-    <Box p={4}>
-      <Grid container spacing={4}>
-        <Grid item xs={12} md={6} lg={4}>
+
+      <Grid sx = {{ marginLeft: 5 }} container spacing={4}>
+        <Grid item xs={3} md={6} lg={4}>
           <Card>
             <CardContent>
               <Typography variant="h5" component="div">
@@ -43,7 +51,7 @@ const Dashboard = () => {
             </CardContent>
           </Card>
         </Grid>
-        <Grid item xs={12} md={6} lg={4}>
+        <Grid item xs={3} md={6} lg={4}>
           <Card>
             <CardContent>
               <Typography variant="h5" component="div">
@@ -55,25 +63,37 @@ const Dashboard = () => {
             </CardContent>
           </Card>
         </Grid>
-        <Grid item xs={12}>
-          <Card>
-            <CardContent>
-              <Typography variant="h5" component="div">
-                Customers Acquired This Year
-              </Typography>
-              <LineChart width={500} height={300} data={data}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="month" />
-                <YAxis />
-                <Tooltip />
-                <Legend />
-                <Line type="monotone" dataKey="customers" stroke="#8884d8" activeDot={{ r: 8 }} />
-              </LineChart>
-            </CardContent>
-          </Card>
+        <Grid sx={{ marginTop: 5 }} container spacing={4}>
+          <Grid item xs={6}>
+
+            <Card>
+              <CardContent>
+
+                <BarChart sx = {{ width: "100%" }}
+                    xAxis={[
+                      {
+                        scaleType: 'band',
+                        data: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                        label: 'Month'
+                      }
+                    ]}
+                    yAxis={[
+                      {
+                        label: 'Customer Count'
+                      }
+                    ]}
+                    series={[{ data: monthlyCustomerCount }]}
+                    height={300}
+                />
+
+
+              </CardContent>
+            </Card>
+          </Grid>
         </Grid>
-      </Grid>
-    </Box>
+        </Grid>
+
+
   );
 };
 

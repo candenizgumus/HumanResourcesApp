@@ -67,12 +67,12 @@ public class UserController
     }
 
 
-    @GetMapping(GET_ALL_USERS_OF_MANAGER_BY_COMPANY_ID)
+    @PostMapping(GET_ALL_USERS_OF_MANAGER_BY_COMPANY_ID)
     @PreAuthorize("hasAnyAuthority('MANAGER')")
     @CrossOrigin("*")
-    public ResponseEntity<List<User>> getAllUsersOfManagerByCompanyId()
+    public ResponseEntity<List<User>> getAllUsersOfManagerByCompanyId(@RequestBody PageRequestDto dto)
     {
-        return ResponseEntity.ok(userService.getAllUsersOfManagerByCompanyId());
+        return ResponseEntity.ok(userService.getAllUsersOfManagerByCompanyId(dto));
     }
 
     @GetMapping(FIND_BY_ID)

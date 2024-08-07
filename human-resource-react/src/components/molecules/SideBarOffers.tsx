@@ -26,7 +26,7 @@ const columns: GridColDef[] = [
     { field: "id", headerName: "ID", width: 70, headerAlign: "center" },
     { field: "name", headerName: "First name", width: 160, headerAlign: "center" },
     { field: "surname", headerName: "Last name", width: 160, headerAlign: "center" },
-    { field: "email", headerName: "Email", headerAlign: "center", width: 300 },
+    { field: "email", headerName: "Email", headerAlign: "center", width: 200 },
     { field: "phone", headerName: "Phone", description: "This column has a value getter and is not sortable.", sortable: false, headerAlign: "center", width: 160 },
     { field: "companyName", headerName: "Company Name", width: 130, headerAlign: "center" },
     { field: "title", headerName: "Title", width: 130, headerAlign: "center" },
@@ -42,6 +42,7 @@ const style = {
     width: 600,
     bgcolor: "background.paper",
     boxShadow: 24,
+    fontSize: 20,
     p: 4,
 };
 
@@ -56,7 +57,7 @@ export default function SideBarOffers() {
     const token = useAppSelector((state) => state.auth.token);
     const [isSendTrue, setIsSendTrue] = useState(false);
     const [isSendFalse, setIsSendFalse] = useState(false);
- 
+
     useEffect(() => {
         dispatch(
             fetchGetOffers({
@@ -263,9 +264,12 @@ export default function SideBarOffers() {
                     "& .MuiDataGrid-columnHeaderTitle": {
                         textAlign: "center",
                         fontWeight: "bold",
+                        fontSize: "12px",
+
                     },
                     "& .MuiDataGrid-cell": {
                         textAlign: "center",
+                        fontsize: "8px",
                     },
                 }}
             />

@@ -254,6 +254,37 @@ export const fetchGetAllUsers = createAsyncThunk(
 
     }
 );
+interface IfetchGetAllUsersOfManager {
+    token: string;
+    page: number;
+    pageSize: number;
+    searchText: string;
+
+}
+export const fetchGetAllUsersOfManager = createAsyncThunk(
+    'user/fetchGetAllUsersOfManager',
+    async (payload: IfetchGetAllUsersOfManager, { dispatch }) => {
+        const response = await fetch('http://localhost:9090/dev/v1/user/get-all-users-of-manager-by-company-id', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer `  + payload.token
+            },body: JSON.stringify({
+                'page': payload.page,
+                'pageSize': payload.pageSize,
+                'searchText': payload.searchText
+            })
+        });
+
+        if (!response.ok) {
+            console.log(response)
+            dispatch(clearToken());
+        }
+
+        return await response.json();
+
+    }
+);
 interface IfetchAddEmployeeToManager {
     token: string;
     email:string;
@@ -335,6 +366,10 @@ const authSlice = createSlice({
                 state.user = action.payload;
             })
             .addCase(fetchGetAllUsers.fulfilled, (state, action: PayloadAction<IUser[]>) => {
+
+                state.userList = action.payload;
+            })
+            .addCase(fetchGetAllUsersOfManager.fulfilled, (state, action: PayloadAction<IUser[]>) => {
 
                 state.userList = action.payload;
             })

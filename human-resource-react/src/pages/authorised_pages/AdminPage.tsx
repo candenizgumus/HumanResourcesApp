@@ -21,10 +21,10 @@ import { HumanResources, RootState} from '../../store';
 import { useDispatch, useSelector } from 'react-redux';
 import { changePageState} from '../../store/feature/authSlice';
 import {NotificationIcon} from "../../components/atoms/NotificationIcon";
-import {AdminMenuContents} from "../../components/organisms/AdminMenuContents";
+import {AdminMenuContentRenderer} from "../../components/organisms/AdminMenuContentRenderer";
 import { useNavigate } from 'react-router-dom';
 import NavbarProfile from "../../components/atoms/NavbarProfile";
-import AdminHomeContent  from "../../components/organisms/AdminHomeContent"
+import AdminHomeContent  from "../../components/molecules/AdminPageComponents/AdminHomeContent"
 import {
   AccountBox,
   AdminPanelSettings,
@@ -183,7 +183,7 @@ export default function AdminPage() {
       <Main open={open}>
         <DrawerHeader />
         <Grid container spacing={2}>
-          { pageState=== '' ? <AdminHomeContent/> : <AdminMenuContents/>}
+          { pageState=== '' ? <AdminHomeContent/> : <AdminMenuContentRenderer/>}
         </Grid>
       </Main>
     </Box>

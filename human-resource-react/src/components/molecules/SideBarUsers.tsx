@@ -6,15 +6,25 @@ import {
     GridRowSelectionModel,
 } from "@mui/x-data-grid";
 import {
+    Box, Button, FormControl, Grid, InputLabel, MenuItem, Modal, Select,
 
-    TextField
+    TextField, Typography
 
 } from "@mui/material";
 import { HumanResources, useAppSelector } from "../../store";
 import { useDispatch } from "react-redux";
 
 import { IOfferList } from "../../models/IOfferList";
-import {clearToken, fetchGetAllUsers, fetchGetUserCount} from "../../store/feature/authSlice";
+import {
+    clearToken,
+    fetchGetAllUsers,
+    fetchGetStatus,
+    fetchGetUserCount,
+    fetchUpdateUserByAdmin
+} from "../../store/feature/authSlice";
+import Swal from "sweetalert2";
+import {IUser} from "../../models/IUser";
+import {fetchGetCompanies, fetchUpdateCompany} from "../../store/feature/companySlice";
 
 const columns: GridColDef[] = [
     { field: "id", headerName: "ID", width: 70, headerAlign: "center" },
@@ -55,7 +65,56 @@ export default function SideBarUsers() {
         pageSize: 5,
     });
     const [rowCount, setRowCount] = useState<number>(0);
+    const [open, setOpen] = useState(false);
+    const users:IUser[] = useAppSelector((state) => state.auth.userList);
+    const [selectedUser, setSelectedUser] = useState<IUser | null>(null);
+    const [loading, setLoading] = useState(false);
 
+    const [statusList, setStatusList] = useState<string[]>([]);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
+
+    const handleEditClick = () => {
+        if (selectedRowIds.length === 1) {
+            const userToEdit = users.find(
+                (user) => user.id === selectedRowIds[0]
+            );
+            setSelectedUser(userToEdit || null);
+            handleOpen();
+        } else {
+            Swal.fire("Please select exactly one company to edit.");
+        }
+    };
+
+    const handleUpdateUserByAdmin = async () => {
+        if (selectedUser) {
+            setLoading(true);
+            try {
+                await dispatch(fetchUpdateUserByAdmin({
+                    token: token,
+                    userId: selectedUser.id,
+                    name: selectedUser.name,
+                    surname: selectedUser.surname,
+                    status: selectedUser.status,
+                    phone: selectedUser.phone
+
+                }));
+                Swal.fire("Success", "User updated successfully", "success");
+                // Fetch updated companies
+                await dispatch(fetchGetAllUsers({
+                    token: token,
+                    page: paginationModel.page,
+                    pageSize: paginationModel.pageSize,
+                    searchText: searchText,
+                }));
+            } catch (error) {
+                console.error("Error updating user:", error);
+            } finally {
+                setLoading(false);
+                handleClose();
+            }
+        }
+    };
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -70,6 +129,9 @@ export default function SideBarUsers() {
                     token: token,
                     searchText: searchText,
                 }))
+                await dispatch(fetchGetStatus()).then(data => setStatusList(data.payload))
+
+
                 setRowCount(count.payload)
             } catch {
                 dispatch(clearToken());
@@ -123,7 +185,87 @@ export default function SideBarUsers() {
                     },
                 }}
             />
+            <Grid container spacing={1} style={{ marginTop: 16 }} direction="row">
+                <Grid item>
+                    <Button
+                        onClick={handleEditClick}
+                        variant="contained"
+                        color="primary"
+                        disabled={loading || selectedRowIds.length !== 1}
+                    >
+                        {loading ? "Processing..." : "Edit"}
+                    </Button>
+                </Grid>
+            </Grid>
+            <Modal
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="modal-title"
+                aria-describedby="modal-description"
+            >
+                <Box sx={style}>
+                    <Typography id="modal-title" variant="h6" component="h2">
+                        Edit User
+                    </Typography>
+                    {selectedUser && (
+                        <form >
+                            <TextField sx={{ marginTop: "25px" }}
+                                       label="Name"
+                                       name="name"
+                                       variant="outlined"
+                                       value={selectedUser.name}
+                                       onChange={e => setSelectedUser({...selectedUser, name: e.target.value})}
+                                       fullWidth
+                                       style={{ marginBottom: "10px" }}
+                            />
+                            <TextField
+                                label="Surname"
+                                name="surname"
+                                variant="outlined"
+                                value={selectedUser.surname}
+                                onChange={e => setSelectedUser({...selectedUser, surname: e.target.value})}
+                                fullWidth
+                                style={{ marginBottom: "10px" }}
+                            />
+                            <TextField
+                                label="Phone"
+                                name="phone"
+                                variant="outlined"
+                                value={selectedUser.phone}
+                                onChange={e => setSelectedUser({...selectedUser, phone: e.target.value})}
+                                fullWidth
+                                style={{ marginBottom: "10px" }}
+                            />
+                            <FormControl sx={{ marginBottom: "25px" }} fullWidth>
+                                <InputLabel id="demo-simple-select-label">Age</InputLabel>
+                                <Select
+                                    labelId="demo-simple-select-label"
+                                    id="demo-simple-select"
+                                    value={selectedUser.status}
+                                    label="Status"
+                                    onChange={e => setSelectedUser({...selectedUser, status: e.target.value})}
+                                >
+                                    {
+                                        statusList.map((status) => (
+                                            <MenuItem key={status} value={status}>{status}</MenuItem>
+                                        ))
+                                    }
 
+                                </Select>
+                            </FormControl>
+                            <Button
+                                onClick={handleUpdateUserByAdmin}
+                                variant="contained"
+                                color="primary"
+                                disabled={loading}
+                                fullWidth
+                            >
+                                {loading ? "Updating..." : "Update"}
+                            </Button>
+                        </form>
+                    )}
+                </Box>
+            </Modal>
 
 
         </div>

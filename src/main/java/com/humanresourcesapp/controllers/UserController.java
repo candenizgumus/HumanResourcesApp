@@ -1,14 +1,12 @@
 package com.humanresourcesapp.controllers;
 
-import com.humanresourcesapp.dto.requests.AddEmployeeToManagerRequestDto;
-import com.humanresourcesapp.dto.requests.PageCountRequestDto;
-import com.humanresourcesapp.dto.requests.PageRequestDto;
-import com.humanresourcesapp.dto.requests.UpdateUserRequestDto;
+import com.humanresourcesapp.dto.requests.*;
 import com.humanresourcesapp.dto.responses.CompanyAndManagerNameResponseDto;
 import com.humanresourcesapp.entities.User;
 import com.humanresourcesapp.entities.enums.EEmployeeType;
 import com.humanresourcesapp.entities.enums.EPosition;
 import com.humanresourcesapp.entities.enums.ESectors;
+import com.humanresourcesapp.entities.enums.EStatus;
 import com.humanresourcesapp.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -39,6 +37,14 @@ public class UserController
         return ResponseEntity.ok(userService.update(dto));
     }
 
+    @PutMapping(UPDATE_USER_BY_ADMIN)
+    @CrossOrigin("*")
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    public ResponseEntity<Boolean> updateUserByAdmin(@RequestBody UpdateUserByAdminRequestDto dto)
+    {
+        return ResponseEntity.ok(userService.updateUserByAdmin(dto));
+    }
+
     @GetMapping(GET_POSITIONS)
     @CrossOrigin("*")
     public ResponseEntity<EPosition[]> getPositions()
@@ -57,6 +63,13 @@ public class UserController
     public ResponseEntity<EEmployeeType[]> getEmployeeTypes()
     {
         return ResponseEntity.ok(EEmployeeType.values());
+    }
+
+    @GetMapping(GET_STATUS)
+    @CrossOrigin("*")
+    public ResponseEntity<EStatus[]> getStatus()
+    {
+        return ResponseEntity.ok(EStatus.values());
     }
 
     @PostMapping(GET_ALL)

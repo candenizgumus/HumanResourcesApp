@@ -3,28 +3,56 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import {Link, useNavigate} from 'react-router-dom';
-import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import {PasswordRounded, SportsTennis} from "@mui/icons-material";
 import {useDispatch} from "react-redux";
 import {HumanResources} from "../../../store";
 import {useState} from "react";
-import getUserTypeFromToken from '../../../util/getUserTypeFromToken';
-import {fetchGetPasswordResetCode, fetchResetPassword} from "../../../store/feature/passwordResetSlice";
+import { useLocation } from 'react-router-dom';
+import {fetchResetPassword} from "../../../store/feature/passwordResetSlice";
 import Swal from "sweetalert2";
-import {Grid} from "@mui/material";
 
 const PasswordResetForm: React.FC = () => {
     const dispatch = useDispatch<HumanResources>();
-    const navigate = useNavigate();
 
     const [token, setToken] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [error, setError] = useState('');
+    const location = useLocation();
+    const navigate = useNavigate();
+    React.useEffect(() => {
+        // Get the token from the URL query params
+        const searchParams = new URLSearchParams(location.search);
+        const tokenFromUrl = searchParams.get('token');
+        if (tokenFromUrl) {
+            setToken(tokenFromUrl);
+        }
+    }, [location.search]);
 
     const handleSubmit = async () => {
-        dispatch(fetchResetPassword({token, newPassword}));
+        
+        if (!token || !newPassword) {
+            setError("Both fields are required.");
+            return;
+        }
+        let result = await dispatch(fetchResetPassword({token, newPassword})).unwrap();
+
+        if (result.code) {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: result.message,
+            });
+        }
+
+        Swal.fire({
+            icon: 'success',
+            title: 'Success!',
+            text: 'Password Reset Successfull.',
+          }).then(()=>{
+            navigate("/login")
+          })
     };
 
     return (
@@ -55,6 +83,7 @@ const PasswordResetForm: React.FC = () => {
                     name="token"
                     autoComplete="off"
                     autoFocus
+                    value={token}
                     onChange={event => setToken(event.target.value)}
                 />
                 <TextField
@@ -69,6 +98,11 @@ const PasswordResetForm: React.FC = () => {
                     autoComplete="off"
                     onChange={event => setNewPassword(event.target.value)}
                 />
+                {error && (
+                <Typography color="error" variant="body2" sx={{ mt: 2 }}>
+                    {error}
+                </Typography>
+                )}
                 <Button
                     type="button"
                     fullWidth

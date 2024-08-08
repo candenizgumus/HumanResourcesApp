@@ -180,6 +180,20 @@ public class InsertDemoData {
                     .iconPath("staff.png")
                     .shortDescription("Manage all employee information in one application.")
                     .build());
+            featureList.add(Feature.builder()
+                    .name("High Data Security")
+                    .iconPath("data_security.png")
+                    .shortDescription("Ensure the utmost security of your data with Easy HR.").build());
+
+            featureList.add(Feature.builder()
+                    .name("Flexible Pricing")
+                    .iconPath("pricing.png")
+                    .shortDescription("Choose from a variety of packages tailored to your company's size and needs.").build());
+
+            featureList.add(Feature.builder()
+                    .name("Easy Access Support")
+                    .iconPath("support.png")
+                    .shortDescription("Easily access support for any inquiries or issues.").build());
 
             featureService.saveAll(featureList);
         }

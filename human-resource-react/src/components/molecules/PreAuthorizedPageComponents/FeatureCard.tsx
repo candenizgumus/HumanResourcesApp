@@ -14,12 +14,13 @@ const CardMediaStyled = styled(CardMedia)({
     height: 140,
 });
 
-export default function FeatureCard(props: IFeature) {
-    const { name, shortDescription, iconPath } = props;
+export default function FeatureCard(props: {name:string,shortDescription:string,iconPath:string, isNavigatable:boolean}) {
+
     const navigate = useNavigate();
 
     const handleEditClick = () => {
-        navigate(`/features/${encodeURIComponent(name)}`);
+        if(props.isNavigatable === true)
+            navigate(`/features/${encodeURIComponent(props.name)}`);
     };
 
     return (
@@ -27,16 +28,16 @@ export default function FeatureCard(props: IFeature) {
             <StyledCard onClick={handleEditClick}>
                 <CardMedia
                     component="img"
-                    image={`./images/${iconPath}`}
-                    title={name}
+                    image={`./images/${props.iconPath}`}
+                    title={props.name}
                     style={{ width: 'auto', height: '64px', objectFit: 'contain' }}
                 />
                 <CardContent>
                     <Typography gutterBottom variant="h5" component="h2">
-                        {name}
+                        {props.name}
                     </Typography>
                     <Typography>
-                        {shortDescription}
+                        {props.shortDescription}
                     </Typography>
                 </CardContent>
             </StyledCard>

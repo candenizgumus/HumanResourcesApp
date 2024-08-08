@@ -133,6 +133,7 @@ public class OfferService
         Offer offer = offerRepository.findById(offerId).orElseThrow(() -> new HumanResourcesAppException(ErrorType.OFFER_NOT_FOUND));
         offer.setStatus(EStatus.DECLINED);
         offerRepository.save(offer);
+        emailService.send(MailModel.builder().to(offer.getEmail()).subject("Your offer has been declined").message("Your offer has been declined").build());
         return true;
     }
 

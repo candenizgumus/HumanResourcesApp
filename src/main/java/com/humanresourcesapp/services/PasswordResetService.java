@@ -35,20 +35,22 @@ public class PasswordResetService {
 
     }
 
-    public void sendPasswordResetEmail(String email) {
+    public boolean sendPasswordResetEmail(String email) {
         if (userService.findByEmail(email).isEmpty()) {
             throw new HumanResourcesAppException(ErrorType.USER_NOT_FOUND);
         }
         PasswordReset passwordReset = createPasswordResetToken(email);
-            MailModel mailModel = MailModel.builder()
-                    .to(passwordReset.getEmail())
-                    .subject("Password reset")
-                    .message("Your password reset code is: " + passwordReset.getToken() + " , available for 1 hour!")
-                    .build();
-            emailService.send(mailModel);
+        String resetLink = "http://localhost:3000/password-reset?token=" + passwordReset.getToken();
+        MailModel mailModel = MailModel.builder()
+                .to(passwordReset.getEmail())
+                .subject("Password reset")
+                .message("Your password reset code is: " + passwordReset.getToken() + " , available for 1 hour! \n" +
+                        "You can also reset your password using this link: " + resetLink)
+                .build();
+            return emailService.send(mailModel);
     }
 
-    public void resetPassword(ResetPasswordRequestDto resetPasswordRequestDto) {
+    public boolean resetPassword(ResetPasswordRequestDto resetPasswordRequestDto) {
         Optional<PasswordReset> passwordResetOptional = passwordResetRepository.findByToken(resetPasswordRequestDto.token());
         if (passwordResetOptional.isEmpty()) {
             throw new HumanResourcesAppException(ErrorType.INVALID_TOKEN);
@@ -61,6 +63,7 @@ public class PasswordResetService {
 
         userService.updatePassword(passwordReset.getEmail(), resetPasswordRequestDto.newPassword());
         passwordResetRepository.delete(passwordReset);
+        return true;
     }
 
 }

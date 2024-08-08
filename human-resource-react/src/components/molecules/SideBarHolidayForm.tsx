@@ -63,6 +63,7 @@ const SideBarHolidayForm: React.FC = () => {
                         fullWidth
                         required
                         autoComplete="off"
+                        inputProps={{ maxLength: 50 }}
                     />
                 </Grid>
                 <Grid item xs={12}>

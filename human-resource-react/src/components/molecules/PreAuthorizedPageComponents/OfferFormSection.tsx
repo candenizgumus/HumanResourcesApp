@@ -105,6 +105,7 @@ const OfferFormSection = () => {
                                 label="Name"
                                 variant="outlined"
                                 value={name}
+                                inputProps={{ maxLength: 50 }}
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
@@ -114,6 +115,7 @@ const OfferFormSection = () => {
                                 label="Surname"
                                 variant="outlined"
                                 value={surname}
+                                inputProps={{ maxLength: 50 }}
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
@@ -122,7 +124,9 @@ const OfferFormSection = () => {
                                 fullWidth
                                 label="E-mail"
                                 variant="outlined"
+                                type={"email"}
                                 value={email}
+                                inputProps={{ maxLength: 50 }}
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
@@ -131,7 +135,9 @@ const OfferFormSection = () => {
                                 fullWidth
                                 label="Phone"
                                 variant="outlined"
+                                type={"tel"}
                                 value={phone}
+                                inputProps={{ maxLength: 50 }}
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
@@ -141,6 +147,7 @@ const OfferFormSection = () => {
                                 label="Title"
                                 variant="outlined"
                                 value={title}
+                                inputProps={{ maxLength: 50 }}
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
@@ -150,6 +157,7 @@ const OfferFormSection = () => {
                                 label="Employee Count"
                                 variant="outlined"
                                 value={numberOfEmployees}
+                                inputProps={{ maxLength: 50 }}
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
@@ -159,6 +167,7 @@ const OfferFormSection = () => {
                                 label="Company Name"
                                 variant="outlined"
                                 value={companyName}
+                                inputProps={{ maxLength: 50 }}
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>

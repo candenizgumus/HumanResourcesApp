@@ -166,6 +166,7 @@ const SideBarAddEmployee: React.FC = () => {
                         onChange={event => setName(event.target.value)}
                         fullWidth
                         required
+                        inputProps={{ maxLength: 50 }}
                     />
                     <TextField
                         label='Surname'
@@ -174,6 +175,7 @@ const SideBarAddEmployee: React.FC = () => {
                         onChange={event => setSurname(event.target.value)}
                         fullWidth
                         required
+                        inputProps={{ maxLength: 50 }}
                     />
                     <TextField
                         label='E-mail'
@@ -182,6 +184,7 @@ const SideBarAddEmployee: React.FC = () => {
                         onChange={event => setEmail(event.target.value)}
                         fullWidth
                         required
+                        inputProps={{ maxLength: 50 }}
                     />
                     <TextField
                         label='Phone'
@@ -191,6 +194,7 @@ const SideBarAddEmployee: React.FC = () => {
                         fullWidth
                         required
                         type={"number"}
+                        inputProps={{ maxLength: 50 }}
                     />
 
                     <TextField
@@ -200,6 +204,7 @@ const SideBarAddEmployee: React.FC = () => {
                         onChange={event => setTitle(event.target.value)}
                         fullWidth
                         required
+                        inputProps={{ maxLength: 50 }}
                     />
                     <TextField
                         label='Location'
@@ -208,6 +213,7 @@ const SideBarAddEmployee: React.FC = () => {
                         onChange={event => setLocation(event.target.value)}
                         fullWidth
                         required
+                        inputProps={{ maxLength: 50 }}
                     />
 
 

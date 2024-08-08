@@ -7,7 +7,7 @@ import LandingPage from "./pre_autorize_pages/Landing";
 import UserStoriesPage from "./pre_autorize_pages/UserStoriesPage";
 import {useDispatch} from "react-redux";
 import {HumanResources, useAppSelector} from "../store";
-import {clearToken, fetchFindUserByToken, setToken} from "../store/feature/authSlice";
+import {setToken} from "../store/feature/authSlice";
 import AboutUsPage from './pre_autorize_pages/AboustUs';
 import ContactPage from './pre_autorize_pages/ContactPage';
 import Loader from '../components/atoms/loader/Loader';
@@ -17,6 +17,7 @@ import FeatureRecruitment from "./pre_autorize_pages/features/FeatureRecruitment
 import FeaturePerformance from "./pre_autorize_pages/features/FeaturePerformance"
 import FeatureShift from "./pre_autorize_pages/features/FeatureShift"
 import EmployeePage from "./authorised_pages/EmployeePage";
+import UserStoryDetailPage from "../pages/pre_autorize_pages/UserStoryDetailPage"
 
 const AdminPage = lazy(() => import('./authorised_pages/AdminPage'));
 const ManagerPage = lazy(() => import('./authorised_pages/ManagerPage'));
@@ -52,6 +53,7 @@ const RouterPage = () => {
                     <Route path='/manager-home' element={isAuth ? <ManagerPage/> : <LandingPage/>}/>
                     <Route path='/employee-home' element={isAuth ? <EmployeePage/> : <LandingPage/>}/>
                     <Route path={'/password-reset'} element={<PasswordResetPage/>}/>
+                    <Route path="/user-stories/:companyName" element={<UserStoryDetailPage />} />
                 </Routes>
             </Suspense>
         </Router>

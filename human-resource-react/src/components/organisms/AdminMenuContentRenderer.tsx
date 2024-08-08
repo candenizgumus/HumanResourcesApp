@@ -8,6 +8,7 @@ import SideBarProfile from "../molecules/SideBarProfile";
 import SideBarUsers from "../molecules/AdminPageComponents/SideBarUsers";
 import CompanyList from "../molecules/AdminPageComponents/SideBarCompanies";
 import SideBarAddEmployee from "../molecules/ManagerComponents/SideBarAddEmployee";
+import SideBarCreateComment from "../molecules/ManagerComponents/SideBarCreateComment";
 import SideBarEmployees from "../molecules/ManagerComponents/SideBarEmployees";
 import {SideBarEmployeeShiftsAndBreaks} from "../molecules/EmployeeComponents/SideBarEmployeeShiftsAndBreaks";
 import {SideBarEmployeeLeaves} from "../molecules/EmployeeComponents/SideBarEmployeeLeaves";
@@ -35,6 +36,7 @@ export const AdminMenuContentRenderer = () => {
                 {page === 'Company Items' && <SideBarEmployeeCompanyItems/>}
                 {page === 'Edit Employee' && <EditEmployee/>}
                 {page === 'Change Password' && <ChangePassword/>}
+                {page === 'Add Comment' && <SideBarCreateComment/>}
             </Grid>
         </>
     );

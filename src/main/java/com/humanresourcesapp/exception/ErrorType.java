@@ -34,7 +34,9 @@ public enum ErrorType
     INVALID_ACCOUNT(1022,"Account is not active" ,   HttpStatus.BAD_REQUEST),
     SUBSCRIPTION_EXPIRED(1023,"Subscription Expired" ,  HttpStatus.BAD_REQUEST),
     TOKEN_EXPIRED(1024,"Token Expired" ,  HttpStatus.BAD_REQUEST),
-    WRONG_PASSWORD(1025,"Wrong Password",   HttpStatus.BAD_REQUEST );
+    WRONG_PASSWORD(1025,"Wrong Password",   HttpStatus.BAD_REQUEST ),
+    COMPANY_ALREADY_COMMENTED(1026,"Company Already Commented",   HttpStatus.BAD_REQUEST ),
+    COMMENT_NOT_FOUND(1027,"Comment Not Found" , HttpStatus.BAD_REQUEST);
     private Integer code;
     private String message;
     private HttpStatus httpStatus;

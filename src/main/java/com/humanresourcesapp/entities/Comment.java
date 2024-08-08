@@ -23,6 +23,4 @@ public class Comment extends BaseEntity{
     private String shortDescription;
     @Column(length = 1500)
     private String longDescription;
-    @Column(length = 255)
-    private String photo;
 }

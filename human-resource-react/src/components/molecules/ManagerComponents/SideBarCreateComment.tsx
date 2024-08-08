@@ -1,27 +1,54 @@
-import React, { useState, ChangeEvent, FormEvent } from 'react';
-import { TextField, Button, Box, Checkbox, FormControlLabel, Typography } from '@mui/material';
+import React, { useState, FormEvent, useEffect } from 'react';
+import { TextField, Button, Box } from '@mui/material';
 import { useDispatch } from 'react-redux';
-import { fetchCreateAdmin } from '../../../store/feature/authSlice';
-import { HumanResources } from '../../../store';
+import { HumanResources, useAppSelector } from '../../../store';
 import Swal from "sweetalert2";
-import { fetchCreateFeature } from '../../../store/feature/featureSlice';
+import { fetchGetUserStory, fetchUpdateUserStories, IUserStory } from '../../../store/feature/userStorySlice';
 
 const UserForm: React.FC = () => {
   const dispatch = useDispatch<HumanResources>();
-  const [name, setName] = useState('');
+  const [longDescription, setLongDescription] = useState('');
   const [shortDescription, setShortDescription] = useState('');
-  const [iconPath, setIconPath] = useState('');
+  const [setNewManager, setSetNewManager] = useState(false);
   const [loading, setLoading] = useState(false);
+  const token = useAppSelector((state) => state.auth.token);
+  const companyStory: IUserStory = useAppSelector((state) => state.userStory.companyStory);
+
+  const setUserInfos = async () => {
+    try {
+      await dispatch(fetchGetUserStory(token)).unwrap();
+
+      setLongDescription(companyStory.longDescription ?? '');
+      setShortDescription(companyStory.shortDescription ?? '');
+    } catch (error) {
+      console.error('Error in setUserInfos:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    setUserInfos();
+  }, [token]);
+
+  useEffect(() => {
+    if (companyStory && !loading) {
+      setLongDescription(companyStory.longDescription ?? '');
+      setShortDescription(companyStory.shortDescription ?? '');
+    }
+  }, [companyStory, loading]);
+
+
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     setLoading(true);
     e.preventDefault();
-
-    let result = await dispatch(fetchCreateFeature({
-      name: name,
+    let result = await dispatch(fetchUpdateUserStories({
+      longDescription: longDescription,
       shortDescription: shortDescription,
-      iconPath: iconPath,
-      token: localStorage.getItem('token') ?? ''
+      token: token ?? '',
+      setNewManager: setNewManager
+
     })).unwrap();
 
     if (result.code) {
@@ -51,39 +78,32 @@ const UserForm: React.FC = () => {
         display: 'flex',
         flexDirection: 'column',
         gap: 2,
-        maxWidth: 400,
+        maxWidth: 800,
         margin: 'auto',
         padding: 2,
       }}
     >
       <TextField
-        label="Feature Name"
-        name="name"
-        value={name}
-        onChange={e => setName(e.target.value)}
-        fullWidth
-        required
-        inputProps={{ maxLength: 64 }}
-      />
-      <TextField
-        label="Short Description"
+        label="Short Comment"
         name="shortDescription"
         value={shortDescription}
         onChange={e => setShortDescription(e.target.value)}
         fullWidth
+        required
         multiline
         rows={4}
-        required
-        inputProps={{ maxLength: 80 }}
+        inputProps={{ maxLength: 255 }}
       />
       <TextField
-        label="Icon Path"
-        name="iconPath"
-        value={iconPath}
-        onChange={e => setIconPath(e.target.value)}
+        label="Full Comment"
+        name="longDescription"
+        value={longDescription}
+        onChange={e => setLongDescription(e.target.value)}
         fullWidth
+        multiline
+        rows={20}
         required
-        inputProps={{ maxLength: 64 }}
+        inputProps={{ maxLength: 1500 }}
       />
       <Button type="submit" variant="contained" color="primary" disabled={loading}>
         {loading ? "Processing..." : "Create"}

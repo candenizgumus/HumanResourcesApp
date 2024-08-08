@@ -114,17 +114,22 @@ export default function SideBarOffers() {
               <p><strong>Employee Count:</strong> ${selectedOffer.numberOfEmployee}</p>
               <p><strong>Sector:</strong> ${selectedOffer.sector}</p>
             </div>
-          `,
+          `     ,
                     showCancelButton: true,
-                    confirmButtonText: "Onayla",
+                    confirmButtonText: "Confirm",
                     input: "radio",
                     inputOptions: {
                         "0": "Monthly",
                         "1": "Yearly",
                     },
                     preConfirm: (value) => {
+                        if (!value) {
+                            Swal.showValidationMessage("You need to select something!");
+                            return
+                        }
                         return value === "0" ? "MONTHLY" : "YEARLY";
                     },
+
                 });
 
                 if (result.isConfirmed) {

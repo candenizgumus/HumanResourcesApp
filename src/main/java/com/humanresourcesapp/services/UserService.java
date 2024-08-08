@@ -122,6 +122,11 @@ public class UserService {
                 .subscriptionEndDate(manager.getSubscriptionEndDate())
                 .build());
 
+        //Increasing number of employee in company
+        companyService.findById(manager.getCompanyId()).ifPresent(c-> {
+            c.setNumberOfEmployee(c.getNumberOfEmployee() + 1);
+            companyService.update(c);
+        });
         return userRepository.save(employee);
     }
 

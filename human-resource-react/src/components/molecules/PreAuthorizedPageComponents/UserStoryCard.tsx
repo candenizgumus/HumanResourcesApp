@@ -4,7 +4,6 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
-import { IUserStory } from '../../../models/IUserStory';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchCreateUserStories, fetchGetUserStories, IUserStoryResponse } from '../../../store/feature/userStorySlice';
 import { RootState } from '../../../store';

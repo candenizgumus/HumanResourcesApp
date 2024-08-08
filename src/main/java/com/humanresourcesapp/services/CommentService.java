@@ -1,11 +1,16 @@
 package com.humanresourcesapp.services;
 
 import com.humanresourcesapp.dto.requests.CommentSaveRequestDto;
+import com.humanresourcesapp.dto.requests.CommentUpdateRequestDto;
 import com.humanresourcesapp.dto.responses.CommentResponseDto;
 import com.humanresourcesapp.entities.Comment;
 import com.humanresourcesapp.entities.Company;
 import com.humanresourcesapp.entities.User;
+import com.humanresourcesapp.exception.ErrorType;
+import com.humanresourcesapp.exception.HumanResourcesAppException;
 import com.humanresourcesapp.repositories.CommentRepository;
+import com.humanresourcesapp.utility.UserInfoSecurityContext;
+import com.humanresourcesapp.utility.UtilMethods;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,11 +25,17 @@ public class CommentService {
     private final CompanyService companyService;
 
     public Comment save(CommentSaveRequestDto dto) {
+        String email = UserInfoSecurityContext.getUserInfoFromSecurityContext();
+        User manager = userService.findByEmail(email).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
+
+        if(!commentRepository.findAllByCompanyId(manager.getCompanyId()).isEmpty()){
+            throw new HumanResourcesAppException(ErrorType.COMPANY_ALREADY_COMMENTED);
+        }
         return commentRepository.save(Comment.builder()
+                .managerId(manager.getId())
                 .shortDescription(dto.shortDescription())
                 .longDescription(dto.longDescription())
-                .companyId(dto.companyId())
-                        .photo(dto.photo())
+                .companyId(manager.getCompanyId())
                 .build());
     }
 
@@ -41,7 +52,7 @@ public class CommentService {
                     .companyName(company.getName())
                     .managerName(manager.getName()+" "+manager.getSurname())
                     .title(manager.getTitle())
-                    .photo(comment.getPhoto())
+                    .photo(manager.getPhoto())
                     .numberOfEmployees(company.getNumberOfEmployee())
                     .sector(manager.getSector().name())
                     .logo(company.getLogo())
@@ -53,5 +64,36 @@ public class CommentService {
 
     public void saveAll(List<Comment> commentList) {
         commentRepository.saveAll(commentList);
+    }
+
+    public Comment update(CommentUpdateRequestDto dto) {
+
+        String email = UserInfoSecurityContext.getUserInfoFromSecurityContext();
+        User manager = userService.findByEmail(email).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
+
+        if(commentRepository.findAllByCompanyId(manager.getCompanyId()).isEmpty()){
+            throw new HumanResourcesAppException(ErrorType.COMMENT_NOT_FOUND);
+        }
+
+        Comment comment = commentRepository.findAllByCompanyId(manager.getCompanyId()).getFirst();
+
+        if(!UtilMethods.isNullOrWhitespace(dto.shortDescription())){
+            comment.setShortDescription(dto.shortDescription());
+        }
+        if (!UtilMethods.isNullOrWhitespace(dto.longDescription())) {
+            comment.setLongDescription(dto.longDescription());
+        }
+        if(dto.setNewManager()){
+            comment.setManagerId(manager.getId());
+        }
+
+        return commentRepository.save(comment);
+    }
+
+    public Comment getCompanyComment() {
+        String email = UserInfoSecurityContext.getUserInfoFromSecurityContext();
+        User manager = userService.findByEmail(email).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
+
+        return commentRepository.findAllByCompanyId(manager.getCompanyId()).getFirst();
     }
 }

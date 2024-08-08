@@ -9,6 +9,7 @@ import com.humanresourcesapp.entities.enums.EStatus;
 import com.humanresourcesapp.exception.ErrorType;
 import com.humanresourcesapp.exception.HumanResourcesAppException;
 import com.humanresourcesapp.repositories.CompanyRepository;
+import com.humanresourcesapp.utility.UtilMethods;
 import com.humanresourcesapp.views.VwGetCompanyLogos;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
@@ -62,13 +63,13 @@ public class CompanyService
 
     public Company update (CompanySaveRequestDto dto){
         Company company = companyRepository.findById(dto.id()).orElseThrow(() -> new HumanResourcesAppException(ErrorType.COMPANY_NOT_FOUND));
-        if(!isNullOrWhitespace(dto.name())){
+        if(!UtilMethods.isNullOrWhitespace(dto.name())){
             company.setName(dto.name());
         }
-        if (!isNullOrWhitespace(dto.logo())){
+        if (!UtilMethods.isNullOrWhitespace(dto.logo())){
             company.setLogo(dto.logo());
         }
-        if (!isNullOrWhitespace(dto.description())){
+        if (!UtilMethods.isNullOrWhitespace(dto.description())){
             company.setDescription(dto.description());
         }
         if (dto.numberOfEmployee() != null){
@@ -76,16 +77,6 @@ public class CompanyService
         }
 
         return companyRepository.save(company);
-    }
-
-    /**
-     * Checks if the given string is null, empty, or contains only whitespace.
-     *
-     * @param str the string to check
-     * @return true if the string is null, empty, or contains only whitespace; false otherwise
-     */
-    public static boolean isNullOrWhitespace(String str) {
-        return str == null || str.trim().isEmpty();
     }
 
     public Long getCount(PageCountRequestDto dto) {

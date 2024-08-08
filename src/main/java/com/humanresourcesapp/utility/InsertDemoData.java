@@ -236,7 +236,6 @@ public class InsertDemoData {
                                 "\n" +
                                 "I would definitely recommend Easy HR to other sector leaders. It is a platform that employees of all levels can easily adapt and use, and HR processes can be managed smoothly and independently of the person.\n" +
                                 "\n")
-                .photo(manager.getPhoto())
 
                 .build());
         User manager2 = userService.findByEmail("manager2@gmail.com").orElseThrow(() -> new RuntimeException("Manager not found"));
@@ -252,7 +251,6 @@ public class InsertDemoData {
                                 "\n" +
                                 "At the beginning, our biggest concern was whether our demands that would be shaped over time would be responded to accurately and quickly. However, we saw that this concern was very unfounded. :) For 10 months we have been actively using EasyEasy HR and during this time we had many requests that we insisted on. We would like to thank the entire Easy HR team for supporting us patiently and with open communication every time.\n" +
                                 "\n")
-                .photo(manager2.getPhoto())
 
                 .build());
 
@@ -269,7 +267,7 @@ public class InsertDemoData {
                                 "Before starting to work with Easy HR, our biggest concern was the loss of time that switching to such a software would create. However, Easy HR's flexible structure and customer-oriented approach eliminated all these concerns.\n" +
                                 "\n" +
                                 "After we started using Easy HR, the features we benefited the most were leave and expenditure. The control mechanisms in these processes and access to historical data have greatly facilitated our work. We have experienced an evolution from disorder to order in our human resources processes with Easy. It has been really great to be able to access historical data and see the big picture!")
-                .photo(manager.getPhoto())
+
 
                 .build());
 
@@ -286,7 +284,6 @@ public class InsertDemoData {
                         "Before starting to work with Easy HR, our biggest concern was the loss of time that switching to such a software would create. However, Easy HR's flexible structure and customer-oriented approach eliminated all these concerns.\n" +
                         "\n" +
                         "After we started using Easy HR, the features we benefited the most were leave and expenditure. The control mechanisms in these processes and access to historical data have greatly facilitated our work. We have experienced an evolution from disorder to order in our human resources processes with Easy. It has been really great to be able to access historical data and see the big picture!")
-                .photo(manager.getPhoto())
 
                 .build());
 
@@ -303,7 +300,6 @@ public class InsertDemoData {
                         "Before starting to work with Easy HR, our biggest concern was the loss of time that switching to such a software would create. However, Easy HR's flexible structure and customer-oriented approach eliminated all these concerns.\n" +
                         "\n" +
                         "After we started using Easy HR, the features we benefited the most were leave and expenditure. The control mechanisms in these processes and access to historical data have greatly facilitated our work. We have experienced an evolution from disorder to order in our human resources processes with Easy. It has been really great to be able to access historical data and see the big picture!")
-                .photo(manager.getPhoto())
 
                 .build());
 
@@ -320,7 +316,6 @@ public class InsertDemoData {
                         "Before starting to work with Easy HR, our biggest concern was the loss of time that switching to such a software would create. However, Easy HR's flexible structure and customer-oriented approach eliminated all these concerns.\n" +
                         "\n" +
                         "After we started using Easy HR, the features we benefited the most were leave and expenditure. The control mechanisms in these processes and access to historical data have greatly facilitated our work. We have experienced an evolution from disorder to order in our human resources processes with Easy. It has been really great to be able to access historical data and see the big picture!")
-                .photo(manager.getPhoto())
 
                 .build());
 

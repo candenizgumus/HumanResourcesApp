@@ -310,8 +310,47 @@ public class InsertDemoData {
                     .title("Turkey Operations Manager")
                     .build();
             userService.save(user);
+
+
+            Auth authEmployee = authService.save(Auth.
+                    builder()
+                    .status(EStatus.ACTIVE)
+                    .email("employee")
+                    .password(encodedPassword)
+                    .userType(EUserType.EMPLOYEE)
+                    .subscriptionType(ESubscriptionType.MONTHLY)
+                    .build());
+
+            User employee = User
+                    .builder()
+                    .status(EStatus.ACTIVE)
+                    .email("employee")
+                    .name("Employee 1")
+                    .surname("Hard")
+                    .authId(authEmployee.getId())
+                    .subscriptionType(ESubscriptionType.MONTHLY)
+                    .subscriptionStartDate(authEmployee.getSubscriptionStartDate())
+                    .subscriptionEndDate(authEmployee.getSubscriptionEndDate())
+                    .location("Turkey")
+                    .birthDate(LocalDate.of(1999, 4, 1))
+                    .position(EPosition.ADMINISTRATIVE_ASSISTANT)
+                    .companyId(1L)
+                    .phone("5555555555")
+                    .photo("https://t4.ftcdn.net/jpg/03/64/21/11/360_F_364211147_1qgLVxv1Tcq0Ohz3FawUfrtONzz8nq3e.jpg")
+                    .userType(EUserType.EMPLOYEE)
+                    .employeeType(EEmployeeType.FULL_TIME)
+                    .sector(ESectors.TECHNOLOGY)
+                    .title("Turkey Operations Employee")
+                    .hireDate(LocalDate.of(2021, 1, 1))
+
+                    .build();
+            userService.save(employee);
+
+
+
         }
     }
+
 
     private void instertOfferDemoData()
     {

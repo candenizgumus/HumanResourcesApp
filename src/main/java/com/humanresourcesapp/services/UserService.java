@@ -111,6 +111,7 @@ public class UserService {
                 .birthDate(dto.birthDate())
                 .managerId(manager.getId())
                 .status(EStatus.ACTIVE)
+                .position(dto.ePosition())
 
                 .position(dto.ePosition())
                         .location(dto.location())

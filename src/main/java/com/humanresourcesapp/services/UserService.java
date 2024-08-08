@@ -232,14 +232,23 @@ public class UserService {
             {
                 //Updating users
                 List<User> userList = userRepository.findAllByManagerId(user.getId());
-                userList.forEach(employee -> employee.setStatus(dto.status()));
+                userList.forEach(employee -> {
+                        if (employee.getStatus() != EStatus.DELETED)
+                        {
+                            employee.setStatus(dto.status());
+                        }
+                    }
+                        );
                 userRepository.saveAll(userList);
 
                 //Updating auths
                 userList.forEach(auth -> {
                     authService.findByEmail(auth.getEmail()).ifPresent(auth1 -> {
-                        auth1.setStatus(dto.status());
-                        authService.save(auth1);
+                        if (auth1.getStatus() != EStatus.DELETED)
+                        {
+                            auth1.setStatus(dto.status());
+                            authService.save(auth1);
+                        }
                     });
                 });
             }

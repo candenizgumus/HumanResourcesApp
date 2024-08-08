@@ -25,7 +25,7 @@ public interface UserRepository extends JpaRepository<User,Long>
     Optional<User> findByEmailAndPhone(String email, String phone);
 
 
-    @Query("select u from User u  where  u.email like %?1%")
+    @Query("select u from User u  where  u.email like %?1% ORDER BY u.id ASC")
     List<User> getAllUserByEmailSearch(String email ,PageRequest pageRequest);
 
     @Query("select u from User u  where  u.email like %?1%  AND u.userType = 'EMPLOYEE' AND u.managerId = ?2")

@@ -14,7 +14,7 @@ public interface OfferRepository extends JpaRepository<Offer, Long>
 {
     @Query("select new com.humanresourcesapp.views.VwGetAllOffer(o.id,o.name,o.surname,o.email,o.phone,o.companyName,o.title,o.numberOfEmployee,o.userType,o.sector,o.approvalText) from Offer o  where o.status = 'PENDING'")
     List<VwGetAllOffer> getAllOffer(PageRequest pageRequest);
-    @Query("select new com.humanresourcesapp.views.VwGetAllOffer(o.id,o.name,o.surname,o.email,o.phone,o.companyName,o.title,o.numberOfEmployee,o.userType,o.sector,o.approvalText) from Offer o  where o.status = 'PENDING' AND o.email like %?1%")
+    @Query("select new com.humanresourcesapp.views.VwGetAllOffer(o.id,o.name,o.surname,o.email,o.phone,o.companyName,o.title,o.numberOfEmployee,o.userType,o.sector,o.approvalText) from Offer o  where o.status = 'PENDING' AND o.email like %?1% ORDER BY o.id ASC")
     List<VwGetAllOffer> getAllOfferByEmailSearch(String email ,PageRequest pageRequest);
 
     Optional<Offer> findByEmail (String email);

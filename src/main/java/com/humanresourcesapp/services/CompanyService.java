@@ -35,6 +35,11 @@ public class CompanyService
         return companyRepository.save(Company.builder().name(dto.name()).logo(dto.logo()).build());
     }
 
+    public Company update(Company company)
+    {
+        return companyRepository.save(company);
+    }
+
     public Optional<Company> findById(Long id)
     {
         return companyRepository.findById(id);

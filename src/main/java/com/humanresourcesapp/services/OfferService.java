@@ -101,7 +101,8 @@ public class OfferService
         );
 
 
-        Company company = companyService.save(CompanySaveRequestDto.builder().name(offer.getCompanyName()).logo("").build());
+        Company company = companyService.save(CompanySaveRequestDto.builder().numberOfEmployee(1).name(offer.getCompanyName()).logo("").build());
+
 
         userService.save(User
                 .builder()

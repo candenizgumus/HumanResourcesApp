@@ -41,71 +41,85 @@ public class InsertDemoData {
             companyList.add(Company.builder()
                     .name("Airbnb")
                     .logo("https://asset.brandfetch.io/idkuvXnjOH/idxMw0tmPe.png")
+                    .numberOfEmployee(1)
                     .build());
 
             companyList.add(Company.builder()
                     .name("Nike")
                     .logo("https://asset.brandfetch.io/id_0dwKPKT/id_GjBr_LQ.png")
+                    .numberOfEmployee(1)
                     .build());
 
             companyList.add(Company.builder()
                     .name("Puma")
                     .logo("https://asset.brandfetch.io/idDV9AjI6R/idt8Kf_9bU.svg")
+                    .numberOfEmployee(1)
                     .build());
 
             companyList.add(Company.builder()
                     .name("McDonald's")
                     .logo("https://asset.brandfetch.io/id7ETzoB9W/idqHifpuke.png")
+                    .numberOfEmployee(1)
                     .build());
 
             companyList.add(Company.builder()
                     .name("HSBC")
                     .logo("https://asset.brandfetch.io/idLLTco_Zw/idpShkJ2yo.svg")
+                    .numberOfEmployee(1)
                     .build());
 
             companyList.add(Company.builder()
                     .name("Tesla")
                     .logo("https://asset.brandfetch.io/id2S-kXbuK/idL-smlY7j.png")
+                    .numberOfEmployee(1)
                     .build());
 
             companyList.add(Company.builder()
                     .name("Spotify")
                     .logo("https://asset.brandfetch.io/id20mQyGeY/idZi0Z5Y9U.png")
+                    .numberOfEmployee(1)
                     .build());
 
             companyList.add(Company.builder()
                     .name("Apple")
                     .logo("https://asset.brandfetch.io/idnrCPuv87/idzou3XgJV.png")
+                    .numberOfEmployee(1)
                     .build());
 
             companyList.add(Company.builder()
                     .name("Amazon")
                     .logo("https://asset.brandfetch.io/idawOgYOsG/idK5GFOo3t.png")
+                    .numberOfEmployee(1)
                     .build());
 
             companyList.add(Company.builder()
                     .name("Google")
                     .logo("https://asset.brandfetch.io/id6O2oGzv-/idSuJ5ik7i.png")
+                    .numberOfEmployee(1)
                     .build());
 
             companyList.add(Company.builder()
                     .name("Microsoft")
                     .logo("https://asset.brandfetch.io/idchmboHEZ/id-ypZheVL.png")
+                    .numberOfEmployee(1)
                     .build());
 
             companyList.add(Company.builder()
                     .name("Facebook")
                     .logo("https://asset.brandfetch.io/idpKX136kp/idQbJ8ZEuI.png")
+                    .numberOfEmployee(1)
                     .build());
 
             companyList.add(Company.builder()
                     .name("Twitter")
                     .logo("https://asset.brandfetch.io/idS5WhqBbM/idrn8jLjIE.png")
+                    .numberOfEmployee(1)
                     .build());
 
             companyList.add(Company.builder()
                     .name("Netflix")
                     .logo("https://asset.brandfetch.io/ideQwN5lBE/idAVFyOJN0.png")
+                    .numberOfEmployee(1)
                     .build());
 
             companyService.saveAll(companyList);

@@ -63,7 +63,7 @@ export default function SideBarEmployees() {
             .catch(() => {
             dispatch(clearToken());
         });
-    }, [dispatch, searchText, token,userList]);
+    }, [dispatch, searchText, token,loading]);
 
     const handleRowSelection = (newSelectionModel: GridRowSelectionModel) => {
         setSelectedRowIds(newSelectionModel as number[]);

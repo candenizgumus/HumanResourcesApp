@@ -324,4 +324,62 @@ public class UserService {
 
         return true;
     }
+
+    public User updateEmployee(UpdateEmployeeByManagerDto dto)
+    {
+        String userEmail = UserInfoSecurityContext.getUserInfoFromSecurityContext();
+        User manager = userRepository.findByEmail(userEmail).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
+        User user = userRepository.findById(dto.employeeId()).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
+
+        //Checking if manager is valid
+        if (manager.getId() != user.getManagerId())
+        {
+            throw new HumanResourcesAppException(ErrorType.INVALID_ACCOUNT);
+        }
+
+        if (dto.name() != null)
+        {
+            user.setName(dto.name());
+        }
+        if (dto.surname() != null)
+        {
+            user.setSurname(dto.surname());
+        }
+        if (dto.phone() != null)
+        {
+            user.setPhone(dto.phone());
+        }
+        if (dto.title() != null)
+        {
+            user.setTitle(dto.title());
+        }
+        if (dto.birthDate() != null)
+        {
+            user.setBirthDate(dto.birthDate());
+        }
+
+        if (dto.hireDate() != null)
+        {
+            user.setHireDate(dto.hireDate());
+        }
+        if (dto.location() != null)
+        {
+            user.setLocation(dto.location());
+        }
+        if (dto.eEmployeeType() != null)
+        {
+            user.setEmployeeType(dto.eEmployeeType());
+        }
+        if (dto.position() != null)
+        {
+            user.setPosition(dto.position());
+        }
+
+
+
+
+        userRepository.save(user);
+
+        return user;
+    }
 }

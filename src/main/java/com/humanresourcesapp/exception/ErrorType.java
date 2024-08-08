@@ -33,7 +33,8 @@ public enum ErrorType
     EMAIL_OR_PHONE_TAKEN(1021,"Email or Phone Number Is Taken" ,    HttpStatus.BAD_REQUEST),
     INVALID_ACCOUNT(1022,"Account is not active" ,   HttpStatus.BAD_REQUEST),
     SUBSCRIPTION_EXPIRED(1023,"Subscription Expired" ,  HttpStatus.BAD_REQUEST),
-    TOKEN_EXPIRED(1024,"Token Expired" ,  HttpStatus.BAD_REQUEST),;
+    TOKEN_EXPIRED(1024,"Token Expired" ,  HttpStatus.BAD_REQUEST),
+    WRONG_PASSWORD(1025,"Wrong Password",   HttpStatus.BAD_REQUEST );
     private Integer code;
     private String message;
     private HttpStatus httpStatus;

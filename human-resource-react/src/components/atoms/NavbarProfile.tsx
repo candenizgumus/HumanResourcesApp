@@ -18,12 +18,17 @@ export default function NavbarProfile() {
 
 
 
+
     const handleMenuOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
     };
 
     const handleMenuClose = () => {
         setAnchorEl(null);
+    };
+    const handleChangePassword = () => {
+        dispatch(changePageState('Change Password'));
+        handleMenuClose();
     };
 
     const handleProfile = () => {
@@ -84,6 +89,7 @@ export default function NavbarProfile() {
                 anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
             >
                 <MenuItem onClick={handleProfile}>Profile</MenuItem>
+                <MenuItem onClick={handleChangePassword}>Change Password</MenuItem>
                 <MenuItem onClick={handleLogout}>Logout</MenuItem>
             </Menu>
         </div>

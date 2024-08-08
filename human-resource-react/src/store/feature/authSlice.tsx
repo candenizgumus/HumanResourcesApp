@@ -549,6 +549,35 @@ export const fetchActivateUserByManager = createAsyncThunk(
 
     }
 );
+interface IfetchChangePassword {
+    token : string;
+    password:string,
+    newPassword:string
+
+
+}
+export const fetchChangePassword = createAsyncThunk(
+    'auth/fetchChangePassword',
+    async (payload: IfetchChangePassword, { dispatch }) => {
+
+        const response = await fetch('http://localhost:9090/dev/v1/auth/change-password', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ` + payload.token
+            },
+            body: JSON.stringify({
+                'password':payload.password,
+                'newPassword':payload.newPassword
+
+            })
+        });
+
+
+        return await response.json();
+
+    }
+);
 
 
 const authSlice = createSlice({

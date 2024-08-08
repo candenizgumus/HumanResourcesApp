@@ -3,6 +3,7 @@ package com.humanresourcesapp.controllers;
 import static com.humanresourcesapp.constants.Endpoints.*;
 
 import com.humanresourcesapp.dto.requests.AuthLoginRequestDto;
+import com.humanresourcesapp.dto.requests.PasswordChangeRequestDto;
 import com.humanresourcesapp.dto.responses.LoginResponseDto;
 import com.humanresourcesapp.entities.Auth;
 import com.humanresourcesapp.entities.enums.EStatus;
@@ -62,6 +63,15 @@ public class AuthController
             return ResponseEntity.ok(loginResponseDto);
         }
         return ResponseEntity.badRequest().build();
+    }
+
+    @PutMapping(CHANGE_PASSWORD)
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','EMPLOYEE')")
+    @CrossOrigin("*")
+    public ResponseEntity<Boolean> changePassword(@RequestBody PasswordChangeRequestDto dto)
+    {
+       return ResponseEntity.ok(authService.changePassword(dto));
+
     }
 
 }

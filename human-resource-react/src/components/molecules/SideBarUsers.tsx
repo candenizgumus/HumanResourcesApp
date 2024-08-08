@@ -27,18 +27,18 @@ import {IUser} from "../../models/IUser";
 import {fetchGetCompanies, fetchUpdateCompany} from "../../store/feature/companySlice";
 
 const columns: GridColDef[] = [
-    { field: "id", headerName: "ID", width: 70, headerAlign: "center" },
-    { field: "name", headerName: "First name", width: 120, headerAlign: "center" },
-    { field: "surname", headerName: "Last name", width: 120, headerAlign: "center" },
-    { field: "email", headerName: "Email", headerAlign: "center", width: 250 },
-    { field: "phone", headerName: "Phone", sortable: false, headerAlign: "center", width: 140 },
-   // { field: "companyName", headerName: "Company Name", width: 130, headerAlign: "center" },
-    { field: "subscriptionType", headerName: "Sub. Type", width: 120, headerAlign: "center" },
-    { field: "sector", headerName: "Sector", type: "string", width: 220, headerAlign: "center" },
-    { field: "userType", headerName: "User Type", width: 120, headerAlign: "center" },
-    { field: "subscriptionStartDate", headerName: "Sub. Start Date", type: "string", width: 150, headerAlign: "center" },
-    { field: "subscriptionEndDate", headerName: "Sub. End Date", type: "string", width: 150, headerAlign: "center" },
-    { field: "status", headerName: "Status", type: "string", width: 130, headerAlign: "center" },
+    { field: "id", headerName: "ID", width: 35, headerAlign: "center" },
+    { field: "companyId", headerName: "Company Id", width: 120, headerAlign: "center" },
+    { field: "name", headerName: "First name", width: 100, headerAlign: "center" },
+    { field: "surname", headerName: "Last name", width: 100, headerAlign: "center" },
+    { field: "email", headerName: "Email", headerAlign: "center", width: 200 },
+    { field: "phone", headerName: "Phone", sortable: false, headerAlign: "center", width: 120 },
+    { field: "sector", headerName: "Sector", type: "string", width: 200, headerAlign: "center" },
+    { field: "userType", headerName: "User Type", width: 100, headerAlign: "center" },
+    { field: "subscriptionType", headerName: "Sub. Type", width: 100, headerAlign: "center" },
+    { field: "subscriptionStartDate", headerName: "Sub. Start Date", type: "string", width: 130, headerAlign: "center" },
+    { field: "subscriptionEndDate", headerName: "Sub. End Date", type: "string", width: 130, headerAlign: "center" },
+    { field: "status", headerName: "Status", type: "string", width: 110, headerAlign: "center" },
 ];
 
 const style = {
@@ -179,9 +179,11 @@ export default function SideBarUsers() {
                     "& .MuiDataGrid-columnHeaderTitle": {
                         textAlign: "center",
                         fontWeight: "bold",
+                        fontSize: "12px",
                     },
                     "& .MuiDataGrid-cell": {
                         textAlign: "center",
+                        fontSize: "11px",
                     },
                 }}
             />
@@ -237,7 +239,7 @@ export default function SideBarUsers() {
                                 style={{ marginBottom: "10px" }}
                             />
                             <FormControl sx={{ marginBottom: "25px" }} fullWidth>
-                                <InputLabel id="demo-simple-select-label">Age</InputLabel>
+                                <InputLabel id="demo-simple-select-label">Status</InputLabel>
                                 <Select
                                     labelId="demo-simple-select-label"
                                     id="demo-simple-select"

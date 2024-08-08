@@ -5,6 +5,7 @@ import com.humanresourcesapp.dto.requests.PageCountRequestDto;
 import com.humanresourcesapp.dto.requests.PageRequestDto;
 import com.humanresourcesapp.entities.BaseEntity;
 import com.humanresourcesapp.entities.Company;
+import com.humanresourcesapp.entities.enums.EStatus;
 import com.humanresourcesapp.exception.ErrorType;
 import com.humanresourcesapp.exception.HumanResourcesAppException;
 import com.humanresourcesapp.repositories.CompanyRepository;
@@ -28,11 +29,13 @@ import java.util.stream.Collectors;
 public class CompanyService
 {
     private final CompanyRepository companyRepository;
-    private final EntityManager entityManager;
+
 
     public Company save(CompanySaveRequestDto dto)
     {
-        return companyRepository.save(Company.builder().name(dto.name()).logo(dto.logo()).build());
+        Company company = Company.builder().name(dto.name()).numberOfEmployee(dto.numberOfEmployee()).logo(dto.logo()).build();
+        company.setStatus(EStatus.ACTIVE);
+        return companyRepository.save(company);
     }
 
     public Company update(Company company)

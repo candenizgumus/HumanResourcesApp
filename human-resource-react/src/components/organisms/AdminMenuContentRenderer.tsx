@@ -12,6 +12,10 @@ import SideBarUsers from "../molecules/SideBarUsers";
 import CompanyList from "../molecules/SideBarCompanies";
 import SideBarAddEmployee from "../molecules/ManagerComponents/SideBarAddEmployee";
 import SideBarEmployees from "../molecules/ManagerComponents/SideBarEmployees";
+import {SideBarEmployeeShiftsAndBreaks} from "../molecules/EmployeeComponents/SideBarEmployeeShiftsAndBreaks";
+import {SideBarEmployeeHolidays} from "../molecules/EmployeeComponents/SideBarEmployeeHolidays";
+import {SideBarEmployeeLeaves} from "../molecules/EmployeeComponents/SideBarEmployeeLeaves";
+import {SideBarEmployeeCompanyItems} from "../molecules/EmployeeComponents/SideBarEmployeeCompanyItems";
 
 export const AdminMenuContentRenderer = () => {
     const page = useAppSelector((state) => state.auth.pageState);
@@ -27,6 +31,9 @@ export const AdminMenuContentRenderer = () => {
                 {page === 'Users' && <SideBarUsers/>}
                 {page === 'Add Employee' && <SideBarAddEmployee/>}
                 {page === 'Employees' && <SideBarEmployees/>}
+                {page === 'Shifts & Breaks' && <SideBarEmployeeShiftsAndBreaks />}
+                {page === 'Leaves' && <SideBarEmployeeLeaves/>}
+                {page === 'Company Items' && <SideBarEmployeeCompanyItems/>}
             </Grid>
         </>
     );

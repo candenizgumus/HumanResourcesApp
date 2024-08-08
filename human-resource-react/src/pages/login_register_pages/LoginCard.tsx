@@ -40,6 +40,8 @@ export default function LoginCard() {
                 navigate('/admin-home');
             } else if (userType === 'MANAGER') {
                 navigate('/manager-home');
+            } else if ( userType ==='EMPLOYEE') {
+                navigate('/employee-home');
             } else {
                 navigate('/');
             }

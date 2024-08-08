@@ -256,6 +256,15 @@ public class UserService {
                         }
                     });
                 });
+
+                //Updating company
+                companyService.findById(user.getCompanyId()).ifPresent(company -> {
+                    if (company.getStatus() != EStatus.DELETED)
+                    {
+                    company.setStatus(dto.status());
+                    companyService.update(company);
+                    }
+                });
             }
 
         return true;

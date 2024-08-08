@@ -246,6 +246,50 @@ export const fetchUpdateUser = createAsyncThunk(
     }
 );
 
+interface IfetchUpdateEmployeeByManager {
+    token : string;
+    employeeId:number
+    name: string;
+    surname: string;
+    phone: string;
+    title: string;
+    birthDate: Date | null;
+    hireDate: Date | null;
+    position: string;
+    location: string;
+    eEmployeeType:string
+
+}
+export const fetchUpdateEmployeeByManager = createAsyncThunk(
+    'user/fetchUpdateEmployeeByManager',
+    async (payload: IfetchUpdateEmployeeByManager, { dispatch }) => {
+
+        const response = await fetch('http://localhost:9090/dev/v1/user/update-employee-by-manager', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ` + payload.token
+            },
+            body: JSON.stringify({
+                'name': payload.name,
+                'surname': payload.surname,
+                'phone': payload.phone,
+                'title': payload.title,
+                'birthDate': payload.birthDate,
+                'position': payload.position,
+                'location': payload.location,
+                'hireDate': payload.hireDate,
+                'employeeId': payload.employeeId,
+                'eEmployeeType': payload.eEmployeeType
+            })
+        });
+
+
+        return await response.json();
+
+    }
+);
+
 interface IfetchGetAllUsers {
     token: string;
     page: number;

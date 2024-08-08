@@ -6,7 +6,7 @@ import {
     fetchAddEmployeeToManager,
     fetchFindCompanyNameAndManagerNameOfUser, fetchFindUserById,
     fetchFindUserByToken, fetchGetEmployeeTypes,
-    fetchGetPositions, fetchUpdateUser
+    fetchGetPositions, fetchUpdateEmployeeByManager, fetchUpdateUser
 } from "../../../store/feature/authSlice";
 import {useDispatch} from "react-redux";
 
@@ -67,9 +67,8 @@ const EditEmployee: React.FC = () => {
             setPhoto(employeeData.payload.photo);
             setHireDate(employeeData.payload.hireDate);
             setLocation(employeeData.payload.location);
-            setSelectedPositions(employeeData.payload.ePosition);
-            setSelectedEmployeeType(employeeData.payload.eEmployeeType);
-
+            setSelectedPositions(employeeData.payload.position);
+            setSelectedEmployeeType(employeeData.payload.employeeType);
 
             dispatch(fetchGetPositions())
                 .then(data => {
@@ -101,12 +100,13 @@ const EditEmployee: React.FC = () => {
 
     useEffect(() => {
         setUserInfos();
+
     },[])
 
-    console.log(name, surname, phone, title, birthDate, selectedPositions, location);
-    const addEmployee = () => {
 
-        if (!name || !surname    || !surname  || !phone || !title  || !birthDate  || !selectedEmployeeType || !location || !hireDate || !selectedPositions) {
+    const updateEmployee = () => {
+
+        if (!name || !surname   || !phone || !title  || !birthDate  || !selectedEmployeeType || !location || !hireDate || !selectedPositions) {
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
@@ -114,7 +114,8 @@ const EditEmployee: React.FC = () => {
             });
             return;
         }
-        dispatch(fetchUpdateUser({
+        dispatch(fetchUpdateEmployeeByManager({
+            employeeId: employeeId,
             token: token,
             name: name,
             surname: surname,
@@ -124,8 +125,8 @@ const EditEmployee: React.FC = () => {
             position: selectedPositions,
             location: location,
             hireDate: hireDate,
-            eEmployeeType: selectedEmployeeType,
-            email: email
+            eEmployeeType: selectedEmployeeType
+
         })).then((data) => {
             if (data.payload.message) {
                 sweetalert2.fire({
@@ -206,7 +207,7 @@ const EditEmployee: React.FC = () => {
                         value={email}
                         onChange={event => setEmail(event.target.value)}
                         fullWidth
-                        required
+                        disabled={true}
                     />
                     <TextField
                         label='Phone'
@@ -239,7 +240,7 @@ const EditEmployee: React.FC = () => {
 
 
 
-                    <Button onClick={addEmployee} sx={{mt: 5}} type="button" variant="contained" color="primary">
+                    <Button onClick={updateEmployee} sx={{mt: 5}} type="button" variant="contained" color="primary">
                         Edit Employee
                     </Button>
                 </Box>

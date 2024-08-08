@@ -62,4 +62,5 @@ public class Endpoints
     public static final String COUNT_BY_MONTH = "/count-by-month";
     public static final String GET_STATUS = "/get-status";
     public static final String UPDATE_USER_BY_ADMIN = "/update-user-by-admin";
+    public static final String UPDATE_EMPLOYEE = "/update-employee-by-manager";
 }

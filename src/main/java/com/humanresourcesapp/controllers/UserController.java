@@ -37,6 +37,15 @@ public class UserController
         return ResponseEntity.ok(userService.update(dto));
     }
 
+    @PutMapping(UPDATE_EMPLOYEE)
+    @CrossOrigin("*")
+    @PreAuthorize("hasAnyAuthority('MANAGER')")
+    public ResponseEntity<User> updateEmployee(@RequestBody UpdateEmployeeByManagerDto dto)
+    {
+        return ResponseEntity.ok(userService.updateEmployee(dto));
+    }
+
+
     @PutMapping(UPDATE_USER_BY_ADMIN)
     @CrossOrigin("*")
     @PreAuthorize("hasAnyAuthority('ADMIN')")

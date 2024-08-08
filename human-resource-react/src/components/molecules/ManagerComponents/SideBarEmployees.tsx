@@ -16,10 +16,11 @@ import { useDispatch } from "react-redux";
 
 
 import {
+    changePageState,
     clearToken,
     fetchDeleteEmployeeByAdmin,
     fetchGetAllUsers,
-    fetchGetAllUsersOfManager
+    fetchGetAllUsersOfManager, setSelectedEmployeeId
 } from "../../../store/feature/authSlice";
 import Swal from "sweetalert2";
 import {fetchApproveOffers, fetchGetOfferCount, fetchGetOffers} from "../../../store/feature/offerSlice";
@@ -67,6 +68,13 @@ export default function SideBarEmployees() {
     const handleRowSelection = (newSelectionModel: GridRowSelectionModel) => {
         setSelectedRowIds(newSelectionModel as number[]);
     };
+
+    const handleOnClickEditEmployee= () => {
+        dispatch(setSelectedEmployeeId(selectedRowIds[0]))
+        dispatch(changePageState("Edit Employee"))
+
+
+    }
 
     const handleDeleteEmployee = async () => {
         setLoading(true);
@@ -174,7 +182,20 @@ export default function SideBarEmployees() {
                         {loading ? "Deleting..." : "Delete Employee"}
                     </Button>
                 </Grid>
+
+                <Grid item>
+                    <Button
+                        onClick={handleOnClickEditEmployee}
+                        variant="contained"
+                        color="warning"
+                        disabled={  selectedRowIds.length>1 || selectedRowIds.length === 0}
+                    >
+                        Edit Employee
+                    </Button>
+                </Grid>
             </Grid>
+
+
 
         </div>
     );

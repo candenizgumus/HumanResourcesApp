@@ -90,9 +90,9 @@ public class UserController
         return ResponseEntity.ok(userService.getAllUsersOfManagerByCompanyId(dto));
     }
 
-    @GetMapping(FIND_BY_ID)
+    @PostMapping(FIND_BY_ID)
     @PreAuthorize("hasAnyAuthority('MANAGER','ADMIN')")
-
+    @CrossOrigin("*")
     public ResponseEntity<User> findById(Long id){
 
         return ResponseEntity.ok(userService.findById(id));

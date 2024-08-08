@@ -308,12 +308,19 @@ public class UserService {
 
     public Boolean delete(Long id)
     {
+        //Changing status of user and auth
         User user = userRepository.findById(id).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
         user.setStatus(EStatus.DELETED);
         userRepository.save(user);
         Auth auth = authService.findByEmail(user.getEmail()).orElseThrow(() -> new HumanResourcesAppException(ErrorType.AUTH_NOT_FOUND));
         auth.setStatus(EStatus.DELETED);
         authService.save(auth);
+
+        //Setting companyEmployee count
+        companyService.findById(user.getCompanyId()).ifPresent(company -> {
+            company.setNumberOfEmployee(company.getNumberOfEmployee() - 1);
+            companyService.update(company);
+        });
 
         return true;
     }

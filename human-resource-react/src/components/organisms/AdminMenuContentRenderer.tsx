@@ -11,7 +11,8 @@ import SideBarEmployees from "../molecules/ManagerComponents/SideBarEmployees";
 import {SideBarEmployeeShiftsAndBreaks} from "../molecules/EmployeeComponents/SideBarEmployeeShiftsAndBreaks";
 import {SideBarEmployeeLeaves} from "../molecules/EmployeeComponents/SideBarEmployeeLeaves";
 import {SideBarEmployeeCompanyItems} from "../molecules/EmployeeComponents/SideBarEmployeeCompanyItems";
-
+import {lazy} from "react";
+const EditEmployee = lazy(() => import('../molecules/ManagerComponents/EditEmployee'));
 export const AdminMenuContentRenderer = () => {
     const page = useAppSelector((state) => state.auth.pageState);
 
@@ -29,6 +30,7 @@ export const AdminMenuContentRenderer = () => {
                 {page === 'Shifts & Breaks' && <SideBarEmployeeShiftsAndBreaks />}
                 {page === 'Leaves' && <SideBarEmployeeLeaves/>}
                 {page === 'Company Items' && <SideBarEmployeeCompanyItems/>}
+                {page === 'Edit Employee' && <EditEmployee/>}
             </Grid>
         </>
     );

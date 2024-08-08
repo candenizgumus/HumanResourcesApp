@@ -10,6 +10,7 @@ interface IAuthState {
     isAuth: boolean;
     pageState: string;
     userType: string;
+    selectedEmployeeId: number;
 }
 
 const initalAuthState: IAuthState = {
@@ -18,7 +19,8 @@ const initalAuthState: IAuthState = {
     token: '',
     isAuth: false,
     pageState: '',
-    userType: ''
+    userType: '',
+    selectedEmployeeId: 0
 };
 
 export const fetchLogin = createAsyncThunk(
@@ -464,6 +466,33 @@ export const fetchDeleteEmployeeByAdmin = createAsyncThunk(
 
     }
 );
+interface IfetchFindUserById {
+    token : string;
+    id : number;
+
+
+}
+export const fetchFindUserById = createAsyncThunk(
+    'user/fetchFindUserById',
+    async (payload: IfetchFindUserById, { dispatch }) => {
+
+        const response = await fetch('http://localhost:9090/dev/v1/user/find-by-id?id='+payload.id, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ` + payload.token
+            }
+        });
+
+        if (!response.ok) {
+            console.log(response)
+            dispatch(clearToken());
+        }
+
+        return await response.json();
+
+    }
+);
 
 
 const authSlice = createSlice({
@@ -485,6 +514,9 @@ const authSlice = createSlice({
         },
         setUserType(state, action: PayloadAction<string>) {
             state.userType = action.payload;
+        },
+        setSelectedEmployeeId(state, action: PayloadAction<number>) {
+            state.selectedEmployeeId = action.payload;
         }
     },
     extraReducers: (builder) => {
@@ -522,5 +554,5 @@ const authSlice = createSlice({
     },
 });
 
-export const { changePageState, setToken, clearToken, setUserType } = authSlice.actions;
+export const { changePageState, setToken, clearToken, setUserType,setSelectedEmployeeId } = authSlice.actions;
 export default authSlice.reducer;

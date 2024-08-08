@@ -26,6 +26,7 @@ import { useNavigate } from 'react-router-dom';
 import NavbarProfile from "../../components/atoms/NavbarProfile";
 import AdminHomeContent  from "../../components/molecules/AdminPageComponents/AdminHomeContent"
 import {AccountBox, Person, PersonAdd} from "@mui/icons-material";
+import AddCommentIcon from '@mui/icons-material/AddComment';
 
 
 const drawerWidth = 240;
@@ -151,13 +152,14 @@ export default function AdminPage() {
         </DrawerHeader>
         <Divider />
         <List>
-          {['Employees', 'Add Employee', 'Profile'].map((text, index) => (
+          {['Employees', 'Add Employee', 'Profile', 'Add Comment'].map((text, index) => (
             <ListItem key={text} disablePadding>
               <ListItemButton onClick={() => handleListItemClick(text)}>
                 <ListItemIcon>
                   {index  === 0 && <Person/>}
                   {index  === 1 && <PersonAdd />}
                   {index  === 2 && <AccountBox /> }
+                  {index === 3 && <AddCommentIcon/>}
                 </ListItemIcon>
                 <ListItemText primary={text} />
               </ListItemButton>

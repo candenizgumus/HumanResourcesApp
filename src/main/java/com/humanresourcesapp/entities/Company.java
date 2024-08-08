@@ -27,4 +27,5 @@ public class Company extends BaseEntity
     String logo;
     String description;
     Integer numberOfEmployee;
+    String country;
 }

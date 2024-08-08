@@ -21,7 +21,8 @@ public class CommentService {
 
     public Comment save(CommentSaveRequestDto dto) {
         return commentRepository.save(Comment.builder()
-                .commentText(dto.commentText())
+                .shortDescription(dto.shortDescription())
+                .longDescription(dto.longDescription())
                 .companyId(dto.companyId())
                         .photo(dto.photo())
                 .build());
@@ -35,11 +36,16 @@ public class CommentService {
             Company company = companyService.findById(comment.getCompanyId()).orElseThrow(() -> new RuntimeException("Company not found"));
             commentDtoList.add(CommentResponseDto.builder()
                     .id(comment.getId())
-                    .commentText(comment.getCommentText())
+                    .shortDescription(comment.getShortDescription())
+                    .longDescription(comment.getLongDescription())
                     .companyName(company.getName())
-                    .managerName(manager.getName())
+                    .managerName(manager.getName()+" "+manager.getSurname())
                     .title(manager.getTitle())
                     .photo(comment.getPhoto())
+                    .numberOfEmployees(company.getNumberOfEmployee())
+                    .sector(manager.getSector().name())
+                    .logo(company.getLogo())
+                    .country(company.getCountry())
                     .build());
         }
         return commentDtoList;

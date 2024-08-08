@@ -19,6 +19,10 @@ public class Comment extends BaseEntity{
 
     private Long managerId;
     private Long companyId;
-    private String commentText;
+    @Column(length = 255)
+    private String shortDescription;
+    @Column(length = 1500)
+    private String longDescription;
+    @Column(length = 255)
     private String photo;
 }

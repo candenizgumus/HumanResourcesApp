@@ -64,4 +64,5 @@ public class Endpoints
     public static final String UPDATE_USER_BY_ADMIN = "/update-user-by-admin";
     public static final String UPDATE_EMPLOYEE = "/update-employee-by-manager";
     public static final String ACTIVATE_EMPLOYEE = "/activate-employee";
+    public static final String CHANGE_PASSWORD = "/change-password";
 }

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 @RequiredArgsConstructor
@@ -382,7 +383,9 @@ public class InsertDemoData {
                     .build();
             userService.save(employee2);
 
-
+            Optional<Company> company = companyService.findById(1L);
+            company.get().setNumberOfEmployee(3);
+            companyService.update(company.get());
 
         }
     }

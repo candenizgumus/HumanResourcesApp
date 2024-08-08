@@ -74,7 +74,7 @@ const UserForm: React.FC = () => {
         multiline
         rows={4}
         required
-        inputProps={{ maxLength: 255 }}
+        inputProps={{ maxLength: 80 }}
       />
       <TextField
         label="Icon Path"

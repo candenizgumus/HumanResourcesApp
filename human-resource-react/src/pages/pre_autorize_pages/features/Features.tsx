@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import {
     Typography,
     Container,
@@ -14,6 +14,7 @@ import FooterElement from '../../../components/molecules/PreAuthorizedPageCompon
 import FeatureCard from '../../../components/molecules/PreAuthorizedPageComponents/FeatureCard';
 import { HumanResources, RootState } from '../../../store';
 import { useDispatch, useSelector } from 'react-redux';
+import { fetchGetFeatures } from '../../../store/feature/featureSlice';
 
 const Root = styled('div')(({ theme }) => ({
     display: 'flex',
@@ -56,7 +57,12 @@ function PerformanceEvaluationPage() {
     const featuresRef = useRef(null);
     const dispatch: HumanResources = useDispatch();
     const featureList = useSelector((state: RootState) => state.feature.featuresList);
-
+    useEffect(() => {
+        const fetchData = async () => {
+            const response = await dispatch(fetchGetFeatures());
+        };
+        fetchData();
+    }, [dispatch]);
     return (
         <Root>
             <CssBaseline />
@@ -64,10 +70,10 @@ function PerformanceEvaluationPage() {
             <Header>
                 <Container maxWidth="lg">
                     <Box py={5}>
-                        <Typography variant="h2" align="center" sx={{color:'white'}} gutterBottom>
+                        <Typography variant="h2" align="center" sx={{ color: 'white' }} gutterBottom>
                             Products
                         </Typography>
-                        <Typography variant="body1" align="center" sx={{color:'white'}} paragraph>
+                        <Typography variant="body1" align="center" sx={{ color: 'white' }} paragraph>
                             Pricing based on your number of employees, use as much as you want, pay as much as you use
                         </Typography>
                     </Box>
@@ -81,12 +87,13 @@ function PerformanceEvaluationPage() {
                                 Features
                             </Typography>
                             <Grid container spacing={4}>
-                                {featureList.map((feature) => (
+                                {featureList.slice(0, 3).map((feature) => (
                                     <FeatureCard
                                         key={feature.id}
                                         name={feature.name}
                                         shortDescription={feature.shortDescription}
                                         iconPath={feature.iconPath}
+                                        isNavigatable={true}
                                     />
                                 ))}
                             </Grid>
@@ -98,21 +105,15 @@ function PerformanceEvaluationPage() {
                                 Additional Features
                             </Typography>
                             <Grid container spacing={4}>
+                                {featureList.slice(3,featureList.length).map((feature) => (
                                     <FeatureCard
-                                        name="High Data Security"
-                                        shortDescription="Ensure the utmost security of your data with Easy HR, where all user data is encrypted using SSL certificates that meet bank standards."
-                                        iconPath="data_security.png"
+                                        key={feature.id}
+                                        name={feature.name}
+                                        shortDescription={feature.shortDescription}
+                                        iconPath={feature.iconPath}
+                                        isNavigatable={false}
                                     />
-                                    <FeatureCard
-                                        name="Flexible Pricing Options"
-                                        shortDescription="Choose from a variety of packages tailored to your company's size and needs, paying only for the services you use and appreciate."
-                                        iconPath="pricing.png"
-                                    />
-                                    <FeatureCard
-                                        name="Easy Access Support"
-                                        shortDescription="Easily access support for any inquiries or issues via the chat application conveniently situated at the bottom right within the app, or through email."
-                                        iconPath="support.png"
-                                    />
+                                ))}
                             </Grid>
                         </CardGrid>
                     </Box>

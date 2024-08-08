@@ -2,7 +2,8 @@ import { Grid} from "@mui/material";
 import { useAppSelector} from "../../store";
 import SideBarOffers from "../molecules/AdminPageComponents/SideBarOffers";
 import SideBarHolidayTable from "../molecules/SideBarHolidayTable";
-import CreateAdminMenuContent  from "../molecules/AdminPageComponents/SideBarCreateAdmin";
+import SideBarCreateAdmin  from "../molecules/AdminPageComponents/SideBarCreateAdmin";
+import SideBarCreateFeature  from "../molecules/AdminPageComponents/SideBarCreateFeature";
 import SideBarProfile from "../molecules/SideBarProfile";
 import SideBarUsers from "../molecules/AdminPageComponents/SideBarUsers";
 import CompanyList from "../molecules/AdminPageComponents/SideBarCompanies";
@@ -21,7 +22,8 @@ export const AdminMenuContentRenderer = () => {
         <>
             <Grid item xs={12}>
                 {page === 'Offers' && <SideBarOffers />}
-                {page === 'Create Admin' && <CreateAdminMenuContent />}
+                {page === 'Create Admin' && <SideBarCreateAdmin />}
+                {page === 'Create Feature' && <SideBarCreateFeature />}
                 {page === 'Holidays' && <SideBarHolidayTable />}
                 {page === 'Profile' && <SideBarProfile/>}
                 {page === 'Companies' && <CompanyList/>}

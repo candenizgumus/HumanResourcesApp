@@ -161,12 +161,13 @@ function LandingPage() {
             Features
           </Typography>
           <Grid container spacing={4}>
-            {featureList.map((feature) => (
+            {featureList.slice(0,6).map((feature) => (
               <FeatureCard
                 key={feature.id}
-                name={feature.name}
+                name ={feature.name}
                 shortDescription={feature.shortDescription}
                 iconPath={feature.iconPath}
+                isNavigatable = {true}
               />
             ))}
           </Grid>

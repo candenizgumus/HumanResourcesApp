@@ -23,7 +23,7 @@ public class EmailService {
     private final static Logger LOGGER = LoggerFactory.getLogger(EmailService.class);
     private final JavaMailSender mailSender;
 
-    public void send(MailModel mailModel) {
+    public boolean send(MailModel mailModel) {
         try {
             MimeMessage mimeMessage = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
@@ -31,6 +31,7 @@ public class EmailService {
             helper.setTo(mailModel.getTo());
             helper.setSubject(mailModel.getSubject());
             mailSender.send(mimeMessage);
+            return true;
         } catch (MessagingException e) {
             LOGGER.error("failed to send email", e);
             throw new HumanResourcesAppException(ErrorType.MAIL_SEND_FAIL);

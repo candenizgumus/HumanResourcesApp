@@ -7,13 +7,26 @@ import Swal from "sweetalert2";
 import Typography from "@mui/material/Typography";
 import Avatar from "@mui/material/Avatar";
 import { CodeRounded } from "@mui/icons-material";
+import { useLocation } from "react-router-dom";
 
 const PasswordResetRequestForm: React.FC = () => {
     const dispatch = useDispatch<HumanResources>();
     const [email, setEmail] = useState<string>('');
     const [isDisabled, setIsDisabled] = useState<boolean>(false);
     const [countdown, setCountdown] = useState<number>(0);
-
+    const location = useLocation();
+    React.useEffect(() => {
+        // Get the token from the URL query params
+        const searchParams = new URLSearchParams(location.search);
+        const tokenFromUrl = searchParams.get('token');
+        if (tokenFromUrl) {
+            dispatch(setIsCodeSend(true));
+            setIsDisabled(true);
+            const endTime = Date.now() + 180 * 1000; // 3 minutes in milliseconds
+            localStorage.setItem('countdownEndTime', endTime.toString());
+            setCountdown(5);
+        }
+    }, [location.search]);
     // Function to calculate remaining time based on end time
     const calculateRemainingTime = (endTime: number) => {
         const now = Date.now();
@@ -54,34 +67,30 @@ const PasswordResetRequestForm: React.FC = () => {
         }
     }, [countdown]);
 
-    const handleSubmit = (email: string) => {
+    const handleSubmit = async (email: string) => {
         setIsDisabled(true);
-        dispatch(setIsCodeSend(true));
         const endTime = Date.now() + 180 * 1000; // 3 minutes in milliseconds
         localStorage.setItem('countdownEndTime', endTime.toString());
-        setCountdown(180); // 3 minutes in seconds
-        dispatch(fetchGetPasswordResetCode({ email }))
-            .then((data) => {
-                if(data.payload.message){
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error!',
-                        text: data.payload.message,
-                    });
-                    dispatch(setIsCodeSend(false));
+        setCountdown(5); // 3 minutes in seconds
+        let result = await dispatch(fetchGetPasswordResetCode({ email })).unwrap();
+        if (result.code) {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: result.message,
+          });
+          dispatch(setIsCodeSend(false));
                     setIsDisabled(false);
-                    setCountdown(0);
-                    localStorage.removeItem('countdownEndTime');
-                }else{
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Success!',
-                        text: 'Password reset code has been sent.',
-                    });
-                }
-                
-            })
-    };
+          return; // Stop the process and prevent further then block executions
+        }
+
+        Swal.fire({
+          icon: 'success',
+          title: 'Success!',
+          text: 'Password reset code has been sent.',
+        });
+        dispatch(setIsCodeSend(true));
+      };
 
     const formatTime = (seconds: number) => {
         const minutes = Math.floor(seconds / 60);

@@ -10,8 +10,8 @@ import {useDispatch, useSelector} from "react-redux";
 import {fetchGetFeatures} from "../../../store/feature/featureSlice";
 
 const features = [
-    { icon: <SecurityIcon fontSize="large" />, title: 'High Data Security', description: 'With Kolay IK, all data communication between users is protected with SSL certificates in accordance with international security standards.' },
-    { icon: <AppsIcon fontSize="large" />, title: 'Free Applications', description: 'Get many free applications such as personnel management, bank integration, overtime, meal card, training and development management with Kolay HR.' },
+    { icon: <SecurityIcon fontSize="large" />, title: 'High Data Security', description: 'With Easy HR, all data communication between users is protected with SSL certificates in accordance with international security standards.' },
+    { icon: <AppsIcon fontSize="large" />, title: 'Free Applications', description: 'Get many free applications such as personnel management, bank integration, overtime, meal card, training and development management with Easy HR.' },
     { icon: <LocalOfferIcon fontSize="large" />, title: 'Reasonable Prices', description: 'Choose the packages that suit your company, use them if you don\'t like them, pay as you use them.' },
     { icon: <SupportIcon fontSize="large" />, title: 'Lifetime Support', description: 'You can reach our lifetime support team, which is ready to help you whenever you have a problem, by phone or e-mail.' },
 ];

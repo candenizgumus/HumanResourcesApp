@@ -122,7 +122,7 @@ export default function AdminPage() {
           </IconButton>
           <Typography variant="h6" sx={logoStyle}>
             <Button style={{ marginRight: '20px' }} onClick={navigateToHome} color="inherit">
-                Kolay IK
+                Easy HR
             </Button>
         </Typography>
             <Box sx={{ flexGrow: 1 }} />

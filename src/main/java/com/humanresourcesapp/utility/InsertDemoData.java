@@ -201,7 +201,7 @@ public class InsertDemoData {
         commentList.add(Comment.builder()
                 .companyId(1L)
                 .managerId(manager.getId())
-                .commentText("Before we met Kolay HR, we were very primitive in terms of personnel and leave management compared to today.")
+                .commentText("Before we met Easy HR, we were very primitive in terms of personnel and leave management compared to today.")
                 .photo("https://xsgames.co/randomusers/avatar.php?g=male")
 
                 .build());
@@ -209,7 +209,7 @@ public class InsertDemoData {
         commentList.add(Comment.builder()
                 .companyId(1L)
                 .managerId(manager.getId())
-                .commentText("We have experienced an evolution from disorder to order in our human resources processes with Kolay HR!")
+                .commentText("We have experienced an evolution from disorder to order in our human resources processes with Easy HR!")
                 .photo("https://xsgames.co/randomusers/avatar.php?g=male")
 
                 .build());

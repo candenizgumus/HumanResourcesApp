@@ -6,7 +6,7 @@ const Header = () => {
         <AppBar position="static" color="transparent" elevation={0}>
             <Toolbar>
                 <Typography variant="h6" sx={{ flexGrow: 1 }}>
-                    KolayIK
+                    Easy HR
                 </Typography>
                 <Box sx={{ flexGrow: 1 }}>
                     <Button color="inherit">Apps</Button>

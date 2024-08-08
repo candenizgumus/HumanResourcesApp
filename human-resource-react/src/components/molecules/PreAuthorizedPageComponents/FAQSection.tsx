@@ -4,8 +4,8 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 const faqs = [
     {
-        question: "What applications are there in Kolay IK?",
-        answer: "Kolay IK has many applications such as personnel management, bank integration, overtime, meal card, training and development management."
+        question: "What applications are there in Easy HR?",
+        answer: "Easy HR has many applications such as personnel management, bank integration, overtime, meal card, training and development management."
     },
     {
         question: "How can I renew my subscription?",
@@ -17,7 +17,7 @@ const faqs = [
     },
     {
         question: "Do you store my credit card information?",
-        answer: "Your credit card information is not stored by Kolay IK at all. All payment transactions are made through a secure payment infrastructure."
+        answer: "Your credit card information is not stored by Easy HR at all. All payment transactions are made through a secure payment infrastructure."
     }
 ];
 

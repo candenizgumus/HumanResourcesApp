@@ -85,7 +85,7 @@ export const NavBar = () => {
             <Toolbar sx={{ alignItems: 'center', display: 'flex', flexWrap: 'nowrap' }}>
                 <Typography variant="h6" sx={logoStyle}>
                     <Button style={{ marginRight: '20px' }} sx={navigationsStyle} onClick={() => navigate('/')} color="inherit">
-                        Kolay IK
+                        Easy HR
                     </Button>
                 </Typography>
                 <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'nowrap' }}>

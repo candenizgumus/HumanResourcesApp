@@ -23,6 +23,8 @@ public class FeatureController {
     private final FeatureService featureService;
 
     @PostMapping(SAVE)
+    @CrossOrigin("*")
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<Feature> save(@RequestBody FeatureSaveRequest dto) {
 
         return ResponseEntity.ok(featureService.save(dto));

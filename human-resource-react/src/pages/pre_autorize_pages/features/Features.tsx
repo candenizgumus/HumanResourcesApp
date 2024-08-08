@@ -100,7 +100,7 @@ function PerformanceEvaluationPage() {
                             <Grid container spacing={4}>
                                     <FeatureCard
                                         name="High Data Security"
-                                        shortDescription="Ensure the utmost security of your data with Kolay, where all user data is encrypted using SSL certificates that meet bank standards."
+                                        shortDescription="Ensure the utmost security of your data with Easy HR, where all user data is encrypted using SSL certificates that meet bank standards."
                                         iconPath="data_security.png"
                                     />
                                     <FeatureCard

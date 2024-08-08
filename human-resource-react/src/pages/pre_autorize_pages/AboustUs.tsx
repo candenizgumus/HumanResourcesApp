@@ -48,7 +48,7 @@ function AboutUsPage() {
               About Us
             </Typography>
             <Typography variant="body1" align="center" paragraph>
-              We are a group of developers dedicated to building a platform similar to KolayIk, providing
+              We are a group of developers dedicated to building a platform similar to Kolay IK, providing
               seamless solutions for businesses. Our team is committed to innovation, quality, and
               customer satisfaction.
             </Typography>

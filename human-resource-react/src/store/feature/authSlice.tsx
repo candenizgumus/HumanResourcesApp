@@ -176,9 +176,9 @@ export const fetchFindCompanyNameAndManagerNameOfUser = createAsyncThunk(
 
 export const fetchCreateAdmin = createAsyncThunk(
     'user/fetchCreateAdmin',
-    async (payload: ICreateAdmin, { rejectWithValue }) => {
-        try {
-            const response = await fetch(`http://localhost:9090/dev/v1/auth/save-admin`, {
+    async (payload: ICreateAdmin) => {
+
+            const response = await fetch(`http://localhost:9090/dev/v1/user/save-admin`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -189,19 +189,8 @@ export const fetchCreateAdmin = createAsyncThunk(
                     'password': payload.password
                 })
             });
-            const data = await response.json();
-            if (!response.ok) {
-                throw new Error(data.message || 'Creating admin failed');
-            }
-            return data;
-        } catch (err) {
-            console.log('Error: ', err);
-            if (err instanceof Error) {
-                return rejectWithValue(err.message);
-            } else {
-                return rejectWithValue('An unknown error occurred');
-            }
-        }
+             
+            return await response.json();
     }
 );
 interface UpdateProfile {

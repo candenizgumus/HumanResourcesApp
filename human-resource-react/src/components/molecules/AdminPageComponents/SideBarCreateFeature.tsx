@@ -4,21 +4,23 @@ import { useDispatch } from 'react-redux';
 import { fetchCreateAdmin } from '../../../store/feature/authSlice';
 import { HumanResources } from '../../../store';
 import Swal from "sweetalert2";
+import { fetchCreateFeature } from '../../../store/feature/featureSlice';
 
 const UserForm: React.FC = () => {
   const dispatch = useDispatch<HumanResources>();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [name, setName] = useState('');
+  const [shortDescription, setShortDescription] = useState('');
+  const [iconPath, setIconPath] = useState('');
   const [loading, setLoading] = useState(false);
-  const [accepted, setAccepted] = useState(false);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     setLoading(true);
     e.preventDefault();
 
-    let result = await dispatch(fetchCreateAdmin({
-      email: email,
-      password: password,
+    let result = await dispatch(fetchCreateFeature({
+      name: name,
+      shortDescription: shortDescription,
+      iconPath: iconPath,
       token: localStorage.getItem('token') ?? ''
     })).unwrap();
 
@@ -35,7 +37,7 @@ const UserForm: React.FC = () => {
     Swal.fire({
       icon: 'success',
       title: 'Success!',
-      text: 'Admin Account Created.',
+      text: 'Feature Created.',
     });
 
     setLoading(false);
@@ -54,46 +56,36 @@ const UserForm: React.FC = () => {
         padding: 2,
       }}
     >
-      <Box
-        sx={{
-          padding: 2,
-          backgroundColor: 'rgba(255, 0, 0, 0.1)',
-          border: '1px solid red',
-          borderRadius: 1,
-          fontWeight: 'bold',
-          color: 'red',
-        }}
-      >
-        <Typography variant="h6">
-          Warning: Creating an admin account can have serious security implications. Please ensure you understand the consequences before proceeding.
-        </Typography>
-      </Box>
       <TextField
-        label="Email"
-        name="email"
-        value={email}
-        onChange={e => setEmail(e.target.value)}
+        label="Feature Name"
+        name="name"
+        value={name}
+        onChange={e => setName(e.target.value)}
         fullWidth
         required
+        inputProps={{ maxLength: 64 }}
       />
       <TextField
-        label="Password"
-        name="password"
-        value={password}
-        onChange={e => setPassword(e.target.value)}
+        label="Short Description"
+        name="shortDescription"
+        value={shortDescription}
+        onChange={e => setShortDescription(e.target.value)}
+        fullWidth
+        multiline
+        rows={4}
+        required
+        inputProps={{ maxLength: 255 }}
+      />
+      <TextField
+        label="Icon Path"
+        name="iconPath"
+        value={iconPath}
+        onChange={e => setIconPath(e.target.value)}
         fullWidth
         required
+        inputProps={{ maxLength: 64 }}
       />
-      <FormControlLabel
-        control={
-          <Checkbox
-            checked={accepted}
-            onChange={e => setAccepted(e.target.checked)}
-          />
-        }
-        label="I understand the consequences of creating an admin account."
-      />
-      <Button type="submit" variant="contained" color="primary" disabled={loading || !accepted}>
+      <Button type="submit" variant="contained" color="primary" disabled={loading}>
         {loading ? "Processing..." : "Create"}
       </Button>
     </Box>

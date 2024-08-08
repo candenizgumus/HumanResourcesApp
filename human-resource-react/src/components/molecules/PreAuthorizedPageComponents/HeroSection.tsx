@@ -16,7 +16,7 @@ const HeroSection = () => {
                         </Typography>
                     </Grid>
                     <Grid item xs={12} md={6}>
-                        <img src={image} alt="KolayIK" style={{ width: '100%' }} />
+                        <img src={image} alt="Easy HR" style={{ width: '100%' }} />
                     </Grid>
                 </Grid>
             </Container>

@@ -6,15 +6,15 @@ const FooterElement = () => {
         <Box sx={{ bgcolor: 'primary.main', color: 'white', py: 6}}>
             <Container maxWidth="lg">
                 <Typography variant="h6" align="center" gutterBottom>
-                    KolayIK
+                    Easy HR
                 </Typography>
                 <Typography variant="subtitle1" align="center" component="p">
                     Simplifying HR Management
                 </Typography>
                 <Typography variant="body2" color="inherit" align="center">
                     {'© '}
-                    <Link color="inherit" href="https://kolayik.com/">
-                        KolayIK
+                    <Link color="inherit" href="https://github.com/candenizgumus/HumanResourcesApp.git">
+                        Easy HR
                     </Link>{' '}
                     {new Date().getFullYear()}
                 </Typography>

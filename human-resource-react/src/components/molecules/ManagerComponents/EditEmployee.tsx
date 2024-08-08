@@ -192,6 +192,7 @@ const EditEmployee: React.FC = () => {
                         onChange={event => setName(event.target.value)}
                         fullWidth
                         required
+                        inputProps={{ maxLength: 50 }}
                     />
                     <TextField
                         label='Surname'
@@ -200,6 +201,7 @@ const EditEmployee: React.FC = () => {
                         onChange={event => setSurname(event.target.value)}
                         fullWidth
                         required
+                        inputProps={{ maxLength: 50 }}
                     />
                     <TextField
                         label='E-mail'
@@ -216,7 +218,8 @@ const EditEmployee: React.FC = () => {
                         onChange={event => setPhone(event.target.value)}
                         fullWidth
                         required
-                        type={"number"}
+                        type={"tel"}
+                        inputProps={{ maxLength: 50 }}
                     />
 
                     <TextField
@@ -226,6 +229,7 @@ const EditEmployee: React.FC = () => {
                         onChange={event => setTitle(event.target.value)}
                         fullWidth
                         required
+                        inputProps={{ maxLength: 50 }}
                     />
                     <TextField
                         label='Location'
@@ -234,6 +238,7 @@ const EditEmployee: React.FC = () => {
                         onChange={event => setLocation(event.target.value)}
                         fullWidth
                         required
+                        inputProps={{ maxLength: 50 }}
                     />
 
 

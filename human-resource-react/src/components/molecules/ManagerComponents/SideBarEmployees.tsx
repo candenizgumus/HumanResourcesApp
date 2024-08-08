@@ -48,6 +48,7 @@ export default function SideBarEmployees() {
     const token = useAppSelector((state) => state.auth.token);
     const userList = useAppSelector((state) => state.auth.userList);
     const [loading, setLoading] = useState(false);
+    const [isActivating, setIsActivating] = useState(false);
 
 
 
@@ -63,7 +64,7 @@ export default function SideBarEmployees() {
             .catch(() => {
             dispatch(clearToken());
         });
-    }, [dispatch, searchText, token,loading]);
+    }, [dispatch, searchText, token,loading,isActivating]);
 
     const handleRowSelection = (newSelectionModel: GridRowSelectionModel) => {
         setSelectedRowIds(newSelectionModel as number[]);
@@ -151,7 +152,7 @@ export default function SideBarEmployees() {
     };
 
     const handleActivateEmployee = async () => {
-        setLoading(true);
+        setIsActivating(true);
 
         for (let id of selectedRowIds) {
             const selectedEmployee = userList.find((selectedEmployee) => selectedEmployee.id === id);
@@ -165,7 +166,7 @@ export default function SideBarEmployees() {
                     confirmButtonText: "OK",
                     confirmButtonColor: "#D32F2F",
                 });
-                setLoading(false);
+                setIsActivating(false);
                 return;
             }
 
@@ -221,7 +222,7 @@ export default function SideBarEmployees() {
             }
         }
 
-        setLoading(false);
+        setIsActivating(false);
     };
 
     return (
@@ -264,7 +265,7 @@ export default function SideBarEmployees() {
                         onClick={handleActivateEmployee}
                         variant="contained"
                         color="primary"
-                        disabled={ loading || selectedRowIds.length === 0}
+                        disabled={ isActivating || selectedRowIds.length === 0}
                     >
                         {loading ? "Activate..." : "Activate Employee"}
                     </Button>

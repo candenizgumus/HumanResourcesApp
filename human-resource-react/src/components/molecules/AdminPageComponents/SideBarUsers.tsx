@@ -157,6 +157,7 @@ export default function SideBarUsers() {
                 onChange={(event) => setSearchText(event.target.value)}
                 value={searchText}
                 style={{ marginBottom: "10px" }}
+                inputProps={{ maxLength: 50 }}
             />
             <DataGrid
                 rows={userList}

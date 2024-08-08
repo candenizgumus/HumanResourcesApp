@@ -189,6 +189,8 @@ const SideBarProfile: React.FC = () => {
                           onChange={event => setName(event.target.value)}
                           fullWidth
                           required
+                          inputProps={{ maxLength: 50 }}
+
                       />
                       <TextField
                           label='Surname'
@@ -197,6 +199,7 @@ const SideBarProfile: React.FC = () => {
                           onChange={event => setSurname(event.target.value)}
                           fullWidth
                           required
+                          inputProps={{ maxLength: 50 }}
                       />
                       <TextField
                           label='Phone'
@@ -205,7 +208,8 @@ const SideBarProfile: React.FC = () => {
                           onChange={event => setPhone(event.target.value)}
                           fullWidth
                           required
-                          type={"number"}
+                          type={"tel"}
+                          inputProps={{ maxLength: 50 }}
                       />
 
                       <TextField
@@ -215,6 +219,7 @@ const SideBarProfile: React.FC = () => {
                           onChange={event => setTitle(event.target.value)}
                           fullWidth
                           required
+                          inputProps={{ maxLength: 50 }}
                       />
                       <TextField
                           label='Location'
@@ -223,6 +228,7 @@ const SideBarProfile: React.FC = () => {
                           onChange={event => setLocation(event.target.value)}
                           fullWidth
                           required
+                          inputProps={{ maxLength: 50 }}
                       />
 
                       <LocalizationProvider dateAdapter={AdapterDayjs}>

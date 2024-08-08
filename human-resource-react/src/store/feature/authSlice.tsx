@@ -537,6 +537,29 @@ export const fetchFindUserById = createAsyncThunk(
 
     }
 );
+interface IfetchActivateUserByManager {
+    token : string;
+    id : number;
+
+
+}
+export const fetchActivateUserByManager = createAsyncThunk(
+    'user/fetchActivateUserByManager',
+    async (payload: IfetchActivateUserByManager, { dispatch }) => {
+
+        const response = await fetch('http://localhost:9090/dev/v1/user/activate-employee?id='+payload.id, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ` + payload.token
+            }
+        });
+
+
+        return await response.json();
+
+    }
+);
 
 
 const authSlice = createSlice({

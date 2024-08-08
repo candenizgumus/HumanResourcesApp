@@ -17,7 +17,7 @@ import { useDispatch } from "react-redux";
 
 import {
     changePageState,
-    clearToken,
+    clearToken, fetchActivateUserByManager,
     fetchDeleteEmployeeByAdmin,
     fetchGetAllUsers,
     fetchGetAllUsersOfManager, setSelectedEmployeeId
@@ -83,6 +83,19 @@ export default function SideBarEmployees() {
             const selectedEmployee = userList.find((selectedEmployee) => selectedEmployee.id === id);
             if (!selectedEmployee) continue;
 
+            if (selectedEmployee.status === "DELETED") {
+                Swal.fire({
+                    title: "Error",
+                    text: "Employee already deleted",
+                    icon: "error",
+                    confirmButtonText: "OK",
+                    confirmButtonColor: "#D32F2F",
+                });
+                setLoading(false);
+                return;
+            }
+
+
             try {
                 const result = await Swal.fire({
                     title: "Please Confirm Deletion of:  \n" + selectedEmployee.name + " " + selectedEmployee.surname,
@@ -114,7 +127,81 @@ export default function SideBarEmployees() {
                         }
                         Swal.fire({
                             title: "Success",
-                            text: "Offer has been approved",
+                            text: "Deletion completed",
+                            icon: "success",
+                            confirmButtonText: "OK",
+                        });
+
+                        fetchGetAllUsersOfManager({
+                            token: token,
+                            page: 0,
+                            pageSize: 100,
+                            searchText: searchText,
+                        })
+                    })
+
+                }
+            } catch (error) {
+                localStorage.removeItem("token");
+                dispatch(clearToken());
+            }
+        }
+
+        setLoading(false);
+    };
+
+    const handleActivateEmployee = async () => {
+        setLoading(true);
+
+        for (let id of selectedRowIds) {
+            const selectedEmployee = userList.find((selectedEmployee) => selectedEmployee.id === id);
+            if (!selectedEmployee) continue;
+
+            if (selectedEmployee.status === "ACTIVE") {
+                Swal.fire({
+                    title: "Error",
+                    text: "Employee already active",
+                    icon: "error",
+                    confirmButtonText: "OK",
+                    confirmButtonColor: "#D32F2F",
+                });
+                setLoading(false);
+                return;
+            }
+
+
+            try {
+                const result = await Swal.fire({
+                    title: "Please Confirm Activation of:  \n" + selectedEmployee.name + " " + selectedEmployee.surname,
+                    showConfirmButton: true,
+                    showCancelButton: true,
+                    confirmButtonText: "Confirm",
+                    input: "radio",
+
+                });
+
+                if (result.isConfirmed) {
+
+
+                    //fetch
+                    const response = await dispatch(fetchActivateUserByManager({
+                        token: token,
+                        id: selectedEmployee.id,
+
+                    })).then(data => {
+                        if (data.payload.message) {
+                            Swal.fire({
+                                title: "Error",
+                                text: data.payload.message,
+                                icon: "error",
+                                confirmButtonText: "OK",
+
+                            });
+                            return
+                        }
+                        Swal.fire({
+                            title: "Success",
+                            text: "Activation has been competed",
                             icon: "success",
                             confirmButtonText: "OK",
                         });
@@ -174,10 +261,20 @@ export default function SideBarEmployees() {
             <Grid container spacing={1} style={{ marginTop: 16 }} direction="row">
                 <Grid item>
                     <Button
+                        onClick={handleActivateEmployee}
+                        variant="contained"
+                        color="primary"
+                        disabled={ loading || selectedRowIds.length === 0}
+                    >
+                        {loading ? "Activate..." : "Activate Employee"}
+                    </Button>
+                </Grid>
+                <Grid item>
+                    <Button
                         onClick={handleDeleteEmployee}
                         variant="contained"
                         color="error"
-                        disabled={ loading }
+                        disabled={ loading || selectedRowIds.length === 0}
                     >
                         {loading ? "Deleting..." : "Delete Employee"}
                     </Button>

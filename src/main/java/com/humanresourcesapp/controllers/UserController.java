@@ -152,4 +152,12 @@ public class UserController
     {
         return ResponseEntity.ok(userService.delete(id));
     }
+
+    @PutMapping(ACTIVATE_EMPLOYEE)
+    @CrossOrigin("*")
+    @PreAuthorize("hasAnyAuthority('MANAGER')")
+    public ResponseEntity<Boolean> activateEmployee(Long id)
+    {
+        return ResponseEntity.ok(userService.activateEmployee(id));
+    }
 }

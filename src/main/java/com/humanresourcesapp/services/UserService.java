@@ -382,4 +382,17 @@ public class UserService {
 
         return user;
     }
+
+    public Boolean activateEmployee(Long id)
+    {
+        User user = userRepository.findById(id).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
+        if (user.getStatus() == EStatus.DELETED)
+        {
+            user.setStatus(EStatus.ACTIVE);
+        }
+
+        userRepository.save(user);
+        return true;
+
+    }
 }

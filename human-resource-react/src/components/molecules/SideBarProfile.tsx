@@ -111,7 +111,7 @@ const SideBarProfile: React.FC = () => {
         }
     }, [user, loading]);
 
-    console.log(name, surname, phone, title, birthDate, selectedPositions, location);
+
     const updateUserProfile = () => {
 
         if (!name || !surname  || !phone || !title  || !birthDate  || !selectedPositions || !location) {

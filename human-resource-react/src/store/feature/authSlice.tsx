@@ -103,6 +103,27 @@ export const fetchGetSectors = createAsyncThunk(
     }
 );
 
+export const fetchGetStatus = createAsyncThunk(
+    'user/fetchGetStatus',
+    async (_, { rejectWithValue }) => {
+        try {
+            const response = await fetch('http://localhost:9090/dev/v1/user/get-status');
+            const data = await response.json();
+            if (!response.ok) {
+                throw new Error(data.message || 'Fetching sectors failed');
+            }
+            return data;
+        } catch (err) {
+            console.log('Error: ', err);
+            if (err instanceof Error) {
+                return rejectWithValue(err.message);
+            } else {
+                return rejectWithValue('An unknown error occurred');
+            }
+        }
+    }
+);
+
 export const fetchGetEmployeeTypes = createAsyncThunk(
     'user/fetchGetEmployeeTypes',
     async (_, { rejectWithValue }) => {
@@ -368,6 +389,44 @@ export const fetchGetCustomerByMonth = createAsyncThunk(
                 'Authorization': `Bearer ` + payload
             }
         });
+
+        return await response.json();
+
+    }
+);
+
+interface IfetchUpdateUserByAdmin {
+    token : string;
+    userId : number;
+    name: string;
+    surname: string;
+    phone: string;
+    status: string;
+
+}
+export const fetchUpdateUserByAdmin = createAsyncThunk(
+    'user/fetchUpdateUserByAdmin',
+    async (payload: IfetchUpdateUserByAdmin, { dispatch }) => {
+
+        const response = await fetch('http://localhost:9090/dev/v1/user/update-user-by-admin', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ` + payload.token
+            },
+            body: JSON.stringify({
+                'userId': payload.userId,
+                'name': payload.name,
+                'surname': payload.surname,
+                'phone': payload.phone,
+                'status': payload.status,
+            })
+        });
+
+        if (!response.ok) {
+            console.log(response)
+            dispatch(clearToken());
+        }
 
         return await response.json();
 

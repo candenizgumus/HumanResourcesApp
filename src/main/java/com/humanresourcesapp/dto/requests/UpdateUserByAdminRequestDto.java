@@ -5,14 +5,11 @@ import com.humanresourcesapp.entities.enums.EStatus;
 
 import java.time.LocalDate;
 
-public record UpdateUserRequestDto(
+public record UpdateUserByAdminRequestDto(
+        Long userId,
         String name,
         String surname,
         String phone,
-        String title,
-        LocalDate birthDate,
-        EPosition position,
-        String location
-)
+        EStatus status)
 {
 }

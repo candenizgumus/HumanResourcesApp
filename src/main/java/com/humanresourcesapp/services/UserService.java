@@ -1,9 +1,6 @@
 package com.humanresourcesapp.services;
 
-import com.humanresourcesapp.dto.requests.AddEmployeeToManagerRequestDto;
-import com.humanresourcesapp.dto.requests.PageCountRequestDto;
-import com.humanresourcesapp.dto.requests.PageRequestDto;
-import com.humanresourcesapp.dto.requests.UpdateUserRequestDto;
+import com.humanresourcesapp.dto.requests.*;
 import com.humanresourcesapp.dto.responses.CompanyAndManagerNameResponseDto;
 import com.humanresourcesapp.entities.Auth;
 import com.humanresourcesapp.entities.Company;
@@ -197,10 +194,58 @@ public class UserService {
             user.setLocation(dto.location());
         }
 
+
         return userRepository.save(user);
 
     }
+    public Boolean updateUserByAdmin(UpdateUserByAdminRequestDto dto)
+    {
+        User user = userRepository.findById(dto.userId()).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
 
+            if (dto.name() != null)
+            {
+                user.setName(dto.name());
+            }
+            if (dto.surname() != null)
+            {
+                user.setSurname(dto.surname());
+            }
+            if (dto.phone() != null)
+            {
+                user.setPhone(dto.phone());
+            }
+            if (dto.status() != null)
+            {
+                user.setStatus(dto.status());
+
+                authService.findByEmail(user.getEmail()).ifPresent(auth -> {
+                    auth.setStatus(dto.status());
+                    authService.save(auth);
+                });
+            }
+
+
+            userRepository.save(user);
+
+            //if usertype is manager we need to set status of employees either
+            if (user.getUserType() == EUserType.MANAGER)
+            {
+                //Updating users
+                List<User> userList = userRepository.findAllByManagerId(user.getId());
+                userList.forEach(employee -> employee.setStatus(dto.status()));
+                userRepository.saveAll(userList);
+
+                //Updating auths
+                userList.forEach(auth -> {
+                    authService.findByEmail(auth.getEmail()).ifPresent(auth1 -> {
+                        auth1.setStatus(dto.status());
+                        authService.save(auth1);
+                    });
+                });
+            }
+
+        return true;
+    }
     public Long getCount(PageCountRequestDto dto) {
         return userRepository.getAllUserByEmailSearchCount(dto.searchText());
     }
@@ -235,4 +280,6 @@ public class UserService {
         countList.add(december);
         return countList;
     }
+
+
 }

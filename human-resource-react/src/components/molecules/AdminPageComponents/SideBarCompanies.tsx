@@ -14,10 +14,10 @@ import {
     Box,
     Typography,
 } from "@mui/material";
-import { HumanResources, useAppSelector } from "../../store";
+import { HumanResources, useAppSelector } from "../../../store";
 import { useDispatch } from "react-redux";
-import { fetchGetCompanies, fetchGetCompanyCount, fetchUpdateCompany, ICompany } from "../../store/feature/companySlice";
-import { clearToken } from "../../store/feature/authSlice";
+import { fetchGetCompanies, fetchGetCompanyCount, fetchUpdateCompany, ICompany } from "../../../store/feature/companySlice";
+import { clearToken } from "../../../store/feature/authSlice";
 import Swal from "sweetalert2";
 
 const columns: GridColDef[] = [

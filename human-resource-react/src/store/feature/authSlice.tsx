@@ -433,6 +433,38 @@ export const fetchUpdateUserByAdmin = createAsyncThunk(
     }
 );
 
+interface IfetchDeleteEmployeeByAdmin {
+    token : string;
+    id : number;
+
+
+}
+export const fetchDeleteEmployeeByAdmin = createAsyncThunk(
+    'user/fetchDeleteEmployeeByAdmin',
+    async (payload: IfetchDeleteEmployeeByAdmin, { dispatch }) => {
+
+        const response = await fetch('http://localhost:9090/dev/v1/user/delete?id='+payload.id, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ` + payload.token
+            },
+            body: JSON.stringify({
+                'id': payload.id,
+
+            })
+        });
+
+        if (!response.ok) {
+            console.log(response)
+            dispatch(clearToken());
+        }
+
+        return await response.json();
+
+    }
+);
+
 
 const authSlice = createSlice({
     name: 'auth',

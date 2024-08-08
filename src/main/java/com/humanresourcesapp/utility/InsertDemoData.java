@@ -311,7 +311,7 @@ public class InsertDemoData {
                     .build();
             userService.save(user);
 
-
+            // Adding employee to the manager
             Auth authEmployee = authService.save(Auth.
                     builder()
                     .status(EStatus.ACTIVE)
@@ -327,6 +327,7 @@ public class InsertDemoData {
                     .email("employee")
                     .name("Employee 1")
                     .surname("Hard")
+                    .managerId(user.getId())
                     .authId(authEmployee.getId())
                     .subscriptionType(ESubscriptionType.MONTHLY)
                     .subscriptionStartDate(authEmployee.getSubscriptionStartDate())
@@ -345,6 +346,41 @@ public class InsertDemoData {
 
                     .build();
             userService.save(employee);
+
+            Auth authEmployee2 = authService.save(Auth.
+                    builder()
+                    .status(EStatus.ACTIVE)
+                    .email("employee2")
+                    .password(encodedPassword)
+                    .userType(EUserType.EMPLOYEE)
+                    .subscriptionType(ESubscriptionType.MONTHLY)
+                    .build());
+
+            User employee2 = User
+                    .builder()
+                    .status(EStatus.ACTIVE)
+                    .email("employee2")
+                    .name("Ahmet")
+                    .surname("Kaya")
+                    .managerId(user.getId())
+                    .authId(authEmployee2.getId())
+                    .subscriptionType(ESubscriptionType.MONTHLY)
+                    .subscriptionStartDate(authEmployee.getSubscriptionStartDate())
+                    .subscriptionEndDate(authEmployee.getSubscriptionEndDate())
+                    .location("Turkey")
+                    .birthDate(LocalDate.of(1990, 5, 15))
+                    .position(EPosition.COMPUTER_PROGRAMMER)
+                    .companyId(1L)
+                    .phone("5555555555")
+                    .photo("https://t4.ftcdn.net/jpg/03/64/21/11/360_F_364211147_1qgLVxv1Tcq0Ohz3FawUfrtONzz8nq3e.jpg")
+                    .userType(EUserType.EMPLOYEE)
+                    .employeeType(EEmployeeType.PART_TIME)
+                    .sector(ESectors.TECHNOLOGY)
+                    .title("Dr.")
+                    .hireDate(LocalDate.of(2023, 5, 5))
+
+                    .build();
+            userService.save(employee2);
 
 
 

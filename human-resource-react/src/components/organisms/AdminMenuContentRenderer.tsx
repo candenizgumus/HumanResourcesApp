@@ -1,19 +1,14 @@
-import {Button, Grid} from "@mui/material";
-import {HumanResources, useAppSelector} from "../../store";
-import SideBarOffers from "../molecules/SideBarOffers";
+import { Grid} from "@mui/material";
+import { useAppSelector} from "../../store";
+import SideBarOffers from "../molecules/AdminPageComponents/SideBarOffers";
 import SideBarHolidayTable from "../molecules/SideBarHolidayTable";
 import CreateAdminMenuContent  from "../molecules/AdminPageComponents/SideBarCreateAdmin";
-import AdminHomeContent  from "../molecules/AdminPageComponents/AdminHomeContent";
 import SideBarProfile from "../molecules/SideBarProfile";
-import { useEffect } from "react";
-import { clearToken, fetchFindUserByToken } from "../../store/feature/authSlice";
-import { useDispatch } from "react-redux";
-import SideBarUsers from "../molecules/SideBarUsers";
-import CompanyList from "../molecules/SideBarCompanies";
+import SideBarUsers from "../molecules/AdminPageComponents/SideBarUsers";
+import CompanyList from "../molecules/AdminPageComponents/SideBarCompanies";
 import SideBarAddEmployee from "../molecules/ManagerComponents/SideBarAddEmployee";
 import SideBarEmployees from "../molecules/ManagerComponents/SideBarEmployees";
 import {SideBarEmployeeShiftsAndBreaks} from "../molecules/EmployeeComponents/SideBarEmployeeShiftsAndBreaks";
-import {SideBarEmployeeHolidays} from "../molecules/EmployeeComponents/SideBarEmployeeHolidays";
 import {SideBarEmployeeLeaves} from "../molecules/EmployeeComponents/SideBarEmployeeLeaves";
 import {SideBarEmployeeCompanyItems} from "../molecules/EmployeeComponents/SideBarEmployeeCompanyItems";
 
@@ -38,3 +33,4 @@ export const AdminMenuContentRenderer = () => {
         </>
     );
 };
+

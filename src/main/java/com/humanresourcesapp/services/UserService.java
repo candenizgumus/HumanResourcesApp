@@ -395,4 +395,32 @@ public class UserService {
         return true;
 
     }
+
+    public Auth saveAdmin(Auth auth) {
+        if(authService.findByEmail(auth.getEmail()).isPresent())
+        {
+            throw new HumanResourcesAppException(ErrorType.EMAIL_TAKEN);
+        }
+        emailService.send(MailModel.builder().to(auth.getEmail()).subject("Your account is created").message("You can log in with email: " + auth.getEmail() + " and password: " + auth.getPassword()).build());
+        String encodedPassword = passwordEncoder.bCryptPasswordEncoder().encode(auth.getPassword());
+        Auth saveAuth = Auth.builder()
+                .email(auth.getEmail())
+                .userType(EUserType.ADMIN)
+                .password(encodedPassword)
+                .status(EStatus.ACTIVE)
+                .build();
+
+        authService.save(saveAuth);
+
+        User user = User.builder()
+                .authId(saveAuth.getId())
+                .email(auth.getEmail())
+                .userType(EUserType.ADMIN)
+                .status(EStatus.ACTIVE)
+                .build();
+
+        userRepository.save(user);
+
+        return saveAuth;
+    }
 }

@@ -2,6 +2,7 @@ package com.humanresourcesapp.controllers;
 
 import com.humanresourcesapp.dto.requests.*;
 import com.humanresourcesapp.dto.responses.CompanyAndManagerNameResponseDto;
+import com.humanresourcesapp.entities.Auth;
 import com.humanresourcesapp.entities.User;
 import com.humanresourcesapp.entities.enums.EEmployeeType;
 import com.humanresourcesapp.entities.enums.EPosition;
@@ -159,5 +160,13 @@ public class UserController
     public ResponseEntity<Boolean> activateEmployee(Long id)
     {
         return ResponseEntity.ok(userService.activateEmployee(id));
+    }
+
+    @PostMapping(SAVE_ADMIN)
+    @CrossOrigin("*")
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    public ResponseEntity<Auth> save(@RequestBody Auth auth)
+    {
+        return ResponseEntity.ok(userService.saveAdmin(auth));
     }
 }

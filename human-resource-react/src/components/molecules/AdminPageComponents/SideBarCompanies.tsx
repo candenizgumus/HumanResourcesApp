@@ -206,6 +206,7 @@ export default function OfferList() {
                                 value={selectedCompany.name}
                                 onChange={handleInputChange}
                                 fullWidth
+                                inputProps={{ maxLength: 64 }}
                                 style={{ marginBottom: "10px" }}
                             />
                             <TextField
@@ -215,6 +216,7 @@ export default function OfferList() {
                                 value={selectedCompany.logo}
                                 onChange={handleInputChange}
                                 fullWidth
+                                inputProps={{ maxLength: 64 }}
                                 style={{ marginBottom: "10px" }}
                             />
                             <TextField
@@ -224,6 +226,7 @@ export default function OfferList() {
                                 value={selectedCompany.description}
                                 onChange={handleInputChange}
                                 fullWidth
+                                inputProps={{ maxLength: 255 }}
                                 style={{ marginBottom: "10px" }}
                             />
                             <TextField

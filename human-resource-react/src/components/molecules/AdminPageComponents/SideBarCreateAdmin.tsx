@@ -75,6 +75,7 @@ const UserForm: React.FC = () => {
         onChange={e => setEmail(e.target.value)}
         fullWidth
         required
+        inputProps={{ maxLength: 64 }}
       />
       <TextField
         label="Password"

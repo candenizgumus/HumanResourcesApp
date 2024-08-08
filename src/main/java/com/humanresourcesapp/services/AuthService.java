@@ -28,10 +28,6 @@ import java.util.Optional;
 public class AuthService implements UserDetailsService
 {
     private final AuthRepository authRepository;
-    private final EmailService emailService;
-    private final PasswordEncoder passwordEncoder;
-
-
 
     public Optional<Auth> findById(Long id)
     {
@@ -59,17 +55,5 @@ public class AuthService implements UserDetailsService
         return findByEmail(email).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
     }
 
-    public Auth saveAdmin(Auth auth) {
-        emailService.send(MailModel.builder().to(auth.getEmail()).subject("Your account is created").message("You can log in with email: " + auth.getEmail() + " and password: " + auth.getPassword()).build());
-        String encodedPassword = passwordEncoder.bCryptPasswordEncoder().encode(auth.getPassword());
-        Auth saveAuth = Auth.builder()
-                .email(auth.getEmail())
-                .userType(EUserType.ADMIN)
-                .password(encodedPassword)
-                .status(EStatus.ACTIVE)
-                .build();
 
-
-        return authRepository.save(saveAuth);
-    }
 }

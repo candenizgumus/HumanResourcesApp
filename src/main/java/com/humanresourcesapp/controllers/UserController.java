@@ -135,4 +135,12 @@ public class UserController
 
         return ResponseEntity.ok(userService.getCountByMonth());
     }
+
+    @DeleteMapping(DELETE)
+    @CrossOrigin("*")
+    @PreAuthorize("hasAnyAuthority('MANAGER')")
+    public ResponseEntity<Boolean> delete(Long id)
+    {
+        return ResponseEntity.ok(userService.delete(id));
+    }
 }

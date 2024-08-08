@@ -15,17 +15,17 @@ import {
     Backdrop,
     CircularProgress
 } from "@mui/material";
-import { HumanResources, useAppSelector } from "../../store";
+import { HumanResources, useAppSelector } from "../../../store";
 import { useDispatch } from "react-redux";
 import {
     fetchApproveOffers, fetchDeclineOffers,
     fetchGetOfferCount,
     fetchGetOffers, fetchSendOfferEmail,
-} from "../../store/feature/offerSlice";
-import { IOfferList } from "../../models/IOfferList";
-import { clearToken } from "../../store/feature/authSlice";
+} from "../../../store/feature/offerSlice";
+import { IOfferList } from "../../../models/IOfferList";
+import { clearToken } from "../../../store/feature/authSlice";
 import Swal from "sweetalert2";
-import Loader from "../atoms/loader/Loader";
+import Loader from "../../atoms/loader/Loader";
 
 const columns: GridColDef[] = [
     { field: "id", headerName: "ID", width: 70, headerAlign: "center" },

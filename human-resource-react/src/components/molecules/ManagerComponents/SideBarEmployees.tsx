@@ -5,6 +5,8 @@ import {
     GridRowSelectionModel,
 } from "@mui/x-data-grid";
 import {
+    Button,
+    Grid,
 
     TextField
 
@@ -13,7 +15,14 @@ import { HumanResources, useAppSelector } from "../../../store";
 import { useDispatch } from "react-redux";
 
 
-import {clearToken, fetchGetAllUsers, fetchGetAllUsersOfManager} from "../../../store/feature/authSlice";
+import {
+    clearToken,
+    fetchDeleteEmployeeByAdmin,
+    fetchGetAllUsers,
+    fetchGetAllUsersOfManager
+} from "../../../store/feature/authSlice";
+import Swal from "sweetalert2";
+import {fetchApproveOffers, fetchGetOfferCount, fetchGetOffers} from "../../../store/feature/offerSlice";
 
 const columns: GridColDef[] = [
     { field: "id", headerName: "ID", width: 70, headerAlign: "center" },
@@ -37,6 +46,8 @@ export default function SideBarEmployees() {
     const dispatch = useDispatch<HumanResources>();
     const token = useAppSelector((state) => state.auth.token);
     const userList = useAppSelector((state) => state.auth.userList);
+    const [loading, setLoading] = useState(false);
+
 
 
     useEffect(() => {
@@ -51,10 +62,71 @@ export default function SideBarEmployees() {
             .catch(() => {
             dispatch(clearToken());
         });
-    }, [dispatch, searchText, token]);
+    }, [dispatch, searchText, token,userList]);
 
     const handleRowSelection = (newSelectionModel: GridRowSelectionModel) => {
         setSelectedRowIds(newSelectionModel as number[]);
+    };
+
+    const handleDeleteEmployee = async () => {
+        setLoading(true);
+
+        for (let id of selectedRowIds) {
+            const selectedEmployee = userList.find((selectedEmployee) => selectedEmployee.id === id);
+            if (!selectedEmployee) continue;
+
+            try {
+                const result = await Swal.fire({
+                    title: "Please Confirm Deletion of:  \n" + selectedEmployee.name + " " + selectedEmployee.surname,
+                    showConfirmButton: true,
+                    showCancelButton: true,
+                    confirmButtonText: "Confirm",
+                    input: "radio",
+
+                });
+
+                if (result.isConfirmed) {
+
+
+                    //fetch
+                    const response = await dispatch(fetchDeleteEmployeeByAdmin({
+                        token: token,
+                        id: selectedEmployee.id,
+
+                    })).then(data => {
+                        if (data.payload.message) {
+                            Swal.fire({
+                                title: "Error",
+                                text: data.payload.message,
+                                icon: "error",
+                                confirmButtonText: "OK",
+
+                            });
+                            return
+                        }
+                        Swal.fire({
+                            title: "Success",
+                            text: "Offer has been approved",
+                            icon: "success",
+                            confirmButtonText: "OK",
+                        });
+
+                        fetchGetAllUsersOfManager({
+                            token: token,
+                            page: 0,
+                            pageSize: 100,
+                            searchText: searchText,
+                        })
+                    })
+
+                }
+            } catch (error) {
+                localStorage.removeItem("token");
+                dispatch(clearToken());
+            }
+        }
+
+        setLoading(false);
     };
 
     return (
@@ -91,7 +163,18 @@ export default function SideBarEmployees() {
                 }}
             />
 
-
+            <Grid container spacing={1} style={{ marginTop: 16 }} direction="row">
+                <Grid item>
+                    <Button
+                        onClick={handleDeleteEmployee}
+                        variant="contained"
+                        color="error"
+                        disabled={ loading }
+                    >
+                        {loading ? "Deleting..." : "Delete Employee"}
+                    </Button>
+                </Grid>
+            </Grid>
 
         </div>
     );

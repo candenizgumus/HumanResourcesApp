@@ -11,20 +11,19 @@ import {
     TextField, Typography
 
 } from "@mui/material";
-import { HumanResources, useAppSelector } from "../../store";
+import { HumanResources, useAppSelector } from "../../../store";
 import { useDispatch } from "react-redux";
 
-import { IOfferList } from "../../models/IOfferList";
 import {
     clearToken,
     fetchGetAllUsers,
     fetchGetStatus,
     fetchGetUserCount,
     fetchUpdateUserByAdmin
-} from "../../store/feature/authSlice";
+} from "../../../store/feature/authSlice";
 import Swal from "sweetalert2";
-import {IUser} from "../../models/IUser";
-import {fetchGetCompanies, fetchUpdateCompany} from "../../store/feature/companySlice";
+import {IUser} from "../../../models/IUser";
+
 
 const columns: GridColDef[] = [
     { field: "id", headerName: "ID", width: 35, headerAlign: "center" },

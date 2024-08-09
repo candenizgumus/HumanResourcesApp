@@ -4,9 +4,7 @@ import SideBarProfile from "../molecules/SideBarProfile";
 import {SideBarEmployeeShiftsAndBreaks} from "../molecules/EmployeeComponents/SideBarEmployeeShiftsAndBreaks";
 import {SideBarEmployeeLeaves} from "../molecules/EmployeeComponents/SideBarEmployeeLeaves";
 import {SideBarEmployeeCompanyItems} from "../molecules/EmployeeComponents/SideBarEmployeeCompanyItems";
-import {lazy} from "react";
 import SideBarHolidayTableUser from "../molecules/ManagerComponents/SideBarHolidayTableUser";
-const EditEmployee = lazy(() => import('../molecules/ManagerComponents/EditEmployee'));
 export const EmployeeMenuContentRenderer = () => {
     const page = useAppSelector((state) => state.auth.pageState);
 

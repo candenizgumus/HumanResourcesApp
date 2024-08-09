@@ -32,6 +32,7 @@ public class Endpoints
     public static final String FEATURE = "/feature";
     public static final String PASSWORD_RESET = "/password-reset";
     public static final String EMAIL = "/email";
+    public static final String MEDIA = "/media";
 
     //methods
     public static final String SAVE = "/save";
@@ -68,4 +69,5 @@ public class Endpoints
     public static final String GET_COMPANY_COMMENT = "/get-company-comment";
     public static final String GET_COMPANY_OF_MANAGER = "/get-company-of-manager";
     public static final String UPDATE_COMPANY_BY_MANAGER = "/update-company-by-manager";
+
 }

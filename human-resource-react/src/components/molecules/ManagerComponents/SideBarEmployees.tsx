@@ -28,7 +28,7 @@ import {fetchApproveOffers, fetchGetOfferCount, fetchGetOffers} from "../../../s
 
 const columns: GridColDef[] = [
     { field: "id", headerName: "ID", width: 70, headerAlign: "center" },
-    { field: "name", headerName: "First name", width: 120, headerAlign: "center" },
+    { field: "name", headerName: "First name", width: 150, headerAlign: "center" },
     { field: "surname", headerName: "Last name", width: 120, headerAlign: "center" },
     { field: "email", headerName: "Email", headerAlign: "center", width: 250 },
     { field: "phone", headerName: "Phone", sortable: false, headerAlign: "center", width: 140 },

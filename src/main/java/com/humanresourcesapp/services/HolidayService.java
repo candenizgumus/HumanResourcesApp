@@ -22,10 +22,15 @@ public class HolidayService {
     private final UserService userService;
 
     public Holiday save(HolidaySaveRequestDto holidaySaveRequestDto) {
+        String userEmail = UserInfoSecurityContext.getUserInfoFromSecurityContext();
+        Optional<User> user = userService.findByEmail(userEmail);
+        if (user.isEmpty()){
+            throw new HumanResourcesAppException(ErrorType.USER_NOT_FOUND);
+        }
         return holidayRepository.save(Holiday.builder()
                 .holidayName(holidaySaveRequestDto.holidayName())
                 .holidayType(holidaySaveRequestDto.holidayType())
-                .companyId(holidaySaveRequestDto.companyId())
+                .companyId(user.get().getCompanyId())
                 .holidayStartDate(holidaySaveRequestDto.holidayStartDate())
                 .holidayEndDate(holidaySaveRequestDto.holidayEndDate())
                 .build());

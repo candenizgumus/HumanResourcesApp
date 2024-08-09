@@ -3,4 +3,5 @@ export interface ICreateHoliday {
     holidayType: string;
     holidayStartDate: number;
     holidayEndDate: number;
+    token: string;
 }

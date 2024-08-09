@@ -6,8 +6,8 @@ import { HumanResources, RootState, useAppSelector } from '../../../store';
 import {fetchDeleteHoliday, fetchHolidaysUser} from '../../../store/feature/holidaySlice';
 import { IHoliday } from '../../../models/IHoliday';
 import { Button, Grid, Box, Divider } from '@mui/material';
-import SideBarHolidayFormAdmin from "../AdminPageComponents/SideBarHolidayFormAdmin";
 import { IHolidayFormatted } from "../../../models/IHolidayFormatted";
+import SideBarHolidayFormUser from "./SideBarHolidayFormUser";
 
 // Helper function to format epoch timestamp to human-readable date
 function epochToHumanReadableWithoutTime(epochTime: number): string {
@@ -131,7 +131,7 @@ export default function SideBarHolidayTableUser() {
                     <Divider sx={{ my: 4 }} />
                 </Grid>
                 <Grid item xs={12}>
-                    <SideBarHolidayFormAdmin />
+                    <SideBarHolidayFormUser />
                 </Grid>
             </Grid>
         </Box>

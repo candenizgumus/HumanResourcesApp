@@ -1,12 +1,5 @@
 import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import IconButton from '@mui/material/IconButton';
-import Badge from '@mui/material/Badge';
-import Popover from '@mui/material/Popover';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import Divider from '@mui/material/Divider';
+import { Badge, IconButton, Popover, Box, Tooltip, Typography, Button, Divider } from '@mui/material';
 import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
 import { useDispatch, useSelector } from 'react-redux';
 import { HumanResources, RootState, useAppSelector } from '../../store';
@@ -40,7 +33,7 @@ export const NotificationIcon = () => {
     };
 
     const handleShowMore = () => {
-        dispatch(changePageState('Notifications')); // Navigate to the page with all notifications
+        dispatch(changePageState('Notifications')); 
         setAnchorEl(null);
     };
 
@@ -48,12 +41,13 @@ export const NotificationIcon = () => {
     const id = openPopover ? 'notification-popover' : undefined;
 
     return (
-        <>
-            <IconButton color="inherit" onClick={handleNotificationClick}>
-                <Badge badgeContent={notificationList.length} color="secondary">
-                    <NotificationsActiveIcon /> 
-                </Badge>
-            </IconButton>
+        <>  <Tooltip title="Notifications">
+                <IconButton color="inherit" onClick={handleNotificationClick}>
+                    <Badge badgeContent={notificationList.length} color="secondary">
+                        <NotificationsActiveIcon fontSize='large'/> 
+                    </Badge>
+                </IconButton>
+            </Tooltip>
             <Popover
                 id={id}
                 open={openPopover}

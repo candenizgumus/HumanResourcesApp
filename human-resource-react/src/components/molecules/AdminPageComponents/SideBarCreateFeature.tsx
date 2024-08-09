@@ -17,30 +17,35 @@ const UserForm: React.FC = () => {
     setLoading(true);
     e.preventDefault();
 
-    let result = await dispatch(fetchCreateFeature({
-      name: name,
-      shortDescription: shortDescription,
-      iconPath: iconPath,
-      token: localStorage.getItem('token') ?? ''
-    })).unwrap();
-
-    if (result.code) {
+    try {
+      let result = await dispatch(fetchCreateFeature({
+        name: name,
+        shortDescription: shortDescription,
+        iconPath: iconPath,
+        token: localStorage.getItem('token') ?? ''
+      })).unwrap();
+  
+      if (result.code) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: result.message,
+        });
+        setLoading(false);
+        return; // Stop the process and prevent further then block executions
+      }
+  
       Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: result.message,
+        icon: 'success',
+        title: 'Success!',
+        text: 'Feature Created.',
       });
+  
       setLoading(false);
-      return; // Stop the process and prevent further then block executions
+    } catch (error) {
+      console.error("Error creating feature:", error);
+      Swal.fire("Error", "There was a problem creating feature.", "error");
     }
-
-    Swal.fire({
-      icon: 'success',
-      title: 'Success!',
-      text: 'Feature Created.',
-    });
-
-    setLoading(false);
   };
 
   return (

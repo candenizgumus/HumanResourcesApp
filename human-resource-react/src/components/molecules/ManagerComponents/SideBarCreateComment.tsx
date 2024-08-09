@@ -44,31 +44,37 @@ const UserForm: React.FC = () => {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     setLoading(true);
     e.preventDefault();
-    let result = await dispatch(fetchUpdateUserStories({
-      longDescription: longDescription,
-      shortDescription: shortDescription,
-      token: token ?? '',
-      setNewManager: setNewManager
 
-    })).unwrap();
-
-    if (result.code) {
+    try {
+      let result = await dispatch(fetchUpdateUserStories({
+        longDescription: longDescription,
+        shortDescription: shortDescription,
+        token: token ?? '',
+        setNewManager: setNewManager
+  
+      })).unwrap();
+  
+      if (result.code) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: result.message,
+        });
+        setLoading(false);
+        return; // Stop the process and prevent further then block executions
+      }
+  
       Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: result.message,
+        icon: 'success',
+        title: 'Success!',
+        text: 'Feature Created.',
       });
+  
       setLoading(false);
-      return; // Stop the process and prevent further then block executions
+    } catch (error) {
+      console.error("Error creating feature:", error);
+      Swal.fire("Error", "There was a problem creating feature.", "error");
     }
-
-    Swal.fire({
-      icon: 'success',
-      title: 'Success!',
-      text: 'Feature Created.',
-    });
-
-    setLoading(false);
   };
 
   return (

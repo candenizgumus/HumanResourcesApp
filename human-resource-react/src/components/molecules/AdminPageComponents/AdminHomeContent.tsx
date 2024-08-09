@@ -42,21 +42,6 @@ const Dashboard = () => {
     }
   }, [dispatch]);
 
-  const data = [
-    { month: 'Jan', customers: monthlyCustomerCount[0] },
-    { month: 'Feb', customers: monthlyCustomerCount[1] },
-    { month: 'Mar', customers: monthlyCustomerCount[2] },
-    { month: 'Apr', customers: monthlyCustomerCount[3] },
-    { month: 'May', customers: monthlyCustomerCount[4] },
-    { month: 'Jun', customers: monthlyCustomerCount[5] },
-    { month: 'Jul', customers: monthlyCustomerCount[6] },
-    { month: 'Aug', customers: monthlyCustomerCount[7] },
-    { month: 'Sep', customers: monthlyCustomerCount[8] },
-    { month: 'Oct', customers: monthlyCustomerCount[9] },
-    { month: 'Nov', customers: monthlyCustomerCount[10] },
-    { month: 'Dec', customers: monthlyCustomerCount[11] },
-  ];
-
   return (
       <Box sx={{ flexGrow: 1, marginLeft: 5, marginTop: 5 }}>
         <Grid container spacing={4}>
@@ -69,7 +54,7 @@ const Dashboard = () => {
                   </Grid>
                   <Grid item xs={4} textAlign="center">
                     <Typography sx={{ fontWeight: 'bold', color: '#1976D2', marginBottom: 1 }} variant="h6">
-                      Total Manager
+                      Total <br/> Manager
                     </Typography>
                     <Typography sx={{ fontWeight: 'medium', fontSize: '1rem', color: '#1976D2' }} variant="h6">
                       {totalManager}
@@ -77,7 +62,7 @@ const Dashboard = () => {
                   </Grid>
                   <Grid item xs={4} textAlign="center">
                     <Typography sx={{ fontWeight: 'bold', color: '#1976D2', marginBottom: 1 }} variant="h6">
-                      Active Manager
+                      Active <br/> Manager
                     </Typography>
                     <Typography sx={{ fontWeight: 'medium', fontSize: '1rem', color: '#1976D2' }} variant="h6">
                       {activeManager}
@@ -96,7 +81,7 @@ const Dashboard = () => {
                   </Grid>
                   <Grid item xs={4} textAlign="center">
                     <Typography sx={{ fontWeight: 'bold', color: '#388E3C', marginBottom: 1 }} variant="h6">
-                      Total Employees
+                      Total <br/> Employees
                     </Typography>
                     <Typography sx={{ fontWeight: 'medium', fontSize: '1rem', color: '#388E3C' }} variant="h6">
                       {totalEmployee}
@@ -104,7 +89,7 @@ const Dashboard = () => {
                   </Grid>
                   <Grid item xs={4} textAlign="center">
                     <Typography sx={{ fontWeight: 'bold', color: '#388E3C', marginBottom: 1 }} variant="h6">
-                      Active Employees
+                      Active <br/> Employees
                     </Typography>
                     <Typography sx={{ fontWeight: 'medium', fontSize: '1rem', color: '#388E3C' }} variant="h6">
                       {activeEmployee}
@@ -123,7 +108,7 @@ const Dashboard = () => {
                   </Grid>
                   <Grid item xs={4} textAlign="center">
                     <Typography sx={{ fontWeight: 'bold', color: '#FFAA01', marginBottom: 1 }} variant="h6">
-                      Daily Turnover
+                      Daily <br/> Turnover
                     </Typography>
                     <Typography sx={{ fontWeight: 'medium', fontSize: '1rem', color: '#FFAA01' }} variant="h6">
                       175 $
@@ -131,7 +116,7 @@ const Dashboard = () => {
                   </Grid>
                   <Grid item xs={4} textAlign="center">
                     <Typography sx={{ fontWeight: 'bold', color: '#FFAA01', marginBottom: 1 }} variant="h6">
-                      Monthly Turnover
+                      Monthly <br/> Turnover
                     </Typography>
                     <Typography sx={{ fontWeight: 'medium', fontSize: '1rem', color: '#FFAA01' }} variant="h6">
                       25.000 $
@@ -144,7 +129,7 @@ const Dashboard = () => {
         </Grid>
 
         <Grid container spacing={4} sx={{ marginTop: 5 }}>
-          <Grid item xs={6}>
+          <Grid item xs={5.5}>
             <Card sx={{
               boxShadow: 7,
               borderRadius: 3,
@@ -174,7 +159,7 @@ const Dashboard = () => {
             </Card>
           </Grid>
 
-          <Grid item xs={3}>
+          <Grid item xs={3.5}>
             <Card sx={{
               boxShadow: 7,
               borderRadius: 3,

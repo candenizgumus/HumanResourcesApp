@@ -34,7 +34,8 @@ const SideBarHolidayFormAdmin: React.FC = () => {
             holidayName,
             holidayType,
             holidayStartDate: startEpoch,
-            holidayEndDate: endEpoch
+            holidayEndDate: endEpoch,
+            token
         }))
             .then(() => {
                 Swal.fire({

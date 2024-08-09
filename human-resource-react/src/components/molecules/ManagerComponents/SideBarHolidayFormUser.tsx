@@ -29,11 +29,13 @@ const SideBarHolidayFormUser: React.FC = () => {
         const startEpoch = holidayStartDate.getTime() / 1000;
         const endEpoch = holidayEndDate.getTime() / 1000;
 
+
         dispatch(fetchCreateHoliday({
             holidayName,
             holidayType,
             holidayStartDate: startEpoch,
-            holidayEndDate: endEpoch
+            holidayEndDate: endEpoch,
+            token
         }))
             .then(() => {
                 Swal.fire({

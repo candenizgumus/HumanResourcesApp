@@ -20,6 +20,7 @@ public class HolidayController {
     private final HolidayService holidayService;
 
     @PostMapping(SAVE)
+    @PreAuthorize("hasAnyAuthority('MANAGER','ADMIN')")
     public ResponseEntity<Holiday> save(@RequestBody HolidaySaveRequestDto holidaySaveRequestDto) {
         return ResponseEntity.ok(holidayService.save(holidaySaveRequestDto));
     }

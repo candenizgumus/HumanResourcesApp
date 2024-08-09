@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { HumanResources } from '../../store';
-import { fetchCreateHoliday, fetchHolidays } from '../../store/feature/holidaySlice';
+import {HumanResources, useAppSelector} from '../../../store';
+import {fetchCreateHoliday, fetchHolidaysAdmin, fetchHolidaysUser} from '../../../store/feature/holidaySlice';
 import Swal from 'sweetalert2';
 import { Box, TextField, Button, Grid, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
 
-const SideBarHolidayForm: React.FC = () => {
+const SideBarHolidayFormUser: React.FC = () => {
     const dispatch = useDispatch<HumanResources>();
-
+    const token = useAppSelector((state) => state.auth.token);
     const [holidayName, setHolidayName] = useState<string>('');
     const [holidayType, setHolidayType] = useState<string>('');
     const [holidayStartDate, setHolidayStartDate] = useState<Date | null>(null);
@@ -41,7 +41,7 @@ const SideBarHolidayForm: React.FC = () => {
                     title: 'Success!',
                     text: 'Holiday has been submitted successfully.',
                 });
-                dispatch(fetchHolidays());
+                dispatch(fetchHolidaysUser(token));
             })
             .catch(() => {
                 Swal.fire({
@@ -119,4 +119,4 @@ const SideBarHolidayForm: React.FC = () => {
     );
 };
 
-export default SideBarHolidayForm;
+export default SideBarHolidayFormUser;

@@ -9,20 +9,31 @@ const initialHolidayState = {
     isLoading: false
 };
 
-export const fetchHolidays = createAsyncThunk(
-    'holiday/fetchHolidays',
-    async (_, {rejectWithValue}) => {
-        try {
-            const response = await fetch('http://localhost:9090/dev/v1/holiday/get-all');
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            const data = await response.json();
-            console.log('API Response:', data); // Log the response
-            return data;
-        } catch (error) {
-            return rejectWithValue((error as Error).message);
-        }
+export const fetchHolidaysUser = createAsyncThunk(
+    'holiday/fetchHolidaysUser',
+    async (payload: string) => {
+            const response = await fetch(`http://localhost:9090/dev/v1/holiday/get-holiday-by-user`,{
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ` + payload
+                },
+            });
+        return await response.json();
+    }
+);
+
+export const fetchHolidaysAdmin = createAsyncThunk(
+    'holiday/fetchHolidaysAdmin',
+    async (payload: string) => {
+        const response = await fetch(`http://localhost:9090/dev/v1/holiday/get-holiday-by-admin`,{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ` + payload
+            },
+        });
+        return await response.json();
     }
 );
 
@@ -83,18 +94,28 @@ const holidaySlice = createSlice({
     reducers: {},
     extraReducers: (builder) => {
         builder
-            .addCase(fetchHolidays.pending, (state) => {
+            .addCase(fetchHolidaysUser.pending, (state) => {
                 state.isLoading = true;
             })
-            .addCase(fetchHolidays.fulfilled, (state, action) => {
+            .addCase(fetchHolidaysUser.fulfilled, (state, action) => {
                 state.holidayList = action.payload;
                 state.isLoading = false;
                 console.log('Holiday List:', state.holidayList); // Log the holiday list
             })
-            .addCase(fetchHolidays.rejected, (state, action) => {
+            .addCase(fetchHolidaysUser.rejected, (state, action) => {
                 state.isLoading = false;
             })
-
+            .addCase(fetchHolidaysAdmin.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(fetchHolidaysAdmin.fulfilled, (state, action) => {
+                state.holidayList = action.payload;
+                state.isLoading = false;
+                console.log('Holiday List By Admin:', state.holidayList); // Log the holiday list
+            })
+            .addCase(fetchHolidaysAdmin.rejected, (state, action) => {
+                state.isLoading = false;
+            })
     },
 });
 

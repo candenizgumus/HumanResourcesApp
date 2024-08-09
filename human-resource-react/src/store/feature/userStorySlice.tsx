@@ -39,7 +39,6 @@ export const fetchGetUserStories = createAsyncThunk(
     async (_, { rejectWithValue }) => {
             const response = await fetch('http://localhost:9090/dev/v1/comment/get-all')
             .then(data => data.json());
-            console.log(response);
             return response;
     }
 );

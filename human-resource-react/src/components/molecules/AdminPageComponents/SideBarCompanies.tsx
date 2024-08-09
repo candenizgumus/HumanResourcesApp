@@ -3,7 +3,6 @@ import {
     DataGrid,
     GridColDef,
     GridRowSelectionModel,
-    GridPaginationModelApi,
     GridPaginationModel,
 } from "@mui/x-data-grid";
 import {
@@ -16,9 +15,10 @@ import {
 } from "@mui/material";
 import { HumanResources, useAppSelector } from "../../../store";
 import { useDispatch } from "react-redux";
-import { fetchGetCompanies, fetchGetCompanyCount, fetchUpdateCompany, ICompany } from "../../../store/feature/companySlice";
+import { fetchGetCompanies, fetchGetCompanyCount, fetchUpdateCompany } from "../../../store/feature/companySlice";
 import { clearToken } from "../../../store/feature/authSlice";
 import Swal from "sweetalert2";
+import {ICompany} from "../../../models/ICompany";
 
 const columns: GridColDef[] = [
     { field: "id", headerName: "ID", width: 70, headerAlign: "center" },

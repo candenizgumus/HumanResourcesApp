@@ -5,6 +5,7 @@ import {
     GridRowSelectionModel,
 } from "@mui/x-data-grid";
 import {
+    Avatar,
     Button,
     Grid,
 
@@ -35,6 +36,18 @@ const columns: GridColDef[] = [
     { field: "userType", headerName: "User Type", width: 150, headerAlign: "center" },
     { field: "employeeType", headerName: "Employee Type", width: 150, headerAlign: "center" },
     { field: "status", headerName: "Status", width: 120, headerAlign: "center" },
+    {
+        field: "photo",
+        headerName: "Photo",
+        width: 100,
+        headerAlign: "center",
+        sortable: false,
+        renderCell: (params) => (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '100%' }}>
+                <Avatar alt={params.row.name} src={params.value} />
+            </div>
+        ),
+    },
 
 ];
 

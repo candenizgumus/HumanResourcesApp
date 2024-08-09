@@ -30,7 +30,6 @@ import {
   AdminPanelSettings,
   Apartment,
   FeaturedPlayList,
-  LocalOffer,
   Person,
   Weekend
 } from "@mui/icons-material";

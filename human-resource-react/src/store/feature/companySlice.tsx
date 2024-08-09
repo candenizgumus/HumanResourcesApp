@@ -1,20 +1,14 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { clearToken } from "./authSlice";
+import {ICompany} from "../../models/ICompany";
 
 export interface ICompanyLogo {
+
     id: number,
     name: string,
     logo: string,
 }
-export interface ICompany {
-    id: number,
-    name: string,
-    logo: string,
-    description: string,
-    numberOfEmployee: number,
-    status: string,
-    createdAt: number
-}
+
 
 export interface IUpdateCompany {
     token: string,
@@ -26,6 +20,7 @@ export interface IUpdateCompany {
 }
 
 interface IInitialCompany{
+    company: ICompany;
     companyList: ICompany[],
     logoList: ICompanyLogo[];
     companyCountByMonth: any;
@@ -35,6 +30,7 @@ interface IInitialCompany{
 }
 
 const initialCompanyState: IInitialCompany = {
+    company : {} as ICompany,
     companyList: [],
     logoList: [],
     isCompanyListLoading: false,
@@ -165,6 +161,57 @@ export const fetchCompanyCountByMonth = createAsyncThunk(
     }
   );
 
+export const fetchGetCompanyDataOfManager = createAsyncThunk(
+    'company/fetchGetCompanyDataOfManager',
+    async (token:string, { dispatch }) => {
+
+        const response = await fetch('http://localhost:9090/dev/v1/company/get-company-of-manager', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ` + token
+            }
+        });
+
+
+        return await response.json();
+
+    }
+);
+interface IUpdateCompanyByManager {
+    token: string;
+    name: string;
+    description: string;
+    country: string;
+}
+export const fetchUpdateCompanyByManager = createAsyncThunk(
+    'company/fetchUpdateCompanyByManager',
+    async (payload:IUpdateCompanyByManager, { dispatch }) => {
+
+        const response = await fetch('http://localhost:9090/dev/v1/company/update-company-by-manager', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ` + payload.token
+            },
+            body: JSON.stringify({
+                'country': payload.country,
+                'name': payload.name,
+                'description': payload.description
+            })
+        });
+
+        if (!response.ok) {
+            console.log(response)
+            dispatch(clearToken());
+        }
+        return await response.json();
+
+
+
+    }
+);
+
 
 const companySlice = createSlice({
     name: 'company',
@@ -189,6 +236,12 @@ const companySlice = createSlice({
             state.companyCountByMonth = action.payload;
             console.log(action.payload)
           })
+        build.addCase(fetchGetCompanyDataOfManager.fulfilled,(state,action:PayloadAction<ICompany>)=>{
+            state.company = action.payload;
+        })
+        build.addCase(fetchUpdateCompanyByManager.fulfilled,(state,action:PayloadAction<ICompany>)=>{
+            state.company = action.payload;
+        })
     }
 });
 

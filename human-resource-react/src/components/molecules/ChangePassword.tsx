@@ -35,6 +35,16 @@ const ChangePassword: React.FC = () => {
         }
     }
     const handleChangePassword = () => {
+        if ( newPassword === '' || reNewPassword === '' || reNewPassword === '') {
+            sweetalert2.fire({
+                icon: 'error',
+                title: 'Please fill all the fields',
+                showConfirmButton: false,
+                timer: 1500
+
+            })
+            return;
+        }
         dispatch(fetchChangePassword({
             token: token,
             password: password,
@@ -57,7 +67,7 @@ const ChangePassword: React.FC = () => {
                     timer: 1500
                 })
             }
-        })
+        });
     }
     return (
         <Grid container spacing={2} >
@@ -119,7 +129,7 @@ const ChangePassword: React.FC = () => {
                         onChange={event => setReNewPassword(event.target.value)}
                     />
 
-                <Button onClick={handleChangePassword}    sx={{ marginBottom: 5 }} variant="contained">Change Password</Button>
+                <Button disabled={isPasswordValid} onClick={handleChangePassword}    sx={{ marginBottom: 5 }} variant="contained">Change Password</Button>
 
 
 

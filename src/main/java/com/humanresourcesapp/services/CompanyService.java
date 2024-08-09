@@ -3,17 +3,22 @@ package com.humanresourcesapp.services;
 import com.humanresourcesapp.dto.requests.CompanySaveRequestDto;
 import com.humanresourcesapp.dto.requests.PageCountRequestDto;
 import com.humanresourcesapp.dto.requests.PageRequestDto;
+import com.humanresourcesapp.dto.requests.UpdateCompanyByManagerDto;
 import com.humanresourcesapp.entities.BaseEntity;
 import com.humanresourcesapp.entities.Company;
+import com.humanresourcesapp.entities.User;
 import com.humanresourcesapp.entities.enums.EStatus;
 import com.humanresourcesapp.exception.ErrorType;
 import com.humanresourcesapp.exception.HumanResourcesAppException;
 import com.humanresourcesapp.repositories.CompanyRepository;
+import com.humanresourcesapp.utility.UserInfoSecurityContext;
 import com.humanresourcesapp.utility.UtilMethods;
 import com.humanresourcesapp.views.VwGetCompanyLogos;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +35,13 @@ import java.util.stream.Collectors;
 public class CompanyService
 {
     private final CompanyRepository companyRepository;
+    private UserService userService;
+
+    //To break circular reference in UserService
+    @Autowired
+    public void setUserService(@Lazy UserService userService) {
+        this.userService = userService;
+    }
 
 
     public Company save(CompanySaveRequestDto dto)
@@ -94,4 +106,36 @@ public class CompanyService
                 ));
     }
 
+    public Company getCompanyOfManager()
+    {
+
+        String userEmail = UserInfoSecurityContext.getUserInfoFromSecurityContext();
+        User manager = userService.findByEmail(userEmail).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
+        return companyRepository.findById(manager.getCompanyId()).orElseThrow(() -> new HumanResourcesAppException(ErrorType.COMPANY_NOT_FOUND));
+    }
+
+    public Company updateCompanyByManager(UpdateCompanyByManagerDto dto)
+    {
+        String userEmail = UserInfoSecurityContext.getUserInfoFromSecurityContext();
+        User manager = userService.findByEmail(userEmail).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
+        Company company = companyRepository.findById(manager.getCompanyId()).orElseThrow(() -> new HumanResourcesAppException(ErrorType.COMPANY_NOT_FOUND));
+
+        if (dto.country() != null)
+        {
+            company.setCountry(dto.country());
+        }
+        if (dto.description() != null)
+        {
+            company.setDescription(dto.description());
+        }
+
+        if (dto.name() != null)
+        {
+            company.setName(dto.name());
+        }
+
+
+        return companyRepository.save(company);
+
+    }
 }

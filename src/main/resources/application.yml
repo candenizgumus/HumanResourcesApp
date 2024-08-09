@@ -2,8 +2,18 @@ server:
   port: 9090
 
 spring:
-  main:
-    allow-circular-references: true
+#  servlet:
+#    multipart:
+#      enabled: true
+#      file-size-threshold: 2KB
+#      max-file-size: 2000MB
+#      max-request-size: 2150MB
+#    cloud:
+#      gcp:
+#        config:
+#          project-id: hip-field-428707-f0
+#  main:
+#    allow-circular-references: true
   security:
     user:
       name: admin

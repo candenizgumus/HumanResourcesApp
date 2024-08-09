@@ -16,10 +16,10 @@ const UserForm: React.FC = () => {
 
   const setUserInfos = async () => {
     try {
-      await dispatch(fetchGetUserStory(token)).unwrap();
+      const result = await dispatch(fetchGetUserStory(token)).unwrap();
 
-      setLongDescription(companyStory.longDescription ?? '');
-      setShortDescription(companyStory.shortDescription ?? '');
+      setLongDescription(result.payload.longDescription ?? '');
+      setShortDescription(result.payload.shortDescription ?? '');
     } catch (error) {
       console.error('Error in setUserInfos:', error);
     } finally {

@@ -35,6 +35,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security:3.3.2'
     implementation 'com.auth0:java-jwt:4.4.0'
     implementation 'org.springframework.boot:spring-boot-starter-mail'
+//    implementation platform("com.google.cloud:spring-cloud-gcp-dependencies:5.5.0")
+//    implementation("com.google.cloud:spring-cloud-gcp-starter-storage")
 }
 
 tasks.named('test') {

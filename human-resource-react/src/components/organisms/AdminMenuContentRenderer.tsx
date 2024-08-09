@@ -8,7 +8,6 @@ import SideBarProfile from "../molecules/SideBarProfile";
 import SideBarUsers from "../molecules/AdminPageComponents/SideBarUsers";
 import CompanyList from "../molecules/AdminPageComponents/SideBarCompanies";
 import SideBarAddEmployee from "../molecules/ManagerComponents/SideBarAddEmployee";
-import SideBarCreateComment from "../molecules/ManagerComponents/SideBarCreateComment";
 import SideBarEmployees from "../molecules/ManagerComponents/SideBarEmployees";
 import {SideBarEmployeeShiftsAndBreaks} from "../molecules/EmployeeComponents/SideBarEmployeeShiftsAndBreaks";
 import {SideBarEmployeeLeaves} from "../molecules/EmployeeComponents/SideBarEmployeeLeaves";
@@ -17,6 +16,7 @@ import {lazy} from "react";
 import ChangePassword from "../molecules/ChangePassword";
 import SideBarCompany from "../molecules/ManagerComponents/SideBarCompany";
 const EditEmployee = lazy(() => import('../molecules/ManagerComponents/EditEmployee'));
+const SideBarCreateComment = lazy(() => import('../molecules/ManagerComponents/SideBarCreateComment'));
 export const AdminMenuContentRenderer = () => {
     const page = useAppSelector((state) => state.auth.pageState);
 

@@ -10,7 +10,6 @@ import {
 } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { HumanResources, useAppSelector } from "../../../store";
 import { fetchDeleteNotification, fetchGetNotifications, fetchGetUnreadNotifications, fetchUpdateIsRead } from "../../../store/feature/notificationSlice";
@@ -20,9 +19,8 @@ import { GridFooterContainer, GridPagination } from "@mui/x-data-grid";
 
 
 const columns: GridColDef[] = [
-    { field: "id", headerName: "ID", width: 35, headerAlign: "center" },
-    { field: "notificationText", headerName: "Text", width: 300, headerAlign: "center" },
     { field: "notificationType", headerName: "Type", width: 150, headerAlign: "center" },
+    { field: "notificationText", headerName: "Text", width: 1430, headerAlign: "center" },
 ];
 
 export default function NotificationsPage() {
@@ -34,7 +32,7 @@ export default function NotificationsPage() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await dispatch(fetchGetNotifications({
+                await dispatch(fetchGetNotifications({
                     token: token,
                     page: 0,
                     pageSize: 100,
@@ -53,15 +51,15 @@ export default function NotificationsPage() {
             dispatch(changePageState(params.row.url));
             dispatch(fetchUpdateIsRead({
                 token,
-                id:params.row.id,
+                id: params.row.id,
                 isRead: true
-            })).then(()=>{
+            })).then(() => {
                 dispatch(fetchGetNotifications({
                     token: token,
                     page: 0,
                     pageSize: 100,
                     searchText: "",
-                })).then(()=>{
+                })).then(() => {
                     dispatch(fetchGetUnreadNotifications(token));
                 })
             })
@@ -99,19 +97,19 @@ export default function NotificationsPage() {
         }
     };
 
-    function CustomPagination(props: any) {  // Use 'any' for props typing
+    function CustomPagination(props: any) {
         return (
-            <GridFooterContainer>
+            <GridFooterContainer sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-start', alignItems: 'center' }}>
                 <GridPagination {...props} />
-                    <Button
-                        onClick={handleDeleteClick}
-                        variant="contained"
-                        color="secondary"
-                        disabled={selectedRowIds.length === 0}
-                        startIcon={<DeleteIcon />}
-                    >
-                        Delete
-                    </Button>
+                <Button
+                    onClick={handleDeleteClick}
+                    variant="contained"
+                    color="secondary"
+                    disabled={selectedRowIds.length === 0}
+                    startIcon={<DeleteIcon />}
+                >
+                    Delete {selectedRowIds.length} Notification{selectedRowIds.length > 1 ? "s" : ""}
+                </Button>
             </GridFooterContainer>
         );
     }
@@ -119,37 +117,46 @@ export default function NotificationsPage() {
         <div style={{ height: '80vh', width: "inherit" }}>
             <DataGrid
                 paginationMode="server"
-                
                 rows={notificationAllList}
                 columns={columns}
                 checkboxSelection
                 onRowSelectionModelChange={handleRowSelection}
                 onRowClick={handleRowClick}
-                slots={{ 
-                    pagination: CustomPagination,  // Use the custom pagination component
+                slots={{
+                    pagination: CustomPagination,
                 }}
-                getRowClassName={(params) =>
+                getRowClassName={(params) => 
                     params.row.isRead === false ? 'MuiDataGrid-row--highlighted' : ''
                 }
                 sx={{
-                    "& .MuiDataGrid-columnHeaders": {
-                        backgroundColor: "rgba(224, 224, 224, 1)",
-                    },
                     "& .MuiDataGrid-columnHeaderTitle": {
                         textAlign: "center",
                         fontWeight: "bold",
-                        fontSize: "12px",
                     },
                     "& .MuiDataGrid-cell": {
                         textAlign: "center",
-                        fontSize: "11px",
                     },
                     "& .MuiDataGrid-row--highlighted": {
-                        backgroundColor: "#FFEBEE",  // Highlight for unread notifications
+                        backgroundColor: "#C8E6C9", // Pale green Highlight for unread notifications
                     },
+                    // Hide footer elemets
+                    "& .MuiDataGrid-footerContainer .MuiTablePagination-displayedRows": {
+                        display: "none",
+                    },
+                    "& .MuiDataGrid-footerContainer .MuiTablePagination-selectLabel, & .MuiTablePagination-select": {
+                        display: "none",
+                    },
+                    "& .MuiTablePagination-input": {
+                        display: "none",
+                    },
+                    "& .MuiTablePagination-actions": {
+                        display: "none",
+                    },
+                    "& .MuiDataGrid-selectedRowCount": {
+                        display: "none"
+                    }
                 }}
             />
-            
         </div>
     );
 }

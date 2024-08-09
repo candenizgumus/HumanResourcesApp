@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import { Avatar, IconButton, Menu, MenuItem, Tooltip } from '@mui/material';
+import { Badge, IconButton, Menu, MenuItem, Tooltip } from '@mui/material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import {useDispatch} from "react-redux";
 import {HumanResources, useAppSelector} from "../../store";
@@ -48,10 +48,10 @@ export default function NavbarProfile() {
     return (
         <div>
             <Tooltip title="Account settings">
-                <IconButton onClick={handleMenuOpen} size="small" sx={{ ml: 2 }}>
-                    <Avatar sx={{ width: 32, height: 32 }}>
-                        <AccountCircleIcon />
-                    </Avatar>
+                <IconButton onClick={handleMenuOpen} color="inherit" sx={{ ml: 2 }}>
+                    <Badge color="secondary">
+                        <AccountCircleIcon fontSize='large'/>
+                    </Badge>
                 </IconButton>
             </Tooltip>
             <Menu

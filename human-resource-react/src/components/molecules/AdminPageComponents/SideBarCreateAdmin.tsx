@@ -16,29 +16,33 @@ const UserForm: React.FC = () => {
     setLoading(true);
     e.preventDefault();
 
-    let result = await dispatch(fetchCreateAdmin({
-      email: email,
-      password: password,
-      token: localStorage.getItem('token') ?? ''
-    })).unwrap();
+    try {
+      let result = await dispatch(fetchCreateAdmin({
+        email: email,
+        password: password,
+        token: localStorage.getItem('token') ?? ''
+      })).unwrap();
+      if (result.code) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: result.message,
+        });
+        setLoading(false);
+        return; // Stop the process and prevent further then block executions
+      }
 
-    if (result.code) {
       Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: result.message,
+        icon: 'success',
+        title: 'Success!',
+        text: 'Admin Account Created.',
       });
+
       setLoading(false);
-      return; // Stop the process and prevent further then block executions
+    } catch (error) {
+      console.error("Error creating admin:", error);
+      Swal.fire("Error", "There was a problem creating admin.", "error");
     }
-
-    Swal.fire({
-      icon: 'success',
-      title: 'Success!',
-      text: 'Admin Account Created.',
-    });
-
-    setLoading(false);
   };
 
   return (

@@ -3,6 +3,7 @@ package com.humanresourcesapp.repositories;
 import com.humanresourcesapp.entities.Company;
 import com.humanresourcesapp.entities.User;
 import com.humanresourcesapp.entities.enums.EStatus;
+import com.humanresourcesapp.entities.enums.EUserType;
 import com.humanresourcesapp.views.VwGetAllOffer;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -39,4 +40,7 @@ public interface UserRepository extends JpaRepository<User,Long>
 
 
     List<User> findAllByManagerId(Long managerId);
+
+    Long countAllByUserType(EUserType userType);
+    Long countAllByUserTypeAndStatus(EUserType userType, EStatus status);
 }

@@ -2,15 +2,18 @@ import React, { useEffect } from 'react';
 import {Box, Card, CardContent, Typography, Grid, Container} from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { HumanResources } from '../../../store';
-import { fetchGetCustomerByMonth } from '../../../store/feature/authSlice';
+import {fetchCountOfUsersForAdminMenu, fetchGetCustomerByMonth} from '../../../store/feature/authSlice';
 import {BarChart, Gauge, PieChart} from "@mui/x-charts";
 import { AttachMoney, Engineering, Person } from "@mui/icons-material";
 
 
 
 const Dashboard = () => {
-  const totalCustomers = 240; // Replace with dynamic data
-  const totalDevelopers = 10; // Replace with dynamic data
+  const [totalManager, setTotalManager] = React.useState(0);
+  const [totalEmployee, setTotalEmployee] = React.useState(0);
+  const [activeManager, setActiveManager] = React.useState(0);
+  const [activeEmployee, setActiveEmployee] = React.useState(0);
+
   const dispatch = useDispatch<HumanResources>();
   const [monthlyCustomerCount, setMonthlyCustomerCount] = React.useState([]);
 
@@ -20,6 +23,13 @@ const Dashboard = () => {
       dispatch(fetchGetCustomerByMonth(token)).then(data => {
         setMonthlyCustomerCount(data.payload);
       });
+
+      dispatch(fetchCountOfUsersForAdminMenu(token)).then(data => {
+        setTotalManager(data.payload.totalManager);
+        setTotalEmployee(data.payload.totalEmployee);
+        setActiveManager(data.payload.activeManager);
+        setActiveEmployee(data.payload.activeEmployee);
+      })
     }
   }, [dispatch]);
 
@@ -53,7 +63,7 @@ const Dashboard = () => {
                       Total Manager
                     </Typography>
                     <Typography sx={{ fontWeight: 'medium', fontSize: '1rem', color: '#1976D2' }} variant="h6">
-                      250
+                      {totalManager}
                     </Typography>
                   </Grid>
                   <Grid item xs={4} textAlign="center">
@@ -61,7 +71,7 @@ const Dashboard = () => {
                       Active Manager
                     </Typography>
                     <Typography sx={{ fontWeight: 'medium', fontSize: '1rem', color: '#1976D2' }} variant="h6">
-                      25
+                      {activeManager}
                     </Typography>
                   </Grid>
                 </Grid>
@@ -80,7 +90,7 @@ const Dashboard = () => {
                       Total Employees
                     </Typography>
                     <Typography sx={{ fontWeight: 'medium', fontSize: '1rem', color: '#388E3C' }} variant="h6">
-                      250
+                      {totalEmployee}
                     </Typography>
                   </Grid>
                   <Grid item xs={4} textAlign="center">
@@ -88,7 +98,7 @@ const Dashboard = () => {
                       Active Employees
                     </Typography>
                     <Typography sx={{ fontWeight: 'medium', fontSize: '1rem', color: '#388E3C' }} variant="h6">
-                      25
+                      {activeEmployee}
                     </Typography>
                   </Grid>
                 </Grid>
@@ -157,16 +167,16 @@ const Dashboard = () => {
             <Card sx={{
               boxShadow: 7,
               borderRadius: 3,
-              border: '2px solid #B39DDB',
-              background: 'linear-gradient(to right, #EDE7F6, #D1C4E9)'
+              border: '2px solid #89CBC4', // Updated border color
+              background: 'linear-gradient(to right, #E0F2F1, #80CBC4)' // Updated gradient
             }}>
               <CardContent sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' , textAlign: 'center'}}>
                 <PieChart
                     series={[
                       {
                         data: [
-                          { id: 0, value: 20, label: 'Manager' },
-                          { id: 1, value: 400, label: 'Employee' },
+                          { id: 0, value: totalManager, label: 'Manager' },
+                          { id: 1, value: totalEmployee, label: 'Employee' },
 
                         ],
                         innerRadius: 30,
@@ -191,8 +201,8 @@ const Dashboard = () => {
             <Card sx={{
               boxShadow: 7,
               borderRadius: 3,
-              border: '2px solid #B39DDB',
-              background: 'linear-gradient(to right, #EDE7F6, #D1C4E9)',
+              border: '2px solid #FFB3B3', // Lighter border color
+              background: 'linear-gradient(to right, #FFE5E5, #FFB3B3)', // Very light gradient with soft pink tones
               height: '100%',
               display: 'flex',
               flexDirection: 'column',
@@ -207,7 +217,7 @@ const Dashboard = () => {
                 textAlign: 'center',
                 padding: 2 // Add some padding to the content
               }}>
-                <Typography sx={{ fontWeight: 'bold', color: '#B39DDB' }} variant="h6">
+                <Typography  variant="h6">
                   20 % Offer Return Ratio
                 </Typography>
                 <Gauge height={265} value={20} />

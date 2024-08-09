@@ -28,6 +28,7 @@ import AdminHomeContent  from "../../components/molecules/AdminPageComponents/Ad
 import {ManagerMenuContentRenderer} from "../../components/organisms/ManagerMenuContentRenderer";
 import {AccountBox, Apartment, Person, PersonAdd, Weekend} from "@mui/icons-material";
 import AddCommentIcon from '@mui/icons-material/AddComment';
+import {ManagerHomeContent} from "../../components/molecules/ManagerComponents/ManagerHomeContent";
 
 
 const drawerWidth = 240;
@@ -174,7 +175,7 @@ export default function AdminPage() {
       <Main open={open}>
         <DrawerHeader />
         <Grid container spacing={2}>
-          { pageState=== '' ? <AdminHomeContent/> : <ManagerMenuContentRenderer/>}
+          { pageState=== '' ? <ManagerHomeContent/> : <ManagerMenuContentRenderer/>}
         </Grid>
       </Main>
     </Box>

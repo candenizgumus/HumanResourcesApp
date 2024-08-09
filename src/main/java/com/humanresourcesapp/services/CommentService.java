@@ -6,6 +6,7 @@ import com.humanresourcesapp.dto.responses.CommentResponseDto;
 import com.humanresourcesapp.entities.Comment;
 import com.humanresourcesapp.entities.Company;
 import com.humanresourcesapp.entities.User;
+import com.humanresourcesapp.entities.enums.EStatus;
 import com.humanresourcesapp.exception.ErrorType;
 import com.humanresourcesapp.exception.HumanResourcesAppException;
 import com.humanresourcesapp.repositories.CommentRepository;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -28,7 +30,7 @@ public class CommentService {
         String email = UserInfoSecurityContext.getUserInfoFromSecurityContext();
         User manager = userService.findByEmail(email).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
 
-        if(!commentRepository.findAllByCompanyId(manager.getCompanyId()).isEmpty()){
+        if(commentRepository.findByCompanyId(manager.getCompanyId()).isPresent()){
             throw new HumanResourcesAppException(ErrorType.COMPANY_ALREADY_COMMENTED);
         }
         return commentRepository.save(Comment.builder()
@@ -36,6 +38,7 @@ public class CommentService {
                 .shortDescription(dto.shortDescription())
                 .longDescription(dto.longDescription())
                 .companyId(manager.getCompanyId())
+                .status(EStatus.ACTIVE)
                 .build());
     }
 
@@ -43,6 +46,7 @@ public class CommentService {
         List<Comment> commentList = commentRepository.findAll();
         List<CommentResponseDto> commentDtoList = new ArrayList<>();
         for (Comment comment : commentList) {
+            if(comment.getLongDescription().isEmpty()) continue;
             User manager = userService.findById(comment.getManagerId());
             Company company = companyService.findById(comment.getCompanyId()).orElseThrow(() -> new RuntimeException("Company not found"));
             commentDtoList.add(CommentResponseDto.builder()
@@ -71,11 +75,11 @@ public class CommentService {
         String email = UserInfoSecurityContext.getUserInfoFromSecurityContext();
         User manager = userService.findByEmail(email).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
 
-        if(commentRepository.findAllByCompanyId(manager.getCompanyId()).isEmpty()){
+        if(commentRepository.findByCompanyId(manager.getCompanyId()).isEmpty()){
             throw new HumanResourcesAppException(ErrorType.COMMENT_NOT_FOUND);
         }
 
-        Comment comment = commentRepository.findAllByCompanyId(manager.getCompanyId()).getFirst();
+        Comment comment = commentRepository.findByCompanyId(manager.getCompanyId()).get();
 
         if(!UtilMethods.isNullOrWhitespace(dto.shortDescription())){
             comment.setShortDescription(dto.shortDescription());
@@ -93,7 +97,12 @@ public class CommentService {
     public Comment getCompanyComment() {
         String email = UserInfoSecurityContext.getUserInfoFromSecurityContext();
         User manager = userService.findByEmail(email).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
+        Optional<Comment> byCompanyId = commentRepository.findByCompanyId(manager.getCompanyId());
 
-        return commentRepository.findAllByCompanyId(manager.getCompanyId()).getFirst();
+        if(byCompanyId.isPresent())
+            return byCompanyId.get();
+        else {
+            return commentRepository.save(Comment.builder().managerId(manager.getId()).companyId(manager.getCompanyId()).status(EStatus.ACTIVE).build());
+        }
     }
 }

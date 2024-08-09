@@ -40,7 +40,6 @@ const SearchBar = styled(TextField)(({ theme }) => ({
 }));
 
 export default function UserStoriesPage() {
-    const featuresRef = useRef<HTMLDivElement>(null);
     const dispatch: HumanResources = useDispatch();
     const userStories = useSelector((state: RootState) => state.userStory.storyList) as IUserStoryResponse[];
     useEffect(() => {
@@ -54,7 +53,7 @@ export default function UserStoriesPage() {
                 <Container maxWidth="lg">
                     <Box sx={{ height: '100%', width: '100%' }}>
                         <Box sx={{ bgcolor: 'primary.main', color: 'white', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: 2 }}>
-                            <Typography variant="h4" gutterBottom>
+                            <Typography variant="h2" gutterBottom>
                                 User Stories
                             </Typography>
 

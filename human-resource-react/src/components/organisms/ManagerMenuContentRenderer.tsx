@@ -1,8 +1,7 @@
 import { Grid} from "@mui/material";
 import { useAppSelector} from "../../store";
 import SideBarOffers from "../molecules/AdminPageComponents/SideBarOffers";
-import SideBarCreateAdmin  from "../molecules/AdminPageComponents/SideBarCreateAdmin";
-import SideBarCreateFeature  from "../molecules/AdminPageComponents/SideBarCreateFeature";
+import SideBarHolidayTableAdmin from "../molecules/AdminPageComponents/SideBarHolidayTableAdmin";
 import CreateAdminMenuContent  from "../molecules/AdminPageComponents/SideBarCreateAdmin";
 import SideBarProfile from "../molecules/SideBarProfile";
 import SideBarUsers from "../molecules/AdminPageComponents/SideBarUsers";
@@ -13,31 +12,19 @@ import {SideBarEmployeeShiftsAndBreaks} from "../molecules/EmployeeComponents/Si
 import {SideBarEmployeeLeaves} from "../molecules/EmployeeComponents/SideBarEmployeeLeaves";
 import {SideBarEmployeeCompanyItems} from "../molecules/EmployeeComponents/SideBarEmployeeCompanyItems";
 import {lazy} from "react";
-import ChangePassword from "../molecules/ChangePassword";
-import SideBarCompany from "../molecules/ManagerComponents/SideBarCompany";
-import SideBarHolidayTableAdmin from "../molecules/AdminPageComponents/SideBarHolidayTableAdmin";
+import SideBarHolidayFormUser from "../molecules/ManagerComponents/SideBarHolidayFormUser";
+import SideBarHolidayTableUser from "../molecules/ManagerComponents/SideBarHolidayTableUser";
 const EditEmployee = lazy(() => import('../molecules/ManagerComponents/EditEmployee'));
-const SideBarCreateComment = lazy(() => import('../molecules/ManagerComponents/SideBarCreateComment'));
-export const AdminMenuContentRenderer = () => {
+export const ManagerMenuContentRenderer = () => {
     const page = useAppSelector((state) => state.auth.pageState);
 
     return (
         <>
             <Grid item xs={12}>
-                {page === 'Offers' && <SideBarOffers />}
-                {page === 'Create Admin' && <CreateAdminMenuContent />}
-                {page === 'Create Admin' && <SideBarCreateAdmin />}
-                {page === 'Create Feature' && <SideBarCreateFeature />}
-                {page === 'Holidays' && <SideBarHolidayTableAdmin />}
+                {page === 'Holidays' && <SideBarHolidayTableUser />}
                 {page === 'Profile' && <SideBarProfile/>}
-                {page === 'Companies' && <CompanyList/>}
-                {page === 'Users' && <SideBarUsers/>}
                 {page === 'Add Employee' && <SideBarAddEmployee/>}
                 {page === 'Employees' && <SideBarEmployees/>}
-                {page === 'Edit Employee' && <EditEmployee/>}
-                {page === 'Change Password' && <ChangePassword/>}
-                {page === 'Add Comment' && <SideBarCreateComment/>}
-                {page === 'Edit Company' && <SideBarCompany/>}
             </Grid>
         </>
     );

@@ -28,15 +28,12 @@ import NavbarProfile from "../../components/atoms/NavbarProfile";
 import {
     AccountBox,
     AdminPanelSettings,
-    Apartment,
     FeaturedPlayList,
-    LocalOffer,
-    Person,
     Weekend
 } from "@mui/icons-material";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
-import {AdminMenuContentRenderer} from "../../components/organisms/AdminMenuContentRenderer";
 import {EmployeeHomeContent} from "../../components/molecules/EmployeeComponents/EmployeeHomeContent";
+import {EmployeeMenuContentRenderer} from "../../components/organisms/EmployeeMenuContentRenderer";
 
 const drawerWidth = 240;
 
@@ -183,7 +180,7 @@ export default function EmployeePage() {
             <Main open={open}>
                 <DrawerHeader />
                 <Grid container spacing={2}>
-                    { pageState=== '' ? <EmployeeHomeContent/> : <AdminMenuContentRenderer/>}
+                    { pageState=== '' ? <EmployeeHomeContent/> : <EmployeeMenuContentRenderer/>}
                 </Grid>
             </Main>
         </Box>

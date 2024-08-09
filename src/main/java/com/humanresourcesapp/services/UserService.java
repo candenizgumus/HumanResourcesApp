@@ -206,6 +206,7 @@ public class UserService {
         return userRepository.save(user);
 
     }
+
     public Boolean updateUserByAdmin(UpdateUserByAdminRequestDto dto)
     {
         User user = userRepository.findById(dto.userId()).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));

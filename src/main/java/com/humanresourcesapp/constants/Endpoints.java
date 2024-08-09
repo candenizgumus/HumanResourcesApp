@@ -57,6 +57,8 @@ public class Endpoints
     public static final String SEND_PASSWORD_RESET_EMAIL = "/send-password-reset-email";
     public static final String GET_ALL_COMPANY_LOGOS = "/get-all-company-logos";
     public static final String DECLINE_OFFER = "/decline-offer";
+    public static final String GET_HOLIDAY_BY_USER = "/get-holiday-by-user";
+    public static final String GET_HOLIDAY_BY_ADMIN = "/get-holiday-by-admin";
 
     public static final String GET_EMPLOYEE_TYPES = "/get-employee-types";
     public static final String GET_COUNT = "/get-count";

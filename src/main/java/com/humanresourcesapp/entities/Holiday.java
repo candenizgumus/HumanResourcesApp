@@ -23,6 +23,7 @@ public class Holiday extends BaseEntity
     EHolidayType holidayType;
     Long holidayStartDate;
     Long holidayEndDate;
+    Long companyId;
 }
 
 

@@ -2,12 +2,12 @@ import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { DataGrid, GridColDef, GridRowSelectionModel } from '@mui/x-data-grid';
-import { HumanResources, RootState, useAppSelector } from '../../store';
-import { fetchDeleteHoliday, fetchHolidays } from '../../store/feature/holidaySlice';
-import { IHoliday } from '../../models/IHoliday';
+import { HumanResources, RootState, useAppSelector } from '../../../store';
+import {fetchDeleteHoliday, fetchHolidaysAdmin, fetchHolidaysUser} from '../../../store/feature/holidaySlice';
+import { IHoliday } from '../../../models/IHoliday';
 import { Button, Grid, Box, Divider } from '@mui/material';
-import SideBarHolidayForm from "./SideBarHolidayForm";
-import { IHolidayFormatted } from "../../models/IHolidayFormatted";
+import SideBarHolidayFormAdmin from "./SideBarHolidayFormAdmin";
+import { IHolidayFormatted } from "../../../models/IHolidayFormatted";
 
 // Helper function to format epoch timestamp to human-readable date
 function epochToHumanReadableWithoutTime(epochTime: number): string {
@@ -42,14 +42,15 @@ const columns: GridColDef[] = [
     },
 ];
 
-export default function SideBarHolidayTable() {
+export default function SideBarHolidayTableAdmin() {
     const holidays: IHoliday[] = useAppSelector((state: RootState) => state.holiday.holidayList);
     const dispatch = useDispatch<HumanResources>();
+    const token = useAppSelector((state) => state.auth.token);
     const [selectedRowIds, setSelectedRowIds] = useState<number[]>([]);
     const [newHolidayList, setNewHolidayList] = useState<IHolidayFormatted[]>([]);
 
     useEffect(() => {
-        dispatch(fetchHolidays());
+        dispatch(fetchHolidaysAdmin(token));
     }, [dispatch]);
 
     useEffect(() => {
@@ -130,7 +131,7 @@ export default function SideBarHolidayTable() {
                     <Divider sx={{ my: 4 }} />
                 </Grid>
                 <Grid item xs={12}>
-                    <SideBarHolidayForm />
+                    <SideBarHolidayFormAdmin />
                 </Grid>
             </Grid>
         </Box>

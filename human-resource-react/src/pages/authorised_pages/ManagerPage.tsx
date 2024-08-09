@@ -25,7 +25,8 @@ import {AdminMenuContentRenderer} from "../../components/organisms/AdminMenuCont
 import { useNavigate } from 'react-router-dom';
 import NavbarProfile from "../../components/atoms/NavbarProfile";
 import AdminHomeContent  from "../../components/molecules/AdminPageComponents/AdminHomeContent"
-import {AccountBox, Apartment, Person, PersonAdd} from "@mui/icons-material";
+import {ManagerMenuContentRenderer} from "../../components/organisms/ManagerMenuContentRenderer";
+import {AccountBox, Apartment, Person, PersonAdd, Weekend} from "@mui/icons-material";
 import AddCommentIcon from '@mui/icons-material/AddComment';
 
 
@@ -152,15 +153,16 @@ export default function AdminPage() {
         </DrawerHeader>
         <Divider />
         <List>
-          {['Employees', 'Add Employee', 'Profile', 'Add Comment','Edit Company'].map((text, index) => (
+          {['Employees', 'Add Employee', 'Profile', 'Edit Company', 'Add Comment', 'Holidays'].map((text, index) => (
             <ListItem key={text} disablePadding>
               <ListItemButton onClick={() => handleListItemClick(text)}>
                 <ListItemIcon>
-                  {index  === 0 && <Person/>}
-                  {index  === 1 && <PersonAdd />}
-                  {index  === 2 && <AccountBox /> }
-                  {index === 3 && <AddCommentIcon/>}
-                  {index === 4 && <Apartment/>}
+                  {index === 0 && <Person/>}
+                  {index === 1 && <PersonAdd />}
+                  {index === 2 && <AccountBox />}
+                  {index === 3 && <Apartment />}
+                  {index === 4 && <AddCommentIcon/>}
+                  {index === 5 && <Weekend/>}
                 </ListItemIcon>
                 <ListItemText primary={text} />
               </ListItemButton>
@@ -172,7 +174,7 @@ export default function AdminPage() {
       <Main open={open}>
         <DrawerHeader />
         <Grid container spacing={2}>
-          { pageState=== '' ? <AdminHomeContent/> : <AdminMenuContentRenderer/>}
+          { pageState=== '' ? <AdminHomeContent/> : <ManagerMenuContentRenderer/>}
         </Grid>
       </Main>
     </Box>

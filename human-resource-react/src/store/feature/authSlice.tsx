@@ -578,6 +578,28 @@ export const fetchChangePassword = createAsyncThunk(
 
     }
 );
+interface IfetchCountOfUsersForAdminMenu {
+    totalManager: number;
+    totalEmployee: number;
+    activeManager: number;
+    activeEmployee: number;
+}
+export const fetchCountOfUsersForAdminMenu = createAsyncThunk(
+    'auth/fetchChangePassword',
+    async (payload:string, { dispatch }) => {
+
+        const response = await fetch('http://localhost:9090/dev/v1/user/count-of-customers-for-graph', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ` + payload
+            }
+        });
+
+        return await response.json();
+
+    }
+);
 
 
 const authSlice = createSlice({

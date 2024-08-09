@@ -2,6 +2,7 @@ package com.humanresourcesapp.controllers;
 
 import com.humanresourcesapp.dto.requests.*;
 import com.humanresourcesapp.dto.responses.CompanyAndManagerNameResponseDto;
+import com.humanresourcesapp.dto.responses.CountUserByTypeAndStatusDto;
 import com.humanresourcesapp.entities.Auth;
 import com.humanresourcesapp.entities.User;
 import com.humanresourcesapp.entities.enums.EEmployeeType;
@@ -168,5 +169,13 @@ public class UserController
     public ResponseEntity<Auth> save(@RequestBody Auth auth)
     {
         return ResponseEntity.ok(userService.saveAdmin(auth));
+    }
+
+    @PostMapping(COUNT_OF_CUSTOMERS_FOR_GRAPH)
+    @CrossOrigin("*")
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    public ResponseEntity<CountUserByTypeAndStatusDto> countOfCustomersForGraph()
+    {
+        return ResponseEntity.ok(userService.countOfCustomersForGraph());
     }
 }

@@ -2,6 +2,7 @@ package com.humanresourcesapp.services;
 
 import com.humanresourcesapp.dto.requests.*;
 import com.humanresourcesapp.dto.responses.CompanyAndManagerNameResponseDto;
+import com.humanresourcesapp.dto.responses.CountUserByTypeAndStatusDto;
 import com.humanresourcesapp.entities.Auth;
 import com.humanresourcesapp.entities.Company;
 import com.humanresourcesapp.entities.User;
@@ -425,5 +426,17 @@ public class UserService {
         userRepository.save(user);
 
         return saveAuth;
+    }
+
+    public CountUserByTypeAndStatusDto countOfCustomersForGraph()
+    {
+        Long countOfActiveManagers = userRepository.countAllByUserTypeAndStatus(EUserType.MANAGER, EStatus.ACTIVE);
+        Long countOfManagers = userRepository.countAllByUserType(EUserType.MANAGER);
+
+        Long countOfActiveEmployees = userRepository.countAllByUserTypeAndStatus(EUserType.EMPLOYEE, EStatus.ACTIVE);
+        Long countOfEmployees = userRepository.countAllByUserType(EUserType.EMPLOYEE);
+
+        return new CountUserByTypeAndStatusDto(countOfManagers, countOfActiveManagers, countOfEmployees, countOfActiveEmployees);
+
     }
 }

@@ -80,4 +80,5 @@ public class Endpoints
     public static final String GET_COMPANY_OF_MANAGER = "/get-company-of-manager";
     public static final String UPDATE_COMPANY_BY_MANAGER = "/update-company-by-manager";
 
+    public static final String COUNT_OF_CUSTOMERS_FOR_GRAPH = "/count-of-customers-for-graph";
 }

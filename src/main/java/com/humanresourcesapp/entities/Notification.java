@@ -1,6 +1,7 @@
 package com.humanresourcesapp.entities;
 
 import com.humanresourcesapp.entities.enums.ENotificationType;
+import com.humanresourcesapp.entities.enums.EStatus;
 import com.humanresourcesapp.entities.enums.EUserType;
 import jakarta.persistence.*;
 import lombok.*;

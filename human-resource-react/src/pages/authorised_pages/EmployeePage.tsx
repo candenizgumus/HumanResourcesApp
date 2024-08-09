@@ -9,6 +9,7 @@ import List from '@mui/material/List';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
+import NotificationsIcon from '@mui/icons-material/Notifications';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
@@ -160,7 +161,7 @@ export default function EmployeePage() {
                 </DrawerHeader>
                 <Divider />
                 <List>
-                    {['Shifts & Breaks', 'Holidays', 'Leaves', 'Profile', 'Company Items'].map((text, index) => (
+                    {['Shifts & Breaks', 'Holidays', 'Leaves', 'Profile', 'Company Items','Notifications'].map((text, index) => (
                         <ListItem key={text} disablePadding>
                             <ListItemButton onClick={() => handleListItemClick(text)}>
                                 <ListItemIcon>
@@ -169,6 +170,7 @@ export default function EmployeePage() {
                                     {index  === 2 && <AdminPanelSettings />}
                                     {index  === 3 && <AccountBox /> }
                                     {index  === 4 && <FeaturedPlayList /> }
+                                    {index === 5 && <NotificationsIcon/>}
                                 </ListItemIcon>
                                 <ListItemText primary={text} />
                             </ListItemButton>

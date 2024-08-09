@@ -12,6 +12,7 @@ import {lazy} from "react";
 import ChangePassword from "../molecules/ChangePassword";
 import SideBarCompany from "../molecules/ManagerComponents/SideBarCompany";
 import SideBarHolidayTableAdmin from "../molecules/AdminPageComponents/SideBarHolidayTableAdmin";
+import SideBarNotifications from "../molecules/AdminPageComponents/SideBarNotifications";
 const EditEmployee = lazy(() => import('../molecules/ManagerComponents/EditEmployee'));
 const SideBarCreateComment = lazy(() => import('../molecules/ManagerComponents/SideBarCreateComment'));
 export const AdminMenuContentRenderer = () => {
@@ -31,7 +32,8 @@ export const AdminMenuContentRenderer = () => {
                 {page === 'Employees' && <SideBarEmployees/>}
                 {page === 'Edit Employee' && <EditEmployee/>}
                 {page === 'Change Password' && <ChangePassword/>}
-                {page === 'Add Comment' && <SideBarCreateComment/>}
+                {page === 'Add Comment' && <SideBarCreateComment/>} 
+                {page === 'Notifications' && <SideBarNotifications/>}
                 {page === 'Edit Company' && <SideBarCompany/>}
             </Grid>
         </>

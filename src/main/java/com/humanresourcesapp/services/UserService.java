@@ -1,5 +1,6 @@
 package com.humanresourcesapp.services;
 
+import com.humanresourcesapp.constants.ENotificationTextBase;
 import com.humanresourcesapp.dto.requests.*;
 import com.humanresourcesapp.dto.responses.CompanyAndManagerNameResponseDto;
 import com.humanresourcesapp.dto.responses.CountUserByTypeAndStatusDto;
@@ -7,6 +8,7 @@ import com.humanresourcesapp.entities.Auth;
 import com.humanresourcesapp.entities.Company;
 import com.humanresourcesapp.entities.Offer;
 import com.humanresourcesapp.entities.User;
+import com.humanresourcesapp.entities.enums.ENotificationType;
 import com.humanresourcesapp.entities.enums.EStatus;
 import com.humanresourcesapp.entities.enums.EUserType;
 import com.humanresourcesapp.exception.ErrorType;
@@ -28,6 +30,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static com.humanresourcesapp.constants.FrontendPaths.*;
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -38,19 +42,28 @@ public class UserService {
     private final EmailService emailService;
     private final JwtTokenManager jwtTokenManager;
     private OfferService offerService;
-    
+
     @Autowired
     public void setOfferService(@Lazy OfferService offerService) {
         this.offerService = offerService;
     }
+    private final NotificationService notificationService;
 
 
     public User save(User user) {
         if (user.getCompanyId() != null) {
             companyService.findById(user.getCompanyId()).orElseThrow(() -> new HumanResourcesAppException(ErrorType.COMPANY_NOT_FOUND));
         }
-
         userRepository.save(user);
+        notificationService.save(NotificationSaveRequestDto.builder()
+                .notificationText(ENotificationTextBase.WELCOME_NOTIFICATION.getText())
+                .userType(null)
+                .userId(user.getId())
+                .isRead(false)
+                .status(EStatus.ACTIVE)
+                .notificationType(ENotificationType.SUCCESS)
+                .url(HOME)
+                .build());
         return user;
     }
 
@@ -138,7 +151,17 @@ public class UserService {
             c.setNumberOfEmployee(c.getNumberOfEmployee() + 1);
             companyService.update(c);
         });
-        return userRepository.save(employee);
+        User save = userRepository.save(employee);
+        notificationService.save(NotificationSaveRequestDto.builder()
+                .notificationText(ENotificationTextBase.WELCOME_NOTIFICATION.getText())
+                .userType(null)
+                .userId(save.getId())
+                .isRead(false)
+                .notificationType(ENotificationType.SUCCESS)
+                .url(HOME)
+                .status(EStatus.ACTIVE)
+                .build());
+        return save;
     }
 
     public User findByToken(String token) {
@@ -403,6 +426,15 @@ public class UserService {
         }
 
         userRepository.save(user);
+        notificationService.save(NotificationSaveRequestDto.builder()
+                .notificationText(ENotificationTextBase.WELCOME_NOTIFICATION.getText())
+                .userType(null)
+                .userId(user.getId())
+                .isRead(false)
+                .notificationType(ENotificationType.SUCCESS)
+                .url(HOME)
+                .status(EStatus.ACTIVE)
+                .build());
         return true;
 
     }

@@ -3,6 +3,7 @@ package com.humanresourcesapp.controllers;
 import com.humanresourcesapp.dto.requests.CompanySaveRequestDto;
 import com.humanresourcesapp.dto.requests.PageCountRequestDto;
 import com.humanresourcesapp.dto.requests.PageRequestDto;
+import com.humanresourcesapp.dto.requests.UpdateCompanyByManagerDto;
 import com.humanresourcesapp.entities.Company;
 import com.humanresourcesapp.services.CompanyService;
 import com.humanresourcesapp.views.VwGetCompanyLogos;
@@ -63,5 +64,19 @@ public class CompanyController
     public ResponseEntity<Map<Integer, Long>> getAy()
     {
         return ResponseEntity.ok(companyService.getCompanyCountByMonthForCurrentYear());
+    }
+
+    @PostMapping(GET_COMPANY_OF_MANAGER)
+    @PreAuthorize("hasAnyAuthority('MANAGER')")
+    public ResponseEntity<Company> getCompanyOfManager()
+    {
+        return ResponseEntity.ok(companyService.getCompanyOfManager());
+    }
+
+    @PutMapping(UPDATE_COMPANY_BY_MANAGER)
+    @PreAuthorize("hasAnyAuthority('MANAGER')")
+    public ResponseEntity<Company> updateCompanyByManager(@RequestBody UpdateCompanyByManagerDto dto)
+    {
+        return ResponseEntity.ok(companyService.updateCompanyByManager(dto));
     }
 }

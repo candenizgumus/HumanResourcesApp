@@ -15,6 +15,7 @@ import {SideBarEmployeeLeaves} from "../molecules/EmployeeComponents/SideBarEmpl
 import {SideBarEmployeeCompanyItems} from "../molecules/EmployeeComponents/SideBarEmployeeCompanyItems";
 import {lazy} from "react";
 import ChangePassword from "../molecules/ChangePassword";
+import SideBarCompany from "../molecules/ManagerComponents/SideBarCompany";
 const EditEmployee = lazy(() => import('../molecules/ManagerComponents/EditEmployee'));
 export const AdminMenuContentRenderer = () => {
     const page = useAppSelector((state) => state.auth.pageState);
@@ -37,6 +38,7 @@ export const AdminMenuContentRenderer = () => {
                 {page === 'Edit Employee' && <EditEmployee/>}
                 {page === 'Change Password' && <ChangePassword/>}
                 {page === 'Add Comment' && <SideBarCreateComment/>}
+                {page === 'Edit Company' && <SideBarCompany/>}
             </Grid>
         </>
     );

@@ -25,7 +25,7 @@ import {AdminMenuContentRenderer} from "../../components/organisms/AdminMenuCont
 import { useNavigate } from 'react-router-dom';
 import NavbarProfile from "../../components/atoms/NavbarProfile";
 import AdminHomeContent  from "../../components/molecules/AdminPageComponents/AdminHomeContent"
-import {AccountBox, Person, PersonAdd} from "@mui/icons-material";
+import {AccountBox, Apartment, Person, PersonAdd} from "@mui/icons-material";
 import AddCommentIcon from '@mui/icons-material/AddComment';
 
 
@@ -152,7 +152,7 @@ export default function AdminPage() {
         </DrawerHeader>
         <Divider />
         <List>
-          {['Employees', 'Add Employee', 'Profile', 'Add Comment'].map((text, index) => (
+          {['Employees', 'Add Employee', 'Profile', 'Add Comment','Edit Company'].map((text, index) => (
             <ListItem key={text} disablePadding>
               <ListItemButton onClick={() => handleListItemClick(text)}>
                 <ListItemIcon>
@@ -160,6 +160,7 @@ export default function AdminPage() {
                   {index  === 1 && <PersonAdd />}
                   {index  === 2 && <AccountBox /> }
                   {index === 3 && <AddCommentIcon/>}
+                  {index === 4 && <Apartment/>}
                 </ListItemIcon>
                 <ListItemText primary={text} />
               </ListItemButton>

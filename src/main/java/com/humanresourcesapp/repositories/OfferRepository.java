@@ -1,6 +1,7 @@
 package com.humanresourcesapp.repositories;
 
 import com.humanresourcesapp.entities.Offer;
+import com.humanresourcesapp.entities.enums.EStatus;
 import com.humanresourcesapp.views.VwGetAllOffer;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -21,4 +22,6 @@ public interface OfferRepository extends JpaRepository<Offer, Long>
 
     @Query("select Count(o) from Offer o  where o.status = 'PENDING' AND o.email like %?1%")
     Long getAllOfferByEmailSearchCount(String email);
+
+    Long countByStatus(EStatus status);
 }

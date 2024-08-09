@@ -578,12 +578,7 @@ export const fetchChangePassword = createAsyncThunk(
 
     }
 );
-interface IfetchCountOfUsersForAdminMenu {
-    totalManager: number;
-    totalEmployee: number;
-    activeManager: number;
-    activeEmployee: number;
-}
+
 export const fetchCountOfUsersForAdminMenu = createAsyncThunk(
     'auth/fetchChangePassword',
     async (payload:string, { dispatch }) => {

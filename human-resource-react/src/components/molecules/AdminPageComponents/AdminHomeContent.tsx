@@ -13,6 +13,9 @@ const Dashboard = () => {
   const [totalEmployee, setTotalEmployee] = React.useState(0);
   const [activeManager, setActiveManager] = React.useState(0);
   const [activeEmployee, setActiveEmployee] = React.useState(0);
+  const[totalOffer, setTotalOffer] = React.useState(0);
+  const[totalApprovedOffer, setTotalApprovedOffer] = React.useState(0);
+  const[offerReturnRatio, setOfferReturnRatio] = React.useState(0.00);
 
   const dispatch = useDispatch<HumanResources>();
   const [monthlyCustomerCount, setMonthlyCustomerCount] = React.useState([]);
@@ -29,7 +32,13 @@ const Dashboard = () => {
         setTotalEmployee(data.payload.totalEmployee);
         setActiveManager(data.payload.activeManager);
         setActiveEmployee(data.payload.activeEmployee);
-      })
+        setTotalOffer(data.payload.totalOffer);
+        setTotalApprovedOffer(data.payload.approvedOffer);
+
+        // Calculate and set offer return ratio
+        const ratio = data.payload.totalOffer > 0 ? data.payload.approvedOffer / data.payload.totalOffer : 0;
+        setOfferReturnRatio(ratio);
+      });
     }
   }, [dispatch]);
 
@@ -154,8 +163,10 @@ const Dashboard = () => {
                     yAxis={[
                       {
                         label: 'Customer Count'
+
                       }
                     ]}
+                    barLabel="value"
                     series={[{ data: monthlyCustomerCount }]}
                     height={300}
                 />
@@ -218,9 +229,9 @@ const Dashboard = () => {
                 padding: 2 // Add some padding to the content
               }}>
                 <Typography  variant="h6">
-                  20 % Offer Return Ratio
+                  { Math.round(offerReturnRatio*100) === 0 ? '0' : Math.round(offerReturnRatio*100)} % Offer Return Ratio
                 </Typography>
-                <Gauge height={265} value={20} />
+                <Gauge height={265} value={Math.round(offerReturnRatio*100) ?? '0'} />
               </CardContent>
             </Card>
           </Grid>

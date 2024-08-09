@@ -1,5 +1,7 @@
 package com.humanresourcesapp.utility;
 
+import com.humanresourcesapp.constants.ENotificationTextBase;
+import com.humanresourcesapp.dto.requests.NotificationSaveRequestDto;
 import com.humanresourcesapp.dto.requests.OfferSaveRequestDto;
 import com.humanresourcesapp.entities.*;
 import com.humanresourcesapp.entities.enums.*;
@@ -12,7 +14,9 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
+
+import static com.humanresourcesapp.constants.FrontendPaths.HOME;
+
 
 @RequiredArgsConstructor
 @Service
@@ -25,6 +29,7 @@ public class InsertDemoData {
     private final CommentService commentService;
     private final HolidayService holidayService;
     private final OfferService offerService;
+    private final NotificationService notificationService;
 
     @PostConstruct
     public void insert() {
@@ -33,6 +38,16 @@ public class InsertDemoData {
         insertCommentDemoData();
         insertHolidayDemoData();
         instertOfferDemoData();
+
+        notificationService.save(NotificationSaveRequestDto.builder()
+                .notificationText(ENotificationTextBase.ERROR_NOTIFICATION.getText() + "We have Errors !")
+                .userType(EUserType.ADMIN)
+                .userId(0L)
+                .isRead(false)
+                .status(EStatus.ACTIVE)
+                .notificationType(ENotificationType.ERROR)
+                .url(HOME)
+                .build());
     }
 
     // Company demo data insertion
@@ -368,6 +383,8 @@ public class InsertDemoData {
                     .title("Turkey Operations Manager")
                     .build();
             userService.save(user);
+
+
 
             Auth auth2 = authService.save(Auth.
                     builder()

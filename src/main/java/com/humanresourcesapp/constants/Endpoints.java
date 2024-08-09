@@ -20,7 +20,7 @@ public class Endpoints
     public static final String ROOT = DEV + VERSION;
 
     //controllers
-    public static final String ASSIGNMENT = "/assignmenut";
+    public static final String ASSIGNMENT = "/assignment";
     public static final String AUTH = "/auth";
     public static final String OFFER = "/offer";
     public static final String BREAK = "/break";
@@ -80,5 +80,7 @@ public class Endpoints
     public static final String GET_COMPANY_OF_MANAGER = "/get-company-of-manager";
     public static final String UPDATE_COMPANY_BY_MANAGER = "/update-company-by-manager";
 
+    public static final String UPDATE_IS_READ = "/update-is-read";
+    public static final String GET_ALL_UNREAD = "/get-all-unread";
     public static final String COUNT_OF_CUSTOMERS_FOR_GRAPH = "/count-of-customers-for-graph";
 }

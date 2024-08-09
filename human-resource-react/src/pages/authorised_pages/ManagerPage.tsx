@@ -11,6 +11,7 @@ import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import NotificationsIcon from '@mui/icons-material/Notifications';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
@@ -154,7 +155,7 @@ export default function AdminPage() {
         </DrawerHeader>
         <Divider />
         <List>
-          {['Employees', 'Add Employee', 'Profile', 'Company', 'Add Comment', 'Holidays'].map((text, index) => (
+          {['Employees', 'Add Employee', 'Profile', 'Company', 'Add Comment', 'Holidays','Notifications'].map((text, index) => (
             <ListItem key={text} disablePadding>
               <ListItemButton onClick={() => handleListItemClick(text)}>
                 <ListItemIcon>
@@ -164,6 +165,7 @@ export default function AdminPage() {
                   {index === 3 && <Apartment />}
                   {index === 4 && <AddCommentIcon/>}
                   {index === 5 && <Weekend/>}
+                  {index === 6 && <NotificationsIcon/>}
                 </ListItemIcon>
                 <ListItemText primary={text} />
               </ListItemButton>

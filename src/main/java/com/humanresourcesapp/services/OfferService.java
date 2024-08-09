@@ -1,10 +1,12 @@
 package com.humanresourcesapp.services;
 
+import com.humanresourcesapp.constants.ENotificationTextBase;
 import com.humanresourcesapp.dto.requests.*;
 import com.humanresourcesapp.entities.Auth;
 import com.humanresourcesapp.entities.Company;
 import com.humanresourcesapp.entities.Offer;
 import com.humanresourcesapp.entities.User;
+import com.humanresourcesapp.entities.enums.ENotificationType;
 import com.humanresourcesapp.entities.enums.EStatus;
 import com.humanresourcesapp.entities.enums.EUserType;
 import com.humanresourcesapp.exception.ErrorType;
@@ -18,7 +20,7 @@ import com.humanresourcesapp.views.VwGetAllOffer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-
+import static com.humanresourcesapp.constants.FrontendPaths.*;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,6 +34,7 @@ public class OfferService
     private final CompanyService companyService;
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
+    private final NotificationService notificationService;
 
 
     public Boolean save(OfferSaveRequestDto dto)
@@ -65,6 +68,15 @@ public class OfferService
                         .sector(dto.sector())
                         .build());
 
+        notificationService.save(NotificationSaveRequestDto.builder()
+                .notificationText(ENotificationTextBase.OFFER_NOTIFICATION.getText() + dto.email())
+                .userType(EUserType.ADMIN)
+                .userId(0L)
+                .isRead(false)
+                .status(EStatus.ACTIVE)
+                .notificationType(ENotificationType.INFORMATION)
+                .url(OFFERS)
+                .build());
 
         return true;
     }

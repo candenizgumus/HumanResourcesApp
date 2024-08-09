@@ -16,6 +16,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
+import NotificationsIcon from '@mui/icons-material/Notifications';
 import { Button, Grid} from '@mui/material';
 import { HumanResources, RootState} from '../../store';
 import { useDispatch, useSelector } from 'react-redux';
@@ -135,7 +136,7 @@ export default function AdminPage() {
             </Button>
         </Typography>
             <Box sx={{ flexGrow: 1 }} />
-            <NotificationIcon />
+            <NotificationIcon/>
             <NavbarProfile />
 
         </Toolbar>
@@ -160,7 +161,7 @@ export default function AdminPage() {
         </DrawerHeader>
         <Divider />
         <List>
-          {['Offers', 'Users', 'Create Admin', 'Create Feature', 'Holidays', 'Profile','Companies'].map((text, index) => (
+          {['Offers', 'Users', 'Create Admin', 'Create Feature', 'Holidays', 'Profile','Companies', 'Notifications'].map((text, index) => (
             <ListItem key={text} disablePadding>
               <ListItemButton onClick={() => handleListItemClick(text)}>
                 <ListItemIcon>
@@ -171,6 +172,7 @@ export default function AdminPage() {
                   {index  === 4 && <Weekend /> }
                   {index  === 5 && <AccountBox /> }
                   {index  === 6 && <Apartment /> }
+                  {index === 7 && <NotificationsIcon/>}
                 </ListItemIcon>
                 <ListItemText primary={text} />
               </ListItemButton>

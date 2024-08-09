@@ -253,10 +253,10 @@ public class InsertDemoData {
                                 "\n")
 
                 .build());
-
+        User manager3 = userService.findByEmail("manager3@gmail.com").orElseThrow(() -> new RuntimeException("Manager not found"));
         commentList.add(Comment.builder()
-                .companyId(1L)
-                .managerId(manager.getId())
+                .companyId(manager3.getCompanyId())
+                .managerId(manager3.getId())
                 .shortDescription("We have experienced an evolution from disorder to order in our human resources processes with Easy HR!")
                         .longDescription("We have experienced an evolution from disorganisation to order in our human resources processes with Easy HR! \u200D\n" +
                                 "\n" +
@@ -270,55 +270,6 @@ public class InsertDemoData {
 
 
                 .build());
-
-        commentList.add(Comment.builder()
-                .companyId(1L)
-                .managerId(manager.getId())
-                .shortDescription("We have experienced an evolution from disorder to order in our human resources processes with Easy HR!")
-                .longDescription("We have experienced an evolution from disorganisation to order in our human resources processes with Easy HR! \u200D\n" +
-                        "\n" +
-                        "Before we met Easy HR, especially our leave and expenditure processes were very complex and disorganised. The follow-up and control problems we experienced in these areas made us feel like we were constantly failing. \n" +
-                        "\n" +
-                        "Therefore, in 2016, we decided that we needed a solution to support our HR processes and we met Easy HR Personnel Management application. The features offered by the application for our problems were the most important factors affecting our decision to cooperate.\n" +
-                        "\n" +
-                        "Before starting to work with Easy HR, our biggest concern was the loss of time that switching to such a software would create. However, Easy HR's flexible structure and customer-oriented approach eliminated all these concerns.\n" +
-                        "\n" +
-                        "After we started using Easy HR, the features we benefited the most were leave and expenditure. The control mechanisms in these processes and access to historical data have greatly facilitated our work. We have experienced an evolution from disorder to order in our human resources processes with Easy. It has been really great to be able to access historical data and see the big picture!")
-
-                .build());
-
-        commentList.add(Comment.builder()
-                .companyId(1L)
-                .managerId(manager.getId())
-                .shortDescription("We have experienced an evolution from disorder to order in our human resources processes with Easy HR!")
-                .longDescription("We have experienced an evolution from disorganisation to order in our human resources processes with Easy HR! \u200D\n" +
-                        "\n" +
-                        "Before we met Easy HR, especially our leave and expenditure processes were very complex and disorganised. The follow-up and control problems we experienced in these areas made us feel like we were constantly failing. \n" +
-                        "\n" +
-                        "Therefore, in 2016, we decided that we needed a solution to support our HR processes and we met Easy HR Personnel Management application. The features offered by the application for our problems were the most important factors affecting our decision to cooperate.\n" +
-                        "\n" +
-                        "Before starting to work with Easy HR, our biggest concern was the loss of time that switching to such a software would create. However, Easy HR's flexible structure and customer-oriented approach eliminated all these concerns.\n" +
-                        "\n" +
-                        "After we started using Easy HR, the features we benefited the most were leave and expenditure. The control mechanisms in these processes and access to historical data have greatly facilitated our work. We have experienced an evolution from disorder to order in our human resources processes with Easy. It has been really great to be able to access historical data and see the big picture!")
-
-                .build());
-
-        commentList.add(Comment.builder()
-                .companyId(1L)
-                .managerId(manager.getId())
-                .shortDescription("We have experienced an evolution from disorder to order in our human resources processes with Easy HR!")
-                .longDescription("We have experienced an evolution from disorganisation to order in our human resources processes with Easy HR! \u200D\n" +
-                        "\n" +
-                        "Before we met Easy HR, especially our leave and expenditure processes were very complex and disorganised. The follow-up and control problems we experienced in these areas made us feel like we were constantly failing. \n" +
-                        "\n" +
-                        "Therefore, in 2016, we decided that we needed a solution to support our HR processes and we met Easy HR Personnel Management application. The features offered by the application for our problems were the most important factors affecting our decision to cooperate.\n" +
-                        "\n" +
-                        "Before starting to work with Easy HR, our biggest concern was the loss of time that switching to such a software would create. However, Easy HR's flexible structure and customer-oriented approach eliminated all these concerns.\n" +
-                        "\n" +
-                        "After we started using Easy HR, the features we benefited the most were leave and expenditure. The control mechanisms in these processes and access to historical data have greatly facilitated our work. We have experienced an evolution from disorder to order in our human resources processes with Easy. It has been really great to be able to access historical data and see the big picture!")
-
-                .build());
-
         commentService.saveAll(commentList);
     }
 
@@ -431,7 +382,7 @@ public class InsertDemoData {
             User user2 = User
                     .builder()
                     .status(EStatus.ACTIVE)
-                    .email("manager2@gmail.com")
+                    .email(auth2.getEmail())
                     .name("Emir")
                     .surname("Güngördü")
                     .authId(auth2.getId())
@@ -449,6 +400,70 @@ public class InsertDemoData {
                     .title("CEO")
                     .build();
             userService.save(user2);
+
+            Auth auth3 = authService.save(Auth.
+                    builder()
+                    .status(EStatus.ACTIVE)
+                    .email("manager3@gmail.com")
+                    .password(encodedPassword)
+                    .userType(EUserType.MANAGER)
+                    .subscriptionType(ESubscriptionType.MONTHLY)
+                    .build());
+
+
+            User user3 = User
+                    .builder()
+                    .status(EStatus.ACTIVE)
+                    .email(auth3.getEmail())
+                    .name("Aslan")
+                    .surname("Demir")
+                    .authId(auth3.getId())
+                    .subscriptionType(ESubscriptionType.MONTHLY)
+                    .subscriptionStartDate(auth3.getSubscriptionStartDate())
+                    .subscriptionEndDate(auth3.getSubscriptionEndDate())
+                    .location("Turkey")
+                    .birthDate(LocalDate.of(1989, 1, 1))
+                    .position(EPosition.CARTOGRAPHER)
+                    .companyId(3L)
+                    .phone("5555555555")
+                    .photo("https://xsgames.co/randomusers/assets/avatars/male/39.jpg")
+                    .userType(EUserType.MANAGER)
+                    .sector(ESectors.TECHNOLOGY)
+                    .title("General Manager")
+                    .build();
+            userService.save(user3);
+
+            Auth auth4 = authService.save(Auth.
+                    builder()
+                    .status(EStatus.ACTIVE)
+                    .email("manager4@gmail.com")
+                    .password(encodedPassword)
+                    .userType(EUserType.MANAGER)
+                    .subscriptionType(ESubscriptionType.MONTHLY)
+                    .build());
+
+
+            User user4 = User
+                    .builder()
+                    .status(EStatus.ACTIVE)
+                    .email(auth4.getEmail())
+                    .name("Can")
+                    .surname("Kara")
+                    .authId(auth4.getId())
+                    .subscriptionType(ESubscriptionType.MONTHLY)
+                    .subscriptionStartDate(auth4.getSubscriptionStartDate())
+                    .subscriptionEndDate(auth4.getSubscriptionEndDate())
+                    .location("Turkey")
+                    .birthDate(LocalDate.of(1989, 1, 1))
+                    .position(EPosition.CARTOGRAPHER)
+                    .companyId(10L)
+                    .phone("5555555555")
+                    .photo("https://xsgames.co/randomusers/assets/avatars/male/31.jpg")
+                    .userType(EUserType.MANAGER)
+                    .sector(ESectors.TECHNOLOGY)
+                    .title("CEO")
+                    .build();
+            userService.save(user4);
 
             // Adding employee to the manager
             Auth authEmployee = authService.save(Auth.

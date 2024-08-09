@@ -63,13 +63,13 @@ function AboutUsPage() {
               <Grid item xs={12} sm={6} md={4}>
                 <Paper elevation={3} sx={{ p: 2, textAlign: 'center' }}>
                   <Avatar
-                    alt="Member Name"
+                    alt="Can Deniz Gümüş"
                     src="/path/to/avatar1.jpg"
                     sx={{ width: 80, height: 80, mx: 'auto', mb: 2 }}
                   />
-                  <Typography variant="h6">Member Name</Typography>
+                  <Typography variant="h6">Can Deniz Gümüş</Typography>
                   <Typography variant="body2" color="textSecondary">
-                    Position
+                    Developer
                   </Typography>
                   <Typography variant="body1">
                     Short bio about the team member, their experience, and role in the project.
@@ -80,13 +80,64 @@ function AboutUsPage() {
               <Grid item xs={12} sm={6} md={4}>
                 <Paper elevation={3} sx={{ p: 2, textAlign: 'center' }}>
                   <Avatar
-                    alt="Member Name"
+                    alt="Heval Can Aslan Özen"
                     src="/path/to/avatar2.jpg"
                     sx={{ width: 80, height: 80, mx: 'auto', mb: 2 }}
                   />
-                  <Typography variant="h6">Member Name</Typography>
+                  <Typography variant="h6">Heval Can Aslan Özen</Typography>
                   <Typography variant="body2" color="textSecondary">
-                    Position
+                  Developer
+                  </Typography>
+                  <Typography variant="body1">
+                    Short bio about the team member, their experience, and role in the project.
+                  </Typography>
+                </Paper>
+              </Grid>
+              {/* Team Member 3 */}
+              <Grid item xs={12} sm={6} md={4}>
+                <Paper elevation={3} sx={{ p: 2, textAlign: 'center' }}>
+                  <Avatar
+                    alt="Hicran Arslan"
+                    src="/path/to/avatar1.jpg"
+                    sx={{ width: 80, height: 80, mx: 'auto', mb: 2 }}
+                  />
+                  <Typography variant="h6">Hicran Arslan</Typography>
+                  <Typography variant="body2" color="textSecondary">
+                  Developer
+                  </Typography>
+                  <Typography variant="body1">
+                    Short bio about the team member, their experience, and role in the project.
+                  </Typography>
+                </Paper>
+              </Grid>
+              {/* Team Member 4 */}
+              <Grid item xs={12} sm={6} md={4}>
+                <Paper elevation={3} sx={{ p: 2, textAlign: 'center' }}>
+                  <Avatar
+                    alt="Kenan Kerem Öktener"
+                    src="/path/to/avatar1.jpg"
+                    sx={{ width: 80, height: 80, mx: 'auto', mb: 2 }}
+                  />
+                  <Typography variant="h6">Kenan Kerem Öktener</Typography>
+                  <Typography variant="body2" color="textSecondary">
+                  Developer
+                  </Typography>
+                  <Typography variant="body1">
+                    Short bio about the team member, their experience, and role in the project.
+                  </Typography>
+                </Paper>
+              </Grid>
+              {/* Team Member 5 */}
+              <Grid item xs={12} sm={6} md={4}>
+                <Paper elevation={3} sx={{ p: 2, textAlign: 'center' }}>
+                  <Avatar
+                    alt="Sami Emir Esen"
+                    src="/path/to/avatar1.jpg"
+                    sx={{ width: 80, height: 80, mx: 'auto', mb: 2 }}
+                  />
+                  <Typography variant="h6">Sami Emir Esen</Typography>
+                  <Typography variant="body2" color="textSecondary">
+                  Developer
                   </Typography>
                   <Typography variant="body1">
                     Short bio about the team member, their experience, and role in the project.

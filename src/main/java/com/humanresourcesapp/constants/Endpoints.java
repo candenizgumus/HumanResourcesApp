@@ -2,6 +2,14 @@ package com.humanresourcesapp.constants;
 
 public class Endpoints
 {
+
+    // server
+    public static final String BASE_URL = "http://";
+    public static final String HOST = "localhost";
+    public static final String PORT = ":9090";
+    public static final String BASE_PATH = BASE_URL + HOST + PORT;
+
+    // version
     public static final String VERSION = "/v1";
 
     //profiles

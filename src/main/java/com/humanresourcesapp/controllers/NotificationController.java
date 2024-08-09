@@ -5,6 +5,7 @@ import com.humanresourcesapp.entities.Notification;
 import com.humanresourcesapp.services.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,9 +22,11 @@ public class NotificationController {
         return ResponseEntity.ok(notificationService.save(notificationSaveRequestDto));
     }
 
-    @PostMapping(GET_BY_ID + "/{userId}")
-    public ResponseEntity<List<Notification>> getAllByUserId(@PathVariable Long userId) {
-        return ResponseEntity.ok(notificationService.getAllById(userId));
+    @PostMapping(GET_ALL)
+    @CrossOrigin("*")
+    @PreAuthorize("hasAnyAuthority('MANAGER','ADMIN','EMPLOYEE')")
+    public ResponseEntity<List<Notification>> getAll() {
+        return ResponseEntity.ok(notificationService.getAll());
     }
 
 

@@ -32,7 +32,7 @@ const FeaturesSection = () => {
                     Features
                 </Typography>
                 <Grid container spacing={4}>
-                    {featureList.slice(0, 6).map((feature) => (
+                    {featureList.slice(0, 3).map((feature) => (
                         <FeatureCard
                             key={feature.id}
                             name={feature.name}

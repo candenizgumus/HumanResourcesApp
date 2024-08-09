@@ -1,6 +1,7 @@
 package com.humanresourcesapp.entities;
 
 import com.humanresourcesapp.entities.enums.ENotificationType;
+import com.humanresourcesapp.entities.enums.EUserType;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -23,4 +24,6 @@ public class Notification extends BaseEntity
     String notificationText;
     @Builder.Default
     Boolean isRead = false;
+    EUserType userType;
+    String url;
 }

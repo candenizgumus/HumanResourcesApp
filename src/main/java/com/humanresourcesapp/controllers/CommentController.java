@@ -36,7 +36,9 @@ public class CommentController {
     @CrossOrigin("*")
     @PreAuthorize("hasAnyAuthority('MANAGER','ADMIN')")
     public ResponseEntity<Comment> getCompanyComment() {
-        return ResponseEntity.ok(commentService.getCompanyComment());
+        Comment companyComment = commentService.getCompanyComment();
+        System.out.println(companyComment);
+        return ResponseEntity.ok(companyComment);
     }
 
     @PostMapping(UPDATE)

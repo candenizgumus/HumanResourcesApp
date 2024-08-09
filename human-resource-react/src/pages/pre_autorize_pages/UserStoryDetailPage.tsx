@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import {
     Typography,
@@ -12,13 +12,20 @@ import { styled } from '@mui/material/styles';
 import { NavBar } from '../../components/molecules/PreAuthorizedPageComponents/NavBar';
 import FooterElement from '../../components/molecules/PreAuthorizedPageComponents/FooterElement';
 import LogoCard from '../../components/molecules/PreAuthorizedPageComponents/LogoCard';
+import { HumanResources, RootState } from '../../store';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchGetUserStories, IUserStoryResponse } from '../../store/feature/userStorySlice';
+import UserStoryCard from '../../components/molecules/PreAuthorizedPageComponents/UserStoryCard';
 
 const Root = styled('div')(({ theme }) => ({
     display: 'flex',
     flexDirection: 'column',
     minHeight: '100vh',
 }));
-
+const CardGrid = styled(Container)(({ theme }) => ({
+    paddingTop: theme.spacing(4),
+    paddingBottom: theme.spacing(4),
+  }));
 const Header = styled('div')(({ theme }) => ({
     marginBottom: theme.spacing(4),
     backgroundColor: theme.palette.primary.main,
@@ -39,7 +46,11 @@ function UserStoryDetailPage() {
     const { companyName } = useParams();
     const location = useLocation();
     const userStory = location.state || {};
-
+    const dispatch: HumanResources = useDispatch();
+    const userStories = useSelector((state: RootState) => state.userStory.storyList) as IUserStoryResponse[];
+    useEffect(() => {
+        dispatch(fetchGetUserStories());
+    }, [dispatch]);
     // Split the long description into sentences
     const sentences = userStory.longDescription ? userStory.longDescription.split('. ') : [];
 
@@ -98,6 +109,29 @@ function UserStoryDetailPage() {
                             ))}
                         </Grid>
                     </Grid>
+                    <CardGrid maxWidth="md" sx={{ marginBottom: '5%' }}>
+                        <Typography component="h1" variant="h4" align="center" color="primary.main" gutterBottom sx={{ paddingBottom: 5 }}>
+                            Other User Stories
+                        </Typography>
+                        <Grid container spacing={4}>
+                            {userStories.filter(story => story.id !== userStory.id).map((userStory) => (
+                                <UserStoryCard 
+                                    key={userStory.id}
+                                    id={userStory.id}
+                                    managerName={userStory.managerName}
+                                    companyName = {userStory.companyName}
+                                    title = {userStory.title}
+                                    shortDescription = {userStory.shortDescription}
+                                    longDescription = {userStory.longDescription}
+                                    photo = {userStory.photo}
+                                    sector = {userStory.sector}
+                                    numberOfEmployees = {userStory.numberOfEmployees}
+                                    logo = {userStory.logo}
+                                    country = {userStory.country}
+                                />
+                            ))}
+                        </Grid>
+                    </CardGrid>
                 </Container>
             </Body>
             <Footer>

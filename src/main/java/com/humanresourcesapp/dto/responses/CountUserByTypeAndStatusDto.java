@@ -4,7 +4,9 @@ public record CountUserByTypeAndStatusDto(
         Long totalManager,
         Long activeManager,
         Long totalEmployee,
-        Long activeEmployee
+        Long activeEmployee,
+        Long totalOffer,
+        Long approvedOffer
 )
 {
 

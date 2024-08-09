@@ -140,4 +140,14 @@ public class OfferService
     public Long getCount(PageCountRequestDto dto) {
         return offerRepository.getAllOfferByEmailSearchCount(dto.searchText());
     }
+
+    public Long count()
+    {
+        return offerRepository.count();
+    }
+
+    public Long countActiveOffers()
+    {
+        return offerRepository.countByStatus(EStatus.ACTIVE);
+    }
 }

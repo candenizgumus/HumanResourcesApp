@@ -5,6 +5,7 @@ import com.humanresourcesapp.dto.responses.CompanyAndManagerNameResponseDto;
 import com.humanresourcesapp.dto.responses.CountUserByTypeAndStatusDto;
 import com.humanresourcesapp.entities.Auth;
 import com.humanresourcesapp.entities.Company;
+import com.humanresourcesapp.entities.Offer;
 import com.humanresourcesapp.entities.User;
 import com.humanresourcesapp.entities.enums.EStatus;
 import com.humanresourcesapp.entities.enums.EUserType;
@@ -36,6 +37,12 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
     private final JwtTokenManager jwtTokenManager;
+    private OfferService offerService;
+    
+    @Autowired
+    public void setOfferService(@Lazy OfferService offerService) {
+        this.offerService = offerService;
+    }
 
 
     public User save(User user) {
@@ -436,7 +443,12 @@ public class UserService {
         Long countOfActiveEmployees = userRepository.countAllByUserTypeAndStatus(EUserType.EMPLOYEE, EStatus.ACTIVE);
         Long countOfEmployees = userRepository.countAllByUserType(EUserType.EMPLOYEE);
 
-        return new CountUserByTypeAndStatusDto(countOfManagers, countOfActiveManagers, countOfEmployees, countOfActiveEmployees);
+        Long count = offerService.count();
+        Long approvedOffers = offerService.countActiveOffers();
+
+
+
+        return new CountUserByTypeAndStatusDto(countOfManagers, countOfActiveManagers, countOfEmployees, countOfActiveEmployees, count, approvedOffers);
 
     }
 }

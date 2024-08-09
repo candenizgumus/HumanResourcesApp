@@ -11,7 +11,7 @@ import {
     TextField,
     Modal,
     Box,
-    Typography,
+    Typography, Avatar,
 } from "@mui/material";
 import { HumanResources, useAppSelector } from "../../../store";
 import { useDispatch } from "react-redux";
@@ -23,10 +23,29 @@ import {ICompany} from "../../../models/ICompany";
 const columns: GridColDef[] = [
     { field: "id", headerName: "ID", width: 70, headerAlign: "center" },
     { field: "name", headerName: "Company Name", width: 160, headerAlign: "center" },
-    { field: "logo", headerName: "Logo", width: 160, headerAlign: "center" },
     { field: "description", headerName: "Description", headerAlign: "center", width: 300 },
     { field: "numberOfEmployee", headerName: "Employee Count", headerAlign: "center", width: 150 },
     { field: "status", headerName: "Status", headerAlign: "center", width: 160 },
+    {
+        field: "logo",
+        headerName: "Logo",
+        width: 100,
+        headerAlign: "center",
+        sortable: false,
+        renderCell: (params) => (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '100%' }}>
+                <Avatar
+                    alt={params.row.name}
+                    src={params.value}
+                    style={{
+                        width: 40,  // Avatar boyutunu küçültme
+                        height: 40, // Avatar boyutunu küçültme
+                        objectFit: 'contain'  // Görselin sığmasını sağlama
+                    }}
+                />
+            </div>
+        ),
+    },
 ];
 
 const style = {

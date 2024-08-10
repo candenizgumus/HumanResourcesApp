@@ -1,5 +1,16 @@
 import React, {useState, FormEvent, useEffect} from 'react';
-import {TextField, Button, Box, Grid, InputLabel, Select, MenuItem, FormControl, Avatar} from '@mui/material';
+import {
+    TextField,
+    Button,
+    Box,
+    Grid,
+    InputLabel,
+    Select,
+    MenuItem,
+    FormControl,
+    Avatar,
+    OutlinedInput, InputAdornment
+} from '@mui/material';
 import {HumanResources, useAppSelector} from "../../../store";
 import {IUser} from "../../../models/IUser";
 import {
@@ -34,6 +45,7 @@ const SideBarAddEmployee: React.FC = () => {
     const [photo, setPhoto] = useState<string>('');
     const [hireDate, setHireDate] = useState<Date | null>(null);
     const [location, setLocation] = useState<string>('') ;
+    const[salary,setSalary]=useState<number>(0)
 
     const [positions, setPositions] = useState([]);
     const [selectedPositions, setSelectedPositions] = useState<string>('');
@@ -81,7 +93,7 @@ const SideBarAddEmployee: React.FC = () => {
     console.log(name, surname, phone, title, birthDate, selectedPositions, location);
     const addEmployee = () => {
 
-        if (!name || !surname    || !surname  || !phone || !title  || !birthDate  || !selectedEmployeeType || !location || !hireDate || !selectedPositions) {
+        if (!salary || !name || !surname    || !surname  || !phone || !title  || !birthDate  || !selectedEmployeeType || !location || !hireDate || !selectedPositions) {
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
@@ -100,7 +112,8 @@ const SideBarAddEmployee: React.FC = () => {
             location: location,
             hireDate: hireDate,
             eEmployeeType: selectedEmployeeType,
-            email: email
+            email: email,
+            salary: salary
         })).then((data) => {
             if (data.payload.message) {
                 sweetalert2.fire({
@@ -282,7 +295,16 @@ const SideBarAddEmployee: React.FC = () => {
 
                         />
                     </LocalizationProvider>
-
+                    <FormControl fullWidth >
+                        <InputLabel htmlFor="outlined-adornment-amount">Salary</InputLabel>
+                        <OutlinedInput
+                            id="outlined-adornment-amount"
+                            startAdornment={<InputAdornment position="start">$</InputAdornment>}
+                            label="Salary"
+                            value={salary ?? ''} // Set the value of the input
+                            onChange={(e) => setSalary(parseInt(e.target.value))} // Handle the value change
+                        />
+                    </FormControl>
 
 
                 </Box>

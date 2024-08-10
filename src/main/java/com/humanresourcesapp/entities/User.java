@@ -37,6 +37,9 @@ public class User extends BaseEntity
     // EMPLOYEE
     String location;
 
+    // EMPLOYEE
+    Double salary;
+
     //EMPLOYEE
     @Enumerated(EnumType.STRING)
     EEmployeeType employeeType;

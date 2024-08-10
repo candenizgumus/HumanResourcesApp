@@ -6,6 +6,7 @@ export interface IUser{
     companyId:number ;
     authId:number ;
     managerId:number ;
+    salary:number ;
     email:string ;
     name:string ;
     surname:string ;

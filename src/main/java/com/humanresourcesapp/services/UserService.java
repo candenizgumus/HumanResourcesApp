@@ -135,15 +135,15 @@ public class UserService {
                 .managerId(manager.getId())
                 .status(EStatus.ACTIVE)
                 .position(dto.ePosition())
-
                 .position(dto.ePosition())
-                        .location(dto.location())
-                        .title(dto.title())
-                        .sector(manager.getSector())
-                        .employeeType(dto.eEmployeeType())
+                .location(dto.location())
+                .title(dto.title())
+                .sector(manager.getSector())
+                .employeeType(dto.eEmployeeType())
                 .subscriptionType(manager.getSubscriptionType())
                 .subscriptionStartDate(manager.getSubscriptionStartDate())
                 .subscriptionEndDate(manager.getSubscriptionEndDate())
+                .salary(dto.salary())
                 .build());
 
         //Increasing number of employee in company
@@ -342,9 +342,15 @@ public class UserService {
 
     public Boolean delete(Long id)
     {
+
         //Changing status of user and auth
         User user = userRepository.findById(id).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
+        if (user.getStatus() == EStatus.DELETED)
+        {
+            throw new HumanResourcesAppException(ErrorType.USER_ALREADY_DELETED);
+        }
         user.setStatus(EStatus.DELETED);
+        emailService.send(MailModel.builder().to(user.getEmail()).subject("Your account is deleted").message("Your account is deleted").build());
         userRepository.save(user);
         Auth auth = authService.findByEmail(user.getEmail()).orElseThrow(() -> new HumanResourcesAppException(ErrorType.AUTH_NOT_FOUND));
         auth.setStatus(EStatus.DELETED);
@@ -423,6 +429,12 @@ public class UserService {
         if (user.getStatus() == EStatus.DELETED)
         {
             user.setStatus(EStatus.ACTIVE);
+            emailService.send(MailModel.builder().to(user.getEmail()).subject("Your account is activated").message("You can log in with email: " + user.getEmail()).build());
+            //Setting companyEmployee count
+            companyService.findById(user.getCompanyId()).ifPresent(company -> {
+                company.setNumberOfEmployee(company.getNumberOfEmployee() + 1);
+                companyService.update(company);
+            });
         }
 
         userRepository.save(user);

@@ -486,7 +486,7 @@ public class InsertDemoData {
             Auth authEmployee = authService.save(Auth.
                     builder()
                     .status(EStatus.ACTIVE)
-                    .email("employee")
+                    .email("employee@gmail.com")
                     .password(encodedPassword)
                     .userType(EUserType.EMPLOYEE)
                     .subscriptionType(ESubscriptionType.MONTHLY)
@@ -495,7 +495,7 @@ public class InsertDemoData {
             User employee = User
                     .builder()
                     .status(EStatus.ACTIVE)
-                    .email("employee")
+                    .email("employee@gmail.com")
                     .name("Employee 1")
                     .surname("Hard")
                     .managerId(user.getId())
@@ -513,6 +513,7 @@ public class InsertDemoData {
                     .employeeType(EEmployeeType.FULL_TIME)
                     .sector(ESectors.TECHNOLOGY)
                     .title("Turkey Operations Employee")
+                    .salary(1950.00)
                     .hireDate(LocalDate.of(2021, 1, 1))
 
                     .build();
@@ -521,7 +522,7 @@ public class InsertDemoData {
             Auth authEmployee2 = authService.save(Auth.
                     builder()
                     .status(EStatus.ACTIVE)
-                    .email("employee2")
+                    .email("employee2@gmail.com")
                     .password(encodedPassword)
                     .userType(EUserType.EMPLOYEE)
                     .subscriptionType(ESubscriptionType.MONTHLY)
@@ -530,7 +531,7 @@ public class InsertDemoData {
             User employee2 = User
                     .builder()
                     .status(EStatus.ACTIVE)
-                    .email("employee2")
+                    .email("employee2@gmail.com")
                     .name("Ahmet")
                     .surname("Kaya")
                     .managerId(user.getId())
@@ -547,6 +548,7 @@ public class InsertDemoData {
                     .userType(EUserType.EMPLOYEE)
                     .employeeType(EEmployeeType.PART_TIME)
                     .sector(ESectors.TECHNOLOGY)
+                    .salary(2650.00)
                     .title("Dr.")
                     .hireDate(LocalDate.of(2023, 5, 5))
 

@@ -6,6 +6,7 @@ import {ICreateAdmin} from '../../models/ICreateAdmin';
 interface IAuthState {
     user: IUser;
     userList: IUser[];
+    upcomingBirthdayUsers: IUser[];
     token: string;
     isAuth: boolean;
     pageState: string;
@@ -16,6 +17,7 @@ interface IAuthState {
 const initalAuthState: IAuthState = {
     user: {} as IUser,
     userList: [],
+    upcomingBirthdayUsers: [],
     token: '',
     isAuth: false,
     pageState: '',
@@ -596,6 +598,23 @@ export const fetchCountOfUsersForAdminMenu = createAsyncThunk(
     }
 );
 
+export const fetchFindEmployeesWithUpcomingBirthdays = createAsyncThunk(
+    'auth/fetchChangePassword',
+    async (payload:string, { dispatch }) => {
+
+        const response = await fetch('http://localhost:9090/dev/v1/user/find-employees-with-upcoming-birthdays', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ` + payload
+            }
+        });
+
+        return await response.json();
+
+    }
+);
+
 
 const authSlice = createSlice({
     name: 'auth',
@@ -643,6 +662,10 @@ const authSlice = createSlice({
             .addCase(fetchGetAllUsersOfManager.fulfilled, (state, action: PayloadAction<IUser[]>) => {
 
                 state.userList = action.payload;
+            })
+            .addCase(fetchFindEmployeesWithUpcomingBirthdays.fulfilled, (state, action: PayloadAction<IUser[]>) => {
+
+                state.upcomingBirthdayUsers = action.payload;
             })
             .addMatcher(
                 (action) => action.type.endsWith('/rejected'),

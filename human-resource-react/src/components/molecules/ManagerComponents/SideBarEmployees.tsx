@@ -20,11 +20,9 @@ import {
     changePageState,
     clearToken, fetchActivateUserByManager,
     fetchDeleteEmployeeByAdmin,
-    fetchGetAllUsers,
     fetchGetAllUsersOfManager, setSelectedEmployeeId
 } from "../../../store/feature/authSlice";
 import Swal from "sweetalert2";
-import {fetchApproveOffers, fetchGetOfferCount, fetchGetOffers} from "../../../store/feature/offerSlice";
 
 const columns: GridColDef[] = [
     { field: "id", headerName: "ID", width: 70, headerAlign: "center" },

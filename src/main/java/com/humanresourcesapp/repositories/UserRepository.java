@@ -8,6 +8,7 @@ import com.humanresourcesapp.views.VwGetAllOffer;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -43,4 +44,9 @@ public interface UserRepository extends JpaRepository<User,Long>
 
     Long countAllByUserType(EUserType userType);
     Long countAllByUserTypeAndStatus(EUserType userType, EStatus status);
+
+    @Query("SELECT u FROM User u WHERE u.userType = :userType AND " +
+            "MONTH(u.birthDate) = MONTH(CURRENT_DATE) OR " +
+            "MONTH(u.birthDate) = MONTH(CURRENT_DATE) + 1")
+    List<User> findEmployeesWithUpcomingBirthdays(@Param("userType") EUserType userType);
 }

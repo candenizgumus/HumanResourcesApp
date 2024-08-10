@@ -483,4 +483,11 @@ public class UserService {
         return new CountUserByTypeAndStatusDto(countOfManagers, countOfActiveManagers, countOfEmployees, countOfActiveEmployees, count, approvedOffers);
 
     }
+
+    public List<User> findEmployeesWithUpcomingBirthdays()
+    {
+
+        return userRepository.findEmployeesWithUpcomingBirthdays(EUserType.EMPLOYEE);
+
+    }
 }

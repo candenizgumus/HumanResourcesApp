@@ -178,4 +178,12 @@ public class UserController
     {
         return ResponseEntity.ok(userService.countOfCustomersForGraph());
     }
+
+    @PostMapping(FIND_EMPLOYEES_WITH_UPCOMING_BIRTHDAYS)
+    @CrossOrigin("*")
+    @PreAuthorize("hasAnyAuthority('MANAGER')")
+    public ResponseEntity<List<User>> findEmployeesWithUpcomingBirthdays()
+    {
+        return ResponseEntity.ok(userService.findEmployeesWithUpcomingBirthdays());
+    }
 }

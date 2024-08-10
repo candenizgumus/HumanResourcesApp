@@ -37,7 +37,9 @@ public enum ErrorType
     WRONG_PASSWORD(1025,"Wrong Password",   HttpStatus.BAD_REQUEST ),
     COMPANY_ALREADY_COMMENTED(1026,"Company Already Commented",   HttpStatus.BAD_REQUEST ),
     COMMENT_NOT_FOUND(1027,"Comment Not Found" , HttpStatus.BAD_REQUEST),
-    NOTIFICATION_NOT_FOUND(1028, "Notification Not Found", HttpStatus.BAD_REQUEST);
+    NOTIFICATION_NOT_FOUND(1028, "Notification Not Found", HttpStatus.BAD_REQUEST),
+    USER_ALREADY_DELETED(1029, "User Already Deleted", HttpStatus.BAD_REQUEST),
+    ;
     private Integer code;
     private String message;
     private HttpStatus httpStatus;

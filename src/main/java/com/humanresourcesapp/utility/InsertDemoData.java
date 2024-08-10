@@ -486,7 +486,7 @@ public class InsertDemoData {
             Auth authEmployee = authService.save(Auth.
                     builder()
                     .status(EStatus.ACTIVE)
-                    .email("employee")
+                    .email("employee@gmail.com")
                     .password(encodedPassword)
                     .userType(EUserType.EMPLOYEE)
                     .subscriptionType(ESubscriptionType.MONTHLY)
@@ -495,7 +495,7 @@ public class InsertDemoData {
             User employee = User
                     .builder()
                     .status(EStatus.ACTIVE)
-                    .email("employee")
+                    .email("employee@gmail.com")
                     .name("Employee 1")
                     .surname("Hard")
                     .managerId(user.getId())
@@ -521,7 +521,7 @@ public class InsertDemoData {
             Auth authEmployee2 = authService.save(Auth.
                     builder()
                     .status(EStatus.ACTIVE)
-                    .email("employee2")
+                    .email("employee2@gmail.com")
                     .password(encodedPassword)
                     .userType(EUserType.EMPLOYEE)
                     .subscriptionType(ESubscriptionType.MONTHLY)
@@ -530,7 +530,7 @@ public class InsertDemoData {
             User employee2 = User
                     .builder()
                     .status(EStatus.ACTIVE)
-                    .email("employee2")
+                    .email("employee2@gmail.com")
                     .name("Ahmet")
                     .surname("Kaya")
                     .managerId(user.getId())

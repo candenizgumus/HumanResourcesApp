@@ -355,6 +355,7 @@ interface IfetchAddEmployeeToManager {
     hireDate:Date;
     ePosition:string;
     eEmployeeType:string;
+    salary:number
 }
 export const fetchAddEmployeeToManager = createAsyncThunk(
     'user/fetchAddEmployeeToManager',
@@ -374,7 +375,8 @@ export const fetchAddEmployeeToManager = createAsyncThunk(
                 'birthDate': payload.birthDate,
                 'hireDate': payload.hireDate,
                 'ePosition': payload.ePosition,
-                'eEmployeeType': payload.eEmployeeType
+                'eEmployeeType': payload.eEmployeeType,
+                'salary': payload.salary
             })
         });
 

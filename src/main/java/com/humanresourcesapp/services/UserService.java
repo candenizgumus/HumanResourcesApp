@@ -135,15 +135,15 @@ public class UserService {
                 .managerId(manager.getId())
                 .status(EStatus.ACTIVE)
                 .position(dto.ePosition())
-
                 .position(dto.ePosition())
-                        .location(dto.location())
-                        .title(dto.title())
-                        .sector(manager.getSector())
-                        .employeeType(dto.eEmployeeType())
+                .location(dto.location())
+                .title(dto.title())
+                .sector(manager.getSector())
+                .employeeType(dto.eEmployeeType())
                 .subscriptionType(manager.getSubscriptionType())
                 .subscriptionStartDate(manager.getSubscriptionStartDate())
                 .subscriptionEndDate(manager.getSubscriptionEndDate())
+                .salary(dto.salary())
                 .build());
 
         //Increasing number of employee in company

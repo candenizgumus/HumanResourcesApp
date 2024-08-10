@@ -513,6 +513,7 @@ public class InsertDemoData {
                     .employeeType(EEmployeeType.FULL_TIME)
                     .sector(ESectors.TECHNOLOGY)
                     .title("Turkey Operations Employee")
+                    .salary(1950.00)
                     .hireDate(LocalDate.of(2021, 1, 1))
 
                     .build();
@@ -547,6 +548,7 @@ public class InsertDemoData {
                     .userType(EUserType.EMPLOYEE)
                     .employeeType(EEmployeeType.PART_TIME)
                     .sector(ESectors.TECHNOLOGY)
+                    .salary(2650.00)
                     .title("Dr.")
                     .hireDate(LocalDate.of(2023, 5, 5))
 

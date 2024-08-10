@@ -15,7 +15,8 @@ public record AddEmployeeToManagerRequestDto(Long managerId,
                                              LocalDate birthDate,
                                              LocalDate hireDate,
                                              EPosition ePosition,
-                                             EEmployeeType eEmployeeType
+                                             EEmployeeType eEmployeeType,
+                                             Double salary
 
 
 )

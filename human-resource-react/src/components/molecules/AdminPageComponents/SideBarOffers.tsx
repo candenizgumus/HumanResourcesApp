@@ -3,7 +3,7 @@ import {
     DataGrid,
     GridColDef,
     GridPaginationModel,
-    GridRowSelectionModel,
+    GridRowSelectionModel, GridToolbar,
 } from "@mui/x-data-grid";
 import {
     Button,
@@ -13,7 +13,6 @@ import {
     Box,
     Typography,
     Backdrop,
-    CircularProgress
 } from "@mui/material";
 import { HumanResources, useAppSelector } from "../../../store";
 import { useDispatch } from "react-redux";
@@ -275,7 +274,7 @@ export default function SideBarOffers() {
     };
 
     return (
-        <div style={{ height: 400, width: "inherit" }}>
+        <div style={{ height: 410, width: "inherit" }}>
             <TextField
                 label="Email"
                 variant="outlined"
@@ -285,6 +284,9 @@ export default function SideBarOffers() {
                 inputProps={{ maxLength: 50 }}
             />
             <DataGrid
+                slots={{
+                    toolbar: GridToolbar,
+                }}
                 rows={offerList}
                 rowCount={rowCount}
                 columns={columns}
@@ -293,7 +295,7 @@ export default function SideBarOffers() {
                 paginationModel={paginationModel}
                 onPaginationModelChange={handlePaginationModelChange}
                 pageSizeOptions={[5, 10]}
-
+                loading={loading}
                 checkboxSelection
                 onRowSelectionModelChange={handleRowSelection}
                 sx={{

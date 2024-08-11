@@ -502,4 +502,6 @@ public class UserService {
         return userRepository.findEmployeesWithUpcomingBirthdays(EUserType.EMPLOYEE);
 
     }
+
+
 }

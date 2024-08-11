@@ -29,7 +29,7 @@ import NavbarProfile from "../../components/atoms/NavbarProfile";
 import {
     AccountBox,
     AdminPanelSettings,
-    FeaturedPlayList,
+    FeaturedPlayList, PointOfSale,
     Weekend
 } from "@mui/icons-material";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
@@ -161,7 +161,7 @@ export default function EmployeePage() {
                 </DrawerHeader>
                 <Divider />
                 <List>
-                    {['Shifts & Breaks', 'Holidays', 'Leaves', 'Profile', 'Company Items','Notifications'].map((text, index) => (
+                    {['Shifts & Breaks', 'Holidays', 'Leaves', 'Profile', 'Company Items','Notifications','Expenditure'].map((text, index) => (
                         <ListItem key={text} disablePadding>
                             <ListItemButton onClick={() => handleListItemClick(text)}>
                                 <ListItemIcon>
@@ -171,6 +171,7 @@ export default function EmployeePage() {
                                     {index  === 3 && <AccountBox /> }
                                     {index  === 4 && <FeaturedPlayList /> }
                                     {index === 5 && <NotificationsIcon/>}
+                                    {index === 6 && <PointOfSale/>}
                                 </ListItemIcon>
                                 <ListItemText primary={text} />
                             </ListItemButton>

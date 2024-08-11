@@ -139,8 +139,7 @@ public class UserController
 
     @PostMapping(COUNT_BY_MONTH)
     @CrossOrigin("*")
-    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
-    //TODO DAHA SONRA MANAGER I SILELIM
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<List<Long>> getCountByMonth()
     {
 

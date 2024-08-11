@@ -3,7 +3,7 @@ import {
     DataGrid,
     GridColDef,
     GridPaginationModel,
-    GridRowSelectionModel,
+    GridRowSelectionModel, GridToolbar,
 } from "@mui/x-data-grid";
 import {
     Avatar,
@@ -164,7 +164,7 @@ export default function SideBarUsers() {
     };
 
     return (
-        <div style={{ height: 400, width: "inherit" }}>
+        <div style={{ height: 410, width: "inherit" }}>
             <TextField
                 label="Email"
                 variant="outlined"
@@ -174,8 +174,11 @@ export default function SideBarUsers() {
                 inputProps={{ maxLength: 50 }}
             />
             <DataGrid
+                slots={{
+                    toolbar: GridToolbar,
+                }}
                 rows={userList}
-
+                loading={loading}
                 rowCount={rowCount}
                 columns={columns}
                 paginationMode="server"

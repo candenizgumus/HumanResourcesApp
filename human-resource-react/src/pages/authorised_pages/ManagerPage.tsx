@@ -22,10 +22,8 @@ import { HumanResources, RootState} from '../../store';
 import { useDispatch, useSelector } from 'react-redux';
 import { changePageState } from '../../store/feature/authSlice';
 import {NotificationIcon} from "../../components/atoms/NotificationIcon";
-import {AdminMenuContentRenderer} from "../../components/organisms/AdminMenuContentRenderer";
 import { useNavigate } from 'react-router-dom';
 import NavbarProfile from "../../components/atoms/NavbarProfile";
-import AdminHomeContent  from "../../components/molecules/AdminPageComponents/AdminHomeContent"
 import {ManagerMenuContentRenderer} from "../../components/organisms/ManagerMenuContentRenderer";
 import {AccountBox, Apartment, Person, PersonAdd, Weekend} from "@mui/icons-material";
 import AddCommentIcon from '@mui/icons-material/AddComment';

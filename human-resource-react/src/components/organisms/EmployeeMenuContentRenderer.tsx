@@ -7,6 +7,7 @@ import {SideBarEmployeeCompanyItems} from "../molecules/EmployeeComponents/SideB
 import SideBarNotifications from "../molecules/AdminPageComponents/SideBarNotifications";
 import {lazy} from "react";
 import SideBarHolidayTableUser from "../molecules/ManagerComponents/SideBarHolidayTableUser";
+import SideBarExpenditure from "../molecules/EmployeeComponents/SideBarExpenditure";
 export const EmployeeMenuContentRenderer = () => {
     const page = useAppSelector((state) => state.auth.pageState);
 
@@ -19,6 +20,7 @@ export const EmployeeMenuContentRenderer = () => {
                 {page === 'Profile' && <SideBarProfile/>}
                 {page === 'Company Items' && <SideBarEmployeeCompanyItems/>}
                 {page === 'Notifications' && <SideBarNotifications/>}
+                {page === 'Expenditure' && <SideBarExpenditure/>}
             </Grid>
         </>
     );

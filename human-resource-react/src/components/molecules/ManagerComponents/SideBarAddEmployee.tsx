@@ -302,7 +302,10 @@ const SideBarAddEmployee: React.FC = () => {
                             startAdornment={<InputAdornment position="start">$</InputAdornment>}
                             label="Salary"
                             value={salary ?? ''} // Set the value of the input
-                            onChange={(e) => setSalary(parseInt(e.target.value))} // Handle the value change
+                            onChange={e => {
+                                const value = e.target.value;
+                                setSalary(value ? parseInt(value) : 0); // Eğer value geçersizse 0 olarak ayarla
+                            }}
                         />
                     </FormControl>
 

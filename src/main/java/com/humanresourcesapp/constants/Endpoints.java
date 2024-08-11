@@ -84,4 +84,5 @@ public class Endpoints
     public static final String GET_ALL_UNREAD = "/get-all-unread";
     public static final String COUNT_OF_CUSTOMERS_FOR_GRAPH = "/count-of-customers-for-graph";
     public static final String FIND_EMPLOYEES_WITH_UPCOMING_BIRTHDAYS = "/find-employees-with-upcoming-birthdays";
+    public static final String SEARCH_BY_EMPLOYEE_ID = "/search-by-employee-id";
 }

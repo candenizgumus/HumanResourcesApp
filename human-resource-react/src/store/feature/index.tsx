@@ -6,6 +6,7 @@ import holidaySlice from "./holidaySlice";
 import offerSlice from "./offerSlice";
 import passwordResetSlice from "./passwordResetSlice";
 import notificationSlice from "./notificationSlice";
+import expenditureSlice from "./expenditureSlice";
  
 
 
@@ -18,5 +19,6 @@ export{
     holidaySlice,
     offerSlice,
     passwordResetSlice,
-    notificationSlice
+    notificationSlice,
+    expenditureSlice
 }

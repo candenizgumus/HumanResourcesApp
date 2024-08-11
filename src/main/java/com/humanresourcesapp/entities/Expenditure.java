@@ -3,9 +3,12 @@ package com.humanresourcesapp.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
+
+import java.time.LocalDate;
 
 @EqualsAndHashCode(callSuper = true)
-@Builder
+@SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
@@ -15,12 +18,12 @@ public class Expenditure extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    private Long employeeId;
-    private String description;
-    private Double price;
-    private Long expenditureDate;
-
-    private String receiptFilePath;
+    Long id;
+    Long employeeId;
+    String description;
+    Double price;
+    LocalDate approveDate;
+    @Builder.Default
+    Boolean isExpenditureApproved = false;
+    String attachedFile;
 }

@@ -1,6 +1,7 @@
 export interface IExpenditure{
     id: number
-    employeeId: string
+    employeeId: number
+    companyId: number
     description: string
     price: number
     approveDate:Date,

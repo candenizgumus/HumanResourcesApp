@@ -4,6 +4,7 @@ import com.humanresourcesapp.dto.requests.ExpenditureSaveRequestDto;
 import com.humanresourcesapp.dto.requests.PageRequestDto;
 import com.humanresourcesapp.entities.Expenditure;
 import com.humanresourcesapp.entities.User;
+import com.humanresourcesapp.entities.enums.EStatus;
 import com.humanresourcesapp.exception.ErrorType;
 import com.humanresourcesapp.exception.HumanResourcesAppException;
 import com.humanresourcesapp.repositories.ExpenditureRepository;
@@ -12,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -32,6 +34,10 @@ public class ExpenditureService
                 .employeeId(employee.getId())
                 .description(dto.description())
                 .price(dto.price())
+                .companyId(employee.getCompanyId())
+                .employeeName(employee.getName())
+                .employeeSurname(employee.getSurname())
+                .status(EStatus.ACTIVE)
                 .build();
 
         //TODO BURADAN MAANAGER A NOTIFICATION GONDERMEK LAZIM
@@ -47,4 +53,34 @@ public class ExpenditureService
     }
 
 
+    public List<Expenditure> searchByCompanyId(PageRequestDto dto)
+    {
+        String userEmail = UserInfoSecurityContext.getUserInfoFromSecurityContext();
+        User manager = userService.findByEmail(userEmail).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
+
+        return expenditureRepository.searchByCompanyId(dto.searchText(), manager.getCompanyId(), PageRequest.of(dto.page(), dto.pageSize()));
+
+    }
+
+    public Boolean approveExpenditure(Long id)
+    {
+        String userEmail = UserInfoSecurityContext.getUserInfoFromSecurityContext();
+        User manager = userService.findByEmail(userEmail).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
+
+        Expenditure expenditure = expenditureRepository.findById(id).orElseThrow(() -> new HumanResourcesAppException(ErrorType.EXPENDITURE_NOT_FOUND));
+        if (!expenditure.getCompanyId().equals(manager.getCompanyId()))
+        {
+            throw new HumanResourcesAppException(ErrorType.INVALID_ACCOUNT);
+        }
+
+        if (!expenditure.getIsExpenditureApproved())
+        {
+            expenditure.setIsExpenditureApproved(true);
+            expenditure.setApproveDate(LocalDate.now());
+            expenditureRepository.save(expenditure);
+            return true;
+
+        }
+       return false;
+    }
 }

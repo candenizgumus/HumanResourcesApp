@@ -25,7 +25,7 @@ import {NotificationIcon} from "../../components/atoms/NotificationIcon";
 import { useNavigate } from 'react-router-dom';
 import NavbarProfile from "../../components/atoms/NavbarProfile";
 import {ManagerMenuContentRenderer} from "../../components/organisms/ManagerMenuContentRenderer";
-import {AccountBox, Apartment, Person, PersonAdd, Weekend} from "@mui/icons-material";
+import {AccountBox, Apartment, Person, PersonAdd, PointOfSale, Weekend} from "@mui/icons-material";
 import AddCommentIcon from '@mui/icons-material/AddComment';
 import {ManagerHomeContent} from "../../components/molecules/ManagerComponents/ManagerHomeContent";
 
@@ -153,7 +153,7 @@ export default function AdminPage() {
         </DrawerHeader>
         <Divider />
         <List>
-          {['Employees', 'Add Employee', 'Profile', 'Company', 'Add Comment', 'Holidays','Notifications'].map((text, index) => (
+          {['Employees', 'Add Employee', 'Profile', 'Company', 'Add Comment', 'Holidays','Notifications', 'Expenditure'].map((text, index) => (
             <ListItem key={text} disablePadding>
               <ListItemButton onClick={() => handleListItemClick(text)}>
                 <ListItemIcon>
@@ -164,6 +164,7 @@ export default function AdminPage() {
                   {index === 4 && <AddCommentIcon/>}
                   {index === 5 && <Weekend/>}
                   {index === 6 && <NotificationsIcon/>}
+                  {index === 7 && <PointOfSale/>}
                 </ListItemIcon>
                 <ListItemText primary={text} />
               </ListItemButton>

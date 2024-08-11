@@ -33,4 +33,16 @@ public class ExpenditureController
     public ResponseEntity<List<Expenditure>> searchByEmployeeId(@RequestBody PageRequestDto dto){
         return ResponseEntity.ok(expenditureService.searchByEmployeeId(dto));
     }
+
+    @PostMapping(SEARCH_BY_COMPANY_ID)
+    @PreAuthorize("hasAnyAuthority('MANAGER')")
+    public ResponseEntity<List<Expenditure>> searchByCompanyId(@RequestBody PageRequestDto dto){
+        return ResponseEntity.ok(expenditureService.searchByCompanyId(dto));
+    }
+
+    @PostMapping(APPROVE_EXPENDITURE)
+    @PreAuthorize("hasAnyAuthority('MANAGER')")
+    public ResponseEntity<Boolean> approveExpenditure(Long id){
+        return ResponseEntity.ok(expenditureService.approveExpenditure(id));
+    }
 }

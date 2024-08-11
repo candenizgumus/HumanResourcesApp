@@ -22,10 +22,16 @@ import {
     fetchGetAllUsersOfManager, setSelectedEmployeeId
 } from "../../../store/feature/authSlice";
 import Swal from "sweetalert2";
-import {fetchExpenditureSave, fetchGetExpendituresOfEmployee} from "../../../store/feature/expenditureSlice";
+import {
+    fetchApproveExpenditure,
+    fetchExpenditureSave,
+    fetchGetExpendituresOfManager
+} from "../../../store/feature/expenditureSlice";
 
 const columns: GridColDef[] = [
     {field: "id", headerName: "ID", width: 70, headerAlign: "center"},
+    {field: "employeeName", headerName: "Name", width: 120, headerAlign: "center"},
+    {field: "employeeSurname", headerName: "Surname", width: 120, headerAlign: "center"},
     {field: "price", headerName: "Price $", width: 150, headerAlign: "center",
         renderCell: (params) => {
             // Check if the value is valid
@@ -50,14 +56,14 @@ const columns: GridColDef[] = [
 ];
 
 
-export default function SideBarExpenditure() {
+export const  SideBarManagerExpenditures = () => {
     const [selectedRowIds, setSelectedRowIds] = useState<number[]>([]);
     const [searchText, setSearchText] = useState('');
 
 
     const dispatch = useDispatch<HumanResources>();
     const token = useAppSelector((state) => state.auth.token);
-    const userList = useAppSelector((state) => state.expenditure.expenditureList);
+    const expenditures = useAppSelector((state) => state.expenditure.expenditureList);
     const [loading, setLoading] = useState(false);
     const [isActivating, setIsActivating] = useState(false);
 
@@ -67,7 +73,7 @@ export default function SideBarExpenditure() {
 
     useEffect(() => {
         dispatch(
-            fetchGetExpendituresOfEmployee({
+            fetchGetExpendituresOfManager({
                 token: token,
                 page: 0,
                 pageSize: 100,
@@ -90,21 +96,21 @@ export default function SideBarExpenditure() {
 
     }
 
-    const handleDeleteEmployee = async () => {
+    const handleApprove = async () => {
         setLoading(true);
 
         for (let id of selectedRowIds) {
-            const selectedEmployee = userList.find((selectedEmployee) => selectedEmployee.id === id);
-            if (!selectedEmployee) continue;
+            const selectedExpenditure = expenditures.find((selectedExpenditure) => selectedExpenditure.id === id);
+            if (!selectedExpenditure) continue;
 
 
             try {
 
 
                 //fetch
-                const response = await dispatch(fetchDeleteEmployeeByAdmin({
+                const response = await dispatch(fetchApproveExpenditure({
                     token: token,
-                    id: selectedEmployee.id,
+                    id: selectedExpenditure.id,
 
                 })).then(data => {
                     if (data.payload.message) {
@@ -119,12 +125,12 @@ export default function SideBarExpenditure() {
                     }
                     Swal.fire({
                         title: "Success",
-                        text: "Deletion completed",
+                        text: "Expenditure has been approved",
                         icon: "success",
                         confirmButtonText: "OK",
                     });
 
-                    fetchGetExpendituresOfEmployee({
+                    fetchGetExpendituresOfManager({
                         token: token,
                         page: 0,
                         pageSize: 100,
@@ -201,7 +207,7 @@ export default function SideBarExpenditure() {
                 style={{marginBottom: "10px"}}
             />
             <DataGrid
-                rows={userList}
+                rows={expenditures}
                 columns={columns}
                 initialState={{
                     pagination: {
@@ -239,66 +245,30 @@ export default function SideBarExpenditure() {
             <Grid container spacing={1} style={{marginTop: 16}} direction="row">
                 <Grid item>
                     <Button
+                        onClick={handleApprove}
+                        variant="contained"
+                        color="error"
+                        disabled={isActivating || selectedRowIds.length === 0}
+                    >
+                        {loading ? "Approving..." : "Approve"}
+                    </Button>
+                </Grid>
+
+                <Grid item>
+                    <Button
                         onClick={handleOnClickEditEmployee}
                         variant="contained"
                         color="error"
                         disabled={isActivating || selectedRowIds.length === 0}
                     >
-                        {loading ? "Deleting..." : "Delete"}
+                        {loading ? "Rejecting..." : "Reject"}
                     </Button>
                 </Grid>
 
             </Grid>
-
-            <Grid container spacing={2} style={{ marginTop: 16 }} direction="row">
-                <Grid item xs={12}>
-                    <Typography sx={{ fontWeight: "bold", marginBottom: "10px" }}>
-                        Add Expenditure
-                    </Typography>
-                </Grid>
-
-                <Grid item xs={4}>
-                    <TextField
-                        label="Description"
-                        name="description"
-                        value={description}
-                        onChange={e => setDescription(e.target.value)}
-                        fullWidth
-                        required
-                        inputProps={{ maxLength: 50 }}
-                    />
-                </Grid>
-
-                <Grid item xs={4}>
-                    <FormControl fullWidth>
-                        <InputLabel htmlFor="outlined-adornment-amount">Expense</InputLabel>
-                        <OutlinedInput
-                            id="outlined-adornment-amount"
-                            startAdornment={<InputAdornment position="start">$</InputAdornment>}
-                            label="Expense"
-                            value={price} // Set the value of the input
-                            onChange={e => {
-                                const value = e.target.value;
-                                setPrice(value ? parseInt(value) : 0); // Eğer value geçersizse 0 olarak ayarla
-                            }}
-                        />
-                    </FormControl>
-                </Grid>
-                <Grid item xs={4}>
-                    <Button
-                        onClick={handleSaveExpense}
-                        variant="contained"
-                        color="primary"
-                        disabled={price === 0  || description.length === 0 }
-
-                    >
-                        {loading ? "Deleting..." : "Add"}
-                    </Button>
-                </Grid>
-            </Grid>
-
-
 
         </div>
     );
 }
+
+export default SideBarManagerExpenditures

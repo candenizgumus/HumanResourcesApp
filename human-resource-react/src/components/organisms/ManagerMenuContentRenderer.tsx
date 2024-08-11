@@ -7,6 +7,7 @@ import SideBarHolidayTableUser from "../molecules/ManagerComponents/SideBarHolid
 import SideBarNotifications from "../molecules/AdminPageComponents/SideBarNotifications";
 import SideBarCompany from "../molecules/ManagerComponents/SideBarCompany";
 import SideBarCreateComment from "../molecules/ManagerComponents/SideBarCreateComment";
+import SideBarManagerExpenditures from "../molecules/ManagerComponents/SideBarManagerExpenditures";
 export const ManagerMenuContentRenderer = () => {
     const page = useAppSelector((state) => state.auth.pageState);
 
@@ -20,6 +21,7 @@ export const ManagerMenuContentRenderer = () => {
                 {page === 'Notifications' && <SideBarNotifications/>}
                 {page === 'Company' && <SideBarCompany/>}
                 {page === 'Add Comment' && <SideBarCreateComment/>}
+                {page === 'Expenditure' && <SideBarManagerExpenditures/>}
             </Grid>
         </>
     );

@@ -20,6 +20,9 @@ public class Expenditure extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     Long employeeId;
+    Long companyId;
+    String employeeName;
+    String employeeSurname;
     String description;
     Double price;
     LocalDate approveDate;

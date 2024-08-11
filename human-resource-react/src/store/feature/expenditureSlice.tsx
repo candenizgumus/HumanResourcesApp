@@ -66,12 +66,57 @@ export const fetchGetExpendituresOfEmployee = createAsyncThunk(
 
 )
 
+export const fetchGetExpendituresOfManager = createAsyncThunk(
+    'expenditure/fetchGetExpendituresOfManager',
+    async (payload: IfetchGetAllExpenditures) => {
+
+        const response = await fetch(`http://localhost:9090/dev/v1/expenditure/search-by-company-id`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ` + payload.token
+            },
+            body: JSON.stringify({
+                'page': payload.page,
+                'pageSize': payload.pageSize,
+                'searchText': payload.searchText
+            })
+        });
+
+        return await response.json();
+    }
+
+)
+interface IfetchApproveExpenditure{
+    token:string,
+    id:number
+}
+export const fetchApproveExpenditure = createAsyncThunk(
+    'expenditure/approveExpenditure',
+    async (payload: IfetchApproveExpenditure) => {
+
+        const response = await fetch(`http://localhost:9090/dev/v1/expenditure/approve-expenditure?id=` + payload.id, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ` + payload.token
+            }
+        });
+
+        return await response.json();
+    }
+
+)
+
 const expenditureSlice = createSlice({
     name: 'expenditure',
     initialState: initialExpenditureState,
     reducers: {},
     extraReducers: (build)=>{
         build.addCase(fetchGetExpendituresOfEmployee.fulfilled,(state,action)=>{
+            state.expenditureList = action.payload;
+        })
+        build.addCase(fetchGetExpendituresOfManager.fulfilled,(state,action)=>{
             state.expenditureList = action.payload;
         })
     }

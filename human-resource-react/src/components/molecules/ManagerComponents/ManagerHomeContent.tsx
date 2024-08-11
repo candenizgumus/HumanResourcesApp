@@ -1,5 +1,5 @@
 import {Avatar, Box, Grid, Typography} from "@mui/material";
-import {DataGrid, GridColDef} from "@mui/x-data-grid";
+import {DataGrid, GridColDef, GridValueGetter} from "@mui/x-data-grid";
 import React, {useEffect, useState} from "react";
 import {HumanResources, useAppSelector} from "../../../store";
 import {useDispatch} from "react-redux";
@@ -49,7 +49,12 @@ export const ManagerHomeContent = () => {
         { field: "surname", headerName: "Last name", width: 150, headerAlign: "center" },
         { field: "email", headerName: "Email", headerAlign: "center", width: 150 },
         { field: "salary", headerName: "Salary $", type: "number", width: 150, headerAlign: "center" },
-        { field: "extraPayments", headerName: "Extra Payments $", type: "number", width: 155, headerAlign: "center" },
+        { field: "extraPayments", headerName: "Extra Payments $", type: "number", width: 155, headerAlign: "center",
+            valueGetter: (value, row) => {
+                return `${row.firstName || ''} ${row.lastName || ''}`;
+            },
+
+        },
         { field: "total", headerName: "Total $", type: "number", width: 155, headerAlign: "center" },
 
 

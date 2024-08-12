@@ -189,8 +189,8 @@ public class ExpenditureService
         return true;
     }
 
-    public List<Expenditure> findAllByCompanyId(Long companyId)
+    public List<Expenditure> findExpendituresByCompanyIdAndCurrentMonth(Long companyId)
     {
-        return expenditureRepository.findAllByCompanyId(companyId);
+        return expenditureRepository.findExpendituresByCompanyIdAndCurrentMonth(companyId);
     }
 }

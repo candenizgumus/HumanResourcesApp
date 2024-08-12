@@ -41,6 +41,7 @@ public interface UserRepository extends JpaRepository<User,Long>
 
 
     List<User> findAllByManagerId(Long managerId);
+    List<User> findAllByManagerIdAndStatus(Long managerId, EStatus status);
 
     Long countAllByUserType(EUserType userType);
     Long countAllByUserTypeAndStatus(EUserType userType, EStatus status);
@@ -49,4 +50,6 @@ public interface UserRepository extends JpaRepository<User,Long>
             "MONTH(u.birthDate) = MONTH(CURRENT_DATE) OR " +
             "MONTH(u.birthDate) = MONTH(CURRENT_DATE) + 1")
     List<User> findEmployeesWithUpcomingBirthdays(@Param("userType") EUserType userType);
+
+
 }

@@ -15,4 +15,6 @@ public interface ExpenditureRepository extends JpaRepository<Expenditure, Long> 
     List<Expenditure> searchByEmployeeId(String description ,Long employeeId, PageRequest pageRequest);
     @Query("select e from Expenditure e  where  e.description like %?1% AND e.companyId = ?2 AND e.status != 'DELETED' ORDER BY e.id ASC")
     List<Expenditure> searchByCompanyId(String description ,Long companyId, PageRequest pageRequest);
+
+    List<Expenditure> findAllByCompanyId(Long companyId);
 }

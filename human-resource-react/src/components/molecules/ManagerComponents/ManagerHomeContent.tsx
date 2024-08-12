@@ -3,7 +3,12 @@ import {DataGrid, GridColDef, GridValueGetter} from "@mui/x-data-grid";
 import React, {useEffect, useState} from "react";
 import {HumanResources, useAppSelector} from "../../../store";
 import {useDispatch} from "react-redux";
-import {fetchFindEmployeesWithUpcomingBirthdays, fetchGetAllUsersOfManager} from "../../../store/feature/authSlice";
+import {
+    fetchFindEmployeesWithUpcomingBirthdays,
+    fetchGetAllUsersOfManager,
+    fetchGetMonthlyPaymentOfEmployees
+} from "../../../store/feature/authSlice";
+import {IMonthlyPaymentOfManager} from "../../../models/IMonthlyPaymentOfManager";
 
 export const ManagerHomeContent = () => {
     const upcomingBirthdayUsers = useAppSelector(state => state.auth.upcomingBirthdayUsers);
@@ -11,7 +16,7 @@ export const ManagerHomeContent = () => {
     const dispatch = useDispatch<HumanResources>();
     const employeList = useAppSelector(state => state.auth.userList);
     const [totalSalary, setTotalSalary] = useState(0);
-
+    const [monthlyPayments, setMonthlyPayments] = useState<IMonthlyPaymentOfManager[]>([]);
 
     const getManagerPageDatas = async () => {
         await dispatch(fetchFindEmployeesWithUpcomingBirthdays(token)).unwrap();
@@ -21,6 +26,9 @@ export const ManagerHomeContent = () => {
             pageSize: 100,
             searchText: ''
         })).unwrap();
+        const result = await dispatch(fetchGetMonthlyPaymentOfEmployees(token)).unwrap();
+
+        setMonthlyPayments(result);
     };
 
     useEffect(() => {
@@ -29,7 +37,7 @@ export const ManagerHomeContent = () => {
 
     useEffect(() => {
         if (employeList.length > 0) {
-            const sum = employeList.reduce((acc, employee) => acc + (employee.salary || 0), 0);
+            const sum = monthlyPayments.reduce((acc, employee) => acc + (employee.total || 0), 0);
             setTotalSalary(sum);
         }
     }, [employeList]);
@@ -45,17 +53,13 @@ export const ManagerHomeContent = () => {
     ];
 
     const columnSalary: GridColDef[] = [
+        { field: "id", headerName: "Id", width: 40, headerAlign: "center" },
         { field: "name", headerName: "First name", width: 170, headerAlign: "center" },
         { field: "surname", headerName: "Last name", width: 150, headerAlign: "center" },
         { field: "email", headerName: "Email", headerAlign: "center", width: 150 },
         { field: "salary", headerName: "Salary $", type: "number", width: 150, headerAlign: "center" },
-        { field: "extraPayments", headerName: "Extra Payments $", type: "number", width: 155, headerAlign: "center",
-            valueGetter: (value, row) => {
-                return `${row.firstName || ''} ${row.lastName || ''}`;
-            },
-
-        },
-        { field: "total", headerName: "Total $", type: "number", width: 155, headerAlign: "center" },
+        { field: "extraPayments", headerName: "Extra Payments $", type: "number", width: 120, headerAlign: "center"},
+        { field: "total", headerName: "Total $", type: "number", width: 142, headerAlign: "center" },
 
 
     ];
@@ -110,7 +114,7 @@ export const ManagerHomeContent = () => {
 
                     <DataGrid
 
-                        rows={employeList}
+                        rows={monthlyPayments}
                         columns={columnSalary}
                         disableRowSelectionOnClick={true} // Satır seçimini kapatır
                         hideFooter // Alt barda yer alan seçenekleri gizler

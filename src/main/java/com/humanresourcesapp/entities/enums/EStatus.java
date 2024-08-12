@@ -6,5 +6,6 @@ public enum EStatus
     INACTIVE,
     DECLINED,
     PENDING,
-    DELETED
+    DELETED,
+    IN_PROGRESS
 }

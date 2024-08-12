@@ -13,7 +13,7 @@ import { useDispatch } from 'react-redux';
 import { HumanResources, useAppSelector } from '../../store';
 import { changePageState } from '../../store/feature/authSlice';
 import { fetchGetUnreadNotifications, fetchUpdateIsRead } from '../../store/feature/notificationSlice';
-
+import AssistantPhotoIcon from '@mui/icons-material/AssistantPhoto';
 export default function NotificationCart(props: { notificationText: string, notificationType: string, url: string, id:number, isRead:boolean }) {
     const theme = useTheme();
     const dispatch = useDispatch<HumanResources>();
@@ -40,6 +40,8 @@ export default function NotificationCart(props: { notificationText: string, noti
                 return <ErrorIcon sx={{ color: theme.palette.error.main }} />;
             case 'SUCCESS':
                 return <CheckCircleIcon sx={{ color: theme.palette.success.main }} />;
+            case 'ASSIST':
+                return <AssistantPhotoIcon style={{ color: '#673AB7' }} />;
             default:
                 return null;
         }
@@ -64,9 +66,6 @@ export default function NotificationCart(props: { notificationText: string, noti
         >
             <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                 <CardContent sx={{ flex: '1 0 auto', padding: theme.spacing(1) }}>
-                    <Typography component="div" variant="subtitle1">
-                        {props.notificationType}
-                    </Typography>
                     <Typography variant="subtitle2" color="text.secondary" component="div">
                         {props.notificationText}
                     </Typography>

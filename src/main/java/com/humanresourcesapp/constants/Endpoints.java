@@ -86,5 +86,9 @@ public class Endpoints
     public static final String FIND_EMPLOYEES_WITH_UPCOMING_BIRTHDAYS = "/find-employees-with-upcoming-birthdays";
     public static final String SEARCH_BY_EMPLOYEE_ID = "/search-by-employee-id";
     public static final String SEARCH_BY_COMPANY_ID = "/search-by-company-id";
-    public static final String APPROVE_EXPENDITURE ="/approve-expenditure"; ;
+    public static final String APPROVE_EXPENDITURE ="/approve-expenditure";
+    public static final String SAVE_CONTACT_US_NOTIFICATION = "/save-contact-us-notification";
+    public static final String MAIL_TO_OFFER_CUSTOMER = "/mail-to-offer-customer";
+    public static final String MAIL_TO_NOTIFICATION_SENDER = "/mail-to-notification-sender";
+    ;
 }

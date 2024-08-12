@@ -4,5 +4,6 @@ public enum ENotificationType {
     INFORMATION,
     WARNING,
     ERROR,
-    SUCCESS
+    SUCCESS,
+    ASSIST
 }

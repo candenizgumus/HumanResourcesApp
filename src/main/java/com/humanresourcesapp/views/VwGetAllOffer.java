@@ -1,6 +1,7 @@
 package com.humanresourcesapp.views;
 
 import com.humanresourcesapp.entities.enums.ESectors;
+import com.humanresourcesapp.entities.enums.EStatus;
 import com.humanresourcesapp.entities.enums.EUserType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,4 +25,5 @@ public class VwGetAllOffer
     EUserType userType;
     ESectors sector;
     Boolean approvalText;
+    EStatus status;
 }

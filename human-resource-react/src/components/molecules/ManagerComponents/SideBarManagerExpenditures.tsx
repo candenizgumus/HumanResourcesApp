@@ -21,7 +21,7 @@ import {
 } from "../../../store/feature/authSlice";
 import Swal from "sweetalert2";
 import {
-    fetchApproveExpenditure, fetchDeleteExpenditureOfEmployee, fetchDeleteExpenditureOfManager,
+    fetchApproveExpenditure, fetchDeleteExpenditure, fetchCancelExpenditure,
     fetchExpenditureSave, fetchGetExpendituresOfEmployee,
     fetchGetExpendituresOfManager
 } from "../../../store/feature/expenditureSlice";
@@ -55,7 +55,7 @@ const columns: GridColDef[] = [
 ];
 
 
-export const  SideBarManagerExpenditures = () => {
+const  SideBarManagerExpenditures = () => {
     const [selectedRowIds, setSelectedRowIds] = useState<number[]>([]);
     const [searchText, setSearchText] = useState('');
 
@@ -200,7 +200,7 @@ export const  SideBarManagerExpenditures = () => {
                 });
 
                 if (result.isConfirmed) {
-                    const data = await dispatch(fetchDeleteExpenditureOfManager({
+                    const data = await dispatch(fetchDeleteExpenditure({
                         token: token,
                         id: selectedExpenditure.id,
                     }));
@@ -236,6 +236,71 @@ export const  SideBarManagerExpenditures = () => {
         }
 
         setIsActivating(false);
+    };
+
+    const handleCancel = async () => {
+        for (let id of selectedRowIds) {
+            const selectedExpenditure = expenditures.find(
+                (selectedExpenditure) => selectedExpenditure.id === id
+            );
+            if (!selectedExpenditure) continue;
+
+            if (!selectedExpenditure.isExpenditureApproved) {
+                await Swal.fire({
+                    title: "Error",
+                    text: 'Expenditure not yet approved, cannot cancel.',
+                    icon: "error",
+                    confirmButtonText: "OK",
+                });
+                continue;
+            }
+            setLoading(true);
+            try {
+                const result = await Swal.fire({
+                    title: "Are you sure?",
+                    text: "You won't be able to revert this!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Yes, cancel it!"
+                });
+
+                if (result.isConfirmed) {
+                    const data = await dispatch(fetchCancelExpenditure({
+                        token: token,
+                        id: selectedExpenditure.id,
+                    }));
+
+                    if (data.payload.message) {
+                        await Swal.fire({
+                            title: "Error",
+                            text: data.payload.message,
+                            icon: "error",
+                            confirmButtonText: "OK",
+                        });
+                        return;
+                    } else {
+                        await Swal.fire({
+                            title: "Cancelled!",
+                            text: "Your expenditure has been cancelled.",
+                            icon: "success"
+                        });
+
+                        await dispatch(fetchGetExpendituresOfManager({
+                            token: token,
+                            page: 0,
+                            pageSize: 100,
+                            searchText: searchText,
+                        }));
+                    }
+                }
+            } catch (error) {
+                localStorage.removeItem("token");
+                dispatch(clearToken());
+            }
+        }
+        setLoading(false);
     };
 
     return (
@@ -306,10 +371,22 @@ export const  SideBarManagerExpenditures = () => {
                     </Button>
                 </Grid>
 
+                <Grid item>
+                    <Button
+                        onClick={handleCancel}
+                        variant="contained"
+                        color="warning"
+                        disabled={isActivating || selectedRowIds.length === 0}
+                    >
+                        {loading ? "Cancelling..." : "Cancel"}
+                    </Button>
+                </Grid>
+
             </Grid>
 
         </div>
     );
 }
 
+// @ts-ignore
 export default SideBarManagerExpenditures

@@ -112,8 +112,8 @@ interface IfetchApproveExpenditure{
     token:string,
     id:number
 }
-export const fetchDeleteExpenditureOfEmployee = createAsyncThunk(
-    'expenditure/fetchDeleteExpenditureOfEmployee',
+export const fetchDeleteExpenditure = createAsyncThunk(
+    'expenditure/fetchDeleteExpenditure',
     async (payload: IfetchApproveExpenditure) => {
 
         const response = await fetch(`http://localhost:9090/dev/v1/expenditure/delete?id=` + payload.id, {
@@ -129,12 +129,12 @@ export const fetchDeleteExpenditureOfEmployee = createAsyncThunk(
 
 )
 
-export const fetchDeleteExpenditureOfManager = createAsyncThunk(
-    'expenditure/fetchDeleteExpenditureOfEmployee',
+export const fetchCancelExpenditure = createAsyncThunk(
+    'expenditure/fetchCancelExpenditure',
     async (payload: IfetchApproveExpenditure) => {
 
-        const response = await fetch(`http://localhost:9090/dev/v1/expenditure/delete-by-manager?id=` + payload.id, {
-            method: 'DELETE',
+        const response = await fetch(`http://localhost:9090/dev/v1/expenditure/cancel?id=` + payload.id, {
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ` + payload.token

@@ -111,7 +111,7 @@ public class ExpenditureService
     public Boolean delete(Long id)
     {
         String userEmail = UserInfoSecurityContext.getUserInfoFromSecurityContext();
-        User employee = userService.findByEmail(userEmail).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
+        User user = userService.findByEmail(userEmail).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
 
         Expenditure expenditure = expenditureRepository.findById(id).orElseThrow(() -> new HumanResourcesAppException(ErrorType.EXPENDITURE_NOT_FOUND));
 
@@ -120,9 +120,18 @@ public class ExpenditureService
             throw new HumanResourcesAppException(ErrorType.EXPENDITURE_ALREADY_APPROVED);
         }
 
-        expenditure.setStatus(EStatus.DELETED);
+        // if the delete request comes from employee, it can be deleted
+        if(user.getId().equals(expenditure.getEmployeeId())){
+            expenditure.setStatus(EStatus.DELETED);
+            expenditureRepository.save(expenditure);
+            return true;
+        }
+        // if the delete request comes from manager, it is actually a decline request
+        expenditure.setStatus(EStatus.DECLINED);
+        expenditureRepository.save(expenditure);
+
         notificationService.save(NotificationSaveRequestDto.builder()
-                .notificationText(ENotificationTextBase.EXPENDITURE_CANCEL_NOTIFICATION.getText() + userEmail)
+                .notificationText(ENotificationTextBase.EXPENDITURE_REJECT_NOTIFICATION.getText() + expenditure.getDescription())
                 .userType(null)
                 .userId(expenditure.getEmployeeId())
                 .isRead(false)
@@ -130,64 +139,42 @@ public class ExpenditureService
                 .notificationType(ENotificationType.WARNING)
                 .url(EXPENDITURE)
                 .build());
-
-        expenditureRepository.save(expenditure);
-
         return true;
     }
 
-    public Boolean deleteByManager(Long id)
-    {
+    public Boolean cancel(Long id) {
         String userEmail = UserInfoSecurityContext.getUserInfoFromSecurityContext();
-        User manager = userService.findByEmail(userEmail).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
+        User user = userService.findByEmail(userEmail).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
 
         Expenditure expenditure = expenditureRepository.findById(id).orElseThrow(() -> new HumanResourcesAppException(ErrorType.EXPENDITURE_NOT_FOUND));
 
+        // if the expenditure is approved, it can be canceled
         if (expenditure.getIsExpenditureApproved())
         {
-            throw new HumanResourcesAppException(ErrorType.EXPENDITURE_ALREADY_APPROVED);
-        }
-
-        expenditure.setStatus(EStatus.DECLINED);
-        notificationService.save(NotificationSaveRequestDto.builder()
-                .notificationText(ENotificationTextBase.EXPENDITURE_REJECT_NOTIFICATION.getText() + expenditure.getDescription())
-                .userType(null)
-                .userId(expenditure.getEmployeeId())
-                .isRead(false)
-                .status(EStatus.ACTIVE)
-                .notificationType(ENotificationType.ERROR)
-                .url(EXPENDITURE)
-                .build());
-
-        expenditureRepository.save(expenditure);
-
-        return true;
-    }
-
-    //TODO implement decline
-    /*
-    notificationService.save(NotificationSaveRequestDto.builder()
-                    .notificationText(ENotificationTextBase.EXPENDITURE_REJECT_NOTIFICATION.getText() + expenditure.getDescription())
+            // Receiver id (employee) if the cancel comes from manager
+            Long sendNotificationTo = expenditure.getEmployeeId();
+            if(user.getId().equals(expenditure.getEmployeeId())){
+                // Receiver id (manager) if the cancel comes from employee
+                sendNotificationTo = user.getManagerId();
+            }
+            notificationService.save(NotificationSaveRequestDto.builder()
+                    .notificationText(ENotificationTextBase.EXPENDITURE_CANCEL_NOTIFICATION.getText() + expenditure.getDescription())
                     .userType(null)
-                    .userId(expenditure.getEmployeeId())
-                    .isRead(false)
-                    .status(EStatus.ACTIVE)
-                    .notificationType(ENotificationType.ERROR)
-                    .url(EXPENDITURE)
-                    .build());
-
-     */
-
-    //TODO implement cancel
-    /*
-    notificationService.save(NotificationSaveRequestDto.builder()
-                    .notificationText(ENotificationTextBase.EXPENDITURE_CANCEL_NOTIFICATION.getText() + userEmail)
-                    .userType(null)
-                    .userId(expenditure.getEmployeeId())
+                    .userId(sendNotificationTo)
                     .isRead(false)
                     .status(EStatus.ACTIVE)
                     .notificationType(ENotificationType.WARNING)
                     .url(EXPENDITURE)
                     .build());
-     */
+
+            expenditure.setStatus(EStatus.CANCELED);
+        // if the expenditure is not approved, it can not be canceled, and it will be deleted or rejected
+        }else {
+            delete(id);
+            return true;
+        }
+
+        expenditureRepository.save(expenditure);
+        return true;
+    }
 }

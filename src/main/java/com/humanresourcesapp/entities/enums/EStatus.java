@@ -7,5 +7,5 @@ public enum EStatus
     DECLINED,
     PENDING,
     DELETED,
-    IN_PROGRESS
+    CANCELED, IN_PROGRESS
 }

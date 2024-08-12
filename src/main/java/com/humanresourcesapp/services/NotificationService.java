@@ -7,6 +7,7 @@ import com.humanresourcesapp.dto.requests.SaveContactUsNotificationRequestDto;
 import com.humanresourcesapp.dto.responses.NotificationResponseDto;
 import com.humanresourcesapp.entities.Notification;
 import com.humanresourcesapp.entities.User;
+import com.humanresourcesapp.entities.enums.EAccessIdentifier;
 import com.humanresourcesapp.entities.enums.ENotificationType;
 import com.humanresourcesapp.entities.enums.EStatus;
 import com.humanresourcesapp.entities.enums.EUserType;
@@ -21,6 +22,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
 import static com.humanresourcesapp.constants.FrontendPaths.HOME;
 
 @Service
@@ -42,6 +45,7 @@ public class NotificationService {
                 .notificationType(notificationSaveRequestDto.notificationType())
                 .userType(notificationSaveRequestDto.userType())
                 .url(notificationSaveRequestDto.url())
+                        .accessIdentifier(notificationSaveRequestDto.accessIdentifier())
                         .status(EStatus.ACTIVE)
                 .build());
     }
@@ -133,5 +137,9 @@ public class NotificationService {
                 .notificationType(ENotificationType.ASSIST)
                 .url(HOME)
                 .build());
+    }
+
+    public Optional<Notification> findByUserIdAndAccessIdentifierAndStatus(Long userId, EAccessIdentifier accessIdentifier, EStatus status) {
+        return notificationRepository.findByUserIdAndAccessIdentifierAndStatus(userId, accessIdentifier, status);
     }
 }

@@ -6,6 +6,7 @@ import com.humanresourcesapp.entities.Auth;
 import com.humanresourcesapp.entities.Company;
 import com.humanresourcesapp.entities.Offer;
 import com.humanresourcesapp.entities.User;
+import com.humanresourcesapp.entities.enums.EAccessIdentifier;
 import com.humanresourcesapp.entities.enums.ENotificationType;
 import com.humanresourcesapp.entities.enums.EStatus;
 import com.humanresourcesapp.entities.enums.EUserType;
@@ -76,6 +77,7 @@ public class OfferService
                 .status(EStatus.ACTIVE)
                 .notificationType(ENotificationType.INFORMATION)
                 .url(OFFERS)
+                .accessIdentifier(EAccessIdentifier.OFFER_SAVE)
                 .build());
 
         return true;
@@ -115,8 +117,7 @@ public class OfferService
 
         Company company = companyService.save(CompanySaveRequestDto.builder().numberOfEmployee(1).name(offer.getCompanyName()).logo("").build());
 
-
-        userService.save(User
+        User user = User
                 .builder()
                 .authId(auth.getId())
                 .email(offer.getEmail())
@@ -128,8 +129,20 @@ public class OfferService
                 .status(EStatus.ACTIVE)
                 .sector(offer.getSector())
                 .subscriptionType(dto.ESubscriptionType())
-                        .subscriptionStartDate(auth.getSubscriptionStartDate())
-                        .subscriptionEndDate(auth.getSubscriptionEndDate())
+                .subscriptionStartDate(auth.getSubscriptionStartDate())
+                .subscriptionEndDate(auth.getSubscriptionEndDate())
+                .build();
+        userService.save(user);
+
+        notificationService.save(NotificationSaveRequestDto.builder()
+                .notificationText(ENotificationTextBase.WELCOME_NOTIFICATION.getText() + user.getEmail())
+                .userType(null)
+                .userId(user.getId())
+                .isRead(false)
+                .status(EStatus.ACTIVE)
+                .notificationType(ENotificationType.INFORMATION)
+                .url(HOME)
+                .accessIdentifier(EAccessIdentifier.WELCOME)
                 .build());
 
         return true;

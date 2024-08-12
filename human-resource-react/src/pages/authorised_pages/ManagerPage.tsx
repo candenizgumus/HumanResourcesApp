@@ -28,6 +28,7 @@ import {ManagerMenuContentRenderer} from "../../components/organisms/ManagerMenu
 import {AccountBox, Apartment, Person, PersonAdd, PointOfSale, Weekend} from "@mui/icons-material";
 import AddCommentIcon from '@mui/icons-material/AddComment';
 import {ManagerHomeContent} from "../../components/molecules/ManagerComponents/ManagerHomeContent";
+import HikingIcon from '@mui/icons-material/Hiking';
 
 
 const drawerWidth = 240;
@@ -153,7 +154,7 @@ export default function AdminPage() {
         </DrawerHeader>
         <Divider />
         <List>
-          {['Employees', 'Add Employee', 'Profile', 'Company', 'Add Comment', 'Holidays','Notifications', 'Expenditure'].map((text, index) => (
+          {['Employees', 'Add Employee', 'Profile', 'Company', 'Add Comment', 'Holidays','Notifications', 'Expenditure', 'Leaves'].map((text, index) => (
             <ListItem key={text} disablePadding>
               <ListItemButton onClick={() => handleListItemClick(text)}>
                 <ListItemIcon>
@@ -165,6 +166,7 @@ export default function AdminPage() {
                   {index === 5 && <Weekend/>}
                   {index === 6 && <NotificationsIcon/>}
                   {index === 7 && <PointOfSale/>}
+                  {index === 8 && <HikingIcon/>}
                 </ListItemIcon>
                 <ListItemText primary={text} />
               </ListItemButton>

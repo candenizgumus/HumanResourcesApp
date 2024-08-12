@@ -15,7 +15,7 @@ export default function NavbarProfile() {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const dispatch = useDispatch<HumanResources>();
     const navigate = useNavigate();
-
+    const token = useAppSelector((state) => state.auth.token);
     const loggedInUser = useAppSelector(state => state.auth.user);
 
 
@@ -44,7 +44,17 @@ export default function NavbarProfile() {
         handleMenuClose();
     };
 
-
+    React.useEffect(() => {
+        const fetchData = async () => {
+            try {
+                await dispatch(fetchFindUserByToken(token))
+            } catch {
+                dispatch(clearToken());
+            }
+        };
+    
+        fetchData();
+    }, [dispatch, token]);
 
     return (
         <div>

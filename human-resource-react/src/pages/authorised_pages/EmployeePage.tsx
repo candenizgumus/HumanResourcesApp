@@ -24,7 +24,7 @@ import { changePageState} from '../../store/feature/authSlice';
 import {NotificationIcon} from "../../components/atoms/NotificationIcon";
 import { useNavigate } from 'react-router-dom';
 import NavbarProfile from "../../components/atoms/NavbarProfile";
-
+import HikingIcon from '@mui/icons-material/Hiking';
 
 import {
     AccountBox,
@@ -161,17 +161,17 @@ export default function EmployeePage() {
                 </DrawerHeader>
                 <Divider />
                 <List>
-                    {['Shifts & Breaks', 'Holidays', 'Leaves', 'Profile', 'Company Items','Notifications','Expenditure'].map((text, index) => (
+                    {['Shifts & Breaks', 'Holidays', 'Profile', 'Company Items','Notifications','Expenditure', 'Leaves'].map((text, index) => (
                         <ListItem key={text} disablePadding>
                             <ListItemButton onClick={() => handleListItemClick(text)}>
                                 <ListItemIcon>
                                     { index === 0 && <LocalOfferIcon />}
                                     {index  === 1 && <Weekend />}
-                                    {index  === 2 && <AdminPanelSettings />}
-                                    {index  === 3 && <AccountBox /> }
-                                    {index  === 4 && <FeaturedPlayList /> }
-                                    {index === 5 && <NotificationsIcon/>}
-                                    {index === 6 && <PointOfSale/>}
+                                    {index  === 2 && <AccountBox /> }
+                                    {index  === 3 && <FeaturedPlayList /> }
+                                    {index === 4 && <NotificationsIcon/>}
+                                    {index === 5 && <PointOfSale/>}
+                                    {index === 6 && <HikingIcon/>}
                                 </ListItemIcon>
                                 <ListItemText primary={text} />
                             </ListItemButton>

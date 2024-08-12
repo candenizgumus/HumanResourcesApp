@@ -18,9 +18,9 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import { Button, Grid} from '@mui/material';
-import { HumanResources, RootState} from '../../store';
+import { HumanResources, RootState, useAppSelector} from '../../store';
 import { useDispatch, useSelector } from 'react-redux';
-import { changePageState} from '../../store/feature/authSlice';
+import { changePageState, clearToken, fetchFindUserByToken} from '../../store/feature/authSlice';
 import {NotificationIcon} from "../../components/atoms/NotificationIcon";
 import {AdminMenuContentRenderer} from "../../components/organisms/AdminMenuContentRenderer";
 import { useNavigate } from 'react-router-dom';
@@ -116,6 +116,8 @@ export default function AdminPage() {
     setSelectedIndex(text);
     dispatch(changePageState(text));
   };
+
+  
   return (
     <Box sx={{ display: 'flex'  }}>
       <CssBaseline />

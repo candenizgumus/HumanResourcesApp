@@ -2,7 +2,7 @@ import { Grid} from "@mui/material";
 import { useAppSelector} from "../../store";
 import SideBarProfile from "../molecules/SideBarProfile";
 import {SideBarEmployeeShiftsAndBreaks} from "../molecules/EmployeeComponents/SideBarEmployeeShiftsAndBreaks";
-import {SideBarEmployeeLeaves} from "../molecules/EmployeeComponents/SideBarEmployeeLeaves";
+import SideBarEmployeeLeaves from "../molecules/EmployeeComponents/SideBarEmployeeLeaves";
 import {SideBarEmployeeCompanyItems} from "../molecules/EmployeeComponents/SideBarEmployeeCompanyItems";
 import SideBarNotifications from "../molecules/AdminPageComponents/SideBarNotifications";
 import SideBarExpenditure from "../molecules/EmployeeComponents/SideBarExpenditure";

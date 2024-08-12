@@ -22,11 +22,16 @@ import {
     fetchGetAllUsersOfManager, setSelectedEmployeeId
 } from "../../../store/feature/authSlice";
 import Swal from "sweetalert2";
-import {fetchExpenditureSave, fetchGetExpendituresOfEmployee} from "../../../store/feature/expenditureSlice";
+import {
+    fetchDeleteExpenditureOfEmployee,
+    fetchExpenditureSave,
+    fetchGetExpendituresOfEmployee
+} from "../../../store/feature/expenditureSlice";
 
 const columns: GridColDef[] = [
     {field: "id", headerName: "ID", width: 70, headerAlign: "center"},
-    {field: "price", headerName: "Price $", width: 150, headerAlign: "center",
+    {
+        field: "price", headerName: "Price $", width: 150, headerAlign: "center",
         renderCell: (params) => {
             // Check if the value is valid
             const value = params.value;
@@ -46,6 +51,7 @@ const columns: GridColDef[] = [
     {field: "description", headerName: "Description", width: 120, headerAlign: "center"},
     {field: "isExpenditureApproved", headerName: "Approval Status", headerAlign: "center", width: 250},
     {field: "approveDate", headerName: "Approval Date", headerAlign: "center", width: 250},
+    {field: "status", headerName: "Status", headerAlign: "center", width: 250},
 
 ];
 
@@ -57,12 +63,12 @@ export default function SideBarExpenditure() {
 
     const dispatch = useDispatch<HumanResources>();
     const token = useAppSelector((state) => state.auth.token);
-    const userList = useAppSelector((state) => state.expenditure.expenditureList);
+    const expenditureList = useAppSelector((state) => state.expenditure.expenditureList);
     const [loading, setLoading] = useState(false);
     const [isActivating, setIsActivating] = useState(false);
 
     const [price, setPrice] = useState(0);
-    const[description, setDescription] = useState('');
+    const [description, setDescription] = useState('');
 
 
     useEffect(() => {
@@ -90,102 +96,119 @@ export default function SideBarExpenditure() {
 
     }
 
-    const handleDeleteEmployee = async () => {
-        setLoading(true);
+    const handleDelete = async () => {
+
 
         for (let id of selectedRowIds) {
-            const selectedEmployee = userList.find((selectedEmployee) => selectedEmployee.id === id);
-            if (!selectedEmployee) continue;
+            const selectedExpenditure = expenditureList.find(
+                (selectedExpenditure) => selectedExpenditure.id === id
+            );
+            if (!selectedExpenditure) continue;
 
-
+            if (selectedExpenditure.isExpenditureApproved) {
+                await Swal.fire({
+                    title: "Error",
+                    text: 'Expenditure already approved',
+                    icon: "error",
+                    confirmButtonText: "OK",
+                });
+                continue; // Diğer id'lere geçmek için continue kullanın
+            }
+            setLoading(true);
             try {
+                const result = await Swal.fire({
+                    title: "Are you sure?",
+                    text: "You won't be able to revert this!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Yes, delete it!"
+                });
 
+                if (result.isConfirmed) {
+                    const data = await dispatch(fetchDeleteExpenditureOfEmployee({
+                        token: token,
+                        id: selectedExpenditure.id,
+                    }));
 
-                //fetch
-                const response = await dispatch(fetchDeleteEmployeeByAdmin({
-                    token: token,
-                    id: selectedEmployee.id,
-
-                })).then(data => {
                     if (data.payload.message) {
-                        Swal.fire({
+                        await Swal.fire({
                             title: "Error",
                             text: data.payload.message,
                             icon: "error",
                             confirmButtonText: "OK",
-
                         });
-                        return
+                        return;
+                    } else {
+                        await Swal.fire({
+                            title: "Deleted!",
+                            text: "Your expenditure has been deleted.",
+                            icon: "success"
+                        });
+
+                        // Silme işlemi sonrasında listeyi hemen güncelleyin
+                        await dispatch(fetchGetExpendituresOfEmployee({
+                            token: token,
+                            page: 0,
+                            pageSize: 100,
+                            searchText: searchText,
+                        }));
                     }
-                    Swal.fire({
-                        title: "Success",
-                        text: "Deletion completed",
-                        icon: "success",
-                        confirmButtonText: "OK",
-                    });
-
-                    fetchGetExpendituresOfEmployee({
-                        token: token,
-                        page: 0,
-                        pageSize: 100,
-                        searchText: searchText,
-                    })
-                })
-
-            } catch
-                (error) {
+                }
+            } catch (error) {
                 localStorage.removeItem("token");
                 dispatch(clearToken());
             }
-
         }
+
         setLoading(false);
     };
+
 
     const handleSaveExpense = async () => {
         setIsActivating(true);
 
 
+        try {
 
-            try {
 
+            //fetch
+            const response = await dispatch(fetchExpenditureSave({
+                token: token,
+                description: description,
+                price: price
 
-                //fetch
-                const response = await dispatch(fetchExpenditureSave({
-                    token: token,
-                    description: description,
-                    price: price
-
-                })).then(data => {
-                    if (data.payload.message) {
-                        Swal.fire({
-                            title: "Error",
-                            text: data.payload.message,
-                            icon: "error",
-                            confirmButtonText: "OK",
-
-                        });
-                        return
-                    }
+            })).then(data => {
+                if (data.payload.message) {
                     Swal.fire({
-                        title: "Success",
-                        text: "Expense has been added",
-                        icon: "success",
+                        title: "Error",
+                        text: data.payload.message,
+                        icon: "error",
                         confirmButtonText: "OK",
+
                     });
+                    return
+                }
+                Swal.fire({
+                    title: "Success",
+                    text: "Expense has been added",
+                    icon: "success",
+                    confirmButtonText: "OK",
+                });
 
-                    fetchGetAllUsersOfManager({
-                        token: token,
-                        page: 0,
-                        pageSize: 100,
-                        searchText: searchText,
-                    })
+                fetchGetAllUsersOfManager({
+                    token: token,
+                    page: 0,
+                    pageSize: 100,
+                    searchText: searchText,
                 })
+            })
 
-            } catch (error) {
-                localStorage.removeItem("token");
-                dispatch(clearToken());
-            }
+        } catch (error) {
+            localStorage.removeItem("token");
+            dispatch(clearToken());
+        }
 
 
         setIsActivating(false);
@@ -201,7 +224,7 @@ export default function SideBarExpenditure() {
                 style={{marginBottom: "10px"}}
             />
             <DataGrid
-                rows={userList}
+                rows={expenditureList}
                 columns={columns}
                 initialState={{
                     pagination: {
@@ -239,7 +262,7 @@ export default function SideBarExpenditure() {
             <Grid container spacing={1} style={{marginTop: 16}} direction="row">
                 <Grid item>
                     <Button
-                        onClick={handleOnClickEditEmployee}
+                        onClick={handleDelete}
                         variant="contained"
                         color="error"
                         disabled={isActivating || selectedRowIds.length === 0}
@@ -250,9 +273,9 @@ export default function SideBarExpenditure() {
 
             </Grid>
 
-            <Grid container spacing={2} style={{ marginTop: 16 }} direction="row">
+            <Grid container spacing={2} style={{marginTop: 16}} direction="row">
                 <Grid item xs={12}>
-                    <Typography sx={{ fontWeight: "bold", marginBottom: "10px" }}>
+                    <Typography sx={{fontWeight: "bold", marginBottom: "10px"}}>
                         Add Expenditure
                     </Typography>
                 </Grid>
@@ -265,7 +288,7 @@ export default function SideBarExpenditure() {
                         onChange={e => setDescription(e.target.value)}
                         fullWidth
                         required
-                        inputProps={{ maxLength: 50 }}
+                        inputProps={{maxLength: 50}}
                     />
                 </Grid>
 
@@ -289,14 +312,13 @@ export default function SideBarExpenditure() {
                         onClick={handleSaveExpense}
                         variant="contained"
                         color="primary"
-                        disabled={price === 0  || description.length === 0 }
+                        disabled={price === 0 || description.length === 0}
 
                     >
                         {loading ? "Deleting..." : "Add"}
                     </Button>
                 </Grid>
             </Grid>
-
 
 
         </div>

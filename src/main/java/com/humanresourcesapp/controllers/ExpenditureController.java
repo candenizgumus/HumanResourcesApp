@@ -45,4 +45,16 @@ public class ExpenditureController
     public ResponseEntity<Boolean> approveExpenditure(Long id){
         return ResponseEntity.ok(expenditureService.approveExpenditure(id));
     }
+
+    @DeleteMapping(DELETE)
+    @PreAuthorize("hasAnyAuthority('EMPLOYEE')")
+    public ResponseEntity<Boolean> delete(Long id){
+        return ResponseEntity.ok(expenditureService.delete(id));
+    }
+
+    @DeleteMapping(DELETE_BY_MANAGER)
+    @PreAuthorize("hasAnyAuthority('MANAGER')")
+    public ResponseEntity<Boolean> deleteByManager(Long id){
+        return ResponseEntity.ok(expenditureService.deleteByManager(id));
+    }
 }

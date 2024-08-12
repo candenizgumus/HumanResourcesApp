@@ -90,5 +90,6 @@ public class Endpoints
     public static final String SAVE_CONTACT_US_NOTIFICATION = "/save-contact-us-notification";
     public static final String MAIL_TO_OFFER_CUSTOMER = "/mail-to-offer-customer";
     public static final String MAIL_TO_NOTIFICATION_SENDER = "/mail-to-notification-sender";
+    public static final String DELETE_BY_MANAGER =  "/delete-by-manager";
     ;
 }

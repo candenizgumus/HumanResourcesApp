@@ -5,10 +5,9 @@ import {
     GridRowSelectionModel,
 } from "@mui/x-data-grid";
 import {
-    Button, FormControl,
-    Grid, InputAdornment, InputLabel, OutlinedInput,
-
-    TextField, Typography
+    Button,
+    Grid,
+    TextField
 
 } from "@mui/material";
 import {HumanResources, useAppSelector} from "../../../store";
@@ -18,13 +17,12 @@ import {useDispatch} from "react-redux";
 import {
     changePageState,
     clearToken,
-    fetchDeleteEmployeeByAdmin,
     fetchGetAllUsersOfManager, setSelectedEmployeeId
 } from "../../../store/feature/authSlice";
 import Swal from "sweetalert2";
 import {
-    fetchApproveExpenditure,
-    fetchExpenditureSave,
+    fetchApproveExpenditure, fetchDeleteExpenditureOfEmployee, fetchDeleteExpenditureOfManager,
+    fetchExpenditureSave, fetchGetExpendituresOfEmployee,
     fetchGetExpendituresOfManager
 } from "../../../store/feature/expenditureSlice";
 
@@ -52,6 +50,7 @@ const columns: GridColDef[] = [
     {field: "description", headerName: "Description", width: 120, headerAlign: "center"},
     {field: "isExpenditureApproved", headerName: "Approval Status", headerAlign: "center", width: 250},
     {field: "approveDate", headerName: "Approval Date", headerAlign: "center", width: 250},
+    {field: "status", headerName: "Status", headerAlign: "center", width: 250},
 
 ];
 
@@ -89,55 +88,69 @@ export const  SideBarManagerExpenditures = () => {
         setSelectedRowIds(newSelectionModel as number[]);
     };
 
-    const handleOnClickEditEmployee = () => {
-        dispatch(setSelectedEmployeeId(selectedRowIds[0]))
-        dispatch(changePageState("Edit Employee"))
-
-
-    }
 
     const handleApprove = async () => {
-        setLoading(true);
+
 
         for (let id of selectedRowIds) {
             const selectedExpenditure = expenditures.find((selectedExpenditure) => selectedExpenditure.id === id);
             if (!selectedExpenditure) continue;
 
+            if (selectedExpenditure.isExpenditureApproved){
+                Swal.fire({
+                    title: "Error",
+                    text: 'Expenditure already approved',
+                    icon: "error",
+                    confirmButtonText: "OK",
+
+                });
+                return
+            }
+            setLoading(true);
 
             try {
 
+                const result = await Swal.fire({
+                    title: "Are you sure?",
+                    text: "You won't be able to revert this!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Yes, approve it!"
+                });
 
-                //fetch
-                const response = await dispatch(fetchApproveExpenditure({
-                    token: token,
-                    id: selectedExpenditure.id,
+                if (result.isConfirmed) {
+                    //fetch
+                    const data = await dispatch(fetchApproveExpenditure({
+                        token: token,
+                        id: selectedExpenditure.id,
+                    }));
 
-                })).then(data => {
                     if (data.payload.message) {
-                        Swal.fire({
+                        await Swal.fire({
                             title: "Error",
                             text: data.payload.message,
                             icon: "error",
                             confirmButtonText: "OK",
-
                         });
-                        return
+                        return;
+                    } else {
+                        await Swal.fire({
+                            title: "Approved!",
+                            text: "Your expenditure has been approved.",
+                            icon: "success"
+                        });
+
+                        // Silme işlemi sonrasında listeyi hemen güncelleyin
+                        await dispatch(fetchGetExpendituresOfManager({
+                            token: token,
+                            page: 0,
+                            pageSize: 100,
+                            searchText: searchText,
+                        }));
                     }
-                    Swal.fire({
-                        title: "Success",
-                        text: "Expenditure has been approved",
-                        icon: "success",
-                        confirmButtonText: "OK",
-                    });
-
-                    fetchGetExpendituresOfManager({
-                        token: token,
-                        page: 0,
-                        pageSize: 100,
-                        searchText: searchText,
-                    })
-                })
-
+                }
             } catch
                 (error) {
                 localStorage.removeItem("token");
@@ -148,51 +161,79 @@ export const  SideBarManagerExpenditures = () => {
         setLoading(false);
     };
 
-    const handleSaveExpense = async () => {
-        setIsActivating(true);
+    const handleReject = async () => {
+        for (let id of selectedRowIds) {
+            const selectedExpenditure = expenditures.find(
+                (selectedExpenditure) => selectedExpenditure.id === id
+            );
+            if (!selectedExpenditure) continue;
 
+            if (selectedExpenditure.isExpenditureApproved) {
+                await Swal.fire({
+                    title: "Error",
+                    text: 'Expenditure already approved',
+                    icon: "error",
+                    confirmButtonText: "OK",
+                });
+                continue; // Diğer id'lere geçmek için continue kullanın
+            }
 
-
+            if (selectedExpenditure.status === "DECLINED") {
+                await Swal.fire({
+                    title: "Error",
+                    text: 'Expenditure already declined',
+                    icon: "error",
+                    confirmButtonText: "OK",
+                });
+                continue; // Diğer id'lere geçmek için continue kullanın
+            }
+            setIsActivating(true);
             try {
+                const result = await Swal.fire({
+                    title: "Are you sure?",
+                    text: "You won't be able to revert this!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Yes, reject it!"
+                });
 
+                if (result.isConfirmed) {
+                    const data = await dispatch(fetchDeleteExpenditureOfManager({
+                        token: token,
+                        id: selectedExpenditure.id,
+                    }));
 
-                //fetch
-                const response = await dispatch(fetchExpenditureSave({
-                    token: token,
-                    description: description,
-                    price: price
-
-                })).then(data => {
                     if (data.payload.message) {
-                        Swal.fire({
+                        await Swal.fire({
                             title: "Error",
                             text: data.payload.message,
                             icon: "error",
                             confirmButtonText: "OK",
-
                         });
-                        return
+                        return;
+                    } else {
+                        await Swal.fire({
+                            title: "Rejected!",
+                            text: "Your expenditure has been rejected.",
+                            icon: "success"
+                        });
+
+                        // Silme işlemi sonrasında listeyi hemen güncelleyin
+                        await dispatch(fetchGetExpendituresOfManager({
+                            token: token,
+                            page: 0,
+                            pageSize: 100,
+                            searchText: searchText,
+                        }));
                     }
-                    Swal.fire({
-                        title: "Success",
-                        text: "Expense has been added",
-                        icon: "success",
-                        confirmButtonText: "OK",
-                    });
-
-                    fetchGetAllUsersOfManager({
-                        token: token,
-                        page: 0,
-                        pageSize: 100,
-                        searchText: searchText,
-                    })
-                })
-
+                }
             } catch (error) {
                 localStorage.removeItem("token");
                 dispatch(clearToken());
             }
-
+        }
 
         setIsActivating(false);
     };
@@ -247,8 +288,8 @@ export const  SideBarManagerExpenditures = () => {
                     <Button
                         onClick={handleApprove}
                         variant="contained"
-                        color="error"
-                        disabled={isActivating || selectedRowIds.length === 0}
+                        color="primary"
+                        disabled={loading || selectedRowIds.length === 0}
                     >
                         {loading ? "Approving..." : "Approve"}
                     </Button>
@@ -256,12 +297,12 @@ export const  SideBarManagerExpenditures = () => {
 
                 <Grid item>
                     <Button
-                        onClick={handleOnClickEditEmployee}
+                        onClick={handleReject}
                         variant="contained"
                         color="error"
                         disabled={isActivating || selectedRowIds.length === 0}
                     >
-                        {loading ? "Rejecting..." : "Reject"}
+                        {isActivating ? "Rejecting..." : "Reject"}
                     </Button>
                 </Grid>
 

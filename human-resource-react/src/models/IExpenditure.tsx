@@ -1,4 +1,7 @@
 export interface IExpenditure{
+    createdAt:Date ;
+    updatedAt:Date ;
+    status:string ;
     id: number
     employeeId: number
     companyId: number
@@ -7,6 +10,7 @@ export interface IExpenditure{
     approveDate:Date,
     isExpenditureApproved:boolean
     attachedFile:string
+
 
 
 }

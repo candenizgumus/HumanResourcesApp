@@ -108,6 +108,44 @@ export const fetchApproveExpenditure = createAsyncThunk(
 
 )
 
+interface IfetchApproveExpenditure{
+    token:string,
+    id:number
+}
+export const fetchDeleteExpenditureOfEmployee = createAsyncThunk(
+    'expenditure/fetchDeleteExpenditureOfEmployee',
+    async (payload: IfetchApproveExpenditure) => {
+
+        const response = await fetch(`http://localhost:9090/dev/v1/expenditure/delete?id=` + payload.id, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ` + payload.token
+            }
+        });
+
+        return await response.json();
+    }
+
+)
+
+export const fetchDeleteExpenditureOfManager = createAsyncThunk(
+    'expenditure/fetchDeleteExpenditureOfEmployee',
+    async (payload: IfetchApproveExpenditure) => {
+
+        const response = await fetch(`http://localhost:9090/dev/v1/expenditure/delete-by-manager?id=` + payload.id, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ` + payload.token
+            }
+        });
+
+        return await response.json();
+    }
+
+)
+
 const expenditureSlice = createSlice({
     name: 'expenditure',
     initialState: initialExpenditureState,

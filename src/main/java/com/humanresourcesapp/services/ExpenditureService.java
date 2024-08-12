@@ -42,7 +42,7 @@ public class ExpenditureService
                 .companyId(employee.getCompanyId())
                 .employeeName(employee.getName())
                 .employeeSurname(employee.getSurname())
-                .status(EStatus.ACTIVE)
+                .status(EStatus.PENDING)
                 .build();
 
         notificationService.save(NotificationSaveRequestDto.builder()
@@ -91,6 +91,7 @@ public class ExpenditureService
         {
             expenditure.setIsExpenditureApproved(true);
             expenditure.setApproveDate(LocalDate.now());
+            expenditure.setStatus(EStatus.ACTIVE);
             expenditureRepository.save(expenditure);
 
             notificationService.save(NotificationSaveRequestDto.builder()
@@ -105,6 +106,62 @@ public class ExpenditureService
             return true;
         }
        return false;
+    }
+
+    public Boolean delete(Long id)
+    {
+        String userEmail = UserInfoSecurityContext.getUserInfoFromSecurityContext();
+        User employee = userService.findByEmail(userEmail).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
+
+        Expenditure expenditure = expenditureRepository.findById(id).orElseThrow(() -> new HumanResourcesAppException(ErrorType.EXPENDITURE_NOT_FOUND));
+
+        if (expenditure.getIsExpenditureApproved())
+        {
+            throw new HumanResourcesAppException(ErrorType.EXPENDITURE_ALREADY_APPROVED);
+        }
+
+        expenditure.setStatus(EStatus.DELETED);
+        notificationService.save(NotificationSaveRequestDto.builder()
+                .notificationText(ENotificationTextBase.EXPENDITURE_CANCEL_NOTIFICATION.getText() + userEmail)
+                .userType(null)
+                .userId(expenditure.getEmployeeId())
+                .isRead(false)
+                .status(EStatus.ACTIVE)
+                .notificationType(ENotificationType.WARNING)
+                .url(EXPENDITURE)
+                .build());
+
+        expenditureRepository.save(expenditure);
+
+        return true;
+    }
+
+    public Boolean deleteByManager(Long id)
+    {
+        String userEmail = UserInfoSecurityContext.getUserInfoFromSecurityContext();
+        User manager = userService.findByEmail(userEmail).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
+
+        Expenditure expenditure = expenditureRepository.findById(id).orElseThrow(() -> new HumanResourcesAppException(ErrorType.EXPENDITURE_NOT_FOUND));
+
+        if (expenditure.getIsExpenditureApproved())
+        {
+            throw new HumanResourcesAppException(ErrorType.EXPENDITURE_ALREADY_APPROVED);
+        }
+
+        expenditure.setStatus(EStatus.DECLINED);
+        notificationService.save(NotificationSaveRequestDto.builder()
+                .notificationText(ENotificationTextBase.EXPENDITURE_REJECT_NOTIFICATION.getText() + expenditure.getDescription())
+                .userType(null)
+                .userId(expenditure.getEmployeeId())
+                .isRead(false)
+                .status(EStatus.ACTIVE)
+                .notificationType(ENotificationType.ERROR)
+                .url(EXPENDITURE)
+                .build());
+
+        expenditureRepository.save(expenditure);
+
+        return true;
     }
 
     //TODO implement decline

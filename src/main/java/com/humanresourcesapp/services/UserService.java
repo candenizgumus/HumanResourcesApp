@@ -571,23 +571,26 @@ public class UserService {
         List<MonthlySalaryOfEmployeesDto> monthlySalaryOfEmployeesDtos = new ArrayList<>();
         String userEmail = UserInfoSecurityContext.getUserInfoFromSecurityContext();
         User manager = userRepository.findByEmail(userEmail).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
-        List<User> employees = userRepository.findAllByManagerId(manager.getId());
-        List<Expenditure> expendituresOfEmployees = expenditureService.findAllByCompanyId(manager.getCompanyId());
+        List<User> employees = userRepository.findAllByManagerIdAndStatus(manager.getId(), EStatus.ACTIVE);
+        List<Expenditure> expendituresOfEmployees = expenditureService.findExpendituresByCompanyIdAndCurrentMonth(manager.getCompanyId());
 
+        //Adding empty employees to monthly salary list
         employees.forEach(e -> {
 
+            monthlySalaryOfEmployeesDtos.add(new MonthlySalaryOfEmployeesDto(e.getId(),e.getName(),e.getSurname(),e.getEmail(),e.getSalary(),0.00,e.getSalary() ));
+
+        });
+
+        //Adding salary and extra payments to each employee
+        monthlySalaryOfEmployeesDtos.forEach(e -> {
             expendituresOfEmployees.forEach(expenditure -> {
-                //TODO MAYBE WE CAN CHECK THIS CONDITION LATER ITS TOO COMPLICATED
-                if (e.getId().equals(expenditure.getEmployeeId()) && expenditure.getIsExpenditureApproved() && expenditure.getStatus().equals(EStatus.ACTIVE))
+
+                if (expenditure.getEmployeeId().equals(e.getId()))
                 {
-                    monthlySalaryOfEmployeesDtos.add(new MonthlySalaryOfEmployeesDto(e.getId(),e.getName(),e.getSurname(),e.getEmail(),e.getSalary(),expenditure.getPrice(),e.getSalary() + expenditure.getPrice()));
-                }
-                else
-                {
-                    monthlySalaryOfEmployeesDtos.add(new MonthlySalaryOfEmployeesDto(e.getId(),e.getName(),e.getSurname(),e.getEmail(),e.getSalary(),0.00,e.getSalary() ));
+                    e.setExtraPayments(expenditure.getPrice());
+                    e.setTotal(e.getSalary() + expenditure.getPrice());
                 }
             });
-
         });
 
         return monthlySalaryOfEmployeesDtos;

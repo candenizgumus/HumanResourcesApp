@@ -33,10 +33,10 @@ export const ManagerHomeContent = () => {
 
     useEffect(() => {
         getManagerPageDatas();
-    }, [dispatch, token]);
+    }, []);
 
     useEffect(() => {
-        if (employeList.length > 0) {
+        if (monthlyPayments.length > 0) {
             const sum = monthlyPayments.reduce((acc, employee) => acc + (employee.total || 0), 0);
             setTotalSalary(sum);
         }
@@ -109,7 +109,7 @@ export const ManagerHomeContent = () => {
                 <Grid sx={{ height:'300px' }} item xs={6}>
 
                     <Typography  sx={{ textAlign: 'center' , fontWeight: 'bold'}} variant="h6" gutterBottom>
-                        Monthly Total Salary (${totalSalary.toFixed(2)})
+                        Monthly Total Salary ($ {totalSalary.toFixed(2)} )
                     </Typography>
 
                     <DataGrid

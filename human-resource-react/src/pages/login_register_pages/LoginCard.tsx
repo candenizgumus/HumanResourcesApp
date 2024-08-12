@@ -3,18 +3,18 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-import {Link, useNavigate} from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import LoginIcon from '@mui/icons-material/Login';
-import {useDispatch, useSelector} from "react-redux";
-import {fetchLogin} from "../../store/feature/authSlice";
-import {HumanResources, RootState} from "../../store";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchFindUserByToken, fetchLogin } from "../../store/feature/authSlice";
+import { HumanResources, RootState } from "../../store";
 
-import {useState} from "react";
-import {Alert} from "@mui/material";
+import { useState } from "react";
+import { Alert } from "@mui/material";
 import getUserTypeFromToken from '../../util/getUserTypeFromToken';
 
 export default function LoginCard() {
@@ -28,29 +28,31 @@ export default function LoginCard() {
 
     const handleLogin = async () => {
 
-            let result = await dispatch(fetchLogin({ email, password })).unwrap();
-            // `result` içinde `code` özelliği olup olmadığını kontrol edin
-            if (result.code) {
-                setError(result.message);
-                return; // İşlemi sonlandırarak sonraki then bloklarına geçişi engeller.
-            }
-            
-            const userType = getUserTypeFromToken(result.token);
-            if (userType === 'ADMIN') {
-                navigate('/admin-home');
-            } else if (userType === 'MANAGER') {
-                navigate('/manager-home');
-            } else if ( userType ==='EMPLOYEE') {
-                navigate('/employee-home');
-            } else {
-                navigate('/');
-            }
+        let result = await dispatch(fetchLogin({ email, password })).unwrap();
+        // `result` içinde `code` özelliği olup olmadığını kontrol edin
+        if (result.code) {
+            setError(result.message);
+            return; // İşlemi sonlandırarak sonraki then bloklarına geçişi engeller.
+        }
+
+        await dispatch(fetchFindUserByToken(result.token));
+
+        const userType = getUserTypeFromToken(result.token);
+        if (userType === 'ADMIN') {
+            navigate('/admin-home');
+        } else if (userType === 'MANAGER') {
+            navigate('/manager-home');
+        } else if (userType === 'EMPLOYEE') {
+            navigate('/employee-home');
+        } else {
+            navigate('/');
+        }
 
     };
 
 
     return (
-        <Paper elevation={6} square sx={{width: '100%', maxWidth: 400}}>
+        <Paper elevation={6} square sx={{ width: '100%', maxWidth: 400 }}>
             <Box
                 sx={{
                     my: 8,
@@ -61,8 +63,8 @@ export default function LoginCard() {
                     justifyContent: 'center',
                 }}
             >
-                <Avatar sx={{m: 1, bgcolor: '#606c38'}}>
-                    <LoginIcon/>
+                <Avatar sx={{ m: 1, bgcolor: '#606c38' }}>
+                    <LoginIcon />
                 </Avatar>
                 <Typography component="h1" variant="h5">
                     Login
@@ -71,16 +73,16 @@ export default function LoginCard() {
                 {error && (
                     <Box sx={{ width: '100%' }}>
                         <Alert severity="error"
-                               sx={{
-                                   width: '100%',
-                                   textAlign: 'center', // Metni ortala
-                                   display: 'flex',
-                                   flexDirection: 'column',
-                                   alignItems: 'center',
-                               }}
+                            sx={{
+                                width: '100%',
+                                textAlign: 'center', // Metni ortala
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'center',
+                            }}
                         >
 
-                            {error+ ' '}
+                            {error + ' '}
                             <strong>Try Again!</strong>
                         </Alert>
                     </Box>
@@ -109,14 +111,14 @@ export default function LoginCard() {
                     onChange={event => setPassword(event.target.value)}
                 />
                 <FormControlLabel
-                    control={<Checkbox value="remember" color="primary"/>}
+                    control={<Checkbox value="remember" color="primary" />}
                     label="Remember me"
                 />
                 <Button
                     type="button"
                     fullWidth
                     variant="contained"
-                    sx={{mt: 3, mb: 2}}
+                    sx={{ mt: 3, mb: 2 }}
                     onClick={handleLogin}
                 >
                     Log In

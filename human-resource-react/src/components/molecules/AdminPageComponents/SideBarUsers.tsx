@@ -23,7 +23,7 @@ import {
     fetchUpdateUserByAdmin
 } from "../../../store/feature/authSlice";
 import Swal from "sweetalert2";
-import {IUser} from "../../../models/IUser";
+import { IUser } from "../../../models/IUser";
 
 
 const columns: GridColDef[] = [
@@ -79,7 +79,7 @@ export default function SideBarUsers() {
     });
     const [rowCount, setRowCount] = useState<number>(0);
     const [open, setOpen] = useState(false);
-    const users:IUser[] = useAppSelector((state) => state.auth.userList);
+    const users: IUser[] = useAppSelector((state) => state.auth.userList);
     const [selectedUser, setSelectedUser] = useState<IUser | null>(null);
     const [loading, setLoading] = useState(false);
 
@@ -229,20 +229,20 @@ export default function SideBarUsers() {
                     {selectedUser && (
                         <form >
                             <TextField sx={{ marginTop: "25px" }}
-                                       label="Name"
-                                       name="name"
-                                       variant="outlined"
-                                       value={selectedUser.name}
-                                       onChange={e => setSelectedUser({...selectedUser, name: e.target.value})}
-                                       fullWidth
-                                       style={{ marginBottom: "10px" }}
+                                label="Name"
+                                name="name"
+                                variant="outlined"
+                                value={selectedUser.name}
+                                onChange={e => setSelectedUser({ ...selectedUser, name: e.target.value })}
+                                fullWidth
+                                style={{ marginBottom: "10px" }}
                             />
                             <TextField
                                 label="Surname"
                                 name="surname"
                                 variant="outlined"
                                 value={selectedUser.surname}
-                                onChange={e => setSelectedUser({...selectedUser, surname: e.target.value})}
+                                onChange={e => setSelectedUser({ ...selectedUser, surname: e.target.value })}
                                 fullWidth
                                 style={{ marginBottom: "10px" }}
                             />
@@ -251,7 +251,7 @@ export default function SideBarUsers() {
                                 name="phone"
                                 variant="outlined"
                                 value={selectedUser.phone}
-                                onChange={e => setSelectedUser({...selectedUser, phone: e.target.value})}
+                                onChange={e => setSelectedUser({ ...selectedUser, phone: e.target.value })}
                                 fullWidth
                                 style={{ marginBottom: "10px" }}
                             />
@@ -262,7 +262,7 @@ export default function SideBarUsers() {
                                     id="demo-simple-select"
                                     value={selectedUser.status}
                                     label="Status"
-                                    onChange={e => setSelectedUser({...selectedUser, status: e.target.value})}
+                                    onChange={e => setSelectedUser({ ...selectedUser, status: e.target.value })}
                                 >
                                     {
                                         statusList.map((status) => (

@@ -1,5 +1,6 @@
 package com.humanresourcesapp.services;
 
+import com.humanresourcesapp.configs.aws.S3Buckets;
 import com.humanresourcesapp.constants.ENotificationTextBase;
 import com.humanresourcesapp.dto.requests.*;
 import com.humanresourcesapp.dto.responses.CompanyAndManagerNameResponseDto;
@@ -20,13 +21,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.PageRequest;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import static com.humanresourcesapp.constants.FrontendPaths.*;
 
@@ -41,6 +46,8 @@ public class UserService {
     private final JwtTokenManager jwtTokenManager;
     private  ExpenditureService expenditureService;
     private OfferService offerService;
+    private final S3Service s3Service;
+    private final S3Buckets s3Buckets;
 
     @Autowired
     public void setOfferService(@Lazy OfferService offerService , @Lazy ExpenditureService expenditureService) {
@@ -76,9 +83,64 @@ public class UserService {
     }
 
     public List<User> getAll(PageRequestDto dto) {
+        List<User> allUserByEmailSearch = userRepository.getAllUserByEmailSearch(dto.searchText(),
+                PageRequest.of(dto.page(),
+                        dto.pageSize()));
 
-        return userRepository.getAllUserByEmailSearch(dto.searchText(),PageRequest.of(dto.page(), dto.pageSize()));
+//        allUserByEmailSearch.forEach(user -> {
+//                    String profileImageUrl = null;
+//                    try {
+//                        profileImageUrl = s3Service.createPresignedGetUrl(
+//                                s3Buckets.getCustomer(), "profile-images/%s/%s".formatted(user.getId(), user.getProfileImageId()));
+//                    } catch (Exception e) {
+//                        System.out.println(e.getMessage());
+//                        System.err.println("Failed to generate S3 URL for player: " + user.getId());
+//                    }
+//                    user.setPhoto(profileImageUrl);
+//                }
+//        );
+        return allUserByEmailSearch;
     }
+
+    public void uploadPlayerProfileImage(MultipartFile file, Authentication authentication) {
+        User profileByEmail = findByEmail(authentication.getName())
+                .orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
+
+        String profileImageId = UUID.randomUUID().toString();
+        String existingProfileImageId = profileByEmail.getProfileImageId(); // Store the old image ID
+
+        try {
+            // Delete the old file in the S3 bucket if it exists
+            if (existingProfileImageId != null && !existingProfileImageId.isEmpty()) {
+                s3Service.deleteObject(s3Buckets.getCustomer(),
+                        "profile-images/%s/%s".formatted(profileByEmail.getId(), existingProfileImageId));
+            }
+
+            // Upload the new file
+            s3Service.putObject(s3Buckets.getCustomer(),
+                    "profile-images/%s/%s".formatted(profileByEmail.getId(), profileImageId),
+                    file.getBytes()
+            );
+
+            String profileImageUrl = s3Service.createPresignedGetUrl(
+                    s3Buckets.getCustomer(), "profile-images/%s/%s".formatted(profileByEmail.getId(), profileImageId));
+
+            profileByEmail.setProfileImageId(profileImageId);
+            profileByEmail.setPhoto(profileImageUrl);
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        userRepository.save(profileByEmail);
+    }
+
+//    public void updatePlayerProfileImageId(String imageId, String playerEmail) {
+//        User user = userRepository.findByEmail(playerEmail).orElseThrow();
+//        user.setProfileImageId(imageId);
+//        user.setPhoto(profileImageUrl);
+//        userRepository.save(user);
+//    }
 
     public List<User> getAllUsersOfManagerByCompanyId(PageRequestDto dto) {
 

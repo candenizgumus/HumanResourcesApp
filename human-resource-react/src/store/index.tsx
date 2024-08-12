@@ -2,7 +2,8 @@ import {configureStore} from "@reduxjs/toolkit";
 import {
     authSlice, companySlice, featureSlice, offerSlice, userStorySlice, holidaySlice,
     passwordResetSlice,
-    notificationSlice, expenditureSlice, personalDocumentSlice
+    notificationSlice, expenditureSlice, personalDocumentSlice,
+    leaveSlice
 } from "./feature";
 
 
@@ -19,7 +20,8 @@ const store = configureStore({
         passwordReset: passwordResetSlice,
         notification: notificationSlice,
         expenditure: expenditureSlice,
-        personalDocument: personalDocumentSlice
+        personalDocument: personalDocumentSlice,
+        leave:leaveSlice
 
     }
 });

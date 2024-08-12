@@ -8,7 +8,8 @@ import passwordResetSlice from "./passwordResetSlice";
 import notificationSlice from "./notificationSlice";
 import expenditureSlice from "./expenditureSlice";
 import personalDocumentSlice from "./personalDocumentSlice";
- 
+import leaveSlice from "./leaveSlice";
+
 
 
 
@@ -22,5 +23,6 @@ export{
     passwordResetSlice,
     notificationSlice,
     expenditureSlice,
-    personalDocumentSlice
+    personalDocumentSlice,
+    leaveSlice
 }

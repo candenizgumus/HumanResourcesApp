@@ -8,6 +8,7 @@ import SideBarNotifications from "../molecules/AdminPageComponents/SideBarNotifi
 import SideBarCompany from "../molecules/ManagerComponents/SideBarCompany";
 import SideBarCreateComment from "../molecules/ManagerComponents/SideBarCreateComment";
 import SideBarManagerExpenditures from "../molecules/ManagerComponents/SideBarManagerExpenditures";
+import SideBarManagerLeaves from "../molecules/ManagerComponents/SideBarManagerLeaves";
 import ChangePassword from "../molecules/ChangePassword";
 import EditEmployee from "../molecules/ManagerComponents/EditEmployee";
 import AddDocument from "../molecules/ManagerComponents/AddDocument";
@@ -28,6 +29,7 @@ export const ManagerMenuContentRenderer = () => {
                 {page === 'Change Password' && <ChangePassword/>}
                 {page === 'Edit Employee' && <EditEmployee/>}
                 {page === 'Add Document' && <AddDocument/>}
+                {page === 'Leaves' && <SideBarManagerLeaves/>}
             </Grid>
         </>
     );

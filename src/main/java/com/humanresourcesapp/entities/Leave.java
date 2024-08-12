@@ -1,16 +1,17 @@
 package com.humanresourcesapp.entities;
 
 
+import com.humanresourcesapp.entities.enums.ELeaveType;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
+
+import java.time.LocalDate;
 
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
+@SuperBuilder
 @Data
 @Entity
 @Table(name = "leaves")
@@ -21,7 +22,17 @@ public class Leave extends BaseEntity {
     private Long id;
 
     private Long employeeId;
-    private Long startDate;
-    private Long endDate;
+    Long companyId;
+    String employeeName;
+    String employeeSurname;
+    String description;
+    LocalDate approveDate;
+    LocalDate startDate;
+    LocalDate endDate;
+    @Builder.Default
+    Boolean isLeaveApproved = false;
+    String attachedFile;
 
+    @Enumerated(EnumType.STRING)
+    ELeaveType leaveType;
 }

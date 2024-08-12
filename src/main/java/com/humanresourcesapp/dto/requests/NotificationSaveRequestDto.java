@@ -1,5 +1,6 @@
 package com.humanresourcesapp.dto.requests;
 
+import com.humanresourcesapp.entities.enums.EAccessIdentifier;
 import com.humanresourcesapp.entities.enums.ENotificationType;
 import com.humanresourcesapp.entities.enums.EStatus;
 import com.humanresourcesapp.entities.enums.EUserType;
@@ -13,5 +14,6 @@ public record NotificationSaveRequestDto(
         String url,
         Boolean isRead,
         EStatus status,
-        EUserType userType) {
+        EUserType userType,
+        EAccessIdentifier accessIdentifier) {
 }

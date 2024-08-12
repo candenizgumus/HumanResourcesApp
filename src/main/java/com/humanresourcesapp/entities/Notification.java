@@ -1,5 +1,6 @@
 package com.humanresourcesapp.entities;
 
+import com.humanresourcesapp.entities.enums.EAccessIdentifier;
 import com.humanresourcesapp.entities.enums.ENotificationType;
 import com.humanresourcesapp.entities.enums.EStatus;
 import com.humanresourcesapp.entities.enums.EUserType;
@@ -27,4 +28,8 @@ public class Notification extends BaseEntity
     Boolean isRead = false;
     EUserType userType;
     String url;
+    @Enumerated(EnumType.STRING)
+    EAccessIdentifier accessIdentifier;
+    @Enumerated(EnumType.STRING)
+    EStatus status;
 }

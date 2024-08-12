@@ -18,4 +18,5 @@ public class FrontendPaths {
     public static final String LEAVES = "Leaves";
     public static final String COMPANY_ITEMS = "Company Items";
     public static final String COMPANY = "Company";
+    public static final String EXPENDITURE = "Expenditure";
 }

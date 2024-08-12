@@ -3,10 +3,13 @@ package com.humanresourcesapp.services;
 import com.humanresourcesapp.dto.requests.NotificationSaveRequestDto;
 import com.humanresourcesapp.dto.requests.NotificationIsReadUpdateRequestDto;
 import com.humanresourcesapp.dto.requests.PageRequestDto;
+import com.humanresourcesapp.dto.requests.SaveContactUsNotificationRequestDto;
 import com.humanresourcesapp.dto.responses.NotificationResponseDto;
 import com.humanresourcesapp.entities.Notification;
 import com.humanresourcesapp.entities.User;
+import com.humanresourcesapp.entities.enums.ENotificationType;
 import com.humanresourcesapp.entities.enums.EStatus;
+import com.humanresourcesapp.entities.enums.EUserType;
 import com.humanresourcesapp.exception.ErrorType;
 import com.humanresourcesapp.exception.HumanResourcesAppException;
 import com.humanresourcesapp.repositories.NotificationRepository;
@@ -16,9 +19,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
+import static com.humanresourcesapp.constants.FrontendPaths.HOME;
 
 @Service
 @RequiredArgsConstructor
@@ -118,5 +121,17 @@ public class NotificationService {
         notification.setStatus(EStatus.DELETED);
         notificationRepository.save(notification);
         return true;
+    }
+
+    public Notification saveContactUsNotification(SaveContactUsNotificationRequestDto notificationSaveDto) {
+        return save(NotificationSaveRequestDto.builder()
+                .notificationText(notificationSaveDto.subject())
+                .userType(EUserType.ADMIN)
+                .userId(0L)
+                .isRead(false)
+                .status(EStatus.ACTIVE)
+                .notificationType(ENotificationType.ASSIST)
+                .url(HOME)
+                .build());
     }
 }

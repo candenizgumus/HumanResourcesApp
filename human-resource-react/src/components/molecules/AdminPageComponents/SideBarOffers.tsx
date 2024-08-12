@@ -36,6 +36,7 @@ const columns: GridColDef[] = [
     { field: "title", headerName: "Title", width: 160, headerAlign: "center" },
     { field: "numberOfEmployee", headerName: "Employee Count", type: "number", width: 120, headerAlign: "center" },
     { field: "sector", headerName: "Sector", type: "string", width: 250, headerAlign: "center" },
+    { field: "status", headerName: "Status", type: "string", width: 150, headerAlign: "center" },
 ];
 
 const style = {
@@ -250,7 +251,14 @@ export default function SideBarOffers() {
                     text: "Email has been sent",
                     icon: "success",
                     timer: 1500
-                });
+                }).then(()=> {
+                    dispatch(fetchGetOffers({
+                        token: token,
+                        page: paginationModel.page,
+                        pageSize: paginationModel.pageSize,
+                        searchText: searchText,
+                    }));
+                })
             } else {
                 Swal.fire({
                     title: "Error",

@@ -37,7 +37,7 @@ public class OfferService
     private final NotificationService notificationService;
 
 
-    public Boolean save(OfferSaveRequestDto dto)
+    public Boolean saveWithDto(OfferSaveRequestDto dto)
     {
         //User check
         if (userService.findByEmail(dto.email()).isPresent())
@@ -161,5 +161,9 @@ public class OfferService
     public Long countActiveOffers()
     {
         return offerRepository.countByStatus(EStatus.ACTIVE);
+    }
+
+    public void save(Offer offer) {
+        offerRepository.save(offer);
     }
 }

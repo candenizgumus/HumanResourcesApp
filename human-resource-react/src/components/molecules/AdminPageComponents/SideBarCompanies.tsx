@@ -4,6 +4,7 @@ import {
     GridColDef,
     GridRowSelectionModel,
     GridPaginationModel,
+    GridToolbar
 } from "@mui/x-data-grid";
 import {
     Button,
@@ -169,6 +170,9 @@ export default function OfferList() {
                 style={{ marginBottom: "10px" }}
             />
             <DataGrid
+                slots={{
+                    toolbar: GridToolbar,
+                }}
                 rows={companyList}
                 rowCount={rowCount}
                 columns={columns}

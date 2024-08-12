@@ -13,14 +13,18 @@ import java.util.Optional;
 
 public interface OfferRepository extends JpaRepository<Offer, Long>
 {
-    @Query("select new com.humanresourcesapp.views.VwGetAllOffer(o.id,o.name,o.surname,o.email,o.phone,o.companyName,o.title,o.numberOfEmployee,o.userType,o.sector,o.approvalText) from Offer o  where o.status = 'PENDING'")
+    @Query("select new com.humanresourcesapp.views.VwGetAllOffer(o.id,o.name,o.surname,o.email,o.phone,o.companyName,o.title,o.numberOfEmployee,o.userType,o.sector,o.approvalText,o.status) from Offer o  where o.status = 'PENDING'")
     List<VwGetAllOffer> getAllOffer(PageRequest pageRequest);
-    @Query("select new com.humanresourcesapp.views.VwGetAllOffer(o.id,o.name,o.surname,o.email,o.phone,o.companyName,o.title,o.numberOfEmployee,o.userType,o.sector,o.approvalText) from Offer o  where o.status = 'PENDING' AND o.email like %?1% ORDER BY o.id ASC")
-    List<VwGetAllOffer> getAllOfferByEmailSearch(String email ,PageRequest pageRequest);
+
+    //Type mismatch: com.humanresourcesapp.entities.enums.EStatus type is expected NOT A REAL ERROR
+    @Query("select new com.humanresourcesapp.views.VwGetAllOffer(o.id,o.name,o.surname,o.email,o.phone,o.companyName,o.title,o.numberOfEmployee,o.userType,o.sector,o.approvalText,o.status) from Offer o where o.status IN ('PENDING', 'IN_PROGRESS') AND o.email like %?1% ORDER BY o.id ASC")
+    List<VwGetAllOffer> getAllOfferByEmailSearch(String email, PageRequest pageRequest);
+
 
     Optional<Offer> findByEmail (String email);
 
-    @Query("select Count(o) from Offer o  where o.status = 'PENDING' AND o.email like %?1%")
+    //Type mismatch: com.humanresourcesapp.entities.enums.EStatus type is expected NOT A REAL ERROR
+    @Query("select Count(o) from Offer o  where o.status IN ('PENDING', 'IN_PROGRESS') AND o.email like %?1%")
     Long getAllOfferByEmailSearchCount(String email);
 
     Long countByStatus(EStatus status);

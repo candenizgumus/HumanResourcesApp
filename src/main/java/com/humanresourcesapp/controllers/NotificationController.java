@@ -2,7 +2,9 @@ package com.humanresourcesapp.controllers;
 
 import com.humanresourcesapp.dto.requests.NotificationIsReadUpdateRequestDto;
 import com.humanresourcesapp.dto.requests.PageRequestDto;
+import com.humanresourcesapp.dto.requests.SaveContactUsNotificationRequestDto;
 import com.humanresourcesapp.dto.responses.NotificationResponseDto;
+import com.humanresourcesapp.entities.Notification;
 import com.humanresourcesapp.services.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,10 +21,11 @@ import static com.humanresourcesapp.constants.Endpoints.*;
 public class NotificationController {
     private final NotificationService notificationService;
 
-//    @PostMapping(SAVE)
-//    public ResponseEntity<Notification> save(NotificationSaveRequestDto notificationSaveRequestDto) {
-//        return ResponseEntity.ok(notificationService.save(notificationSaveRequestDto));
-//    }
+    @PostMapping(SAVE_CONTACT_US_NOTIFICATION)
+    @CrossOrigin("*")
+    public ResponseEntity<Notification> saveContactUsNotification(@RequestBody SaveContactUsNotificationRequestDto notificationSaveDto) {
+        return ResponseEntity.ok(notificationService.saveContactUsNotification(notificationSaveDto));
+    }
 
     @PostMapping(GET_ALL_UNREAD)
     @CrossOrigin("*")

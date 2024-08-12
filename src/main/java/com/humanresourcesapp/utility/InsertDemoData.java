@@ -567,7 +567,7 @@ public class InsertDemoData {
     {
 
 
-        offerService.save(new OfferSaveRequestDto(
+        offerService.saveWithDto(new OfferSaveRequestDto(
                 "Alice",
                 "Johnson",
                 "alice.johnson@example.com",
@@ -578,7 +578,7 @@ public class InsertDemoData {
                 ESectors.TECHNOLOGY
         ));
 
-        offerService.save(new OfferSaveRequestDto(
+        offerService.saveWithDto(new OfferSaveRequestDto(
                 "Bob",
                 "Smith",
                 "bob.smith@example.com",
@@ -589,7 +589,7 @@ public class InsertDemoData {
                 ESectors.AGRICULTURAL_SERVICES
         ));
 
-        offerService.save(new OfferSaveRequestDto(
+        offerService.saveWithDto(new OfferSaveRequestDto(
                 "Charlie",
                 "Brown",
                 "charlie.brown@example.com",
@@ -600,7 +600,7 @@ public class InsertDemoData {
                 ESectors.HEALTHCARE
         ));
 
-        offerService.save(new OfferSaveRequestDto(
+        offerService.saveWithDto(new OfferSaveRequestDto(
                 "David",
                 "Clark",
                 "david.clark@example.com",
@@ -611,7 +611,7 @@ public class InsertDemoData {
                 ESectors.ACCOUNTING_SERVICES
         ));
 
-        offerService.save(new OfferSaveRequestDto(
+        offerService.saveWithDto(new OfferSaveRequestDto(
                 "Eva",
                 "Martin",
                 "eva.martin@example.com",
@@ -622,7 +622,7 @@ public class InsertDemoData {
                 ESectors.MARKETING
         ));
 
-        offerService.save(new OfferSaveRequestDto(
+        offerService.saveWithDto(new OfferSaveRequestDto(
                 "Frank",
                 "Garcia",
                 "frank.garcia@example.com",
@@ -633,7 +633,7 @@ public class InsertDemoData {
                 ESectors.CONSTRUCTION
         ));
 
-        offerService.save(new OfferSaveRequestDto(
+        offerService.saveWithDto(new OfferSaveRequestDto(
                 "Grace",
                 "Lee",
                 "grace.lee@example.com",
@@ -644,7 +644,7 @@ public class InsertDemoData {
                 ESectors.RETAIL
         ));
 
-        offerService.save(new OfferSaveRequestDto(
+        offerService.saveWithDto(new OfferSaveRequestDto(
                 "Hank",
                 "Moore",
                 "hank.moore@example.com",
@@ -655,7 +655,7 @@ public class InsertDemoData {
                 ESectors.EDUCATION
         ));
 
-        offerService.save(new OfferSaveRequestDto(
+        offerService.saveWithDto(new OfferSaveRequestDto(
                 "Ivy",
                 "Taylor",
                 "ivy.taylor@example.com",
@@ -666,7 +666,7 @@ public class InsertDemoData {
                 ESectors.CONSTRUCTION
         ));
 
-        offerService.save(new OfferSaveRequestDto(
+        offerService.saveWithDto(new OfferSaveRequestDto(
                 "Jack",
                 "Anderson",
                 "jack.anderson@example.com",
@@ -677,7 +677,7 @@ public class InsertDemoData {
                 ESectors.LEGAL
         ));
 
-        offerService.save(new OfferSaveRequestDto(
+        offerService.saveWithDto(new OfferSaveRequestDto(
                 "Kate",
                 "Thomas",
                 "kate.thomas@example.com",
@@ -688,7 +688,7 @@ public class InsertDemoData {
                 ESectors.INVESTMENT_MANAGEMENT
         ));
 
-        offerService.save(new OfferSaveRequestDto(
+        offerService.saveWithDto(new OfferSaveRequestDto(
                 "Leo",
                 "Martinez",
                 "leo.martinez@example.com",
@@ -699,7 +699,7 @@ public class InsertDemoData {
                 ESectors.JOURNALISM
         ));
 
-        offerService.save(new OfferSaveRequestDto(
+        offerService.saveWithDto(new OfferSaveRequestDto(
                 "Mia",
                 "Harris",
                 "mia.harris@example.com",
@@ -710,7 +710,7 @@ public class InsertDemoData {
                 ESectors.AUTOMOTIVE
         ));
 
-        offerService.save(new OfferSaveRequestDto(
+        offerService.saveWithDto(new OfferSaveRequestDto(
                 "Noah",
                 "Nelson",
                 "noah.nelson@example.com",
@@ -721,7 +721,7 @@ public class InsertDemoData {
                 ESectors.MEDIA
         ));
 
-        offerService.save(new OfferSaveRequestDto(
+        offerService.saveWithDto(new OfferSaveRequestDto(
                 "Olivia",
                 "Scott",
                 "olivia.scott@example.com",

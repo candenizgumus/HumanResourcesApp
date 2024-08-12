@@ -1,5 +1,4 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { clearToken } from "./authSlice";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 export interface INotification {
     id: number,
@@ -112,7 +111,33 @@ export const fetchDeleteNotification = createAsyncThunk(
     }
 );
 
+export interface IContactUsNotificationPayload {
+    senderName: string,
+    senderEmail: string,
+    subject: string
+    message: string
+}
 
+export const fetchSaveContactUsNotification = createAsyncThunk(
+    'notification/fetchSaveContactUsNotification',
+    async (payload:IContactUsNotificationPayload) => {
+        const response = await fetch('http://localhost:9090/dev/v1/notification/save-contact-us-notification', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                'senderName': payload.senderName,
+                'senderEmail' : payload.senderEmail,
+                'subject': payload.subject,
+                'message': payload.message
+            })
+        });
+
+        return await response.json();
+
+    }
+);
 
 
 const notificationSlice = createSlice({

@@ -13,6 +13,9 @@ import { styled } from '@mui/material/styles';
 import { NavBar } from '../../components/molecules/PreAuthorizedPageComponents/NavBar';
 import FooterElement from '../../components/molecules/PreAuthorizedPageComponents/FooterElement';
 import Swal from 'sweetalert2';
+import { fetchSaveContactUsNotification } from '../../store/feature/notificationSlice';
+import { HumanResources, useAppSelector } from '../../store';
+import { useDispatch } from 'react-redux';
 
 const Root = styled('div')(({ theme }) => ({
   flexGrow: 1,
@@ -47,10 +50,10 @@ const ContactForm = styled(Paper)(({ theme }) => ({
 
 function ContactUsPage() {
   const featuresRef = useRef<HTMLDivElement>(null);
-
+  const dispatch = useDispatch<HumanResources>();
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
+    senderName: '',
+    senderEmail: '',
     subject: '',
     message: '',
   });
@@ -63,30 +66,34 @@ function ContactUsPage() {
     }));
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    // Here you can perform any form submission logic, such as sending data to a server.
-    // For now, we'll just show a success message and clear the form.
-
-    Swal.fire({
-      title: 'Success!',
-      text: 'Your message has been sent successfully.',
-      icon: 'success',
-      confirmButtonText: 'OK',
-    });
-
-    setFormData({
-      name: '',
-      email: '',
-      subject: '',
-      message: '',
-    });
+    console.log("Form data before dispatch:", formData);
+    try {
+      await dispatch(fetchSaveContactUsNotification({
+        senderName: formData.senderName,
+        senderEmail: formData.senderEmail,
+        subject: formData.subject,
+        message: formData.message,
+      })).then(() => {
+        setFormData({
+          senderName: '',
+          senderEmail: '',
+          subject: '',
+          message: '',
+        });
+      })
+      Swal.fire("Success", "Your message has been sent successfully.", "success");
+    } catch (error) {
+      console.error("Error sending message:", error);
+      Swal.fire("Error", "There was a problem sending the message.", "error");
+    }
   };
 
   return (
     <Root>
       <CssBaseline />
-      <NavBar/>
+      <NavBar />
       <Header>
         <Container maxWidth="lg">
           <Box py={5} textAlign="center">
@@ -112,10 +119,10 @@ function ContactUsPage() {
                   <Grid item xs={12}>
                     <TextField
                       fullWidth
-                      id="name"
+                      id="senderName"
                       label="Name"
                       variant="outlined"
-                      value={formData.name}
+                      value={formData.senderName}
                       onChange={handleChange}
                       required
                     />
@@ -123,10 +130,10 @@ function ContactUsPage() {
                   <Grid item xs={12}>
                     <TextField
                       fullWidth
-                      id="email"
+                      id="senderEmail"
                       label="Email"
                       variant="outlined"
-                      value={formData.email}
+                      value={formData.senderEmail}
                       onChange={handleChange}
                       required
                     />

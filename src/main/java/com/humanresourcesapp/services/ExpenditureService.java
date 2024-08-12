@@ -1,9 +1,12 @@
 package com.humanresourcesapp.services;
 
+import com.humanresourcesapp.constants.ENotificationTextBase;
 import com.humanresourcesapp.dto.requests.ExpenditureSaveRequestDto;
+import com.humanresourcesapp.dto.requests.NotificationSaveRequestDto;
 import com.humanresourcesapp.dto.requests.PageRequestDto;
 import com.humanresourcesapp.entities.Expenditure;
 import com.humanresourcesapp.entities.User;
+import com.humanresourcesapp.entities.enums.ENotificationType;
 import com.humanresourcesapp.entities.enums.EStatus;
 import com.humanresourcesapp.exception.ErrorType;
 import com.humanresourcesapp.exception.HumanResourcesAppException;
@@ -15,6 +18,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+
+import static com.humanresourcesapp.constants.FrontendPaths.EXPENDITURE;
 
 @Service
 @RequiredArgsConstructor
@@ -40,7 +45,16 @@ public class ExpenditureService
                 .status(EStatus.ACTIVE)
                 .build();
 
-        //TODO BURADAN MAANAGER A NOTIFICATION GONDERMEK LAZIM
+        notificationService.save(NotificationSaveRequestDto.builder()
+                .notificationText(ENotificationTextBase.EXPENDITURE_REQUEST_NOTIFICATION.getText() + userEmail)
+                .userType(null)
+                .userId(employee.getManagerId())
+                .isRead(false)
+                .status(EStatus.ACTIVE)
+                .notificationType(ENotificationType.WARNING)
+                .url(EXPENDITURE)
+                .build());
+
         return expenditureRepository.save(expenditure);
     }
 
@@ -78,9 +92,45 @@ public class ExpenditureService
             expenditure.setIsExpenditureApproved(true);
             expenditure.setApproveDate(LocalDate.now());
             expenditureRepository.save(expenditure);
-            return true;
 
+            notificationService.save(NotificationSaveRequestDto.builder()
+                    .notificationText(ENotificationTextBase.EXPENDITURE_APPROVE_NOTIFICATION.getText() + expenditure.getDescription())
+                    .userType(null)
+                    .userId(expenditure.getEmployeeId())
+                    .isRead(false)
+                    .status(EStatus.ACTIVE)
+                    .notificationType(ENotificationType.SUCCESS)
+                    .url(EXPENDITURE)
+                    .build());
+            return true;
         }
        return false;
     }
+
+    //TODO implement decline
+    /*
+    notificationService.save(NotificationSaveRequestDto.builder()
+                    .notificationText(ENotificationTextBase.EXPENDITURE_REJECT_NOTIFICATION.getText() + expenditure.getDescription())
+                    .userType(null)
+                    .userId(expenditure.getEmployeeId())
+                    .isRead(false)
+                    .status(EStatus.ACTIVE)
+                    .notificationType(ENotificationType.ERROR)
+                    .url(EXPENDITURE)
+                    .build());
+
+     */
+
+    //TODO implement cancel
+    /*
+    notificationService.save(NotificationSaveRequestDto.builder()
+                    .notificationText(ENotificationTextBase.EXPENDITURE_CANCEL_NOTIFICATION.getText() + userEmail)
+                    .userType(null)
+                    .userId(expenditure.getEmployeeId())
+                    .isRead(false)
+                    .status(EStatus.ACTIVE)
+                    .notificationType(ENotificationType.WARNING)
+                    .url(EXPENDITURE)
+                    .build());
+     */
 }

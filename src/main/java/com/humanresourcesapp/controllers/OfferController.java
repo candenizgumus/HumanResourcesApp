@@ -4,8 +4,6 @@ import com.humanresourcesapp.dto.requests.OfferApproveRequestDto;
 import com.humanresourcesapp.dto.requests.OfferSaveRequestDto;
 import com.humanresourcesapp.dto.requests.PageCountRequestDto;
 import com.humanresourcesapp.dto.requests.PageRequestDto;
-import com.humanresourcesapp.exception.ErrorType;
-import com.humanresourcesapp.exception.HumanResourcesAppException;
 import com.humanresourcesapp.services.OfferService;
 import com.humanresourcesapp.views.VwGetAllOffer;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +26,7 @@ public class OfferController
     @PostMapping(SAVE)
     public ResponseEntity<Boolean> save(@RequestBody OfferSaveRequestDto dto)
     {
-        return ResponseEntity.ok(offerService.save(dto));
+        return ResponseEntity.ok(offerService.saveWithDto(dto));
     }
 
     @PostMapping(GET_ALL)

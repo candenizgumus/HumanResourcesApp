@@ -25,6 +25,7 @@ export const NotificationIcon = () => {
     }, [dispatch, token]);
 
     const handleNotificationClick = (event: React.MouseEvent<HTMLElement>) => {
+        dispatch(fetchGetUnreadNotifications(token));
         setAnchorEl(event.currentTarget);
     };
 
@@ -63,9 +64,9 @@ export const NotificationIcon = () => {
                 }}
                 PaperProps={{
                     sx: {
-                        mt: 1.5, // Margin top to move the popover down
-                        maxHeight: '300px', // Set the max height for the popover
-                        width: '300px', // Optional: you can also set a specific width
+                        mt: 1.5,
+                        maxHeight: '300px',
+                        width: '300px',
                     },
                 }}
             >

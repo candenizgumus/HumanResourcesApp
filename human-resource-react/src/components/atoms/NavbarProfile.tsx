@@ -1,21 +1,22 @@
-import React, {useEffect, useState} from 'react';
-import { Badge, IconButton, Menu, MenuItem, Tooltip } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { Avatar, Badge, IconButton, Menu, MenuItem, Tooltip } from '@mui/material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import {useDispatch} from "react-redux";
-import {HumanResources, useAppSelector} from "../../store";
+import { useDispatch } from "react-redux";
+import { HumanResources, useAppSelector } from "../../store";
 import {
     changePageState,
     clearToken,
     fetchFindCompanyNameAndManagerNameOfUser,
     fetchFindUserByToken
 } from "../../store/feature/authSlice";
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function NavbarProfile() {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const dispatch = useDispatch<HumanResources>();
     const navigate = useNavigate();
 
+    const loggedInUser = useAppSelector(state => state.auth.user);
 
 
 
@@ -50,7 +51,8 @@ export default function NavbarProfile() {
             <Tooltip title="Account settings">
                 <IconButton onClick={handleMenuOpen} color="inherit" sx={{ ml: 2 }}>
                     <Badge color="secondary">
-                        <AccountCircleIcon fontSize='large'/>
+                        {/* <AccountCircleIcon fontSize='large' /> */}
+                        <Avatar src={loggedInUser.photo} alt={loggedInUser.name} sx={{ width: 40, height: 40, objectFit: 'cover', objectPosition: 'top' }} />
                     </Badge>
                 </IconButton>
             </Tooltip>

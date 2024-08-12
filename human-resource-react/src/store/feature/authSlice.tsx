@@ -1,7 +1,7 @@
-import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {ILogin} from "../../models/ILogin";
-import {IUser} from "../../models/IUser";
-import {ICreateAdmin} from '../../models/ICreateAdmin';
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { ILogin } from "../../models/ILogin";
+import { IUser } from "../../models/IUser";
+import { ICreateAdmin } from '../../models/ICreateAdmin';
 
 interface IAuthState {
     user: IUser;
@@ -181,23 +181,23 @@ export const fetchCreateAdmin = createAsyncThunk(
     'user/fetchCreateAdmin',
     async (payload: ICreateAdmin) => {
 
-            const response = await fetch(`http://localhost:9090/dev/v1/user/save-admin`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ` + payload.token
-                },
-                body: JSON.stringify({
-                    'email': payload.email,
-                    'password': payload.password
-                })
-            });
-             
-            return await response.json();
+        const response = await fetch(`http://localhost:9090/dev/v1/user/save-admin`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ` + payload.token
+            },
+            body: JSON.stringify({
+                'email': payload.email,
+                'password': payload.password
+            })
+        });
+
+        return await response.json();
     }
 );
 interface UpdateProfile {
-    token : string;
+    token: string;
     name: string;
     surname: string;
     phone: string;
@@ -239,8 +239,8 @@ export const fetchUpdateUser = createAsyncThunk(
 );
 
 interface IfetchUpdateEmployeeByManager {
-    token : string;
-    employeeId:number
+    token: string;
+    employeeId: number
     name: string;
     surname: string;
     phone: string;
@@ -249,7 +249,7 @@ interface IfetchUpdateEmployeeByManager {
     hireDate: Date | null;
     position: string;
     location: string;
-    eEmployeeType:string
+    eEmployeeType: string
 
 }
 export const fetchUpdateEmployeeByManager = createAsyncThunk(
@@ -297,7 +297,7 @@ export const fetchGetAllUsers = createAsyncThunk(
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ` + payload.token
-            },body: JSON.stringify({
+            }, body: JSON.stringify({
                 'page': payload.page,
                 'pageSize': payload.pageSize,
                 'searchText': payload.searchText
@@ -327,8 +327,8 @@ export const fetchGetAllUsersOfManager = createAsyncThunk(
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer `  + payload.token
-            },body: JSON.stringify({
+                'Authorization': `Bearer ` + payload.token
+            }, body: JSON.stringify({
                 'page': payload.page,
                 'pageSize': payload.pageSize,
                 'searchText': payload.searchText
@@ -346,17 +346,17 @@ export const fetchGetAllUsersOfManager = createAsyncThunk(
 );
 interface IfetchAddEmployeeToManager {
     token: string;
-    email:string;
-    name:string;
-    surname:string;
-    phone:string;
-    title:string;
-    location:string;
-    birthDate:Date;
-    hireDate:Date;
-    ePosition:string;
-    eEmployeeType:string;
-    salary:number
+    email: string;
+    name: string;
+    surname: string;
+    phone: string;
+    title: string;
+    location: string;
+    birthDate: Date;
+    hireDate: Date;
+    ePosition: string;
+    eEmployeeType: string;
+    salary: number
 }
 export const fetchAddEmployeeToManager = createAsyncThunk(
     'user/fetchAddEmployeeToManager',
@@ -366,7 +366,7 @@ export const fetchAddEmployeeToManager = createAsyncThunk(
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ` + payload.token
-            },body: JSON.stringify({
+            }, body: JSON.stringify({
                 'email': payload.email,
                 'name': payload.name,
                 'surname': payload.surname,
@@ -397,23 +397,23 @@ export const fetchGetUserCount = createAsyncThunk(
     'offer/fetchGetUserCount',
     async (payload: fetchGetUserCountPayload, { dispatch }) => {
 
-            const response = await fetch('http://localhost:9090/dev/v1/user/get-count', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ` + payload.token
-                },
-                body: JSON.stringify({
-                    'searchText': payload.searchText
-                })
-            });
+        const response = await fetch('http://localhost:9090/dev/v1/user/get-count', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ` + payload.token
+            },
+            body: JSON.stringify({
+                'searchText': payload.searchText
+            })
+        });
 
-            if (!response.ok) {
-                console.log(response)
-                dispatch(clearToken());
-            }
+        if (!response.ok) {
+            console.log(response)
+            dispatch(clearToken());
+        }
 
-            return await response.json();
+        return await response.json();
 
     }
 );
@@ -436,8 +436,8 @@ export const fetchGetCustomerByMonth = createAsyncThunk(
 );
 
 interface IfetchUpdateUserByAdmin {
-    token : string;
-    userId : number;
+    token: string;
+    userId: number;
     name: string;
     surname: string;
     phone: string;
@@ -474,8 +474,8 @@ export const fetchUpdateUserByAdmin = createAsyncThunk(
 );
 
 interface IfetchDeleteEmployeeByAdmin {
-    token : string;
-    id : number;
+    token: string;
+    id: number;
 
 
 }
@@ -483,7 +483,7 @@ export const fetchDeleteEmployeeByAdmin = createAsyncThunk(
     'user/fetchDeleteEmployeeByAdmin',
     async (payload: IfetchDeleteEmployeeByAdmin, { dispatch }) => {
 
-        const response = await fetch('http://localhost:9090/dev/v1/user/delete?id='+payload.id, {
+        const response = await fetch('http://localhost:9090/dev/v1/user/delete?id=' + payload.id, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
@@ -505,8 +505,8 @@ export const fetchDeleteEmployeeByAdmin = createAsyncThunk(
     }
 );
 interface IfetchFindUserById {
-    token : string;
-    id : number;
+    token: string;
+    id: number;
 
 
 }
@@ -514,7 +514,7 @@ export const fetchFindUserById = createAsyncThunk(
     'user/fetchFindUserById',
     async (payload: IfetchFindUserById, { dispatch }) => {
 
-        const response = await fetch('http://localhost:9090/dev/v1/user/find-by-id?id='+payload.id, {
+        const response = await fetch('http://localhost:9090/dev/v1/user/find-by-id?id=' + payload.id, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -532,8 +532,8 @@ export const fetchFindUserById = createAsyncThunk(
     }
 );
 interface IfetchActivateUserByManager {
-    token : string;
-    id : number;
+    token: string;
+    id: number;
 
 
 }
@@ -541,7 +541,7 @@ export const fetchActivateUserByManager = createAsyncThunk(
     'user/fetchActivateUserByManager',
     async (payload: IfetchActivateUserByManager, { dispatch }) => {
 
-        const response = await fetch('http://localhost:9090/dev/v1/user/activate-employee?id='+payload.id, {
+        const response = await fetch('http://localhost:9090/dev/v1/user/activate-employee?id=' + payload.id, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -555,9 +555,9 @@ export const fetchActivateUserByManager = createAsyncThunk(
     }
 );
 interface IfetchChangePassword {
-    token : string;
-    password:string,
-    newPassword:string
+    token: string;
+    password: string,
+    newPassword: string
 
 
 }
@@ -572,8 +572,8 @@ export const fetchChangePassword = createAsyncThunk(
                 'Authorization': `Bearer ` + payload.token
             },
             body: JSON.stringify({
-                'password':payload.password,
-                'newPassword':payload.newPassword
+                'password': payload.password,
+                'newPassword': payload.newPassword
 
             })
         });
@@ -586,7 +586,7 @@ export const fetchChangePassword = createAsyncThunk(
 
 export const fetchCountOfUsersForAdminMenu = createAsyncThunk(
     'auth/fetchChangePassword',
-    async (payload:string, { dispatch }) => {
+    async (payload: string, { dispatch }) => {
 
         const response = await fetch('http://localhost:9090/dev/v1/user/count-of-customers-for-graph', {
             method: 'POST',
@@ -603,7 +603,7 @@ export const fetchCountOfUsersForAdminMenu = createAsyncThunk(
 
 export const fetchFindEmployeesWithUpcomingBirthdays = createAsyncThunk(
     'auth/fetchChangePassword',
-    async (payload:string, { dispatch }) => {
+    async (payload: string, { dispatch }) => {
 
         const response = await fetch('http://localhost:9090/dev/v1/user/find-employees-with-upcoming-birthdays', {
             method: 'POST',
@@ -667,7 +667,6 @@ const authSlice = createSlice({
                 localStorage.setItem('token', action.payload.token);
             })
             .addCase(fetchFindUserByToken.fulfilled, (state, action: PayloadAction<IUser>) => {
-
                 state.user = action.payload;
             })
             .addCase(fetchUpdateUser.fulfilled, (state, action: PayloadAction<IUser>) => {
@@ -698,5 +697,5 @@ const authSlice = createSlice({
     },
 });
 
-export const { changePageState, setToken, clearToken, setUserType,setSelectedEmployeeId } = authSlice.actions;
+export const { changePageState, setToken, clearToken, setUserType, setSelectedEmployeeId } = authSlice.actions;
 export default authSlice.reducer;

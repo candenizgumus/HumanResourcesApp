@@ -63,6 +63,9 @@ public class User extends BaseEntity
     LocalDate hireDate;
 
     // MANAGER and EMPLOYEE
+    String profileImageId;
+
+    @Column(length = 1000)
     String photo;
 
     // MANAGER and EMPLOYEE

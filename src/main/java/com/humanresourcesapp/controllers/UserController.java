@@ -12,9 +12,12 @@ import com.humanresourcesapp.entities.enums.ESectors;
 import com.humanresourcesapp.entities.enums.EStatus;
 import com.humanresourcesapp.services.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -55,6 +58,17 @@ public class UserController
     public ResponseEntity<Boolean> updateUserByAdmin(@RequestBody UpdateUserByAdminRequestDto dto)
     {
         return ResponseEntity.ok(userService.updateUserByAdmin(dto));
+    }
+
+    @PostMapping(value = "/profile-image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PreAuthorize("hasAnyAuthority('MANAGER','ADMIN', 'EMPLOYEE')")
+    @CrossOrigin("*")
+    public void uploadPlayerProfileImage(@RequestParam("file") MultipartFile file, Authentication authentication){
+        System.out.println("File name: " + file.getOriginalFilename());
+        System.out.println("File size: " + file.getSize() + " bytes");
+        System.out.println("File type: " + file.getContentType());
+        System.out.println(authentication.getName());
+        userService.uploadPlayerProfileImage(file, authentication);
     }
 
     @GetMapping(GET_POSITIONS)

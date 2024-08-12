@@ -20,6 +20,8 @@ import { fetchGetCompanies, fetchGetCompanyLogos } from "../../store/feature/com
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import LogoCard from "../../components/molecules/PreAuthorizedPageComponents/LogoCard";
+import CircularProgress from '@mui/material/CircularProgress';
+
 
 const Root = styled('div')(({ theme }) => ({
   display: 'flex',
@@ -78,9 +80,19 @@ function LandingPage() {
 
   useEffect(() => {
     const fetchData = async () => {
-      await dispatch(fetchGetFeatures());
-      await dispatch(fetchGetCompanyLogos());
-      setLoading(false);
+      try {
+        const result = await dispatch(fetchGetFeatures()).unwrap();
+        if (!result.code) {
+          const result = await dispatch(fetchGetCompanyLogos()).unwrap();
+          if (!result.code) {
+            setLoading(false);
+          } else {
+            console.error('Unexpected result format:', result);
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching:', error);
+      }
     };
     fetchData();
   }, [dispatch]);
@@ -137,41 +149,47 @@ function LandingPage() {
         </Container>
       </Header>
       <Body>
-        {!loading && (
-          <LogoContainer sx={{ marginBottom: '5%', marginTop: '5%' }}>
-            <IconButton onClick={handlePrev}>
-              <ArrowBackIosIcon />
-            </IconButton>
-            <Logos>
-              {visibleLogos.map((company, index) => (
-                <LogoCard
-                  key={index}
-                  logoSrc={company.logo}
-                  altText={company.name}
-                />
-              ))}
-            </Logos>
-            <IconButton onClick={handleNext}>
-              <ArrowForwardIosIcon />
-            </IconButton>
-          </LogoContainer>
+        {loading ? (
+          <Box sx={{ display: 'flex', justifyContent: 'center', marginBottom: '5%', marginTop: '5%' }}>
+            <CircularProgress />
+          </Box>
+        ) : (
+          <>
+            <LogoContainer sx={{ marginBottom: '5%', marginTop: '5%' }}>
+              <IconButton onClick={handlePrev}>
+                <ArrowBackIosIcon />
+              </IconButton>
+              <Logos>
+                {visibleLogos.map((company, index) => (
+                  <LogoCard
+                    key={index}
+                    logoSrc={company.logo}
+                    altText={company.name}
+                  />
+                ))}
+              </Logos>
+              <IconButton onClick={handleNext}>
+                <ArrowForwardIosIcon />
+              </IconButton>
+            </LogoContainer>
+            <CardGrid maxWidth="md" sx={{ marginBottom: '5%' }}>
+              <Typography component="h1" variant="h4" align="center" color="primary.main" gutterBottom sx={{ paddingBottom: 5 }}>
+                Features
+              </Typography>
+              <Grid container spacing={4}>
+                {featureList.slice(0, 3).map((feature) => (
+                  <FeatureCard
+                    key={feature.id}
+                    name={feature.name}
+                    shortDescription={feature.shortDescription}
+                    iconPath={feature.iconPath}
+                    isNavigatable={true}
+                  />
+                ))}
+              </Grid>
+            </CardGrid>
+          </>
         )}
-        <CardGrid maxWidth="md" sx={{ marginBottom: '5%' }}>
-          <Typography component="h1" variant="h4" align="center" color="primary.main" gutterBottom sx={{ paddingBottom: 5 }}>
-            Features
-          </Typography>
-          <Grid container spacing={4}>
-            {featureList.slice(0,3).map((feature) => (
-              <FeatureCard
-                key={feature.id}
-                name ={feature.name}
-                shortDescription={feature.shortDescription}
-                iconPath={feature.iconPath}
-                isNavigatable = {true}
-              />
-            ))}
-          </Grid>
-        </CardGrid>
       </Body>
       <Footer>
         <CssBaseline />

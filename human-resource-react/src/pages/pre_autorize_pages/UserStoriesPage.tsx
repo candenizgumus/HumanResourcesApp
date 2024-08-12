@@ -1,5 +1,5 @@
 import { styled } from "@mui/material/styles";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { CssBaseline } from "@mui/material";
 import { NavBar } from "../../components/molecules/PreAuthorizedPageComponents/NavBar";
 import FooterElement from "../../components/molecules/PreAuthorizedPageComponents/FooterElement";
@@ -9,6 +9,7 @@ import { HumanResources, RootState } from "../../store";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchGetUserStories, IUserStoryResponse } from "../../store/feature/userStorySlice";
 import { useNavigate } from "react-router-dom";
+import CircularProgress from '@mui/material/CircularProgress';
 
 const Root = styled('div')(({ theme }) => ({
     display: 'flex',
@@ -42,8 +43,22 @@ const SearchBar = styled(TextField)(({ theme }) => ({
 export default function UserStoriesPage() {
     const dispatch: HumanResources = useDispatch();
     const userStories = useSelector((state: RootState) => state.userStory.storyList) as IUserStoryResponse[];
+    const [loading, setLoading] = useState(true);
+
     useEffect(() => {
-        dispatch(fetchGetUserStories());
+        const fetchData = async () => {
+            try {
+                const result = await dispatch(fetchGetUserStories()).unwrap();
+                if (!result.code) {
+                    setLoading(false);
+                } else {
+                    console.error('Unexpected result format:', result);
+                }
+            } catch (error) {
+                console.error('Error fetching:', error);
+            }
+        };
+        fetchData();
     }, [dispatch]);
     return (
         <Root>
@@ -68,26 +83,32 @@ export default function UserStoriesPage() {
                 </Container>
             </Header>
             <Body sx={{ width: '100%', marginTop: '3.45%' }}>
-                <Container maxWidth="lg">
-                    <Grid container spacing={4} sx={{marginBottom:'10%'}}>
-                        {userStories.map((userStory) => (
-                            <UserStoryCard 
-                                key={userStory.id}
-                                id={userStory.id}
-                                managerName={userStory.managerName}
-                                companyName = {userStory.companyName}
-                                title = {userStory.title}
-                                shortDescription = {userStory.shortDescription}
-                                longDescription = {userStory.longDescription}
-                                photo = {userStory.photo}
-                                sector = {userStory.sector}
-                                numberOfEmployees = {userStory.numberOfEmployees}
-                                logo = {userStory.logo}
-                                country = {userStory.country}
-                            />
-                        ))}
-                    </Grid>
-                </Container>
+                {loading ? (
+                    <Box sx={{ display: 'flex', justifyContent: 'center', marginBottom: '5%', marginTop: '5%' }}>
+                        <CircularProgress />
+                    </Box>
+                ) : (
+                    <Container maxWidth="lg">
+                        <Grid container spacing={4} sx={{ marginBottom: '10%' }}>
+                            {userStories.map((userStory) => (
+                                <UserStoryCard
+                                    key={userStory.id}
+                                    id={userStory.id}
+                                    managerName={userStory.managerName}
+                                    companyName={userStory.companyName}
+                                    title={userStory.title}
+                                    shortDescription={userStory.shortDescription}
+                                    longDescription={userStory.longDescription}
+                                    photo={userStory.photo}
+                                    sector={userStory.sector}
+                                    numberOfEmployees={userStory.numberOfEmployees}
+                                    logo={userStory.logo}
+                                    country={userStory.country}
+                                />
+                            ))}
+                        </Grid>
+                    </Container>
+                )}
             </Body>
             <Footer>
                 <CssBaseline />

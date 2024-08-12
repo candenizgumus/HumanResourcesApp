@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import {
     Typography,
@@ -16,6 +16,7 @@ import { HumanResources, RootState } from '../../store';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchGetUserStories, IUserStoryResponse } from '../../store/feature/userStorySlice';
 import UserStoryCard from '../../components/molecules/PreAuthorizedPageComponents/UserStoryCard';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const Root = styled('div')(({ theme }) => ({
     display: 'flex',
@@ -25,7 +26,7 @@ const Root = styled('div')(({ theme }) => ({
 const CardGrid = styled(Container)(({ theme }) => ({
     paddingTop: theme.spacing(4),
     paddingBottom: theme.spacing(4),
-  }));
+}));
 const Header = styled('div')(({ theme }) => ({
     marginBottom: theme.spacing(4),
     backgroundColor: theme.palette.primary.main,
@@ -48,9 +49,23 @@ function UserStoryDetailPage() {
     const userStory = location.state || {};
     const dispatch: HumanResources = useDispatch();
     const userStories = useSelector((state: RootState) => state.userStory.storyList) as IUserStoryResponse[];
+    const [loading, setLoading] = useState(true);
     useEffect(() => {
-        dispatch(fetchGetUserStories());
+        const fetchData = async () => {
+            try {
+                const result = await dispatch(fetchGetUserStories()).unwrap();
+                if (!result.code) {
+                    setLoading(false);
+                } else {
+                    console.error('Unexpected result format:', result);
+                }
+            } catch (error) {
+                console.error('Error fetching:', error);
+            }
+        };
+        fetchData();
     }, [dispatch]);
+
     // Split the long description into sentences
     const sentences = userStory.longDescription ? userStory.longDescription.split('. ') : [];
 
@@ -59,6 +74,11 @@ function UserStoryDetailPage() {
             <CssBaseline />
             <NavBar />
             <Header>
+            {loading ? (
+                        <Box sx={{ display: 'flex', justifyContent: 'center', marginBottom: '5%', marginTop: '5%'}}>
+                            <CircularProgress sx={{color:'white'}} />
+                        </Box>
+                    ) : (
                 <Container maxWidth="lg">
                     <Box py={4}>
                         <Typography variant="h2" align="left" sx={{ margin: '10px' }} gutterBottom>
@@ -69,6 +89,7 @@ function UserStoryDetailPage() {
                         </Typography>
                     </Box>
                 </Container>
+                    )}
             </Header>
             <Body>
                 <Container maxWidth="lg">
@@ -92,45 +113,57 @@ function UserStoryDetailPage() {
                             </Paper>
                         </Grid>
                     </Grid>
-                    <Grid container spacing={4} sx={{ alignItems: 'stretch' }}>
-                        <Grid item xs={12} md={2}>
-                            <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%', justifyContent: 'space-between' }}>
-                                <LogoCard
-                                    logoSrc={userStory.logo}
-                                    altText={userStory.companyName}
-                                />
-                            </Box>
+                    {loading ? (
+                        <Box sx={{ display: 'flex', justifyContent: 'center', marginBottom: '5%', marginTop: '5%' }}>
+                            <CircularProgress />
+                        </Box>
+                    ) : (
+                        <Grid container spacing={4} sx={{ alignItems: 'stretch' }}>
+                            <Grid item xs={12} md={2}>
+                                <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%', justifyContent: 'space-between' }}>
+                                    <LogoCard
+                                        logoSrc={userStory.logo}
+                                        altText={userStory.companyName}
+                                    />
+                                </Box>
+                            </Grid>
+                            <Grid item xs={12} md={10}>
+                                {sentences.map((sentence: string, index: number) => (
+                                    <Typography key={index} variant="h6" sx={{ marginBottom: '20px', marginTop: '20px' }}>
+                                        {sentence.trim() + '.'}
+                                    </Typography>
+                                ))}
+                            </Grid>
                         </Grid>
-                        <Grid item xs={12} md={10}>
-                            {sentences.map((sentence: string, index:number) => (
-                                <Typography key={index} variant="h6" sx={{ marginBottom: '20px', marginTop: '20px' }}>
-                                    {sentence.trim() + '.'}
-                                </Typography>
-                            ))}
-                        </Grid>
-                    </Grid>
+                    )}
                     <CardGrid maxWidth="md" sx={{ marginBottom: '5%' }}>
                         <Typography component="h1" variant="h4" align="center" color="primary.main" gutterBottom sx={{ paddingBottom: 5 }}>
                             Other User Stories
                         </Typography>
-                        <Grid container spacing={4}>
-                            {userStories.filter(story => story.id !== userStory.id).map((userStory) => (
-                                <UserStoryCard 
-                                    key={userStory.id}
-                                    id={userStory.id}
-                                    managerName={userStory.managerName}
-                                    companyName = {userStory.companyName}
-                                    title = {userStory.title}
-                                    shortDescription = {userStory.shortDescription}
-                                    longDescription = {userStory.longDescription}
-                                    photo = {userStory.photo}
-                                    sector = {userStory.sector}
-                                    numberOfEmployees = {userStory.numberOfEmployees}
-                                    logo = {userStory.logo}
-                                    country = {userStory.country}
-                                />
-                            ))}
-                        </Grid>
+                        {loading ? (
+                            <Box sx={{ display: 'flex', justifyContent: 'center', marginBottom: '5%', marginTop: '5%' }}>
+                                <CircularProgress />
+                            </Box>
+                        ) : (
+                            <Grid container spacing={4}>
+                                {userStories.filter(story => story.id !== userStory.id).map((userStory) => (
+                                    <UserStoryCard
+                                        key={userStory.id}
+                                        id={userStory.id}
+                                        managerName={userStory.managerName}
+                                        companyName={userStory.companyName}
+                                        title={userStory.title}
+                                        shortDescription={userStory.shortDescription}
+                                        longDescription={userStory.longDescription}
+                                        photo={userStory.photo}
+                                        sector={userStory.sector}
+                                        numberOfEmployees={userStory.numberOfEmployees}
+                                        logo={userStory.logo}
+                                        country={userStory.country}
+                                    />
+                                ))}
+                            </Grid>
+                        )}
                     </CardGrid>
                 </Container>
             </Body>

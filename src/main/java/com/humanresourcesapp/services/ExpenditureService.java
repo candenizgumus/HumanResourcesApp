@@ -28,6 +28,7 @@ public class ExpenditureService
     private final ExpenditureRepository expenditureRepository;
     private final UserService userService;
     private final NotificationService notificationService;
+    private final CompanyService companyService;
 
     public Expenditure save(ExpenditureSaveRequestDto dto)
     {
@@ -176,5 +177,10 @@ public class ExpenditureService
 
         expenditureRepository.save(expenditure);
         return true;
+    }
+
+    public List<Expenditure> findAllByCompanyId(Long companyId)
+    {
+        return expenditureRepository.findAllByCompanyId(companyId);
     }
 }

@@ -92,4 +92,5 @@ public class Endpoints
     public static final String MAIL_TO_NOTIFICATION_SENDER = "/mail-to-notification-sender";
     public static final String DELETE_BY_MANAGER =  "/delete-by-manager";
     public static final String CANCEL = "/cancel";
+    public static final String FIND_MONTHLY_SALARY_OF_EMPLOYEES = "/find-monthly-salary-of-employees";
 }

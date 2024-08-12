@@ -4,10 +4,8 @@ import com.humanresourcesapp.constants.ENotificationTextBase;
 import com.humanresourcesapp.dto.requests.*;
 import com.humanresourcesapp.dto.responses.CompanyAndManagerNameResponseDto;
 import com.humanresourcesapp.dto.responses.CountUserByTypeAndStatusDto;
-import com.humanresourcesapp.entities.Auth;
-import com.humanresourcesapp.entities.Company;
-import com.humanresourcesapp.entities.Offer;
-import com.humanresourcesapp.entities.User;
+import com.humanresourcesapp.dto.responses.MonthlySalaryOfEmployeesDto;
+import com.humanresourcesapp.entities.*;
 import com.humanresourcesapp.entities.enums.ENotificationType;
 import com.humanresourcesapp.entities.enums.EStatus;
 import com.humanresourcesapp.entities.enums.EUserType;
@@ -41,11 +39,13 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
     private final JwtTokenManager jwtTokenManager;
+    private  ExpenditureService expenditureService;
     private OfferService offerService;
 
     @Autowired
-    public void setOfferService(@Lazy OfferService offerService) {
+    public void setOfferService(@Lazy OfferService offerService , @Lazy ExpenditureService expenditureService) {
         this.offerService = offerService;
+        this.expenditureService = expenditureService;
     }
     private final NotificationService notificationService;
 
@@ -504,4 +504,31 @@ public class UserService {
     }
 
 
+    public List<MonthlySalaryOfEmployeesDto> findMonthlySalaryOfEmployees()
+    {
+        List<MonthlySalaryOfEmployeesDto> monthlySalaryOfEmployeesDtos = new ArrayList<>();
+        String userEmail = UserInfoSecurityContext.getUserInfoFromSecurityContext();
+        User manager = userRepository.findByEmail(userEmail).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
+        List<User> employees = userRepository.findAllByManagerId(manager.getId());
+        List<Expenditure> expendituresOfEmployees = expenditureService.findAllByCompanyId(manager.getCompanyId());
+
+        employees.forEach(e -> {
+
+            expendituresOfEmployees.forEach(expenditure -> {
+                //TODO MAYBE WE CAN CHECK THIS CONDITION LATER ITS TOO COMPLICATED
+                if (e.getId().equals(expenditure.getEmployeeId()) && expenditure.getIsExpenditureApproved() && expenditure.getStatus().equals(EStatus.ACTIVE))
+                {
+                    monthlySalaryOfEmployeesDtos.add(new MonthlySalaryOfEmployeesDto(e.getId(),e.getName(),e.getSurname(),e.getEmail(),e.getSalary(),expenditure.getPrice(),e.getSalary() + expenditure.getPrice()));
+                }
+                else
+                {
+                    monthlySalaryOfEmployeesDtos.add(new MonthlySalaryOfEmployeesDto(e.getId(),e.getName(),e.getSurname(),e.getEmail(),e.getSalary(),0.00,e.getSalary() ));
+                }
+            });
+
+        });
+
+        return monthlySalaryOfEmployeesDtos;
+
+    }
 }

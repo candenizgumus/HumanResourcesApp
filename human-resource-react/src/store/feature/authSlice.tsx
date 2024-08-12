@@ -6,6 +6,7 @@ import {ICreateAdmin} from '../../models/ICreateAdmin';
 interface IAuthState {
     user: IUser;
     userList: IUser[];
+
     upcomingBirthdayUsers: IUser[];
     token: string;
     isAuth: boolean;
@@ -617,6 +618,22 @@ export const fetchFindEmployeesWithUpcomingBirthdays = createAsyncThunk(
     }
 );
 
+export const fetchGetMonthlyPaymentOfEmployees = createAsyncThunk(
+    'user/fetchGetMonthlyPaymentOfEmployees',
+    async (payload: string) => {
+
+        const response = await fetch(`http://localhost:9090/dev/v1/user/find-monthly-salary-of-employees`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ` + payload
+            }
+        });
+
+        return await response.json();
+    }
+
+)
 
 const authSlice = createSlice({
     name: 'auth',

@@ -3,6 +3,7 @@ package com.humanresourcesapp.controllers;
 import com.humanresourcesapp.dto.requests.*;
 import com.humanresourcesapp.dto.responses.CompanyAndManagerNameResponseDto;
 import com.humanresourcesapp.dto.responses.CountUserByTypeAndStatusDto;
+import com.humanresourcesapp.dto.responses.MonthlySalaryOfEmployeesDto;
 import com.humanresourcesapp.entities.Auth;
 import com.humanresourcesapp.entities.User;
 import com.humanresourcesapp.entities.enums.EEmployeeType;
@@ -184,5 +185,13 @@ public class UserController
     public ResponseEntity<List<User>> findEmployeesWithUpcomingBirthdays()
     {
         return ResponseEntity.ok(userService.findEmployeesWithUpcomingBirthdays());
+    }
+
+    @PostMapping(FIND_MONTHLY_SALARY_OF_EMPLOYEES)
+    @CrossOrigin("*")
+    @PreAuthorize("hasAnyAuthority('MANAGER')")
+    public ResponseEntity<List<MonthlySalaryOfEmployeesDto>> findMonthlySalaryOfEmployees()
+    {
+        return ResponseEntity.ok(userService.findMonthlySalaryOfEmployees());
     }
 }

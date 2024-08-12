@@ -1,15 +1,15 @@
-import { configureStore } from "@reduxjs/toolkit";
+import {configureStore} from "@reduxjs/toolkit";
 import {
     authSlice, companySlice, featureSlice, offerSlice, userStorySlice, holidaySlice,
     passwordResetSlice,
-    notificationSlice, expenditureSlice
+    notificationSlice, expenditureSlice, personalDocumentSlice
 } from "./feature";
 
 
 import {useSelector} from "react-redux";
 
 const store = configureStore({
-    reducer:{
+    reducer: {
         auth: authSlice,
         feature: featureSlice,
         offer: offerSlice,
@@ -18,7 +18,8 @@ const store = configureStore({
         holiday: holidaySlice,
         passwordReset: passwordResetSlice,
         notification: notificationSlice,
-        expenditure:expenditureSlice
+        expenditure: expenditureSlice,
+        personalDocument: personalDocumentSlice
 
     }
 });

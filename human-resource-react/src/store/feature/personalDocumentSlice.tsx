@@ -1,22 +1,35 @@
-import {IPersonalDocument} from "../../models/IPersonalDocument";
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
+import {IPersonalDocument} from "../../models/IPersonalDocument";
 
 
-const initialPersonalDocumentState = {
+export interface IPersonalDocumentState {
+    personalDocument: IPersonalDocument
+    personalDocuments: IPersonalDocumentState[],
+
+    loading: boolean;
+}
+
+const initialPersonalDocumentState: IPersonalDocumentState = {
     personalDocuments: [],
-    personalDocument: {},
+    personalDocument: {} as IPersonalDocument,
     loading: false,
-    error: null,
 };
+
+interface ISavePersonalDocument{
+    employeeId: number;
+    documentType: string;
+    documentFile: string;
+    token: string;
+}
 
 export const fetchSavePersonalDocument = createAsyncThunk(
     'personalDocument/savePersonalDocument',
-    async (payload: IPersonalDocument, {rejectWithValue}) => {
-        try {
+    async (payload: ISavePersonalDocument, {rejectWithValue}) => {
             const response = await fetch('http://localhost:9090/dev/v1/personal-document/save', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Authorization': `Bearer ` + payload.token
                 },
                 body: JSON.stringify(
                     {
@@ -26,32 +39,21 @@ export const fetchSavePersonalDocument = createAsyncThunk(
                     }
                 ),
             });
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            const data = await response.json();
-            console.log('API Response:', data); // Log the response
-            return data;
-        } catch (error) {
-            return rejectWithValue((error as Error).message);
-        }
+        return await response.json();
     }
 )
 
-export const fetchPersonalDocuments = createAsyncThunk(
+export const fetchPersonalDocumentTypes = createAsyncThunk(
     'personalDocument/fetchPersonalDocuments',
-    async (_, {rejectWithValue}) => {
-        try {
-            const response = await fetch('http://localhost:9090/dev/v1/personal-document/get-all');
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            const data = await response.json();
-            console.log('API Response:', data); // Log the response
-            return data;
-        } catch (error) {
-            return rejectWithValue((error as Error).message);
-        }
+    async (token: string, {rejectWithValue}) => {
+            const response = await fetch('http://localhost:9090/dev/v1/personal-document/get-all-personal-document-types',{
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ` + token
+                },
+            });
+        return await response.json();
     }
 );
 
@@ -60,13 +62,19 @@ const personalDocumentSlice = createSlice({
     initialState: initialPersonalDocumentState,
     reducers: {},
     extraReducers: (builder) => {
-        builder.addCase(fetchPersonalDocuments.pending, (state) => {
+        builder.addCase(fetchPersonalDocumentTypes.pending, (state) => {
             state.loading = true;
         });
-        builder.addCase(fetchPersonalDocuments.fulfilled, (state, action) => {
+        builder.addCase(fetchPersonalDocumentTypes.fulfilled, (state, action) => {
             state.personalDocuments = action.payload;
+            state.loading = false;
+        });
+        builder.addCase(fetchSavePersonalDocument.fulfilled, (state, action) => {
+            state.personalDocument = action.payload;
             state.loading = false;
         });
     }
 });
+
+export default personalDocumentSlice.reducer;
 

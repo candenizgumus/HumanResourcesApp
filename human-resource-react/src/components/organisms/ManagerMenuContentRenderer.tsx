@@ -10,6 +10,7 @@ import SideBarCreateComment from "../molecules/ManagerComponents/SideBarCreateCo
 import SideBarManagerExpenditures from "../molecules/ManagerComponents/SideBarManagerExpenditures";
 import ChangePassword from "../molecules/ChangePassword";
 import EditEmployee from "../molecules/ManagerComponents/EditEmployee";
+import AddDocument from "../molecules/ManagerComponents/AddDocument";
 export const ManagerMenuContentRenderer = () => {
     const page = useAppSelector((state) => state.auth.pageState);
 
@@ -26,6 +27,7 @@ export const ManagerMenuContentRenderer = () => {
                 {page === 'Expenditure' && <SideBarManagerExpenditures/>}
                 {page === 'Change Password' && <ChangePassword/>}
                 {page === 'Edit Employee' && <EditEmployee/>}
+                {page === 'Add Document' && <AddDocument/>}
             </Grid>
         </>
     );

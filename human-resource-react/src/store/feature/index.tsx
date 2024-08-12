@@ -7,6 +7,7 @@ import offerSlice from "./offerSlice";
 import passwordResetSlice from "./passwordResetSlice";
 import notificationSlice from "./notificationSlice";
 import expenditureSlice from "./expenditureSlice";
+import personalDocumentSlice from "./personalDocumentSlice";
  
 
 
@@ -20,5 +21,6 @@ export{
     offerSlice,
     passwordResetSlice,
     notificationSlice,
-    expenditureSlice
+    expenditureSlice,
+    personalDocumentSlice
 }

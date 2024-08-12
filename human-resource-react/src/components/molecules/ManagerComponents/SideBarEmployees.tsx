@@ -81,11 +81,14 @@ export default function SideBarEmployees() {
         setSelectedRowIds(newSelectionModel as number[]);
     };
 
+    const handleOnClickAddDocument= () => {
+        dispatch(setSelectedEmployeeId(selectedRowIds[0]))
+        dispatch(changePageState("Add Document"))
+    }
+
     const handleOnClickEditEmployee= () => {
         dispatch(setSelectedEmployeeId(selectedRowIds[0]))
         dispatch(changePageState("Edit Employee"))
-
-
     }
 
     const handleDeleteEmployee = async () => {
@@ -275,7 +278,7 @@ export default function SideBarEmployees() {
                     <Button
                         onClick={handleActivateEmployee}
                         variant="contained"
-                        color="primary"
+                        color="success"
                         disabled={ isActivating || selectedRowIds.length === 0}
                     >
                         {loading ? "Activate..." : "Activate Employee"}
@@ -300,6 +303,17 @@ export default function SideBarEmployees() {
                         disabled={  selectedRowIds.length>1 || selectedRowIds.length === 0}
                     >
                         Edit Employee
+                    </Button>
+                </Grid>
+
+                <Grid item>
+                    <Button
+                        onClick={handleOnClickAddDocument}
+                        variant="contained"
+                        color="primary"
+                        disabled={  selectedRowIds.length>1 || selectedRowIds.length === 0}
+                    >
+                        Add Document
                     </Button>
                 </Grid>
             </Grid>

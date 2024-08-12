@@ -97,4 +97,6 @@ public class Endpoints
     public static final String DELETE_BY_MANAGER =  "/delete-by-manager";
     public static final String CANCEL = "/cancel";
     public static final String FIND_MONTHLY_SALARY_OF_EMPLOYEES = "/find-monthly-salary-of-employees";
+
+    public static final String GET_ALL_PERSONAL_DOCUMENT_TYPES = "/get-all-personal-document-types";
 }

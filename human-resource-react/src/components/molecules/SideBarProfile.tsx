@@ -111,7 +111,7 @@ const SideBarProfile = () => {
     const updateUserProfile = async () => {
 
 
-        if (!formState.name || !formState.surname || !formState.phone || !formState.title || !formState.birthDate || !selectedPositions || !location) {
+        if (!formState.name || !formState.surname || !formState.phone || !formState.title || !formState.birthDate || !selectedPositions || !formState.location) {
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',

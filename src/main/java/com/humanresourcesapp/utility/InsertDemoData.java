@@ -296,6 +296,7 @@ public class InsertDemoData {
                 .holidayType(EHolidayType.NATIONAL)
                 .holidayStartDate(1730182819L)
                 .holidayEndDate(1730269219L)
+                .status(EStatus.INACTIVE)
                 .build());
 
         holidayList.add(Holiday.builder()
@@ -303,6 +304,7 @@ public class InsertDemoData {
                 .holidayType(EHolidayType.RELIGIOUS)
                 .holidayStartDate(1749190819L)
                 .holidayEndDate(1749450019L)
+                .status(EStatus.INACTIVE)
                 .build());
 
         holidayList.add(Holiday.builder()
@@ -310,6 +312,7 @@ public class InsertDemoData {
                 .holidayType(EHolidayType.RELIGIOUS)
                 .holidayStartDate(1743315619L)
                 .holidayEndDate(1743488419L)
+                .status(EStatus.INACTIVE)
                 .build());
 
         holidayList.add(Holiday.builder()
@@ -317,6 +320,7 @@ public class InsertDemoData {
                 .holidayType(EHolidayType.INTERNATIONAL)
                 .holidayStartDate(1735626019L)
                 .holidayEndDate(1735712419L)
+                .status(EStatus.INACTIVE)
                 .build());
 
         holidayList.add(Holiday.builder()
@@ -324,6 +328,7 @@ public class InsertDemoData {
                 .holidayType(EHolidayType.NATIONAL)
                 .holidayStartDate(1745389219L)
                 .holidayEndDate(1745475619L)
+                .status(EStatus.INACTIVE)
                 .build());
 
         holidayList.add(Holiday.builder()
@@ -331,6 +336,7 @@ public class InsertDemoData {
                 .holidayType(EHolidayType.NATIONAL)
                 .holidayStartDate(1756534819L)
                 .holidayEndDate(1756621219L)
+                .status(EStatus.INACTIVE)
                 .build());
 
         holidayList.add(Holiday.builder()
@@ -338,6 +344,7 @@ public class InsertDemoData {
                 .holidayType(EHolidayType.NATIONAL)
                 .holidayStartDate(1746080419L)
                 .holidayEndDate(1746166819L)
+                .status(EStatus.INACTIVE)
                 .build());
 
         holidayService.saveAll(holidayList);

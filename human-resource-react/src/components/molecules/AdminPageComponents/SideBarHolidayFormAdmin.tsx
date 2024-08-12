@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import {HumanResources, useAppSelector} from '../../../store';
-import {fetchCreateHoliday, fetchHolidaysAdmin} from '../../../store/feature/holidaySlice';
+import {fetchCreateHolidayAdmin, fetchHolidaysAdmin} from '../../../store/feature/holidaySlice';
 import Swal from 'sweetalert2';
 import { Box, TextField, Button, Grid, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import DatePicker from 'react-datepicker';
@@ -30,7 +30,7 @@ const SideBarHolidayFormAdmin: React.FC = () => {
         const startEpoch = holidayStartDate.getTime() / 1000;
         const endEpoch = holidayEndDate.getTime() / 1000;
 
-        dispatch(fetchCreateHoliday({
+        dispatch(fetchCreateHolidayAdmin({
             holidayName,
             holidayType,
             holidayStartDate: startEpoch,

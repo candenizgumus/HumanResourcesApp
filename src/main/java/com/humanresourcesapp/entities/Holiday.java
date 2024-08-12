@@ -1,6 +1,7 @@
 package com.humanresourcesapp.entities;
 
 import com.humanresourcesapp.entities.enums.EHolidayType;
+import com.humanresourcesapp.entities.enums.EStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -24,6 +25,7 @@ public class Holiday extends BaseEntity
     Long holidayStartDate;
     Long holidayEndDate;
     Long companyId;
+    EStatus status;
 }
 
 

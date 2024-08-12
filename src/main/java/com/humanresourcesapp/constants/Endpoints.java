@@ -67,6 +67,9 @@ public class Endpoints
     public static final String DECLINE_OFFER = "/decline-offer";
     public static final String GET_HOLIDAY_BY_USER = "/get-holiday-by-user";
     public static final String GET_HOLIDAY_BY_ADMIN = "/get-holiday-by-admin";
+    public static final String GET_HOLIDAYS_OF_COMPANY = "/get-holidays-of-company";
+    public static final String SAVE_HOLIDAY_MANAGER = "/save-holiday-manager";
+    public static final String SAVE_HOLIDAY_ADMIN = "/save-holiday-admin";
 
     public static final String GET_EMPLOYEE_TYPES = "/get-employee-types";
     public static final String GET_COUNT = "/get-count";
@@ -79,6 +82,7 @@ public class Endpoints
     public static final String GET_COMPANY_COMMENT = "/get-company-comment";
     public static final String GET_COMPANY_OF_MANAGER = "/get-company-of-manager";
     public static final String UPDATE_COMPANY_BY_MANAGER = "/update-company-by-manager";
+    public static final String CHANGE_STATUS = "/change-status";
 
     public static final String UPDATE_IS_READ = "/update-is-read";
     public static final String GET_ALL_UNREAD = "/get-all-unread";

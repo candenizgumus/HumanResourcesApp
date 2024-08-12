@@ -47,14 +47,14 @@ public class ExpenditureController
     }
 
     @DeleteMapping(DELETE)
-    @PreAuthorize("hasAnyAuthority('EMPLOYEE')")
+    @PreAuthorize("hasAnyAuthority('EMPLOYEE','MANAGER')")
     public ResponseEntity<Boolean> delete(Long id){
         return ResponseEntity.ok(expenditureService.delete(id));
     }
 
-    @DeleteMapping(DELETE_BY_MANAGER)
-    @PreAuthorize("hasAnyAuthority('MANAGER')")
-    public ResponseEntity<Boolean> deleteByManager(Long id){
-        return ResponseEntity.ok(expenditureService.deleteByManager(id));
+    @PostMapping(CANCEL)
+    @PreAuthorize("hasAnyAuthority('EMPLOYEE','MANAGER')")
+    public ResponseEntity<Boolean> cancel(Long id){
+        return ResponseEntity.ok(expenditureService.cancel(id));
     }
 }

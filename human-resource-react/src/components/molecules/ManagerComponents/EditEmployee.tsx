@@ -1,12 +1,10 @@
 import React, {useState, FormEvent, useEffect} from 'react';
 import {TextField, Button, Box, Grid, InputLabel, Select, MenuItem, FormControl, Avatar} from '@mui/material';
 import {HumanResources, useAppSelector} from "../../../store";
-import {IUser} from "../../../models/IUser";
 import {
-    fetchAddEmployeeToManager,
-    fetchFindCompanyNameAndManagerNameOfUser, fetchFindUserById,
-    fetchFindUserByToken, fetchGetEmployeeTypes,
-    fetchGetPositions, fetchUpdateEmployeeByManager, fetchUpdateUser
+     fetchFindUserById,
+     fetchGetEmployeeTypes,
+    fetchGetPositions, fetchUpdateEmployeeByManager
 } from "../../../store/feature/authSlice";
 import {useDispatch} from "react-redux";
 

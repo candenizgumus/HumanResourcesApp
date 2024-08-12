@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { DataGrid, GridColDef, GridRowSelectionModel } from '@mui/x-data-grid';
 import { HumanResources, RootState, useAppSelector } from '../../../store';
-import {fetchDeleteHoliday, fetchHolidaysAdmin, fetchHolidaysUser} from '../../../store/feature/holidaySlice';
+import {fetchDeleteHoliday, fetchHolidaysAdmin} from '../../../store/feature/holidaySlice';
 import { IHoliday } from '../../../models/IHoliday';
 import { Button, Grid, Box, Divider } from '@mui/material';
 import SideBarHolidayFormAdmin from "./SideBarHolidayFormAdmin";
@@ -68,12 +68,13 @@ export default function SideBarHolidayTableAdmin() {
         setSelectedRowIds(newSelectionModel as number[]);
     };
 
-    const handleConfirmSelection = () => {
+    const handleConfirmDeletion = () => {
         selectedRowIds.forEach((id) => {
-            dispatch(fetchDeleteHoliday(id));
+            dispatch(fetchDeleteHoliday({token, id}))
+                .then(() => {
+                    dispatch(fetchHolidaysAdmin(token));
+                });
         });
-
-        console.log('Selected Row IDs:', selectedRowIds);
     };
 
     return (
@@ -108,16 +109,7 @@ export default function SideBarHolidayTableAdmin() {
                         <Grid container spacing={2} style={{ marginTop: 16 }}>
                             <Grid item xs={12}>
                                 <Button
-                                    style={{ marginRight: 4 }}
-                                    onClick={handleConfirmSelection}
-                                    variant="contained"
-                                    color="primary"
-                                    disabled={true}
-                                >
-                                    Confirm Selection
-                                </Button>
-                                <Button
-                                    onClick={handleConfirmSelection}
+                                    onClick={handleConfirmDeletion}
                                     variant="contained"
                                     color="error"
                                 >

@@ -1,12 +1,17 @@
 import * as React from 'react';
-import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { DataGrid, GridColDef, GridRowSelectionModel } from '@mui/x-data-grid';
-import { HumanResources, RootState, useAppSelector } from '../../../store';
-import {fetchDeleteHoliday, fetchHolidaysUser} from '../../../store/feature/holidaySlice';
-import { IHoliday } from '../../../models/IHoliday';
-import { Button, Grid, Box, Divider } from '@mui/material';
-import { IHolidayFormatted } from "../../../models/IHolidayFormatted";
+import {useEffect, useState} from 'react';
+import {useDispatch} from 'react-redux';
+import {DataGrid, GridColDef, GridRowSelectionModel} from '@mui/x-data-grid';
+import {HumanResources, RootState, useAppSelector} from '../../../store';
+import {
+    fetchChangeHolidayStatus,
+    fetchCreateHolidayManager,
+    fetchDeleteHoliday,
+    fetchHolidaysUser
+} from '../../../store/feature/holidaySlice';
+import {IHoliday} from '../../../models/IHoliday';
+import {Button, Grid, Box, Divider} from '@mui/material';
+import {IHolidayFormatted} from "../../../models/IHolidayFormatted";
 import SideBarHolidayFormUser from "./SideBarHolidayFormUser";
 
 // Helper function to format epoch timestamp to human-readable date
@@ -23,16 +28,20 @@ function epochToHumanReadableWithoutTime(epochTime: number): string {
     return date.toLocaleDateString('tr-TR', options);
 }
 
+function dateToEpoch(date: string): number {
+    return new Date(date).getTime() / 1000;
+}
+
 // Define the columns
 const columns: GridColDef[] = [
-    { field: 'id', headerName: 'ID', width: 70 , headerAlign: "center"},
-    { field: 'holidayName', headerName: 'Holiday', width: 250 , headerAlign: "center"},
-    { field: 'holidayType', headerName: 'Type', width: 160 , headerAlign: "center"},
+    {field: 'id', headerName: 'ID', width: 70, headerAlign: "center"},
+    {field: 'holidayName', headerName: 'Holiday', width: 250, headerAlign: "center"},
+    {field: 'holidayType', headerName: 'Type', width: 160, headerAlign: "center"},
     {
         field: 'holidayStartDate',
         headerName: 'Start Date',
         width: 200
-    , headerAlign: "center"
+        , headerAlign: "center"
     },
     {
         field: 'holidayEndDate',
@@ -40,6 +49,7 @@ const columns: GridColDef[] = [
         width: 200
         , headerAlign: "center"
     },
+    {field: 'status', headerName: 'Status', width: 150, headerAlign: "center"},
 ];
 
 export default function SideBarHolidayTableUser() {
@@ -60,6 +70,7 @@ export default function SideBarHolidayTableUser() {
             holidayType: holiday.holidayType,
             holidayStartDate: epochToHumanReadableWithoutTime(holiday.holidayStartDate),
             holidayEndDate: epochToHumanReadableWithoutTime(holiday.holidayEndDate),
+            status: holiday.status
         }));
         setNewHolidayList(formattedHolidays);
     }, [holidays]);
@@ -68,25 +79,49 @@ export default function SideBarHolidayTableUser() {
         setSelectedRowIds(newSelectionModel as number[]);
     };
 
-    const handleConfirmSelection = () => {
+    const handleConfirmDeletion = () => {
         selectedRowIds.forEach((id) => {
-            dispatch(fetchDeleteHoliday(id));
+            dispatch(fetchDeleteHoliday({token, id}))
+                .then(() => {
+                    dispatch(fetchHolidaysUser(token));
+                });
         });
-
-        console.log('Selected Row IDs:', selectedRowIds);
     };
 
+    const handleConfirmChangeStatus = () => {
+        selectedRowIds.forEach((id) => {
+            dispatch(fetchChangeHolidayStatus({token, id}))
+                .then(() => {
+                    dispatch(fetchHolidaysUser(token));
+                });
+        });
+    }
+
+    const handleConfirmSelection = () => {
+        selectedRowIds.forEach((id) => {
+            dispatch(fetchCreateHolidayManager(
+                {
+                    holidayName: newHolidayList[id - 1].holidayName,
+                    holidayType: newHolidayList[id - 1].holidayType,
+                    holidayStartDate: dateToEpoch(newHolidayList[id - 1].holidayStartDate),
+                    holidayEndDate: dateToEpoch(newHolidayList[id - 1].holidayEndDate),
+                    token
+                }
+            ))
+        });
+    }
+
     return (
-        <Box sx={{ flexGrow: 1, padding: 2 }}>
+        <Box sx={{flexGrow: 1, padding: 2}}>
             <Grid container spacing={2}>
                 <Grid item xs={12}>
-                    <div style={{ height: 400, width: '100%' }}>
+                    <div style={{height: 400, width: '100%'}}>
                         <DataGrid
                             rows={newHolidayList}
                             columns={columns}
                             initialState={{
                                 pagination: {
-                                    paginationModel: { page: 1, pageSize: 5 },
+                                    paginationModel: {page: 1, pageSize: 5},
                                 },
                             }}
                             pageSizeOptions={[5, 10]}
@@ -105,33 +140,33 @@ export default function SideBarHolidayTableUser() {
                                 },
                             }}
                         />
-                        <Grid container spacing={2} style={{ marginTop: 16 }}>
+                        <Grid container spacing={2} style={{marginTop: 16}}>
                             <Grid item xs={12}>
                                 <Button
-                                    style={{ marginRight: 4 }}
-                                    onClick={handleConfirmSelection}
-                                    variant="contained"
-                                    color="primary"
-                                    disabled={true}
-                                >
-                                    Confirm Selection
-                                </Button>
-                                <Button
-                                    onClick={handleConfirmSelection}
+                                    style={{marginRight: 4}}
+                                    onClick={handleConfirmDeletion}
                                     variant="contained"
                                     color="error"
                                 >
                                     Delete Selected
+                                </Button>
+                                <Button
+                                    style={{marginRight: 4}}
+                                    onClick={handleConfirmChangeStatus}
+                                    variant="contained"
+                                    color="warning"
+                                >
+                                    Change Status
                                 </Button>
                             </Grid>
                         </Grid>
                     </div>
                 </Grid>
                 <Grid item xs={12}>
-                    <Divider sx={{ my: 4 }} />
+                    <Divider sx={{my: 4}}/>
                 </Grid>
                 <Grid item xs={12}>
-                    <SideBarHolidayFormUser />
+                    <SideBarHolidayFormUser/>
                 </Grid>
             </Grid>
         </Box>

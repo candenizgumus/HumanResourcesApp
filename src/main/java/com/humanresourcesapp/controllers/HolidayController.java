@@ -19,18 +19,26 @@ import static com.humanresourcesapp.constants.Endpoints.*;
 public class HolidayController {
     private final HolidayService holidayService;
 
-    @PostMapping(SAVE)
-    @PreAuthorize("hasAnyAuthority('MANAGER','ADMIN')")
-    public ResponseEntity<Holiday> save(@RequestBody HolidaySaveRequestDto holidaySaveRequestDto) {
-        return ResponseEntity.ok(holidayService.save(holidaySaveRequestDto));
+    @PostMapping(SAVE_HOLIDAY_ADMIN)
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    public ResponseEntity<Holiday> saveHolidayAdmin(@RequestBody HolidaySaveRequestDto holidaySaveRequestDto) {
+        return ResponseEntity.ok(holidayService.saveHolidayAdmin(holidaySaveRequestDto));
+    }
+
+    @PostMapping(SAVE_HOLIDAY_MANAGER)
+    @PreAuthorize("hasAnyAuthority('MANAGER')")
+    public ResponseEntity<Holiday> saveHolidayManager(@RequestBody HolidaySaveRequestDto holidaySaveRequestDto) {
+        return ResponseEntity.ok(holidayService.saveHolidayManager(holidaySaveRequestDto));
     }
 
     @DeleteMapping(DELETE + "/{holidayId}")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
     public ResponseEntity<Holiday> delete(@PathVariable Long holidayId) {
          return ResponseEntity.ok(holidayService.delete(holidayId));
     }
 
     @PostMapping(UPDATE)
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
     public ResponseEntity<Holiday> update(Long holidayId, HolidaySaveRequestDto holidaySaveRequestDto) {
         return ResponseEntity.ok(holidayService.update(holidayId, holidaySaveRequestDto));
     }
@@ -40,15 +48,27 @@ public class HolidayController {
         return ResponseEntity.ok(holidayService.findAll());
     }
 
-    @PostMapping(GET_HOLIDAY_BY_USER)
-    @PreAuthorize("hasAnyAuthority('MANAGER','EMPLOYEE')")
-    public ResponseEntity<List<Holiday>> getHolidaysByCompanyIdUser() {
-        return ResponseEntity.ok(holidayService.getHolidaysForUser());
-    }
-
     @PostMapping(GET_HOLIDAY_BY_ADMIN)
     @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<List<Holiday>> getHolidaysByCompanyIdAdmin() {
         return ResponseEntity.ok(holidayService.getHolidaysForAdmin());
+    }
+
+    @PostMapping(GET_HOLIDAY_BY_USER)
+    @PreAuthorize("hasAnyAuthority('MANAGER')")
+    public ResponseEntity<List<Holiday>> getHolidaysByCompanyIdUser() {
+        return ResponseEntity.ok(holidayService.getHolidaysForUser());
+    }
+
+    @PostMapping(GET_HOLIDAYS_OF_COMPANY)
+    @PreAuthorize("hasAnyAuthority('MANAGER', 'EMPLOYEE')")
+    public ResponseEntity<List<Holiday>> getHolidaysOfCompany(){
+        return ResponseEntity.ok(holidayService.getHolidaysOfCompany());
+    }
+
+    @PutMapping(CHANGE_STATUS + "/{holidayId}")
+    @PreAuthorize("hasAnyAuthority('MANAGER')")
+    public ResponseEntity<Holiday> changeStatus(@PathVariable Long holidayId) {
+        return ResponseEntity.ok(holidayService.changeStatus(holidayId));
     }
 }

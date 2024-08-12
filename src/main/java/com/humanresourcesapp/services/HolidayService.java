@@ -4,6 +4,7 @@ import com.humanresourcesapp.dto.requests.HolidaySaveRequestDto;
 import com.humanresourcesapp.dto.responses.HolidayResponseDto;
 import com.humanresourcesapp.entities.Holiday;
 import com.humanresourcesapp.entities.User;
+import com.humanresourcesapp.entities.enums.EStatus;
 import com.humanresourcesapp.exception.ErrorType;
 import com.humanresourcesapp.exception.HumanResourcesAppException;
 import com.humanresourcesapp.repositories.HolidayRepository;
@@ -21,7 +22,17 @@ public class HolidayService {
     private final HolidayRepository holidayRepository;
     private final UserService userService;
 
-    public Holiday save(HolidaySaveRequestDto holidaySaveRequestDto) {
+    public Holiday saveHolidayAdmin(HolidaySaveRequestDto holidaySaveRequestDto) {
+        return holidayRepository.save(Holiday.builder()
+                .holidayName(holidaySaveRequestDto.holidayName())
+                .holidayType(holidaySaveRequestDto.holidayType())
+                .holidayStartDate(holidaySaveRequestDto.holidayStartDate())
+                .holidayEndDate(holidaySaveRequestDto.holidayEndDate())
+                .status(EStatus.INACTIVE)
+                .build());
+    }
+
+    public Holiday saveHolidayManager(HolidaySaveRequestDto holidaySaveRequestDto) {
         String userEmail = UserInfoSecurityContext.getUserInfoFromSecurityContext();
         Optional<User> user = userService.findByEmail(userEmail);
         if (user.isEmpty()){
@@ -30,9 +41,10 @@ public class HolidayService {
         return holidayRepository.save(Holiday.builder()
                 .holidayName(holidaySaveRequestDto.holidayName())
                 .holidayType(holidaySaveRequestDto.holidayType())
-                .companyId(user.get().getCompanyId())
                 .holidayStartDate(holidaySaveRequestDto.holidayStartDate())
                 .holidayEndDate(holidaySaveRequestDto.holidayEndDate())
+                .companyId(user.get().getCompanyId())
+                .status(EStatus.ACTIVE)
                 .build());
     }
 
@@ -101,5 +113,34 @@ public class HolidayService {
             }
         }
         return holidayListAdmin;
+    }
+
+    public List<Holiday> getHolidaysOfCompany() {
+        String userEmail = UserInfoSecurityContext.getUserInfoFromSecurityContext();
+        Optional<User> user = userService.findByEmail(userEmail);
+        if (user.isPresent()) {
+            return holidayRepository.findByCompanyIdAndStatus((user.get().getCompanyId()), EStatus.ACTIVE);
+        } else {
+            throw new HumanResourcesAppException(ErrorType.USER_NOT_FOUND);
+        }
+    }
+
+    public Holiday changeStatus(Long holidayId) {
+        String userEmail = UserInfoSecurityContext.getUserInfoFromSecurityContext();
+        Optional<User> user = userService.findByEmail(userEmail);
+        Optional<Holiday> optionalHoliday = holidayRepository.findById(holidayId);
+        if (optionalHoliday.isPresent()) {
+            Holiday holiday = optionalHoliday.get();
+            if (holiday.getStatus().equals(EStatus.ACTIVE)) {
+                holiday.setStatus(EStatus.INACTIVE);
+                holiday.setCompanyId(user.get().getCompanyId());
+            } else {
+                holiday.setStatus(EStatus.ACTIVE);
+                holiday.setCompanyId(user.get().getCompanyId());
+            }
+            return holidayRepository.save(holiday);
+        } else {
+            throw new HumanResourcesAppException(ErrorType.ID_NOT_FOUND);
+        }
     }
 }

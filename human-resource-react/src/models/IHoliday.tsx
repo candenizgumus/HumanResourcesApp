@@ -4,4 +4,5 @@ export interface IHoliday {
     holidayType: string;
     holidayStartDate: number;
     holidayEndDate: number;
+    status: string;
 }

@@ -102,4 +102,5 @@ public class Endpoints
     public static final String GET_ALL_PERSONAL_DOCUMENT_TYPES = "/get-all-personal-document-types";
     public static final String GET_MONTHLY_PAYMENTS = "/get-monthly-payments";
     public static final String GET_CURRENT_MONTHS_HOLIDAYS = "/get-current-months-holidays";
+    public static final String APPROVE_LEAVE = "/approve-leave";
 }

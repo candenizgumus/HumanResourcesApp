@@ -42,9 +42,12 @@ public enum ErrorType
     EXPENDITURE_NOT_FOUND( 1030, "Expenditure Not Found",  HttpStatus.BAD_REQUEST ),
     EXPENDITURE_ALREADY_APPROVED( 1031, "Expenditure Already Approved",  HttpStatus.BAD_REQUEST),
     PAYMENT_NOT_FOUND(  1032, "Payment Not Found",  HttpStatus.BAD_REQUEST ),
-    PAYMENT_ALREADY_DELETED( 1033, "Payment Already Deleted",  HttpStatus.BAD_REQUEST);
-    private Integer code;
-    private String message;
-    private HttpStatus httpStatus;
+    PAYMENT_ALREADY_DELETED( 1033, "Payment Already Deleted",  HttpStatus.BAD_REQUEST),
+    LEAVE_NOT_FOUND( 1034, "Leave Not Found",  HttpStatus.BAD_REQUEST ),
+    LEAVE_ALREADY_APPROVED( 1035, "Leave Already Approved",  HttpStatus.BAD_REQUEST),
+    ;
+    private final Integer code;
+    private final String message;
+    private final HttpStatus httpStatus;
 
 }

@@ -10,5 +10,9 @@ public enum EAccessIdentifier {
     OFFER_DECLINE,
     OFFER_CANCEL,
     CONTACT_US_SAVE,
-    WELCOME
+    WELCOME,
+    LEAVE_SAVE,
+    LEAVE_APPROVE,
+    LEAVE_DECLINE,
+    LEAVE_CANCEL,
 }

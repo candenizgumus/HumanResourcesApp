@@ -1,15 +1,21 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { EnumType } from "typescript";
+import { ELeaveType } from "../../models/ELeaveType";
 
 export interface ILeave {
-    id: number,
-    userId: number,
-    notificationType: string,
-    notificationText: string,
-    isRead: boolean,
-    userType: string
-    url: string
+    createdAt:Date 
+    updatedAt:Date 
+    status:string 
+    id: number
+    employeeId: number
+    companyId: number
+    description: string
+    startDate:Date
+    endDate:Date
+    approveDate:Date
+    isLeaveApproved:boolean
+    attachedFile:string
 }
-
 
 interface IInitialLeave {
     leaveList: ILeave[],
@@ -21,92 +27,171 @@ const initialLeaveState: IInitialLeave = {
     isLeaveListLoading: false,
 }
 
-
-interface IFetchGetLeaves {
-    token: string;
-    page: number;
-    pageSize: number;
-    searchText: string;
-
-}
-export const fetchGetLeaves = createAsyncThunk(
-    'leave/fetchGetLeaves',
-    async (payload: IFetchGetLeaves) => {
-        const response = await fetch('http://localhost:9090/dev/v1/leave/get-all', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ` + payload.token
-            },body: JSON.stringify({
-                'page': payload.page,
-                'pageSize' : payload.pageSize,
-                'searchText' : payload.searchText
-            })
-        });
-
-        return await response.json();
-
-    }
-);
-
 interface IFetchSaveLeave {
-    token: string;
-    page: number;
-    pageSize: number;
-    searchText: string;
-
+    token : string,
+    description: string;
+    startDate: Date;
+    endDate: Date;
+    leaveType: ELeaveType;
+    files: File[];
 }
+
 export const fetchSaveLeave = createAsyncThunk(
     'leave/fetchSaveLeave',
     async (payload: IFetchSaveLeave) => {
-        const response = await fetch('http://localhost:9090/dev/v1/leave/get-all', {
+        const formData = new FormData();
+        formData.append('description', payload.description);
+
+        // Format the dates to 'yyyy-MM-dd'
+        const formatDate = (date: Date) => date.toISOString().split('T')[0];
+        formData.append('startDate', formatDate(payload.startDate));
+        formData.append('endDate', formatDate(payload.endDate));
+
+        formData.append('leaveType', payload.leaveType.toString());
+
+        payload.files.forEach((file) => {
+            formData.append('files', file);
+        });
+
+        const response = await fetch('http://localhost:9090/dev/v1/leave/save', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ` + payload.token
+            },
+            body: formData
+        });
+
+        return await response.json();
+    }
+)
+
+export interface IRequestWıthIdAndToken{
+    token: string,
+    id: number,
+}
+
+interface IfetchGetAllLeaves{
+    token:string,
+    page:number,
+    pageSize:number,
+    searchText:string
+}
+export const fetchGetLeavesOfEmployee = createAsyncThunk(
+    'leave/fetchGetLeavesOfEmployee',
+    async (payload: IfetchGetAllLeaves) => {
+
+        const response = await fetch(`http://localhost:9090/dev/v1/leave/search-by-employee-id`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ` + payload.token
-            },body: JSON.stringify({
+            },
+            body: JSON.stringify({
                 'page': payload.page,
-                'pageSize' : payload.pageSize,
-                'searchText' : payload.searchText
+                'pageSize': payload.pageSize,
+                'searchText': payload.searchText
             })
         });
 
         return await response.json();
-
     }
-);
 
-export interface IDeleteLeave{
-    token: string,
-    id: number,
-}
+)
+
+export const fetchGetLeavesOfManager = createAsyncThunk(
+    'leave/fetchGetLeavesOfManager',
+    async (payload: IfetchGetAllLeaves) => {
+
+        const response = await fetch(`http://localhost:9090/dev/v1/leave/search-by-company-id`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ` + payload.token
+            },
+            body: JSON.stringify({
+                'page': payload.page,
+                'pageSize': payload.pageSize,
+                'searchText': payload.searchText
+            })
+        });
+
+        return await response.json();
+    }
+
+)
+
+export const fetchApproveLeave = createAsyncThunk(
+    'leave/fetchApproveLeave',
+    async (payload: IRequestWıthIdAndToken) => {
+
+        const response = await fetch(`http://localhost:9090/dev/v1/leave/approve-leave?id=` + payload.id, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ` + payload.token
+            }
+        });
+
+        return await response.json();
+    }
+
+)
+
 export const fetchDeleteLeave = createAsyncThunk(
     'leave/fetchDeleteLeave',
-    async (payload:IDeleteLeave) => {
-        const response = await fetch('http://localhost:9090/dev/v1/leave/delete?id='+payload.id, {
+    async (payload: IRequestWıthIdAndToken) => {
+
+        const response = await fetch(`http://localhost:9090/dev/v1/leave/delete?id=` + payload.id, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ` + payload.token
             }
         });
+
         return await response.json();
     }
-);
 
+)
+
+export const fetchCancelLeave = createAsyncThunk(
+    'leave/fetchCancelLeave',
+    async (payload: IRequestWıthIdAndToken) => {
+
+        const response = await fetch(`http://localhost:9090/dev/v1/leave/cancel?id=` + payload.id, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ` + payload.token
+            }
+        });
+
+        return await response.json();
+    }
+
+)
 
 const leaveSlice = createSlice({
     name: 'leave',
     initialState: initialLeaveState,
     reducers: {},
     extraReducers: (build) => {
-        build.addCase(fetchSaveLeave.fulfilled, (state, action) => {
+        build.addCase(fetchGetLeavesOfEmployee.fulfilled, (state, action) => {
             state.leaveList = action.payload;
         })
-        build.addCase(fetchSaveLeave.pending, (state) => {
+        build.addCase(fetchGetLeavesOfEmployee.pending, (state) => {
             state.isLeaveListLoading = true;
         })
-        build.addCase(fetchSaveLeave.rejected, (state, action) => {
+        build.addCase(fetchGetLeavesOfEmployee.rejected, (state, action) => {
+            
+        })
+        build.addCase(fetchGetLeavesOfManager.fulfilled, (state, action) => {
+            state.leaveList = action.payload;
+        })
+        build.addCase(fetchGetLeavesOfManager.pending, (state) => {
+            state.isLeaveListLoading = true;
+        })
+        build.addCase(fetchGetLeavesOfManager.rejected, (state, action) => {
             
         })
     }

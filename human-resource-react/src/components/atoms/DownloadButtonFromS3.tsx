@@ -22,7 +22,7 @@ const DownloadButtonFromS3: React.FC<{ fileKey: string }> = ({ fileKey }) => {
 
             // Create a link element
             const link = document.createElement('a');
-            link.href = url;
+            link.href = presignedUrl.payload.url;
             link.download = fileKey; // Optional, specify the filename
             document.body.appendChild(link);
 

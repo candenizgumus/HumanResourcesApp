@@ -26,21 +26,25 @@ export const ManagerHomeContent = () => {
             pageSize: 100,
             searchText: ''
         })).unwrap();
+
         const result = await dispatch(fetchGetMonthlyPaymentOfEmployees(token)).unwrap();
 
-        setMonthlyPayments(result);
+        if (Array.isArray(result)) {
+            // Calculate the total salary here
+            const sum = result.reduce((acc: number, employee: IMonthlyPaymentOfManager) => acc + (employee.total || 0), 0);
+
+            // Set the states
+            setMonthlyPayments(result);
+            setTotalSalary(sum);
+        } else {
+            console.error("Result is not an array:", result);
+        }
     };
 
     useEffect(() => {
         getManagerPageDatas();
     }, []);
 
-    useEffect(() => {
-        if (monthlyPayments.length > 0) {
-            const sum = monthlyPayments.reduce((acc, employee) => acc + (employee.total || 0), 0);
-            setTotalSalary(sum);
-        }
-    }, [employeList]);
 
     const columns: GridColDef[] = [
         { field: "name", headerName: "First name", width: 170, headerAlign: "center" },

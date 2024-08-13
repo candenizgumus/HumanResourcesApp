@@ -15,14 +15,11 @@ import {useDispatch} from "react-redux";
 
 
 import {
-    changePageState,
-    clearToken,
-    fetchGetAllUsersOfManager, setSelectedEmployeeId
+    clearToken
 } from "../../../store/feature/authSlice";
 import Swal from "sweetalert2";
 import {
     fetchApproveExpenditure, fetchDeleteExpenditure, fetchCancelExpenditure,
-    fetchExpenditureSave, fetchGetExpendituresOfEmployee,
     fetchGetExpendituresOfManager
 } from "../../../store/feature/expenditureSlice";
 

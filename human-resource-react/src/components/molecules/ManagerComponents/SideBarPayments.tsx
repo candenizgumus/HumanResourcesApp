@@ -14,20 +14,24 @@ import { useDispatch } from "react-redux";
 import {
     changePageState,
     clearToken,
-    fetchGetAllUsersOfManager, setSelectedEmployeeId
+     setSelectedEmployeeId
 } from "../../../store/feature/authSlice";
 import Swal from "sweetalert2";
 import {
     fetchDeleteExpenditure,
-    fetchExpenditureSave,
     fetchGetExpendituresOfEmployee,
     fetchCancelExpenditure // Import the cancel action
 } from "../../../store/feature/expenditureSlice";
+import {fetchGetPayments, fetchPaymentSave} from "../../../store/feature/paymentSlice";
+import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
+import {DatePicker} from "@mui/x-date-pickers/DatePicker";
+import dayjs from "dayjs";
+import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
 
 const columns: GridColDef[] = [
     { field: "id", headerName: "ID", width: 70, headerAlign: "center" },
     {
-        field: "price", headerName: "Price $", width: 150, headerAlign: "center",
+        field: "payment", headerName: "Payment $", width: 150, headerAlign: "center",
         renderCell: (params) => {
             const value = params.value;
             if (typeof value === 'number' && !isNaN(value)) {
@@ -41,26 +45,26 @@ const columns: GridColDef[] = [
             return '$0.00';
         },
     },
-    { field: "description", headerName: "Description", width: 120, headerAlign: "center" },
-    { field: "isExpenditureApproved", headerName: "Approval Status", headerAlign: "center", width: 250 },
-    { field: "approveDate", headerName: "Approval Date", headerAlign: "center", width: 250 },
-    { field: "status", headerName: "Status", headerAlign: "center", width: 250 },
+    { field: "description", headerName: "Description", width: 600, headerAlign: "center" },
+    { field: "paymentDate", headerName: "Payment Date", headerAlign: "center", width: 180 },
+    { field: "status", headerName: "Status", headerAlign: "center", width: 150 },
 ];
 
-export default function SideBarExpenditure() {
+export default function SideBarPayments() {
     const [selectedRowIds, setSelectedRowIds] = useState<number[]>([]);
     const [searchText, setSearchText] = useState('');
     const dispatch = useDispatch<HumanResources>();
     const token = useAppSelector((state) => state.auth.token);
-    const expenditureList = useAppSelector((state) => state.expenditure.expenditureList);
+    const paymentList = useAppSelector((state) => state.payment.paymentList);
     const [loading, setLoading] = useState(false);
     const [isActivating, setIsActivating] = useState(false);
-    const [price, setPrice] = useState(0);
+    const [payment, setPayment] = useState(0);
     const [description, setDescription] = useState('');
+    const [paymentDate, setPaymentDate] = useState<Date | null>(null);
 
     useEffect(() => {
         dispatch(
-            fetchGetExpendituresOfEmployee({
+            fetchGetPayments({
                 token: token,
                 page: 0,
                 pageSize: 100,
@@ -82,20 +86,11 @@ export default function SideBarExpenditure() {
 
     const handleDelete = async () => {
         for (let id of selectedRowIds) {
-            const selectedExpenditure = expenditureList.find(
+            const selectedExpenditure = paymentList.find(
                 (selectedExpenditure) => selectedExpenditure.id === id
             );
             if (!selectedExpenditure) continue;
 
-            if (selectedExpenditure.isExpenditureApproved) {
-                await Swal.fire({
-                    title: "Error",
-                    text: 'Expenditure already approved',
-                    icon: "error",
-                    confirmButtonText: "OK",
-                });
-                continue;
-            }
             setLoading(true);
             try {
                 const result = await Swal.fire({
@@ -147,20 +142,12 @@ export default function SideBarExpenditure() {
 
     const handleCancel = async () => {
         for (let id of selectedRowIds) {
-            const selectedExpenditure = expenditureList.find(
+            const selectedExpenditure = paymentList.find(
                 (selectedExpenditure) => selectedExpenditure.id === id
             );
             if (!selectedExpenditure) continue;
 
-            if (!selectedExpenditure.isExpenditureApproved) {
-                await Swal.fire({
-                    title: "Error",
-                    text: 'Expenditure not yet approved, cannot cancel.',
-                    icon: "error",
-                    confirmButtonText: "OK",
-                });
-                continue;
-            }
+
             setLoading(true);
             try {
                 const result = await Swal.fire({
@@ -210,14 +197,25 @@ export default function SideBarExpenditure() {
         setLoading(false);
     };
 
-    const handleSaveExpense = async () => {
-        setIsActivating(true);
-
+    const handleSavePayment = async () => {
         try {
-            const response = await dispatch(fetchExpenditureSave({
+
+            if (description === "" || payment === 0 || paymentDate === null) {
+                Swal.fire({
+                    title: "Error",
+                    text: "Please fill out all required fields",
+                    icon: "error",
+                    confirmButtonText: "OK",
+                });
+                return;
+            }
+            setIsActivating(true);
+
+            const response = await dispatch(fetchPaymentSave({
                 token: token,
                 description: description,
-                price: price
+                payment: payment,
+                paymentDate: paymentDate
             })).then(data => {
                 if (data.payload.message) {
                     Swal.fire({
@@ -230,12 +228,12 @@ export default function SideBarExpenditure() {
                 }
                 Swal.fire({
                     title: "Success",
-                    text: "Expense has been added",
+                    text: "Payment has been added",
                     icon: "success",
                     confirmButtonText: "OK",
                 });
 
-                fetchGetAllUsersOfManager({
+                fetchGetPayments({
                     token: token,
                     page: 0,
                     pageSize: 100,
@@ -260,18 +258,14 @@ export default function SideBarExpenditure() {
                 style={{ marginBottom: "10px" }}
             />
             <DataGrid
-                rows={expenditureList}
+                rows={paymentList}
                 columns={columns}
                 initialState={{
                     pagination: {
                         paginationModel: { page: 1, pageSize: 5 },
                     },
                 }}
-                getRowClassName={(params) =>
-                    params.row.isExpenditureApproved
-                        ? "approved-row"
-                        : "unapproved-row"
-                }
+
                 pageSizeOptions={[5, 10]}
                 checkboxSelection
                 onRowSelectionModelChange={handleRowSelection}
@@ -286,12 +280,7 @@ export default function SideBarExpenditure() {
                     "& .MuiDataGrid-cell": {
                         textAlign: "center",
                     },
-                    "& .approved-row": {
-                        backgroundColor: "#e0f2e9",
-                    },
-                    "& .unapproved-row": {
-                        backgroundColor: "#ffe0e0",
-                    },
+
                 }}
             />
 
@@ -321,7 +310,7 @@ export default function SideBarExpenditure() {
             <Grid container spacing={2} style={{ marginTop: 16 }} direction="row">
                 <Grid item xs={12}>
                     <Typography sx={{ fontWeight: "bold", marginBottom: "10px" }}>
-                        Add Expenditure
+                        Add Payment
                     </Typography>
                 </Grid>
 
@@ -339,27 +328,38 @@ export default function SideBarExpenditure() {
 
                 <Grid item xs={4}>
                     <FormControl fullWidth>
-                        <InputLabel htmlFor="outlined-adornment-amount">Expense</InputLabel>
+                        <InputLabel htmlFor="outlined-adornment-amount">Payment Amount</InputLabel>
                         <OutlinedInput
                             id="outlined-adornment-amount"
                             startAdornment={<InputAdornment position="start">$</InputAdornment>}
-                            label="Expense"
-                            value={price}
+                            label="Payment"
+                            value={payment}
                             onChange={e => {
                                 const value = e.target.value;
-                                setPrice(value ? parseInt(value) : 0);
+                                setPayment(value ? parseInt(value) : 0);
                             }}
                         />
                     </FormControl>
                 </Grid>
                 <Grid item xs={4}>
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <DatePicker
+                            label="Payment Date"
+                            value={paymentDate ? dayjs(paymentDate) : null}
+
+                            onChange={(newValue) => setPaymentDate(newValue ? newValue.toDate() : null)}
+
+                        />
+                    </LocalizationProvider>
+                </Grid>
+                <Grid item xs={4}>
                     <Button
-                        onClick={handleSaveExpense}
+                        onClick={handleSavePayment}
                         variant="contained"
                         color="primary"
-                        disabled={price === 0 || description.length === 0}
+                        disabled={payment === 0 || description.length === 0 || paymentDate === null}
                     >
-                        {loading ? "Adding..." : "Add"}
+                        {loading ? "Saving..." : "Save Payment"}
                     </Button>
                 </Grid>
             </Grid>

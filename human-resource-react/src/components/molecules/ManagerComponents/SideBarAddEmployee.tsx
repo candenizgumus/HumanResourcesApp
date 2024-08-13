@@ -12,12 +12,10 @@ import {
     OutlinedInput, InputAdornment
 } from '@mui/material';
 import {HumanResources, useAppSelector} from "../../../store";
-import {IUser} from "../../../models/IUser";
 import {
     fetchAddEmployeeToManager,
-    fetchFindCompanyNameAndManagerNameOfUser,
-    fetchFindUserByToken, fetchGetEmployeeTypes,
-    fetchGetPositions, fetchUpdateUser
+     fetchGetEmployeeTypes,
+    fetchGetPositions
 } from "../../../store/feature/authSlice";
 import {useDispatch} from "react-redux";
 

@@ -8,6 +8,7 @@ import {
 
 
 import {useSelector} from "react-redux";
+import paymentSlice from "./feature/paymentSlice";
 
 const store = configureStore({
     reducer: {
@@ -21,7 +22,8 @@ const store = configureStore({
         notification: notificationSlice,
         expenditure: expenditureSlice,
         personalDocument: personalDocumentSlice,
-        leave:leaveSlice
+        leave:leaveSlice,
+        payment:paymentSlice
 
     }
 });

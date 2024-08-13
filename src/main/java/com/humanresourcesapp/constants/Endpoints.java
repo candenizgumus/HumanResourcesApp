@@ -41,6 +41,7 @@ public class Endpoints
     public static final String PASSWORD_RESET = "/password-reset";
     public static final String EMAIL = "/email";
     public static final String MEDIA = "/media";
+    public static final String PAYMENT = "/payment";
 
     //methods
     public static final String SAVE = "/save";

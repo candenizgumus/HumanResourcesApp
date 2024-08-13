@@ -8,6 +8,7 @@ import com.humanresourcesapp.dto.requests.PageRequestDto;
 import com.humanresourcesapp.entities.Leave;
 import com.humanresourcesapp.entities.User;
 import com.humanresourcesapp.entities.enums.EAccessIdentifier;
+import com.humanresourcesapp.entities.enums.ELeaveType;
 import com.humanresourcesapp.entities.enums.ENotificationType;
 import com.humanresourcesapp.entities.enums.EStatus;
 import com.humanresourcesapp.exception.ErrorType;
@@ -23,6 +24,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.Period;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import static com.humanresourcesapp.constants.FrontendPaths.EXPENDITURE;
@@ -98,6 +101,15 @@ public class LeaveService {
 
         if (!leave.getIsLeaveApproved())
         {
+            if(leave.getLeaveType().equals(ELeaveType.ANNUAL)){
+                User employee = userService.findById(leave.getEmployeeId());
+                if(employee.getRemainingAnnualLeave() < ChronoUnit.DAYS.between(leave.getStartDate(), leave.getEndDate())){
+                    throw new HumanResourcesAppException(ErrorType.ANNUAL_LEAVE_EXCEEDED);
+                }else {
+                    employee.setRemainingAnnualLeave(employee.getRemainingAnnualLeave() -(int) ChronoUnit.DAYS.between(leave.getStartDate(), leave.getEndDate()));
+                    userService.save(employee);
+                }
+            }
             leave.setIsLeaveApproved(true);
             leave.setApproveDate(LocalDate.now());
             leave.setStatus(EStatus.ACTIVE);

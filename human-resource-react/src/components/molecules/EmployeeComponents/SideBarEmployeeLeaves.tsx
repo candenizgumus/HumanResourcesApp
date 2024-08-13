@@ -24,7 +24,7 @@ import {
 } from "../../../store/feature/leaveSlice"; // Import your actions
 import { HumanResources, useAppSelector } from "../../../store"; // Import your hooks
 import { ELeaveType } from "../../../models/ELeaveType";
-import { clearToken } from "../../../store/feature/authSlice";
+import { clearToken, fetchFindUserByToken } from "../../../store/feature/authSlice";
 import MyDropzone from "../../atoms/DropZone";
 
 const leaveColumns: GridColDef[] = [
@@ -45,6 +45,7 @@ export default function SideBarEmployeeLeaves() {
     const [searchText, setSearchText] = useState('');
     const dispatch = useDispatch<HumanResources>();
     const token = useAppSelector((state) => state.auth.token);
+    const user = useAppSelector((state) => state.auth.user);
     const leaveList = useAppSelector((state) => state.leave.leaveList);
     const [loading, setLoading] = useState(false);
     const [description, setDescription] = useState('');
@@ -52,7 +53,7 @@ export default function SideBarEmployeeLeaves() {
     const [startDate, setStartDate] = useState<Date | null>(null);
     const [endDate, setEndDate] = useState<Date | null>(null);
     const [files, setFiles] = useState<File[]>([]);
-    
+
     useEffect(() => {
         dispatch(
             fetchGetLeavesOfEmployee({
@@ -61,7 +62,9 @@ export default function SideBarEmployeeLeaves() {
                 pageSize: 100,
                 searchText: searchText,
             })
-        ).catch(() => {
+        ).then(()=> {
+            dispatch(fetchFindUserByToken(token))
+        }).catch(() => {
             // handle error, e.g., clear token
         });
     }, [dispatch, searchText, token]);
@@ -182,7 +185,7 @@ export default function SideBarEmployeeLeaves() {
                 startDate: new Date(startDate.setHours(12)), // Convert Dayjs to JS Date and add 12 hours
                 endDate: new Date(endDate.setHours(12)), // Convert Dayjs to JS Date and add 12 hours
                 leaveType,
-                files: files, // attachedFile is empty for now
+                files: files,
             })).unwrap();
 
             if (!result.code) {
@@ -213,13 +216,36 @@ export default function SideBarEmployeeLeaves() {
 
     return (
         <div style={{ height: 400, width: "inherit" }}>
-            <TextField
-                label="Description"
-                variant="outlined"
-                onChange={(event) => setSearchText(event.target.value)}
-                value={searchText}
-                style={{ marginBottom: "10px" }}
-            />
+            <Grid container spacing={1} style={{ marginTop: 16 }} direction="row" alignItems="center">
+                <Grid item>
+                    <TextField
+                        label="Search by Description"
+                        variant="outlined"
+                        onChange={(event) => setSearchText(event.target.value)}
+                        value={searchText}
+                        style={{ marginBottom: "10px" }}
+                    />
+                </Grid>
+                <Grid item sx={{ marginLeft: '10px' }}>
+                    <Typography
+                        sx={{
+                            fontWeight: "bold",
+                            marginBottom: "10px",
+                            color: 'red',
+                            borderRadius: '5px',
+                            border: '1px solid',
+                            borderColor: 'red',
+                            padding: '10px',
+                            minHeight: '56px',
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center'
+                        }}
+                    >
+                        Remaining Annual Leave: {user.remainingAnnualLeave} day{user.remainingAnnualLeave > 0 ? 's' : ''}
+                    </Typography>
+                </Grid>
+            </Grid>
             <DataGrid
                 rows={leaveList}
                 columns={leaveColumns}
@@ -301,7 +327,7 @@ export default function SideBarEmployeeLeaves() {
                     <Grid item >
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DatePicker
-                                shouldDisableDate={(date) => date.isBefore(dayjs().subtract(1,'day'))}
+                                shouldDisableDate={(date) => date.isBefore(dayjs().subtract(1, 'day'))}
                                 label="Leave Start Date"
                                 value={startDate ? dayjs(startDate) : null}
                                 onChange={(newValue) => setStartDate(newValue ? newValue.toDate() : null)}
@@ -335,7 +361,7 @@ export default function SideBarEmployeeLeaves() {
                             ))}
                         </TextField>
                     </Grid>
-                    <Grid item style={{ width: 399, height:72  }}>
+                    <Grid item style={{ width: 399, height: 72 }}>
                         <MyDropzone onFilesAdded={setFiles} />
                     </Grid>
                     <Grid item>
@@ -347,7 +373,7 @@ export default function SideBarEmployeeLeaves() {
                         >
                             {loading ? "Saving..." : "Save Leave"}
                         </Button>
-                </Grid>
+                    </Grid>
                 </Grid>
             </Grid>
 

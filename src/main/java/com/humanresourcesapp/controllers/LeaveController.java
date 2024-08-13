@@ -49,7 +49,7 @@ public class LeaveController {
                 .startDate(startDate)
                 .endDate(endDate)
                 .leaveType(leaveType)
-                .files(files)
+                .files(files.isEmpty() ? null : files)
                 .build();
         return ResponseEntity.ok(leaveService.save(dto));
     }

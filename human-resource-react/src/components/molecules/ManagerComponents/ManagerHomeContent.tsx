@@ -1,5 +1,5 @@
-import {Avatar, Box, Grid, Typography} from "@mui/material";
-import {DataGrid, GridColDef, GridValueGetter} from "@mui/x-data-grid";
+import {  Grid, Typography} from "@mui/material";
+import {DataGrid, GridColDef} from "@mui/x-data-grid";
 import React, {useEffect, useState} from "react";
 import {HumanResources, useAppSelector} from "../../../store";
 import {useDispatch} from "react-redux";
@@ -68,7 +68,7 @@ export const ManagerHomeContent = () => {
         }
 
         const result = await dispatch(fetchGetMonthlyPaymentOfEmployees(token)).unwrap();
-        formatHolidays();
+
         if (Array.isArray(result)) {
             // Calculate the total salary here
             const sum = result.reduce((acc: number, employee: IMonthlyPaymentOfManager) => acc + (employee.total || 0), 0);
@@ -80,22 +80,29 @@ export const ManagerHomeContent = () => {
             console.error("Result is not an array:", result);
         }
     };
-    const formatHolidays = () => {
-        const formattedHolidays = monthlyHolidaysUnformatted.map(holiday => ({
-            id: holiday.id,
-            holidayName: holiday.holidayName,
-            holidayType: holiday.holidayType,
-            holidayStartDate: formatDate(holiday.startDate),
-            holidayEndDate: formatDate(holiday.endDate),
-        }));
-        setMonthlyHolidays(formattedHolidays);
-    }
 
+
+    useEffect(() => {
+        const formatHolidays = () => {
+            const formattedHolidays = monthlyHolidaysUnformatted.map((holiday) => ({
+                id: holiday.id,
+                holidayName: holiday.holidayName,
+                holidayType: holiday.holidayType,
+                holidayStartDate: formatDate(holiday.startDate),
+                holidayEndDate: formatDate(holiday.endDate),
+            }));
+            setMonthlyHolidays(formattedHolidays);
+        };
+
+        if (monthlyHolidaysUnformatted.length > 0) {
+            formatHolidays();
+        }
+    }, [monthlyHolidaysUnformatted]);
     useEffect(() => {
         getManagerPageDatas();
 
 
-    }, [monthlyHolidays]);
+    }, []);
 
 
     const columns: GridColDef[] = [
@@ -160,7 +167,7 @@ export const ManagerHomeContent = () => {
                 <Grid sx={{ height:'300px' , marginBottom: '40px' }} item xs={6}>
 
                     <Typography  sx={{ textAlign: 'center' , fontWeight: 'bold'}} variant="h6" gutterBottom>
-                        Upcoming Employee Birthdays
+                        Monthly Employee Birthdays
                     </Typography>
 
                     <DataGrid
@@ -301,12 +308,12 @@ export const ManagerHomeContent = () => {
 
 
                         sx={{
-                            backgroundColor: "#FDEFC5", // Açık tonlarda arka plan rengi
+                            backgroundColor: "#F6CFFC", // Açık tonlarda arka plan rengi
                             "& .MuiDataGrid-columnHeaders": {
-                                backgroundColor: "#FDEFC5", // Header için açık yeşil tonlarda bir arka plan rengi
+                                backgroundColor: "#F6CFFC", // Header için açık yeşil tonlarda bir arka plan rengi
                             },
                             "& .MuiDataGrid-columnHeader": {
-                                backgroundColor: "#FFBF5D", // Header arka plan rengi
+                                backgroundColor: "#E29BF7", // Header arka plan rengi
                             },
                             "& .MuiDataGrid-columnHeaderTitle": {
                                 textAlign: "center",

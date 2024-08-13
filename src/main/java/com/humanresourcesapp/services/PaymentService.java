@@ -45,4 +45,26 @@ public class PaymentService
         return paymentRepository.findByDescriptionContainingAndCompanyIdAndStatus(dto.searchText(), manager.getCompanyId(), EStatus.ACTIVE, PageRequest.of(dto.page(), dto.pageSize()));
 
     }
+
+    public Boolean delete(Long id)
+    {
+        Payment payment = paymentRepository.findById(id).orElseThrow(() -> new HumanResourcesAppException(ErrorType.PAYMENT_NOT_FOUND));
+        if (payment.getStatus() == EStatus.DELETED)
+        {
+            throw new HumanResourcesAppException(ErrorType.PAYMENT_ALREADY_DELETED);
+        }
+        payment.setStatus(EStatus.DELETED);
+        paymentRepository.save(payment);
+        return true;
+    }
+
+
+    public List<Payment> getMonthlyPayments()
+    {
+        String userEmail = UserInfoSecurityContext.getUserInfoFromSecurityContext();
+        User manager = userService.findByEmail(userEmail).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
+
+        return paymentRepository.findPaymentOfCurrentMonth(manager.getCompanyId());
+
+    }
 }

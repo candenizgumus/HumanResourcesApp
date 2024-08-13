@@ -34,4 +34,18 @@ public class PaymentController
     {
         return ResponseEntity.ok(paymentService.getAll(dto));
     }
+
+    @DeleteMapping(DELETE)
+    @PreAuthorize("hasAuthority('MANAGER')")
+    public ResponseEntity<Boolean> delete(Long id)
+    {
+        return ResponseEntity.ok(paymentService.delete(id));
+    }
+
+    @PostMapping(GET_MONTHLY_PAYMENTS)
+    @PreAuthorize("hasAnyAuthority('MANAGER')")
+    public ResponseEntity<List<Payment>> getMonthlyPayments()
+    {
+        return ResponseEntity.ok(paymentService.getMonthlyPayments());
+    }
 }

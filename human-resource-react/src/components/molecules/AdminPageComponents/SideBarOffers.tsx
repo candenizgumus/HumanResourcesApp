@@ -27,17 +27,18 @@ import Swal from "sweetalert2";
 import Loader from "../../atoms/loader/Loader";
 
 const columns: GridColDef[] = [
-    { field: "id", headerName: "ID", width: 70, headerAlign: "center" },
-    { field: "name", headerName: "First name", width: 160, headerAlign: "center" },
-    { field: "surname", headerName: "Last name", width: 160, headerAlign: "center" },
-    { field: "email", headerName: "Email", headerAlign: "center", width: 200 },
-    { field: "phone", headerName: "Phone", type: "number", sortable: false, headerAlign: "center", width: 160 },
-    { field: "companyName", headerName: "Company Name", width: 130, headerAlign: "center" },
-    { field: "title", headerName: "Title", width: 160, headerAlign: "center" },
-    { field: "numberOfEmployee", headerName: "Employee Count", type: "number", width: 120, headerAlign: "center" },
-    { field: "sector", headerName: "Sector", type: "string", width: 250, headerAlign: "center" },
-    { field: "status", headerName: "Status", type: "string", width: 150, headerAlign: "center" },
+    { field: "id", headerName: "ID", flex: 0.7, headerAlign: "center" },
+    { field: "name", headerName: "First name", flex: 1.6, headerAlign: "center" },
+    { field: "surname", headerName: "Last name", flex: 1.6, headerAlign: "center" },
+    { field: "email", headerName: "Email", flex: 2.0, headerAlign: "center" },
+    { field: "phone", headerName: "Phone", type: "number", sortable: false, flex: 1.6, headerAlign: "center" },
+    { field: "companyName", headerName: "Company Name", flex: 1.3, headerAlign: "center" },
+    { field: "title", headerName: "Title", flex: 1.6, headerAlign: "center" },
+    { field: "numberOfEmployee", headerName: "Employee Count", type: "number", flex: 1.2, headerAlign: "center" },
+    { field: "sector", headerName: "Sector", type: "string", flex: 2.5, headerAlign: "center" },
+    { field: "status", headerName: "Status", type: "string", flex: 1.5, headerAlign: "center" },
 ];
+
 
 const style = {
     position: "absolute" as "absolute",

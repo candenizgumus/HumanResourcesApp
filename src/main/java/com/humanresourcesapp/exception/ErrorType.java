@@ -40,8 +40,9 @@ public enum ErrorType
     NOTIFICATION_NOT_FOUND(1028, "Notification Not Found", HttpStatus.BAD_REQUEST),
     USER_ALREADY_DELETED(1029, "User Already Deleted", HttpStatus.BAD_REQUEST),
     EXPENDITURE_NOT_FOUND( 1030, "Expenditure Not Found",  HttpStatus.BAD_REQUEST ),
-    EXPENDITURE_ALREADY_APPROVED( 1031, "Expenditure Already Approved",  HttpStatus.BAD_REQUEST)
-    ;
+    EXPENDITURE_ALREADY_APPROVED( 1031, "Expenditure Already Approved",  HttpStatus.BAD_REQUEST),
+    PAYMENT_NOT_FOUND(  1032, "Payment Not Found",  HttpStatus.BAD_REQUEST ),
+    PAYMENT_ALREADY_DELETED( 1033, "Payment Already Deleted",  HttpStatus.BAD_REQUEST);
     private Integer code;
     private String message;
     private HttpStatus httpStatus;

@@ -5,10 +5,12 @@ import {IPayment} from "../../models/IPayment";
 
 interface IPaymentState{
     paymentList: IPayment[],
+    currentMonthsPayments: IPayment[]
 }
 
 const initialPaymentState:IPaymentState = {
     paymentList: [],
+    currentMonthsPayments: []
 }
 
 
@@ -69,6 +71,44 @@ export const fetchGetPayments = createAsyncThunk(
     }
 
 )
+interface IfetchDeletePayment{
+    token:string,
+    id:number,
+
+}
+export const fetchDeletePayment = createAsyncThunk(
+    'payment/IfetchDeletePayment',
+    async (payload: IfetchDeletePayment) => {
+
+        const response = await fetch(`http://localhost:9090/dev/v1/payment/delete?id=`+ payload.id , {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ` + payload.token
+            }
+        });
+
+        return await response.json();
+    }
+
+)
+
+export const fetchMonthlyPayments = createAsyncThunk(
+    'payment/IfetchDeletePayment',
+    async (token: string) => {
+
+        const response = await fetch(`http://localhost:9090/dev/v1/payment/get-monthly-payments` , {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ` + token
+            }
+        });
+
+        return await response.json();
+    }
+
+)
 
 
 
@@ -80,6 +120,9 @@ const paymentSlice = createSlice({
     extraReducers: (build)=>{
         build.addCase(fetchGetPayments.fulfilled,(state,action)=>{
             state.paymentList = action.payload;
+        })
+        build.addCase(fetchMonthlyPayments.fulfilled,(state,action)=>{
+            state.currentMonthsPayments = action.payload;
         })
 
     }

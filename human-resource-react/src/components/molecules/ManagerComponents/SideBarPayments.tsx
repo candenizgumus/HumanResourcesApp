@@ -22,7 +22,7 @@ import {
     fetchGetExpendituresOfEmployee,
     fetchCancelExpenditure // Import the cancel action
 } from "../../../store/feature/expenditureSlice";
-import {fetchGetPayments, fetchPaymentSave} from "../../../store/feature/paymentSlice";
+import {fetchDeletePayment, fetchGetPayments, fetchPaymentSave} from "../../../store/feature/paymentSlice";
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import {DatePicker} from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
@@ -86,10 +86,10 @@ export default function SideBarPayments() {
 
     const handleDelete = async () => {
         for (let id of selectedRowIds) {
-            const selectedExpenditure = paymentList.find(
-                (selectedExpenditure) => selectedExpenditure.id === id
+            const selectedPayment = paymentList.find(
+                (selectedPayment) => selectedPayment.id === id
             );
-            if (!selectedExpenditure) continue;
+            if (!selectedPayment) continue;
 
             setLoading(true);
             try {
@@ -104,9 +104,9 @@ export default function SideBarPayments() {
                 });
 
                 if (result.isConfirmed) {
-                    const data = await dispatch(fetchDeleteExpenditure({
+                    const data = await dispatch(fetchDeletePayment({
                         token: token,
-                        id: selectedExpenditure.id,
+                        id: selectedPayment.id,
                     }));
 
                     if (data.payload.message) {
@@ -120,68 +120,11 @@ export default function SideBarPayments() {
                     } else {
                         await Swal.fire({
                             title: "Deleted!",
-                            text: "Your expenditure has been deleted.",
+                            text: "Your Payment has been deleted.",
                             icon: "success"
                         });
 
-                        await dispatch(fetchGetExpendituresOfEmployee({
-                            token: token,
-                            page: 0,
-                            pageSize: 100,
-                            searchText: searchText,
-                        }));
-                    }
-                }
-            } catch (error) {
-                localStorage.removeItem("token");
-                dispatch(clearToken());
-            }
-        }
-        setLoading(false);
-    };
-
-    const handleCancel = async () => {
-        for (let id of selectedRowIds) {
-            const selectedExpenditure = paymentList.find(
-                (selectedExpenditure) => selectedExpenditure.id === id
-            );
-            if (!selectedExpenditure) continue;
-
-
-            setLoading(true);
-            try {
-                const result = await Swal.fire({
-                    title: "Are you sure?",
-                    text: "You won't be able to revert this!",
-                    icon: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "#3085d6",
-                    cancelButtonColor: "#d33",
-                    confirmButtonText: "Yes, cancel it!"
-                });
-
-                if (result.isConfirmed) {
-                    const data = await dispatch(fetchCancelExpenditure({
-                        token: token,
-                        id: selectedExpenditure.id,
-                    }));
-
-                    if (data.payload.message) {
-                        await Swal.fire({
-                            title: "Error",
-                            text: data.payload.message,
-                            icon: "error",
-                            confirmButtonText: "OK",
-                        });
-                        return;
-                    } else {
-                        await Swal.fire({
-                            title: "Cancelled!",
-                            text: "Your expenditure has been cancelled.",
-                            icon: "success"
-                        });
-
-                        await dispatch(fetchGetExpendituresOfEmployee({
+                        await dispatch(fetchGetPayments({
                             token: token,
                             page: 0,
                             pageSize: 100,
@@ -293,16 +236,6 @@ export default function SideBarPayments() {
                         disabled={isActivating || selectedRowIds.length === 0}
                     >
                         {loading ? "Deleting..." : "Delete"}
-                    </Button>
-                </Grid>
-                <Grid item>
-                    <Button
-                        onClick={handleCancel}
-                        variant="contained"
-                        color="warning"
-                        disabled={isActivating || selectedRowIds.length === 0}
-                    >
-                        {loading ? "Cancelling..." : "Cancel"}
                     </Button>
                 </Grid>
             </Grid>

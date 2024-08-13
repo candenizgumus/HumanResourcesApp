@@ -9,6 +9,7 @@ import notificationSlice from "./notificationSlice";
 import expenditureSlice from "./expenditureSlice";
 import personalDocumentSlice from "./personalDocumentSlice";
 import leaveSlice from "./leaveSlice";
+import paymentSlice from "./paymentSlice";
 
 
 
@@ -24,5 +25,6 @@ export{
     notificationSlice,
     expenditureSlice,
     personalDocumentSlice,
-    leaveSlice
+    leaveSlice,
+    paymentSlice
 }

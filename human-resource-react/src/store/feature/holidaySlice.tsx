@@ -65,8 +65,8 @@ export const fetchCreateHolidayAdmin = createAsyncThunk(
                     {
                         'holidayName': payload.holidayName,
                         'holidayType': payload.holidayType,
-                        'holidayStartDate': payload.holidayStartDate,
-                        'holidayEndDate': payload.holidayEndDate,
+                        'startDate': payload.startDate,
+                        'endDate': payload.endDate,
                     }
                 ),
             });
@@ -89,8 +89,8 @@ export const fetchCreateHolidayManager = createAsyncThunk(
                     {
                         'holidayName': payload.holidayName,
                         'holidayType': payload.holidayType,
-                        'holidayStartDate': payload.holidayStartDate,
-                        'holidayEndDate': payload.holidayEndDate,
+                        'startDate': payload.startDate,
+                        'endDate': payload.endDate,
                     }
                 ),
             });

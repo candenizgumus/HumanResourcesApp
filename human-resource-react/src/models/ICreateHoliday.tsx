@@ -1,7 +1,9 @@
+import {Dayjs} from "dayjs";
+
 export interface ICreateHoliday {
     holidayName: string;
     holidayType: string;
-    holidayStartDate: number;
-    holidayEndDate: number;
+    startDate: Date;
+    endDate: Date;
     token: string;
 }

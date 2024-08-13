@@ -71,7 +71,6 @@ export const ManagerHomeContent = () => {
 
 
     const columnSalary: GridColDef[] = [
-        { field: "id", headerName: "Id", flex: 0.4, headerAlign: "center" },
         { field: "name", headerName: "First name", flex: 1.7, headerAlign: "center" },
         { field: "surname", headerName: "Last name", flex: 1.5, headerAlign: "center" },
         { field: "email", headerName: "Email", flex: 1.5, headerAlign: "center" },

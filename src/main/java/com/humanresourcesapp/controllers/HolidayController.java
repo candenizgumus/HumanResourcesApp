@@ -71,4 +71,10 @@ public class HolidayController {
     public ResponseEntity<Holiday> changeStatus(@PathVariable Long holidayId) {
         return ResponseEntity.ok(holidayService.changeStatus(holidayId));
     }
+
+    @PostMapping(GET_CURRENT_MONTHS_HOLIDAYS)
+    @PreAuthorize("hasAnyAuthority('MANAGER')")
+    public ResponseEntity<List<Holiday>> getCurrentMonthsHolidays() {
+        return ResponseEntity.ok(holidayService.getCurrentMonthsHolidays());
+    }
 }

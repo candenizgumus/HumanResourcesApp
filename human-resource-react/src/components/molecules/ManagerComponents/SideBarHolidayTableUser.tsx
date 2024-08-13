@@ -13,20 +13,10 @@ import {IHoliday} from '../../../models/IHoliday';
 import {Button, Grid, Box, Divider} from '@mui/material';
 import {IHolidayFormatted} from "../../../models/IHolidayFormatted";
 import SideBarHolidayFormUser from "./SideBarHolidayFormUser";
+import {format} from "date-fns";
 
 // Helper function to format epoch timestamp to human-readable date
-function epochToHumanReadableWithoutTime(epochTime: number): string {
-    const date = new Date(epochTime * 1000);
 
-    const options: Intl.DateTimeFormatOptions = {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        //timeZoneName: 'short'
-    };
-
-    return date.toLocaleDateString('tr-TR', options);
-}
 
 function dateToEpoch(date: string): number {
     return new Date(date).getTime() / 1000;
@@ -59,6 +49,20 @@ export default function SideBarHolidayTableUser() {
     const [selectedRowIds, setSelectedRowIds] = useState<number[]>([]);
     const [newHolidayList, setNewHolidayList] = useState<IHolidayFormatted[]>([]);
 
+    const formatDate = (date: Date | string | undefined): string => {
+        if (!date) return '';
+
+        const months = [
+            'January', 'February', 'March', 'April', 'May', 'June',
+            'July', 'August', 'September', 'October', 'November', 'December'
+        ];
+
+        const d = new Date(date);
+        const day = d.getDate();
+        const month = months[d.getMonth()]; // Get month name
+
+        return `${day} ${month}`;
+    };
     useEffect(() => {
         dispatch(fetchHolidaysUser(token));
     }, [dispatch]);
@@ -68,8 +72,8 @@ export default function SideBarHolidayTableUser() {
             id: holiday.id,
             holidayName: holiday.holidayName,
             holidayType: holiday.holidayType,
-            holidayStartDate: epochToHumanReadableWithoutTime(holiday.holidayStartDate),
-            holidayEndDate: epochToHumanReadableWithoutTime(holiday.holidayEndDate),
+            holidayStartDate: formatDate(holiday.startDate),
+            holidayEndDate: formatDate(holiday.endDate),
             status: holiday.status
         }));
         setNewHolidayList(formattedHolidays);
@@ -97,19 +101,6 @@ export default function SideBarHolidayTableUser() {
         });
     }
 
-    const handleConfirmSelection = () => {
-        selectedRowIds.forEach((id) => {
-            dispatch(fetchCreateHolidayManager(
-                {
-                    holidayName: newHolidayList[id - 1].holidayName,
-                    holidayType: newHolidayList[id - 1].holidayType,
-                    holidayStartDate: dateToEpoch(newHolidayList[id - 1].holidayStartDate),
-                    holidayEndDate: dateToEpoch(newHolidayList[id - 1].holidayEndDate),
-                    token
-                }
-            ))
-        });
-    }
 
     return (
         <Box sx={{flexGrow: 1, padding: 2}}>

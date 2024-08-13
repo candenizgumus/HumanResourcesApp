@@ -7,8 +7,12 @@ import {
 } from '../../../store/feature/holidaySlice';
 import Swal from 'sweetalert2';
 import { Box, TextField, Button, Grid, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
-import DatePicker from 'react-datepicker';
+
 import 'react-datepicker/dist/react-datepicker.css';
+import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
+import {DatePicker} from "@mui/x-date-pickers/DatePicker";
+import dayjs from "dayjs";
+import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
 
 
 const SideBarHolidayFormUser: React.FC = () => {
@@ -29,15 +33,13 @@ const SideBarHolidayFormUser: React.FC = () => {
             return;
         }
 
-        const startEpoch = holidayStartDate.getTime() / 1000;
-        const endEpoch = holidayEndDate.getTime() / 1000;
 
 
         dispatch(fetchCreateHolidayManager({
             holidayName,
             holidayType,
-            holidayStartDate: startEpoch,
-            holidayEndDate: endEpoch,
+            startDate: holidayStartDate,
+            endDate: holidayEndDate,
             token
         }))
             .then(() => {
@@ -86,34 +88,34 @@ const SideBarHolidayFormUser: React.FC = () => {
                         </Select>
                     </FormControl>
                 </Grid>
+
                 <Grid item xs={12}>
-                    <DatePicker
-                        selected={holidayStartDate}
-                        onChange={(date: Date | null) => setHolidayStartDate(date)}
-                        dateFormat="yyyy-MM-dd"
-                        placeholderText="Select start date"
-                        customInput={<TextField
-                            fullWidth
-                            required
-                            autoComplete="off" />}
-                    />
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <DatePicker
+                            label="Holiday Start Date"
+                            value={holidayStartDate ? dayjs(holidayStartDate) : null}
+
+                            onChange={(newValue) => setHolidayStartDate(newValue ? newValue.toDate() : null)}
+
+                        />
+                    </LocalizationProvider>
                 </Grid>
                 <Grid item xs={12}>
-                    <DatePicker
-                        selected={holidayEndDate}
-                        onChange={(date: Date | null) => setHolidayEndDate(date)}
-                        dateFormat="yyyy-MM-dd"
-                        placeholderText="Select end date"
-                        customInput={<TextField
-                            fullWidth
-                            required
-                            autoComplete="off" />}
-                    />
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <DatePicker
+                            label="Holiday End Date"
+                            value={holidayEndDate ? dayjs(holidayEndDate) : null}
+                            shouldDisableDate={holidayStartDate ? (date) => date.isBefore(holidayStartDate) : undefined}
+                            onChange={(newValue) => setHolidayEndDate(newValue ? newValue.toDate() : null)}
+
+                        />
+                    </LocalizationProvider>
                 </Grid>
                 <Grid item xs={12}>
                     <Button
                         variant="contained"
                         color="primary"
+                        disabled={holidayStartDate === null || holidayEndDate === null || holidayName === '' || holidayType === ''}
                         onClick={handleSubmit}
                     >
                         Submit

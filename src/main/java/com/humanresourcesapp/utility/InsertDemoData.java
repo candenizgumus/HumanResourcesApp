@@ -291,61 +291,64 @@ public class InsertDemoData {
     private void insertHolidayDemoData() {
         List <Holiday> holidayList = new ArrayList<>();
 
+
+
         holidayList.add(Holiday.builder()
                 .holidayName("29 EKİM")
                 .holidayType(EHolidayType.NATIONAL)
-                .holidayStartDate(1730182819L)
-                .holidayEndDate(1730269219L)
+                .startDate(LocalDate.of(2024, 10, 29)) // Örnek yıl 2024, gün ve ay 29 Ekim
+                .endDate(LocalDate.of(2024, 10, 29))   // Tatil bir gün sürüyorsa startDate ve endDate aynı olabilir
                 .status(EStatus.INACTIVE)
                 .build());
 
         holidayList.add(Holiday.builder()
                 .holidayName("KURBAN BAYRAMI")
                 .holidayType(EHolidayType.RELIGIOUS)
-                .holidayStartDate(1749190819L)
-                .holidayEndDate(1749450019L)
+                .startDate(LocalDate.of(2024, 6, 17)) // Örnek yıl ve ay/gün
+                .endDate(LocalDate.of(2024, 6, 20))
                 .status(EStatus.INACTIVE)
                 .build());
 
         holidayList.add(Holiday.builder()
                 .holidayName("RAMAZAN BAYRAMI")
                 .holidayType(EHolidayType.RELIGIOUS)
-                .holidayStartDate(1743315619L)
-                .holidayEndDate(1743488419L)
+                .startDate(LocalDate.of(2024, 3, 10)) // Örnek yıl ve ay/gün
+                .endDate(LocalDate.of(2024, 3, 13))
                 .status(EStatus.INACTIVE)
                 .build());
 
         holidayList.add(Holiday.builder()
                 .holidayName("YILBAŞI")
                 .holidayType(EHolidayType.INTERNATIONAL)
-                .holidayStartDate(1735626019L)
-                .holidayEndDate(1735712419L)
+                .startDate(LocalDate.of(2024, 1, 1)) // Yılbaşı günü
+                .endDate(LocalDate.of(2024, 1, 1))
                 .status(EStatus.INACTIVE)
                 .build());
 
         holidayList.add(Holiday.builder()
                 .holidayName("23 NİSAN")
                 .holidayType(EHolidayType.NATIONAL)
-                .holidayStartDate(1745389219L)
-                .holidayEndDate(1745475619L)
+                .startDate(LocalDate.of(2024, 4, 23)) // 23 Nisan Ulusal Egemenlik ve Çocuk Bayramı
+                .endDate(LocalDate.of(2024, 4, 23))
                 .status(EStatus.INACTIVE)
                 .build());
 
         holidayList.add(Holiday.builder()
                 .holidayName("30 AĞUSTOS")
                 .holidayType(EHolidayType.NATIONAL)
-                .holidayStartDate(1756534819L)
-                .holidayEndDate(1756621219L)
+                .startDate(LocalDate.of(2024, 8, 30)) // Zafer Bayramı
+                .endDate(LocalDate.of(2024, 8, 30))
                 .status(EStatus.INACTIVE)
                 .build());
 
         holidayList.add(Holiday.builder()
                 .holidayName("1 MAYIS")
                 .holidayType(EHolidayType.NATIONAL)
-                .holidayStartDate(1746080419L)
-                .holidayEndDate(1746166819L)
+                .startDate(LocalDate.of(2024, 5, 1)) // Emek ve Dayanışma Günü
+                .endDate(LocalDate.of(2024, 5, 1))
                 .status(EStatus.INACTIVE)
                 .build());
+
 
         holidayService.saveAll(holidayList);
     }

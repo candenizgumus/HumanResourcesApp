@@ -1,11 +1,16 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import { useDispatch } from 'react-redux';
 import {HumanResources, useAppSelector} from '../../../store';
 import {fetchCreateHolidayAdmin, fetchHolidaysAdmin} from '../../../store/feature/holidaySlice';
 import Swal from 'sweetalert2';
 import { Box, TextField, Button, Grid, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
-import DatePicker from 'react-datepicker';
+
 import 'react-datepicker/dist/react-datepicker.css';
+import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
+import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
+import dayjs from "dayjs";
+import {DatePicker} from "@mui/x-date-pickers/DatePicker";
+import sweetalert2 from "sweetalert2";
 
 
 const SideBarHolidayFormAdmin: React.FC = () => {
@@ -17,6 +22,7 @@ const SideBarHolidayFormAdmin: React.FC = () => {
     const [holidayStartDate, setHolidayStartDate] = useState<Date | null>(null);
     const [holidayEndDate, setHolidayEndDate] = useState<Date | null>(null);
 
+
     const handleSubmit = () => {
         if (!holidayName || !holidayType || !holidayStartDate || !holidayEndDate) {
             Swal.fire({
@@ -27,14 +33,13 @@ const SideBarHolidayFormAdmin: React.FC = () => {
             return;
         }
 
-        const startEpoch = holidayStartDate.getTime() / 1000;
-        const endEpoch = holidayEndDate.getTime() / 1000;
+
 
         dispatch(fetchCreateHolidayAdmin({
             holidayName,
             holidayType,
-            holidayStartDate: startEpoch,
-            holidayEndDate: endEpoch,
+            startDate: holidayStartDate,
+            endDate: holidayEndDate,
             token
         }))
             .then(() => {
@@ -83,33 +88,31 @@ const SideBarHolidayFormAdmin: React.FC = () => {
                     </FormControl>
                 </Grid>
                 <Grid item xs={12}>
-                    <DatePicker
-                        selected={holidayStartDate}
-                        onChange={(date: Date | null) => setHolidayStartDate(date)}
-                        dateFormat="yyyy-MM-dd"
-                        placeholderText="Select start date"
-                        customInput={<TextField
-                            fullWidth
-                            required
-                            autoComplete="off" />}
-                    />
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <DatePicker
+                            label="Holiday Start Date"
+                            value={holidayStartDate ? dayjs(holidayStartDate) : null}
+
+                            onChange={(newValue) => setHolidayStartDate(newValue ? newValue.toDate() : null)}
+
+                        />
+                    </LocalizationProvider>
                 </Grid>
                 <Grid item xs={12}>
-                    <DatePicker
-                        selected={holidayEndDate}
-                        onChange={(date: Date | null) => setHolidayEndDate(date)}
-                        dateFormat="yyyy-MM-dd"
-                        placeholderText="Select end date"
-                        customInput={<TextField
-                            fullWidth
-                            required
-                            autoComplete="off" />}
-                    />
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <DatePicker
+                            shouldDisableDate={holidayStartDate ? (date) => date.isBefore(holidayStartDate) : undefined}
+                            label="Holiday End Date"
+                            value={holidayEndDate ? dayjs(holidayEndDate) : null}
+                            onChange={(newValue) => setHolidayEndDate(newValue ? newValue.toDate() : null)}
+                        />
+                    </LocalizationProvider>
                 </Grid>
                 <Grid item xs={12}>
                     <Button
                         variant="contained"
                         color="primary"
+                        disabled={holidayStartDate === null || holidayEndDate === null || holidayName === '' || holidayType === ''}
                         onClick={handleSubmit}
                     >
                         Submit

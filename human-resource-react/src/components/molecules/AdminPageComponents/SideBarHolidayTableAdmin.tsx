@@ -9,19 +9,6 @@ import { Button, Grid, Box, Divider } from '@mui/material';
 import SideBarHolidayFormAdmin from "./SideBarHolidayFormAdmin";
 import { IHolidayFormatted } from "../../../models/IHolidayFormatted";
 
-// Helper function to format epoch timestamp to human-readable date
-function epochToHumanReadableWithoutTime(epochTime: number): string {
-    const date = new Date(epochTime * 1000);
-
-    const options: Intl.DateTimeFormatOptions = {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        //timeZoneName: 'short'
-    };
-
-    return date.toLocaleDateString('tr-TR', options);
-}
 
 // Define the columns
 const columns: GridColDef[] = [
@@ -48,7 +35,20 @@ export default function SideBarHolidayTableAdmin() {
     const token = useAppSelector((state) => state.auth.token);
     const [selectedRowIds, setSelectedRowIds] = useState<number[]>([]);
     const [newHolidayList, setNewHolidayList] = useState<IHolidayFormatted[]>([]);
+    const formatDate = (date: Date | string | undefined): string => {
+        if (!date) return '';
 
+        const months = [
+            'January', 'February', 'March', 'April', 'May', 'June',
+            'July', 'August', 'September', 'October', 'November', 'December'
+        ];
+
+        const d = new Date(date);
+        const day = d.getDate();
+        const month = months[d.getMonth()]; // Get month name
+
+        return `${day} ${month}`;
+    };
     useEffect(() => {
         dispatch(fetchHolidaysAdmin(token));
     }, [dispatch]);
@@ -58,8 +58,8 @@ export default function SideBarHolidayTableAdmin() {
             id: holiday.id,
             holidayName: holiday.holidayName,
             holidayType: holiday.holidayType,
-            holidayStartDate: epochToHumanReadableWithoutTime(holiday.holidayStartDate),
-            holidayEndDate: epochToHumanReadableWithoutTime(holiday.holidayEndDate),
+            holidayStartDate: formatDate(holiday.startDate),
+            holidayEndDate: formatDate(holiday.endDate),
         }));
         setNewHolidayList(formattedHolidays);
     }, [holidays]);

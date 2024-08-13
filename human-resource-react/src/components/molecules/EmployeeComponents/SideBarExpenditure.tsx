@@ -55,7 +55,7 @@ const columns: GridColDef[] = [
         field: "attachedFile", headerName: "Document", headerAlign: "center", width: 100,
         renderCell: (params) => (
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '100%' }}>
-                <DownloadButtonFromS3 fileKey={params.value} />
+                {params.value && <DownloadButtonFromS3 fileKey={params.value}/> }
             </div>
         ),
         // renderCell: (params) => {

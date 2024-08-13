@@ -10,6 +10,7 @@ import com.humanresourcesapp.entities.enums.ELeaveType;
 import com.humanresourcesapp.services.LeaveService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -42,14 +43,14 @@ public class LeaveController {
                                                    @RequestParam ("startDate") LocalDate startDate,
                                                    @RequestParam ("endDate") LocalDate endDate,
                                                    @RequestParam ("leaveType") ELeaveType leaveType,
-                                                   @RequestParam("files") List<MultipartFile> files) {
+                                                   @Nullable @RequestParam("files") List<MultipartFile> files) {
 
         LeaveSaveRequestDto dto = LeaveSaveRequestDto.builder()
                 .description(description)
                 .startDate(startDate)
                 .endDate(endDate)
                 .leaveType(leaveType)
-                .files(files.isEmpty() ? null : files)
+                .files(files)
                 .build();
         return ResponseEntity.ok(leaveService.save(dto));
     }

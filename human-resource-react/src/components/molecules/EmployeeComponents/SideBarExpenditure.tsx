@@ -5,8 +5,9 @@ import {
     GridRowSelectionModel,
 } from "@mui/x-data-grid";
 import {
+    Avatar,
     Button, FormControl,
-    Grid, InputAdornment, InputLabel, OutlinedInput,
+    Grid, IconButton, InputAdornment, InputLabel, OutlinedInput,
     TextField, Typography
 } from "@mui/material";
 import { HumanResources, useAppSelector } from "../../../store";
@@ -21,9 +22,13 @@ import {
     fetchDeleteExpenditure,
     fetchExpenditureSave,
     fetchGetExpendituresOfEmployee,
-    fetchCancelExpenditure // Import the cancel action
+    fetchCancelExpenditure, // Import the cancel action
+    fetchDownloadExpenditureFile
 } from "../../../store/feature/expenditureSlice";
 import MyDropzone from "../../atoms/DropZone";
+import { FileDownload, FileDownloadDoneRounded, FileDownloadOffRounded } from "@mui/icons-material";
+import FilePreviewModal from "../../atoms/FilePreviewModal";
+import DownloadButtonFromS3 from "../../atoms/DownloadButtonFromS3";
 
 const columns: GridColDef[] = [
     { field: "id", headerName: "ID", width: 70, headerAlign: "center" },
@@ -46,7 +51,62 @@ const columns: GridColDef[] = [
     { field: "isExpenditureApproved", headerName: "Approval Status", headerAlign: "center", width: 250 },
     { field: "approveDate", headerName: "Approval Date", headerAlign: "center", width: 250 },
     { field: "status", headerName: "Status", headerAlign: "center", width: 250 },
+    {
+        field: "attachedFile", headerName: "Document", headerAlign: "center", width: 100,
+        renderCell: (params) => (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '100%' }}>
+                <DownloadButtonFromS3 fileKey={params.value} />
+            </div>
+        ),
+        // renderCell: (params) => {
+        //     // const fileKey = params.value;
+        //     // const dispatch = useDispatch();
+        //     // const email = useAppSelector((state) => state.auth.user.email);
+        //     // const token = useAppSelector((state) => state.auth.token);
+
+        //     // const [modalOpen, setModalOpen] = useState(false);
+        //     // const [fileUrl, setFileUrl] = useState<string | null>(null);
+
+        //     // const handleOpenModal = async () => {
+        //     //     console.log('clickedd')
+        //     //     if (fileKey) {
+        //     //         console.log(fileKey)
+        //     //         try {
+        //     //             const url = await dispatch(fetchDownloadExpenditureFile({
+        //     //                 email: email,
+        //     //                 fileName: fileKey,
+        //     //                 token: token
+        //     //             }) as any);
+        //     //             console.log(url);
+        //     //             setFileUrl(url);
+        //     //             setModalOpen(true);
+        //     //         } catch (error) {
+        //     //             console.error('Failed to get file from S3', error);
+        //     //         }
+        //     //     }
+        //     // };
+
+        //     // return (
+        //     //     <>
+        //     //         <DownloadButtonFromS3 fileKey={params.value} />
+        //     //         {/* <IconButton
+        //     //             color="primary"
+        //     //             onClick={handleOpenModal}
+        //     //         >
+        //     //             <FileDownload />
+        //     //         </IconButton>
+        //     //         <FilePreviewModal
+        //     //             open={modalOpen}
+        //     //             onClose={() => setModalOpen(false)}
+        //     //             fileUrl={fileUrl || ''}
+        //     //             fileName={fileKey || ''}
+        //     //         /> */}
+        //     //     </>
+        //     // );
+        // }
+    }
 ];
+
 
 export default function SideBarExpenditure() {
     const [selectedRowIds, setSelectedRowIds] = useState<number[]>([]);

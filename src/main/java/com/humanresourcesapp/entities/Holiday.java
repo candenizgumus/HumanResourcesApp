@@ -6,6 +6,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
+import java.time.LocalDate;
+
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
@@ -22,8 +24,8 @@ public class Holiday extends BaseEntity
     String holidayName;
     @Enumerated(EnumType.STRING)
     EHolidayType holidayType;
-    Long holidayStartDate;
-    Long holidayEndDate;
+    LocalDate startDate;
+    LocalDate endDate;
     Long companyId;
     EStatus status;
 }

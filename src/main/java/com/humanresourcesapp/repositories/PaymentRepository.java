@@ -1,6 +1,6 @@
 package com.humanresourcesapp.repositories;
 
-import com.humanresourcesapp.entities.Expenditure;
+
 import com.humanresourcesapp.entities.Payment;
 import com.humanresourcesapp.entities.enums.EStatus;
 import org.springframework.data.domain.PageRequest;

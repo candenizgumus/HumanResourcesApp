@@ -12,6 +12,7 @@ import com.humanresourcesapp.utility.UserInfoSecurityContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -26,8 +27,8 @@ public class HolidayService {
         return holidayRepository.save(Holiday.builder()
                 .holidayName(holidaySaveRequestDto.holidayName())
                 .holidayType(holidaySaveRequestDto.holidayType())
-                .holidayStartDate(holidaySaveRequestDto.holidayStartDate())
-                .holidayEndDate(holidaySaveRequestDto.holidayEndDate())
+                .startDate(holidaySaveRequestDto.startDate())
+                .endDate(holidaySaveRequestDto.endDate())
                 .status(EStatus.INACTIVE)
                 .build());
     }
@@ -41,8 +42,8 @@ public class HolidayService {
         return holidayRepository.save(Holiday.builder()
                 .holidayName(holidaySaveRequestDto.holidayName())
                 .holidayType(holidaySaveRequestDto.holidayType())
-                .holidayStartDate(holidaySaveRequestDto.holidayStartDate())
-                .holidayEndDate(holidaySaveRequestDto.holidayEndDate())
+                .startDate(holidaySaveRequestDto.startDate())
+                .endDate(holidaySaveRequestDto.endDate())
                 .companyId(user.get().getCompanyId())
                 .status(EStatus.ACTIVE)
                 .build());
@@ -64,8 +65,8 @@ public class HolidayService {
             Holiday holiday = optionalHoliday.get();
             holiday.setHolidayName(holidaySaveRequestDto.holidayName());
             holiday.setHolidayType(holidaySaveRequestDto.holidayType());
-            holiday.setHolidayStartDate(holidaySaveRequestDto.holidayStartDate());
-            holiday.setHolidayEndDate(holidaySaveRequestDto.holidayEndDate());
+            holiday.setStartDate(holidaySaveRequestDto.startDate());
+            holiday.setEndDate(holidaySaveRequestDto.endDate());
             return holidayRepository.save(holiday);
         } else {
             throw new HumanResourcesAppException(ErrorType.ID_NOT_FOUND);
@@ -80,8 +81,8 @@ public class HolidayService {
                     holiday.getId(),
                     holiday.getHolidayName(),
                     holiday.getHolidayType(),
-                    holiday.getHolidayStartDate(),
-                    holiday.getHolidayEndDate()
+                    holiday.getStartDate(),
+                    holiday.getEndDate()
             ));
         }
         return holidayResponseDtoList;
@@ -142,5 +143,16 @@ public class HolidayService {
         } else {
             throw new HumanResourcesAppException(ErrorType.ID_NOT_FOUND);
         }
+    }
+
+    public List<Holiday> getCurrentMonthsHolidays()
+    {
+        String userEmail = UserInfoSecurityContext.getUserInfoFromSecurityContext();
+        User user = userService.findByEmail(userEmail).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
+
+        LocalDate localDate = LocalDate.of(LocalDate.now().getYear(), LocalDate.now().getMonthValue(), 1);
+
+
+        return null;
     }
 }

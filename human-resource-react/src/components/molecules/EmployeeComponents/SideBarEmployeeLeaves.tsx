@@ -179,8 +179,8 @@ export default function SideBarEmployeeLeaves() {
             const result = await dispatch(fetchSaveLeave({
                 token,
                 description,
-                startDate: new Date(startDate.setHours(12)), // Convert Dayjs to JS Date
-                endDate: new Date(endDate.setHours(12)), // Convert Dayjs to JS Date
+                startDate: new Date(startDate.setHours(12)), // Convert Dayjs to JS Date and add 12 hours
+                endDate: new Date(endDate.setHours(12)), // Convert Dayjs to JS Date and add 12 hours
                 leaveType,
                 files: files, // attachedFile is empty for now
             })).unwrap();

@@ -38,8 +38,8 @@ const SideBarHolidayFormAdmin: React.FC = () => {
         dispatch(fetchCreateHolidayAdmin({
             holidayName,
             holidayType,
-            startDate: holidayStartDate,
-            endDate: holidayEndDate,
+            startDate: new Date(holidayStartDate.setHours(12)), // Convert Dayjs to JS Date and add 12 hours
+            endDate: new Date(holidayEndDate.setHours(12)), // Convert Dayjs to JS Date and add 12 hours
             token
         }))
             .then(() => {

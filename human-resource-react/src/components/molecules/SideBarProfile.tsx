@@ -47,14 +47,7 @@ const SideBarProfile = () => {
     const [dob, setDob] = useState<Dayjs | null>(initialDob);
     const [isUploading, setIsUploading] = useState(false);
     const [isSelected, setIsSelected] = useState(false);
-
-    const handleDateChange = (date: Dayjs | null) => {
-        setDob(date);
-        setFormState({
-            ...formState,
-            birthDate: date ? date.toISOString() : 'N/A'
-        });
-    };
+    const [birthDate, setBirthDate] = useState<Date | null>(null);
 
     const [formState, setFormState] = useState<IUpdateUserProfile>({
         name: user.name,
@@ -118,8 +111,8 @@ const SideBarProfile = () => {
                 phone: user.phone ?? '',
                 title: user.title ?? '',
                 location: user.location ?? '',
-
             });
+            setBirthDate(user.birthDate ?? '');
             setHireDate(user.hireDate ?? '');
             setUserType(user.userType ?? '');
             setSector(user.sector ?? '');
@@ -134,7 +127,7 @@ const SideBarProfile = () => {
     const updateUserProfile = async () => {
 
 
-        if (!formState.name || !formState.surname || !formState.phone || !formState.title || !formState.birthDate || !selectedPositions || !formState.location) {
+        if (!formState.name || !formState.surname || !formState.phone || !formState.title || birthDate === null || !selectedPositions || !formState.location) {
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
@@ -153,7 +146,7 @@ const SideBarProfile = () => {
             surname: formState.surname,
             phone: formState.phone,
             title: formState.title,
-            birthDate: dayjs(formState.birthDate).toDate(),
+            birthDate: new Date(birthDate.setHours(12)), // Convert Dayjs to JS Date and add 12 hours
             position: selectedPositions,
             location: formState.location
         })).then((data) => {
@@ -385,8 +378,8 @@ const SideBarProfile = () => {
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DatePicker
                             label="Birth Date"
-                            value={dayjs(dob)}
-                            onChange={handleDateChange}
+                            value={birthDate ? dayjs(birthDate) : null}
+                            onChange={(newValue) => setBirthDate(newValue ? newValue.toDate() : null)}
 
                         />
                     </LocalizationProvider>

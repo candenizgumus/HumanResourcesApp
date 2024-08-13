@@ -75,6 +75,8 @@ public class HolidayController {
     @PostMapping(GET_CURRENT_MONTHS_HOLIDAYS)
     @PreAuthorize("hasAnyAuthority('MANAGER')")
     public ResponseEntity<List<Holiday>> getCurrentMonthsHolidays() {
-        return ResponseEntity.ok(holidayService.getCurrentMonthsHolidays());
+        List<Holiday> currentMonthsHolidays = holidayService.getCurrentMonthsHolidays();
+        System.out.println(currentMonthsHolidays);
+        return ResponseEntity.ok(currentMonthsHolidays);
     }
 }

@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -149,10 +150,14 @@ public class HolidayService {
     {
         String userEmail = UserInfoSecurityContext.getUserInfoFromSecurityContext();
         User user = userService.findByEmail(userEmail).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
+        LocalDate now = LocalDate.now();
+        int month = now.getMonth().getValue();
+        int lastDay = now.lengthOfMonth();
 
-        LocalDate localDate = LocalDate.of(LocalDate.now().getYear(), LocalDate.now().getMonthValue(), 1);
+        LocalDate firstDateOfMonth = LocalDate.of(now.getYear(), month, 1);
+        LocalDate lastDateOfMonth = LocalDate.of(now.getYear(), month, lastDay);
 
 
-        return null;
+        return holidayRepository.findAllByStartDateIsBetweenAndCompanyIdAndStatus(firstDateOfMonth, lastDateOfMonth, user.getCompanyId(), EStatus.ACTIVE);
     }
 }

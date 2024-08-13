@@ -6,7 +6,8 @@ import {ICreateHoliday} from "../../models/ICreateHoliday";
 
 const initialHolidayState = {
     holidayList: [] as IHoliday[],
-    isLoading: false
+    isLoading: false,
+    monthlyHolidayList: [] as IHoliday[]
 };
 
 export const fetchHolidaysUser = createAsyncThunk(
@@ -132,6 +133,20 @@ export const fetchChangeHolidayStatus = createAsyncThunk(
     }
 );
 
+export const fetchGetMonthlyHolidays = createAsyncThunk(
+    'holiday/changeHolidayStatus',
+    async (token: string, {rejectWithValue}) => {
+        const response = await fetch(`http://localhost:9090/dev/v1/holiday/get-current-months-holidays`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ` + token
+            },
+        });
+        return await response.json();
+    }
+);
+
 
 
 const holidaySlice = createSlice({
@@ -165,6 +180,10 @@ const holidaySlice = createSlice({
             .addCase(fetchHolidaysEmployee.fulfilled, (state, action) => {
                 state.holidayList = action.payload;
                 state.isLoading = false;
+            })
+            .addCase(fetchGetMonthlyHolidays.fulfilled, (state, action) => {
+                state.monthlyHolidayList = action.payload;
+
             })
     },
 });

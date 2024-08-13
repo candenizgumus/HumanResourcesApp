@@ -16,3 +16,4 @@ export const uploadPlayerProfileImage = createAsyncThunk<string, FormData, { rej
         return await response.text();
     }
 );
+

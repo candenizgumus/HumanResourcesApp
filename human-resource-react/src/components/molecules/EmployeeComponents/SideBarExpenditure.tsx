@@ -23,6 +23,8 @@ import {
     fetchGetExpendituresOfEmployee,
     fetchCancelExpenditure // Import the cancel action
 } from "../../../store/feature/expenditureSlice";
+import Dropzone from "react-dropzone";
+import MyDropzone from "../../atoms/DropZone";
 
 const columns: GridColDef[] = [
     { field: "id", headerName: "ID", width: 70, headerAlign: "center" },
@@ -57,6 +59,7 @@ export default function SideBarExpenditure() {
     const [isActivating, setIsActivating] = useState(false);
     const [price, setPrice] = useState(0);
     const [description, setDescription] = useState('');
+    const [files, setFiles] = useState<File[]>([]);
 
     useEffect(() => {
         dispatch(
@@ -214,10 +217,20 @@ export default function SideBarExpenditure() {
         setIsActivating(true);
 
         try {
+
+            const formData = new FormData();
+            formData.append('description', description);
+            formData.append('price', price.toString());
+
+            files.forEach(file => {
+                formData.append('files', file);
+            });
+
             const response = await dispatch(fetchExpenditureSave({
                 token: token,
                 description: description,
-                price: price
+                price: price,
+                files: files
             })).then(data => {
                 if (data.payload.message) {
                     Swal.fire({
@@ -352,7 +365,10 @@ export default function SideBarExpenditure() {
                         />
                     </FormControl>
                 </Grid>
-                <Grid item xs={4}>
+                <Grid item xs={8}>
+                    <MyDropzone onFilesAdded={setFiles} />
+                </Grid>
+                <Grid item xs={8}>
                     <Button
                         onClick={handleSaveExpense}
                         variant="contained"

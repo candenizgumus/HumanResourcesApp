@@ -218,7 +218,8 @@ export default function SideBarEployeeLeaves() {
             const response = await dispatch(fetchExpenditureSave({
                 token: token,
                 description: description,
-                price: price
+                price: price,
+                files: [] //eslint hatasi almamak icin gecici eklendi.
             })).then(data => {
                 if (data.payload.message) {
                     Swal.fire({

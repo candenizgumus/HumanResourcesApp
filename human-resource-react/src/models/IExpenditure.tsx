@@ -1,16 +1,14 @@
-export interface IExpenditure{
-    createdAt:Date ;
-    updatedAt:Date ;
-    status:string ;
+export interface IExpenditure {
+    createdAt: Date;
+    updatedAt: Date;
+    status: string;
     id: number
     employeeId: number
     companyId: number
     description: string
     price: number
-    approveDate:Date,
-    isExpenditureApproved:boolean
-    attachedFile:string
-
-
+    approveDate: Date,
+    isExpenditureApproved: boolean,
+    attachedFile: File | null
 
 }

@@ -1,7 +1,12 @@
 package com.humanresourcesapp.dto.requests;
 
-import java.time.LocalDate;
+import org.springframework.web.multipart.MultipartFile;
 
-public record ExpenditureSaveRequestDto(String description, Double price)
+import java.util.List;
+
+public record ExpenditureSaveRequestDto(
+        String description,
+        Double price,
+        List<MultipartFile> files)
 {
 }

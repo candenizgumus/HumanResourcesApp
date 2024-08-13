@@ -28,5 +28,6 @@ public class Expenditure extends BaseEntity {
     LocalDate approveDate;
     @Builder.Default
     Boolean isExpenditureApproved = false;
+    //stores key from aws s3
     String attachedFile;
 }

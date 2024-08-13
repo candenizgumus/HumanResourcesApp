@@ -1,5 +1,6 @@
 package com.humanresourcesapp.services;
 
+import com.humanresourcesapp.configs.aws.S3Buckets;
 import com.humanresourcesapp.constants.ENotificationTextBase;
 import com.humanresourcesapp.dto.requests.ExpenditureSaveRequestDto;
 import com.humanresourcesapp.dto.requests.NotificationSaveRequestDto;
@@ -17,7 +18,9 @@ import com.humanresourcesapp.utility.UserInfoSecurityContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -32,11 +35,28 @@ public class ExpenditureService
     private final UserService userService;
     private final NotificationService notificationService;
     private final CompanyService companyService;
+    private final S3Service s3Service;
+    private final S3Buckets s3Buckets;
 
     public Expenditure save(ExpenditureSaveRequestDto dto)
     {
         String userEmail = UserInfoSecurityContext.getUserInfoFromSecurityContext();
         User employee = userService.findByEmail(userEmail).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
+
+        if (dto.files() != null && !dto.files().isEmpty()) {
+            for (MultipartFile file : dto.files()) {
+                String fileName = file.getOriginalFilename();
+                byte[] fileContent;
+                try {
+                    fileContent = file.getBytes();
+                } catch (IOException e) {
+                    throw new RuntimeException("Failed to read file content", e);
+                }
+                s3Service.putObject(s3Buckets.getCustomer(),
+                        "expenditures/%s/%s".formatted(userEmail, fileName),
+                        fileContent);
+            }
+        }
 
         Expenditure expenditure = Expenditure
                 .builder()
@@ -48,6 +68,8 @@ public class ExpenditureService
                 .employeeSurname(employee.getSurname())
                 .status(EStatus.PENDING)
                 .build();
+
+
 
         notificationService.save(NotificationSaveRequestDto.builder()
                 .notificationText(ENotificationTextBase.EXPENDITURE_REQUEST_NOTIFICATION.getText() + userEmail)

@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -23,8 +24,10 @@ public class ExpenditureController
 
     @PostMapping(SAVE)
     @PreAuthorize("hasAnyAuthority('EMPLOYEE')")
-    public ResponseEntity<Expenditure> save(@RequestBody ExpenditureSaveRequestDto dto){
-
+    public ResponseEntity<Expenditure> save(@RequestParam("description") String description,
+                                            @RequestParam("price") double price,
+                                            @RequestParam("files") List<MultipartFile> files){
+        ExpenditureSaveRequestDto dto = new ExpenditureSaveRequestDto(description, price, files);
         return ResponseEntity.ok(expenditureService.save(dto));
     }
 

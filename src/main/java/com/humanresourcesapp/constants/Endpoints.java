@@ -100,4 +100,5 @@ public class Endpoints
     public static final String FIND_MONTHLY_SALARY_OF_EMPLOYEES = "/find-monthly-salary-of-employees";
 
     public static final String GET_ALL_PERSONAL_DOCUMENT_TYPES = "/get-all-personal-document-types";
+    public static final String GET_MONTHLY_PAYMENTS = "/get-monthly-payments";
 }

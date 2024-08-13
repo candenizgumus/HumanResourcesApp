@@ -105,10 +105,10 @@ const SideBarAddEmployee: React.FC = () => {
             surname: surname,
             phone: phone,
             title: title,
-            birthDate: birthDate,
+            birthDate: new Date(birthDate.setHours(12)), // Convert Dayjs to JS Date and add 12 hours
             ePosition: selectedPositions,
             location: location,
-            hireDate: hireDate,
+            hireDate: new Date(hireDate.setHours(12)), // Convert Dayjs to JS Date and add 12 hours
             eEmployeeType: selectedEmployeeType,
             email: email,
             salary: salary

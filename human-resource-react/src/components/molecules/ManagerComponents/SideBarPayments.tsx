@@ -158,7 +158,7 @@ export default function SideBarPayments() {
                 token: token,
                 description: description,
                 payment: payment,
-                paymentDate: paymentDate
+                paymentDate: new Date(paymentDate.setHours(12)), // Convert Dayjs to JS Date and add 12 hours
             })).then(data => {
                 if (data.payload.message) {
                     Swal.fire({

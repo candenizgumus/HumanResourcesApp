@@ -119,10 +119,10 @@ const EditEmployee: React.FC = () => {
             surname: surname,
             phone: phone,
             title: title,
-            birthDate: birthDate,
+            birthDate: new Date(birthDate.setHours(12)), // Convert Dayjs to JS Date and add 12 hours
             position: selectedPositions,
             location: location,
-            hireDate: hireDate,
+            hireDate: new Date(hireDate.setHours(12)), // Convert Dayjs to JS Date and add 12 hours
             eEmployeeType: selectedEmployeeType
 
         })).then((data) => {

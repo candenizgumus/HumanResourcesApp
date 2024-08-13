@@ -11,6 +11,9 @@ import {
 import {IMonthlyPaymentOfManager} from "../../../models/IMonthlyPaymentOfManager";
 import {fetchMonthlyPayments} from "../../../store/feature/paymentSlice";
 import {IPayment} from "../../../models/IPayment";
+import {fetchGetMonthlyHolidays} from "../../../store/feature/holidaySlice";
+import {IHoliday} from "../../../models/IHoliday";
+import {IHolidayFormatted} from "../../../models/IHolidayFormatted";
 
 export const ManagerHomeContent = () => {
     const upcomingBirthdayUsers = useAppSelector(state => state.auth.upcomingBirthdayUsers);
@@ -20,7 +23,25 @@ export const ManagerHomeContent = () => {
     const [totalSalary, setTotalSalary] = useState(0);
     const [totalMonthlyPayment, setTotalMonthlyPayment] = useState(0);
     const [monthlyEmployeeSalaries, setMonthlyEmployeeSalaries] = useState<IMonthlyPaymentOfManager[]>([]);
+    const [monthlyHolidays, setMonthlyHolidays] = useState<IHolidayFormatted[]>([]);
+    const [monthlyHolidaysUnformatted, setmonthlyHolidaysUnformatted] = useState<IHoliday[]>([]);
 
+    const formatDate = (date: Date | string | undefined): string => {
+        if (!date) return '';
+
+        const months = [
+            'January', 'February', 'March', 'April', 'May', 'June',
+            'July', 'August', 'September', 'October', 'November', 'December'
+        ];
+
+        const d = new Date(date);
+        const day = d.getDate();
+        const month = months[d.getMonth()]; // Get month name
+
+        return `${day} ${month}`;
+
+
+    };
     const getManagerPageDatas = async () => {
         await dispatch(fetchFindEmployeesWithUpcomingBirthdays(token)).unwrap();
         await dispatch(fetchGetAllUsersOfManager({
@@ -30,6 +51,10 @@ export const ManagerHomeContent = () => {
             searchText: ''
         })).unwrap();
         const monthlyPayments = await dispatch(fetchMonthlyPayments(token)).unwrap();
+
+        const monthlyHolidaysUnFormatted = await dispatch(fetchGetMonthlyHolidays(token)).unwrap();
+
+        setmonthlyHolidaysUnformatted(monthlyHolidaysUnFormatted);
 
         if (Array.isArray(monthlyPayments)) {
             // Calculate the total salary here
@@ -43,7 +68,7 @@ export const ManagerHomeContent = () => {
         }
 
         const result = await dispatch(fetchGetMonthlyPaymentOfEmployees(token)).unwrap();
-
+        formatHolidays();
         if (Array.isArray(result)) {
             // Calculate the total salary here
             const sum = result.reduce((acc: number, employee: IMonthlyPaymentOfManager) => acc + (employee.total || 0), 0);
@@ -55,10 +80,22 @@ export const ManagerHomeContent = () => {
             console.error("Result is not an array:", result);
         }
     };
+    const formatHolidays = () => {
+        const formattedHolidays = monthlyHolidaysUnformatted.map(holiday => ({
+            id: holiday.id,
+            holidayName: holiday.holidayName,
+            holidayType: holiday.holidayType,
+            holidayStartDate: formatDate(holiday.startDate),
+            holidayEndDate: formatDate(holiday.endDate),
+        }));
+        setMonthlyHolidays(formattedHolidays);
+    }
 
     useEffect(() => {
         getManagerPageDatas();
-    }, []);
+
+
+    }, [monthlyHolidays]);
 
 
     const columns: GridColDef[] = [
@@ -77,6 +114,23 @@ export const ManagerHomeContent = () => {
         { field: "salary", headerName: "Salary $", type: "number", flex: 1.5, headerAlign: "center" },
         { field: "extraPayments", headerName: "Extra Payments $", type: "number", flex: 1.2, headerAlign: "center" },
         { field: "total", headerName: "Total $", type: "number", flex: 1.42, headerAlign: "center" },
+    ];
+
+    const columHolidays: GridColDef[] = [
+        { field: 'holidayName', headerName: 'Holiday', flex: 2, headerAlign: "center" },
+        { field: 'holidayType', headerName: 'Type', flex: 1.5, headerAlign: "center" },
+        {
+            field: 'holidayStartDate',
+            headerName: 'Start Date',
+            flex: 1.5,
+            headerAlign: "center"
+        },
+        {
+            field: 'holidayEndDate',
+            headerName: 'End Date',
+            flex: 1.5,
+            headerAlign: "center"
+        },
     ];
 
 
@@ -194,6 +248,47 @@ export const ManagerHomeContent = () => {
 
                         rows={monthlyPayments}
                         columns={columnMonthlyPayments}
+                        disableRowSelectionOnClick={true} // Satır seçimini kapatır
+                        hideFooter // Alt barda yer alan seçenekleri gizler
+                        isRowSelectable={() => false}
+                        initialState={{
+                            pagination: {
+                                paginationModel: { page: 0, pageSize: 5 },
+                            },
+                        }}
+                        pageSizeOptions={[5, 10]}
+
+
+                        sx={{
+                            backgroundColor: "#FDEFC5", // Açık tonlarda arka plan rengi
+                            "& .MuiDataGrid-columnHeaders": {
+                                backgroundColor: "#FDEFC5", // Header için açık yeşil tonlarda bir arka plan rengi
+                            },
+                            "& .MuiDataGrid-columnHeader": {
+                                backgroundColor: "#FFBF5D", // Header arka plan rengi
+                            },
+                            "& .MuiDataGrid-columnHeaderTitle": {
+                                textAlign: "center",
+                                fontWeight: "bold",
+
+                            },
+                            "& .MuiDataGrid-cell": {
+                                textAlign: "center",
+                            },
+                        }}
+                    />
+                </Grid>
+
+                <Grid sx={{ height:'300px' }} item xs={6}>
+
+                    <Typography  sx={{ textAlign: 'center' , fontWeight: 'bold'}} variant="h6" gutterBottom>
+                        Monthly Holidays
+                    </Typography>
+
+                    <DataGrid
+
+                        rows={monthlyHolidays}
+                        columns={columHolidays}
                         disableRowSelectionOnClick={true} // Satır seçimini kapatır
                         hideFooter // Alt barda yer alan seçenekleri gizler
                         isRowSelectable={() => false}

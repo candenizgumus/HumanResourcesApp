@@ -88,6 +88,9 @@ public class User extends BaseEntity
     @Enumerated(EnumType.STRING)
     ESectors sector;
 
+    // EMPLOYEE
+    Integer remainingAnnualLeave;
+
 }
 
 

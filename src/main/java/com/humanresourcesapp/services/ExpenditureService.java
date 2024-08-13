@@ -5,6 +5,7 @@ import com.humanresourcesapp.constants.ENotificationTextBase;
 import com.humanresourcesapp.dto.requests.ExpenditureSaveRequestDto;
 import com.humanresourcesapp.dto.requests.NotificationSaveRequestDto;
 import com.humanresourcesapp.dto.requests.PageRequestDto;
+import com.humanresourcesapp.dto.responses.URL;
 import com.humanresourcesapp.entities.Expenditure;
 import com.humanresourcesapp.entities.Notification;
 import com.humanresourcesapp.entities.User;
@@ -17,6 +18,7 @@ import com.humanresourcesapp.repositories.ExpenditureRepository;
 import com.humanresourcesapp.utility.UserInfoSecurityContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -29,8 +31,7 @@ import static com.humanresourcesapp.constants.FrontendPaths.EXPENDITURE;
 
 @Service
 @RequiredArgsConstructor
-public class ExpenditureService
-{
+public class ExpenditureService {
     private final ExpenditureRepository expenditureRepository;
     private final UserService userService;
     private final NotificationService notificationService;
@@ -38,22 +39,25 @@ public class ExpenditureService
     private final S3Service s3Service;
     private final S3Buckets s3Buckets;
 
-    public Expenditure save(ExpenditureSaveRequestDto dto)
-    {
+    public Expenditure save(ExpenditureSaveRequestDto dto) {
         String userEmail = UserInfoSecurityContext.getUserInfoFromSecurityContext();
         User employee = userService.findByEmail(userEmail).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
 
+        String fileName = "";
+
         if (dto.files() != null && !dto.files().isEmpty()) {
             for (MultipartFile file : dto.files()) {
-                String fileName = file.getOriginalFilename();
+                fileName = file.getOriginalFilename();
                 byte[] fileContent;
+                String key;
                 try {
                     fileContent = file.getBytes();
+                    key = "expenditures/%s/%s".formatted(userEmail, fileName);
                 } catch (IOException e) {
                     throw new RuntimeException("Failed to read file content", e);
                 }
                 s3Service.putObject(s3Buckets.getCustomer(),
-                        "expenditures/%s/%s".formatted(userEmail, fileName),
+                        key,
                         fileContent);
             }
         }
@@ -67,8 +71,8 @@ public class ExpenditureService
                 .employeeName(employee.getName())
                 .employeeSurname(employee.getSurname())
                 .status(EStatus.PENDING)
+                .attachedFile(fileName)
                 .build();
-
 
 
         notificationService.save(NotificationSaveRequestDto.builder()
@@ -85,8 +89,7 @@ public class ExpenditureService
         return expenditureRepository.save(expenditure);
     }
 
-    public List<Expenditure> searchByEmployeeId(PageRequestDto dto)
-    {
+    public List<Expenditure> searchByEmployeeId(PageRequestDto dto) {
         String userEmail = UserInfoSecurityContext.getUserInfoFromSecurityContext();
         User employee = userService.findByEmail(userEmail).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
 
@@ -94,28 +97,23 @@ public class ExpenditureService
     }
 
 
-    public List<Expenditure> searchByCompanyId(PageRequestDto dto)
-    {
+    public List<Expenditure> searchByCompanyId(PageRequestDto dto) {
         String userEmail = UserInfoSecurityContext.getUserInfoFromSecurityContext();
         User manager = userService.findByEmail(userEmail).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
 
         return expenditureRepository.searchByCompanyId(dto.searchText(), manager.getCompanyId(), PageRequest.of(dto.page(), dto.pageSize()));
-
     }
 
-    public Boolean approveExpenditure(Long id)
-    {
+    public Boolean approveExpenditure(Long id) {
         String userEmail = UserInfoSecurityContext.getUserInfoFromSecurityContext();
         User manager = userService.findByEmail(userEmail).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
 
         Expenditure expenditure = expenditureRepository.findById(id).orElseThrow(() -> new HumanResourcesAppException(ErrorType.EXPENDITURE_NOT_FOUND));
-        if (!expenditure.getCompanyId().equals(manager.getCompanyId()))
-        {
+        if (!expenditure.getCompanyId().equals(manager.getCompanyId())) {
             throw new HumanResourcesAppException(ErrorType.INVALID_ACCOUNT);
         }
 
-        if (!expenditure.getIsExpenditureApproved())
-        {
+        if (!expenditure.getIsExpenditureApproved()) {
             expenditure.setIsExpenditureApproved(true);
             expenditure.setApproveDate(LocalDate.now());
             expenditure.setStatus(EStatus.ACTIVE);
@@ -133,23 +131,21 @@ public class ExpenditureService
                     .build());
             return true;
         }
-       return false;
+        return false;
     }
 
-    public Boolean delete(Long id)
-    {
+    public Boolean delete(Long id) {
         String userEmail = UserInfoSecurityContext.getUserInfoFromSecurityContext();
         User user = userService.findByEmail(userEmail).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
 
         Expenditure expenditure = expenditureRepository.findById(id).orElseThrow(() -> new HumanResourcesAppException(ErrorType.EXPENDITURE_NOT_FOUND));
 
-        if (expenditure.getIsExpenditureApproved())
-        {
+        if (expenditure.getIsExpenditureApproved()) {
             throw new HumanResourcesAppException(ErrorType.EXPENDITURE_ALREADY_APPROVED);
         }
 
         // if the delete request comes from employee, it can be deleted
-        if(user.getId().equals(expenditure.getEmployeeId())){
+        if (user.getId().equals(expenditure.getEmployeeId())) {
             expenditure.setStatus(EStatus.DELETED);
             expenditureRepository.save(expenditure);
             notificationService.findByUserIdAndAccessIdentifierAndStatus(user.getManagerId(), EAccessIdentifier.EXPENDITURE_SAVE, EStatus.ACTIVE).ifPresent(value -> {
@@ -181,11 +177,10 @@ public class ExpenditureService
         Expenditure expenditure = expenditureRepository.findById(id).orElseThrow(() -> new HumanResourcesAppException(ErrorType.EXPENDITURE_NOT_FOUND));
 
         // if the expenditure is approved, it can be canceled
-        if (expenditure.getIsExpenditureApproved())
-        {
+        if (expenditure.getIsExpenditureApproved()) {
             // Receiver id (employee) if the cancel comes from manager
             Long sendNotificationTo = expenditure.getEmployeeId();
-            if(user.getId().equals(expenditure.getEmployeeId())){
+            if (user.getId().equals(expenditure.getEmployeeId())) {
                 // Receiver id (manager) if the cancel comes from employee
                 sendNotificationTo = user.getManagerId();
             }
@@ -201,8 +196,8 @@ public class ExpenditureService
                     .build());
 
             expenditure.setStatus(EStatus.CANCELED);
-        // if the expenditure is not approved, it can not be canceled, and it will be deleted or rejected
-        }else {
+            // if the expenditure is not approved, it can not be canceled, and it will be deleted or rejected
+        } else {
             delete(id);
             return true;
         }
@@ -211,8 +206,13 @@ public class ExpenditureService
         return true;
     }
 
-    public List<Expenditure> findExpendituresByCompanyIdAndCurrentMonth(Long companyId)
-    {
+    public List<Expenditure> findExpendituresByCompanyIdAndCurrentMonth(Long companyId) {
         return expenditureRepository.findExpendituresByCompanyIdAndCurrentMonth(companyId);
+    }
+
+    public URL getExpenditurePresignedUrl(String email, String fileName) {
+        String key = "expenditures/%s/%s".formatted(email, fileName);
+        String presignedGetUrl = s3Service.createPresignedGetUrl(s3Buckets.getCustomer(), key);
+        return new URL(presignedGetUrl);
     }
 }

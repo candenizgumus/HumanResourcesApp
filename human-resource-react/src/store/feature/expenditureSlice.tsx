@@ -4,10 +4,12 @@ import { IExpenditure } from "../../models/IExpenditure";
 
 interface IExpenditureState {
     expenditureList: IExpenditure[],
+    url: string
 }
 
 const initialExpenditureState: IExpenditureState = {
     expenditureList: [],
+    url: ''
 }
 
 
@@ -36,7 +38,6 @@ export const fetchExpenditureSave = createAsyncThunk(
             },
             body: formData
         });
-
         return await response.json();
     }
 )
@@ -66,8 +67,62 @@ export const fetchGetExpendituresOfEmployee = createAsyncThunk(
 
         return await response.json();
     }
-
 )
+
+interface IFetchDownloadExpenditureFile {
+    token: string,
+    email: string,
+    fileName: string
+
+}
+export const fetchDownloadExpenditureFile = createAsyncThunk(
+    'expenditure/fetchDownloadExpenditureFile',
+    async (payload: IFetchDownloadExpenditureFile) => {
+
+        const response = await fetch(`http://localhost:9090/dev/v1/expenditure/download`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ` + payload.token
+            },
+            body: JSON.stringify({
+                email: payload.email,
+                fileName: payload.fileName
+            })
+        });
+        return await response.json();
+    }
+)
+
+// export const fetchDownloadExpenditureFile = createAsyncThunk(
+//     'expenditure/fetchDownloadFile',
+//     async ({ email, fileName, token }: { email: string; fileName: string; token: string }) => {
+//         try {
+//             const response = await fetch(`http://localhost:9090/dev/v1/expenditure/download?email=${encodeURIComponent(email)}&fileName=${encodeURIComponent(fileName)}`, {
+//                 method: 'GET',
+//                 headers: {
+//                     'Authorization': `Bearer ${token}`,
+//                 },
+//             });
+
+//             if (!response.ok) {
+//                 throw new Error('Failed to fetch presigned URL');
+//             }
+
+//             const presignedUrl = await response.text();
+
+//             // Create a link to download the file
+//             const link = document.createElement('a');
+//             link.href = presignedUrl;
+//             link.setAttribute('download', fileName); // Optional, specify the filename
+//             document.body.appendChild(link);
+//             link.click();
+//             link.remove();
+//         } catch (error) {
+
+//         }
+//     }
+// );
 
 export const fetchGetExpendituresOfManager = createAsyncThunk(
     'expenditure/fetchGetExpendituresOfManager',
@@ -161,6 +216,9 @@ const expenditureSlice = createSlice({
         })
         build.addCase(fetchGetExpendituresOfManager.fulfilled, (state, action) => {
             state.expenditureList = action.payload;
+        })
+        build.addCase(fetchDownloadExpenditureFile.fulfilled, (state, action) => {
+            state.url = action.payload.url;
         })
     }
 });

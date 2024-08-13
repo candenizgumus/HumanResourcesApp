@@ -2,12 +2,16 @@ package com.humanresourcesapp.controllers;
 
 import static com.humanresourcesapp.constants.Endpoints.*;
 
+import com.humanresourcesapp.dto.requests.ExpenditureDownloadRequestDto;
 import com.humanresourcesapp.dto.requests.ExpenditureSaveRequestDto;
 import com.humanresourcesapp.dto.requests.PageRequestDto;
+import com.humanresourcesapp.dto.responses.URL;
 import com.humanresourcesapp.entities.Expenditure;
 import com.humanresourcesapp.services.ExpenditureService;
+import com.humanresourcesapp.services.S3Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,7 +30,7 @@ public class ExpenditureController
     @PreAuthorize("hasAnyAuthority('EMPLOYEE')")
     public ResponseEntity<Expenditure> save(@RequestParam("description") String description,
                                             @RequestParam("price") double price,
-                                            @RequestParam("files") List<MultipartFile> files){
+                                            @Nullable  @RequestParam("files") List<MultipartFile> files){
         ExpenditureSaveRequestDto dto = new ExpenditureSaveRequestDto(description, price, files);
         return ResponseEntity.ok(expenditureService.save(dto));
     }
@@ -35,6 +39,11 @@ public class ExpenditureController
     @PreAuthorize("hasAnyAuthority('EMPLOYEE')")
     public ResponseEntity<List<Expenditure>> searchByEmployeeId(@RequestBody PageRequestDto dto){
         return ResponseEntity.ok(expenditureService.searchByEmployeeId(dto));
+    }
+    @PostMapping("/download")
+    @PreAuthorize("hasAnyAuthority('EMPLOYEE', 'MANAGER', 'ADMIN')")
+    public ResponseEntity<URL> downloadFile(@RequestBody ExpenditureDownloadRequestDto dto) {
+        return ResponseEntity.ok(expenditureService.getExpenditurePresignedUrl(dto.email(), dto.fileName()));
     }
 
     @PostMapping(SEARCH_BY_COMPANY_ID)

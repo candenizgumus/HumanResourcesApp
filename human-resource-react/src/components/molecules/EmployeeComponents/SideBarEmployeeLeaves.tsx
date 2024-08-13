@@ -9,94 +9,84 @@ import {
     Grid, InputAdornment, InputLabel, OutlinedInput,
     TextField, Typography
 } from "@mui/material";
-import { HumanResources, useAppSelector } from "../../../store";
 import { useDispatch } from "react-redux";
-import {
-    changePageState,
-    clearToken,
-    fetchDeleteEmployeeByAdmin,
-    fetchGetAllUsersOfManager, setSelectedEmployeeId
-} from "../../../store/feature/authSlice";
 import Swal from "sweetalert2";
+import { parseISO } from 'date-fns';
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import dayjs, { Dayjs } from "dayjs";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from '@mui/x-date-pickers';
 import {
-    fetchDeleteExpenditure,
-    fetchExpenditureSave,
-    fetchGetExpendituresOfEmployee,
-    fetchCancelExpenditure // Import the cancel action
-} from "../../../store/feature/expenditureSlice";
+    fetchDeleteLeave,
+    fetchSaveLeave,
+    fetchGetLeavesOfEmployee,
+    fetchCancelLeave
+} from "../../../store/feature/leaveSlice"; // Import your actions
+import { HumanResources, useAppSelector } from "../../../store"; // Import your hooks
+import { ELeaveType } from "../../../models/ELeaveType";
+import { clearToken } from "../../../store/feature/authSlice";
+import MyDropzone from "../../atoms/DropZone";
 
-const columns: GridColDef[] = [
+const leaveColumns: GridColDef[] = [
     { field: "id", headerName: "ID", width: 70, headerAlign: "center" },
-    {
-        field: "price", headerName: "Price $", width: 150, headerAlign: "center",
-        renderCell: (params) => {
-            const value = params.value;
-            if (typeof value === 'number' && !isNaN(value)) {
-                return new Intl.NumberFormat('en-US', {
-                    style: 'currency',
-                    currency: 'USD',
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2
-                }).format(value);
-            }
-            return '$0.00';
-        },
-    },
-    { field: "description", headerName: "Description", width: 120, headerAlign: "center" },
-    { field: "isExpenditureApproved", headerName: "Approval Status", headerAlign: "center", width: 250 },
-    { field: "approveDate", headerName: "Approval Date", headerAlign: "center", width: 250 },
-    { field: "status", headerName: "Status", headerAlign: "center", width: 250 },
+    { field: "description", headerName: "Description", width: 200, headerAlign: "center" },
+
+    { field: "startDate", headerName: "Start Date", width: 150, headerAlign: "center" },
+    { field: "endDate", headerName: "End Date", width: 150, headerAlign: "center" },
+    { field: "leaveType", headerName: "Leave Type", width: 150, headerAlign: "center" },
+    { field: "isLeaveApproved", headerName: "Approval Status", headerAlign: "center", width: 250 },
+    { field: "approveDate", headerName: "Approval Date", width: 150, headerAlign: "center" },
+    { field: "status", headerName: "Status", width: 120, headerAlign: "center" },
+
 ];
 
-export default function SideBarEployeeLeaves() {
+export default function SideBarEmployeeLeaves() {
     const [selectedRowIds, setSelectedRowIds] = useState<number[]>([]);
     const [searchText, setSearchText] = useState('');
     const dispatch = useDispatch<HumanResources>();
     const token = useAppSelector((state) => state.auth.token);
-    const expenditureList = useAppSelector((state) => state.expenditure.expenditureList);
+    const leaveList = useAppSelector((state) => state.leave.leaveList);
     const [loading, setLoading] = useState(false);
-    const [isActivating, setIsActivating] = useState(false);
-    const [price, setPrice] = useState(0);
     const [description, setDescription] = useState('');
-
+    const [leaveType, setLeaveType] = useState<ELeaveType>(ELeaveType.ANNUAL); // Default to ANNUAL
+    const [startDate, setStartDate] = useState<Date | null>(null);
+    const [endDate, setEndDate] = useState<Date | null>(null);
+    const [files, setFiles] = useState<File[]>([]);
+    
     useEffect(() => {
         dispatch(
-            fetchGetExpendituresOfEmployee({
+            fetchGetLeavesOfEmployee({
                 token: token,
                 page: 0,
                 pageSize: 100,
                 searchText: searchText,
             })
         ).catch(() => {
-            dispatch(clearToken());
+            // handle error, e.g., clear token
         });
-    }, [dispatch, searchText, token, loading, isActivating]);
+    }, [dispatch, searchText, token]);
 
     const handleRowSelection = (newSelectionModel: GridRowSelectionModel) => {
         setSelectedRowIds(newSelectionModel as number[]);
     };
 
-    const handleOnClickEditEmployee = () => {
-        dispatch(setSelectedEmployeeId(selectedRowIds[0]));
-        dispatch(changePageState("Edit Employee"));
-    };
-
     const handleDelete = async () => {
         for (let id of selectedRowIds) {
-            const selectedExpenditure = expenditureList.find(
-                (selectedExpenditure) => selectedExpenditure.id === id
+            const selectedLeave = leaveList.find(
+                (leave) => leave.id === id
             );
-            if (!selectedExpenditure) continue;
+            if (!selectedLeave) continue;
 
-            if (selectedExpenditure.isExpenditureApproved) {
+            if (selectedLeave.isLeaveApproved) {
                 await Swal.fire({
                     title: "Error",
-                    text: 'Expenditure already approved',
+                    text: 'Leave already approved',
                     icon: "error",
                     confirmButtonText: "OK",
                 });
                 continue;
             }
+
             setLoading(true);
             try {
                 const result = await Swal.fire({
@@ -110,58 +100,39 @@ export default function SideBarEployeeLeaves() {
                 });
 
                 if (result.isConfirmed) {
-                    const data = await dispatch(fetchDeleteExpenditure({
-                        token: token,
-                        id: selectedExpenditure.id,
-                    }));
-
-                    if (data.payload.message) {
-                        await Swal.fire({
-                            title: "Error",
-                            text: data.payload.message,
-                            icon: "error",
-                            confirmButtonText: "OK",
-                        });
-                        return;
-                    } else {
-                        await Swal.fire({
-                            title: "Deleted!",
-                            text: "Your expenditure has been deleted.",
-                            icon: "success"
-                        });
-
-                        await dispatch(fetchGetExpendituresOfEmployee({
-                            token: token,
-                            page: 0,
-                            pageSize: 100,
-                            searchText: searchText,
-                        }));
-                    }
+                    await dispatch(fetchDeleteLeave({ token, id: selectedLeave.id }));
+                    await Swal.fire({
+                        title: "Deleted!",
+                        text: "Your leave has been deleted.",
+                        icon: "success"
+                    });
+                    dispatch(fetchGetLeavesOfEmployee({ token, page: 0, pageSize: 100, searchText }));
                 }
             } catch (error) {
-                localStorage.removeItem("token");
-                dispatch(clearToken());
+                // handle error, e.g., clear token
+            } finally {
+                setLoading(false);
             }
         }
-        setLoading(false);
     };
 
     const handleCancel = async () => {
         for (let id of selectedRowIds) {
-            const selectedExpenditure = expenditureList.find(
-                (selectedExpenditure) => selectedExpenditure.id === id
+            const selectedLeave = leaveList.find(
+                (leave) => leave.id === id
             );
-            if (!selectedExpenditure) continue;
+            if (!selectedLeave) continue;
 
-            if (!selectedExpenditure.isExpenditureApproved) {
+            if (!selectedLeave.isLeaveApproved) {
                 await Swal.fire({
                     title: "Error",
-                    text: 'Expenditure not yet approved, cannot cancel.',
+                    text: 'Leave not yet approved, cannot cancel.',
                     icon: "error",
                     confirmButtonText: "OK",
                 });
                 continue;
             }
+
             setLoading(true);
             try {
                 const result = await Swal.fire({
@@ -175,82 +146,70 @@ export default function SideBarEployeeLeaves() {
                 });
 
                 if (result.isConfirmed) {
-                    const data = await dispatch(fetchCancelExpenditure({
-                        token: token,
-                        id: selectedExpenditure.id,
-                    }));
-
-                    if (data.payload.message) {
-                        await Swal.fire({
-                            title: "Error",
-                            text: data.payload.message,
-                            icon: "error",
-                            confirmButtonText: "OK",
-                        });
-                        return;
-                    } else {
-                        await Swal.fire({
-                            title: "Cancelled!",
-                            text: "Your expenditure has been cancelled.",
-                            icon: "success"
-                        });
-
-                        await dispatch(fetchGetExpendituresOfEmployee({
-                            token: token,
-                            page: 0,
-                            pageSize: 100,
-                            searchText: searchText,
-                        }));
-                    }
+                    await dispatch(fetchCancelLeave({ token, id: selectedLeave.id }));
+                    await Swal.fire({
+                        title: "Cancelled!",
+                        text: "Your leave has been cancelled.",
+                        icon: "success"
+                    });
+                    dispatch(fetchGetLeavesOfEmployee({ token, page: 0, pageSize: 100, searchText }));
                 }
             } catch (error) {
-                localStorage.removeItem("token");
-                dispatch(clearToken());
+                // handle error, e.g., clear token
+            } finally {
+                setLoading(false);
             }
         }
-        setLoading(false);
     };
 
-    const handleSaveExpense = async () => {
-        setIsActivating(true);
+    const handleSaveLeave = async () => {
+        // Validate required fields
+        if (!description || !startDate || !endDate || !leaveType) {
+            Swal.fire({
+                title: "Error",
+                text: "Please fill in all required fields.",
+                icon: "error",
+                confirmButtonText: "OK",
+            });
+            return;
+        }
 
+        setLoading(true);
         try {
-            const response = await dispatch(fetchExpenditureSave({
-                token: token,
-                description: description,
-                price: price,
-                files: [] //eslint hatasi almamak icin gecici eklendi.
-            })).then(data => {
-                if (data.payload.message) {
-                    Swal.fire({
-                        title: "Error",
-                        text: data.payload.message,
-                        icon: "error",
-                        confirmButtonText: "OK",
-                    });
-                    return;
-                }
+            const result = await dispatch(fetchSaveLeave({
+                token,
+                description,
+                startDate: new Date(startDate.setHours(12)), // Convert Dayjs to JS Date
+                endDate: new Date(endDate.setHours(12)), // Convert Dayjs to JS Date
+                leaveType,
+                files: files, // attachedFile is empty for now
+            })).unwrap();
+
+            if (!result.code) {
                 Swal.fire({
                     title: "Success",
-                    text: "Expense has been added",
+                    text: "Leave has been added",
                     icon: "success",
                     confirmButtonText: "OK",
                 });
-
-                fetchGetAllUsersOfManager({
-                    token: token,
-                    page: 0,
-                    pageSize: 100,
-                    searchText: searchText,
+            } else {
+                Swal.fire({
+                    title: "Error",
+                    text: "Something went wrong.",
+                    icon: "error",
+                    confirmButtonText: "OK",
                 });
-            });
-        } catch (error) {
-            localStorage.removeItem("token");
-            dispatch(clearToken());
-        }
+            }
 
-        setIsActivating(false);
+            dispatch(fetchGetLeavesOfEmployee({ token, page: 0, pageSize: 100, searchText }));
+        } catch (error) {
+            dispatch(clearToken())
+        } finally {
+            setLoading(false);
+        }
     };
+
+
 
     return (
         <div style={{ height: 400, width: "inherit" }}>
@@ -262,20 +221,20 @@ export default function SideBarEployeeLeaves() {
                 style={{ marginBottom: "10px" }}
             />
             <DataGrid
-                rows={expenditureList}
-                columns={columns}
+                rows={leaveList}
+                columns={leaveColumns}
                 initialState={{
                     pagination: {
                         paginationModel: { page: 1, pageSize: 5 },
                     },
                 }}
+                pageSizeOptions={[5, 10]}
+                checkboxSelection
                 getRowClassName={(params) =>
-                    params.row.isExpenditureApproved
+                    params.row.isLeaveApproved
                         ? "approved-row"
                         : "unapproved-row"
                 }
-                pageSizeOptions={[5, 10]}
-                checkboxSelection
                 onRowSelectionModelChange={handleRowSelection}
                 sx={{
                     "& .MuiDataGrid-columnHeaders": {
@@ -303,7 +262,7 @@ export default function SideBarEployeeLeaves() {
                         onClick={handleDelete}
                         variant="contained"
                         color="error"
-                        disabled={isActivating || selectedRowIds.length === 0}
+                        disabled={loading || selectedRowIds.length === 0}
                     >
                         {loading ? "Deleting..." : "Delete"}
                     </Button>
@@ -313,58 +272,85 @@ export default function SideBarEployeeLeaves() {
                         onClick={handleCancel}
                         variant="contained"
                         color="warning"
-                        disabled={isActivating || selectedRowIds.length === 0}
+                        disabled={loading || selectedRowIds.length === 0}
                     >
                         {loading ? "Cancelling..." : "Cancel"}
                     </Button>
                 </Grid>
             </Grid>
 
-            <Grid container spacing={2} style={{ marginTop: 16 }} direction="row">
-                <Grid item xs={12}>
+            <Grid container spacing={2} style={{ marginTop: 16 }} alignItems="center">
+                <Grid item xs={2}>
                     <Typography sx={{ fontWeight: "bold", marginBottom: "10px" }}>
-                        Add Expenditure
+                        Add Leave
                     </Typography>
                 </Grid>
 
-                <Grid item xs={4}>
-                    <TextField
-                        label="Description"
-                        name="description"
-                        value={description}
-                        onChange={e => setDescription(e.target.value)}
-                        fullWidth
-                        required
-                        inputProps={{ maxLength: 50 }}
-                    />
-                </Grid>
-
-                <Grid item xs={4}>
-                    <FormControl fullWidth>
-                        <InputLabel htmlFor="outlined-adornment-amount">Expense</InputLabel>
-                        <OutlinedInput
-                            id="outlined-adornment-amount"
-                            startAdornment={<InputAdornment position="start">$</InputAdornment>}
-                            label="Expense"
-                            value={price}
-                            onChange={e => {
-                                const value = e.target.value;
-                                setPrice(value ? parseInt(value) : 0);
-                            }}
+                <Grid container item xs={12} spacing={2} alignItems="center">
+                    <Grid item>
+                        <TextField
+                            label="Description"
+                            name="description"
+                            value={description}
+                            onChange={e => setDescription(e.target.value)}
+                            required
+                            style={{ width: 259 }}
                         />
-                    </FormControl>
+                    </Grid>
+
+                    <Grid item >
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <DatePicker
+                                shouldDisableDate={(date) => date.isBefore(dayjs().subtract(1,'day'))}
+                                label="Leave Start Date"
+                                value={startDate ? dayjs(startDate) : null}
+                                onChange={(newValue) => setStartDate(newValue ? newValue.toDate() : null)}
+                            />
+                        </LocalizationProvider>
+                    </Grid>
+
+                    <Grid item >
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <DatePicker
+                                shouldDisableDate={startDate ? (date) => date.isBefore(startDate) : undefined}
+                                label="Leave End Date"
+                                value={endDate ? dayjs(endDate) : null}
+                                onChange={(newValue) => setEndDate(newValue ? newValue.toDate() : null)}
+                            />
+                        </LocalizationProvider>
+                    </Grid>
+
+                    <Grid item >
+                        <TextField
+                            select
+                            label="Leave Type"
+                            value={leaveType}
+                            onChange={e => setLeaveType(e.target.value as ELeaveType)}
+                            required
+                            SelectProps={{ native: true }}
+                            style={{ width: 259 }}
+                        >
+                            {Object.values(ELeaveType).map(type => (
+                                <option key={type} value={type}>{type}</option>
+                            ))}
+                        </TextField>
+                    </Grid>
+                    <Grid item style={{ width: 399, height:72  }}>
+                        <MyDropzone onFilesAdded={setFiles} />
+                    </Grid>
+                    <Grid item>
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={handleSaveLeave}
+                            disabled={loading}
+                        >
+                            {loading ? "Saving..." : "Save Leave"}
+                        </Button>
                 </Grid>
-                <Grid item xs={4}>
-                    <Button
-                        onClick={handleSaveExpense}
-                        variant="contained"
-                        color="primary"
-                        disabled={price === 0 || description.length === 0}
-                    >
-                        {loading ? "Adding..." : "Add"}
-                    </Button>
                 </Grid>
             </Grid>
+
         </div>
     );
 }

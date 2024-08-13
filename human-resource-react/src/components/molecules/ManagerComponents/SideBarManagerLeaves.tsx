@@ -8,71 +8,41 @@ import {
     Button,
     Grid,
     TextField
-
 } from "@mui/material";
 import {HumanResources, useAppSelector} from "../../../store";
 import {useDispatch} from "react-redux";
-
-
-import {
-    changePageState,
-    clearToken,
-    fetchGetAllUsersOfManager, setSelectedEmployeeId
-} from "../../../store/feature/authSlice";
 import Swal from "sweetalert2";
 import {
-    fetchApproveExpenditure, fetchDeleteExpenditure, fetchCancelExpenditure,
-    fetchExpenditureSave, fetchGetExpendituresOfEmployee,
-    fetchGetExpendituresOfManager
-} from "../../../store/feature/expenditureSlice";
+    fetchGetLeavesOfManager, fetchApproveLeave,
+    fetchDeleteLeave, fetchCancelLeave
+} from "../../../store/feature/leaveSlice";
+import { clearToken } from "../../../store/feature/authSlice";
 
 const columns: GridColDef[] = [
-    {field: "id", headerName: "ID", width: 70, headerAlign: "center"},
-    {field: "employeeName", headerName: "Name", width: 120, headerAlign: "center"},
-    {field: "employeeSurname", headerName: "Surname", width: 120, headerAlign: "center"},
-    {field: "price", headerName: "Price $", width: 150, headerAlign: "center",
-        renderCell: (params) => {
-            // Check if the value is valid
-            const value = params.value;
-            if (typeof value === 'number' && !isNaN(value)) {
-                // Format the number as currency
-                return new Intl.NumberFormat('en-US', {
-                    style: 'currency',
-                    currency: 'USD',
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2
-                }).format(value);
-            }
-            return '$0.00'; // Return default value if not a valid number
-        },
-    },
+    { field: "id", headerName: "ID", width: 70, headerAlign: "center" },
+    { field: "description", headerName: "Description", width: 200, headerAlign: "center" },
 
-    {field: "description", headerName: "Description", width: 120, headerAlign: "center"},
-    {field: "isExpenditureApproved", headerName: "Approval Status", headerAlign: "center", width: 250},
-    {field: "approveDate", headerName: "Approval Date", headerAlign: "center", width: 250},
-    {field: "status", headerName: "Status", headerAlign: "center", width: 250},
-
+    { field: "startDate", headerName: "Start Date", width: 150, headerAlign: "center" },
+    { field: "endDate", headerName: "End Date", width: 150, headerAlign: "center" },
+    { field: "leaveType", headerName: "Leave Type", width: 150, headerAlign: "center" },
+    { field: "isLeaveApproved", headerName: "Approval Status", headerAlign: "center", width: 250 },
+    { field: "approveDate", headerName: "Approval Date", width: 150, headerAlign: "center" },
+    { field: "status", headerName: "Status", width: 120, headerAlign: "center" },
 ];
-
 
 const SideBarManagerLeaves = () => {
     const [selectedRowIds, setSelectedRowIds] = useState<number[]>([]);
     const [searchText, setSearchText] = useState('');
 
-
     const dispatch = useDispatch<HumanResources>();
     const token = useAppSelector((state) => state.auth.token);
-    const expenditures = useAppSelector((state) => state.expenditure.expenditureList);
+    const leaves = useAppSelector((state) => state.leave.leaveList);
     const [loading, setLoading] = useState(false);
     const [isActivating, setIsActivating] = useState(false);
 
-    const [price, setPrice] = useState(0);
-    const[description, setDescription] = useState('');
-
-
     useEffect(() => {
         dispatch(
-            fetchGetExpendituresOfManager({
+            fetchGetLeavesOfManager({
                 token: token,
                 page: 0,
                 pageSize: 100,
@@ -88,28 +58,23 @@ const SideBarManagerLeaves = () => {
         setSelectedRowIds(newSelectionModel as number[]);
     };
 
-
     const handleApprove = async () => {
-
-
         for (let id of selectedRowIds) {
-            const selectedExpenditure = expenditures.find((selectedExpenditure) => selectedExpenditure.id === id);
-            if (!selectedExpenditure) continue;
+            const selectedLeave = leaves.find((leave) => leave.id === id);
+            if (!selectedLeave) continue;
 
-            if (selectedExpenditure.isExpenditureApproved){
+            if (selectedLeave.isLeaveApproved){
                 Swal.fire({
                     title: "Error",
-                    text: 'Expenditure already approved',
+                    text: 'Leave already approved',
                     icon: "error",
                     confirmButtonText: "OK",
-
                 });
                 return
             }
             setLoading(true);
 
             try {
-
                 const result = await Swal.fire({
                     title: "Are you sure?",
                     text: "You won't be able to revert this!",
@@ -121,10 +86,9 @@ const SideBarManagerLeaves = () => {
                 });
 
                 if (result.isConfirmed) {
-                    //fetch
-                    const data = await dispatch(fetchApproveExpenditure({
+                    const data = await dispatch(fetchApproveLeave({
                         token: token,
-                        id: selectedExpenditure.id,
+                        id: selectedLeave.id,
                     }));
 
                     if (data.payload.message) {
@@ -138,12 +102,11 @@ const SideBarManagerLeaves = () => {
                     } else {
                         await Swal.fire({
                             title: "Approved!",
-                            text: "Your expenditure has been approved.",
+                            text: "The leave has been approved.",
                             icon: "success"
                         });
 
-                        // Silme işlemi sonrasında listeyi hemen güncelleyin
-                        await dispatch(fetchGetExpendituresOfManager({
+                        await dispatch(fetchGetLeavesOfManager({
                             token: token,
                             page: 0,
                             pageSize: 100,
@@ -151,42 +114,29 @@ const SideBarManagerLeaves = () => {
                         }));
                     }
                 }
-            } catch
-                (error) {
+            } catch (error) {
                 localStorage.removeItem("token");
                 dispatch(clearToken());
             }
-
         }
         setLoading(false);
     };
 
     const handleReject = async () => {
         for (let id of selectedRowIds) {
-            const selectedExpenditure = expenditures.find(
-                (selectedExpenditure) => selectedExpenditure.id === id
-            );
-            if (!selectedExpenditure) continue;
+            const selectedLeave = leaves.find((leave) => leave.id === id);
+            if (!selectedLeave) continue;
 
-            if (selectedExpenditure.isExpenditureApproved) {
+            if (selectedLeave.isLeaveApproved) {
                 await Swal.fire({
                     title: "Error",
-                    text: 'Expenditure already approved',
+                    text: 'Leave already approved',
                     icon: "error",
                     confirmButtonText: "OK",
                 });
-                continue; // Diğer id'lere geçmek için continue kullanın
+                continue;
             }
 
-            if (selectedExpenditure.status === "DECLINED") {
-                await Swal.fire({
-                    title: "Error",
-                    text: 'Expenditure already declined',
-                    icon: "error",
-                    confirmButtonText: "OK",
-                });
-                continue; // Diğer id'lere geçmek için continue kullanın
-            }
             setIsActivating(true);
             try {
                 const result = await Swal.fire({
@@ -200,9 +150,9 @@ const SideBarManagerLeaves = () => {
                 });
 
                 if (result.isConfirmed) {
-                    const data = await dispatch(fetchDeleteExpenditure({
+                    const data = await dispatch(fetchDeleteLeave({
                         token: token,
-                        id: selectedExpenditure.id,
+                        id: selectedLeave.id,
                     }));
 
                     if (data.payload.message) {
@@ -216,12 +166,11 @@ const SideBarManagerLeaves = () => {
                     } else {
                         await Swal.fire({
                             title: "Rejected!",
-                            text: "Your expenditure has been rejected.",
+                            text: "The leave has been rejected.",
                             icon: "success"
                         });
 
-                        // Silme işlemi sonrasında listeyi hemen güncelleyin
-                        await dispatch(fetchGetExpendituresOfManager({
+                        await dispatch(fetchGetLeavesOfManager({
                             token: token,
                             page: 0,
                             pageSize: 100,
@@ -234,21 +183,18 @@ const SideBarManagerLeaves = () => {
                 dispatch(clearToken());
             }
         }
-
         setIsActivating(false);
     };
 
     const handleCancel = async () => {
         for (let id of selectedRowIds) {
-            const selectedExpenditure = expenditures.find(
-                (selectedExpenditure) => selectedExpenditure.id === id
-            );
-            if (!selectedExpenditure) continue;
+            const selectedLeave = leaves.find((leave) => leave.id === id);
+            if (!selectedLeave) continue;
 
-            if (!selectedExpenditure.isExpenditureApproved) {
+            if (!selectedLeave.isLeaveApproved) {
                 await Swal.fire({
                     title: "Error",
-                    text: 'Expenditure not yet approved, cannot cancel.',
+                    text: 'Leave not yet approved, cannot cancel.',
                     icon: "error",
                     confirmButtonText: "OK",
                 });
@@ -267,9 +213,9 @@ const SideBarManagerLeaves = () => {
                 });
 
                 if (result.isConfirmed) {
-                    const data = await dispatch(fetchCancelExpenditure({
+                    const data = await dispatch(fetchCancelLeave({
                         token: token,
-                        id: selectedExpenditure.id,
+                        id: selectedLeave.id,
                     }));
 
                     if (data.payload.message) {
@@ -283,11 +229,11 @@ const SideBarManagerLeaves = () => {
                     } else {
                         await Swal.fire({
                             title: "Cancelled!",
-                            text: "Your expenditure has been cancelled.",
+                            text: "The leave has been cancelled.",
                             icon: "success"
                         });
 
-                        await dispatch(fetchGetExpendituresOfManager({
+                        await dispatch(fetchGetLeavesOfManager({
                             token: token,
                             page: 0,
                             pageSize: 100,
@@ -313,7 +259,7 @@ const SideBarManagerLeaves = () => {
                 style={{marginBottom: "10px"}}
             />
             <DataGrid
-                rows={expenditures}
+                rows={leaves}
                 columns={columns}
                 initialState={{
                     pagination: {
@@ -321,9 +267,9 @@ const SideBarManagerLeaves = () => {
                     },
                 }}
                 getRowClassName={(params) =>
-                    params.row.isExpenditureApproved
-                        ? "approved-row" // Eğer onaylandıysa, yeşil arka plan
-                        : "unapproved-row" // Onaylanmadıysa, kırmızı arka plan
+                    params.row.isLeaveApproved
+                        ? "approved-row"
+                        : "unapproved-row"
                 }
                 pageSizeOptions={[5, 10]}
                 checkboxSelection
@@ -340,10 +286,10 @@ const SideBarManagerLeaves = () => {
                         textAlign: "center",
                     },
                     "& .approved-row": {
-                        backgroundColor: "#e0f2e9", // Onaylananlar için yeşil arka plan
+                        backgroundColor: "#e0f2e9",
                     },
                     "& .unapproved-row": {
-                        backgroundColor: "#ffe0e0", // Onaylanmayanlar için kırmızı arka plan
+                        backgroundColor: "#ffe0e0",
                     },
                 }}
             />
@@ -364,10 +310,10 @@ const SideBarManagerLeaves = () => {
                     <Button
                         onClick={handleReject}
                         variant="contained"
-                        color="error"
-                        disabled={isActivating || selectedRowIds.length === 0}
+                        color="secondary"
+                        disabled={loading || selectedRowIds.length === 0}
                     >
-                        {isActivating ? "Rejecting..." : "Reject"}
+                        {loading ? "Rejecting..." : "Reject"}
                     </Button>
                 </Grid>
 
@@ -375,17 +321,15 @@ const SideBarManagerLeaves = () => {
                     <Button
                         onClick={handleCancel}
                         variant="contained"
-                        color="warning"
-                        disabled={isActivating || selectedRowIds.length === 0}
+                        color="error"
+                        disabled={loading || selectedRowIds.length === 0}
                     >
                         {loading ? "Cancelling..." : "Cancel"}
                     </Button>
                 </Grid>
-
             </Grid>
-
         </div>
     );
-}
+};
 
-export default SideBarManagerLeaves
+export default SideBarManagerLeaves;

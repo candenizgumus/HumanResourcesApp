@@ -23,7 +23,6 @@ import {
     fetchGetExpendituresOfEmployee,
     fetchCancelExpenditure // Import the cancel action
 } from "../../../store/feature/expenditureSlice";
-import Dropzone from "react-dropzone";
 import MyDropzone from "../../atoms/DropZone";
 
 const columns: GridColDef[] = [
@@ -78,6 +77,7 @@ export default function SideBarExpenditure() {
         setSelectedRowIds(newSelectionModel as number[]);
     };
 
+    // Not sure if this is needed
     const handleOnClickEditEmployee = () => {
         dispatch(setSelectedEmployeeId(selectedRowIds[0]));
         dispatch(changePageState("Edit Employee"));
@@ -226,7 +226,7 @@ export default function SideBarExpenditure() {
                 formData.append('files', file);
             });
 
-            const response = await dispatch(fetchExpenditureSave({
+            await dispatch(fetchExpenditureSave({
                 token: token,
                 description: description,
                 price: price,
@@ -331,14 +331,14 @@ export default function SideBarExpenditure() {
                 </Grid>
             </Grid>
 
-            <Grid container spacing={2} style={{ marginTop: 16 }} direction="row">
+            <Grid container spacing={2} style={{ marginTop: 16 }} direction="row" alignItems="center">
                 <Grid item xs={12}>
-                    <Typography sx={{ fontWeight: "bold", marginBottom: "10px" }}>
+                    <Typography sx={{ fontWeight: "bold"}}>
                         Add Expenditure
                     </Typography>
                 </Grid>
 
-                <Grid item xs={4}>
+                <Grid item>
                     <TextField
                         label="Description"
                         name="description"
@@ -347,11 +347,12 @@ export default function SideBarExpenditure() {
                         fullWidth
                         required
                         inputProps={{ maxLength: 50 }}
+                        style={{ width: 399 }}
                     />
                 </Grid>
 
-                <Grid item xs={4}>
-                    <FormControl fullWidth>
+                <Grid item>
+                    <FormControl fullWidth style={{ width: 399 }}>
                         <InputLabel htmlFor="outlined-adornment-amount">Expense</InputLabel>
                         <OutlinedInput
                             id="outlined-adornment-amount"
@@ -365,10 +366,10 @@ export default function SideBarExpenditure() {
                         />
                     </FormControl>
                 </Grid>
-                <Grid item xs={8}>
+                <Grid item style={{ width: 399, height:72  }}>
                     <MyDropzone onFilesAdded={setFiles} />
                 </Grid>
-                <Grid item xs={8}>
+                <Grid item>
                     <Button
                         onClick={handleSaveExpense}
                         variant="contained"

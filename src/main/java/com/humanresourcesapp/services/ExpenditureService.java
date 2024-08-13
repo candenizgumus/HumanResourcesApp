@@ -6,7 +6,6 @@ import com.humanresourcesapp.dto.requests.ExpenditureSaveRequestDto;
 import com.humanresourcesapp.dto.requests.NotificationSaveRequestDto;
 import com.humanresourcesapp.dto.requests.PageRequestDto;
 import com.humanresourcesapp.entities.Expenditure;
-import com.humanresourcesapp.entities.Notification;
 import com.humanresourcesapp.entities.User;
 import com.humanresourcesapp.entities.enums.EAccessIdentifier;
 import com.humanresourcesapp.entities.enums.ENotificationType;
@@ -23,7 +22,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 import static com.humanresourcesapp.constants.FrontendPaths.EXPENDITURE;
 
@@ -34,7 +32,6 @@ public class ExpenditureService
     private final ExpenditureRepository expenditureRepository;
     private final UserService userService;
     private final NotificationService notificationService;
-    private final CompanyService companyService;
     private final S3Service s3Service;
     private final S3Buckets s3Buckets;
 
@@ -152,9 +149,6 @@ public class ExpenditureService
         if(user.getId().equals(expenditure.getEmployeeId())){
             expenditure.setStatus(EStatus.DELETED);
             expenditureRepository.save(expenditure);
-            notificationService.findByUserIdAndAccessIdentifierAndStatus(user.getManagerId(), EAccessIdentifier.EXPENDITURE_SAVE, EStatus.ACTIVE).ifPresent(value -> {
-                notificationService.delete(value.getId());
-            });
             return true;
         }
         // if the delete request comes from manager, it is actually a decline request

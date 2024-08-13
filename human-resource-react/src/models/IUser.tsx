@@ -23,4 +23,5 @@ export interface IUser{
     subscriptionType:string;
     subscriptionStartDate:Date;
     subscriptionEndDate:Date;
+    remainingAnnualLeave: number;
 }

@@ -199,6 +199,7 @@ public class UserService {
                 .position(dto.ePosition())
                 .position(dto.ePosition())
                 .location(dto.location())
+                .remainingAnnualLeave(0)
                 .title(dto.title())
                 .sector(manager.getSector())
                 .employeeType(dto.eEmployeeType())

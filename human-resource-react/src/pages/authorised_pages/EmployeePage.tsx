@@ -29,7 +29,7 @@ import HikingIcon from '@mui/icons-material/Hiking';
 import {
     AccountBox,
     AdminPanelSettings,
-    FeaturedPlayList, PointOfSale,
+    FeaturedPlayList, Paid, PointOfSale,
     Weekend
 } from "@mui/icons-material";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
@@ -161,7 +161,7 @@ export default function EmployeePage() {
                 </DrawerHeader>
                 <Divider />
                 <List>
-                    {['Shifts & Breaks', 'Holidays', 'Profile', 'Company Items','Notifications','Expenditure', 'Leaves'].map((text, index) => (
+                    {['Shifts & Breaks', 'Holidays', 'Profile', 'Company Items','Notifications','Expenditure', 'Leaves','Bonus'].map((text, index) => (
                         <ListItem key={text} disablePadding>
                             <ListItemButton onClick={() => handleListItemClick(text)}>
                                 <ListItemIcon>
@@ -172,6 +172,7 @@ export default function EmployeePage() {
                                     {index === 4 && <NotificationsIcon/>}
                                     {index === 5 && <PointOfSale/>}
                                     {index === 6 && <HikingIcon/>}
+                                    {index === 7 && <Paid/>}
                                 </ListItemIcon>
                                 <ListItemText primary={text} />
                             </ListItemButton>

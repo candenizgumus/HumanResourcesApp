@@ -69,6 +69,28 @@ export const fetchGetBonusesOfManager = createAsyncThunk(
     }
 
 )
+
+export const fetchGetBonusesOfEmployee = createAsyncThunk(
+    'bonus/fetchGetBonusesOfEmployee',
+    async (payload: IfetchGetPayments) => {
+
+        const response = await fetch(`http://localhost:9090/dev/v1/bonus/get-all-bonuses-of-employee`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ` + payload.token
+            },
+            body: JSON.stringify({
+                'page': payload.page,
+                'pageSize': payload.pageSize,
+                'searchText': payload.searchText
+            })
+        });
+
+        return await response.json();
+    }
+
+)
 interface IfetchDeleteBonus{
     token:string,
     id:number
@@ -100,6 +122,9 @@ const bonusSlice = createSlice({
     reducers: {},
     extraReducers: (build)=>{
         build.addCase(fetchGetBonusesOfManager.fulfilled,(state,action)=>{
+            state.bonusList = action.payload
+        })
+        build.addCase(fetchGetBonusesOfEmployee.fulfilled,(state,action)=>{
             state.bonusList = action.payload
         })
 

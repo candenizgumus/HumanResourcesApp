@@ -36,6 +36,7 @@ export const ManagerMenuContentRenderer = () => {
                 {page === 'Payments' && <SideBarPayments/>}
                 {page === 'Personal Documents' && <PersonalDocumetList/>}
                 {page === 'Bonus' && <SideBarManagerBonus/>}
+
             </Grid>
         </>
     );

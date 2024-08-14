@@ -1,11 +1,12 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import {IBonus} from "../../models/IBonus";
 
 interface IBonusState{
-
+    bonusList:IBonus[]
 }
 
 const initialBonusState:IBonusState = {
-
+    bonusList: []
 }
 
 
@@ -47,11 +48,11 @@ interface IfetchGetPayments{
     pageSize:number,
     searchText:string
 }
-export const fetchGetPayments = createAsyncThunk(
-    'payment/fetchGetPayments',
+export const fetchGetBonusesOfManager = createAsyncThunk(
+    'bonus/fetchGetBonusesOfManager',
     async (payload: IfetchGetPayments) => {
 
-        const response = await fetch(`http://localhost:9090/dev/v1/payment/get-all`, {
+        const response = await fetch(`http://localhost:9090/dev/v1/bonus/get-all`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -68,7 +69,26 @@ export const fetchGetPayments = createAsyncThunk(
     }
 
 )
+interface IfetchDeleteBonus{
+    token:string,
+    id:number
+}
+export const fetchDeleteBonus = createAsyncThunk(
+    'bonus/fetchGetBonusesOfManager',
+    async (payload: IfetchDeleteBonus) => {
 
+        const response = await fetch(`http://localhost:9090/dev/v1/bonus/delete?id=` + payload.id, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ` + payload.token
+            }
+        });
+
+        return await response.json();
+    }
+
+)
 
 
 
@@ -79,7 +99,9 @@ const bonusSlice = createSlice({
     initialState: initialBonusState,
     reducers: {},
     extraReducers: (build)=>{
-
+        build.addCase(fetchGetBonusesOfManager.fulfilled,(state,action)=>{
+            state.bonusList = action.payload
+        })
 
     }
 });

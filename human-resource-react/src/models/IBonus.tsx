@@ -1,4 +1,4 @@
-export interface ICompany {
+export interface IBonus {
     id: number;
     description: string;
     bonusAmount: number;

@@ -21,6 +21,9 @@ public class Bonus extends BaseEntity {
     Long id;
     Long employeeId;
     Long companyId;
+    String name;
+    String surname;
+    String email;
     String description;
     Double bonusAmount;
     LocalDate bonusDate;

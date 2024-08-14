@@ -14,6 +14,7 @@ import EditEmployee from "../molecules/ManagerComponents/EditEmployee";
 import AddDocument from "../molecules/ManagerComponents/AddDocument";
 import SideBarPayments from "../molecules/ManagerComponents/SideBarPayments";
 import PersonalDocumetList from "../molecules/ManagerComponents/SideBarPersonalDocumentList";
+import SideBarManagerBonus from "../molecules/ManagerComponents/SideBarManagerBonus";
 export const ManagerMenuContentRenderer = () => {
     const page = useAppSelector((state) => state.auth.pageState);
 
@@ -34,6 +35,7 @@ export const ManagerMenuContentRenderer = () => {
                 {page === 'Leaves' && <SideBarManagerLeaves/>}
                 {page === 'Payments' && <SideBarPayments/>}
                 {page === 'Personal Documents' && <PersonalDocumetList/>}
+                {page === 'Bonus' && <SideBarManagerBonus/>}
             </Grid>
         </>
     );

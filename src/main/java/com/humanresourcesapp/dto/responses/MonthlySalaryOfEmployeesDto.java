@@ -17,5 +17,6 @@ public class MonthlySalaryOfEmployeesDto
     String email;
     Double salary;
     Double extraPayments;
+    Double bonus;
     Double total;
 }

@@ -46,13 +46,15 @@ public class UserService {
     private final JwtTokenManager jwtTokenManager;
     private  ExpenditureService expenditureService;
     private OfferService offerService;
+    private BonusService bonusService;
     private final S3Service s3Service;
     private final S3Buckets s3Buckets;
 
     @Autowired
-    public void setOfferService(@Lazy OfferService offerService , @Lazy ExpenditureService expenditureService) {
+    public void setOfferService(@Lazy OfferService offerService , @Lazy ExpenditureService expenditureService, @Lazy BonusService bonusService) {
         this.offerService = offerService;
         this.expenditureService = expenditureService;
+        this.bonusService = bonusService;
     }
     private final NotificationService notificationService;
 
@@ -578,7 +580,7 @@ public class UserService {
         //Adding empty employees to monthly salary list
         employees.forEach(e -> {
 
-            monthlySalaryOfEmployeesDtos.add(new MonthlySalaryOfEmployeesDto(e.getId(),e.getName(),e.getSurname(),e.getEmail(),e.getSalary(),0.00,e.getSalary() ));
+            monthlySalaryOfEmployeesDtos.add(new MonthlySalaryOfEmployeesDto(e.getId(),e.getName(),e.getSurname(),e.getEmail(),e.getSalary(),0.00,0.00,e.getSalary() ));
 
         });
 
@@ -588,8 +590,20 @@ public class UserService {
 
                 if (expenditure.getEmployeeId().equals(e.getId()))
                 {
-                    e.setExtraPayments(expenditure.getPrice());
+                    e.setExtraPayments(e.getExtraPayments() + expenditure.getPrice()); // Add to extra payments
                     e.setTotal(e.getSalary() + expenditure.getPrice());
+                }
+            });
+        });
+
+        //Adding bonuses to each employee
+        bonusService.findMonthlyBonusesOfEmployees().forEach(bonus -> {
+
+            monthlySalaryOfEmployeesDtos.forEach(e -> {
+                if (bonus.getEmployeeId().equals(e.getId()))
+                {
+                    e.setBonus(e.getBonus() + bonus.getBonusAmount()); // Accumulate bonuses
+                    e.setTotal(e.getTotal() + bonus.getBonusAmount());
                 }
             });
         });

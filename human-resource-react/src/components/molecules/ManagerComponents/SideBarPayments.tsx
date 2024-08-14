@@ -233,7 +233,7 @@ export default function SideBarPayments() {
                         onClick={handleDelete}
                         variant="contained"
                         color="error"
-                        disabled={isActivating || selectedRowIds.length === 0}
+                        disabled={ selectedRowIds.length === 0 || loading}
                     >
                         {loading ? "Deleting..." : "Delete"}
                     </Button>
@@ -290,9 +290,9 @@ export default function SideBarPayments() {
                         onClick={handleSavePayment}
                         variant="contained"
                         color="primary"
-                        disabled={payment === 0 || description.length === 0 || paymentDate === null}
+                        disabled={payment === 0 || description.length === 0 || paymentDate === null || isActivating}
                     >
-                        {loading ? "Saving..." : "Save Payment"}
+                        {isActivating  ? "Saving..." : "Save Payment"}
                     </Button>
                 </Grid>
             </Grid>

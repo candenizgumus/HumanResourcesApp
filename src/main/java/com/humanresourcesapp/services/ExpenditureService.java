@@ -5,7 +5,6 @@ import com.humanresourcesapp.constants.ENotificationTextBase;
 import com.humanresourcesapp.dto.requests.ExpenditureSaveRequestDto;
 import com.humanresourcesapp.dto.requests.NotificationSaveRequestDto;
 import com.humanresourcesapp.dto.requests.PageRequestDto;
-import com.humanresourcesapp.dto.responses.URL;
 import com.humanresourcesapp.entities.Expenditure;
 import com.humanresourcesapp.entities.User;
 import com.humanresourcesapp.entities.enums.EAccessIdentifier;
@@ -17,7 +16,6 @@ import com.humanresourcesapp.repositories.ExpenditureRepository;
 import com.humanresourcesapp.utility.UserInfoSecurityContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -40,6 +38,7 @@ public class ExpenditureService {
         String userEmail = UserInfoSecurityContext.getUserInfoFromSecurityContext();
         User employee = userService.findByEmail(userEmail).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
 
+        // Saving file
         String fileName = "";
 
         if (dto.files() != null && !dto.files().isEmpty()) {
@@ -49,7 +48,7 @@ public class ExpenditureService {
                 String key;
                 try {
                     fileContent = file.getBytes();
-                    key = "expenditures/%s/%s".formatted(userEmail, fileName);
+                    key = "personelDocuments/%s/%s".formatted(userEmail, fileName);
                 } catch (IOException e) {
                     throw new RuntimeException("Failed to read file content", e);
                 }
@@ -204,9 +203,5 @@ public class ExpenditureService {
         return expenditureRepository.findExpendituresByCompanyIdAndCurrentMonth(companyId);
     }
 
-    public URL getExpenditurePresignedUrl(String email, String fileName) {
-        String key = "expenditures/%s/%s".formatted(email, fileName);
-        String presignedGetUrl = s3Service.createPresignedGetUrl(s3Buckets.getCustomer(), key);
-        return new URL(presignedGetUrl);
-    }
+
 }

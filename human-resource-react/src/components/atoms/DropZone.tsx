@@ -5,9 +5,10 @@ import { useDropzone } from 'react-dropzone'
 
 interface MyDropzoneProps {
     onFilesAdded: (files: File[]) => void;
+    onFileRemoved: (file: File) => void;  // Yeni prop
 }
 
-export default function MyDropzone({ onFilesAdded }: MyDropzoneProps) {
+export default function MyDropzone({ onFilesAdded, onFileRemoved }: MyDropzoneProps) {
     const [files, setFiles] = useState<File[]>([]);
     const inputRef = useRef<HTMLInputElement>(null);
     const dropzoneRef = useRef<HTMLDivElement>(null);
@@ -24,8 +25,12 @@ export default function MyDropzone({ onFilesAdded }: MyDropzoneProps) {
     };
 
     const handleRemoveFile = (fileToRemove: File, event: React.MouseEvent) => {
-        event.stopPropagation(); // Prevents triggering the click event on the dropzone
-        setFiles(prevFiles => prevFiles.filter(file => file !== fileToRemove));
+        event.stopPropagation();
+        setFiles(prevFiles => {
+            const updatedFiles = prevFiles.filter(file => file !== fileToRemove);
+            onFileRemoved(fileToRemove);  // Dosya silindiğinde çağrılacak
+            return updatedFiles;
+        });
     };
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop, noClick: true });
@@ -45,7 +50,7 @@ export default function MyDropzone({ onFilesAdded }: MyDropzoneProps) {
             <input
                 {...getInputProps()}
                 ref={inputRef}
-                style={{ display: 'none' }} // Hide the file input
+                style={{ display: 'none' }}
                 onChange={(e) => {
                     if (e.target.files) {
                         onDrop(Array.from(e.target.files));
@@ -54,8 +59,8 @@ export default function MyDropzone({ onFilesAdded }: MyDropzoneProps) {
             />
             <Typography variant="body1">
                 {isDragActive
-                    ? 'Add documents about expenditure...'
-                    : 'Drag \'n\' drop expenditure files here, or click to select files'}
+                    ? 'Add documents'
+                    : 'Drag \'n\' drop files here, or click to select files'}
             </Typography>
             <ul style={{ listStyleType: 'none', padding: 0, marginTop: '10px' }}>
                 {files.map((file, index) => (
@@ -81,5 +86,5 @@ export default function MyDropzone({ onFilesAdded }: MyDropzoneProps) {
                 ))}
             </ul>
         </Paper>
-    )
+    );
 }

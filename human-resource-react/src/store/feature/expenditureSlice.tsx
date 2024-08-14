@@ -69,17 +69,17 @@ export const fetchGetExpendituresOfEmployee = createAsyncThunk(
     }
 )
 
-interface IFetchDownloadExpenditureFile {
+interface IFetchDownloadFile {
     token: string,
     email: string,
     fileName: string
 
 }
-export const fetchDownloadExpenditureFile = createAsyncThunk(
-    'expenditure/fetchDownloadExpenditureFile',
-    async (payload: IFetchDownloadExpenditureFile) => {
+export const fetchDownloadFile = createAsyncThunk(
+    's3/fetchDownloadFile',
+    async (payload: IFetchDownloadFile) => {
 
-        const response = await fetch(`http://localhost:9090/dev/v1/expenditure/download`, {
+        const response = await fetch(`http://localhost:9090/dev/v1/s3/download`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -217,7 +217,7 @@ const expenditureSlice = createSlice({
         build.addCase(fetchGetExpendituresOfManager.fulfilled, (state, action) => {
             state.expenditureList = action.payload;
         })
-        build.addCase(fetchDownloadExpenditureFile.fulfilled, (state, action) => {
+        build.addCase(fetchDownloadFile.fulfilled, (state, action) => {
             state.url = action.payload.url;
         })
     }

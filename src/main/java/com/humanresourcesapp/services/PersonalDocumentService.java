@@ -93,8 +93,6 @@ public class PersonalDocumentService {
     public List<PersonalDocument> getAllByEmail(PageRequestDto dto) {
         String employeeEmail = UserInfoSecurityContext.getUserInfoFromSecurityContext();
         User employee = userService.findByEmail(employeeEmail).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
-        if (dto.searchText().isEmpty())
-            return getAll();
         return personalDocumentRepository.findByEmailContainingAndCompanyIdAndStatus(dto.searchText(), employee.getCompanyId(), EStatus.ACTIVE, PageRequest.of(dto.page(), dto.pageSize()));
 
     }

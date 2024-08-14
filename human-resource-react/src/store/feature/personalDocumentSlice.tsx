@@ -41,6 +41,20 @@ export const fetchSavePersonalDocument = createAsyncThunk(
     }
 )
 
+export const fetchDeletePersonalDocument = createAsyncThunk(
+    'personalDocument/fetchDeletePersonalDocument',
+    async (payload: {id: number, token: string}, {rejectWithValue}) => {
+            const response = await fetch(`http://localhost:9090/dev/v1/personal-document/delete/${payload.id}`,{
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ` + payload.token
+                }
+            });
+        return await response.json();
+    }
+);
+
 interface IFetchGetPersonalDocument{
     token: string;
     searchText: string;
@@ -103,30 +117,6 @@ export const fetchPersonalDocumentTypes = createAsyncThunk(
     }
 );
 
-interface IDownloadPersonalDocument{
-    documentId: number;
-    token: string;
-}
-
-export const fetchDownloadPersonalDocument = createAsyncThunk(
-    'personalDocument/fetchDownloadPersonalDocument',
-    async (payload: IDownloadPersonalDocument, {rejectWithValue}) => {
-            const response = await fetch('http://localhost:9090/dev/v1/personal-document/download/',{
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ` + payload.token
-                },
-                body: JSON.stringify(
-                    {
-                        'documentId': payload.documentId
-                    }
-                ),
-            });
-        return await response.json();
-    }
-);
-
 const personalDocumentSlice = createSlice({
     name: 'personalDocument',
     initialState: initialPersonalDocumentState,
@@ -139,18 +129,25 @@ const personalDocumentSlice = createSlice({
             state.personalDocuments = action.payload;
             state.loading = false;
         });
+        builder.addCase(fetchPersonalDocumentTypes.rejected, (state) => {
+            state.loading = false;
+        });
         builder.addCase(fetchSavePersonalDocument.fulfilled, (state, action) => {
             state.personalDocument = action.payload;
             state.loading = false;
         });
-
+        builder.addCase(fetchSavePersonalDocument.pending, (state) => {
+            state.loading = true;
+        });
         builder.addCase(fetchPersonalDocuments.fulfilled, (state, action) => {
             state.personalDocuments = action.payload;
-
         });
-
+        builder.addCase(fetchPersonalDocuments.rejected, (state) => {
+            state.loading = false;
+        });
     }
 });
+
 
 export default personalDocumentSlice.reducer;
 

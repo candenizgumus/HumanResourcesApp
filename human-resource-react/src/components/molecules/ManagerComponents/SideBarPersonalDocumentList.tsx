@@ -1,16 +1,15 @@
-import React, { useState, useEffect, FormEvent } from 'react';
-import { TextField, Button, Box, Grid, InputLabel, Select, MenuItem, FormControl, Avatar, List, ListItem, ListItemText, ListItemSecondaryAction, IconButton } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { TextField } from '@mui/material';
 import { HumanResources, useAppSelector } from "../../../store";
 import { useDispatch } from "react-redux";
 import {
-    fetchDownloadPersonalDocument, fetchPersonalDocuments,
-    fetchPersonalDocumentsOfEmployee
-} from "../../../store/feature/personalDocumentSlice";
-import DownloadIcon from '@mui/icons-material/Download';
+     fetchPersonalDocuments,
+    } from "../../../store/feature/personalDocumentSlice";
 import {DataGrid, GridColDef, GridRowSelectionModel} from "@mui/x-data-grid";
 import DownloadButtonFromS3 from "../../atoms/DownloadButtonFromS3";
 const columns: GridColDef[] = [
-    {field: "id", headerName: "ID", width: 70, headerAlign: "center"},
+
+    {field: "id", headerName: "Id", width: 90, headerAlign: "center"},
     {field: "email", headerName: "Email", width: 120, headerAlign: "center"},
     {field: "description", headerName: "Description", width: 120, headerAlign: "center"},
     {field: "documentType", headerName: "Document Type", width: 120, headerAlign: "center"},
@@ -24,28 +23,27 @@ const columns: GridColDef[] = [
     },
 
 ];
-const PersonalDocumentList: React.FC = () => {
+const SideBarPersonalDocumentList: React.FC = () => {
     const [selectedRowIds, setSelectedRowIds] = useState<number[]>([]);
     const token = useAppSelector((state) => state.auth.token);
     const employeeId = useAppSelector((state) => state.auth.selectedEmployeeId);
     const dispatch = useDispatch<HumanResources>();
-    const personalDocuments = useAppSelector((state) => state.personalDocument.personalDocuments);
-    const [documentId, setDocumentId] = useState<number>(0);
+    const [personalDocuments , setPersonelDocuments] = useState([]);
     const [searchText, setSearchText] = useState('');
 
 
-    useEffect(() => {
+    useEffect( () => {
         dispatch(fetchPersonalDocuments({
             token: token,
+            page:0,
             searchText: searchText,
             pageSize: 100,
+        })).then(data => {
+            setPersonelDocuments(data.payload);
+        })
 
-        }));
     }, [dispatch, token, searchText]);
 
-    const downloadDocument = (documentId: number) => {
-        dispatch(fetchDownloadPersonalDocument({ documentId, token }));
-    };
 
     const handleRowSelection = (newSelectionModel: GridRowSelectionModel) => {
         setSelectedRowIds(newSelectionModel as number[]);
@@ -65,7 +63,7 @@ const PersonalDocumentList: React.FC = () => {
                 columns={columns}
                 initialState={{
                     pagination: {
-                        paginationModel: {page: 1, pageSize: 5},
+                        paginationModel: {page: 0, pageSize: 5},
                     },
                 }}
                 pageSizeOptions={[5, 10]}
@@ -97,4 +95,4 @@ const PersonalDocumentList: React.FC = () => {
     );
 };
 
-export default PersonalDocumentList;
+export default SideBarPersonalDocumentList;

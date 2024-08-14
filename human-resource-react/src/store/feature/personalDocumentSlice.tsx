@@ -4,12 +4,8 @@ import {IPersonalDocument} from "../../models/IPersonalDocument";
 
 export interface IPersonalDocumentState {
     personalDocument: IPersonalDocument
-    personalDocuments: IPersonalDocumentState[],
-
+    personalDocuments: IPersonalDocument[],
     loading: boolean;
-    id?: number;
-    documentType?: string;
-    documentFile?: string;
 }
 
 const initialPersonalDocumentState: IPersonalDocumentState = {
@@ -48,6 +44,7 @@ export const fetchSavePersonalDocument = createAsyncThunk(
 interface IFetchGetPersonalDocument{
     token: string;
     searchText: string;
+    page:number;
     pageSize: number;
 }
 export const fetchPersonalDocuments = createAsyncThunk(
@@ -61,7 +58,8 @@ export const fetchPersonalDocuments = createAsyncThunk(
                 },
                 body: JSON.stringify({
                     'searchText': payload.searchText,
-                    'pageSize': payload.pageSize
+                    'pageSize': payload.pageSize,
+                    'page':payload.page
                 })
             });
         return await response.json();
@@ -145,19 +143,10 @@ const personalDocumentSlice = createSlice({
             state.personalDocument = action.payload;
             state.loading = false;
         });
-        builder.addCase(fetchSavePersonalDocument.pending, (state) => {
-            state.loading = true;
-        });
-        builder.addCase(fetchDownloadPersonalDocument.fulfilled, (state, action) => {
-            state.personalDocument = action.payload;
-            state.loading = false;
-        });
-        builder.addCase(fetchDownloadPersonalDocument.pending, (state) => {
-            state.loading = true;
-        });
+
         builder.addCase(fetchPersonalDocuments.fulfilled, (state, action) => {
             state.personalDocuments = action.payload;
-            state.loading = false;
+
         });
 
     }

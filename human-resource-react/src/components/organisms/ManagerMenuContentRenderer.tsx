@@ -13,7 +13,7 @@ import ChangePassword from "../molecules/ChangePassword";
 import EditEmployee from "../molecules/ManagerComponents/EditEmployee";
 import AddDocument from "../molecules/ManagerComponents/AddDocument";
 import SideBarPayments from "../molecules/ManagerComponents/SideBarPayments";
-import PersonalDocumetList from "../molecules/ManagerComponents/PersonalDocumentList";
+import PersonalDocumetList from "../molecules/ManagerComponents/SideBarPersonalDocumentList";
 export const ManagerMenuContentRenderer = () => {
     const page = useAppSelector((state) => state.auth.pageState);
 

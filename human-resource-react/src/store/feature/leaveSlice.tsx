@@ -15,6 +15,8 @@ export interface ILeave {
     approveDate:Date
     isLeaveApproved:boolean
     attachedFile:string
+    fullName: string
+    email: string
 }
 
 interface IInitialLeave {
@@ -65,6 +67,44 @@ export const fetchSaveLeave = createAsyncThunk(
     }
 )
 
+interface IFetchSaveLeaveAsManager {
+    token : string,
+    description: string;
+    startDate: Date;
+    endDate: Date;
+    leaveType: ELeaveType;
+    files: File[];
+    employeeId: number;
+}
+
+export const fetchAssignLeave = createAsyncThunk(
+    'leave/fetchAssignLeave',
+    async (payload: IFetchSaveLeaveAsManager) => {
+        const formData = new FormData();
+        formData.append('description', payload.description);
+
+        // Format the dates to 'yyyy-MM-dd'
+        const formatDate = (date: Date) => date.toISOString().split('T')[0];
+        formData.append('startDate', formatDate(payload.startDate));
+        formData.append('endDate', formatDate(payload.endDate));
+
+        formData.append('leaveType', payload.leaveType.toString());
+        formData.append('employeeId', payload.employeeId.toString());
+        payload.files.forEach((file) => {
+            formData.append('files', file);
+        });
+
+        const response = await fetch('http://localhost:9090/dev/v1/leave/assign-leave', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ` + payload.token
+            },
+            body: formData
+        });
+
+        return await response.json();
+    }
+)
 export interface IRequestWıthIdAndToken{
     token: string,
     id: number,

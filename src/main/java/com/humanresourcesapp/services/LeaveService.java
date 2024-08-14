@@ -2,6 +2,7 @@ package com.humanresourcesapp.services;
 
 import com.humanresourcesapp.configs.aws.S3Buckets;
 import com.humanresourcesapp.constants.ENotificationTextBase;
+import com.humanresourcesapp.dto.requests.AssignLeaveRequestDto;
 import com.humanresourcesapp.dto.requests.LeaveSaveRequestDto;
 import com.humanresourcesapp.dto.requests.NotificationSaveRequestDto;
 import com.humanresourcesapp.dto.requests.PageRequestDto;
@@ -73,6 +74,8 @@ public class LeaveService {
                         .leaveType(dto.leaveType())
                         .startDate(dto.startDate())
                         .endDate(dto.endDate())
+                        .fullName(employee.getName() + " " + employee.getSurname())
+                        .email(employee.getEmail())
                         .attachedFile(fileName)
                 .build());
 
@@ -206,6 +209,7 @@ public class LeaveService {
                     .build());
 
             leave.setStatus(EStatus.CANCELED);
+            leave.setIsLeaveApproved(false);
             // if the expenditure is not approved, it can not be canceled, and it will be deleted or rejected
         }else {
             delete(id);
@@ -233,6 +237,60 @@ public class LeaveService {
                 .isRead(false)
                 .status(EStatus.ACTIVE)
                 .notificationType(ENotificationType.WARNING)
+                .url(LEAVES)
+                .build());
+        return true;
+    }
+
+    public Boolean assignLeave(AssignLeaveRequestDto dto) {
+        String managerEmail = UserInfoSecurityContext.getUserInfoFromSecurityContext();
+        User manager = userService.findByEmail(managerEmail).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
+
+        User employee = userService.findById(dto.employeeId());
+        if(!employee.getCompanyId().equals(manager.getCompanyId())){
+            throw new HumanResourcesAppException(ErrorType.INSUFFICIENT_PERMISSION);
+        }
+
+        String fileName = "";
+        if (dto.files() != null && !dto.files().isEmpty()) {
+            for (MultipartFile file : dto.files()) {
+                fileName = employee.getEmail()+"/"+file.getOriginalFilename();
+                byte[] fileContent;
+                try {
+                    fileContent = file.getBytes();
+                } catch (IOException e) {
+                    throw new RuntimeException("Failed to read file content", e);
+                }
+                s3Service.putObject(s3Buckets.getCustomer(),
+                        "personelDocuments/%s".formatted( fileName),
+                        fileContent);
+            }
+        }
+
+        leaveRepository.save(Leave.builder()
+                .description(dto.description())
+                .employeeId(employee.getId())
+                .employeeName(employee.getName())
+                .employeeSurname(employee.getSurname())
+                .companyId(employee.getCompanyId())
+                .leaveType(dto.leaveType())
+                .startDate(dto.startDate())
+                .endDate(dto.endDate())
+                .approveDate(LocalDate.now())
+                .isLeaveApproved(true)
+                .status(EStatus.ACTIVE)
+                .attachedFile(fileName)
+                .fullName(employee.getName() + " " + employee.getSurname())
+                .email(employee.getEmail())
+                .build());
+
+        notificationService.save(NotificationSaveRequestDto.builder()
+                .notificationText(ENotificationTextBase.LEAVE_APPROVE_NOTIFICATION.getText() + dto.description())
+                .userType(null)
+                .userId(employee.getId())
+                .isRead(false)
+                .status(EStatus.ACTIVE)
+                .notificationType(ENotificationType.INFORMATION)
                 .url(LEAVES)
                 .build());
         return true;

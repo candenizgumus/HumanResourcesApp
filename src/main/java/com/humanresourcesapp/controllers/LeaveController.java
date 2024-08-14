@@ -1,5 +1,6 @@
 package com.humanresourcesapp.controllers;
 
+import com.humanresourcesapp.dto.requests.AssignLeaveRequestDto;
 import com.humanresourcesapp.dto.requests.LeaveSaveRequestDto;
 import com.humanresourcesapp.dto.requests.PageRequestDto;
 import com.humanresourcesapp.entities.Leave;
@@ -50,6 +51,26 @@ public class LeaveController {
                 .files(files)
                 .build();
         return ResponseEntity.ok(leaveService.save(dto));
+    }
+
+    @PostMapping(ASSIGN_LEAVE)
+    @PreAuthorize("hasAnyAuthority('EMPLOYEE','MANAGER')")
+    public ResponseEntity<Boolean> assignLeave(@RequestParam ("description") String description,
+                                                   @RequestParam ("startDate") LocalDate startDate,
+                                                   @RequestParam ("endDate") LocalDate endDate,
+                                                   @RequestParam ("leaveType") ELeaveType leaveType,
+                                                   @Nullable @RequestParam("files") List<MultipartFile> files,
+                                                   @RequestParam ("employeeId") Long employeeId) {
+
+        AssignLeaveRequestDto dto = AssignLeaveRequestDto.builder()
+                .description(description)
+                .startDate(startDate)
+                .endDate(endDate)
+                .leaveType(leaveType)
+                .files(files)
+                .employeeId(employeeId)
+                .build();
+        return ResponseEntity.ok(leaveService.assignLeave(dto));
     }
 
     @PostMapping(APPROVE_LEAVE)

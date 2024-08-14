@@ -42,6 +42,7 @@ public class Endpoints
     public static final String EMAIL = "/email";
     public static final String MEDIA = "/media";
     public static final String PAYMENT = "/payment";
+    public static final String S3 ="/s3";
 
     //methods
     public static final String SAVE = "/save";
@@ -103,4 +104,7 @@ public class Endpoints
     public static final String GET_MONTHLY_PAYMENTS = "/get-monthly-payments";
     public static final String GET_CURRENT_MONTHS_HOLIDAYS = "/get-current-months-holidays";
     public static final String APPROVE_LEAVE = "/approve-leave";
+    public static final String DOWNLOAD = "/download";
+    public static final String UPLOAD = "/upload";
+
 }

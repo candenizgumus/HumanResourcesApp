@@ -1,6 +1,9 @@
 package com.humanresourcesapp.services;
 
 
+import com.humanresourcesapp.configs.aws.S3Buckets;
+import com.humanresourcesapp.dto.requests.UploadFileRequestDto;
+import com.humanresourcesapp.dto.responses.UrlResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import software.amazon.awssdk.core.ResponseInputStream;
@@ -22,6 +25,7 @@ import java.time.Duration;
 public class S3Service {
 
     private final S3Client s3Client;
+    private final S3Buckets s3Buckets;
 
     public void putObject(String bucketName, String key, byte[] file){
         PutObjectRequest objectRequest = PutObjectRequest.builder()
@@ -79,6 +83,11 @@ public class S3Service {
         }
     }
 
+    public UrlResponseDto getPresignedUrl(String email, String fileName) {
+        String key = "personelDocuments/%s/%s".formatted(email, fileName);
+        String presignedGetUrl = createPresignedGetUrl(s3Buckets.getCustomer(), key);
+        return new UrlResponseDto(presignedGetUrl);
+    }
 
 
 }

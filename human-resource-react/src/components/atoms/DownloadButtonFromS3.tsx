@@ -1,6 +1,6 @@
 import { FileDownload } from "@mui/icons-material";
 import { IconButton } from "@mui/material";
-import { fetchDownloadExpenditureFile } from "../../store/feature/expenditureSlice";
+import { fetchDownloadFile} from "../../store/feature/expenditureSlice";
 import { HumanResources, useAppSelector } from "../../store";
 import { useDispatch } from "react-redux";
 
@@ -8,11 +8,11 @@ const DownloadButtonFromS3: React.FC<{ fileKey: string }> = ({ fileKey }) => {
     const dispatch = useDispatch<HumanResources>();
     const user = useAppSelector((state) => state.auth.user);
     const token = useAppSelector((state) => state.auth.token);
-    const url = useAppSelector(state => state.expenditure.url);
+
 
     const handleDownload = async () => {
         try {
-            const presignedUrl = await dispatch(fetchDownloadExpenditureFile({
+            const presignedUrl = await dispatch(fetchDownloadFile({
                 email: user.email,
                 fileName: fileKey,
                 token: token

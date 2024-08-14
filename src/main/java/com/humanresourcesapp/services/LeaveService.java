@@ -50,9 +50,10 @@ public class LeaveService {
         String userEmail = UserInfoSecurityContext.getUserInfoFromSecurityContext();
         User employee = userService.findByEmail(userEmail).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
 
+        String fileName = "";
         if (dto.files() != null && !dto.files().isEmpty()) {
             for (MultipartFile file : dto.files()) {
-                String fileName = file.getOriginalFilename();
+                fileName = file.getOriginalFilename();
                 byte[] fileContent;
                 try {
                     fileContent = file.getBytes();
@@ -60,7 +61,7 @@ public class LeaveService {
                     throw new RuntimeException("Failed to read file content", e);
                 }
                 s3Service.putObject(s3Buckets.getCustomer(),
-                        "expenditures/%s/%s".formatted(userEmail, fileName),
+                        "personelDocuments/%s/%s".formatted(userEmail, fileName),
                         fileContent);
             }
         }
@@ -74,6 +75,7 @@ public class LeaveService {
                         .leaveType(dto.leaveType())
                         .startDate(dto.startDate())
                         .endDate(dto.endDate())
+                        .attachedFile(fileName)
                 .build());
 
         notificationService.save(NotificationSaveRequestDto.builder()

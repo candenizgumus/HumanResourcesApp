@@ -5,17 +5,17 @@ import {
     GridRowSelectionModel,
 } from "@mui/x-data-grid";
 import {
-    Avatar,
+
     Button, FormControl,
-    Grid, IconButton, InputAdornment, InputLabel, OutlinedInput,
+    Grid, InputAdornment, InputLabel, OutlinedInput,
     TextField, Typography
 } from "@mui/material";
 import { HumanResources, useAppSelector } from "../../../store";
 import { useDispatch } from "react-redux";
 import {
-    changePageState,
+
     clearToken,
-    fetchGetAllUsersOfManager, setSelectedEmployeeId
+    fetchGetAllUsersOfManager
 } from "../../../store/feature/authSlice";
 import Swal from "sweetalert2";
 import {
@@ -23,11 +23,9 @@ import {
     fetchExpenditureSave,
     fetchGetExpendituresOfEmployee,
     fetchCancelExpenditure, // Import the cancel action
-    fetchDownloadExpenditureFile
+
 } from "../../../store/feature/expenditureSlice";
 import MyDropzone from "../../atoms/DropZone";
-import { FileDownload, FileDownloadDoneRounded, FileDownloadOffRounded } from "@mui/icons-material";
-import FilePreviewModal from "../../atoms/FilePreviewModal";
 import DownloadButtonFromS3 from "../../atoms/DownloadButtonFromS3";
 
 const columns: GridColDef[] = [
@@ -135,12 +133,6 @@ export default function SideBarExpenditure() {
 
     const handleRowSelection = (newSelectionModel: GridRowSelectionModel) => {
         setSelectedRowIds(newSelectionModel as number[]);
-    };
-
-    // Not sure if this is needed
-    const handleOnClickEditEmployee = () => {
-        dispatch(setSelectedEmployeeId(selectedRowIds[0]));
-        dispatch(changePageState("Edit Employee"));
     };
 
     const handleDelete = async () => {
@@ -323,6 +315,14 @@ export default function SideBarExpenditure() {
         setIsActivating(false);
     };
 
+    const handleFilesAdded = (newFiles: File[]) => {
+        setFiles(prevFiles => [...prevFiles, ...newFiles]);
+    };
+
+    const handleFileRemoved = (fileToRemove: File) => {
+        setFiles(prevFiles => prevFiles.filter(file => file !== fileToRemove));
+        // Ekstra işlemler burada yapılabilir
+    };
     return (
         <div style={{ height: 400, width: "inherit" }}>
             <TextField
@@ -427,14 +427,17 @@ export default function SideBarExpenditure() {
                     </FormControl>
                 </Grid>
                 <Grid item style={{ width: 399, height:72  }}>
-                    <MyDropzone onFilesAdded={setFiles} />
+                    <MyDropzone
+                        onFilesAdded={handleFilesAdded}
+                        onFileRemoved={handleFileRemoved}
+                    />
                 </Grid>
                 <Grid item>
                     <Button
                         onClick={handleSaveExpense}
                         variant="contained"
                         color="primary"
-                        disabled={price === 0 || description.length === 0}
+                        disabled={price === 0 || description.length === 0 || isActivating}
                     >
                         {loading ? "Adding..." : "Add"}
                     </Button>

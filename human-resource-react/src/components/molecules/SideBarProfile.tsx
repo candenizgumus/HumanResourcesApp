@@ -299,18 +299,8 @@ const SideBarProfile = () => {
                     />
                 </Box>
             </Grid>
-            <Grid item xs={6}>
-                <Box
-                    component="form"
-                    sx={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: 2,
-                        maxWidth: 800,
-                        margin: 'auto',
-                        padding: 2,
-                    }}
-                >
+            <Grid sx={{ justifyContent: 'center' ,marginY: 3, marginLeft:0.8}} container spacing={2}>
+                <Grid >
                     {error && (
                         <Typography color="error">{error}</Typography>
                     )}
@@ -326,6 +316,21 @@ const SideBarProfile = () => {
                         {isUploading ? 'Uploading...' : 'Upload Image'}
 
                     </Button>
+                </Grid>
+            </Grid>
+            <Grid item xs={6}>
+                <Box
+                    component="form"
+                    sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: 2,
+                        maxWidth: 800,
+                        margin: 'auto',
+                        padding: 2,
+                    }}
+                >
+
                     <TextField
                         label='Name'
                         name="name"
@@ -416,6 +421,13 @@ const SideBarProfile = () => {
                     }}
                 >
 
+                    <TextField
+                        label="Email"
+                        name="email"
+                        value={user.email}
+                        fullWidth
+                        disabled
+                    />
                     <TextField
                         label="User Type"
                         name="userType"

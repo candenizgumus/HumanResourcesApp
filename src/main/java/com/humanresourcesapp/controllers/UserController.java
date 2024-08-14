@@ -64,10 +64,6 @@ public class UserController
     @PreAuthorize("hasAnyAuthority('MANAGER','ADMIN', 'EMPLOYEE')")
     @CrossOrigin("*")
     public void uploadPlayerProfileImage(@RequestParam("file") MultipartFile file, Authentication authentication){
-        System.out.println("File name: " + file.getOriginalFilename());
-        System.out.println("File size: " + file.getSize() + " bytes");
-        System.out.println("File type: " + file.getContentType());
-        System.out.println(authentication.getName());
         userService.uploadPlayerProfileImage(file, authentication);
     }
 

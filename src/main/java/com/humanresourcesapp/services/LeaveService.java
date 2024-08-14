@@ -53,7 +53,7 @@ public class LeaveService {
         String fileName = "";
         if (dto.files() != null && !dto.files().isEmpty()) {
             for (MultipartFile file : dto.files()) {
-                fileName = file.getOriginalFilename();
+                fileName = employee.getEmail()+"/"+file.getOriginalFilename();
                 byte[] fileContent;
                 try {
                     fileContent = file.getBytes();

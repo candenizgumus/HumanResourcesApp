@@ -28,6 +28,9 @@ import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import {DatePicker} from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
 import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
+import {fetchSaveBonus} from "../../../store/feature/bonusSlice";
+import {Simulate} from "react-dom/test-utils";
+import error = Simulate.error;
 
 const columns: GridColDef[] = [
     { field: "id", headerName: "ID", width: 70, headerAlign: "center" },
@@ -51,7 +54,6 @@ const columns: GridColDef[] = [
             </div>
         ),
     },
-    {field: "personalDocument", headerName: "Personal Document", width: 120, headerAlign: "center"},
 
 
 ];
@@ -90,7 +92,39 @@ export default function SideBarEmployees() {
     };
 
     const handleAddBonus = () => {
+        if (bonusDate === null || bonusAmount === 0 || description === '') {
+            handleClose();
+            Swal.fire({
+                title: "Error",
+                text: "Please fill all the fields",
+                icon: "error",
+                confirmButtonText: "OK",
+                confirmButtonColor: "#D32F2F",
+            });
+            setIsActivating(false);
+            return;
 
+        }
+        dispatch(fetchSaveBonus({ token: token, description: description, bonusDate: bonusDate, bonusAmount: bonusAmount,employeeId:selectedRowIds[0] })).then(data => {
+            if (data.payload.message) {
+                Swal.fire({
+                    title: "Error",
+                    text: data.payload.message,
+                    icon: "error",
+                    confirmButtonText: "OK",
+
+                });
+                return
+            }
+            handleClose();
+            Swal.fire({
+                title: "Success",
+                text: "Bonus added successfully",
+                icon: "success",
+                confirmButtonText: "OK",
+            });
+
+        })
     }
 
     useEffect(() => {
@@ -384,7 +418,7 @@ export default function SideBarEmployees() {
                                     />
                                 </Grid>
                                 <Grid item xs={12}>
-                                    <TextField sx={{ marginTop: "25px" }}
+                                    <TextField
                                                label="Bonus Amount $"
                                                name="bonusAmount"
                                                variant="outlined"
@@ -406,13 +440,6 @@ export default function SideBarEmployees() {
                                     </LocalizationProvider>
                                 </Grid>
                             </Grid>
-
-
-
-
-
-
-
                             <Button
                                 onClick={handleAddBonus}
                                 variant="contained"

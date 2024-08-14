@@ -9,19 +9,20 @@ const initialBonusState:IBonusState = {
 }
 
 
-export interface IfetchPaymentSave{
+export interface IfetchSaveBonus{
     token:string;
     description:string ;
-    payment: number;
-    paymentDate: Date;
+    bonusDate: Date;
+    bonusAmount: number;
+    employeeId: number;
 
 }
 
-export const fetchPaymentSave = createAsyncThunk(
-    'payment/fetchPaymentSave',
-    async (payload: IfetchPaymentSave) => {
+export const fetchSaveBonus = createAsyncThunk(
+    'bonus/fetchSaveBonus',
+    async (payload: IfetchSaveBonus) => {
 
-            const response = await fetch(`http://localhost:9090/dev/v1/payment/save`, {
+            const response = await fetch(`http://localhost:9090/dev/v1/bonus/save`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -29,8 +30,9 @@ export const fetchPaymentSave = createAsyncThunk(
                 },
                 body: JSON.stringify({
                     'description': payload.description,
-                    'payment': payload.payment,
-                    'paymentDate': payload.paymentDate
+                    'bonusDate': payload.bonusDate,
+                    'bonusAmount': payload.bonusAmount,
+                    'employeeId': payload.employeeId
 
                 })
             });

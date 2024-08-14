@@ -28,7 +28,7 @@ import {ManagerMenuContentRenderer} from "../../components/organisms/ManagerMenu
 import {
   AccountBox,
   Apartment,
-  DocumentScanner,
+  DocumentScanner, Paid,
   Payments,
   Person,
   PersonAdd,
@@ -163,7 +163,7 @@ export default function AdminPage() {
         </DrawerHeader>
         <Divider />
         <List>
-          {['Employees', 'Add Employee', 'Profile', 'Company', 'Add Comment', 'Holidays','Notifications', 'Expenditure', 'Leaves','Payments','Personal Documents'].map((text, index) => (
+          {['Employees', 'Add Employee', 'Profile', 'Company', 'Add Comment', 'Holidays','Notifications', 'Expenditure', 'Leaves','Payments','Personal Documents','Bonus'].map((text, index) => (
             <ListItem key={text} disablePadding>
               <ListItemButton onClick={() => handleListItemClick(text)}>
                 <ListItemIcon>
@@ -178,6 +178,7 @@ export default function AdminPage() {
                   {index === 8 && <HikingIcon/>}
                   {index === 9 && <Payments/>}
                   {index === 10 && <DocumentScanner/>}
+                  {index === 11 && <Paid/>}
                 </ListItemIcon>
                 <ListItemText primary={text} />
               </ListItemButton>

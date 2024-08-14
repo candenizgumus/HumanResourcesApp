@@ -422,7 +422,7 @@ export default function SideBarEmployees() {
                                                label="Bonus Amount $"
                                                name="bonusAmount"
                                                variant="outlined"
-
+                                               type={"number"}
                                                onChange={event => setBonusAmount(parseInt(event.target.value))}
                                                fullWidth
                                                style={{ marginBottom: "10px" }}

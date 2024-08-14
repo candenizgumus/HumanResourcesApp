@@ -71,14 +71,11 @@ public class S3Service {
                     .build();
 
             GetObjectPresignRequest presignRequest = GetObjectPresignRequest.builder()
-                    .signatureDuration(Duration.ofMinutes(120))  // The URL will expire in 10 minutes.
+                    .signatureDuration(Duration.ofMinutes(5))  // The URL will expire in 10 minutes.
                     .getObjectRequest(objectRequest)
                     .build();
 
             PresignedGetObjectRequest presignedRequest = presigner.presignGetObject(presignRequest);
-            System.out.printf("Presigned URL: [{%s}]%n", presignedRequest.url().toString());
-            System.out.printf("HTTP method: [{%s}]", presignedRequest.httpRequest().method());
-
             return presignedRequest.url().toExternalForm();
         }
     }

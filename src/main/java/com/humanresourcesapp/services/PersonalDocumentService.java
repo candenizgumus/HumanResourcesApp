@@ -63,8 +63,8 @@ public class PersonalDocumentService {
                 .build());
     }
 
-    public PersonalDocument delete(Long personalDocumentId) {
-        Optional<PersonalDocument> optionalPersonalDocument = personalDocumentRepository.findById(personalDocumentId);
+    public PersonalDocument delete(Long id) {
+        Optional<PersonalDocument> optionalPersonalDocument = personalDocumentRepository.findById(id);
         if (optionalPersonalDocument.isPresent()) {
             personalDocumentRepository.delete(optionalPersonalDocument.get());
             return optionalPersonalDocument.get();

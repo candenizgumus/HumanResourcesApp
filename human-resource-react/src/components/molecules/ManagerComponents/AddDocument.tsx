@@ -7,6 +7,8 @@ import {
     fetchSavePersonalDocument
 } from "../../../store/feature/personalDocumentSlice";
 import MyDropzone from "../../atoms/DropZone";
+import Swal from "sweetalert2";
+import sweetalert2 from "sweetalert2";
 
 
 const AddDocument: React.FC = () => {
@@ -20,6 +22,8 @@ const AddDocument: React.FC = () => {
     const [selectedDocumentType, setSelectedDocumentType] = useState<string>('');
     const [files, setFiles] = useState<File[]>([]);
     const [description, setDescription] = useState<string>('');
+    const [loading, setLoading] = useState(false);
+
 
     const handleFilesAdded = (newFiles: File[]) => {
         setFiles(prevFiles => [...prevFiles, ...newFiles]);
@@ -42,18 +46,46 @@ const AddDocument: React.FC = () => {
     };
 
     const addDocument = () => {
+        if (selectedDocumentType === '' || files.length === 0 || description === '') {
+            Swal.fire({
+                icon: 'error',
+                text: 'Please fill all the fields!',
+            });
+            return;
+        }
+
+        setLoading(true)
+
         dispatch(fetchSavePersonalDocument({
             employeeId: employeeId,
             documentType: selectedDocumentType,
             documentFile: files,
             description: description,
             token: token
-        }));
+        }))
+            .then((data) => {
+                if (data.payload.message) {
+                    Swal.fire({
+                        icon: 'error',
+                        text: data.payload.message ?? 'Failed to add document',
+                        showConfirmButton: true
+                    })
+
+                } else {
+                    Swal.fire({
+                        icon: 'success',
+                        text: 'Document has been added',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                }
+            })
+            .finally(() => {
+                setLoading(false);
+            });
     };
 
     return (
-
-
         <Grid container spacing={2}>
             <Grid item xs={6}>
                 <Box
@@ -88,14 +120,22 @@ const AddDocument: React.FC = () => {
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
                     />
-                    <Grid item style={{ width: 399, height:72  }}>
+                    <Grid item style={{width: 399, height: 72, marginBottom: 5}}>
                         <MyDropzone
                             onFilesAdded={handleFilesAdded}
                             onFileRemoved={handleFileRemoved}
                         />
                     </Grid>
-                    <Button onClick={addDocument} sx={{mt: 5}} type="button" variant="contained" color="primary">
-                        Add Document
+                    <Grid item style={{marginBottom: 5}}></Grid>
+                        <Button
+                        onClick={addDocument}
+                        sx={{mt: 5}}
+                        type="button"
+                        variant="contained"
+                        color="primary"
+                        disabled={loading}
+                    >
+                        {loading ? "Adding Document..." : "Add Document"}
                     </Button>
                 </Box>
             </Grid>

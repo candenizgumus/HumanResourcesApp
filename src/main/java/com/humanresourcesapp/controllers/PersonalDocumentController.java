@@ -33,11 +33,6 @@ public class PersonalDocumentController {
         return ResponseEntity.ok(personalDocumentService.save(employeeId, documentType, documentFile, description));
     }
 
-    @PostMapping(DELETE + "/{personalDocumentId}")
-    public ResponseEntity<PersonalDocument> delete(@PathVariable Long personalDocumentId) {
-        return ResponseEntity.ok(personalDocumentService.delete(personalDocumentId));
-    }
-
 //    @PostMapping(UPDATE)
 //    public ResponseEntity<PersonalDocument> update(Long personalDocumentId, PersonalDocumentSaveRequestDto personalDocumentSaveRequestDto) {
 //        return ResponseEntity.ok(personalDocumentService.update(personalDocumentId, personalDocumentSaveRequestDto));
@@ -55,18 +50,16 @@ public class PersonalDocumentController {
         return ResponseEntity.ok(EDocumentType.values());
     }
 
-    @PostMapping(DOWNLOAD_PERSONAL_DOCUMENT + "/{personalDocumentId}")
-    @PreAuthorize("hasAnyAuthority('MANAGER')")
-    public ResponseEntity<Void> downloadPersonalDocument(@PathVariable Long personalDocumentId) {
-
-
-        return ResponseEntity.ok().build();
-    }
-
     @PostMapping(GET_ALL)
     @PreAuthorize("hasAnyAuthority('MANAGER')")
     public ResponseEntity<List<PersonalDocument>> getAll(@RequestBody PageRequestDto dto){
         return ResponseEntity.ok(personalDocumentService.getAllByEmail(dto));
+    }
+
+    @DeleteMapping(DELETE + "/{id}")
+    @PreAuthorize("hasAnyAuthority('MANAGER')")
+    public ResponseEntity<PersonalDocument> deletePersonalDocument(@PathVariable Long id) {
+        return ResponseEntity.ok(personalDocumentService.delete(id));
     }
 
 }

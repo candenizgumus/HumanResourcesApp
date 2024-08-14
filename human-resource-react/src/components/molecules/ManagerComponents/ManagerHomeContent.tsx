@@ -117,10 +117,10 @@ export const ManagerHomeContent = () => {
     const columnSalary: GridColDef[] = [
         { field: "name", headerName: "First name", flex: 1.7, headerAlign: "center" },
         { field: "surname", headerName: "Last name", flex: 1.5, headerAlign: "center" },
-        { field: "email", headerName: "Email", flex: 1.5, headerAlign: "center" },
         { field: "salary", headerName: "Salary $", type: "number", flex: 1.5, headerAlign: "center" },
-        { field: "extraPayments", headerName: "Extra Payments $", type: "number", flex: 1.2, headerAlign: "center" },
-        { field: "total", headerName: "Total $", type: "number", flex: 1.42, headerAlign: "center" },
+        { field: "extraPayments", headerName: "Extra Payments $", type: "number", flex: 1.4, headerAlign: "center" },
+        { field: "bonus", headerName: "Bonus $", type: "number", flex: 1.0, headerAlign: "center" },
+        { field: "total", headerName: "Total $", type: "number", flex: 1.2, headerAlign: "center" },
     ];
 
     const columHolidays: GridColDef[] = [

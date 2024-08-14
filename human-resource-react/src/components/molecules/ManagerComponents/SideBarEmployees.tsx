@@ -5,11 +5,11 @@ import {
     GridRowSelectionModel,
 } from "@mui/x-data-grid";
 import {
-    Avatar,
-    Button,
-    Grid,
+    Avatar, Box,
+    Button, FormControl,
+    Grid, InputLabel, MenuItem, Modal, Select,
 
-    TextField
+    TextField, Typography
 
 } from "@mui/material";
 import { HumanResources, useAppSelector } from "../../../store";
@@ -23,6 +23,11 @@ import {
     fetchGetAllUsersOfManager, setSelectedEmployeeId
 } from "../../../store/feature/authSlice";
 import Swal from "sweetalert2";
+import {IUser} from "../../../models/IUser";
+import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
+import {DatePicker} from "@mui/x-date-pickers/DatePicker";
+import dayjs from "dayjs";
+import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
 
 const columns: GridColDef[] = [
     { field: "name", headerName: "First name", width: 150, headerAlign: "center" },
@@ -59,8 +64,31 @@ export default function SideBarEmployees() {
     const userList = useAppSelector((state) => state.auth.userList);
     const [loading, setLoading] = useState(false);
     const [isActivating, setIsActivating] = useState(false);
+    const [open, setOpen] = useState(false);
+    const [selectedUser, setSelectedUser] = useState<IUser | null>(null);
 
 
+    const [description, setDescription] = useState('');
+    const [bonusAmount, setBonusAmount] = useState(0);
+    const [bonusDate, setBonusDate] = useState<Date | null>(null);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
+
+    const openAddBonus = () => {
+        if (selectedRowIds.length === 1) {
+            const userToEdit = userList.find(
+                (user) => user.id === selectedRowIds[0]
+            );
+            setSelectedUser(userToEdit || null);
+            handleOpen();
+        } else {
+            Swal.fire("Please select exactly one company to edit.");
+        }
+    };
+
+    const handleAddBonus = () => {
+
+    }
 
     useEffect(() => {
         dispatch(
@@ -315,10 +343,97 @@ export default function SideBarEmployees() {
                         Add Document
                     </Button>
                 </Grid>
+
+                <Grid item>
+                    <Button
+                        onClick={openAddBonus}
+                        variant="contained"
+                        color="primary"
+                        disabled={  selectedRowIds.length>1 || selectedRowIds.length === 0}
+                    >
+                        Add Bonus
+                    </Button>
+                </Grid>
             </Grid>
 
+            <Modal
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="modal-title"
+                aria-describedby="modal-description"
+            >
+                <Box sx={style}>
+                    <Typography id="modal-title" variant="h6" component="h2">
+                        Add Bonus to {selectedUser && selectedUser.name + " " + selectedUser.surname}
+                    </Typography>
+                    {selectedUser && (
+                        <form >
+                            <Grid container spacing={2}>
+                                <Grid item xs={12}>
+                                    <TextField sx={{ marginTop: "25px" }}
+                                               label="Description"
+                                               name="description"
+                                               variant="outlined"
 
+                                               onChange={event => setDescription(event.target.value)}
+                                               fullWidth
+                                               style={{ marginBottom: "10px" }}
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextField sx={{ marginTop: "25px" }}
+                                               label="Bonus Amount $"
+                                               name="bonusAmount"
+                                               variant="outlined"
+
+                                               onChange={event => setBonusAmount(parseInt(event.target.value))}
+                                               fullWidth
+                                               style={{ marginBottom: "10px" }}
+                                    />
+                                </Grid>
+                                <Grid sx={{ marginBottom: "25px"  }} item xs={12}>
+                                    <LocalizationProvider   dateAdapter={AdapterDayjs}>
+                                        <DatePicker
+                                            label="Bonus Date"
+                                            value={bonusDate ? dayjs(bonusDate) : null}
+                                            disablePast={true}
+                                            onChange={(newValue) => setBonusDate(newValue ? newValue.toDate() : null)}
+
+                                        />
+                                    </LocalizationProvider>
+                                </Grid>
+                            </Grid>
+
+
+
+
+
+
+
+                            <Button
+                                onClick={handleAddBonus}
+                                variant="contained"
+                                color="primary"
+                                disabled={loading}
+                                fullWidth
+                            >
+                                {loading ? "Adding..." : "Add Bonus"}
+                            </Button>
+                        </form>
+                    )}
+                </Box>
+            </Modal>
 
         </div>
     );
 }
+const style = {
+    position: "absolute" as "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 600,
+    bgcolor: "background.paper",
+    boxShadow: 24,
+    p: 4,
+};

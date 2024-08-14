@@ -3,12 +3,12 @@ import {
     authSlice, companySlice, featureSlice, offerSlice, userStorySlice, holidaySlice,
     passwordResetSlice,
     notificationSlice, expenditureSlice, personalDocumentSlice,
-    leaveSlice
+    leaveSlice, bonusSlice, paymentSlice
 } from "./feature";
 
 
 import {useSelector} from "react-redux";
-import paymentSlice from "./feature/paymentSlice";
+
 
 const store = configureStore({
     reducer: {
@@ -23,7 +23,8 @@ const store = configureStore({
         expenditure: expenditureSlice,
         personalDocument: personalDocumentSlice,
         leave:leaveSlice,
-        payment:paymentSlice
+        payment:paymentSlice,
+        bonus:bonusSlice
 
     }
 });

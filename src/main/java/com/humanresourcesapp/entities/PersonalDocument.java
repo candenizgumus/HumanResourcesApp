@@ -5,8 +5,10 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
@@ -22,6 +24,9 @@ public class PersonalDocument extends BaseEntity{
     Long employeeId;
     @Enumerated(EnumType.STRING)
     EDocumentType documentType;
-    String documentFile;
+    String attachedFile;
+    String description;
+    String email;
+    Long companyId;
 
 }

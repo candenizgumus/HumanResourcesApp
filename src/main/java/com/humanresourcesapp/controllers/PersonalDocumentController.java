@@ -1,5 +1,6 @@
 package com.humanresourcesapp.controllers;
 
+import com.humanresourcesapp.dto.requests.PageRequestDto;
 import com.humanresourcesapp.dto.requests.PersonalDocumentSaveRequestDto;
 import com.humanresourcesapp.dto.responses.PersonalDocumentResponseDto;
 import com.humanresourcesapp.entities.PersonalDocument;
@@ -7,8 +8,10 @@ import com.humanresourcesapp.entities.enums.EDocumentType;
 import com.humanresourcesapp.services.PersonalDocumentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -23,8 +26,11 @@ public class PersonalDocumentController {
 
     @PostMapping(SAVE)
     @PreAuthorize("hasAnyAuthority('MANAGER')")
-    public ResponseEntity<PersonalDocument> save(@RequestBody PersonalDocumentSaveRequestDto personalDocumentSaveRequestDto) {
-        return ResponseEntity.ok(personalDocumentService.save(personalDocumentSaveRequestDto));
+    public ResponseEntity<PersonalDocument> save(@RequestParam("employeeId") String employeeId,
+                                                 @RequestParam("documentType") String documentType,
+                                                 @Nullable @RequestParam("documentFile") List<MultipartFile> documentFile,
+                                                 @RequestParam("description") String description){
+        return ResponseEntity.ok(personalDocumentService.save(employeeId, documentType, documentFile, description));
     }
 
     @PostMapping(DELETE + "/{personalDocumentId}")
@@ -32,9 +38,15 @@ public class PersonalDocumentController {
         return ResponseEntity.ok(personalDocumentService.delete(personalDocumentId));
     }
 
-    @PostMapping(UPDATE)
-    public ResponseEntity<PersonalDocument> update(Long personalDocumentId, PersonalDocumentSaveRequestDto personalDocumentSaveRequestDto) {
-        return ResponseEntity.ok(personalDocumentService.update(personalDocumentId, personalDocumentSaveRequestDto));
+//    @PostMapping(UPDATE)
+//    public ResponseEntity<PersonalDocument> update(Long personalDocumentId, PersonalDocumentSaveRequestDto personalDocumentSaveRequestDto) {
+//        return ResponseEntity.ok(personalDocumentService.update(personalDocumentId, personalDocumentSaveRequestDto));
+//    }
+
+    @PostMapping(GET_BY_EMPLOYEE_ID)
+    @PreAuthorize("hasAnyAuthority('MANAGER')")
+    public ResponseEntity<List<PersonalDocument>> getByEmployeeId(Long employeeId) {
+        return ResponseEntity.ok(personalDocumentService.getByEmployeeId(employeeId));
     }
 
     @PostMapping(GET_ALL_PERSONAL_DOCUMENT_TYPES)
@@ -42,4 +54,19 @@ public class PersonalDocumentController {
     public ResponseEntity<EDocumentType[]> getAllPersonalDocumentTypes() {
         return ResponseEntity.ok(EDocumentType.values());
     }
+
+    @PostMapping(DOWNLOAD_PERSONAL_DOCUMENT + "/{personalDocumentId}")
+    @PreAuthorize("hasAnyAuthority('MANAGER')")
+    public ResponseEntity<Void> downloadPersonalDocument(@PathVariable Long personalDocumentId) {
+
+
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping(GET_ALL)
+    @PreAuthorize("hasAnyAuthority('MANAGER')")
+    public ResponseEntity<List<PersonalDocument>> getAll(@RequestBody PageRequestDto dto){
+        return ResponseEntity.ok(personalDocumentService.getAllByEmail(dto));
+    }
+
 }

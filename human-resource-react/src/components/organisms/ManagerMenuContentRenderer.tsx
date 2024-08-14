@@ -13,6 +13,7 @@ import ChangePassword from "../molecules/ChangePassword";
 import EditEmployee from "../molecules/ManagerComponents/EditEmployee";
 import AddDocument from "../molecules/ManagerComponents/AddDocument";
 import SideBarPayments from "../molecules/ManagerComponents/SideBarPayments";
+import PersonalDocumetList from "../molecules/ManagerComponents/PersonalDocumentList";
 export const ManagerMenuContentRenderer = () => {
     const page = useAppSelector((state) => state.auth.pageState);
 
@@ -32,6 +33,7 @@ export const ManagerMenuContentRenderer = () => {
                 {page === 'Add Document' && <AddDocument/>}
                 {page === 'Leaves' && <SideBarManagerLeaves/>}
                 {page === 'Payments' && <SideBarPayments/>}
+                {page === 'Personal Documents' && <PersonalDocumetList/>}
             </Grid>
         </>
     );

@@ -110,5 +110,6 @@ public class Endpoints
     public static final String UPLOAD = "/upload";
 
     public static final String BONUS = "/bonus";
+    public static final String GET_ALL_BONUSES_OF_EMPLOYEE = "/get-all-bonuses-of-employee";
     public static final String CHANGE_LEAVE_DAY = "/change-leave-day";
 }

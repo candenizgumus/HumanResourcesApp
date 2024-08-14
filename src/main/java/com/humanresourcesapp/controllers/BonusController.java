@@ -35,6 +35,13 @@ public class BonusController
         return ResponseEntity.ok(bonusService.getAll(dto));
     }
 
+    @PostMapping(GET_ALL_BONUSES_OF_EMPLOYEE)
+    @PreAuthorize("hasAnyAuthority('EMPLOYEE')")
+    public ResponseEntity<List<Bonus>> getAllBonusesOfEmployee(@RequestBody PageRequestDto dto)
+    {
+        return ResponseEntity.ok(bonusService.getAllBonusesOfEmployee(dto));
+    }
+
     @DeleteMapping(DELETE)
     @PreAuthorize("hasAnyAuthority('MANAGER')")
     public ResponseEntity<Boolean> delete(Long id)

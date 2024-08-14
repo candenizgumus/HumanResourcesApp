@@ -82,4 +82,11 @@ public class BonusService
 
         return bonusRepository.findAllByBonusDateIsBetweenAndCompanyIdAndStatus(firstDateOfMonth, lastDateOfMonth, manager.getCompanyId(), EStatus.ACTIVE);
     }
+
+    public List<Bonus> getAllBonusesOfEmployee(PageRequestDto dto)
+    {
+        String userEmail = UserInfoSecurityContext.getUserInfoFromSecurityContext();
+        User employee = userService.findByEmail(userEmail).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
+        return bonusRepository.findAllByDescriptionContainingAndEmployeeIdAndStatus(dto.searchText(), employee.getId(), EStatus.ACTIVE, PageRequest.of(dto.page(), dto.pageSize()));
+    }
 }

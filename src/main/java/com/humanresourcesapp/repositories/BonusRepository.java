@@ -16,4 +16,5 @@ public interface BonusRepository extends JpaRepository<Bonus,Long> {
 
     List<Bonus> findByEmailContainingAndCompanyIdAndStatus(String description, Long companyId, EStatus status, PageRequest pageRequest);
     List<Bonus> findAllByBonusDateIsBetweenAndCompanyIdAndStatus(LocalDate startDate, LocalDate endDate, Long companyId, EStatus status);
+    List<Bonus> findAllByDescriptionContainingAndEmployeeIdAndStatus(String description, Long employeeId, EStatus status, PageRequest pageRequest);
 }

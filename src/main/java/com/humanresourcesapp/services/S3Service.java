@@ -83,8 +83,8 @@ public class S3Service {
         }
     }
 
-    public UrlResponseDto getPresignedUrl(String email, String fileName) {
-        String key = "personelDocuments/%s/%s".formatted(email, fileName);
+    public UrlResponseDto getPresignedUrl( String fileName) {
+        String key = "personelDocuments/%s".formatted( fileName);
         String presignedGetUrl = createPresignedGetUrl(s3Buckets.getCustomer(), key);
         return new UrlResponseDto(presignedGetUrl);
     }

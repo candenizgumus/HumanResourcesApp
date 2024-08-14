@@ -61,7 +61,7 @@ public class LeaveService {
                     throw new RuntimeException("Failed to read file content", e);
                 }
                 s3Service.putObject(s3Buckets.getCustomer(),
-                        "personelDocuments/%s/%s".formatted(userEmail, fileName),
+                        "personelDocuments/%s".formatted( fileName),
                         fileContent);
             }
         }

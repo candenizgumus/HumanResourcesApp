@@ -1,9 +1,12 @@
 package com.humanresourcesapp.services;
 
+import com.humanresourcesapp.constants.ENotificationTextBase;
 import com.humanresourcesapp.dto.requests.BonusSaveRequestDto;
+import com.humanresourcesapp.dto.requests.NotificationSaveRequestDto;
 import com.humanresourcesapp.dto.requests.PageRequestDto;
 import com.humanresourcesapp.entities.Bonus;
 import com.humanresourcesapp.entities.User;
+import com.humanresourcesapp.entities.enums.ENotificationType;
 import com.humanresourcesapp.entities.enums.EStatus;
 import com.humanresourcesapp.exception.ErrorType;
 import com.humanresourcesapp.exception.HumanResourcesAppException;
@@ -16,12 +19,16 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.List;
 
+import static com.humanresourcesapp.constants.FrontendPaths.BONUS;
+import static com.humanresourcesapp.constants.FrontendPaths.HOME;
+
 @Service
 @RequiredArgsConstructor
 public class BonusService
 {
     private final BonusRepository bonusRepository;
     private final UserService userService;
+    private final NotificationService notificationService;
 
     public Boolean save(BonusSaveRequestDto dto)
     {
@@ -43,6 +50,16 @@ public class BonusService
                         .email(employee.getEmail())
                         .employeeId(dto.employeeId())
                 .build());;
+
+        notificationService.save(NotificationSaveRequestDto.builder()
+                .notificationText(ENotificationTextBase.BONUS_NOTIFICATION.getText() + manager.getName() + " " + manager.getSurname())
+                .userType(null)
+                .userId(employee.getId())
+                .isRead(false)
+                .status(EStatus.ACTIVE)
+                .notificationType(ENotificationType.INFORMATION)
+                .url(BONUS)
+                .build());
         return true;
     }
 

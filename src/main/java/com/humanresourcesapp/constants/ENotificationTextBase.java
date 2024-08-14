@@ -18,7 +18,11 @@ public enum ENotificationTextBase {
     LEAVE_APPROVE_NOTIFICATION("Leave approved : "),
     LEAVE_REJECT_NOTIFICATION("Leave rejected : "),
     LEAVE_CANCEL_NOTIFICATION("Leave canceled : "),
-    ANNUAL_LEAVE_CHANGE("Annual leave change : ");
+    ANNUAL_LEAVE_CHANGE("Annual leave change : "),
+
+    BONUS_NOTIFICATION("Bonus from : ");
+
+
     private final String text;
     ENotificationTextBase(String notificationTextBase) {
         this.text = notificationTextBase;

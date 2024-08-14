@@ -71,7 +71,7 @@ public class UserService {
                 .isRead(false)
                 .status(EStatus.ACTIVE)
                 .notificationType(ENotificationType.SUCCESS)
-                .url(HOME)
+                .url(BONUS)
                 .build());
         return user;
     }

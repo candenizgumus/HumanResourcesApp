@@ -1,33 +1,43 @@
 import React, { useEffect, useState } from "react";
 import {
-  DataGrid,
-  GridColDef,
-  GridRowSelectionModel,
+    DataGrid,
+    GridColDef,
+    GridRowSelectionModel,
 } from "@mui/x-data-grid";
+import CircularProgress from '@mui/material/CircularProgress';
 import {
-  Button,
-  Grid,
-  TextField,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  Autocomplete,
-  Typography,
-  Box,
+    Button,
+    Grid,
+    TextField,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    Autocomplete,
+    Typography,
+    Box,
 } from "@mui/material";
-import {HumanResources, useAppSelector} from "../../../store";
-import {useDispatch} from "react-redux";
+import { HumanResources, useAppSelector } from "../../../store";
+import { useDispatch } from "react-redux";
 import Swal from "sweetalert2";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import dayjs, { Dayjs } from "dayjs";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import MyDropzone from "../../atoms/DropZone";
+import DownloadButtonFromS3 from "../../atoms/DownloadButtonFromS3";
 import {
     fetchGetLeavesOfManager, fetchApproveLeave,
-    fetchDeleteLeave, fetchCancelLeave, fetchUpdateAnnualLeaveDays
+    fetchDeleteLeave, fetchCancelLeave, fetchUpdateAnnualLeaveDays,
+    fetchSaveLeave,
+    fetchAssignLeave
 } from "../../../store/feature/leaveSlice";
 import { clearToken, fetchFindUserByToken, fetchGetAllUsersOfManager } from "../../../store/feature/authSlice";
-import DownloadButtonFromS3 from "../../atoms/DownloadButtonFromS3";
+import { ELeaveType } from "../../../models/ELeaveType";
 
 const columns: GridColDef[] = [
-    { field: "id", headerName: "ID", width: 70, headerAlign: "center" },
+    { field: "fullName", headerName: "Name", width: 150, headerAlign: "center" },
+    { field: "email", headerName: "Email", width: 150, headerAlign: "center" },
     { field: "description", headerName: "Description", width: 200, headerAlign: "center" },
 
     { field: "startDate", headerName: "Start Date", width: 150, headerAlign: "center" },
@@ -40,7 +50,7 @@ const columns: GridColDef[] = [
         field: "attachedFile", headerName: "Document", headerAlign: "center", width: 100,
         renderCell: (params) => (
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '100%' }}>
-                {params.value && <DownloadButtonFromS3 fileKey={params.value}/> }
+                {params.value && <DownloadButtonFromS3 fileKey={params.value} />}
             </div>
         )
     },
@@ -55,10 +65,16 @@ const SideBarManagerLeaves = () => {
     const leaves = useAppSelector((state) => state.leave.leaveList);
     const [loading, setLoading] = useState(false);
     const [isActivating, setIsActivating] = useState(false);
-    const [openModal, setOpenModal] = useState(false); 
+    const [openChangeAnnualLeaveDayModal, setOpenChangeAnnualLeaveDayModal] = useState(false);
+    const [openAssignLeaveModal, setOpenAssignLeaveModal] = useState(false);
     const [selectedEmployee, setSelectedEmployee] = useState<any>(null);
     const [newLeaveDays, setNewLeaveDays] = useState(0);
     const employees = useAppSelector((state) => state.auth.userList);
+    const [description, setDescription] = useState('');
+    const [leaveType, setLeaveType] = useState<ELeaveType>(ELeaveType.ANNUAL); // Default to ANNUAL
+    const [startDate, setStartDate] = useState<Date | null>(null);
+    const [endDate, setEndDate] = useState<Date | null>(null);
+    const [files, setFiles] = useState<File[]>([]);
 
     useEffect(() => {
         dispatch(
@@ -83,7 +99,7 @@ const SideBarManagerLeaves = () => {
             const selectedLeave = leaves.find((leave) => leave.id === id);
             if (!selectedLeave) continue;
 
-            if (selectedLeave.isLeaveApproved){
+            if (selectedLeave.isLeaveApproved) {
                 Swal.fire({
                     title: "Error",
                     text: 'Leave already approved',
@@ -270,105 +286,214 @@ const SideBarManagerLeaves = () => {
         setLoading(false);
     };
 
-    const handleOpenModal = async () => {
-        setOpenModal(true);
+    const handleUpdateAnnualLeaveDays = async () => {
+        setOpenChangeAnnualLeaveDayModal(true);
     };
-    
-      const handleCloseModal = () => {
-        setOpenModal(false);
+
+    const handleAssignLeave = async () => {
+        setOpenAssignLeaveModal(true)
+    }
+
+    const handleCloseChangeAnnualLeaveDayModal = () => {
+        setOpenChangeAnnualLeaveDayModal(false);
         setSelectedEmployee(null);
         setNewLeaveDays(0);
     };
-    
-      const handleEmployeeChange = (event: any, selectedEmployee: any) => {
+
+    const handleCloseAssignLeaveModal = () => {
+        setOpenAssignLeaveModal(false);
+        setSelectedEmployee(null);
+        setDescription('');
+        setEndDate(null);
+        setStartDate(null);
+        setLeaveType(ELeaveType.ANNUAL);
+        setFiles([]);
+    };
+
+    const handleEmployeeChange = (event: any, selectedEmployee: any) => {
         if (selectedEmployee) {
-          setSelectedEmployee(selectedEmployee);
-          setNewLeaveDays(selectedEmployee.remainingAnnualLeave);
+            setSelectedEmployee(selectedEmployee);
+            setNewLeaveDays(selectedEmployee.remainingAnnualLeave);
         } else {
-          setSelectedEmployee(null);
+            setSelectedEmployee(null);
         }
-      };
-    
-      const handleSaveLeaveDays = async () => {
+    };
+
+    const handleSaveLeaveDays = async () => {
         if (!selectedEmployee || newLeaveDays <= 0) {
-            handleCloseModal();
-          Swal.fire({
-            title: "Error",
-            text: "Please select an employee and enter valid leave days.",
-            icon: "error",
-            confirmButtonText: "OK",
-          });
-          return;
+            handleCloseChangeAnnualLeaveDayModal();
+            Swal.fire({
+                title: "Error",
+                text: "Please select an employee and enter valid leave days.",
+                icon: "error",
+                confirmButtonText: "OK",
+            });
+            return;
         }
-    
+
         setLoading(true);
-    
+
         try {
-          const result = await dispatch(
-            fetchUpdateAnnualLeaveDays({
-              token: token,
-              id: selectedEmployee.id,
-              leaveDays: newLeaveDays,
-            })
-          );
-    
-          if (result.payload.message) {
-            Swal.fire({
-              title: "Error",
-              text: result.payload.message,
-              icon: "error",
-              confirmButtonText: "OK",
-            });
-          } else {
-            Swal.fire({
-              title: "Success",
-              text: "Annual leave days updated successfully.",
-              icon: "success",
-              confirmButtonText: "OK",
-            });
-
-            dispatch(
-                fetchGetAllUsersOfManager({
+            const result = await dispatch(
+                fetchUpdateAnnualLeaveDays({
                     token: token,
-                    page: 0,
-                    pageSize: 100,
-                    searchText: searchText,
+                    id: selectedEmployee.id,
+                    leaveDays: newLeaveDays,
                 })
-            )
-                .catch(() => {
-                dispatch(clearToken());
-            });
-    
-            handleCloseModal();
-          }
-        } catch (error) {
-          Swal.fire({
-            title: "Error",
-            text: "An error occurred while updating leave days.",
-            icon: "error",
-            confirmButtonText: "OK",
-          });
-        }
-    
-        setLoading(false);
-      };
+            );
 
+            if (result.payload.message) {
+                Swal.fire({
+                    title: "Error",
+                    text: result.payload.message,
+                    icon: "error",
+                    confirmButtonText: "OK",
+                });
+            } else {
+                Swal.fire({
+                    title: "Success",
+                    text: "Annual leave days updated successfully.",
+                    icon: "success",
+                    confirmButtonText: "OK",
+                });
+
+                dispatch(
+                    fetchGetAllUsersOfManager({
+                        token: token,
+                        page: 0,
+                        pageSize: 100,
+                        searchText: searchText,
+                    })
+                )
+                    .catch(() => {
+                        dispatch(clearToken());
+                    });
+
+                handleCloseChangeAnnualLeaveDayModal();
+            }
+        } catch (error) {
+            Swal.fire({
+                title: "Error",
+                text: "An error occurred while updating leave days.",
+                icon: "error",
+                confirmButtonText: "OK",
+            });
+        }
+
+        setLoading(false);
+    };
+
+    const handleSaveLeave = async () => {
+        if (!selectedEmployee) {
+            handleCloseAssignLeaveModal();
+            Swal.fire({
+                title: "Error",
+                text: "Please select an employee.",
+                icon: "error",
+                confirmButtonText: "OK",
+            });
+            return;
+        }
+
+        setLoading(true);
+
+        if (!description || !startDate || !endDate || !leaveType) {
+            handleCloseAssignLeaveModal();
+            Swal.fire({
+                title: "Error",
+                text: "Please fill in all required fields.",
+                icon: "error",
+                confirmButtonText: "OK",
+            });
+            return;
+        }
+
+        try {
+            const result = await dispatch(
+                fetchAssignLeave({
+                    token,
+                    description,
+                    startDate: new Date(startDate.setHours(12)), // Convert Dayjs to JS Date and add 12 hours
+                    endDate: new Date(endDate.setHours(12)), // Convert Dayjs to JS Date and add 12 hours
+                    leaveType,
+                    files: files,
+                    employeeId: selectedEmployee.id
+                })
+            );
+
+            if (result.payload.message) {
+                Swal.fire({
+                    title: "Error",
+                    text: result.payload.message,
+                    icon: "error",
+                    confirmButtonText: "OK",
+                });
+            } else {
+                Swal.fire({
+                    title: "Success",
+                    text: "Leave assigned successfully.",
+                    icon: "success",
+                    confirmButtonText: "OK",
+                });
+
+                dispatch(
+                    fetchGetAllUsersOfManager({
+                        token: token,
+                        page: 0,
+                        pageSize: 100,
+                        searchText: searchText,
+                    })
+                ).then(() => {
+                    dispatch(fetchGetLeavesOfManager({
+                        token: token,
+                        page: 0,
+                        pageSize: 100,
+                        searchText: searchText,
+                    }))
+                })
+                    .catch(() => {
+                        dispatch(clearToken());
+                    });
+
+
+                handleCloseAssignLeaveModal();
+            }
+        } catch (error) {
+            handleCloseAssignLeaveModal();
+            Swal.fire({
+                title: "Error",
+                text: "An error occurred while assigning leave.",
+                icon: "error",
+                confirmButtonText: "OK",
+            });
+        }
+        setLoading(false);
+    }
+
+    const handleFilesAdded = (newFiles: File[]) => {
+        setFiles(prevFiles => [...prevFiles, ...newFiles]);
+    };
+
+    const handleFileRemoved = (fileToRemove: File) => {
+        setFiles(prevFiles => prevFiles.filter(file => file !== fileToRemove));
+        // Ekstra işlemler burada yapılabilir
+    };
     return (
         <>
-            <div style={{height: 400, width: "inherit"}}>
+            <div style={{ height: 400, width: "inherit" }}>
                 <TextField
                     label="Description"
                     variant="outlined"
                     onChange={(event) => setSearchText(event.target.value)}
                     value={searchText}
-                    style={{marginBottom: "10px"}}
+                    style={{ marginBottom: "10px" }}
                 />
                 <DataGrid
                     rows={leaves}
                     columns={columns}
                     initialState={{
                         pagination: {
-                            paginationModel: {page: 1, pageSize: 5},
+                            paginationModel: { page: 1, pageSize: 5 },
                         },
                     }}
                     getRowClassName={(params) =>
@@ -398,7 +523,7 @@ const SideBarManagerLeaves = () => {
                         },
                     }}
                 />
-                <Grid container spacing={1} style={{marginTop: 16}} direction="row">
+                <Grid container spacing={1} style={{ marginTop: 16 }} direction="row">
                     <Grid item>
                         <Button
                             onClick={handleApprove}
@@ -438,14 +563,24 @@ const SideBarManagerLeaves = () => {
                         <Button
                             variant="contained"
                             color="primary"
-                            onClick={handleOpenModal}
+                            onClick={handleUpdateAnnualLeaveDays}
                             style={{ marginTop: "20px" }}
                         >
                             Update Annual Leave Days
                         </Button>
                     </Grid>
+                    <Grid item>
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={handleAssignLeave}
+                            style={{ marginTop: "20px" }}
+                        >
+                            Assign Leave
+                        </Button>
+                    </Grid>
                 </Grid>
-                <Dialog open={openModal} onClose={handleCloseModal} fullWidth maxWidth='sm'>
+                <Dialog open={openChangeAnnualLeaveDayModal} onClose={handleCloseChangeAnnualLeaveDayModal} fullWidth maxWidth='sm'>
                     <DialogTitle>Update Annual Leave Days</DialogTitle>
                     <DialogContent>
                         <Box mt={2}>
@@ -464,22 +599,111 @@ const SideBarManagerLeaves = () => {
                             />
                             {selectedEmployee && (
                                 <TextField
-                                label="New Annual Leave Days"
-                                type="number"
-                                value={newLeaveDays}
-                                onChange={(e) => setNewLeaveDays(Number(e.target.value))}
-                                fullWidth
-                                margin="normal"
+                                    label="New Annual Leave Days"
+                                    type="number"
+                                    value={newLeaveDays}
+                                    onChange={(e) => setNewLeaveDays(Number(e.target.value))}
+                                    fullWidth
+                                    margin="normal"
                                 />
                             )}
                         </Box>
-                        
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={handleCloseModal} color="secondary">
+                        <Button onClick={handleCloseChangeAnnualLeaveDayModal} color="secondary">
                             Cancel
                         </Button>
                         <Button onClick={handleSaveLeaveDays} color="primary">
+                            Save
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+                <Dialog open={openAssignLeaveModal} onClose={handleCloseAssignLeaveModal} fullWidth maxWidth='sm'>
+                    <DialogTitle>Assign Leave</DialogTitle>
+                    <DialogContent>
+                        <Box mt={2}>
+                            <Autocomplete
+                                options={employees}
+                                getOptionLabel={(option) => option.name}
+                                onChange={handleEmployeeChange}
+                                renderInput={(params) => (
+                                    <TextField
+                                        {...params}
+                                        label="Select Employee"
+                                        variant="outlined"
+                                        fullWidth
+                                    />
+                                )}
+                            />
+                            {selectedEmployee && (
+                                <>
+                                    <Grid item mt={2}>
+                                        <TextField
+                                            label="Description"
+                                            name="description"
+                                            value={description}
+                                            onChange={e => setDescription(e.target.value)}
+                                            required
+                                            fullWidth
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12} mt={2}>
+                                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                            <DatePicker
+                                                shouldDisableDate={(date) => date.isBefore(dayjs().subtract(1, 'day'))}
+                                                label="Leave Start Date"
+                                                value={startDate ? dayjs(startDate) : null}
+                                                onChange={(newValue) => setStartDate(newValue ? newValue.toDate() : null)}
+                                                sx={{ width: '100%' }}
+                                            />
+                                        </LocalizationProvider>
+                                    </Grid>
+                                    <Grid item xs={12} mt={2}>
+                                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                            <DatePicker
+                                                shouldDisableDate={startDate ? (date) => date.isBefore(startDate) : undefined}
+                                                label="Leave End Date"
+                                                value={endDate ? dayjs(endDate) : null}
+                                                onChange={(newValue) => setEndDate(newValue ? newValue.toDate() : null)}
+                                                sx={{ width: '100%' }}
+                                            />
+                                        </LocalizationProvider>
+                                    </Grid>
+                                    <Grid item mt={2}>
+                                        <TextField
+                                            select
+                                            label="Leave Type"
+                                            value={leaveType}
+                                            onChange={e => setLeaveType(e.target.value as ELeaveType)}
+                                            required
+                                            fullWidth
+                                            SelectProps={{ native: true }}
+                                        >
+                                            {Object.values(ELeaveType).map(type => (
+                                                <option key={type} value={type}>{type}</option>
+                                            ))}
+                                        </TextField>
+                                    </Grid>
+                                    <Grid item mt={2}>
+                                        <MyDropzone
+                                            onFilesAdded={handleFilesAdded}
+                                            onFileRemoved={handleFileRemoved}
+                                        />
+                                    </Grid>
+                                </>
+                            )}
+                        </Box>
+                        {loading && (
+                            <Box display="flex" justifyContent="center" alignItems="center" mb={2}>
+                                <CircularProgress />
+                            </Box>
+                        )}
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={handleCloseAssignLeaveModal} color="secondary">
+                            Cancel
+                        </Button>
+                        <Button onClick={handleSaveLeave} color="primary">
                             Save
                         </Button>
                     </DialogActions>

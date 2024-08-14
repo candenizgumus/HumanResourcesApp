@@ -35,4 +35,7 @@ public class Leave extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     ELeaveType leaveType;
+
+    String fullName;
+    String email;
 }

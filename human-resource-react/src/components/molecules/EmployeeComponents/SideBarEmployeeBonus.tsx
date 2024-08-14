@@ -96,8 +96,9 @@ const  SideBarEmloyeeBonus = () => {
                     },
                 }}
                 pageSizeOptions={[5, 10]}
-                checkboxSelection
                 onRowSelectionModelChange={handleRowSelection}
+                rowSelection={false}
+
                 sx={{
                     "& .MuiDataGrid-columnHeaders": {
                         backgroundColor: "rgba(224, 224, 224, 1)",
@@ -109,9 +110,9 @@ const  SideBarEmloyeeBonus = () => {
                     "& .MuiDataGrid-cell": {
                         textAlign: "center",
                     },
-
                 }}
             />
+
 
 
         </div>

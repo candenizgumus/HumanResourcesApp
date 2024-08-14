@@ -428,14 +428,14 @@ export default function SideBarEmployees() {
                                                style={{ marginBottom: "10px" }}
                                     />
                                 </Grid>
-                                <Grid sx={{ marginBottom: "25px"  }} item xs={12}>
+                                <Grid sx={{ marginBottom: "50px"  }} item xs={12}>
                                     <LocalizationProvider   dateAdapter={AdapterDayjs}>
                                         <DatePicker
                                             label="Bonus Date"
                                             value={bonusDate ? dayjs(bonusDate) : null}
                                             disablePast={true}
                                             onChange={(newValue) => setBonusDate(newValue ? newValue.toDate() : null)}
-
+                                            sx={{ width: "100%" }}
                                         />
                                     </LocalizationProvider>
                                 </Grid>

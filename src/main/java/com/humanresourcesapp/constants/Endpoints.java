@@ -51,6 +51,7 @@ public class Endpoints
     public static final String GET = "/get";
     public static final String GET_ALL = "/get-all";
     public static final String GET_BY_ID = "/get-by-id";
+    public static final String GET_BY_EMPLOYEE_ID = "/get-by-employee-id";
     public static final String LOGIN = "/login";
     public static final String REGISTER = "/register";
     public static final String FORGOT_PASSWORD = "/forgot-password";
@@ -101,6 +102,7 @@ public class Endpoints
     public static final String FIND_MONTHLY_SALARY_OF_EMPLOYEES = "/find-monthly-salary-of-employees";
 
     public static final String GET_ALL_PERSONAL_DOCUMENT_TYPES = "/get-all-personal-document-types";
+    public static final String DOWNLOAD_PERSONAL_DOCUMENT = "/download-personal-document";
     public static final String GET_MONTHLY_PAYMENTS = "/get-monthly-payments";
     public static final String GET_CURRENT_MONTHS_HOLIDAYS = "/get-current-months-holidays";
     public static final String APPROVE_LEAVE = "/approve-leave";

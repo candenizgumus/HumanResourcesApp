@@ -41,7 +41,3 @@ dependencies {
     implementation 'software.amazon.awssdk:s3:2.21.1'
     implementation 'software.amazon.awssdk:auth:2.21.1'
 }
-
-tasks.named('test') {
-    useJUnitPlatform()
-}

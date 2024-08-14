@@ -30,13 +30,14 @@ import dayjs from "dayjs";
 import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
 
 const columns: GridColDef[] = [
+    { field: "id", headerName: "ID", width: 70, headerAlign: "center" },
     { field: "name", headerName: "First name", width: 150, headerAlign: "center" },
     { field: "surname", headerName: "Last name", width: 120, headerAlign: "center" },
     { field: "email", headerName: "Email", headerAlign: "center", width: 250 },
     { field: "phone", headerName: "Phone", sortable: false, headerAlign: "center", width: 140 },
     { field: "position", headerName: "Position", type: "string", width: 220, headerAlign: "center" },
+    { field: "userType", headerName: "User Type", width: 150, headerAlign: "center" },
     { field: "employeeType", headerName: "Employee Type", width: 150, headerAlign: "center" },
-    { field: "remainingAnnualLeave", headerName: "Remaining A.Leave", width: 150, headerAlign: "center" },
     { field: "status", headerName: "Status", width: 120, headerAlign: "center" },
     {
         field: "photo",
@@ -50,6 +51,8 @@ const columns: GridColDef[] = [
             </div>
         ),
     },
+    {field: "personalDocument", headerName: "Personal Document", width: 120, headerAlign: "center"},
+
 
 ];
 

@@ -6,6 +6,7 @@ import {
     fetchPersonalDocumentTypes,
     fetchSavePersonalDocument
 } from "../../../store/feature/personalDocumentSlice";
+import MyDropzone from "../../atoms/DropZone";
 
 
 const AddDocument: React.FC = () => {
@@ -17,7 +18,17 @@ const AddDocument: React.FC = () => {
     const [documentType, setDocumentType] = useState([]);
     const [documentFile, setDocumentFile] = useState<string>('');
     const [selectedDocumentType, setSelectedDocumentType] = useState<string>('');
+    const [files, setFiles] = useState<File[]>([]);
+    const [description, setDescription] = useState<string>('');
 
+    const handleFilesAdded = (newFiles: File[]) => {
+        setFiles(prevFiles => [...prevFiles, ...newFiles]);
+    };
+
+    const handleFileRemoved = (fileToRemove: File) => {
+        setFiles(prevFiles => prevFiles.filter(file => file !== fileToRemove));
+        // Ekstra işlemler burada yapılabilir
+    };
 
     useEffect(() => {
         dispatch(fetchPersonalDocumentTypes(token))
@@ -34,7 +45,8 @@ const AddDocument: React.FC = () => {
         dispatch(fetchSavePersonalDocument({
             employeeId: employeeId,
             documentType: selectedDocumentType,
-            documentFile: documentFile,
+            documentFile: files,
+            description: description,
             token: token
         }));
     };
@@ -56,14 +68,6 @@ const AddDocument: React.FC = () => {
                         padding: 2,
                     }}
                 >
-                    <TextField
-                        label=""
-                        name="employeeId"
-                        value={employeeId}
-                        fullWidth
-                        disabled={true}
-                        inputProps={{maxLength: 50}}
-                    />
                     <FormControl required variant="outlined">
                         <InputLabel>{'Document Type'}</InputLabel>
                         <Select
@@ -79,14 +83,17 @@ const AddDocument: React.FC = () => {
                         </Select>
                     </FormControl>
                     <TextField
-                        label='File Path'
-                        name="documentFile"
-                        value={documentFile}
-                        onChange={event => setDocumentFile(event.target.value)}
-                        fullWidth
                         required
-                        inputProps={{ maxLength: 50 }}
+                        label="Description"
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
                     />
+                    <Grid item style={{ width: 399, height:72  }}>
+                        <MyDropzone
+                            onFilesAdded={handleFilesAdded}
+                            onFileRemoved={handleFileRemoved}
+                        />
+                    </Grid>
                     <Button onClick={addDocument} sx={{mt: 5}} type="button" variant="contained" color="primary">
                         Add Document
                     </Button>

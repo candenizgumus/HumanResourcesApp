@@ -2,10 +2,7 @@ package com.humanresourcesapp.controllers;
 
 import com.humanresourcesapp.dto.requests.LeaveSaveRequestDto;
 import com.humanresourcesapp.dto.requests.PageRequestDto;
-import com.humanresourcesapp.dto.responses.LeaveResponseDto;
-import com.humanresourcesapp.entities.Expenditure;
 import com.humanresourcesapp.entities.Leave;
-import com.humanresourcesapp.entities.LeaveRequest;
 import com.humanresourcesapp.entities.enums.ELeaveType;
 import com.humanresourcesapp.services.LeaveService;
 import lombok.RequiredArgsConstructor;
@@ -71,5 +68,12 @@ public class LeaveController {
     @PreAuthorize("hasAnyAuthority('EMPLOYEE','MANAGER')")
     public ResponseEntity<Boolean> cancel(Long id){
         return ResponseEntity.ok(leaveService.cancel(id));
+    }
+
+    @PostMapping(CHANGE_LEAVE_DAY)
+    @PreAuthorize("hasAnyAuthority('MANAGER')")
+    public ResponseEntity<Boolean> changeLeaveDay(@RequestParam ("id") Long id,
+                                               @RequestParam ("leaveDay") Integer leaveDay) {
+        return ResponseEntity.ok(leaveService.changeLeaveDay(id,leaveDay));
     }
 }

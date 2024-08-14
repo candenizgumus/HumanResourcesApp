@@ -7,7 +7,6 @@ import com.humanresourcesapp.dto.requests.NotificationSaveRequestDto;
 import com.humanresourcesapp.dto.requests.PageRequestDto;
 import com.humanresourcesapp.entities.Expenditure;
 import com.humanresourcesapp.entities.User;
-import com.humanresourcesapp.entities.enums.EAccessIdentifier;
 import com.humanresourcesapp.entities.enums.ENotificationType;
 import com.humanresourcesapp.entities.enums.EStatus;
 import com.humanresourcesapp.exception.ErrorType;
@@ -79,7 +78,6 @@ public class ExpenditureService {
                 .status(EStatus.ACTIVE)
                 .notificationType(ENotificationType.WARNING)
                 .url(EXPENDITURE)
-                .accessIdentifier(EAccessIdentifier.EXPENDITURE_SAVE)
                 .build());
 
         return expenditureRepository.save(expenditure);
@@ -123,7 +121,6 @@ public class ExpenditureService {
                     .status(EStatus.ACTIVE)
                     .notificationType(ENotificationType.SUCCESS)
                     .url(EXPENDITURE)
-                    .accessIdentifier(EAccessIdentifier.EXPENDITURE_APPROVE)
                     .build());
             return true;
         }
@@ -158,7 +155,6 @@ public class ExpenditureService {
                 .status(EStatus.ACTIVE)
                 .notificationType(ENotificationType.WARNING)
                 .url(EXPENDITURE)
-                .accessIdentifier(EAccessIdentifier.EXPENDITURE_DECLINE)
                 .build());
         return true;
     }
@@ -185,7 +181,6 @@ public class ExpenditureService {
                     .status(EStatus.ACTIVE)
                     .notificationType(ENotificationType.WARNING)
                     .url(EXPENDITURE)
-                    .accessIdentifier(EAccessIdentifier.EXPENDITURE_CANCEL)
                     .build());
 
             expenditure.setStatus(EStatus.CANCELED);

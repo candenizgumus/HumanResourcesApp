@@ -170,6 +170,28 @@ export const fetchCancelLeave = createAsyncThunk(
     }
 
 )
+interface IFetchChangeLeaveDay{
+    token:string,
+    id: number,
+    leaveDays: number
+}
+
+export const fetchUpdateAnnualLeaveDays = createAsyncThunk(
+    'leave/fetchUpdateAnnualLeaveDays',
+    async (payload: IFetchChangeLeaveDay) => {
+
+        const response = await fetch('http://localhost:9090/dev/v1/leave/change-leave-day?id='+payload.id+'&leaveDay='+payload.leaveDays, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ` + payload.token
+            }
+        });
+
+        return await response.json();
+    }
+
+)
 
 const leaveSlice = createSlice({
     name: 'leave',

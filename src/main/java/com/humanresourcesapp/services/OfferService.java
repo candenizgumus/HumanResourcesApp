@@ -6,7 +6,6 @@ import com.humanresourcesapp.entities.Auth;
 import com.humanresourcesapp.entities.Company;
 import com.humanresourcesapp.entities.Offer;
 import com.humanresourcesapp.entities.User;
-import com.humanresourcesapp.entities.enums.EAccessIdentifier;
 import com.humanresourcesapp.entities.enums.ENotificationType;
 import com.humanresourcesapp.entities.enums.EStatus;
 import com.humanresourcesapp.entities.enums.EUserType;
@@ -77,7 +76,6 @@ public class OfferService
                 .status(EStatus.ACTIVE)
                 .notificationType(ENotificationType.INFORMATION)
                 .url(OFFERS)
-                .accessIdentifier(EAccessIdentifier.OFFER_SAVE)
                 .build());
 
         return true;
@@ -142,7 +140,6 @@ public class OfferService
                 .status(EStatus.ACTIVE)
                 .notificationType(ENotificationType.INFORMATION)
                 .url(HOME)
-                .accessIdentifier(EAccessIdentifier.WELCOME)
                 .build());
 
         return true;

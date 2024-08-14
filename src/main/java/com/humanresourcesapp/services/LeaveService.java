@@ -7,7 +7,6 @@ import com.humanresourcesapp.dto.requests.NotificationSaveRequestDto;
 import com.humanresourcesapp.dto.requests.PageRequestDto;
 import com.humanresourcesapp.entities.Leave;
 import com.humanresourcesapp.entities.User;
-import com.humanresourcesapp.entities.enums.EAccessIdentifier;
 import com.humanresourcesapp.entities.enums.ELeaveType;
 import com.humanresourcesapp.entities.enums.ENotificationType;
 import com.humanresourcesapp.entities.enums.EStatus;
@@ -24,7 +23,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.Period;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
@@ -86,7 +84,6 @@ public class LeaveService {
                 .status(EStatus.ACTIVE)
                 .notificationType(ENotificationType.WARNING)
                 .url(LEAVES)
-                .accessIdentifier(EAccessIdentifier.LEAVE_SAVE)
                 .build());
         return true;
     }
@@ -125,7 +122,6 @@ public class LeaveService {
                     .status(EStatus.ACTIVE)
                     .notificationType(ENotificationType.SUCCESS)
                     .url(EXPENDITURE)
-                    .accessIdentifier(EAccessIdentifier.LEAVE_APPROVE)
                     .build());
             return true;
         }
@@ -180,7 +176,6 @@ public class LeaveService {
                 .status(EStatus.ACTIVE)
                 .notificationType(ENotificationType.WARNING)
                 .url(LEAVES)
-                .accessIdentifier(EAccessIdentifier.LEAVE_DECLINE)
                 .build());
         return true;
     }
@@ -208,7 +203,6 @@ public class LeaveService {
                     .status(EStatus.ACTIVE)
                     .notificationType(ENotificationType.WARNING)
                     .url(LEAVES)
-                    .accessIdentifier(EAccessIdentifier.LEAVE_CANCEL)
                     .build());
 
             leave.setStatus(EStatus.CANCELED);
@@ -219,6 +213,28 @@ public class LeaveService {
         }
 
         leaveRepository.save(leave);
+        return true;
+    }
+
+    public Boolean changeLeaveDay(Long id, Integer leaveDay) {
+        String userEmail = UserInfoSecurityContext.getUserInfoFromSecurityContext();
+        User manager = userService.findByEmail(userEmail).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
+        User user = userService.findById(id);
+
+        if(!user.getCompanyId().equals(manager.getCompanyId())){
+            throw new HumanResourcesAppException(ErrorType.INSUFFICIENT_PERMISSION);
+        }
+        user.setRemainingAnnualLeave(leaveDay);
+        userService.save(user);
+        notificationService.save(NotificationSaveRequestDto.builder()
+                .notificationText(ENotificationTextBase.ANNUAL_LEAVE_CHANGE.getText() + leaveDay)
+                .userType(null)
+                .userId(user.getId())
+                .isRead(false)
+                .status(EStatus.ACTIVE)
+                .notificationType(ENotificationType.WARNING)
+                .url(LEAVES)
+                .build());
         return true;
     }
 }

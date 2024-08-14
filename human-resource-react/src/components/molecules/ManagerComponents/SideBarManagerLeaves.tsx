@@ -16,7 +16,7 @@ import {
     fetchGetLeavesOfManager, fetchApproveLeave,
     fetchDeleteLeave, fetchCancelLeave
 } from "../../../store/feature/leaveSlice";
-import { clearToken } from "../../../store/feature/authSlice";
+import { clearToken, fetchFindUserByToken } from "../../../store/feature/authSlice";
 
 const columns: GridColDef[] = [
     { field: "id", headerName: "ID", width: 70, headerAlign: "center" },
@@ -98,6 +98,7 @@ const SideBarManagerLeaves = () => {
                             icon: "error",
                             confirmButtonText: "OK",
                         });
+                        setLoading(false);
                         return;
                     } else {
                         await Swal.fire({
@@ -185,6 +186,10 @@ const SideBarManagerLeaves = () => {
         }
         setIsActivating(false);
     };
+
+    const handleAddDay = async () => {
+        
+    }
 
     const handleCancel = async () => {
         for (let id of selectedRowIds) {
@@ -325,6 +330,17 @@ const SideBarManagerLeaves = () => {
                         disabled={loading || selectedRowIds.length === 0}
                     >
                         {loading ? "Cancelling..." : "Cancel"}
+                    </Button>
+                </Grid>
+            </Grid>
+            <Grid container spacing={1} style={{marginTop: 16}} direction="row">
+                <Grid item>
+                    <Button
+                        onClick={handleAddDay}
+                        variant="contained"
+                        color="primary"
+                    >
+                        Add Annual Leave Day
                     </Button>
                 </Grid>
             </Grid>

@@ -45,6 +45,7 @@ public enum ErrorType
     PAYMENT_ALREADY_DELETED( 1033, "Payment Already Deleted",  HttpStatus.BAD_REQUEST),
     LEAVE_NOT_FOUND( 1034, "Leave Not Found",  HttpStatus.BAD_REQUEST ),
     LEAVE_ALREADY_APPROVED( 1035, "Leave Already Approved",  HttpStatus.BAD_REQUEST),
+    ANNUAL_LEAVE_EXCEEDED(1036, "Annual Leave Exceeded",HttpStatus.BAD_REQUEST ),
     ;
     private final Integer code;
     private final String message;

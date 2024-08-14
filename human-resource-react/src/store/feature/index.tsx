@@ -10,6 +10,7 @@ import expenditureSlice from "./expenditureSlice";
 import personalDocumentSlice from "./personalDocumentSlice";
 import leaveSlice from "./leaveSlice";
 import paymentSlice from "./paymentSlice";
+import bonusSlice from "./bonusSlice";
 
 
 
@@ -26,5 +27,6 @@ export{
     expenditureSlice,
     personalDocumentSlice,
     leaveSlice,
-    paymentSlice
+    paymentSlice,
+    bonusSlice
 }

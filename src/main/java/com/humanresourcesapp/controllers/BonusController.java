@@ -7,10 +7,7 @@ import com.humanresourcesapp.services.BonusService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RequestMapping(ROOT+BONUS)
@@ -22,7 +19,7 @@ public class BonusController
 
     @PostMapping(SAVE)
     @PreAuthorize("hasAnyAuthority('MANAGER')")
-    public ResponseEntity<Boolean> save(BonusSaveRequestDto dto)
+    public ResponseEntity<Boolean> save(@RequestBody BonusSaveRequestDto dto)
     {
         return ResponseEntity.ok(bonusService.save(dto));
     }

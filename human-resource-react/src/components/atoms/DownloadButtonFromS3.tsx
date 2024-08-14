@@ -6,14 +6,13 @@ import { useDispatch } from "react-redux";
 
 const DownloadButtonFromS3: React.FC<{ fileKey: string }> = ({ fileKey }) => {
     const dispatch = useDispatch<HumanResources>();
-    const user = useAppSelector((state) => state.auth.user);
+
     const token = useAppSelector((state) => state.auth.token);
 
 
     const handleDownload = async () => {
         try {
             const presignedUrl = await dispatch(fetchDownloadFile({
-                email: user.email,
                 fileName: fileKey,
                 token: token
             }));

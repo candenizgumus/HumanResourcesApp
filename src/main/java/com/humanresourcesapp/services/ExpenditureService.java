@@ -48,7 +48,7 @@ public class ExpenditureService {
                 String key;
                 try {
                     fileContent = file.getBytes();
-                    key = "personelDocuments/%s/%s".formatted(userEmail, fileName);
+                    key = "personelDocuments/%s".formatted( fileName);
                 } catch (IOException e) {
                     throw new RuntimeException("Failed to read file content", e);
                 }

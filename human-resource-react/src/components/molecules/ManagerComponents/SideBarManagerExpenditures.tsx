@@ -22,6 +22,7 @@ import {
     fetchApproveExpenditure, fetchDeleteExpenditure, fetchCancelExpenditure,
     fetchGetExpendituresOfManager
 } from "../../../store/feature/expenditureSlice";
+import DownloadButtonFromS3 from "../../atoms/DownloadButtonFromS3";
 
 const columns: GridColDef[] = [
     {field: "id", headerName: "ID", width: 70, headerAlign: "center"},
@@ -48,6 +49,14 @@ const columns: GridColDef[] = [
     {field: "isExpenditureApproved", headerName: "Approval Status", headerAlign: "center", width: 250},
     {field: "approveDate", headerName: "Approval Date", headerAlign: "center", width: 250},
     {field: "status", headerName: "Status", headerAlign: "center", width: 250},
+    {
+        field: "attachedFile", headerName: "Document", headerAlign: "center", width: 100,
+        renderCell: (params) => (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '100%' }}>
+                {params.value && <DownloadButtonFromS3 fileKey={params.value}/> }
+            </div>
+        )
+    },
 
 ];
 

@@ -24,7 +24,7 @@ public class S3Controller
     @PostMapping(DOWNLOAD)
     @PreAuthorize("hasAnyAuthority('EMPLOYEE', 'MANAGER', 'ADMIN')")
     public ResponseEntity<UrlResponseDto> downloadFile(@RequestBody ExpenditureDownloadRequestDto dto) {
-        return ResponseEntity.ok(s3Service.getPresignedUrl(dto.email(), dto.fileName()));
+        return ResponseEntity.ok(s3Service.getPresignedUrl(dto.fileName()));
     }
 
    /* @PostMapping(UPLOAD)

@@ -71,7 +71,6 @@ export const fetchGetExpendituresOfEmployee = createAsyncThunk(
 
 interface IFetchDownloadFile {
     token: string,
-    email: string,
     fileName: string
 
 }
@@ -86,7 +85,6 @@ export const fetchDownloadFile = createAsyncThunk(
                 'Authorization': `Bearer ` + payload.token
             },
             body: JSON.stringify({
-                email: payload.email,
                 fileName: payload.fileName
             })
         });

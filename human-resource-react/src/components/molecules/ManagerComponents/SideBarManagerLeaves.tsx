@@ -17,6 +17,7 @@ import {
     fetchDeleteLeave, fetchCancelLeave
 } from "../../../store/feature/leaveSlice";
 import { clearToken, fetchFindUserByToken } from "../../../store/feature/authSlice";
+import DownloadButtonFromS3 from "../../atoms/DownloadButtonFromS3";
 
 const columns: GridColDef[] = [
     { field: "id", headerName: "ID", width: 70, headerAlign: "center" },
@@ -28,6 +29,14 @@ const columns: GridColDef[] = [
     { field: "isLeaveApproved", headerName: "Approval Status", headerAlign: "center", width: 250 },
     { field: "approveDate", headerName: "Approval Date", width: 150, headerAlign: "center" },
     { field: "status", headerName: "Status", width: 120, headerAlign: "center" },
+    {
+        field: "attachedFile", headerName: "Document", headerAlign: "center", width: 100,
+        renderCell: (params) => (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '100%' }}>
+                {params.value && <DownloadButtonFromS3 fileKey={params.value}/> }
+            </div>
+        )
+    },
 ];
 
 const SideBarManagerLeaves = () => {

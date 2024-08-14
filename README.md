@@ -11,9 +11,8 @@ This project is a web application developed based on the [Kolay IK](https://kola
 - [License](#license)
 
 ## Technologies Used
-- **Backend:** Java
+- **Backend:** Java , SpringBoot, SpringSecurity, SpringWeb, SpringData JPA, SpringEmail, JWT, Amazon S3
 - **Frontend:** React, TypeScript
-- ...
 
 ## Getting Started
 To get a local copy of the project up and running, follow these simple steps.

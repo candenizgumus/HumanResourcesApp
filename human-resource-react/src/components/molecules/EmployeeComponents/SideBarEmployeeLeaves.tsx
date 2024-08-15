@@ -19,34 +19,14 @@ import {
     fetchDeleteLeave,
     fetchSaveLeave,
     fetchGetLeavesOfEmployee,
-    fetchCancelLeave
-} from "../../../store/feature/leaveSlice"; // Import your actions
-import { HumanResources, useAppSelector } from "../../../store"; // Import your hooks
-import { ELeaveType } from "../../../models/ELeaveType";
+    fetchCancelLeave,
+} from "../../../store/feature/leaveSlice";
+import { fetchGetDLeaveTypes } from "../../../store/feature/definitionSlice";
+import { HumanResources, useAppSelector } from "../../../store"; //
 import { clearToken, fetchFindUserByToken } from "../../../store/feature/authSlice";
 import MyDropzone from "../../atoms/DropZone";
 import DownloadButtonFromS3 from "../../atoms/DownloadButtonFromS3";
 
-const leaveColumns: GridColDef[] = [
-    { field: "id", headerName: "ID", width: 70, headerAlign: "center" },
-    { field: "description", headerName: "Description", width: 200, headerAlign: "center" },
-
-    { field: "startDate", headerName: "Start Date", width: 150, headerAlign: "center" },
-    { field: "endDate", headerName: "End Date", width: 150, headerAlign: "center" },
-    { field: "leaveType", headerName: "Leave Type", width: 150, headerAlign: "center" },
-    { field: "isLeaveApproved", headerName: "Approval Status", headerAlign: "center", width: 250 },
-    { field: "approveDate", headerName: "Approval Date", width: 150, headerAlign: "center" },
-    { field: "status", headerName: "Status", width: 120, headerAlign: "center" },
-    {
-        field: "attachedFile", headerName: "Document", headerAlign: "center", width: 100,
-        renderCell: (params) => (
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '100%' }}>
-                {params.value && <DownloadButtonFromS3 fileKey={params.value}/> }
-            </div>
-        )
-    },
-
-];
 
 export default function SideBarEmployeeLeaves() {
     const [selectedRowIds, setSelectedRowIds] = useState<number[]>([]);
@@ -57,10 +37,41 @@ export default function SideBarEmployeeLeaves() {
     const leaveList = useAppSelector((state) => state.leave.leaveList);
     const [loading, setLoading] = useState(false);
     const [description, setDescription] = useState('');
-    const [leaveType, setLeaveType] = useState<ELeaveType>(ELeaveType.ANNUAL); // Default to ANNUAL
+    const [dLeaveTypeId, setDLeaveTypeId] = useState(1); // Default to ANNUAL
     const [startDate, setStartDate] = useState<Date | null>(null);
     const [endDate, setEndDate] = useState<Date | null>(null);
     const [files, setFiles] = useState<File[]>([]);
+    const leaveTypes = useAppSelector((state) => state.definition.leaveTypeList);
+
+    const leaveColumns: GridColDef[] = [
+        { field: "id", headerName: "ID", width: 70, headerAlign: "center" },
+        { field: "description", headerName: "Description", width: 200, headerAlign: "center" },
+    
+        { field: "startDate", headerName: "Start Date", width: 150, headerAlign: "center" },
+        { field: "endDate", headerName: "End Date", width: 150, headerAlign: "center" },
+        { 
+            field: "dleaveTypeId", 
+            headerName: "Leave Type", 
+            width: 150, 
+            headerAlign: "center", 
+            renderCell: (params) => {
+                const leaveType = leaveTypes.find(lt => lt.id === params.value);
+                return leaveType ? leaveType.name : "Unknown";
+            }
+        },
+        { field: "isLeaveApproved", headerName: "Approval Status", headerAlign: "center", width: 250 },
+        { field: "approveDate", headerName: "Approval Date", width: 150, headerAlign: "center" },
+        { field: "status", headerName: "Status", width: 120, headerAlign: "center" },
+        {
+            field: "attachedFile", headerName: "Document", headerAlign: "center", width: 100,
+            renderCell: (params) => (
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '100%' }}>
+                    {params.value && <DownloadButtonFromS3 fileKey={params.value}/> }
+                </div>
+            )
+        },
+    
+    ];
 
     useEffect(() => {
         dispatch(
@@ -71,7 +82,9 @@ export default function SideBarEmployeeLeaves() {
                 searchText: searchText,
             })
         ).then(()=> {
-            dispatch(fetchFindUserByToken(token))
+            dispatch(fetchFindUserByToken(token)).then(()=> {
+                dispatch(fetchGetDLeaveTypes(token))
+            })
         }).catch(() => {
             // handle error, e.g., clear token
         });
@@ -175,7 +188,7 @@ export default function SideBarEmployeeLeaves() {
 
     const handleSaveLeave = async () => {
         // Validate required fields
-        if (!description || !startDate || !endDate || !leaveType) {
+        if (!description || !startDate || !endDate || !dLeaveTypeId) {
             Swal.fire({
                 title: "Error",
                 text: "Please fill in all required fields.",
@@ -192,7 +205,7 @@ export default function SideBarEmployeeLeaves() {
                 description,
                 startDate: new Date(startDate.setHours(12)), // Convert Dayjs to JS Date and add 12 hours
                 endDate: new Date(endDate.setHours(12)), // Convert Dayjs to JS Date and add 12 hours
-                leaveType,
+                dLeaveTypeId,
                 files: files,
             })).unwrap();
 
@@ -365,14 +378,14 @@ export default function SideBarEmployeeLeaves() {
                         <TextField
                             select
                             label="Leave Type"
-                            value={leaveType}
-                            onChange={e => setLeaveType(e.target.value as ELeaveType)}
+                            value={dLeaveTypeId}
+                            onChange={e => setDLeaveTypeId(parseInt(e.target.value, 10))}
                             required
                             SelectProps={{ native: true }}
                             style={{ width: 259 }}
                         >
-                            {Object.values(ELeaveType).map(type => (
-                                <option key={type} value={type}>{type}</option>
+                            {Object.values(leaveTypes).map(type => (
+                                <option key={type.name} value={type.id}>{type.name}</option>
                             ))}
                         </TextField>
                     </Grid>

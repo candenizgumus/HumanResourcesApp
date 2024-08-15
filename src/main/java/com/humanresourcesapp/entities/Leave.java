@@ -1,7 +1,6 @@
 package com.humanresourcesapp.entities;
 
 
-import com.humanresourcesapp.entities.enums.ELeaveType;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -32,10 +31,7 @@ public class Leave extends BaseEntity {
     @Builder.Default
     Boolean isLeaveApproved = false;
     String attachedFile;
-
-    @Enumerated(EnumType.STRING)
-    ELeaveType leaveType;
-
+    Long dLeaveTypeId;
     String fullName;
     String email;
 }

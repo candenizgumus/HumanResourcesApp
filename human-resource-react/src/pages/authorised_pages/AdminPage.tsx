@@ -17,6 +17,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import NotificationsIcon from '@mui/icons-material/Notifications';
+import DesignServicesIcon from '@mui/icons-material/DesignServices';
 import { Button, Grid} from '@mui/material';
 import { HumanResources, RootState, useAppSelector} from '../../store';
 import { useDispatch, useSelector } from 'react-redux';
@@ -163,7 +164,7 @@ export default function AdminPage() {
         </DrawerHeader>
         <Divider />
         <List>
-          {['Offers', 'Users', 'Create Admin', 'Create Feature', 'Holidays', 'Profile','Companies', 'Notifications'].map((text, index) => (
+          {['Offers', 'Users', 'Create Admin', 'Create Feature', 'Create Definition', 'Holidays', 'Profile','Companies', 'Notifications'].map((text, index) => (
             <ListItem key={text} disablePadding>
               <ListItemButton onClick={() => handleListItemClick(text)}>
                 <ListItemIcon>
@@ -171,10 +172,11 @@ export default function AdminPage() {
                   {index  === 1 && <Person />}
                   {index  === 2 && <AdminPanelSettings />}
                   {index  === 3 && <FeaturedPlayList /> }
-                  {index  === 4 && <Weekend /> }
-                  {index  === 5 && <AccountBox /> }
-                  {index  === 6 && <Apartment /> }
-                  {index === 7 && <NotificationsIcon/>}
+                  {index  === 4 && <DesignServicesIcon /> }
+                  {index  === 5 && <Weekend /> }
+                  {index  === 6 && <AccountBox /> }
+                  {index  === 7 && <Apartment /> }
+                  {index  === 8 && <NotificationsIcon/>}
                 </ListItemIcon>
                 <ListItemText primary={text} />
               </ListItemButton>

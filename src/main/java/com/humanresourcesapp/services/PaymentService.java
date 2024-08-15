@@ -38,6 +38,21 @@ public class PaymentService
         return true;
     }
 
+    public Boolean saveForDemoData(PaymentSaveRequestDto dto)
+    {
+
+
+        paymentRepository.save(Payment
+                .builder()
+                .companyId(1L)
+                .description(dto.description())
+                .payment(dto.payment())
+                .paymentDate(dto.paymentDate())
+                .status(EStatus.ACTIVE)
+                .build());
+        return true;
+    }
+
     public List<Payment> getAll(PageRequestDto dto)
     {
         String userEmail = UserInfoSecurityContext.getUserInfoFromSecurityContext();

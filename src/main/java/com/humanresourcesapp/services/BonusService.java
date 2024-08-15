@@ -63,6 +63,38 @@ public class BonusService
         return true;
     }
 
+    public Boolean saveForDemoData(BonusSaveRequestDto dto)
+    {
+
+
+
+        User employee = userService.findById(dto.employeeId());
+
+        bonusRepository.save(Bonus
+                .builder()
+                .bonusDate(dto.bonusDate())
+                .bonusAmount(dto.bonusAmount())
+                .description(dto.description())
+                .companyId(1L)
+                .status(EStatus.ACTIVE)
+                .name(employee.getName())
+                .surname(employee.getSurname())
+                .email(employee.getEmail())
+                .employeeId(dto.employeeId())
+                .build());;
+
+        notificationService.save(NotificationSaveRequestDto.builder()
+                .notificationText(ENotificationTextBase.BONUS_NOTIFICATION.getText() + " Snovid Something ")
+                .userType(null)
+                .userId(employee.getId())
+                .isRead(false)
+                .status(EStatus.ACTIVE)
+                .notificationType(ENotificationType.INFORMATION)
+                .url(BONUS)
+                .build());
+        return true;
+    }
+
     public List<Bonus> getAll(PageRequestDto dto)
     {
         String userEmail = UserInfoSecurityContext.getUserInfoFromSecurityContext();

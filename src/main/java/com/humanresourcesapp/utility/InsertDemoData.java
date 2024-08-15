@@ -1,8 +1,7 @@
 package com.humanresourcesapp.utility;
 
 import com.humanresourcesapp.constants.ENotificationTextBase;
-import com.humanresourcesapp.dto.requests.NotificationSaveRequestDto;
-import com.humanresourcesapp.dto.requests.OfferSaveRequestDto;
+import com.humanresourcesapp.dto.requests.*;
 import com.humanresourcesapp.entities.*;
 import com.humanresourcesapp.entities.definitions.DLeaveType;
 import com.humanresourcesapp.entities.enums.*;
@@ -10,8 +9,10 @@ import com.humanresourcesapp.services.*;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -31,7 +32,12 @@ public class InsertDemoData {
     private final HolidayService holidayService;
     private final OfferService offerService;
     private final NotificationService notificationService;
+    private final ShiftService shiftService;
+    private final BonusService bonusService;
+    private final PaymentService paymentService;
+    private final ExpenditureService expenditureService;
     private final DefinitionService definitionService;
+
 
     @PostConstruct
     public void insert() {
@@ -40,7 +46,12 @@ public class InsertDemoData {
         insertCommentDemoData();
         insertHolidayDemoData();
         instertOfferDemoData();
+        insertShiftDemoData();
+        insertBonusData();
+        insertPaymentData();
+        insertExpenditureData();
         insertLeaveTypeDemoData();
+
 
         notificationService.save(NotificationSaveRequestDto.builder()
                 .notificationText(ENotificationTextBase.ERROR_NOTIFICATION.getText() + "We have Errors !")
@@ -514,7 +525,7 @@ public class InsertDemoData {
                     .subscriptionStartDate(authEmployee.getSubscriptionStartDate())
                     .subscriptionEndDate(authEmployee.getSubscriptionEndDate())
                     .location("Turkey")
-                    .birthDate(LocalDate.of(1999, 4, 1))
+                    .birthDate(LocalDate.of(1999, 9, 1))
                     .position(EPosition.ADMINISTRATIVE_ASSISTANT)
                     .companyId(user.getCompanyId())
                     .remainingAnnualLeave(25)
@@ -550,7 +561,7 @@ public class InsertDemoData {
                     .subscriptionStartDate(authEmployee.getSubscriptionStartDate())
                     .subscriptionEndDate(authEmployee.getSubscriptionEndDate())
                     .location("Turkey")
-                    .birthDate(LocalDate.of(1990, 5, 15))
+                    .birthDate(LocalDate.of(1990, 8, 15))
                     .position(EPosition.COMPUTER_PROGRAMMER)
                     .companyId(user.getCompanyId())
                     .remainingAnnualLeave(15)
@@ -745,6 +756,56 @@ public class InsertDemoData {
 
     }
 
+
+    private void insertShiftDemoData() {
+        List<ShiftSaveRequestDto> shifts = new ArrayList<>();
+        Long[] employeeIds = {7L, 8L};
+        Long companyId = 1L;
+
+        LocalDateTime startDate = LocalDateTime.of(2024, 8, 19, 9, 0); // Starting from August 19, 2024
+        LocalDateTime endDate = startDate.plusMonths(2).withHour(17); // 2 months later
+
+        for (LocalDateTime date = startDate; date.isBefore(endDate); date = date.plusDays(1)) {
+            // Skip weekends
+            if (date.getDayOfWeek().getValue() > 5) {
+                continue;
+            }
+
+            for (Long employeeId : employeeIds) {
+                ShiftSaveRequestDto shift = new ShiftSaveRequestDto(
+                        companyId,
+                        employeeId,
+                        "Regular Shift",
+                        "Weekday shift from 9 AM to 5 PM",
+                        date,
+                        date.plusHours(8)
+                );
+                shiftService.save(shift);
+
+            }
+        }
+
+    }
+
+    private void insertBonusData(){
+        bonusService.saveForDemoData(new BonusSaveRequestDto(7L, "Regular Bonus", 1000.0, LocalDate.now()));
+        bonusService.saveForDemoData(new BonusSaveRequestDto(8L, "Special Bonus", 2000.0, LocalDate.now()));
+
+    }
+
+    private void insertPaymentData(){
+        paymentService.saveForDemoData( new PaymentSaveRequestDto(LocalDate.now(), 1000.0 ,"Weekly Payment"));
+        paymentService.saveForDemoData( new PaymentSaveRequestDto(LocalDate.now().plusDays(5), 8000.0 ,"Monthly Payment"));
+
+
+    }
+    private void insertExpenditureData(){
+        List<MultipartFile> files =  new ArrayList<>();
+
+
+        expenditureService.saveForDemoData(new ExpenditureSaveRequestDto("Food", 100.0,files ));
+        expenditureService.saveForDemoData(new ExpenditureSaveRequestDto("Transportation", 50.0, files));
+
     private void insertLeaveTypeDemoData(){
         definitionService.saveLeaveType(new DLeaveType("ANNUAL"));
         definitionService.saveLeaveType(new DLeaveType("HALF_ANNUAL"));
@@ -759,5 +820,6 @@ public class InsertDemoData {
         definitionService.saveLeaveType(new DLeaveType("JURY_DUTY"));
         definitionService.saveLeaveType(new DLeaveType("UNPAID"));
         definitionService.saveLeaveType(new DLeaveType("OTHER"));
+
     }
 }

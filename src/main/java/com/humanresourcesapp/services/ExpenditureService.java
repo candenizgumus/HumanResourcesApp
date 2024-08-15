@@ -85,6 +85,38 @@ public class ExpenditureService {
         return expenditureRepository.save(expenditure);
     }
 
+    public Expenditure saveForDemoData(ExpenditureSaveRequestDto dto) {
+
+
+
+
+        Expenditure expenditure = Expenditure
+                .builder()
+                .employeeId(7L)
+                .description(dto.description())
+                .price(dto.price())
+                .companyId(1L)
+                .employeeName("Employee 1")
+                .employeeSurname("Hard")
+                .status(EStatus.PENDING)
+                .attachedFile("")
+                .build();
+
+
+        notificationService.save(NotificationSaveRequestDto.builder()
+                .notificationText(ENotificationTextBase.EXPENDITURE_REQUEST_NOTIFICATION.getText() + "employee@gmail.com")
+                .userType(null)
+                .userId(null)
+                .companyId(1L)
+                .isRead(false)
+                .status(EStatus.ACTIVE)
+                .notificationType(ENotificationType.WARNING)
+                .url(EXPENDITURE)
+                .build());
+
+        return expenditureRepository.save(expenditure);
+    }
+
     public List<Expenditure> searchByEmployeeId(PageRequestDto dto) {
         String userEmail = UserInfoSecurityContext.getUserInfoFromSecurityContext();
         User employee = userService.findByEmail(userEmail).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));

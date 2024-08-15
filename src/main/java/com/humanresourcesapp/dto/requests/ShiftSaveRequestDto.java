@@ -1,4 +1,11 @@
 package com.humanresourcesapp.dto.requests;
 
-public record ShiftSaveRequestDto(Long companyId, String shiftName, Long shiftStartTime, Long shiftEndTime) {
+import java.time.LocalDateTime;
+
+public record ShiftSaveRequestDto(Long companyId,
+        Long employeeId,
+        String title,
+        String description,
+        LocalDateTime start,
+        LocalDateTime endTime) {
 }

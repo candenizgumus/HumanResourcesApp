@@ -11,6 +11,7 @@ import personalDocumentSlice from "./personalDocumentSlice";
 import leaveSlice from "./leaveSlice";
 import paymentSlice from "./paymentSlice";
 import bonusSlice from "./bonusSlice";
+import shiftSlice from "./shiftSlice";
 
 
 
@@ -28,5 +29,6 @@ export{
     personalDocumentSlice,
     leaveSlice,
     paymentSlice,
-    bonusSlice
+    bonusSlice,
+    shiftSlice
 }

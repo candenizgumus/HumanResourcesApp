@@ -536,7 +536,7 @@ public class UserService {
         List<MonthlySalaryOfEmployeesDto> monthlySalaryOfEmployeesDtos = new ArrayList<>();
         String userEmail = UserInfoSecurityContext.getUserInfoFromSecurityContext();
         User manager = userRepository.findByEmail(userEmail).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
-        List<User> employees = userRepository.findAllByCompanyIdAndStatus(manager.getCompanyId(), EStatus.ACTIVE);
+        List<User> employees = userRepository.findAllByCompanyIdAndStatusAndUserType(manager.getCompanyId(), EStatus.ACTIVE,EUserType.EMPLOYEE);
         List<Expenditure> expendituresOfEmployees = expenditureService.findExpendituresByCompanyIdAndCurrentMonth(manager.getCompanyId());
 
         //Adding empty employees to monthly salary list

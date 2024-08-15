@@ -48,7 +48,7 @@ public enum ErrorType
     ANNUAL_LEAVE_EXCEEDED(1036, "Annual Leave Exceeded",HttpStatus.BAD_REQUEST ),
     INSUFFICIENT_PERMISSION(1037, "Insufficient Permission",HttpStatus.BAD_REQUEST),
     BONUS_NOT_FOUND(    1038, "Bonus Not Found",    HttpStatus.BAD_REQUEST ),
-    ;
+    SHIFT_NOT_FOUND(    1039, "Shift Not Found",    HttpStatus.BAD_REQUEST );
     private final Integer code;
     private final String message;
     private final HttpStatus httpStatus;

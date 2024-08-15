@@ -40,7 +40,7 @@ public interface UserRepository extends JpaRepository<User,Long>
     Long countByCreatedAtBetween(LocalDateTime start, LocalDateTime end);
 
 
-    List<User> findAllByCompanyIdAndStatus(Long companyId, EStatus status);
+    List<User> findAllByCompanyIdAndStatusAndUserType(Long companyId, EStatus status,EUserType userType);
 
     Long countAllByUserType(EUserType userType);
     Long countAllByUserTypeAndStatus(EUserType userType, EStatus status);

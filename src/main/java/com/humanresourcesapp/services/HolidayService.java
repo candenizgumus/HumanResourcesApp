@@ -16,6 +16,7 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -40,6 +41,20 @@ public class HolidayService {
         if (user.isEmpty()){
             throw new HumanResourcesAppException(ErrorType.USER_NOT_FOUND);
         }
+
+        List<Holiday> holidayList = holidayRepository.findAll();
+        for (Holiday holiday: holidayList) {
+            if (
+                    Objects.equals(holiday.getCompanyId(), user.get().getCompanyId()) &&
+                    (holiday.getStartDate().getMonth().equals(holidaySaveRequestDto.startDate().getMonth()) &&
+                    holiday.getStartDate().getDayOfMonth() == holidaySaveRequestDto.startDate().getDayOfMonth() &&
+                    holiday.getEndDate().getMonth().equals(holidaySaveRequestDto.endDate().getMonth()) &&
+                    holiday.getEndDate().getDayOfMonth() == holidaySaveRequestDto.endDate().getDayOfMonth())
+            ) {
+                throw new HumanResourcesAppException(ErrorType.HOLIDAY_ALREADY_EXISTS);
+            }
+        }
+
         return holidayRepository.save(Holiday.builder()
                 .holidayName(holidaySaveRequestDto.holidayName())
                 .holidayType(holidaySaveRequestDto.holidayType())

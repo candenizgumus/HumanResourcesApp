@@ -49,7 +49,7 @@ public class HolidayController {
     }
 
     @PostMapping(GET_HOLIDAY_BY_ADMIN)
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
     public ResponseEntity<List<Holiday>> getHolidaysByCompanyIdAdmin() {
         return ResponseEntity.ok(holidayService.getHolidaysForAdmin());
     }

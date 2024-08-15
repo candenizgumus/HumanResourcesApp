@@ -23,7 +23,7 @@ public class ShiftService {
         return shiftRepository.save(Shift.builder()
                 .companyId(dto.companyId())
                         .start(dto.start().plusHours(3)) //TODO LOOK AT LATER to fix time difference issue
-                        .endTime(dto.start().plusHours(3))
+                        .endTime(dto.endTime().plusHours(3))
                         .title(dto.title())
                         .description(dto.description())
                         .employeeId(dto.employeeId())

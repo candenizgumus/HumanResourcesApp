@@ -23,13 +23,12 @@ interface MyCalendarProps {
     onDeleteEvent?: (eventId: number) => void;
     companyId?: number;
     employeeId?: number;
-    isUserManager:boolean
+    isUserManager: boolean;
 }
 
-const MyCalendar: React.FC<MyCalendarProps> = ({ events, onSaveEvent, onUpdateEvent, onDeleteEvent,companyId,employeeId,isUserManager }) => {
+const MyCalendar: React.FC<MyCalendarProps> = ({ events, onSaveEvent, onUpdateEvent, onDeleteEvent, companyId, employeeId, isUserManager }) => {
     const [selectedEvent, setSelectedEvent] = useState<IShift | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
-
 
     const handleSelectEvent = (event: IShift) => {
         setSelectedEvent(event);
@@ -76,8 +75,8 @@ const MyCalendar: React.FC<MyCalendarProps> = ({ events, onSaveEvent, onUpdateEv
             employeeId: employeeId || 1,
             companyId: companyId || 1,
             title: 'Yeni Vardiya',
-            start: new Date(slotInfo.start),
-            endTime: new Date(slotInfo.end),
+            start: slotInfo.start,  // Doğrudan Date objesini kullanın
+            endTime: slotInfo.end,  // Doğrudan Date objesini kullanın
             description: '',
         };
 
@@ -97,11 +96,11 @@ const MyCalendar: React.FC<MyCalendarProps> = ({ events, onSaveEvent, onUpdateEv
                             localizer={localizer}
                             events={events.map(event => ({
                                 ...event,
-                                start: new Date(event.start),
-                                end: new Date(event.endTime),
+                                start: new Date(event.start),  // Date objesi
+                                end: new Date(event.endTime),   // Date objesi
                             }))}
-                            startAccessor="start"
-                            endAccessor="endTime"
+                            startAccessor={(event) => new Date(event.start.toString())}
+                            endAccessor={(event) => new Date(event.end.toString())}
                             style={{ height: '100%' }}
                             views={['month', 'week', 'day']}
                             toolbar
@@ -149,14 +148,14 @@ const MyCalendar: React.FC<MyCalendarProps> = ({ events, onSaveEvent, onUpdateEv
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose} color="primary">
-                        İptal
+                        Cancel
                     </Button>
                     <Button onClick={handleSave} color="primary">
-                        Kaydet
+                        Save
                     </Button>
                     {selectedEvent?.id && (
                         <Button onClick={handleDelete} color="secondary">
-                            Sil
+                            Delete
                         </Button>
                     )}
                 </DialogActions>

@@ -3,6 +3,8 @@ import MyCalendar, { IShift } from "../../atoms/MyCalender";
 import { useDispatch } from "react-redux";
 import { HumanResources, useAppSelector } from "../../../store";
 import { fetchFindShiftsOfEmployee, fetchSaveShift, fetchUpdateShift, fetchDeleteShift } from "../../../store/feature/shiftSlice";
+import sweetalert2 from "sweetalert2";
+import Swal from "sweetalert2";
 
 export const SetShifts: React.FC = () => {
     const [events, setEvents] = useState<IShift[]>([]);
@@ -22,6 +24,16 @@ export const SetShifts: React.FC = () => {
     }, []);
 
     const handleSaveEvent = (newEvent: IShift) => {
+        if (newEvent.description === '' || newEvent.title === '' || newEvent.start === null || newEvent.endTime === null) {
+            Swal.fire({
+                title: "Error",
+                text: "Please fill all the fields",
+                icon: "error",
+                confirmButtonText: "OK",
+                confirmButtonColor: "#D32F2F",
+            });
+            return;
+        }
         dispatch(fetchSaveShift({
             token: token,
             companyId: newEvent.companyId,

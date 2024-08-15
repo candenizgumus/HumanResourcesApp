@@ -12,6 +12,7 @@ import leaveSlice from "./leaveSlice";
 import paymentSlice from "./paymentSlice";
 import bonusSlice from "./bonusSlice";
 import shiftSlice from "./shiftSlice";
+import definitionSlice from "./definitionSlice";
 
 
 
@@ -30,5 +31,6 @@ export{
     leaveSlice,
     paymentSlice,
     bonusSlice,
-    shiftSlice
+    shiftSlice,
+    definitionSlice
 }

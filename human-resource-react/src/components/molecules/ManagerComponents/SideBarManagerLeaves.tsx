@@ -29,32 +29,11 @@ import DownloadButtonFromS3 from "../../atoms/DownloadButtonFromS3";
 import {
     fetchGetLeavesOfManager, fetchApproveLeave,
     fetchDeleteLeave, fetchCancelLeave, fetchUpdateAnnualLeaveDays,
-    fetchSaveLeave,
-    fetchAssignLeave
+    fetchAssignLeave,
 } from "../../../store/feature/leaveSlice";
-import { clearToken, fetchFindUserByToken, fetchGetAllUsersOfManager } from "../../../store/feature/authSlice";
-import { ELeaveType } from "../../../models/ELeaveType";
 
-const columns: GridColDef[] = [
-    { field: "fullName", headerName: "Name", width: 150, headerAlign: "center" },
-    { field: "email", headerName: "Email", width: 150, headerAlign: "center" },
-    { field: "description", headerName: "Description", width: 200, headerAlign: "center" },
-
-    { field: "startDate", headerName: "Start Date", width: 150, headerAlign: "center" },
-    { field: "endDate", headerName: "End Date", width: 150, headerAlign: "center" },
-    { field: "leaveType", headerName: "Leave Type", width: 150, headerAlign: "center" },
-    { field: "isLeaveApproved", headerName: "Approval Status", headerAlign: "center", width: 250 },
-    { field: "approveDate", headerName: "Approval Date", width: 150, headerAlign: "center" },
-    { field: "status", headerName: "Status", width: 120, headerAlign: "center" },
-    {
-        field: "attachedFile", headerName: "Document", headerAlign: "center", width: 100,
-        renderCell: (params) => (
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '100%' }}>
-                {params.value && <DownloadButtonFromS3 fileKey={params.value} />}
-            </div>
-        )
-    },
-];
+import {fetchGetDLeaveTypes} from "../../../store/feature/definitionSlice";
+import { clearToken, fetchGetAllUsersOfManager } from "../../../store/feature/authSlice";
 
 const SideBarManagerLeaves = () => {
     const [selectedRowIds, setSelectedRowIds] = useState<number[]>([]);
@@ -63,6 +42,7 @@ const SideBarManagerLeaves = () => {
     const dispatch = useDispatch<HumanResources>();
     const token = useAppSelector((state) => state.auth.token);
     const leaves = useAppSelector((state) => state.leave.leaveList);
+    const leaveTypes = useAppSelector((state) => state.definition.leaveTypeList);
     const [loading, setLoading] = useState(false);
     const [isActivating, setIsActivating] = useState(false);
     const [openChangeAnnualLeaveDayModal, setOpenChangeAnnualLeaveDayModal] = useState(false);
@@ -71,10 +51,40 @@ const SideBarManagerLeaves = () => {
     const [newLeaveDays, setNewLeaveDays] = useState(0);
     const employees = useAppSelector((state) => state.auth.userList);
     const [description, setDescription] = useState('');
-    const [leaveType, setLeaveType] = useState<ELeaveType>(ELeaveType.ANNUAL); // Default to ANNUAL
+    const [dLeaveTypeId, setDLeaveTypeId] = useState(1); // Default to ANNUAL
     const [startDate, setStartDate] = useState<Date | null>(null);
     const [endDate, setEndDate] = useState<Date | null>(null);
     const [files, setFiles] = useState<File[]>([]);
+
+    const columns: GridColDef[] = [
+        { field: "fullName", headerName: "Name", width: 150, headerAlign: "center" },
+        { field: "email", headerName: "Email", width: 150, headerAlign: "center" },
+        { field: "description", headerName: "Description", width: 200, headerAlign: "center" },
+    
+        { field: "startDate", headerName: "Start Date", width: 150, headerAlign: "center" },
+        { field: "endDate", headerName: "End Date", width: 150, headerAlign: "center" },
+        { 
+            field: "dleaveTypeId", 
+            headerName: "Leave Type", 
+            width: 150, 
+            headerAlign: "center", 
+            renderCell: (params) => {
+                const leaveType = leaveTypes.find(lt => lt.id === params.value);
+                return leaveType ? leaveType.name : "Unknown";
+            }
+        },
+        { field: "isLeaveApproved", headerName: "Approval Status", headerAlign: "center", width: 250 },
+        { field: "approveDate", headerName: "Approval Date", width: 150, headerAlign: "center" },
+        { field: "status", headerName: "Status", width: 120, headerAlign: "center" },
+        {
+            field: "attachedFile", headerName: "Document", headerAlign: "center", width: 100,
+            renderCell: (params) => (
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '100%' }}>
+                    {params.value && <DownloadButtonFromS3 fileKey={params.value} />}
+                </div>
+            )
+        },
+    ];
 
     useEffect(() => {
         dispatch(
@@ -83,8 +93,9 @@ const SideBarManagerLeaves = () => {
                 page: 0,
                 pageSize: 100,
                 searchText: searchText,
+            })).then(()=> {
+                dispatch(fetchGetDLeaveTypes(token))
             })
-        )
             .catch(() => {
                 dispatch(clearToken());
             });
@@ -306,7 +317,7 @@ const SideBarManagerLeaves = () => {
         setDescription('');
         setEndDate(null);
         setStartDate(null);
-        setLeaveType(ELeaveType.ANNUAL);
+        setDLeaveTypeId(1);
         setFiles([]);
     };
 
@@ -397,7 +408,7 @@ const SideBarManagerLeaves = () => {
 
         setLoading(true);
 
-        if (!description || !startDate || !endDate || !leaveType) {
+        if (!description || !startDate || !endDate || !dLeaveTypeId) {
             handleCloseAssignLeaveModal();
             Swal.fire({
                 title: "Error",
@@ -415,7 +426,7 @@ const SideBarManagerLeaves = () => {
                     description,
                     startDate: new Date(startDate.setHours(12)), // Convert Dayjs to JS Date and add 12 hours
                     endDate: new Date(endDate.setHours(12)), // Convert Dayjs to JS Date and add 12 hours
-                    leaveType,
+                    dLeaveTypeId,
                     files: files,
                     employeeId: selectedEmployee.id
                 })
@@ -673,14 +684,14 @@ const SideBarManagerLeaves = () => {
                                         <TextField
                                             select
                                             label="Leave Type"
-                                            value={leaveType}
-                                            onChange={e => setLeaveType(e.target.value as ELeaveType)}
+                                            value={dLeaveTypeId}
+                                            onChange={e => setDLeaveTypeId(parseInt(e.target.value, 10))}
                                             required
                                             fullWidth
                                             SelectProps={{ native: true }}
                                         >
-                                            {Object.values(ELeaveType).map(type => (
-                                                <option key={type} value={type}>{type}</option>
+                                            {Object.values(leaveTypes).map(type => (
+                                                <option key={type.name} value={type.id}>{type.name}</option>
                                             ))}
                                         </TextField>
                                     </Grid>

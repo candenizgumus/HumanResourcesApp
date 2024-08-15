@@ -3,6 +3,7 @@ package com.humanresourcesapp.utility;
 import com.humanresourcesapp.constants.ENotificationTextBase;
 import com.humanresourcesapp.dto.requests.*;
 import com.humanresourcesapp.entities.*;
+import com.humanresourcesapp.entities.definitions.DLeaveType;
 import com.humanresourcesapp.entities.enums.*;
 import com.humanresourcesapp.services.*;
 import jakarta.annotation.PostConstruct;
@@ -35,6 +36,8 @@ public class InsertDemoData {
     private final BonusService bonusService;
     private final PaymentService paymentService;
     private final ExpenditureService expenditureService;
+    private final DefinitionService definitionService;
+
 
     @PostConstruct
     public void insert() {
@@ -47,6 +50,7 @@ public class InsertDemoData {
         insertBonusData();
         insertPaymentData();
         insertExpenditureData();
+        insertLeaveTypeDemoData();
 
 
         notificationService.save(NotificationSaveRequestDto.builder()
@@ -180,7 +184,6 @@ public class InsertDemoData {
         }
     }
 
-
     // Feature demo data insertion
     private void insertFeatureDemoData() {
         if(featureService.getAll().isEmpty()) {
@@ -238,7 +241,6 @@ public class InsertDemoData {
             featureService.saveAll(featureList);
         }
     }
-
 
     // Comment demo data insertion
     private void insertCommentDemoData() {
@@ -582,7 +584,6 @@ public class InsertDemoData {
         }
     }
 
-
     private void instertOfferDemoData()
     {
 
@@ -755,6 +756,7 @@ public class InsertDemoData {
 
     }
 
+
     private void insertShiftDemoData() {
         List<ShiftSaveRequestDto> shifts = new ArrayList<>();
         Long[] employeeIds = {7L, 8L};
@@ -803,5 +805,21 @@ public class InsertDemoData {
 
         expenditureService.saveForDemoData(new ExpenditureSaveRequestDto("Food", 100.0,files ));
         expenditureService.saveForDemoData(new ExpenditureSaveRequestDto("Transportation", 50.0, files));
+
+    private void insertLeaveTypeDemoData(){
+        definitionService.saveLeaveType(new DLeaveType("ANNUAL"));
+        definitionService.saveLeaveType(new DLeaveType("HALF_ANNUAL"));
+        definitionService.saveLeaveType(new DLeaveType("MATERNITY"));
+        definitionService.saveLeaveType(new DLeaveType("PATERNITY"));
+        definitionService.saveLeaveType(new DLeaveType("SICK"));
+        definitionService.saveLeaveType(new DLeaveType("BEREAVEMENT"));
+        definitionService.saveLeaveType(new DLeaveType("PERSONAL"));
+        definitionService.saveLeaveType(new DLeaveType("FAMILY_CARE"));
+        definitionService.saveLeaveType(new DLeaveType("MILITARY"));
+        definitionService.saveLeaveType(new DLeaveType("MARRIAGE"));
+        definitionService.saveLeaveType(new DLeaveType("JURY_DUTY"));
+        definitionService.saveLeaveType(new DLeaveType("UNPAID"));
+        definitionService.saveLeaveType(new DLeaveType("OTHER"));
+
     }
 }

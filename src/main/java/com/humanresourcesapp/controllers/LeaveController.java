@@ -4,7 +4,6 @@ import com.humanresourcesapp.dto.requests.AssignLeaveRequestDto;
 import com.humanresourcesapp.dto.requests.LeaveSaveRequestDto;
 import com.humanresourcesapp.dto.requests.PageRequestDto;
 import com.humanresourcesapp.entities.Leave;
-import com.humanresourcesapp.entities.enums.ELeaveType;
 import com.humanresourcesapp.services.LeaveService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -40,14 +39,14 @@ public class LeaveController {
     public ResponseEntity<Boolean> addLeaveRequest(@RequestParam ("description") String description,
                                                    @RequestParam ("startDate") LocalDate startDate,
                                                    @RequestParam ("endDate") LocalDate endDate,
-                                                   @RequestParam ("leaveType") ELeaveType leaveType,
+                                                   @RequestParam ("dLeaveTypeId") Long dLeaveTypeId,
                                                    @Nullable @RequestParam("files") List<MultipartFile> files) {
 
         LeaveSaveRequestDto dto = LeaveSaveRequestDto.builder()
                 .description(description)
                 .startDate(startDate)
                 .endDate(endDate)
-                .leaveType(leaveType)
+                .dLeaveTypeId(dLeaveTypeId)
                 .files(files)
                 .build();
         return ResponseEntity.ok(leaveService.save(dto));
@@ -58,7 +57,7 @@ public class LeaveController {
     public ResponseEntity<Boolean> assignLeave(@RequestParam ("description") String description,
                                                    @RequestParam ("startDate") LocalDate startDate,
                                                    @RequestParam ("endDate") LocalDate endDate,
-                                                   @RequestParam ("leaveType") ELeaveType leaveType,
+                                                   @RequestParam ("dLeaveTypeId") Long dLeaveTypeId,
                                                    @Nullable @RequestParam("files") List<MultipartFile> files,
                                                    @RequestParam ("employeeId") Long employeeId) {
 
@@ -66,7 +65,7 @@ public class LeaveController {
                 .description(description)
                 .startDate(startDate)
                 .endDate(endDate)
-                .leaveType(leaveType)
+                .dLeaveTypeId(dLeaveTypeId)
                 .files(files)
                 .employeeId(employeeId)
                 .build();
@@ -97,4 +96,5 @@ public class LeaveController {
                                                @RequestParam ("leaveDay") Integer leaveDay) {
         return ResponseEntity.ok(leaveService.changeLeaveDay(id,leaveDay));
     }
+
 }

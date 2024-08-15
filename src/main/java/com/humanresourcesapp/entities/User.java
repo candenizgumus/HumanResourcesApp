@@ -29,9 +29,6 @@ public class User extends BaseEntity
     Long authId;
 
     // EMPLOYEE
-    Long managerId;
-
-    // EMPLOYEE
     String title;
 
     // EMPLOYEE

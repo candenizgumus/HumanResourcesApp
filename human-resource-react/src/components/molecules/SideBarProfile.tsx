@@ -37,7 +37,6 @@ const SideBarProfile = () => {
     const [subscriptionEndDate, setSubscriptionEndDate] = useState(user.subscriptionEndDate ?? '');
 
     const [companyName, setCompanyName] = useState<string>('');
-    const [managerName, setManagerName] = useState<string>('');
 
     const [selectedPositions, setSelectedPositions] = useState<string>(user.position ?? '');
     const [loading, setLoading] = useState(true);
@@ -78,7 +77,6 @@ const SideBarProfile = () => {
             }
 
             setCompanyName(result.companyName ?? '');
-            setManagerName(result.managerName ?? '');
 
             const positionsResult = await dispatch(fetchGetPositions()).unwrap();
             setPositions(positionsResult);
@@ -454,17 +452,6 @@ const SideBarProfile = () => {
                                 label="Company Name"
                                 name="companyName"
                                 value={companyName}
-                                fullWidth
-                                disabled
-                            />
-                        )
-                    }
-                    {
-                        user.managerId && (
-                            <TextField
-                                label="Manager Name"
-                                name="managerName"
-                                value={managerName}
                                 fullWidth
                                 disabled
                             />

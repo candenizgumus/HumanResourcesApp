@@ -11,6 +11,7 @@ import com.humanresourcesapp.entities.User;
 import com.humanresourcesapp.entities.enums.ELeaveType;
 import com.humanresourcesapp.entities.enums.ENotificationType;
 import com.humanresourcesapp.entities.enums.EStatus;
+import com.humanresourcesapp.entities.enums.EUserType;
 import com.humanresourcesapp.exception.ErrorType;
 import com.humanresourcesapp.exception.HumanResourcesAppException;
 import com.humanresourcesapp.repositories.LeaveRepository;
@@ -81,8 +82,9 @@ public class LeaveService {
 
         notificationService.save(NotificationSaveRequestDto.builder()
                 .notificationText(ENotificationTextBase.LEAVE_REQUEST_NOTIFICATION.getText() + userEmail)
-                .userType(null)
-                .userId(employee.getManagerId())
+                .userType(EUserType.MANAGER)
+                .userId(null)
+                .companyId(employee.getCompanyId())
                 .isRead(false)
                 .status(EStatus.ACTIVE)
                 .notificationType(ENotificationType.WARNING)
@@ -189,28 +191,35 @@ public class LeaveService {
 
         Leave leave = leaveRepository.findById(id).orElseThrow(() -> new HumanResourcesAppException(ErrorType.LEAVE_NOT_FOUND));
 
-        // if the expenditure is approved, it can be canceled
-        if (leave.getIsLeaveApproved())
-        {
-            // Receiver id (employee) if the cancel comes from manager
-            Long sendNotificationTo = leave.getEmployeeId();
-            if(user.getId().equals(leave.getEmployeeId())){
-                // Receiver id (manager) if the cancel comes from employee
-                sendNotificationTo = user.getManagerId();
-            }
-            notificationService.save(NotificationSaveRequestDto.builder()
-                    .notificationText(ENotificationTextBase.LEAVE_CANCEL_NOTIFICATION.getText() + leave.getDescription())
-                    .userType(null)
-                    .userId(sendNotificationTo)
-                    .isRead(false)
-                    .status(EStatus.ACTIVE)
-                    .notificationType(ENotificationType.WARNING)
-                    .url(LEAVES)
-                    .build());
+        // if the leave is approved, it can be canceled
+        if (leave.getIsLeaveApproved()) {
 
+            // If the cancel comes from employee
+            if (user.getId().equals(leave.getEmployeeId())) {
+                notificationService.save(NotificationSaveRequestDto.builder()
+                        .notificationText(ENotificationTextBase.LEAVE_CANCEL_NOTIFICATION.getText() + leave.getDescription())
+                        .userType(EUserType.MANAGER)
+                        .userId(null)
+                        .companyId(user.getCompanyId())
+                        .isRead(false)
+                        .status(EStatus.ACTIVE)
+                        .notificationType(ENotificationType.WARNING)
+                        .url(LEAVES)
+                        .build());
+            }else { // If the cancel comes from manager
+                notificationService.save(NotificationSaveRequestDto.builder()
+                        .notificationText(ENotificationTextBase.LEAVE_CANCEL_NOTIFICATION.getText() + leave.getDescription())
+                        .userType(null)
+                        .userId(leave.getEmployeeId())
+                        .companyId(null)
+                        .isRead(false)
+                        .status(EStatus.ACTIVE)
+                        .notificationType(ENotificationType.WARNING)
+                        .url(LEAVES)
+                        .build());
+            }
             leave.setStatus(EStatus.CANCELED);
-            leave.setIsLeaveApproved(false);
-            // if the expenditure is not approved, it can not be canceled, and it will be deleted or rejected
+            // if the leave is not approved, it can not be canceled, and it will be deleted or rejected
         }else {
             delete(id);
             return true;

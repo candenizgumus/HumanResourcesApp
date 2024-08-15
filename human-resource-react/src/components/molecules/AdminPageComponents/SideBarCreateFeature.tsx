@@ -1,7 +1,7 @@
 import React, { useState, ChangeEvent, FormEvent } from 'react';
 import { TextField, Button, Box, Checkbox, FormControlLabel, Typography } from '@mui/material';
 import { useDispatch } from 'react-redux';
-import { fetchCreateAdmin } from '../../../store/feature/authSlice';
+import { fetchCreateUserWithUserType } from '../../../store/feature/authSlice';
 import { HumanResources } from '../../../store';
 import Swal from "sweetalert2";
 import { fetchCreateFeature } from '../../../store/feature/featureSlice';

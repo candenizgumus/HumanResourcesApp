@@ -17,9 +17,9 @@ import ErrorIcon from '@mui/icons-material/Error';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { useDispatch } from "react-redux";
 import Swal from "sweetalert2";
-import { HumanResources, useAppSelector } from "../../../store";
-import { fetchDeleteNotification, fetchGetNotifications, fetchGetUnreadNotifications, fetchUpdateIsRead } from "../../../store/feature/notificationSlice";
-import { changePageState, clearToken } from "../../../store/feature/authSlice";
+import { HumanResources, useAppSelector } from "../../store";
+import { fetchDeleteNotification, fetchGetNotifications, fetchGetUnreadNotifications, fetchUpdateIsRead } from "../../store/feature/notificationSlice";
+import { changePageState, clearToken } from "../../store/feature/authSlice";
 
 const renderNotificationType = (params: any) => {
     switch (params.value) {

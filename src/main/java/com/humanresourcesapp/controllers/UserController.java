@@ -1,15 +1,12 @@
 package com.humanresourcesapp.controllers;
 
 import com.humanresourcesapp.dto.requests.*;
-import com.humanresourcesapp.dto.responses.CompanyAndManagerNameResponseDto;
+import com.humanresourcesapp.dto.responses.CompanyNameResponseDto;
 import com.humanresourcesapp.dto.responses.CountUserByTypeAndStatusDto;
 import com.humanresourcesapp.dto.responses.MonthlySalaryOfEmployeesDto;
 import com.humanresourcesapp.entities.Auth;
 import com.humanresourcesapp.entities.User;
-import com.humanresourcesapp.entities.enums.EEmployeeType;
-import com.humanresourcesapp.entities.enums.EPosition;
-import com.humanresourcesapp.entities.enums.ESectors;
-import com.humanresourcesapp.entities.enums.EStatus;
+import com.humanresourcesapp.entities.enums.*;
 import com.humanresourcesapp.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -120,12 +117,12 @@ public class UserController
         return ResponseEntity.ok(userService.findById(id));
     }
 
-    @PostMapping(ADD_EMPLOYEE_TO_MANAGER)
+    @PostMapping(ADD_EMPLOYEE_TO_COMPANY)
     @PreAuthorize("hasAnyAuthority('MANAGER')")
     @CrossOrigin("*")
-    public ResponseEntity<User> addEmployeeToManager(@RequestBody AddEmployeeToManagerRequestDto dto)
+    public ResponseEntity<User> addEmployeeToCompany(@RequestBody AddEmployeeToCompanyRequestDto dto)
     {
-        return ResponseEntity.ok(userService.addEmployeeToManager(dto));
+        return ResponseEntity.ok(userService.addEmployeeToCompany(dto));
     }
 
     @GetMapping(FIND_BY_TOKEN)
@@ -134,10 +131,10 @@ public class UserController
         return ResponseEntity.ok(userService.findByToken(token));
     }
 
-    @PostMapping(FIND_COMPANY_NAME_AND_MANAGER_NAME_OF_USER)
+    @PostMapping(FIND_COMPANY_NAME_OF_USER)
     @CrossOrigin("*")
-    public ResponseEntity<CompanyAndManagerNameResponseDto> findCompanyNameAndManagerNameOfUser(){
-        return ResponseEntity.ok(userService.findCompanyNameAndManagerNameOfUser());
+    public ResponseEntity<CompanyNameResponseDto> findCompanyNameOfUser(){
+        return ResponseEntity.ok(userService.findCompanyNameOfUser());
     }
 
     @PostMapping(GET_COUNT)
@@ -173,12 +170,12 @@ public class UserController
         return ResponseEntity.ok(userService.activateEmployee(id));
     }
 
-    @PostMapping(SAVE_ADMIN)
+    @PostMapping(CREATE_USER_WITH_USERTYPE)
     @CrossOrigin("*")
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
-    public ResponseEntity<Auth> save(@RequestBody Auth auth)
+    @PreAuthorize("hasAnyAuthority('MANAGER','ADMIN')")
+    public ResponseEntity<Auth> createUserWithUserType(@RequestBody Auth auth)
     {
-        return ResponseEntity.ok(userService.saveAdmin(auth));
+        return ResponseEntity.ok(userService.createUserWithUserType(auth));
     }
 
     @PostMapping(COUNT_OF_CUSTOMERS_FOR_GRAPH)

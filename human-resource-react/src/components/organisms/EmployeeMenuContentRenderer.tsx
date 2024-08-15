@@ -4,7 +4,7 @@ import SideBarProfile from "../molecules/SideBarProfile";
 import {SideBarEmployeeShiftsAndBreaks} from "../molecules/EmployeeComponents/SideBarEmployeeShiftsAndBreaks";
 import SideBarEmployeeLeaves from "../molecules/EmployeeComponents/SideBarEmployeeLeaves";
 import {SideBarEmployeeCompanyItems} from "../molecules/EmployeeComponents/SideBarEmployeeCompanyItems";
-import SideBarNotifications from "../molecules/AdminPageComponents/SideBarNotifications";
+import SideBarNotifications from "../molecules/SideBarNotifications";
 import SideBarExpenditure from "../molecules/EmployeeComponents/SideBarExpenditure";
 import SideBarEmployeeHolidays from "../molecules/EmployeeComponents/SideBarEmployeeHolidays";
 import ChangePassword from "../molecules/ChangePassword";

@@ -6,6 +6,7 @@ import lombok.Builder;
 public record NotificationResponseDto(
         Long id,
         Long userId,
+        Long companyId,
         String notificationType,
         String notificationText,
         Boolean isRead,

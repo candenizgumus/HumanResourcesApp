@@ -8,6 +8,7 @@ import lombok.Builder;
 @Builder
 public record NotificationSaveRequestDto(
         Long userId,
+        Long companyId,
         ENotificationType notificationType,
         String notificationText,
         String url,

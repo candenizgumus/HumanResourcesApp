@@ -22,7 +22,7 @@ const UserForm: React.FC = () => {
         email: email,
         password: password,
         token: localStorage.getItem('token') ?? '',
-        userType: IUserType.ADMIN
+        userType: IUserType.MANAGER
       })).unwrap();
       if (result.code) {
         Swal.fire({
@@ -37,14 +37,13 @@ const UserForm: React.FC = () => {
       Swal.fire({
         icon: 'success',
         title: 'Success!',
-        text: 'Admin Account Created.',
+        text: 'Manager Account Created.',
       });
-      setEmail('');
-      setPassword('');
+
       setLoading(false);
     } catch (error) {
-      console.error("Error creating admin:", error);
-      Swal.fire("Error", "There was a problem creating admin.", "error");
+      console.error("Error creating manager:", error);
+      Swal.fire("Error", "There was a problem creating manager.", "error");
     }
   };
 
@@ -72,7 +71,7 @@ const UserForm: React.FC = () => {
         }}
       >
         <Typography variant="h6">
-          Warning: Creating an admin account can have serious security implications. Please ensure you understand the consequences before proceeding.
+          Warning: Creating a manager account can have serious security implications. Please ensure you understand the consequences before proceeding.
         </Typography>
       </Box>
       <TextField
@@ -99,7 +98,7 @@ const UserForm: React.FC = () => {
             onChange={e => setAccepted(e.target.checked)}
           />
         }
-        label="I understand the consequences of creating an admin account."
+        label="I understand the consequences of creating a manager account."
       />
       <Button type="submit" variant="contained" color="primary" disabled={loading || !accepted}>
         {loading ? "Processing..." : "Create"}

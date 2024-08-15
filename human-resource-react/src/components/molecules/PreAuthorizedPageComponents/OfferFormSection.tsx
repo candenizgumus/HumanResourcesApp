@@ -16,9 +16,7 @@ import { HumanResources } from "../../../store";
 import { fetchCreateOffer } from "../../../store/feature/offerSlice";
 import Swal from "sweetalert2";
 import {
-    fetchFindCompanyNameAndManagerNameOfUser,
-    fetchFindUserByToken,
-    fetchGetPositions, fetchGetSectors
+     fetchGetSectors
 } from "../../../store/feature/authSlice";
 
 const OfferFormSection = () => {

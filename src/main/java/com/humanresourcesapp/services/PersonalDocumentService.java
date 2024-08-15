@@ -13,6 +13,7 @@ import com.humanresourcesapp.exception.HumanResourcesAppException;
 import com.humanresourcesapp.repositories.PersonalDocumentRepository;
 import com.humanresourcesapp.utility.UserInfoSecurityContext;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,6 +29,9 @@ public class PersonalDocumentService {
     private final UserService userService;
     private final S3Buckets s3Buckets;
     private final S3Service s3Service;
+    @Value("${AWS_BUCKET_NAME}")
+    private String bucketName;
+
 
 
     public PersonalDocument save(String employeeId, String documentType, List<MultipartFile> documentFile, String description) {
@@ -100,4 +104,11 @@ public class PersonalDocumentService {
     public List<PersonalDocument> getByEmployeeId(Long employeeId) {
         return personalDocumentRepository.findByEmployeeId(employeeId);
     }
+
+    public void deleteFromBucket(String attachedFile) {
+        String key = "personelDocuments/" + attachedFile;
+        s3Service.deleteObject(bucketName, key);
+    }
+
+
 }

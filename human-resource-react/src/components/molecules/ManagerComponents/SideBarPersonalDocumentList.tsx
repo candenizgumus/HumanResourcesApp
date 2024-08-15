@@ -8,11 +8,10 @@ import {
 } from "../../../store/feature/personalDocumentSlice";
 import {DataGrid, GridColDef, GridRowSelectionModel} from "@mui/x-data-grid";
 import DownloadButtonFromS3 from "../../atoms/DownloadButtonFromS3";
-import {fetchDeleteHoliday, fetchHolidaysUser} from "../../../store/feature/holidaySlice";
 import Swal from "sweetalert2";
+import {IPersonalDocument} from "../../../models/IPersonalDocument";
 
 const columns: GridColDef[] = [
-
     {field: "id", headerName: "Id", flex: 1, headerAlign: "center"},
     {field: "email", headerName: "Email", flex: 1, headerAlign: "center"},
     {field: "description", headerName: "Description", flex: 1, headerAlign: "center"},
@@ -38,8 +37,9 @@ const SideBarPersonalDocumentList: React.FC = () => {
     const token = useAppSelector((state) => state.auth.token);
     const employeeId = useAppSelector((state) => state.auth.selectedEmployeeId);
     const dispatch = useDispatch<HumanResources>();
-    const [personalDocuments, setPersonelDocuments] = useState([]);
+    const [personalDocuments, setPersonelDocuments] = useState<IPersonalDocument[]>([]);    //const personalDocuments =  useAppSelector((state) => state.personalDocument.personalDocuments);
     const [searchText, setSearchText] = useState('');
+    const [loading, setLoading] = useState(false);
 
 
     useEffect(() => {
@@ -61,31 +61,36 @@ const SideBarPersonalDocumentList: React.FC = () => {
 
     const handleDelete = () => {
         selectedRowIds.forEach((id) => {
-            dispatch(fetchDeletePersonalDocument({id, token}))
-                .then(() => {
-                    dispatch(fetchPersonalDocuments({
-                        token: token,
-                        page: 0,
-                        searchText: searchText,
-                        pageSize: 100,
-                    })).then(data => {
-                        if (data.payload.message) {
-                            Swal.fire({
-                                icon: 'error',
-                                text: data.payload.message ?? 'Failed to delete document',
-                                showConfirmButton: true
-                            })
-                        }else{
-                            Swal.fire({
-                                icon: 'success',
-                                text: 'Document has been deleted',
-                                showConfirmButton: false,
-                                timer: 1500
-                            })
-                        }
-                        setPersonelDocuments(data.payload);
-                    })
-                });
+            const selectedDocument = personalDocuments.find(doc => doc.id === id);
+            if (selectedDocument) {
+                const { attachedFile } = selectedDocument;
+
+                dispatch(fetchDeletePersonalDocument({ id, token, attachedFile }))
+                    .then(() => {
+                        dispatch(fetchPersonalDocuments({
+                            token: token,
+                            page: 0,
+                            searchText: searchText,
+                            pageSize: 100,
+                        })).then(data => {
+                            if (data.payload.message) {
+                                Swal.fire({
+                                    icon: 'error',
+                                    text: data.payload.message ?? 'Failed to delete document',
+                                    showConfirmButton: true
+                                });
+                            } else {
+                                Swal.fire({
+                                    icon: 'success',
+                                    text: 'Document has been deleted',
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                });
+                            }
+                            setPersonelDocuments(data.payload);
+                        });
+                    });
+            }
         });
     };
 

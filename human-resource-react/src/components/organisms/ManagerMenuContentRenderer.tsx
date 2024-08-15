@@ -16,6 +16,7 @@ import SideBarPayments from "../molecules/ManagerComponents/SideBarPayments";
 import PersonalDocumetList from "../molecules/ManagerComponents/SideBarPersonalDocumentList";
 import SideBarManagerBonus from "../molecules/ManagerComponents/SideBarManagerBonus";
 import SideBarCreateManager from "../molecules/ManagerComponents/SideBarCreateManager";
+import {SetShifts} from "../molecules/ManagerComponents/SetShifts";
 export const ManagerMenuContentRenderer = () => {
     const page = useAppSelector((state) => state.auth.pageState);
 
@@ -38,6 +39,7 @@ export const ManagerMenuContentRenderer = () => {
                 {page === 'Personal Documents' && <PersonalDocumetList/>}
                 {page === 'Bonus' && <SideBarManagerBonus/>}
                 {page === 'Create Manager' && <SideBarCreateManager/>}
+                {page === 'Shift' && <SetShifts/>}
 
             </Grid>
         </>

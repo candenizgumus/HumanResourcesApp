@@ -14,7 +14,6 @@ spring:
 #          project-id: hip-field-428707-f0
 #  main:
 #    allow-circular-references: true
-
   servlet:
     multipart:
       max-file-size: 10MB
@@ -31,6 +30,8 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create-drop
+#    properties:
+#      hibernate.jdbc.time-zone: UTC
   mail:
     host: smtp.gmail.com
     port: 587

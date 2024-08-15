@@ -6,8 +6,8 @@ import {
 } from "@mui/x-data-grid";
 import {
     Avatar, Box,
-    Button, FormControl,
-    Grid, InputLabel, MenuItem, Modal, Select,
+    Button,
+    Grid,  Modal,
 
     TextField, Typography
 
@@ -31,6 +31,7 @@ import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
 import {fetchSaveBonus} from "../../../store/feature/bonusSlice";
 import {Simulate} from "react-dom/test-utils";
 import error = Simulate.error;
+import {setEmployeeIdAndCompanyId} from "../../../store/feature/shiftSlice";
 
 const columns: GridColDef[] = [
     { field: "id", headerName: "ID", width: 70, headerAlign: "center" },
@@ -79,6 +80,15 @@ export default function SideBarEmployees() {
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
+    const handleSetShifts  = () => {
+        for (let id of selectedRowIds) {
+            const selectedEmployee = userList.find((selectedEmployee) => selectedEmployee.id === id);
+            if (!selectedEmployee) continue;
+            dispatch(setEmployeeIdAndCompanyId({  employeeId: selectedEmployee.id , companyId: selectedEmployee.companyId }));
+            dispatch(changePageState("Shift"));
+
+        }
+    }
     const openAddBonus = () => {
         if (selectedRowIds.length === 1) {
             const userToEdit = userList.find(
@@ -391,6 +401,16 @@ export default function SideBarEmployees() {
                         Add Bonus
                     </Button>
                 </Grid>
+                <Grid item>
+                    <Button
+                        onClick={handleSetShifts}
+                        variant="contained"
+                        color="primary"
+                        disabled={  selectedRowIds.length>1 || selectedRowIds.length === 0}
+                    >
+                        Set Shifts
+                    </Button>
+                </Grid>
             </Grid>
 
             <Modal
@@ -449,6 +469,7 @@ export default function SideBarEmployees() {
                             >
                                 {loading ? "Adding..." : "Add Bonus"}
                             </Button>
+
                         </form>
                     )}
                 </Box>

@@ -33,6 +33,14 @@ public class ShiftController {
         return ResponseEntity.ok(shiftService.update(dto));
     }
 
+    @DeleteMapping(DELETE)
+    @PreAuthorize("hasAnyAuthority('MANAGER','EMPLOYEE')")
+    //TODO DAHA SONRA EMPLOYEE SİLCEZ
+    public ResponseEntity<Void> delete(Long id) {
+        shiftService.delete(id);
+        return ResponseEntity.ok().build();
+    }
+
     @PostMapping(GET_ALL)
     @PreAuthorize("hasAnyAuthority('MANAGER','EMPLOYEE')")
     public ResponseEntity<List<Shift>> getAll(Long employeeId) {

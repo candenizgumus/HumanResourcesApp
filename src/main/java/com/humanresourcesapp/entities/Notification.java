@@ -20,6 +20,7 @@ public class Notification extends BaseEntity
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     Long userId;
+    Long companyId;
     @Enumerated(EnumType.STRING)
     ENotificationType notificationType;
     String notificationText;

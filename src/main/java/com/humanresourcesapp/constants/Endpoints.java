@@ -59,10 +59,10 @@ public class Endpoints
     public static final String APPROVE_OFFER_AND_REGISTER_AUTH_AND_USER = "/approve-offer-and-register-auth-and-user";
     public static final String GET_ALL_USERS_OF_MANAGER_BY_COMPANY_ID = "/get-all-users-of-manager-by-company-id";
     public static final String FIND_BY_ID ="/find-by-id";
-    public static final String ADD_EMPLOYEE_TO_MANAGER = "/add-employee-to-manager";
+    public static final String ADD_EMPLOYEE_TO_COMPANY = "/add-employee-to-company";
     public static final String FIND_BY_TOKEN =  "/find-by-token";
-    public static final String FIND_COMPANY_NAME_AND_MANAGER_NAME_OF_USER = "/find-company-name-and-manager-name-of-user";
-    public static final String SAVE_ADMIN = "/save-admin";
+    public static final String FIND_COMPANY_NAME_OF_USER = "/find-company-name-of-user";
+    public static final String CREATE_USER_WITH_USERTYPE = "/create-user-with-usertype";
     public static final String GET_POSITIONS = "/get-positions";
     public static final String GET_SECTORS = "/get-sectors";
     public static final String SEND_PASSWORD_RESET_EMAIL = "/send-password-reset-email";

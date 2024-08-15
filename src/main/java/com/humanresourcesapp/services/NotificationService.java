@@ -65,16 +65,30 @@ public class NotificationService {
                     .build());
         }
 
-        for(Notification notification : notificationRepository.findAllByUserTypeAndIsReadAndStatus(user.getUserType(), false, EStatus.ACTIVE)) {
-            all.add(NotificationResponseDto.builder()
-                            .id(notification.getId())
-                            .userId(notification.getUserId())
-                            .isRead(notification.getIsRead())
-                            .notificationText(notification.getNotificationText())
-                            .notificationType(notification.getNotificationType().name())
-                            .userType(notification.getUserType().name())
-                            .url(notification.getUrl())
-                    .build());
+        if(user.getCompanyId() == null) {
+            for(Notification notification : notificationRepository.findAllByUserTypeAndIsReadAndStatus(user.getUserType(), false, EStatus.ACTIVE)) {
+                all.add(NotificationResponseDto.builder()
+                        .id(notification.getId())
+                        .userId(notification.getUserId())
+                        .isRead(notification.getIsRead())
+                        .notificationText(notification.getNotificationText())
+                        .notificationType(notification.getNotificationType().name())
+                        .userType(notification.getUserType().name())
+                        .url(notification.getUrl())
+                        .build());
+            }
+        }else {
+            for(Notification notification : notificationRepository.findAllByUserTypeAndIsReadAndStatusAndCompanyId(user.getUserType(), false, EStatus.ACTIVE, user.getCompanyId())) {
+                all.add(NotificationResponseDto.builder()
+                        .id(notification.getId())
+                        .userId(notification.getUserId())
+                        .isRead(notification.getIsRead())
+                        .notificationText(notification.getNotificationText())
+                        .notificationType(notification.getNotificationType().name())
+                        .userType(notification.getUserType().name())
+                        .url(notification.getUrl())
+                        .build());
+                }
         }
         return all;
     }
@@ -92,7 +106,8 @@ public class NotificationService {
         String email = UserInfoSecurityContext.getUserInfoFromSecurityContext();
         User user = userService.findByEmail(email).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
 
-        for(Notification notification : notificationRepository.findAllByUserIdAndStatus(user.getId(),EStatus.ACTIVE, PageRequest.of(dto.page(), dto.pageSize()))) {
+        // If the notification especially belongs to the user
+        for(Notification notification : notificationRepository.findAllByUserIdAndStatus(user.getId(),  EStatus.ACTIVE, PageRequest.of(dto.page(), dto.pageSize()))) {
             all.add(NotificationResponseDto.builder()
                     .id(notification.getId())
                     .userId(notification.getUserId())
@@ -104,16 +119,32 @@ public class NotificationService {
                     .build());
         }
 
-        for(Notification notification : notificationRepository.findAllByUserTypeAndStatus(user.getUserType(),EStatus.ACTIVE, PageRequest.of(dto.page(), dto.pageSize()))) {
-            all.add(NotificationResponseDto.builder()
-                    .id(notification.getId())
-                    .userId(notification.getUserId())
-                    .isRead(notification.getIsRead())
-                    .notificationText(notification.getNotificationText())
-                    .notificationType(notification.getNotificationType().name())
-                    .userType(notification.getUserType().name())
-                    .url(notification.getUrl())
-                    .build());
+
+        // If notification belongs to admins
+        if(user.getCompanyId() == null) {
+            for(Notification notification : notificationRepository.findAllByUserTypeAndStatus(user.getUserType(), EStatus.ACTIVE, PageRequest.of(dto.page(), dto.pageSize()))) {
+                all.add(NotificationResponseDto.builder()
+                        .id(notification.getId())
+                        .userId(notification.getUserId())
+                        .isRead(notification.getIsRead())
+                        .notificationText(notification.getNotificationText())
+                        .notificationType(notification.getNotificationType().name())
+                        .userType(notification.getUserType().name())
+                        .url(notification.getUrl())
+                        .build());
+            }
+        }else { // If notification belongs to a customer account
+            for(Notification notification : notificationRepository.findAllByUserTypeAndStatusAndCompanyId(user.getUserType(), EStatus.ACTIVE, user.getCompanyId(), PageRequest.of(dto.page(), dto.pageSize()))) {
+                all.add(NotificationResponseDto.builder()
+                        .id(notification.getId())
+                        .userId(notification.getUserId())
+                        .isRead(notification.getIsRead())
+                        .notificationText(notification.getNotificationText())
+                        .notificationType(notification.getNotificationType().name())
+                        .userType(notification.getUserType().name())
+                        .url(notification.getUrl())
+                        .build());
+            }
         }
         return all;
     }
@@ -130,6 +161,7 @@ public class NotificationService {
                 .notificationText(notificationSaveDto.subject())
                 .userType(EUserType.ADMIN)
                 .userId(0L)
+                .companyId(0L)
                 .isRead(false)
                 .status(EStatus.ACTIVE)
                 .notificationType(ENotificationType.ASSIST)

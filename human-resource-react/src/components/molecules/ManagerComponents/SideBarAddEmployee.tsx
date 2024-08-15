@@ -13,7 +13,7 @@ import {
 } from '@mui/material';
 import {HumanResources, useAppSelector} from "../../../store";
 import {
-    fetchAddEmployeeToManager,
+    fetchAddEmployeeToCompany,
      fetchGetEmployeeTypes,
     fetchGetPositions
 } from "../../../store/feature/authSlice";
@@ -99,7 +99,7 @@ const SideBarAddEmployee: React.FC = () => {
             });
             return;
         }
-        dispatch(fetchAddEmployeeToManager({
+        dispatch(fetchAddEmployeeToCompany({
             token: token,
             name: name,
             surname: surname,

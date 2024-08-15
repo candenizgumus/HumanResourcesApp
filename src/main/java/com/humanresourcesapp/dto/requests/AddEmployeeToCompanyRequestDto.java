@@ -5,7 +5,7 @@ import com.humanresourcesapp.entities.enums.EPosition;
 
 import java.time.LocalDate;
 
-public record AddEmployeeToManagerRequestDto(Long managerId,
+public record AddEmployeeToCompanyRequestDto(Long companyId,
                                              String title,
                                              String email,
                                              String name,

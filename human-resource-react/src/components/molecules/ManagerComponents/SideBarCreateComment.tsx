@@ -1,5 +1,5 @@
 import React, { useState, FormEvent, useEffect } from 'react';
-import { TextField, Button, Box } from '@mui/material';
+import { TextField, Button, Box, FormControlLabel, Checkbox } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { HumanResources, useAppSelector } from '../../../store';
 import Swal from "sweetalert2";
@@ -67,13 +67,13 @@ const UserForm: React.FC = () => {
       Swal.fire({
         icon: 'success',
         title: 'Success!',
-        text: 'Feature Created.',
+        text: 'Comment Created.',
       });
   
       setLoading(false);
     } catch (error) {
-      console.error("Error creating feature:", error);
-      Swal.fire("Error", "There was a problem creating feature.", "error");
+      console.error("Error creating comment:", error);
+      Swal.fire("Error", "There was a problem creating comment.", "error");
     }
   };
 
@@ -111,6 +111,15 @@ const UserForm: React.FC = () => {
         rows={20}
         required
         inputProps={{ maxLength: 1500 }}
+      />
+      <FormControlLabel
+        control={
+          <Checkbox
+            checked={setNewManager}
+            onChange={e => setSetNewManager(e.target.checked)}
+          />
+        }
+        label="Set me as the creator"
       />
       <Button type="submit" variant="contained" color="primary" disabled={loading}>
         {loading ? "Processing..." : "Create"}

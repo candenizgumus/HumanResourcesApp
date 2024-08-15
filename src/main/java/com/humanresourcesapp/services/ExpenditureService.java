@@ -9,6 +9,7 @@ import com.humanresourcesapp.entities.Expenditure;
 import com.humanresourcesapp.entities.User;
 import com.humanresourcesapp.entities.enums.ENotificationType;
 import com.humanresourcesapp.entities.enums.EStatus;
+import com.humanresourcesapp.entities.enums.EUserType;
 import com.humanresourcesapp.exception.ErrorType;
 import com.humanresourcesapp.exception.HumanResourcesAppException;
 import com.humanresourcesapp.repositories.ExpenditureRepository;
@@ -73,7 +74,8 @@ public class ExpenditureService {
         notificationService.save(NotificationSaveRequestDto.builder()
                 .notificationText(ENotificationTextBase.EXPENDITURE_REQUEST_NOTIFICATION.getText() + userEmail)
                 .userType(null)
-                .userId(employee.getManagerId())
+                .userId(null)
+                .companyId(employee.getCompanyId())
                 .isRead(false)
                 .status(EStatus.ACTIVE)
                 .notificationType(ENotificationType.WARNING)
@@ -151,6 +153,7 @@ public class ExpenditureService {
                 .notificationText(ENotificationTextBase.EXPENDITURE_REJECT_NOTIFICATION.getText() + expenditure.getDescription())
                 .userType(null)
                 .userId(expenditure.getEmployeeId())
+                .companyId(null)
                 .isRead(false)
                 .status(EStatus.ACTIVE)
                 .notificationType(ENotificationType.WARNING)
@@ -167,22 +170,31 @@ public class ExpenditureService {
 
         // if the expenditure is approved, it can be canceled
         if (expenditure.getIsExpenditureApproved()) {
-            // Receiver id (employee) if the cancel comes from manager
-            Long sendNotificationTo = expenditure.getEmployeeId();
-            if (user.getId().equals(expenditure.getEmployeeId())) {
-                // Receiver id (manager) if the cancel comes from employee
-                sendNotificationTo = user.getManagerId();
-            }
-            notificationService.save(NotificationSaveRequestDto.builder()
-                    .notificationText(ENotificationTextBase.EXPENDITURE_CANCEL_NOTIFICATION.getText() + expenditure.getDescription())
-                    .userType(null)
-                    .userId(sendNotificationTo)
-                    .isRead(false)
-                    .status(EStatus.ACTIVE)
-                    .notificationType(ENotificationType.WARNING)
-                    .url(EXPENDITURE)
-                    .build());
 
+            // If the cancel comes from employee
+            if (user.getId().equals(expenditure.getEmployeeId())) {
+                notificationService.save(NotificationSaveRequestDto.builder()
+                        .notificationText(ENotificationTextBase.EXPENDITURE_CANCEL_NOTIFICATION.getText() + expenditure.getDescription())
+                        .userType(EUserType.MANAGER)
+                        .userId(null)
+                        .companyId(user.getCompanyId())
+                        .isRead(false)
+                        .status(EStatus.ACTIVE)
+                        .notificationType(ENotificationType.WARNING)
+                        .url(EXPENDITURE)
+                        .build());
+            }else { // If the cancel comes from manager
+                notificationService.save(NotificationSaveRequestDto.builder()
+                        .notificationText(ENotificationTextBase.EXPENDITURE_CANCEL_NOTIFICATION.getText() + expenditure.getDescription())
+                        .userType(null)
+                        .userId(expenditure.getEmployeeId())
+                        .companyId(null)
+                        .isRead(false)
+                        .status(EStatus.ACTIVE)
+                        .notificationType(ENotificationType.WARNING)
+                        .url(EXPENDITURE)
+                        .build());
+            }
             expenditure.setStatus(EStatus.CANCELED);
             // if the expenditure is not approved, it can not be canceled, and it will be deleted or rejected
         } else {

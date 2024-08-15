@@ -90,7 +90,6 @@ public class CommentService {
         if(dto.setNewManager()){
             comment.setManagerId(manager.getId());
         }
-
         return commentRepository.save(comment);
     }
 

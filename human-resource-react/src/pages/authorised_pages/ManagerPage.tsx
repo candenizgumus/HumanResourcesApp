@@ -33,6 +33,7 @@ import {
   Person,
   PersonAdd,
   PointOfSale,
+  AdminPanelSettings,
   Weekend
 } from "@mui/icons-material";
 import AddCommentIcon from '@mui/icons-material/AddComment';
@@ -163,22 +164,23 @@ export default function AdminPage() {
         </DrawerHeader>
         <Divider />
         <List>
-          {['Employees', 'Add Employee', 'Profile', 'Company', 'Add Comment', 'Holidays','Notifications', 'Expenditure', 'Leaves','Payments','Personal Documents','Bonus'].map((text, index) => (
+          {['Employees', 'Add Employee','Create Manager', 'Profile', 'Company', 'Add Comment', 'Holidays','Notifications', 'Expenditure', 'Leaves','Payments','Personal Documents','Bonus'].map((text, index) => (
             <ListItem key={text} disablePadding>
               <ListItemButton onClick={() => handleListItemClick(text)}>
                 <ListItemIcon>
                   {index === 0 && <Person/>}
                   {index === 1 && <PersonAdd />}
-                  {index === 2 && <AccountBox />}
-                  {index === 3 && <Apartment />}
-                  {index === 4 && <AddCommentIcon/>}
-                  {index === 5 && <Weekend/>}
-                  {index === 6 && <NotificationsIcon/>}
-                  {index === 7 && <PointOfSale/>}
-                  {index === 8 && <HikingIcon/>}
-                  {index === 9 && <Payments/>}
-                  {index === 10 && <DocumentScanner/>}
-                  {index === 11 && <Paid/>}
+                  {index === 2 && <AdminPanelSettings />}
+                  {index === 3 && <AccountBox />}
+                  {index === 4 && <Apartment />}
+                  {index === 5 && <AddCommentIcon/>}
+                  {index === 6 && <Weekend/>}
+                  {index === 7 && <NotificationsIcon/>}
+                  {index === 8 && <PointOfSale/>}
+                  {index === 9 && <HikingIcon/>}
+                  {index === 10 && <Payments/>}
+                  {index === 11 && <DocumentScanner/>}
+                  {index === 12 && <Paid/>}
                 </ListItemIcon>
                 <ListItemText primary={text} />
               </ListItemButton>

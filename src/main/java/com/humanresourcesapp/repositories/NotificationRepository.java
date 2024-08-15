@@ -15,7 +15,10 @@ public interface NotificationRepository extends JpaRepository<Notification, Long
     List<Notification> findAllByUserIdAndIsReadAndStatus(Long userId, boolean isRead, EStatus status);
 
     List<Notification> findAllByUserTypeAndIsReadAndStatus(EUserType userType, boolean isRead, EStatus status);
+    List<Notification> findAllByUserTypeAndIsReadAndStatusAndCompanyId(EUserType userType, boolean isRead, EStatus status, Long companyId);
 
     List<Notification> findAllByUserIdAndStatus(Long userId, EStatus status, PageRequest pageRequest);
     List<Notification> findAllByUserTypeAndStatus(EUserType userType, EStatus status, PageRequest pageRequest);
+
+    List<Notification> findAllByUserTypeAndStatusAndCompanyId(EUserType userType, EStatus status, Long companyId, PageRequest of);
 }

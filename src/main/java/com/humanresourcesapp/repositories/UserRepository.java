@@ -30,8 +30,8 @@ public interface UserRepository extends JpaRepository<User,Long>
     @Query("select u from User u  where  u.email like %?1% ORDER BY u.id ASC")
     List<User> getAllUserByEmailSearch(String email ,PageRequest pageRequest);
 
-    @Query("select u from User u  where  u.email like %?1%  AND u.userType = 'EMPLOYEE' AND u.managerId = ?2")
-    List<User> findAllUsersByEmailAndManagerId(String email ,Long managerId ,PageRequest pageRequest);
+    @Query("select u from User u  where  u.email like %?1%  AND u.userType = 'EMPLOYEE' AND u.companyId = ?2")
+    List<User> findAllUsersByEmailAndCompanyId(String email ,Long companyId ,PageRequest pageRequest);
 
     @Query("select Count(u) from User u  where  u.email like %?1%")
     Long getAllUserByEmailSearchCount(String email);
@@ -40,8 +40,7 @@ public interface UserRepository extends JpaRepository<User,Long>
     Long countByCreatedAtBetween(LocalDateTime start, LocalDateTime end);
 
 
-    List<User> findAllByManagerId(Long managerId);
-    List<User> findAllByManagerIdAndStatus(Long managerId, EStatus status);
+    List<User> findAllByCompanyIdAndStatus(Long companyId, EStatus status);
 
     Long countAllByUserType(EUserType userType);
     Long countAllByUserTypeAndStatus(EUserType userType, EStatus status);

@@ -6,7 +6,6 @@ import { HumanResources, useAppSelector } from "../../store";
 import {
     changePageState,
     clearToken,
-    fetchFindCompanyNameAndManagerNameOfUser,
     fetchFindUserByToken
 } from "../../store/feature/authSlice";
 import { useNavigate } from "react-router-dom";

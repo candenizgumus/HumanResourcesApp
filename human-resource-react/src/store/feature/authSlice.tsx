@@ -1,7 +1,9 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ILogin } from "../../models/ILogin";
 import { IUser } from "../../models/IUser";
-import { ICreateAdmin } from '../../models/ICreateAdmin';
+import { ICreateUser } from '../../models/ICreateUser';
+import { IUserType } from "../../models/IUserType";
+import path from "path";
 
 interface IAuthState {
     user: IUser;
@@ -154,7 +156,7 @@ export const fetchFindCompanyNameAndManagerNameOfUser = createAsyncThunk(
     'user/fetchFindCompanyNameAndManagerNameOfUser',
     async (token: string, { rejectWithValue }) => {
         try {
-            const response = await fetch('http://localhost:9090/dev/v1/user/find-company-name-and-manager-name-of-user', {
+            const response = await fetch('http://localhost:9090/dev/v1/user/find-company-name-of-user', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -177,11 +179,11 @@ export const fetchFindCompanyNameAndManagerNameOfUser = createAsyncThunk(
     }
 );
 
-export const fetchCreateAdmin = createAsyncThunk(
-    'user/fetchCreateAdmin',
-    async (payload: ICreateAdmin) => {
+export const fetchCreateUserWithUserType = createAsyncThunk(
+    'user/fetchCreateUserWithUserType',
+    async (payload: ICreateUser) => {
 
-        const response = await fetch(`http://localhost:9090/dev/v1/user/save-admin`, {
+        const response = await fetch(`http://localhost:9090/dev/v1/user/create-user-with-usertype`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -189,13 +191,15 @@ export const fetchCreateAdmin = createAsyncThunk(
             },
             body: JSON.stringify({
                 'email': payload.email,
-                'password': payload.password
+                'password': payload.password,
+                'userType': payload.userType
             })
         });
 
         return await response.json();
     }
 );
+
 interface UpdateProfile {
     token: string;
     name: string;
@@ -344,7 +348,7 @@ export const fetchGetAllUsersOfManager = createAsyncThunk(
 
     }
 );
-interface IfetchAddEmployeeToManager {
+interface IfetchAddEmployeeToCompany {
     token: string;
     email: string;
     name: string;
@@ -358,10 +362,10 @@ interface IfetchAddEmployeeToManager {
     eEmployeeType: string;
     salary: number
 }
-export const fetchAddEmployeeToManager = createAsyncThunk(
-    'user/fetchAddEmployeeToManager',
-    async (payload: IfetchAddEmployeeToManager, { dispatch }) => {
-        const response = await fetch('http://localhost:9090/dev/v1/user/add-employee-to-manager', {
+export const fetchAddEmployeeToCompany = createAsyncThunk(
+    'user/fetchAddEmployeeToCompany',
+    async (payload: IfetchAddEmployeeToCompany, { dispatch }) => {
+        const response = await fetch('http://localhost:9090/dev/v1/user/add-employee-to-company', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

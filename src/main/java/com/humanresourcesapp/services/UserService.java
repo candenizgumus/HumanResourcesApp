@@ -3,7 +3,7 @@ package com.humanresourcesapp.services;
 import com.humanresourcesapp.configs.aws.S3Buckets;
 import com.humanresourcesapp.constants.ENotificationTextBase;
 import com.humanresourcesapp.dto.requests.*;
-import com.humanresourcesapp.dto.responses.CompanyAndManagerNameResponseDto;
+import com.humanresourcesapp.dto.responses.CompanyNameResponseDto;
 import com.humanresourcesapp.dto.responses.CountUserByTypeAndStatusDto;
 import com.humanresourcesapp.dto.responses.MonthlySalaryOfEmployeesDto;
 import com.humanresourcesapp.entities.*;
@@ -28,10 +28,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.Year;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 import static com.humanresourcesapp.constants.FrontendPaths.*;
 
@@ -148,14 +145,14 @@ public class UserService {
 
         String email = UserInfoSecurityContext.getUserInfoFromSecurityContext();
         User manager = userRepository.findByEmail(email).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
-        return userRepository.findAllUsersByEmailAndManagerId(dto.searchText(), manager.getId(), PageRequest.of(dto.page(), dto.pageSize()));
+        return userRepository.findAllUsersByEmailAndCompanyId(dto.searchText(), manager.getCompanyId(), PageRequest.of(dto.page(), dto.pageSize()));
     }
 
     public User findById(Long id) {
         return userRepository.findById(id).orElseThrow(() -> new HumanResourcesAppException(ErrorType.ID_NOT_FOUND));
     }
 
-    public User addEmployeeToManager(AddEmployeeToManagerRequestDto dto) {
+    public User addEmployeeToCompany(AddEmployeeToCompanyRequestDto dto) {
         String userEmail = UserInfoSecurityContext.getUserInfoFromSecurityContext();
         User manager = userRepository.findByEmail(userEmail).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
 
@@ -196,7 +193,6 @@ public class UserService {
                 .userType(EUserType.EMPLOYEE)
                 .hireDate(dto.hireDate())
                 .birthDate(dto.birthDate())
-                .managerId(manager.getId())
                 .status(EStatus.ACTIVE)
                 .position(dto.ePosition())
                 .position(dto.ePosition())
@@ -234,7 +230,7 @@ public class UserService {
         return userRepository.findByAuthId(authId).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
     }
 
-    public CompanyAndManagerNameResponseDto findCompanyNameAndManagerNameOfUser() {
+    public CompanyNameResponseDto findCompanyNameOfUser() {
 
         String email = UserInfoSecurityContext.getUserInfoFromSecurityContext();
         User user = userRepository.findByEmail(email).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
@@ -246,13 +242,7 @@ public class UserService {
 
 
         }
-        if (user.getManagerId() != null )
-        {
-            User manager = userRepository.findByAuthId(user.getManagerId()).get();
-            managerName = manager.getName() + " " + manager.getSurname();
-        }
-
-        return new CompanyAndManagerNameResponseDto(companyName, managerName );
+        return new CompanyNameResponseDto(companyName);
     }
 
 
@@ -336,7 +326,7 @@ public class UserService {
             if (user.getUserType() == EUserType.MANAGER)
             {
                 //Updating users
-                List<User> userList = userRepository.findAllByManagerId(user.getId());
+                List<User> userList = userRepository.findAllByCompanyId(user.getId());
                 userList.forEach(employee -> {
                         if (employee.getStatus() != EStatus.DELETED)
                         {
@@ -437,9 +427,9 @@ public class UserService {
         User user = userRepository.findById(dto.employeeId()).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
 
         //Checking if manager is valid
-        if (manager.getId() != user.getManagerId())
+        if (!Objects.equals(manager.getCompanyId(), user.getCompanyId()))
         {
-            throw new HumanResourcesAppException(ErrorType.INVALID_ACCOUNT);
+            throw new HumanResourcesAppException(ErrorType.INSUFFICIENT_PERMISSION);
         }
 
         if (dto.name() != null)
@@ -516,34 +506,6 @@ public class UserService {
 
     }
 
-    public Auth saveAdmin(Auth auth) {
-        if(authService.findByEmail(auth.getEmail()).isPresent())
-        {
-            throw new HumanResourcesAppException(ErrorType.EMAIL_TAKEN);
-        }
-        emailService.send(MailModel.builder().to(auth.getEmail()).subject("Your account is created").message("You can log in with email: " + auth.getEmail() + " and password: " + auth.getPassword()).build());
-        String encodedPassword = passwordEncoder.bCryptPasswordEncoder().encode(auth.getPassword());
-        Auth saveAuth = Auth.builder()
-                .email(auth.getEmail())
-                .userType(EUserType.ADMIN)
-                .password(encodedPassword)
-                .status(EStatus.ACTIVE)
-                .build();
-
-        authService.save(saveAuth);
-
-        User user = User.builder()
-                .authId(saveAuth.getId())
-                .email(auth.getEmail())
-                .userType(EUserType.ADMIN)
-                .status(EStatus.ACTIVE)
-                .build();
-
-        userRepository.save(user);
-
-        return saveAuth;
-    }
-
     public CountUserByTypeAndStatusDto countOfCustomersForGraph()
     {
         Long countOfActiveManagers = userRepository.countAllByUserTypeAndStatus(EUserType.MANAGER, EStatus.ACTIVE);
@@ -574,7 +536,7 @@ public class UserService {
         List<MonthlySalaryOfEmployeesDto> monthlySalaryOfEmployeesDtos = new ArrayList<>();
         String userEmail = UserInfoSecurityContext.getUserInfoFromSecurityContext();
         User manager = userRepository.findByEmail(userEmail).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
-        List<User> employees = userRepository.findAllByManagerIdAndStatus(manager.getId(), EStatus.ACTIVE);
+        List<User> employees = userRepository.findAllByCompanyIdAndStatus(manager.getCompanyId(), EStatus.ACTIVE);
         List<Expenditure> expendituresOfEmployees = expenditureService.findExpendituresByCompanyIdAndCurrentMonth(manager.getCompanyId());
 
         //Adding empty employees to monthly salary list
@@ -610,5 +572,44 @@ public class UserService {
 
         return monthlySalaryOfEmployeesDtos;
 
+    }
+
+    public Auth createUserWithUserType(Auth auth) {
+        String userEmail = UserInfoSecurityContext.getUserInfoFromSecurityContext();
+        User user = userRepository.findByEmail(userEmail).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
+
+        if(user.getUserType().equals(EUserType.MANAGER) && auth.getUserType().equals(EUserType.ADMIN))
+            throw new HumanResourcesAppException(ErrorType.INSUFFICIENT_PERMISSION);
+
+        if(authService.findByEmail(auth.getEmail()).isPresent())
+        {
+            throw new HumanResourcesAppException(ErrorType.EMAIL_TAKEN);
+        }
+        emailService.send(MailModel.builder().to(auth.getEmail()).subject("Your account is created").message("You can log in with email: " + auth.getEmail() + " and password: " + auth.getPassword()).build());
+        String encodedPassword = passwordEncoder.bCryptPasswordEncoder().encode(auth.getPassword());
+        Auth saveAuth = Auth.builder()
+                .email(auth.getEmail())
+                .userType(auth.getUserType())
+                .password(encodedPassword)
+                .status(EStatus.ACTIVE)
+                .build();
+
+        authService.save(saveAuth);
+
+        User saveUser = User.builder()
+                .authId(saveAuth.getId())
+                .email(auth.getEmail())
+                .userType(auth.getUserType())
+                .status(EStatus.ACTIVE)
+                .companyId(user.getCompanyId())
+                .sector(user.getSector())
+                .subscriptionEndDate(user.getSubscriptionEndDate())
+                .subscriptionStartDate(user.getSubscriptionStartDate())
+                .subscriptionType(user.getSubscriptionType())
+                .build();
+
+        userRepository.save(saveUser);
+
+        return saveAuth;
     }
 }

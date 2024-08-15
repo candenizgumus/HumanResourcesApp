@@ -21,11 +21,12 @@ import {
     fetchGetLeavesOfEmployee,
     fetchCancelLeave,
 } from "../../../store/feature/leaveSlice";
-import { fetchGetDLeaveTypes } from "../../../store/feature/definitionSlice";
+import { fetchGetDefinitions } from "../../../store/feature/definitionSlice";
 import { HumanResources, useAppSelector } from "../../../store"; //
 import { clearToken, fetchFindUserByToken } from "../../../store/feature/authSlice";
 import MyDropzone from "../../atoms/DropZone";
 import DownloadButtonFromS3 from "../../atoms/DownloadButtonFromS3";
+import { EDefinitionType } from "../../../models/IDefinitionType";
 
 
 export default function SideBarEmployeeLeaves() {
@@ -41,8 +42,7 @@ export default function SideBarEmployeeLeaves() {
     const [startDate, setStartDate] = useState<Date | null>(null);
     const [endDate, setEndDate] = useState<Date | null>(null);
     const [files, setFiles] = useState<File[]>([]);
-    const leaveTypes = useAppSelector((state) => state.definition.leaveTypeList);
-
+    const leaveTypes = useAppSelector((state) => state.definition.definitionList);
     const leaveColumns: GridColDef[] = [
         { field: "id", headerName: "ID", width: 70, headerAlign: "center" },
         { field: "description", headerName: "Description", width: 200, headerAlign: "center" },
@@ -83,7 +83,9 @@ export default function SideBarEmployeeLeaves() {
             })
         ).then(()=> {
             dispatch(fetchFindUserByToken(token)).then(()=> {
-                dispatch(fetchGetDLeaveTypes(token))
+                dispatch(fetchGetDefinitions({
+                    token: token,
+                    definitionType: EDefinitionType.LEAVE_TYPE}))
             })
         }).catch(() => {
             // handle error, e.g., clear token
@@ -203,8 +205,8 @@ export default function SideBarEmployeeLeaves() {
             const result = await dispatch(fetchSaveLeave({
                 token,
                 description,
-                startDate: new Date(startDate.setHours(12)), // Convert Dayjs to JS Date and add 12 hours
-                endDate: new Date(endDate.setHours(12)), // Convert Dayjs to JS Date and add 12 hours
+                startDate: startDate,
+                endDate:endDate,
                 dLeaveTypeId,
                 files: files,
             })).unwrap();

@@ -3,7 +3,7 @@ package com.humanresourcesapp.utility;
 import com.humanresourcesapp.constants.ENotificationTextBase;
 import com.humanresourcesapp.dto.requests.*;
 import com.humanresourcesapp.entities.*;
-import com.humanresourcesapp.entities.definitions.DLeaveType;
+import com.humanresourcesapp.entities.Definition;
 import com.humanresourcesapp.entities.enums.*;
 import com.humanresourcesapp.services.*;
 import jakarta.annotation.PostConstruct;
@@ -52,7 +52,7 @@ public class InsertDemoData
         insertBonusData();
         insertPaymentData();
         insertExpenditureData();
-        insertLeaveTypeDemoData();
+        insertDefinitionDemoData();
 
 
         notificationService.save(NotificationSaveRequestDto.builder()
@@ -540,7 +540,7 @@ public class InsertDemoData
                     .phone("5305443221")
                     .photo("https://t4.ftcdn.net/jpg/03/64/21/11/360_F_364211147_1qgLVxv1Tcq0Ohz3FawUfrtONzz8nq3e.jpg")
                     .userType(EUserType.EMPLOYEE)
-                    .employeeType(EEmployeeType.FULL_TIME)
+                    .employeeTypeDefinitionId(15L)
                     .sector(ESectors.TECHNOLOGY)
                     .title("Turkey Operations Employee")
                     .salary(1950.00)
@@ -576,7 +576,7 @@ public class InsertDemoData
                     .phone("5395558471")
                     .photo("https://t4.ftcdn.net/jpg/03/64/21/11/360_F_364211147_1qgLVxv1Tcq0Ohz3FawUfrtONzz8nq3e.jpg")
                     .userType(EUserType.EMPLOYEE)
-                    .employeeType(EEmployeeType.PART_TIME)
+                    .employeeTypeDefinitionId(14L)
                     .sector(ESectors.TECHNOLOGY)
                     .salary(2650.00)
                     .title("Dr.")
@@ -815,30 +815,33 @@ public class InsertDemoData
 
     }
 
-    private void insertExpenditureData()
-    {
+    private void insertExpenditureData() {
         List<MultipartFile> files = new ArrayList<>();
 
 
         expenditureService.saveForDemoData(new ExpenditureSaveRequestDto("Food", 100.0, files));
         expenditureService.saveForDemoData(new ExpenditureSaveRequestDto("Transportation", 50.0, files));
 
-
-
     }
-    private void insertLeaveTypeDemoData() {
-        definitionService.saveLeaveType(new DLeaveType("ANNUAL"));
-        definitionService.saveLeaveType(new DLeaveType("HALF_ANNUAL"));
-        definitionService.saveLeaveType(new DLeaveType("MATERNITY"));
-        definitionService.saveLeaveType(new DLeaveType("PATERNITY"));
-        definitionService.saveLeaveType(new DLeaveType("SICK"));
-        definitionService.saveLeaveType(new DLeaveType("BEREAVEMENT"));
-        definitionService.saveLeaveType(new DLeaveType("PERSONAL"));
-        definitionService.saveLeaveType(new DLeaveType("FAMILY_CARE"));
-        definitionService.saveLeaveType(new DLeaveType("MILITARY"));
-        definitionService.saveLeaveType(new DLeaveType("MARRIAGE"));
-        definitionService.saveLeaveType(new DLeaveType("JURY_DUTY"));
-        definitionService.saveLeaveType(new DLeaveType("UNPAID"));
-        definitionService.saveLeaveType(new DLeaveType("OTHER"));
+
+    private void insertDefinitionDemoData(){
+        definitionService.saveLeaveType(Definition.builder().definitionType(EDefinitionType.LEAVE_TYPE).name("ANNUAL").build());
+        definitionService.saveLeaveType(Definition.builder().definitionType(EDefinitionType.LEAVE_TYPE).name("HALF_ANNUAL").build());
+        definitionService.saveLeaveType(Definition.builder().definitionType(EDefinitionType.LEAVE_TYPE).name("MATERNITY").build());
+        definitionService.saveLeaveType(Definition.builder().definitionType(EDefinitionType.LEAVE_TYPE).name("PATERNITY").build());
+        definitionService.saveLeaveType(Definition.builder().definitionType(EDefinitionType.LEAVE_TYPE).name("SICK").build());
+        definitionService.saveLeaveType(Definition.builder().definitionType(EDefinitionType.LEAVE_TYPE).name("BEREAVEMENT").build());
+        definitionService.saveLeaveType(Definition.builder().definitionType(EDefinitionType.LEAVE_TYPE).name("PERSONAL").build());
+        definitionService.saveLeaveType(Definition.builder().definitionType(EDefinitionType.LEAVE_TYPE).name("FAMILY_CARE").build());
+        definitionService.saveLeaveType(Definition.builder().definitionType(EDefinitionType.LEAVE_TYPE).name("MILITARY").build());
+        definitionService.saveLeaveType(Definition.builder().definitionType(EDefinitionType.LEAVE_TYPE).name("MARRIAGE").build());
+        definitionService.saveLeaveType(Definition.builder().definitionType(EDefinitionType.LEAVE_TYPE).name("JURY_DUTY").build());
+        definitionService.saveLeaveType(Definition.builder().definitionType(EDefinitionType.LEAVE_TYPE).name("UNPAID").build());
+        definitionService.saveLeaveType(Definition.builder().definitionType(EDefinitionType.LEAVE_TYPE).name("OTHER").build());
+
+        definitionService.saveLeaveType(Definition.builder().definitionType(EDefinitionType.EMPLOYEE_TYPE).name("FULL_TIME").build());
+        definitionService.saveLeaveType(Definition.builder().definitionType(EDefinitionType.EMPLOYEE_TYPE).name("PART_TIME").build());
+        definitionService.saveLeaveType(Definition.builder().definitionType(EDefinitionType.EMPLOYEE_TYPE).name("CONTRACT").build());
+        definitionService.saveLeaveType(Definition.builder().definitionType(EDefinitionType.EMPLOYEE_TYPE).name("OTHER").build());
     }
 }

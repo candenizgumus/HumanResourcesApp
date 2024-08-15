@@ -32,8 +32,9 @@ import {
     fetchAssignLeave,
 } from "../../../store/feature/leaveSlice";
 
-import {fetchGetDLeaveTypes} from "../../../store/feature/definitionSlice";
+import {fetchGetDefinitions} from "../../../store/feature/definitionSlice";
 import { clearToken, fetchGetAllUsersOfManager } from "../../../store/feature/authSlice";
+import { EDefinitionType } from "../../../models/IDefinitionType";
 
 const SideBarManagerLeaves = () => {
     const [selectedRowIds, setSelectedRowIds] = useState<number[]>([]);
@@ -42,7 +43,7 @@ const SideBarManagerLeaves = () => {
     const dispatch = useDispatch<HumanResources>();
     const token = useAppSelector((state) => state.auth.token);
     const leaves = useAppSelector((state) => state.leave.leaveList);
-    const leaveTypes = useAppSelector((state) => state.definition.leaveTypeList);
+    const leaveTypes = useAppSelector((state) => state.definition.definitionList);
     const [loading, setLoading] = useState(false);
     const [isActivating, setIsActivating] = useState(false);
     const [openChangeAnnualLeaveDayModal, setOpenChangeAnnualLeaveDayModal] = useState(false);
@@ -94,7 +95,10 @@ const SideBarManagerLeaves = () => {
                 pageSize: 100,
                 searchText: searchText,
             })).then(()=> {
-                dispatch(fetchGetDLeaveTypes(token))
+                dispatch(fetchGetDefinitions({
+                    token : token,
+                    definitionType: EDefinitionType.LEAVE_TYPE
+                }))
             })
             .catch(() => {
                 dispatch(clearToken());
@@ -424,8 +428,8 @@ const SideBarManagerLeaves = () => {
                 fetchAssignLeave({
                     token,
                     description,
-                    startDate: new Date(startDate.setHours(12)), // Convert Dayjs to JS Date and add 12 hours
-                    endDate: new Date(endDate.setHours(12)), // Convert Dayjs to JS Date and add 12 hours
+                    startDate: startDate,
+                    endDate: endDate,
                     dLeaveTypeId,
                     files: files,
                     employeeId: selectedEmployee.id

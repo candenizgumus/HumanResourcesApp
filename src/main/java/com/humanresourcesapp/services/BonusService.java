@@ -40,7 +40,7 @@ public class BonusService
 
         bonusRepository.save(Bonus
                 .builder()
-                        .bonusDate(dto.bonusDate())
+                        .bonusDate(dto.bonusDate().plusDays(1))
                         .bonusAmount(dto.bonusAmount())
                         .description(dto.description())
                         .companyId(manager.getCompanyId())

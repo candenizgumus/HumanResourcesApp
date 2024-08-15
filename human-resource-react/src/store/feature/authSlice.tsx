@@ -2,13 +2,11 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ILogin } from "../../models/ILogin";
 import { IUser } from "../../models/IUser";
 import { ICreateUser } from '../../models/ICreateUser';
-import { IUserType } from "../../models/IUserType";
-import path from "path";
+
 
 interface IAuthState {
     user: IUser;
     userList: IUser[];
-
     upcomingBirthdayUsers: IUser[];
     token: string;
     isAuth: boolean;
@@ -131,27 +129,6 @@ export const fetchGetStatus = createAsyncThunk(
     }
 );
 
-export const fetchGetEmployeeTypes = createAsyncThunk(
-    'user/fetchGetEmployeeTypes',
-    async (_, { rejectWithValue }) => {
-        try {
-            const response = await fetch('http://localhost:9090/dev/v1/user/get-employee-types');
-            const data = await response.json();
-            if (!response.ok) {
-                throw new Error(data.message || 'Fetching sectors failed');
-            }
-            return data;
-        } catch (err) {
-            console.log('Error: ', err);
-            if (err instanceof Error) {
-                return rejectWithValue(err.message);
-            } else {
-                return rejectWithValue('An unknown error occurred');
-            }
-        }
-    }
-);
-
 export const fetchFindCompanyNameAndManagerNameOfUser = createAsyncThunk(
     'user/fetchFindCompanyNameAndManagerNameOfUser',
     async (token: string, { rejectWithValue }) => {
@@ -253,7 +230,7 @@ interface IfetchUpdateEmployeeByManager {
     hireDate: Date | null;
     position: string;
     location: string;
-    eEmployeeType: string
+    employeeTypeDefinitionId: number
 
 }
 export const fetchUpdateEmployeeByManager = createAsyncThunk(
@@ -276,7 +253,7 @@ export const fetchUpdateEmployeeByManager = createAsyncThunk(
                 'location': payload.location,
                 'hireDate': payload.hireDate,
                 'employeeId': payload.employeeId,
-                'eEmployeeType': payload.eEmployeeType
+                'employeeTypeDefinitionId': payload.employeeTypeDefinitionId
             })
         });
 
@@ -359,7 +336,7 @@ interface IfetchAddEmployeeToCompany {
     birthDate: Date;
     hireDate: Date;
     ePosition: string;
-    eEmployeeType: string;
+    employeeTypeDefinitionId: number;
     salary: number
 }
 export const fetchAddEmployeeToCompany = createAsyncThunk(
@@ -380,7 +357,7 @@ export const fetchAddEmployeeToCompany = createAsyncThunk(
                 'birthDate': payload.birthDate,
                 'hireDate': payload.hireDate,
                 'ePosition': payload.ePosition,
-                'eEmployeeType': payload.eEmployeeType,
+                'employeeTypeDefinitionId': payload.employeeTypeDefinitionId,
                 'salary': payload.salary
             })
         });

@@ -1,5 +1,6 @@
-package com.humanresourcesapp.entities.definitions;
+package com.humanresourcesapp.entities;
 
+import com.humanresourcesapp.entities.enums.EDefinitionType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,16 +12,18 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "leave_types")
-public class DLeaveType {
+@Table(name = "definition")
+public class Definition {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
+    @Column(name = "name")
     private String name;
 
-    public DLeaveType(String name) {
-        this.name = name;
-    }
+    @Enumerated(EnumType.STRING)
+    EDefinitionType definitionType;
+
+
 }

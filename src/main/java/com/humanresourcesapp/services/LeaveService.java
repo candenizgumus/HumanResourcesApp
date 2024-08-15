@@ -73,8 +73,8 @@ public class LeaveService {
                         .employeeSurname(employee.getSurname())
                         .companyId(employee.getCompanyId())
                         .dLeaveTypeId(dto.dLeaveTypeId())
-                        .startDate(dto.startDate())
-                        .endDate(dto.endDate())
+                        .startDate(dto.startDate().plusDays(1))
+                        .endDate(dto.endDate().plusDays(1))
                         .fullName(employee.getName() + " " + employee.getSurname())
                         .email(employee.getEmail())
                         .attachedFile(fileName)
@@ -283,8 +283,8 @@ public class LeaveService {
                 .employeeSurname(employee.getSurname())
                 .companyId(employee.getCompanyId())
                 .dLeaveTypeId(dto.dLeaveTypeId())
-                .startDate(dto.startDate())
-                .endDate(dto.endDate())
+                .startDate(dto.startDate().plusDays(1))
+                .endDate(dto.endDate().plusDays(1))
                 .approveDate(LocalDate.now())
                 .isLeaveApproved(true)
                 .status(EStatus.ACTIVE)
@@ -304,6 +304,8 @@ public class LeaveService {
                 .build());
         return true;
     }
+
+    // TODO Update Leaves
 }
 
 

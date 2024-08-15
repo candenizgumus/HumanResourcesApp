@@ -20,18 +20,20 @@ import styled from '@emotion/styled';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import { uploadPlayerProfileImage } from '../../store/feature/awsSlice';
 import { IUpdateUserProfile } from '../../models/IUpdateUserProfile';
+import { fetchGetDefinitions } from '../../store/feature/definitionSlice';
+import { EDefinitionType } from '../../models/IDefinitionType';
 
 
 const SideBarProfile = () => {
     const dispatch = useDispatch<HumanResources>();
     const token = useAppSelector((state) => state.auth.token);
     const user: IUser = useAppSelector((state) => state.auth.user);
-
+    const employeeTypes = useAppSelector((state) => state.definition.definitionList);
     const [positions, setPositions] = useState([]);
     const [hireDate, setHireDate] = useState(user.hireDate ?? '');
     const [userType, setUserType] = useState<string>(user.userType ?? '');
     const [sector, setSector] = useState<string>(user.sector ?? '');
-    const [employeeType, setEmployeeType] = useState<string>(user.employeeType ?? '');
+    const [employeeType, setEmployeeType] = useState<number>(user.employeeTypeDefinitionId ?? null);
     const [subscriptionType, setSubscriptionType] = useState<string>(user.subscriptionType ?? '');
     const [subscriptionStartDate, setSubscriptionStartDate] = useState(user.subscriptionStartDate ?? '');
     const [subscriptionEndDate, setSubscriptionEndDate] = useState(user.subscriptionEndDate ?? '');
@@ -84,11 +86,16 @@ const SideBarProfile = () => {
             setHireDate(user.hireDate ?? '');
             setUserType(user.userType ?? '');
             setSector(user.sector ?? '');
-            setEmployeeType(user.employeeType ?? '');
+            setEmployeeType(user.employeeTypeDefinitionId ?? null);
             setSubscriptionType(user.subscriptionType ?? '');
             setSubscriptionStartDate(user.subscriptionStartDate ?? '');
             setSubscriptionEndDate(user.subscriptionEndDate ?? '');
             setSelectedPositions(user.position ?? '');
+
+            dispatch(fetchGetDefinitions({
+                token: token,
+                definitionType: EDefinitionType.EMPLOYEE_TYPE
+            }))
         } catch (error) {
             console.error('Error in setUserInfos:', error);
         } finally {
@@ -114,7 +121,7 @@ const SideBarProfile = () => {
             setHireDate(user.hireDate ?? '');
             setUserType(user.userType ?? '');
             setSector(user.sector ?? '');
-            setEmployeeType(user.employeeType ?? '');
+            setEmployeeType(user.employeeTypeDefinitionId ?? null);
             setSubscriptionType(user.subscriptionType ?? '');
             setSubscriptionStartDate(user.subscriptionStartDate ?? '');
             setSubscriptionEndDate(user.subscriptionEndDate ?? '');
@@ -144,7 +151,7 @@ const SideBarProfile = () => {
             surname: formState.surname,
             phone: formState.phone,
             title: formState.title,
-            birthDate: new Date(birthDate.setHours(12)), // Convert Dayjs to JS Date and add 12 hours
+            birthDate: birthDate,
             position: selectedPositions,
             location: formState.location
         })).then((data) => {
@@ -242,6 +249,11 @@ const SideBarProfile = () => {
         }
 
     };
+
+    const employeeTypeFunc = () =>{
+        const leaveType = employeeTypes.find(lt => lt.id === user.employeeTypeDefinitionId);
+        return leaveType ? leaveType.name : "Unknown";
+    }
 
     console.log(user);
     return (
@@ -433,6 +445,18 @@ const SideBarProfile = () => {
                         fullWidth
                         disabled
                     />
+                    
+                    {
+                        user.employeeTypeDefinitionId && (
+                            <TextField
+                                label="Employe Type"
+                                name="employeeTypeDefinitionId"
+                                value={employeeTypeFunc()}
+                                fullWidth
+                                disabled
+                            />
+                        )
+                    }
                     {
                         user.sector && (
                             <TextField

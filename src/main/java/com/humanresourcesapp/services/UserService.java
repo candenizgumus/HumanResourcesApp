@@ -191,8 +191,8 @@ public class UserService {
                 .surname(dto.surname())
                 .companyId(manager.getCompanyId())
                 .userType(EUserType.EMPLOYEE)
-                .hireDate(dto.hireDate())
-                .birthDate(dto.birthDate())
+                .hireDate(dto.hireDate().plusDays(1))
+                .birthDate(dto.birthDate().plusDays(1))
                 .status(EStatus.ACTIVE)
                 .position(dto.ePosition())
                 .position(dto.ePosition())
@@ -200,7 +200,7 @@ public class UserService {
                 .remainingAnnualLeave(0)
                 .title(dto.title())
                 .sector(manager.getSector())
-                .employeeType(dto.eEmployeeType())
+                .employeeTypeDefinitionId(dto.employeeTypeDefinitionId())
                 .subscriptionType(manager.getSubscriptionType())
                 .subscriptionStartDate(manager.getSubscriptionStartDate())
                 .subscriptionEndDate(manager.getSubscriptionEndDate())
@@ -277,7 +277,7 @@ public class UserService {
         }
         if (dto.birthDate() != null)
         {
-            user.setBirthDate(dto.birthDate());
+            user.setBirthDate(dto.birthDate().plusDays(1));
         }
         if (dto.position() != null)
         {
@@ -450,20 +450,20 @@ public class UserService {
         }
         if (dto.birthDate() != null)
         {
-            user.setBirthDate(dto.birthDate());
+            user.setBirthDate(dto.birthDate().plusDays(1));
         }
 
         if (dto.hireDate() != null)
         {
-            user.setHireDate(dto.hireDate());
+            user.setHireDate(dto.hireDate().plusDays(1));
         }
         if (dto.location() != null)
         {
             user.setLocation(dto.location());
         }
-        if (dto.eEmployeeType() != null)
+        if (dto.employeeTypeDefinitionId() != null)
         {
-            user.setEmployeeType(dto.eEmployeeType());
+            user.setEmployeeTypeDefinitionId(dto.employeeTypeDefinitionId());
         }
         if (dto.position() != null)
         {

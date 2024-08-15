@@ -32,7 +32,7 @@ public class PaymentService
                         .companyId(manager.getCompanyId())
                         .description(dto.description())
                         .payment(dto.payment())
-                        .paymentDate(dto.paymentDate())
+                        .paymentDate(dto.paymentDate().plusDays(1))
                         .status(EStatus.ACTIVE)
                 .build());
         return true;

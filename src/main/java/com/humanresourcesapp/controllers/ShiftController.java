@@ -1,6 +1,7 @@
 package com.humanresourcesapp.controllers;
 
 import com.humanresourcesapp.dto.requests.ShiftSaveRequestDto;
+import com.humanresourcesapp.dto.requests.ShiftUpdateRequestDto;
 import com.humanresourcesapp.entities.Shift;
 import com.humanresourcesapp.services.ShiftService;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,13 @@ public class ShiftController {
     //TODO DAHA SONRA EMPLOYEE SİLCEZ
     public ResponseEntity<Shift> save(@RequestBody ShiftSaveRequestDto dto) {
         return ResponseEntity.ok(shiftService.save(dto));
+    }
+
+    @PostMapping(UPDATE)
+    @PreAuthorize("hasAnyAuthority('MANAGER','EMPLOYEE')")
+    //TODO DAHA SONRA EMPLOYEE SİLCEZ
+    public ResponseEntity<Shift> update(@RequestBody ShiftUpdateRequestDto dto) {
+        return ResponseEntity.ok(shiftService.update(dto));
     }
 
     @PostMapping(GET_ALL)

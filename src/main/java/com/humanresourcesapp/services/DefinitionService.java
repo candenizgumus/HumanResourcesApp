@@ -22,6 +22,9 @@ public class DefinitionService {
     }
 
     public Boolean save(DefinitionSaveRequestDto dto) {
+        definitionRepository.findByName(dto.name()).ifPresent(definition -> {
+            throw new HumanResourcesAppException(ErrorType.DEFINITION_ALREADY_EXISTS);
+        });
         definitionRepository.save(Definition.builder()
                         .definitionType(dto.definitionType())
                         .name(dto.name())

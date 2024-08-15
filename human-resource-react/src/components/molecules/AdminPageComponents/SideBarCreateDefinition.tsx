@@ -1,18 +1,16 @@
 import React, { useState, ChangeEvent, FormEvent } from 'react';
-import { TextField, Button, Box, Checkbox, FormControlLabel, Typography } from '@mui/material';
+import { TextField, Button, Box } from '@mui/material';
 import { useDispatch } from 'react-redux';
-import { fetchCreateUserWithUserType } from '../../../store/feature/authSlice';
-import { HumanResources } from '../../../store';
-import Swal from "sweetalert2";
-import { fetchCreateFeature } from '../../../store/feature/featureSlice';
 import { fetchSaveDefinition } from '../../../store/feature/definitionSlice';
 import { EDefinitionType } from '../../../models/IDefinitionType';
+import Swal from "sweetalert2";
+import { HumanResources } from '../../../store';
 
 const UserForm: React.FC = () => {
   const dispatch = useDispatch<HumanResources>();
   const [name, setName] = useState('');
   const [loading, setLoading] = useState(false);
-  const [definitionType, setDefinitionType] = useState<EDefinitionType>(EDefinitionType.LEAVE_TYPE);
+  const [definitionType, setDefinitionType] = useState<EDefinitionType | ''>('');
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     setLoading(true);
@@ -21,10 +19,10 @@ const UserForm: React.FC = () => {
     try {
       let result = await dispatch(fetchSaveDefinition({
         name: name.toUpperCase(),
-        definitionType: definitionType,
+        definitionType: definitionType as EDefinitionType, // Cast to EDefinitionType
         token: localStorage.getItem('token') ?? ''
       })).unwrap();
-  
+
       if (result.code) {
         Swal.fire({
           icon: 'error',
@@ -32,15 +30,15 @@ const UserForm: React.FC = () => {
           text: result.message,
         });
         setLoading(false);
-        return; // Stop the process and prevent further then block executions
+        return;
       }
-  
+
       Swal.fire({
         icon: 'success',
         title: 'Success!',
         text: 'Feature Created.',
       });
-  
+
       setLoading(false);
     } catch (error) {
       console.error("Error creating feature:", error);
@@ -49,7 +47,10 @@ const UserForm: React.FC = () => {
   };
 
   const handleDefinitionTypeChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setDefinitionType(EDefinitionType[e.target.value as keyof typeof EDefinitionType]);
+    const selectedValue = e.target.value;
+
+    // Cast to unknown first, then to EDefinitionType
+    setDefinitionType(selectedValue as unknown as EDefinitionType);
   };
 
   return (
@@ -65,24 +66,23 @@ const UserForm: React.FC = () => {
         padding: 2,
       }}
     >
-      
       <TextField
-          select
-          label="Definition Type"
-          value={definitionType}
-          onChange={handleDefinitionTypeChange}
-          required
-          fullWidth
-          SelectProps={{ native: true }}
+        select
+        label="Definition Type"
+        value={definitionType}
+        onChange={handleDefinitionTypeChange as any} // Type casting here
+        required
+        fullWidth
+        SelectProps={{ native: true }}
       >
-          {Object.keys(EDefinitionType)
-          .filter((key) => isNaN(Number(key))) // Filter out the numeric keys
-          .map((type) => (
-            <option key={type} value={type}>
-              {type}
-            </option>
-          ))}
+        <option value="">Select a type</option> {/* Optional default empty option */}
+        {Object.values(EDefinitionType).map((value) => (
+          <option key={value} value={value}>
+            {value}
+          </option>
+        ))}
       </TextField>
+      
       <TextField
         label="Definition Name"
         name="name"

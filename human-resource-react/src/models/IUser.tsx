@@ -19,7 +19,7 @@ export interface IUser{
     position:string ;
     sector:string ;
     location:string ;
-    employeeType:string;
+    employeeTypeDefinitionId:number;
     subscriptionType:string;
     subscriptionStartDate:Date;
     subscriptionEndDate:Date;

@@ -68,8 +68,8 @@ const SideBarHolidayFormUser: React.FC = () => {
         dispatch(fetchCreateHolidayManager({
             holidayName,
             holidayType,
-            startDate: new Date(holidayStartDate.setHours(12)), // Convert Dayjs to JS Date and add 12 hours
-            endDate: new Date(holidayEndDate.setHours(12)), // Convert Dayjs to JS Date and add 12 hours
+            startDate:holidayStartDate,
+            endDate: holidayEndDate,
             token
         }))
             .then(data => {

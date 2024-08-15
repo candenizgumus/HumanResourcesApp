@@ -29,8 +29,8 @@ public class HolidayService {
         return holidayRepository.save(Holiday.builder()
                 .holidayName(holidaySaveRequestDto.holidayName())
                 .holidayType(holidaySaveRequestDto.holidayType())
-                .startDate(holidaySaveRequestDto.startDate())
-                .endDate(holidaySaveRequestDto.endDate())
+                .startDate(holidaySaveRequestDto.startDate().plusDays(1))
+                .endDate(holidaySaveRequestDto.endDate().plusDays(1))
                 .status(EStatus.INACTIVE)
                 .build());
     }
@@ -58,8 +58,8 @@ public class HolidayService {
         return holidayRepository.save(Holiday.builder()
                 .holidayName(holidaySaveRequestDto.holidayName())
                 .holidayType(holidaySaveRequestDto.holidayType())
-                .startDate(holidaySaveRequestDto.startDate())
-                .endDate(holidaySaveRequestDto.endDate())
+                .startDate(holidaySaveRequestDto.startDate().plusDays(1))
+                .endDate(holidaySaveRequestDto.endDate().plusDays(1))
                 .companyId(user.get().getCompanyId())
                 .status(EStatus.ACTIVE)
                 .build());
@@ -81,8 +81,8 @@ public class HolidayService {
             Holiday holiday = optionalHoliday.get();
             holiday.setHolidayName(holidaySaveRequestDto.holidayName());
             holiday.setHolidayType(holidaySaveRequestDto.holidayType());
-            holiday.setStartDate(holidaySaveRequestDto.startDate());
-            holiday.setEndDate(holidaySaveRequestDto.endDate());
+            holiday.setStartDate(holidaySaveRequestDto.startDate().plusDays(1));
+            holiday.setEndDate(holidaySaveRequestDto.endDate().plusDays(1));
             return holidayRepository.save(holiday);
         } else {
             throw new HumanResourcesAppException(ErrorType.ID_NOT_FOUND);

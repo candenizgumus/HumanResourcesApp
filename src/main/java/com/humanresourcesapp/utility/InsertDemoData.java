@@ -52,7 +52,7 @@ public class InsertDemoData
         insertBonusData();
         insertPaymentData();
         insertExpenditureData();
-        insertLeaveTypeDemoData();
+        insertDefinitionDemoData();
 
 
         notificationService.save(NotificationSaveRequestDto.builder()
@@ -540,7 +540,7 @@ public class InsertDemoData
                     .phone("5305443221")
                     .photo("https://t4.ftcdn.net/jpg/03/64/21/11/360_F_364211147_1qgLVxv1Tcq0Ohz3FawUfrtONzz8nq3e.jpg")
                     .userType(EUserType.EMPLOYEE)
-                    .employeeType(EEmployeeType.FULL_TIME)
+                    .employeeTypeDefinitionId(15L)
                     .sector(ESectors.TECHNOLOGY)
                     .title("Turkey Operations Employee")
                     .salary(1950.00)
@@ -576,7 +576,7 @@ public class InsertDemoData
                     .phone("5395558471")
                     .photo("https://t4.ftcdn.net/jpg/03/64/21/11/360_F_364211147_1qgLVxv1Tcq0Ohz3FawUfrtONzz8nq3e.jpg")
                     .userType(EUserType.EMPLOYEE)
-                    .employeeType(EEmployeeType.PART_TIME)
+                    .employeeTypeDefinitionId(14L)
                     .sector(ESectors.TECHNOLOGY)
                     .salary(2650.00)
                     .title("Dr.")
@@ -815,8 +815,7 @@ public class InsertDemoData
 
     }
 
-    private void insertExpenditureData()
-    {
+    private void insertExpenditureData() {
         List<MultipartFile> files = new ArrayList<>();
 
 
@@ -825,7 +824,7 @@ public class InsertDemoData
 
     }
 
-    private void insertLeaveTypeDemoData(){
+    private void insertDefinitionDemoData(){
         definitionService.saveLeaveType(Definition.builder().definitionType(EDefinitionType.LEAVE_TYPE).name("ANNUAL").build());
         definitionService.saveLeaveType(Definition.builder().definitionType(EDefinitionType.LEAVE_TYPE).name("HALF_ANNUAL").build());
         definitionService.saveLeaveType(Definition.builder().definitionType(EDefinitionType.LEAVE_TYPE).name("MATERNITY").build());
@@ -839,5 +838,10 @@ public class InsertDemoData
         definitionService.saveLeaveType(Definition.builder().definitionType(EDefinitionType.LEAVE_TYPE).name("JURY_DUTY").build());
         definitionService.saveLeaveType(Definition.builder().definitionType(EDefinitionType.LEAVE_TYPE).name("UNPAID").build());
         definitionService.saveLeaveType(Definition.builder().definitionType(EDefinitionType.LEAVE_TYPE).name("OTHER").build());
+
+        definitionService.saveLeaveType(Definition.builder().definitionType(EDefinitionType.EMPLOYEE_TYPE).name("FULL_TIME").build());
+        definitionService.saveLeaveType(Definition.builder().definitionType(EDefinitionType.EMPLOYEE_TYPE).name("PART_TIME").build());
+        definitionService.saveLeaveType(Definition.builder().definitionType(EDefinitionType.EMPLOYEE_TYPE).name("CONTRACT").build());
+        definitionService.saveLeaveType(Definition.builder().definitionType(EDefinitionType.EMPLOYEE_TYPE).name("OTHER").build());
     }
 }

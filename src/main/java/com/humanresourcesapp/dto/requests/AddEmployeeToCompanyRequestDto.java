@@ -1,6 +1,5 @@
 package com.humanresourcesapp.dto.requests;
 
-import com.humanresourcesapp.entities.enums.EEmployeeType;
 import com.humanresourcesapp.entities.enums.EPosition;
 
 import java.time.LocalDate;
@@ -15,7 +14,7 @@ public record AddEmployeeToCompanyRequestDto(Long companyId,
                                              LocalDate birthDate,
                                              LocalDate hireDate,
                                              EPosition ePosition,
-                                             EEmployeeType eEmployeeType,
+                                             Long employeeTypeDefinitionId,
                                              Double salary
 
 

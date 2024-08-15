@@ -77,12 +77,6 @@ public class UserController
     {
         return ResponseEntity.ok(ESectors.values());
     }
-    @GetMapping(GET_EMPLOYEE_TYPES)
-    @CrossOrigin("*")
-    public ResponseEntity<EEmployeeType[]> getEmployeeTypes()
-    {
-        return ResponseEntity.ok(EEmployeeType.values());
-    }
 
     @GetMapping(GET_STATUS)
     @CrossOrigin("*")

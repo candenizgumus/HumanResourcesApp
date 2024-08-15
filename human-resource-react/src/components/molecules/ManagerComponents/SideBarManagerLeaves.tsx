@@ -56,7 +56,6 @@ const SideBarManagerLeaves = () => {
     const [startDate, setStartDate] = useState<Date | null>(null);
     const [endDate, setEndDate] = useState<Date | null>(null);
     const [files, setFiles] = useState<File[]>([]);
-    const [definitionType, setDefinitionType] = useState<EDefinitionType>(EDefinitionType.LEAVE_TYPE);
 
     const columns: GridColDef[] = [
         { field: "fullName", headerName: "Name", width: 150, headerAlign: "center" },
@@ -98,7 +97,7 @@ const SideBarManagerLeaves = () => {
             })).then(()=> {
                 dispatch(fetchGetDefinitions({
                     token : token,
-                    definitionType: definitionType
+                    definitionType: EDefinitionType.LEAVE_TYPE
                 }))
             })
             .catch(() => {
@@ -429,8 +428,8 @@ const SideBarManagerLeaves = () => {
                 fetchAssignLeave({
                     token,
                     description,
-                    startDate: new Date(startDate.setHours(12)), // Convert Dayjs to JS Date and add 12 hours
-                    endDate: new Date(endDate.setHours(12)), // Convert Dayjs to JS Date and add 12 hours
+                    startDate: startDate,
+                    endDate: endDate,
                     dLeaveTypeId,
                     files: files,
                     employeeId: selectedEmployee.id

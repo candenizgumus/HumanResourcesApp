@@ -32,53 +32,58 @@ import {fetchSaveBonus} from "../../../store/feature/bonusSlice";
 import {Simulate} from "react-dom/test-utils";
 import error = Simulate.error;
 import {setEmployeeIdAndCompanyId} from "../../../store/feature/shiftSlice";
-
-const columns: GridColDef[] = [
-    { field: "id", headerName: "ID", width: 70, headerAlign: "center" },
-    { field: "name", headerName: "First name", width: 150, headerAlign: "center" },
-    { field: "surname", headerName: "Last name", width: 120, headerAlign: "center" },
-    { field: "email", headerName: "Email", headerAlign: "center", width: 250 },
-    { field: "phone", headerName: "Phone", sortable: false, headerAlign: "center", width: 140 },
-    { field: "position", headerName: "Position", type: "string", width: 220, headerAlign: "center" },
-    { field: "userType", headerName: "User Type", width: 150, headerAlign: "center" },
-    { field: "employeeType", headerName: "Employee Type", width: 150, headerAlign: "center" },
-    { field: "status", headerName: "Status", width: 120, headerAlign: "center" },
-    {
-        field: "photo",
-        headerName: "Photo",
-        width: 100,
-        headerAlign: "center",
-        sortable: false,
-        renderCell: (params) => (
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '100%' }}>
-                <Avatar alt={params.row.name} src={params.value} />
-            </div>
-        ),
-    },
-
-
-];
-
+import { fetchGetDefinitions } from "../../../store/feature/definitionSlice";
+import { EDefinitionType } from "../../../models/IDefinitionType";
 
 export default function SideBarEmployees() {
     const [selectedRowIds, setSelectedRowIds] = useState<number[]>([]);
     const [searchText, setSearchText] = useState('');
-
-
     const dispatch = useDispatch<HumanResources>();
     const token = useAppSelector((state) => state.auth.token);
     const userList = useAppSelector((state) => state.auth.userList);
+    const employeeTypes = useAppSelector((state) => state.definition.definitionList);
     const [loading, setLoading] = useState(false);
     const [isActivating, setIsActivating] = useState(false);
     const [open, setOpen] = useState(false);
     const [selectedUser, setSelectedUser] = useState<IUser | null>(null);
-
-
     const [description, setDescription] = useState('');
     const [bonusAmount, setBonusAmount] = useState(0);
     const [bonusDate, setBonusDate] = useState<Date | null>(null);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
+
+    const columns: GridColDef[] = [
+        { field: "id", headerName: "ID", width: 70, headerAlign: "center" },
+        { field: "name", headerName: "First name", width: 150, headerAlign: "center" },
+        { field: "surname", headerName: "Last name", width: 120, headerAlign: "center" },
+        { field: "email", headerName: "Email", headerAlign: "center", width: 250 },
+        { field: "phone", headerName: "Phone", sortable: false, headerAlign: "center", width: 140 },
+        { field: "position", headerName: "Position", type: "string", width: 220, headerAlign: "center" },
+        { field: "userType", headerName: "User Type", width: 150, headerAlign: "center" },
+        {
+            field: "employeeTypeDefinitionId",
+            headerName: "Employee Type",
+            width: 150,
+            headerAlign: "center",
+            renderCell: (params) => {
+                const employeeType = employeeTypes.find(lt => lt.id === params.value);
+                return employeeType ? employeeType.name : "Unknown";
+            }
+        },
+        { field: "status", headerName: "Status", width: 120, headerAlign: "center" },
+        {
+            field: "photo",
+            headerName: "Photo",
+            width: 100,
+            headerAlign: "center",
+            sortable: false,
+            renderCell: (params) => (
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '100%' }}>
+                    <Avatar alt={params.row.name} src={params.value} />
+                </div>
+            ),
+        },
+    ];
 
     const handleSetShifts  = () => {
         for (let id of selectedRowIds) {
@@ -138,14 +143,18 @@ export default function SideBarEmployees() {
     }
 
     useEffect(() => {
-        dispatch(
-            fetchGetAllUsersOfManager({
-                token: token,
-                page: 0,
-                pageSize: 100,
-                searchText: searchText,
+        dispatch(fetchGetDefinitions({
+            token : token,
+            definitionType: EDefinitionType.EMPLOYEE_TYPE
+        })
+            ).then(()=> {
+                dispatch(fetchGetAllUsersOfManager({
+                    token: token,
+                    page: 0,
+                    pageSize: 100,
+                    searchText: searchText,
+                }))
             })
-        )
             .catch(() => {
             dispatch(clearToken());
         });

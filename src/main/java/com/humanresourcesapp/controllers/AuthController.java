@@ -54,6 +54,9 @@ public class AuthController
         //Check if subscription is expired.
         if (auth.getUserType() != EUserType.ADMIN && auth.getSubscriptionEndDate() != null && auth.getSubscriptionEndDate().isBefore(LocalDate.now()))
         {
+            //Inactivating all related accounts
+            authService.inactivateAllRelatedAccounts(auth.getId());
+
             throw new HumanResourcesAppException(ErrorType.SUBSCRIPTION_EXPIRED);
         }
 

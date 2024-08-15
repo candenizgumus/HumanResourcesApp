@@ -5,10 +5,11 @@ import com.humanresourcesapp.entities.Shift;
 import com.humanresourcesapp.services.ShiftService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
 import static com.humanresourcesapp.constants.Endpoints.*;
 
 @RestController
@@ -18,8 +19,16 @@ import static com.humanresourcesapp.constants.Endpoints.*;
 public class ShiftController {
     private final ShiftService shiftService;
     @PostMapping(SAVE)
-    public ResponseEntity<Shift> save(ShiftSaveRequestDto dto) {
+    @PreAuthorize("hasAnyAuthority('MANAGER','EMPLOYEE')")
+    //TODO DAHA SONRA EMPLOYEE SİLCEZ
+    public ResponseEntity<Shift> save(@RequestBody ShiftSaveRequestDto dto) {
         return ResponseEntity.ok(shiftService.save(dto));
+    }
+
+    @PostMapping(GET_ALL)
+    @PreAuthorize("hasAnyAuthority('MANAGER','EMPLOYEE')")
+    public ResponseEntity<List<Shift>> getAll(Long employeeId) {
+        return ResponseEntity.ok(shiftService.getAll(employeeId));
     }
 
 }

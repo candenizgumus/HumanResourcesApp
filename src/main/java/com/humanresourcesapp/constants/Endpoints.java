@@ -1,5 +1,7 @@
 package com.humanresourcesapp.constants;
 
+import software.amazon.awssdk.services.s3.endpoints.internal.Value;
+
 public class Endpoints
 {
 
@@ -47,6 +49,7 @@ public class Endpoints
     //methods
     public static final String SAVE = "/save";
     public static final String DELETE = "/delete";
+    public static final String DELETE_FROM_BUCKET = "/delete-from-bucket";
     public static final String UPDATE = "/update";
     public static final String GET = "/get";
     public static final String GET_ALL = "/get-all";

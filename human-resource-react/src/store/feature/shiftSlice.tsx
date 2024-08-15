@@ -3,10 +3,14 @@ import {IShift} from "../../components/atoms/MyCalender";
 
 interface shiftState{
     shiftList:IShift[]
+    employeeId:number,
+    companyId:number
 }
 
 const initialShiftState:shiftState = {
-    shiftList: []
+    shiftList: [],
+    employeeId:0,
+    companyId:0
 }
 
 
@@ -41,8 +45,43 @@ export const fetchSaveShift = createAsyncThunk(
 
                 })
             });
-             
+
             return await response.json();
+    }
+
+)
+
+export interface IfetchUpdateShift{
+    token:string;
+    shiftId:number,
+    description:string,
+    start:Date,
+    endTime:Date,
+    title:string
+
+}
+
+export const fetchUpdateShift = createAsyncThunk(
+    'shift/fetchUpdateShift',
+    async (payload: IfetchUpdateShift) => {
+
+        const response = await fetch(`http://localhost:9090/dev/v1/shift/update`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ` + payload.token
+            },
+            body: JSON.stringify({
+                'shiftId': payload.shiftId,
+                'description': payload.description,
+                'start': payload.start,
+                'endTime': payload.endTime,
+                'title': payload.title,
+
+            })
+        });
+
+        return await response.json();
     }
 
 )
@@ -67,10 +106,37 @@ export const fetchFindShiftsOfEmployee = createAsyncThunk(
 
 )
 
+interface IfetchDeleteShift{
+    token:string,
+    shiftId:number,
+}
+export const fetchDeleteShift = createAsyncThunk(
+    'shift/fetchFindShiftsOfEmployee',
+    async (payload: IfetchDeleteShift) => {
+
+        const response = await fetch(`http://localhost:9090/dev/v1/shift/delete?id=` + payload.shiftId, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ` + payload.token
+            }
+        });
+
+
+    }
+
+)
+
 const shiftSlice = createSlice({
     name: 'bonus',
     initialState: initialShiftState,
-    reducers: {},
+    reducers: {
+        setEmployeeIdAndCompanyId:(state,action)=>{
+
+            state.employeeId = action.payload.employeeId
+            state.companyId = action.payload.companyId
+        }
+    },
     extraReducers: (build)=>{
       build.addCase(fetchFindShiftsOfEmployee.fulfilled,(state,action)=>{
 
@@ -81,4 +147,4 @@ const shiftSlice = createSlice({
 });
 
 export default shiftSlice.reducer;
-export const {} = shiftSlice.actions
+export const {setEmployeeIdAndCompanyId} = shiftSlice.actions

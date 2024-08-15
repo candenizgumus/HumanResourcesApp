@@ -1,8 +1,7 @@
 package com.humanresourcesapp.utility;
 
 import com.humanresourcesapp.constants.ENotificationTextBase;
-import com.humanresourcesapp.dto.requests.NotificationSaveRequestDto;
-import com.humanresourcesapp.dto.requests.OfferSaveRequestDto;
+import com.humanresourcesapp.dto.requests.*;
 import com.humanresourcesapp.entities.*;
 import com.humanresourcesapp.entities.Definition;
 import com.humanresourcesapp.entities.enums.*;
@@ -10,8 +9,10 @@ import com.humanresourcesapp.services.*;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -21,7 +22,8 @@ import static com.humanresourcesapp.constants.FrontendPaths.HOME;
 
 @RequiredArgsConstructor
 @Service
-public class InsertDemoData {
+public class InsertDemoData
+{
     private final CompanyService companyService;
     private final FeatureService featureService;
     private final UserService userService;
@@ -31,16 +33,27 @@ public class InsertDemoData {
     private final HolidayService holidayService;
     private final OfferService offerService;
     private final NotificationService notificationService;
+    private final ShiftService shiftService;
+    private final BonusService bonusService;
+    private final PaymentService paymentService;
+    private final ExpenditureService expenditureService;
     private final DefinitionService definitionService;
 
+
     @PostConstruct
-    public void insert() {
+    public void insert()
+    {
         insertCompanyDemoData();
         insertFeatureDemoData();
         insertCommentDemoData();
         insertHolidayDemoData();
         instertOfferDemoData();
+        insertShiftDemoData();
+        insertBonusData();
+        insertPaymentData();
+        insertExpenditureData();
         insertLeaveTypeDemoData();
+
 
         notificationService.save(NotificationSaveRequestDto.builder()
                 .notificationText(ENotificationTextBase.ERROR_NOTIFICATION.getText() + "We have Errors !")
@@ -54,8 +67,10 @@ public class InsertDemoData {
     }
 
     // Company demo data insertion
-    private void insertCompanyDemoData() {
-        if(companyService.getAll().isEmpty()) {
+    private void insertCompanyDemoData()
+    {
+        if (companyService.getAll().isEmpty())
+        {
             List<Company> companyList = new ArrayList<>();
             companyList.add(Company.builder()
                     .name("Airbnb")
@@ -174,8 +189,10 @@ public class InsertDemoData {
     }
 
     // Feature demo data insertion
-    private void insertFeatureDemoData() {
-        if(featureService.getAll().isEmpty()) {
+    private void insertFeatureDemoData()
+    {
+        if (featureService.getAll().isEmpty())
+        {
             List<Feature> featureList = new ArrayList<>();
             featureList.add(Feature.builder()
                     .name("Recruitment")
@@ -232,26 +249,27 @@ public class InsertDemoData {
     }
 
     // Comment demo data insertion
-    private void insertCommentDemoData() {
+    private void insertCommentDemoData()
+    {
         List<Comment> commentList = new ArrayList<>();
         createManagerUser();
         User manager = userService.findByEmail("manager").orElseThrow(() -> new RuntimeException("Manager not found"));
         commentList.add(Comment.builder()
-                        .companyId(manager.getCompanyId())
-                        .managerId(manager.getId())
-                        .shortDescription("A platform that can be easily used by employees of all levels, where HR processes can be managed smoothly and independently of the person")
-                        .longDescription("Before we met Easy HR, we were having great difficulties with expense and leave tracking. In addition, our personal information was managed in an irregular way in different Google documents.\n" +
-                                "\n" +
-                                "While looking for a digital HR solution to solve these problems, I discovered Easy HR on the recommendation of a friend. I had the opportunity to examine the application in detail during the demo period. Turkish and English language support and ease of use were very effective in our decision to cooperate.\n" +
-                                "\n" +
-                                "At the beginning, our biggest concern was the problems that may be experienced in keeping leave and expenses retrospectively and possible disruptions in approval processes. As we approach our first year of using Easy, we have not encountered any problems about these issues.\n" +
-                                "\n" +
-                                "A platform that can be easily used by employees of all levels, where HR processes can be managed smoothly and independently of the person\n" +
-                                "\n" +
-                                "With Easy HR, our expense processes have been streamlined and payment periods have been standardised. Employees are also very satisfied with this transition. The ease of request and approval processes in Easy HR enabled them to easily follow the transactions.\n" +
-                                "\n" +
-                                "I would definitely recommend Easy HR to other sector leaders. It is a platform that employees of all levels can easily adapt and use, and HR processes can be managed smoothly and independently of the person.\n" +
-                                "\n")
+                .companyId(manager.getCompanyId())
+                .managerId(manager.getId())
+                .shortDescription("A platform that can be easily used by employees of all levels, where HR processes can be managed smoothly and independently of the person")
+                .longDescription("Before we met Easy HR, we were having great difficulties with expense and leave tracking. In addition, our personal information was managed in an irregular way in different Google documents.\n" +
+                        "\n" +
+                        "While looking for a digital HR solution to solve these problems, I discovered Easy HR on the recommendation of a friend. I had the opportunity to examine the application in detail during the demo period. Turkish and English language support and ease of use were very effective in our decision to cooperate.\n" +
+                        "\n" +
+                        "At the beginning, our biggest concern was the problems that may be experienced in keeping leave and expenses retrospectively and possible disruptions in approval processes. As we approach our first year of using Easy, we have not encountered any problems about these issues.\n" +
+                        "\n" +
+                        "A platform that can be easily used by employees of all levels, where HR processes can be managed smoothly and independently of the person\n" +
+                        "\n" +
+                        "With Easy HR, our expense processes have been streamlined and payment periods have been standardised. Employees are also very satisfied with this transition. The ease of request and approval processes in Easy HR enabled them to easily follow the transactions.\n" +
+                        "\n" +
+                        "I would definitely recommend Easy HR to other sector leaders. It is a platform that employees of all levels can easily adapt and use, and HR processes can be managed smoothly and independently of the person.\n" +
+                        "\n")
 
                 .build());
         User manager2 = userService.findByEmail("manager2@gmail.com").orElseThrow(() -> new RuntimeException("Manager not found"));
@@ -259,14 +277,14 @@ public class InsertDemoData {
                 .companyId(manager2.getCompanyId())
                 .managerId(manager2.getId())
                 .shortDescription("Before we met Easy HR, we were very primitive in terms of personnel and leave management compared to today.")
-                        .longDescription("Before we met Easy HR, we were very primitive in personnel and leave management compared to today.\n" +
-                                "\n" +
-                                "Before we met Easy, even accessing the simplest personal data took a very serious amount of time. Our leave management processes were manual and very error-prone. It took us a lot of time to meet the requests for information, statistical data, etc. from employees, management and related institutions. Our access to information was very limited and we did not have a database. Frankly speaking, we were very primitive in personnel and leave management compared to today.\n" +
-                                "\n" +
-                                "I had used Easy HR for a short period in my previous company and found it very useful. In addition, I started to follow its social accounts and HR magazine İKahve. It seemed very practical to manage personnel data and leave processes on a single platform. Moreover, the fact that there are many different applications and solution partners in the field of HR that we can use over time was very effective in our decision to cooperate.\n" +
-                                "\n" +
-                                "At the beginning, our biggest concern was whether our demands that would be shaped over time would be responded to accurately and quickly. However, we saw that this concern was very unfounded. :) For 10 months we have been actively using EasyEasy HR and during this time we had many requests that we insisted on. We would like to thank the entire Easy HR team for supporting us patiently and with open communication every time.\n" +
-                                "\n")
+                .longDescription("Before we met Easy HR, we were very primitive in personnel and leave management compared to today.\n" +
+                        "\n" +
+                        "Before we met Easy, even accessing the simplest personal data took a very serious amount of time. Our leave management processes were manual and very error-prone. It took us a lot of time to meet the requests for information, statistical data, etc. from employees, management and related institutions. Our access to information was very limited and we did not have a database. Frankly speaking, we were very primitive in personnel and leave management compared to today.\n" +
+                        "\n" +
+                        "I had used Easy HR for a short period in my previous company and found it very useful. In addition, I started to follow its social accounts and HR magazine İKahve. It seemed very practical to manage personnel data and leave processes on a single platform. Moreover, the fact that there are many different applications and solution partners in the field of HR that we can use over time was very effective in our decision to cooperate.\n" +
+                        "\n" +
+                        "At the beginning, our biggest concern was whether our demands that would be shaped over time would be responded to accurately and quickly. However, we saw that this concern was very unfounded. :) For 10 months we have been actively using EasyEasy HR and during this time we had many requests that we insisted on. We would like to thank the entire Easy HR team for supporting us patiently and with open communication every time.\n" +
+                        "\n")
 
                 .build());
         User manager3 = userService.findByEmail("manager3@gmail.com").orElseThrow(() -> new RuntimeException("Manager not found"));
@@ -274,24 +292,24 @@ public class InsertDemoData {
                 .companyId(manager3.getCompanyId())
                 .managerId(manager3.getId())
                 .shortDescription("We have experienced an evolution from disorder to order in our human resources processes with Easy HR!")
-                        .longDescription("We have experienced an evolution from disorganisation to order in our human resources processes with Easy HR! \u200D\n" +
-                                "\n" +
-                                "Before we met Easy HR, especially our leave and expenditure processes were very complex and disorganised. The follow-up and control problems we experienced in these areas made us feel like we were constantly failing. \n" +
-                                "\n" +
-                                "Therefore, in 2016, we decided that we needed a solution to support our HR processes and we met Easy HR Personnel Management application. The features offered by the application for our problems were the most important factors affecting our decision to cooperate.\n" +
-                                "\n" +
-                                "Before starting to work with Easy HR, our biggest concern was the loss of time that switching to such a software would create. However, Easy HR's flexible structure and customer-oriented approach eliminated all these concerns.\n" +
-                                "\n" +
-                                "After we started using Easy HR, the features we benefited the most were leave and expenditure. The control mechanisms in these processes and access to historical data have greatly facilitated our work. We have experienced an evolution from disorder to order in our human resources processes with Easy. It has been really great to be able to access historical data and see the big picture!")
+                .longDescription("We have experienced an evolution from disorganisation to order in our human resources processes with Easy HR! \u200D\n" +
+                        "\n" +
+                        "Before we met Easy HR, especially our leave and expenditure processes were very complex and disorganised. The follow-up and control problems we experienced in these areas made us feel like we were constantly failing. \n" +
+                        "\n" +
+                        "Therefore, in 2016, we decided that we needed a solution to support our HR processes and we met Easy HR Personnel Management application. The features offered by the application for our problems were the most important factors affecting our decision to cooperate.\n" +
+                        "\n" +
+                        "Before starting to work with Easy HR, our biggest concern was the loss of time that switching to such a software would create. However, Easy HR's flexible structure and customer-oriented approach eliminated all these concerns.\n" +
+                        "\n" +
+                        "After we started using Easy HR, the features we benefited the most were leave and expenditure. The control mechanisms in these processes and access to historical data have greatly facilitated our work. We have experienced an evolution from disorder to order in our human resources processes with Easy. It has been really great to be able to access historical data and see the big picture!")
 
 
                 .build());
         commentService.saveAll(commentList);
     }
 
-    private void insertHolidayDemoData() {
-        List <Holiday> holidayList = new ArrayList<>();
-
+    private void insertHolidayDemoData()
+    {
+        List<Holiday> holidayList = new ArrayList<>();
 
 
         holidayList.add(Holiday.builder()
@@ -358,7 +376,7 @@ public class InsertDemoData {
     {
         String managerEmail = "manager";
         String password = "123";
-
+        LocalDate currentDate = LocalDate.now();
         if (authService.findByEmail(managerEmail).isEmpty())
         {
             String encodedPassword = passwordEncoder.bCryptPasswordEncoder().encode(password);
@@ -369,7 +387,7 @@ public class InsertDemoData {
                     .email(managerEmail)
                     .password(encodedPassword)
                     .userType(EUserType.MANAGER)
-                            .subscriptionType(ESubscriptionType.MONTHLY)
+                    .subscriptionType(ESubscriptionType.MONTHLY)
                     .build());
 
 
@@ -384,7 +402,7 @@ public class InsertDemoData {
                     .subscriptionStartDate(auth.getSubscriptionStartDate())
                     .subscriptionEndDate(auth.getSubscriptionEndDate())
                     .location("Turkey")
-                    .birthDate(LocalDate.of(1989, 1, 1))
+                    .birthDate(LocalDate.of(1989, currentDate.getMonthValue(), 1))
                     .position(EPosition.CARTOGRAPHER)
                     .companyId(1L)
                     .phone("5555555555")
@@ -394,7 +412,6 @@ public class InsertDemoData {
                     .title("Turkey Operations Manager")
                     .build();
             userService.save(user);
-
 
 
             Auth auth2 = authService.save(Auth.
@@ -493,6 +510,8 @@ public class InsertDemoData {
                     .build();
             userService.save(user4);
 
+
+
             // Adding employee to the manager
             Auth authEmployee = authService.save(Auth.
                     builder()
@@ -507,18 +526,18 @@ public class InsertDemoData {
                     .builder()
                     .status(EStatus.ACTIVE)
                     .email("employee@gmail.com")
-                    .name("Employee 1")
+                    .name("Jason")
                     .surname("Hard")
                     .authId(authEmployee.getId())
                     .subscriptionType(ESubscriptionType.MONTHLY)
                     .subscriptionStartDate(authEmployee.getSubscriptionStartDate())
                     .subscriptionEndDate(authEmployee.getSubscriptionEndDate())
-                    .location("Turkey")
-                    .birthDate(LocalDate.of(1999, 4, 1))
+                    .location("England")
+                    .birthDate(LocalDate.of(1999, currentDate.getMonthValue(), 1))
                     .position(EPosition.ADMINISTRATIVE_ASSISTANT)
                     .companyId(user.getCompanyId())
                     .remainingAnnualLeave(25)
-                    .phone("5555555555")
+                    .phone("5305443221")
                     .photo("https://t4.ftcdn.net/jpg/03/64/21/11/360_F_364211147_1qgLVxv1Tcq0Ohz3FawUfrtONzz8nq3e.jpg")
                     .userType(EUserType.EMPLOYEE)
                     .employeeType(EEmployeeType.FULL_TIME)
@@ -550,11 +569,11 @@ public class InsertDemoData {
                     .subscriptionStartDate(authEmployee.getSubscriptionStartDate())
                     .subscriptionEndDate(authEmployee.getSubscriptionEndDate())
                     .location("Turkey")
-                    .birthDate(LocalDate.of(1990, 5, 15))
+                    .birthDate(LocalDate.of(1990, currentDate.getMonthValue() + 1, 15))
                     .position(EPosition.COMPUTER_PROGRAMMER)
                     .companyId(user.getCompanyId())
                     .remainingAnnualLeave(15)
-                    .phone("5555555555")
+                    .phone("5395558471")
                     .photo("https://t4.ftcdn.net/jpg/03/64/21/11/360_F_364211147_1qgLVxv1Tcq0Ohz3FawUfrtONzz8nq3e.jpg")
                     .userType(EUserType.EMPLOYEE)
                     .employeeType(EEmployeeType.PART_TIME)
@@ -742,6 +761,67 @@ public class InsertDemoData {
                 ESectors.TOURISM
         ));
 
+
+    }
+
+
+    private void insertShiftDemoData()
+    {
+
+        Long[] employeeIds = {7L, 8L};
+        Long companyId = 1L;
+
+        LocalDateTime startDate = LocalDateTime.of(2024, 8, 19, 9, 0); // Starting from August 19, 2024
+        LocalDateTime endDate = startDate.plusMonths(2).withHour(17); // 2 months later
+
+        for (LocalDateTime date = startDate; date.isBefore(endDate); date = date.plusDays(1))
+        {
+            // Skip weekends
+            if (date.getDayOfWeek().getValue() > 5)
+            {
+                continue;
+            }
+
+            for (Long employeeId : employeeIds)
+            {
+                ShiftSaveRequestDto shift = new ShiftSaveRequestDto(
+                        companyId,
+                        employeeId,
+                        "Regular Shift",
+                        "Weekday shift from 9 AM to 5 PM",
+                        date,
+                        date.plusHours(8)
+                );
+                shiftService.save(shift);
+
+            }
+        }
+
+    }
+
+    private void insertBonusData()
+    {
+        bonusService.saveForDemoData(new BonusSaveRequestDto(7L, "Regular Bonus", 1000.0, LocalDate.now()));
+        bonusService.saveForDemoData(new BonusSaveRequestDto(8L, "Special Bonus", 2000.0, LocalDate.now()));
+
+    }
+
+    private void insertPaymentData()
+    {
+        paymentService.saveForDemoData(new PaymentSaveRequestDto(LocalDate.now(), 1000.0, "Weekly Payment"));
+        paymentService.saveForDemoData(new PaymentSaveRequestDto(LocalDate.now().plusDays(5), 8000.0, "Monthly Payment"));
+        paymentService.saveForDemoData(new PaymentSaveRequestDto(LocalDate.now().plusDays(20), 2500.0, "Delivery Payment"));
+
+
+    }
+
+    private void insertExpenditureData()
+    {
+        List<MultipartFile> files = new ArrayList<>();
+
+
+        expenditureService.saveForDemoData(new ExpenditureSaveRequestDto("Food", 100.0, files));
+        expenditureService.saveForDemoData(new ExpenditureSaveRequestDto("Transportation", 50.0, files));
 
     }
 

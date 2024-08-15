@@ -16,13 +16,14 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ShiftService {
     private final ShiftRepository shiftRepository;
-
+   // private static final ZoneId SERVER_TIME_ZONE = ZoneId.of("Europe/Istanbul");
     public Shift save(ShiftSaveRequestDto dto) {
 
+        //ZonedDateTime.parse(dto.start().toString()).withZoneSameInstant(SERVER_TIME_ZONE);
         return shiftRepository.save(Shift.builder()
                 .companyId(dto.companyId())
                         .start(dto.start().plusHours(3)) //TODO LOOK AT LATER to fix time difference issue
-                        .endTime(dto.start().plusHours(3))
+                        .endTime(dto.endTime().plusHours(3))
                         .title(dto.title())
                         .description(dto.description())
                         .employeeId(dto.employeeId())
@@ -42,11 +43,11 @@ public class ShiftService {
 
         if (dto.start() != null)
         {
-            shift.setStart(dto.start());
+            shift.setStart(dto.start().plusHours(3));
         }
         if (dto.endTime() != null)
         {
-            shift.setEndTime(dto.endTime());
+            shift.setEndTime(dto.endTime().plusHours(3));
         }
         if (dto.title() != null)
         {
@@ -57,5 +58,10 @@ public class ShiftService {
             shift.setDescription(dto.description());
         }
        return shiftRepository.save(shift);
+    }
+
+    public void delete(Long id)
+    {
+        shiftRepository.deleteById(id);
     }
 }

@@ -3,11 +3,15 @@ import MyCalendar, { IShift } from "../../atoms/MyCalender";
 import { useDispatch } from "react-redux";
 import { HumanResources, useAppSelector } from "../../../store";
 import { fetchFindShiftsOfEmployee, fetchSaveShift, fetchUpdateShift, fetchDeleteShift } from "../../../store/feature/shiftSlice";
+import sweetalert2 from "sweetalert2";
+import Swal from "sweetalert2";
 
-export const EmployeeHomeContent: React.FC = () => {
+export const SetShifts: React.FC = () => {
     const [events, setEvents] = useState<IShift[]>([]);
     const dispatch = useDispatch<HumanResources>();
     const token = useAppSelector((state) => state.auth.token);
+    const employeeId = useAppSelector((state) => state.shift.employeeId);
+    const companyId = useAppSelector((state) => state.shift.companyId);
 
     const getShiftsOfEmployee = () => {
         dispatch(fetchFindShiftsOfEmployee({ employeeId: 7, token: token })).then(data => {
@@ -20,6 +24,16 @@ export const EmployeeHomeContent: React.FC = () => {
     }, []);
 
     const handleSaveEvent = (newEvent: IShift) => {
+        if (newEvent.description === '' || newEvent.title === '' || newEvent.start === null || newEvent.endTime === null) {
+            Swal.fire({
+                title: "Error",
+                text: "Please fill all the fields",
+                icon: "error",
+                confirmButtonText: "OK",
+                confirmButtonColor: "#D32F2F",
+            });
+            return;
+        }
         dispatch(fetchSaveShift({
             token: token,
             companyId: newEvent.companyId,
@@ -71,5 +85,5 @@ export const EmployeeHomeContent: React.FC = () => {
         });
     };
 
-    return <MyCalendar events={events} isUserManager={false}  />;
+    return <MyCalendar events={events} isUserManager={true} onDeleteEvent={handleDeleteEvent} onSaveEvent={handleSaveEvent} onUpdateEvent={handleUpdateEvent} companyId={companyId} employeeId={employeeId} />;
 };

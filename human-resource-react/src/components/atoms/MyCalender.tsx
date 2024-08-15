@@ -7,7 +7,7 @@ import { Box, Typography, Paper, Dialog, DialogTitle, DialogContent, TextField, 
 const localizer = momentLocalizer(moment);
 
 export interface IShift {
-    id: number;
+    id?: number;
     employeeId: number;
     companyId: number;
     title: string;
@@ -18,57 +18,70 @@ export interface IShift {
 
 interface MyCalendarProps {
     events: IShift[];
-    onUpdateEvent: (updatedEvent: IShift) => void;
+    onSaveEvent?: (newEvent: IShift) => void;  // Yeni etkinliği kaydetme için
+    onUpdateEvent?: (updatedEvent: IShift) => void; // Mevcut etkinliği güncelleme için
+    onDeleteEvent?: (eventId: number) => void;
+    companyId?: number;
+    employeeId?: number;
+    isUserManager: boolean;
 }
 
-const MyCalendar: React.FC<MyCalendarProps> = ({ events, onUpdateEvent }) => {
+const MyCalendar: React.FC<MyCalendarProps> = ({ events, onSaveEvent, onUpdateEvent, onDeleteEvent, companyId, employeeId, isUserManager }) => {
     const [selectedEvent, setSelectedEvent] = useState<IShift | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const handleSelectEvent = (event: IShift) => {
-        setSelectedEvent(event); // Seçilen etkinlik bilgilerini state'e atar
-        setIsModalOpen(true); // Modalı açar
+        setSelectedEvent(event);
+        setIsModalOpen(true);
     };
 
     const handleClose = () => {
-        setIsModalOpen(false); // Modalı kapatır
-        setSelectedEvent(null); // Seçilen etkinliği temizler
+        setIsModalOpen(false);
+        setSelectedEvent(null);
     };
 
     const handleSave = () => {
         if (selectedEvent) {
             if (selectedEvent.id) {
-                // Güncellenmiş etkinliği güncelle
-                onUpdateEvent(selectedEvent);
+                if (onUpdateEvent) {
+                    onUpdateEvent(selectedEvent);
+                } // Eğer id varsa, güncelleme işlemi
             } else {
-                // Yeni etkinliği ekle (burada `onUpdateEvent` ile yeni bir etkinlik ekleme fonksiyonu kullanılabilir)
-                const newEvent = { ...selectedEvent, id: events.length + 1 };
-                onUpdateEvent(newEvent);
+                if (onSaveEvent) {
+                    onSaveEvent(selectedEvent);
+                } // Eğer id yoksa, yeni etkinlik kaydetme
             }
         }
-        handleClose(); // Modalı kapat
+        handleClose();
     };
 
-
+    const handleDelete = () => {
+        if (selectedEvent && selectedEvent.id) {
+            if (onDeleteEvent) {
+                onDeleteEvent(selectedEvent.id);
+            }
+            handleClose();
+        }
+    };
 
     const handleChange = (field: keyof IShift, value: string | Date) => {
         if (selectedEvent) {
-            setSelectedEvent({ ...selectedEvent, [field]: value }); // Değişiklikleri state'e kaydeder
+            setSelectedEvent({ ...selectedEvent, [field]: value });
         }
     };
+
     const handleSelectSlot = (slotInfo: { start: Date; end: Date }) => {
         const newEvent: IShift = {
-            id: events.length + 1, // Yeni bir ID veriyoruz
-            employeeId: 1, // Varsayılan bir employeeId atayabilirsiniz
-            companyId: 1, // Varsayılan bir companyId atayabilirsiniz
-            title: 'Yeni Vardiya', // Varsayılan başlık
-            start: slotInfo.start, // Seçilen başlangıç zamanı
-            endTime: slotInfo.end, // Seçilen bitiş zamanı
-            description: '', // Varsayılan açıklama
+            employeeId: employeeId || 1,
+            companyId: companyId || 1,
+            title: 'Yeni Vardiya',
+            start: slotInfo.start,  // Doğrudan Date objesini kullanın
+            endTime: slotInfo.end,  // Doğrudan Date objesini kullanın
+            description: '',
         };
 
-        setSelectedEvent(newEvent); // Yeni etkinliği seçili olarak ayarla
-        setIsModalOpen(true); // Modalı aç
+        setSelectedEvent(newEvent);
+        setIsModalOpen(true);
     };
 
     return (
@@ -81,18 +94,20 @@ const MyCalendar: React.FC<MyCalendarProps> = ({ events, onUpdateEvent }) => {
                     <Box sx={{ height: 600 }}>
                         <Calendar
                             localizer={localizer}
-                            events={events}
-                            startAccessor="start"
-                            endAccessor="endTime"
+                            events={events.map(event => ({
+                                ...event,
+                                start: new Date(event.start),  // Date objesi
+                                end: new Date(event.endTime),   // Date objesi
+                            }))}
+                            startAccessor={(event) => new Date(event.start.toString())}
+                            endAccessor={(event) => new Date(event.end.toString())}
                             style={{ height: '100%' }}
                             views={['month', 'week', 'day']}
                             toolbar
                             showMultiDayTimes
-                            onSelectEvent={handleSelectEvent} // Etkinlik tıklama için event handler
-                            onSelectSlot={handleSelectSlot} // Boş güne tıklama için event handler
-                            selectable // Boş güne tıklama özelliğini aktif et
+                            selectable={isUserManager} // isUserManager true ise seçilebilir yap
+                            {...(isUserManager ? { onSelectEvent: handleSelectEvent, onSelectSlot: handleSelectSlot } : {})} // isUserManager true ise onSelectEvent ve onSelectSlot prop'larını ekle
                         />
-
                     </Box>
                 </Paper>
             </Box>
@@ -105,14 +120,14 @@ const MyCalendar: React.FC<MyCalendarProps> = ({ events, onUpdateEvent }) => {
                         fullWidth
                         margin="dense"
                         value={selectedEvent?.title || ''}
-                        onChange={(e) => handleChange('title', e.target.value)} // Başlık değişikliğini yakalar
+                        onChange={(e) => handleChange('title', e.target.value)}
                     />
                     <TextField
                         label="Açıklama"
                         fullWidth
                         margin="dense"
                         value={selectedEvent?.description || ''}
-                        onChange={(e) => handleChange('description', e.target.value)} // Açıklama değişikliğini yakalar
+                        onChange={(e) => handleChange('description', e.target.value)}
                     />
                     <TextField
                         label="Başlangıç Tarihi"
@@ -120,7 +135,7 @@ const MyCalendar: React.FC<MyCalendarProps> = ({ events, onUpdateEvent }) => {
                         fullWidth
                         margin="dense"
                         value={selectedEvent?.start ? moment(selectedEvent.start).format('YYYY-MM-DDTHH:mm') : ''}
-                        onChange={(e) => handleChange('start', new Date(e.target.value))} // Başlangıç tarihi değişikliğini yakalar
+                        onChange={(e) => handleChange('start', new Date(e.target.value))}
                     />
                     <TextField
                         label="Bitiş Tarihi"
@@ -128,16 +143,21 @@ const MyCalendar: React.FC<MyCalendarProps> = ({ events, onUpdateEvent }) => {
                         fullWidth
                         margin="dense"
                         value={selectedEvent?.endTime ? moment(selectedEvent.endTime).format('YYYY-MM-DDTHH:mm') : ''}
-                        onChange={(e) => handleChange('endTime', new Date(e.target.value))} // Bitiş tarihi değişikliğini yakalar
+                        onChange={(e) => handleChange('endTime', new Date(e.target.value))}
                     />
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose} color="primary">
-                        İptal
+                        Cancel
                     </Button>
                     <Button onClick={handleSave} color="primary">
-                        Kaydet
+                        Save
                     </Button>
+                    {selectedEvent?.id && (
+                        <Button onClick={handleDelete} color="secondary">
+                            Delete
+                        </Button>
+                    )}
                 </DialogActions>
             </Dialog>
         </>

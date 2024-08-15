@@ -1,5 +1,6 @@
 package com.humanresourcesapp.controllers;
 
+import com.humanresourcesapp.dto.requests.DeletePersonalDocumentRequestDto;
 import com.humanresourcesapp.dto.requests.PageRequestDto;
 import com.humanresourcesapp.dto.requests.PersonalDocumentSaveRequestDto;
 import com.humanresourcesapp.dto.responses.PersonalDocumentResponseDto;
@@ -29,7 +30,7 @@ public class PersonalDocumentController {
     public ResponseEntity<PersonalDocument> save(@RequestParam("employeeId") String employeeId,
                                                  @RequestParam("documentType") String documentType,
                                                  @Nullable @RequestParam("documentFile") List<MultipartFile> documentFile,
-                                                 @RequestParam("description") String description){
+                                                 @RequestParam("description") String description) {
         return ResponseEntity.ok(personalDocumentService.save(employeeId, documentType, documentFile, description));
     }
 
@@ -52,14 +53,29 @@ public class PersonalDocumentController {
 
     @PostMapping(GET_ALL)
     @PreAuthorize("hasAnyAuthority('MANAGER')")
-    public ResponseEntity<List<PersonalDocument>> getAll(@RequestBody PageRequestDto dto){
+    public ResponseEntity<List<PersonalDocument>> getAll(@RequestBody PageRequestDto dto) {
         return ResponseEntity.ok(personalDocumentService.getAllByEmail(dto));
     }
 
-    @DeleteMapping(DELETE + "/{id}")
+//    @DeleteMapping(DELETE + "/{id}")
+//    @PreAuthorize("hasAnyAuthority('MANAGER')")
+//    public ResponseEntity<PersonalDocument> deletePersonalDocument(@PathVariable Long id) {
+//        return ResponseEntity.ok(personalDocumentService.delete(id));
+//    }
+//
+//    @DeleteMapping(DELETE_FROM_BUCKET)
+//    @PreAuthorize("hasAnyAuthority('MANAGER')")
+//    public ResponseEntity<Void> deletePersonalDocumentFromBucket(@RequestParam String attachedFile) {
+//        personalDocumentService.deleteFromBucket(attachedFile);
+//        return ResponseEntity.ok().build();
+//    }
+
+    @DeleteMapping(DELETE)
     @PreAuthorize("hasAnyAuthority('MANAGER')")
-    public ResponseEntity<PersonalDocument> deletePersonalDocument(@PathVariable Long id) {
-        return ResponseEntity.ok(personalDocumentService.delete(id));
+    public ResponseEntity<PersonalDocument> deletePersonalDocument(@RequestBody DeletePersonalDocumentRequestDto dto) {
+        PersonalDocument deletedDocument = personalDocumentService.delete(dto.id());
+        personalDocumentService.deleteFromBucket(dto.attachedFile());
+        return ResponseEntity.ok(deletedDocument);
     }
 
 }

@@ -14,7 +14,7 @@ const initialPersonalDocumentState: IPersonalDocumentState = {
     loading: false,
 };
 
-interface ISavePersonalDocument{
+interface ISavePersonalDocument {
     employeeId: number;
     documentType: string;
     documentFile: File[];
@@ -26,79 +26,87 @@ export const fetchSavePersonalDocument = createAsyncThunk(
     'personalDocument/fetchSavePersonalDocument',
     async (payload: ISavePersonalDocument, {rejectWithValue}) => {
         const formData = new FormData();
-        formData.append('employeeId', String (payload.employeeId));
+        formData.append('employeeId', String(payload.employeeId));
         formData.append('documentType', payload.documentType);
         formData.append('documentFile', payload.documentFile[0]); // İlk dosyayı ekliyoruz
         formData.append('description', payload.description);
-            const response = await fetch('http://localhost:9090/dev/v1/personal-document/save', {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ` + payload.token
-                },
-                body: formData, // FormData'yı body olarak ekliyoruz
-            });
+        const response = await fetch('http://localhost:9090/dev/v1/personal-document/save', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ` + payload.token
+            },
+            body: formData, // FormData'yı body olarak ekliyoruz
+        });
         return await response.json();
     }
 )
 
 export const fetchDeletePersonalDocument = createAsyncThunk(
-    'personalDocument/fetchDeletePersonalDocument',
-    async (payload: {id: number, token: string}, {rejectWithValue}) => {
-            const response = await fetch(`http://localhost:9090/dev/v1/personal-document/delete/${payload.id}`,{
+    'personalDocument/fetchDeletePersonalDocumentAndFile',
+    async (payload: { id: number, attachedFile: string, token: string }, { rejectWithValue }) => {
+            const response = await fetch(`http://localhost:9090/dev/v1/personal-document/delete`, {
                 method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ` + payload.token
-                }
-            });
-        return await response.json();
-    }
-);
-
-interface IFetchGetPersonalDocument{
-    token: string;
-    searchText: string;
-    page:number;
-    pageSize: number;
-}
-export const fetchPersonalDocuments = createAsyncThunk(
-    'personalDocument/fetchPersonalDocuments',
-    async (payload: IFetchGetPersonalDocument, {rejectWithValue}) => {
-            const response = await fetch('http://localhost:9090/dev/v1/personal-document/get-all',{
-                method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ` + payload.token
                 },
                 body: JSON.stringify({
-                    'searchText': payload.searchText,
-                    'pageSize': payload.pageSize,
-                    'page':payload.page
+                    'id': payload.id,
+                    'attachedFile': payload.attachedFile
                 })
             });
+
+            return await response.json();
+
+    }
+);
+
+interface IFetchGetPersonalDocument {
+    token: string;
+    searchText: string;
+    page: number;
+    pageSize: number;
+}
+
+export const fetchPersonalDocuments = createAsyncThunk(
+    'personalDocument/fetchPersonalDocuments',
+    async (payload: IFetchGetPersonalDocument, {rejectWithValue}) => {
+        const response = await fetch('http://localhost:9090/dev/v1/personal-document/get-all', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ` + payload.token
+            },
+            body: JSON.stringify({
+                'searchText': payload.searchText,
+                'pageSize': payload.pageSize,
+                'page': payload.page
+            })
+        });
         return await response.json();
     }
 );
 
-interface IFetchPersonalDocument{
+interface IFetchPersonalDocument {
     employeeId: number;
     token: string;
 }
+
 export const fetchPersonalDocumentsOfEmployee = createAsyncThunk(
     'personalDocument/fetchPersonalDocumentsOfEmployee',
     async (payload: IFetchPersonalDocument, {rejectWithValue}) => {
-            const response = await fetch('http://localhost:9090/dev/v1/personal-document/get-by-employee-id',{
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ` + payload.token
-                },
-                body: JSON.stringify(
-                    {
-                        'employeeId': payload.employeeId
-                    }
-                ),
-            });
+        const response = await fetch('http://localhost:9090/dev/v1/personal-document/get-by-employee-id', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ` + payload.token
+            },
+            body: JSON.stringify(
+                {
+                    'employeeId': payload.employeeId
+                }
+            ),
+        });
         return await response.json();
     }
 );
@@ -106,13 +114,13 @@ export const fetchPersonalDocumentsOfEmployee = createAsyncThunk(
 export const fetchPersonalDocumentTypes = createAsyncThunk(
     'personalDocument/fetchPersonalDocumentsTypes',
     async (token: string, {rejectWithValue}) => {
-            const response = await fetch('http://localhost:9090/dev/v1/personal-document/get-all-personal-document-types',{
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ` + token
-                },
-            });
+        const response = await fetch('http://localhost:9090/dev/v1/personal-document/get-all-personal-document-types', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ` + token
+            },
+        });
         return await response.json();
     }
 );

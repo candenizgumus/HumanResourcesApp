@@ -1,33 +1,54 @@
-import React from 'react';
-import MyCalendar from "../../atoms/MyCalender";
-import {Grid} from "@mui/material";
+import React, {useEffect, useState} from 'react';
+import MyCalendar, {IShift} from "../../atoms/MyCalender";
+import {useDispatch} from "react-redux";
+import {HumanResources, useAppSelector} from "../../../store";
+import {fetchFindShiftsOfEmployee, fetchSaveShift} from "../../../store/feature/shiftSlice";
+
 
 export const EmployeeHomeContent: React.FC = () => {
-    const events = [
-        {
-            title: 'Sabah Vardiyası',
-            start: new Date(2024, 7, 14, 8, 0), // 14 Ağustos 2024, 08:00
-            end: new Date(2024, 7, 14, 16, 0),  // 14 Ağustos 2024, 16:00
-            desc: 'Bu vardiya 8 saat sürer.',
-        },
-        {
-            title: 'Öğle Molası',
-            start: new Date(2024, 7, 14, 12, 0), // 14 Ağustos 2024, 12:00
-            end: new Date(2024, 7, 14, 13, 0),  // 14 Ağustos 2024, 13:00
-            desc: 'Bu mola 1 saat sürer.',
-        },
-    ];
+    const [events, setEvents] = useState<IShift[]>([]);
+    const dispatch = useDispatch<HumanResources>();
+    const token = useAppSelector((state) => state.auth.token);
 
-    return (
-        <>
-            <Grid container spacing={2}>
-                <Grid item xs={12} md={6}>
-                    <MyCalendar events={events} />;
-                </Grid>
-            </Grid>
+    const getShiftsOfEmployee = () => {
+        dispatch(fetchFindShiftsOfEmployee({employeeId: 7, token: token})).then(data => {
+            setEvents(data.payload);
+        });
+    };
 
-        </>
-        )
+    useEffect(() => {
+        getShiftsOfEmployee();
+    }, []);
 
+    const handleUpdateEvent = (updatedEvent: IShift) => {
+        // Dispatch the save action to save the updated event
+        dispatch(fetchSaveShift({
+            token: token,
+            companyId: 1,
+            employeeId: 7,
+            description: updatedEvent.description,
+            start: updatedEvent.start,
+            endTime: updatedEvent.endTime,
+            title: updatedEvent.title,
+        })).then(() => {
+            // Update the local state only if the save operation is successful
+            setEvents(prevEvents => {
+                const existingEventIndex = prevEvents.findIndex(e => e.id === updatedEvent.id);
+                if (existingEventIndex !== -1) {
+                    // Update the existing event
+                    const newEvents = [...prevEvents];
+                    newEvents[existingEventIndex] = updatedEvent;
+                    return newEvents;
+                } else {
+                    // Add the new event
+                    return [...prevEvents, updatedEvent];
+                }
+            });
+        }).catch((error) => {
+            console.error('Failed to save the event:', error);
+            // Handle error appropriately (e.g., show an error message)
+        });
+    };
 
+    return <MyCalendar events={events} onUpdateEvent={handleUpdateEvent} />;
 };

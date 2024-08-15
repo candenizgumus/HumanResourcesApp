@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
+import java.time.LocalDateTime;
+
 @EqualsAndHashCode(callSuper = true)
 @Data
 @RequiredArgsConstructor
@@ -15,10 +17,11 @@ public class Shift extends BaseEntity
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
-    private Long companyId;
-    private String shiftName;
-    private Long shiftStartTime;
-    private Long shiftEndTime;
+    Long id;
+    Long companyId;
+    Long employeeId;
+    String title;
+    String description;
+    LocalDateTime start;
+    LocalDateTime endTime;
 }

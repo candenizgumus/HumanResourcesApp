@@ -1,6 +1,4 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { EnumType } from "typescript";
-import { ELeaveType } from "../../models/ELeaveType";
 
 export interface ILeave {
     createdAt:Date 
@@ -17,6 +15,12 @@ export interface ILeave {
     attachedFile:string
     fullName: string
     email: string
+    dLeaveTypeId: number
+}
+
+export interface ILeaveType {
+    id: number,
+    name: string
 }
 
 interface IInitialLeave {
@@ -34,7 +38,7 @@ interface IFetchSaveLeave {
     description: string;
     startDate: Date;
     endDate: Date;
-    leaveType: ELeaveType;
+    dLeaveTypeId: number;
     files: File[];
 }
 
@@ -49,7 +53,7 @@ export const fetchSaveLeave = createAsyncThunk(
         formData.append('startDate', formatDate(payload.startDate));
         formData.append('endDate', formatDate(payload.endDate));
 
-        formData.append('leaveType', payload.leaveType.toString());
+        formData.append('dLeaveTypeId', payload.dLeaveTypeId.toString());
 
         payload.files.forEach((file) => {
             formData.append('files', file);
@@ -72,7 +76,7 @@ interface IFetchSaveLeaveAsManager {
     description: string;
     startDate: Date;
     endDate: Date;
-    leaveType: ELeaveType;
+    dLeaveTypeId: number;
     files: File[];
     employeeId: number;
 }
@@ -88,7 +92,7 @@ export const fetchAssignLeave = createAsyncThunk(
         formData.append('startDate', formatDate(payload.startDate));
         formData.append('endDate', formatDate(payload.endDate));
 
-        formData.append('leaveType', payload.leaveType.toString());
+        formData.append('dLeaveTypeId', payload.dLeaveTypeId.toString());
         formData.append('employeeId', payload.employeeId.toString());
         payload.files.forEach((file) => {
             formData.append('files', file);
@@ -232,6 +236,10 @@ export const fetchUpdateAnnualLeaveDays = createAsyncThunk(
     }
 
 )
+
+
+
+
 
 const leaveSlice = createSlice({
     name: 'leave',

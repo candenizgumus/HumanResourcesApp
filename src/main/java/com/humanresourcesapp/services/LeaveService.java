@@ -8,7 +8,6 @@ import com.humanresourcesapp.dto.requests.NotificationSaveRequestDto;
 import com.humanresourcesapp.dto.requests.PageRequestDto;
 import com.humanresourcesapp.entities.Leave;
 import com.humanresourcesapp.entities.User;
-import com.humanresourcesapp.entities.enums.ELeaveType;
 import com.humanresourcesapp.entities.enums.ENotificationType;
 import com.humanresourcesapp.entities.enums.EStatus;
 import com.humanresourcesapp.entities.enums.EUserType;
@@ -40,6 +39,7 @@ public class LeaveService {
     private final NotificationService notificationService;
     private final S3Service s3Service;
     private final S3Buckets s3Buckets;
+    private final DefinitionService definitionService;
     //To break circular reference in UserService
     @Autowired
     public void setUserService(@Lazy UserService userService) {
@@ -72,7 +72,7 @@ public class LeaveService {
                         .employeeName(employee.getName())
                         .employeeSurname(employee.getSurname())
                         .companyId(employee.getCompanyId())
-                        .leaveType(dto.leaveType())
+                        .dLeaveTypeId(dto.dLeaveTypeId())
                         .startDate(dto.startDate())
                         .endDate(dto.endDate())
                         .fullName(employee.getName() + " " + employee.getSurname())
@@ -105,7 +105,7 @@ public class LeaveService {
 
         if (!leave.getIsLeaveApproved())
         {
-            if(leave.getLeaveType().equals(ELeaveType.ANNUAL)){
+            if(leave.getDLeaveTypeId().equals(definitionService.findByName("ANNUAL").getId())){
                 User employee = userService.findById(leave.getEmployeeId());
                 if(employee.getRemainingAnnualLeave() < ChronoUnit.DAYS.between(leave.getStartDate(), leave.getEndDate())){
                     throw new HumanResourcesAppException(ErrorType.ANNUAL_LEAVE_EXCEEDED);
@@ -282,7 +282,7 @@ public class LeaveService {
                 .employeeName(employee.getName())
                 .employeeSurname(employee.getSurname())
                 .companyId(employee.getCompanyId())
-                .leaveType(dto.leaveType())
+                .dLeaveTypeId(dto.dLeaveTypeId())
                 .startDate(dto.startDate())
                 .endDate(dto.endDate())
                 .approveDate(LocalDate.now())

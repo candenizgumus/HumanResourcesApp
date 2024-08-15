@@ -4,6 +4,7 @@ import com.humanresourcesapp.constants.ENotificationTextBase;
 import com.humanresourcesapp.dto.requests.NotificationSaveRequestDto;
 import com.humanresourcesapp.dto.requests.OfferSaveRequestDto;
 import com.humanresourcesapp.entities.*;
+import com.humanresourcesapp.entities.definitions.DLeaveType;
 import com.humanresourcesapp.entities.enums.*;
 import com.humanresourcesapp.services.*;
 import jakarta.annotation.PostConstruct;
@@ -30,6 +31,7 @@ public class InsertDemoData {
     private final HolidayService holidayService;
     private final OfferService offerService;
     private final NotificationService notificationService;
+    private final DefinitionService definitionService;
 
     @PostConstruct
     public void insert() {
@@ -38,6 +40,7 @@ public class InsertDemoData {
         insertCommentDemoData();
         insertHolidayDemoData();
         instertOfferDemoData();
+        insertLeaveTypeDemoData();
 
         notificationService.save(NotificationSaveRequestDto.builder()
                 .notificationText(ENotificationTextBase.ERROR_NOTIFICATION.getText() + "We have Errors !")
@@ -170,7 +173,6 @@ public class InsertDemoData {
         }
     }
 
-
     // Feature demo data insertion
     private void insertFeatureDemoData() {
         if(featureService.getAll().isEmpty()) {
@@ -228,7 +230,6 @@ public class InsertDemoData {
             featureService.saveAll(featureList);
         }
     }
-
 
     // Comment demo data insertion
     private void insertCommentDemoData() {
@@ -572,7 +573,6 @@ public class InsertDemoData {
         }
     }
 
-
     private void instertOfferDemoData()
     {
 
@@ -743,5 +743,21 @@ public class InsertDemoData {
         ));
 
 
+    }
+
+    private void insertLeaveTypeDemoData(){
+        definitionService.saveLeaveType(new DLeaveType("ANNUAL"));
+        definitionService.saveLeaveType(new DLeaveType("HALF_ANNUAL"));
+        definitionService.saveLeaveType(new DLeaveType("MATERNITY"));
+        definitionService.saveLeaveType(new DLeaveType("PATERNITY"));
+        definitionService.saveLeaveType(new DLeaveType("SICK"));
+        definitionService.saveLeaveType(new DLeaveType("BEREAVEMENT"));
+        definitionService.saveLeaveType(new DLeaveType("PERSONAL"));
+        definitionService.saveLeaveType(new DLeaveType("FAMILY_CARE"));
+        definitionService.saveLeaveType(new DLeaveType("MILITARY"));
+        definitionService.saveLeaveType(new DLeaveType("MARRIAGE"));
+        definitionService.saveLeaveType(new DLeaveType("JURY_DUTY"));
+        definitionService.saveLeaveType(new DLeaveType("UNPAID"));
+        definitionService.saveLeaveType(new DLeaveType("OTHER"));
     }
 }

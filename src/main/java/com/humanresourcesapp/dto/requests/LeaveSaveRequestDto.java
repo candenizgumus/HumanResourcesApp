@@ -1,6 +1,5 @@
 package com.humanresourcesapp.dto.requests;
 
-import com.humanresourcesapp.entities.enums.ELeaveType;
 import lombok.Builder;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -12,6 +11,6 @@ public record LeaveSaveRequestDto(
         String description,
         LocalDate startDate,
         LocalDate endDate,
-        ELeaveType leaveType,
+        Long dLeaveTypeId,
         List<MultipartFile> files) {
 }

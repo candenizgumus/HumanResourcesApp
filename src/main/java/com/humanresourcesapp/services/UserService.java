@@ -612,4 +612,13 @@ public class UserService {
 
         return saveAuth;
     }
+
+    public User findByAuthId(Long authId) {
+        User user = userRepository.findByAuthId(authId).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
+        return user;
+    }
+
+    public List<User> findAllByCompanyId(Long companyId) {
+        return userRepository.findAllByCompanyId(companyId);
+    }
 }

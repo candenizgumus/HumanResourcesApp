@@ -15,6 +15,8 @@ import com.humanresourcesapp.utility.JwtTokenManager;
 import com.humanresourcesapp.utility.PasswordEncoder;
 import com.humanresourcesapp.utility.UserInfoSecurityContext;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -32,6 +34,13 @@ public class AuthService implements UserDetailsService
 {
     private final AuthRepository authRepository;
     private final PasswordEncoder passwordEncoder;
+    private UserService userService;
+
+    @Autowired
+    public void setUserService(@Lazy UserService userService)
+    {
+        this.userService = userService;
+    }
 
     public Optional<Auth> findById(Long id)
     {
@@ -75,6 +84,24 @@ public class AuthService implements UserDetailsService
         {
             throw new HumanResourcesAppException(ErrorType.WRONG_PASSWORD);
         }
+
+
+    }
+
+    public void inactivateAllRelatedAccounts(Long id)
+    {
+        Auth auth = authRepository.findById(id).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
+
+        User user = userService.findByAuthId(auth.getId());
+
+        userService.findAllByCompanyId(user.getCompanyId()).forEach(user1 -> {
+            user1.setStatus(EStatus.INACTIVE);
+            userService.save(user1);
+
+            Optional<Auth> auth1 = authRepository.findById(user1.getAuthId());
+            auth1.get().setStatus(EStatus.INACTIVE);
+            authRepository.save(auth1.get());
+        });
 
 
     }

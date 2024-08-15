@@ -376,7 +376,7 @@ public class InsertDemoData
     {
         String managerEmail = "manager";
         String password = "123";
-
+        LocalDate currentDate = LocalDate.now();
         if (authService.findByEmail(managerEmail).isEmpty())
         {
             String encodedPassword = passwordEncoder.bCryptPasswordEncoder().encode(password);
@@ -402,7 +402,7 @@ public class InsertDemoData
                     .subscriptionStartDate(auth.getSubscriptionStartDate())
                     .subscriptionEndDate(auth.getSubscriptionEndDate())
                     .location("Turkey")
-                    .birthDate(LocalDate.of(1989, 1, 1))
+                    .birthDate(LocalDate.of(1989, currentDate.getMonthValue(), 1))
                     .position(EPosition.CARTOGRAPHER)
                     .companyId(1L)
                     .phone("5555555555")
@@ -510,6 +510,8 @@ public class InsertDemoData
                     .build();
             userService.save(user4);
 
+
+
             // Adding employee to the manager
             Auth authEmployee = authService.save(Auth.
                     builder()
@@ -524,18 +526,18 @@ public class InsertDemoData
                     .builder()
                     .status(EStatus.ACTIVE)
                     .email("employee@gmail.com")
-                    .name("Employee 1")
+                    .name("Jason")
                     .surname("Hard")
                     .authId(authEmployee.getId())
                     .subscriptionType(ESubscriptionType.MONTHLY)
                     .subscriptionStartDate(authEmployee.getSubscriptionStartDate())
                     .subscriptionEndDate(authEmployee.getSubscriptionEndDate())
-                    .location("Turkey")
-                    .birthDate(LocalDate.of(1999, 9, 1))
+                    .location("England")
+                    .birthDate(LocalDate.of(1999, currentDate.getMonthValue(), 1))
                     .position(EPosition.ADMINISTRATIVE_ASSISTANT)
                     .companyId(user.getCompanyId())
                     .remainingAnnualLeave(25)
-                    .phone("5555555555")
+                    .phone("5305443221")
                     .photo("https://t4.ftcdn.net/jpg/03/64/21/11/360_F_364211147_1qgLVxv1Tcq0Ohz3FawUfrtONzz8nq3e.jpg")
                     .userType(EUserType.EMPLOYEE)
                     .employeeType(EEmployeeType.FULL_TIME)
@@ -567,11 +569,11 @@ public class InsertDemoData
                     .subscriptionStartDate(authEmployee.getSubscriptionStartDate())
                     .subscriptionEndDate(authEmployee.getSubscriptionEndDate())
                     .location("Turkey")
-                    .birthDate(LocalDate.of(1990, 8, 15))
+                    .birthDate(LocalDate.of(1990, currentDate.getMonthValue() + 1, 15))
                     .position(EPosition.COMPUTER_PROGRAMMER)
                     .companyId(user.getCompanyId())
                     .remainingAnnualLeave(15)
-                    .phone("5555555555")
+                    .phone("5395558471")
                     .photo("https://t4.ftcdn.net/jpg/03/64/21/11/360_F_364211147_1qgLVxv1Tcq0Ohz3FawUfrtONzz8nq3e.jpg")
                     .userType(EUserType.EMPLOYEE)
                     .employeeType(EEmployeeType.PART_TIME)
@@ -765,7 +767,7 @@ public class InsertDemoData
 
     private void insertShiftDemoData()
     {
-        List<ShiftSaveRequestDto> shifts = new ArrayList<>();
+
         Long[] employeeIds = {7L, 8L};
         Long companyId = 1L;
 
@@ -808,6 +810,7 @@ public class InsertDemoData
     {
         paymentService.saveForDemoData(new PaymentSaveRequestDto(LocalDate.now(), 1000.0, "Weekly Payment"));
         paymentService.saveForDemoData(new PaymentSaveRequestDto(LocalDate.now().plusDays(5), 8000.0, "Monthly Payment"));
+        paymentService.saveForDemoData(new PaymentSaveRequestDto(LocalDate.now().plusDays(20), 2500.0, "Delivery Payment"));
 
 
     }

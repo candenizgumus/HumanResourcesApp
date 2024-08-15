@@ -18,11 +18,6 @@ export interface ILeave {
     dLeaveTypeId: number
 }
 
-export interface ILeaveType {
-    id: number,
-    name: string
-}
-
 interface IInitialLeave {
     leaveList: ILeave[],
     isLeaveListLoading: boolean;

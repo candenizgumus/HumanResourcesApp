@@ -4,7 +4,7 @@ import com.humanresourcesapp.constants.ENotificationTextBase;
 import com.humanresourcesapp.dto.requests.NotificationSaveRequestDto;
 import com.humanresourcesapp.dto.requests.OfferSaveRequestDto;
 import com.humanresourcesapp.entities.*;
-import com.humanresourcesapp.entities.definitions.DLeaveType;
+import com.humanresourcesapp.entities.Definition;
 import com.humanresourcesapp.entities.enums.*;
 import com.humanresourcesapp.services.*;
 import jakarta.annotation.PostConstruct;
@@ -746,18 +746,18 @@ public class InsertDemoData {
     }
 
     private void insertLeaveTypeDemoData(){
-        definitionService.saveLeaveType(new DLeaveType("ANNUAL"));
-        definitionService.saveLeaveType(new DLeaveType("HALF_ANNUAL"));
-        definitionService.saveLeaveType(new DLeaveType("MATERNITY"));
-        definitionService.saveLeaveType(new DLeaveType("PATERNITY"));
-        definitionService.saveLeaveType(new DLeaveType("SICK"));
-        definitionService.saveLeaveType(new DLeaveType("BEREAVEMENT"));
-        definitionService.saveLeaveType(new DLeaveType("PERSONAL"));
-        definitionService.saveLeaveType(new DLeaveType("FAMILY_CARE"));
-        definitionService.saveLeaveType(new DLeaveType("MILITARY"));
-        definitionService.saveLeaveType(new DLeaveType("MARRIAGE"));
-        definitionService.saveLeaveType(new DLeaveType("JURY_DUTY"));
-        definitionService.saveLeaveType(new DLeaveType("UNPAID"));
-        definitionService.saveLeaveType(new DLeaveType("OTHER"));
+        definitionService.saveLeaveType(Definition.builder().definitionType(EDefinitionType.LEAVE_TYPE).name("ANNUAL").build());
+        definitionService.saveLeaveType(Definition.builder().definitionType(EDefinitionType.LEAVE_TYPE).name("HALF_ANNUAL").build());
+        definitionService.saveLeaveType(Definition.builder().definitionType(EDefinitionType.LEAVE_TYPE).name("MATERNITY").build());
+        definitionService.saveLeaveType(Definition.builder().definitionType(EDefinitionType.LEAVE_TYPE).name("PATERNITY").build());
+        definitionService.saveLeaveType(Definition.builder().definitionType(EDefinitionType.LEAVE_TYPE).name("SICK").build());
+        definitionService.saveLeaveType(Definition.builder().definitionType(EDefinitionType.LEAVE_TYPE).name("BEREAVEMENT").build());
+        definitionService.saveLeaveType(Definition.builder().definitionType(EDefinitionType.LEAVE_TYPE).name("PERSONAL").build());
+        definitionService.saveLeaveType(Definition.builder().definitionType(EDefinitionType.LEAVE_TYPE).name("FAMILY_CARE").build());
+        definitionService.saveLeaveType(Definition.builder().definitionType(EDefinitionType.LEAVE_TYPE).name("MILITARY").build());
+        definitionService.saveLeaveType(Definition.builder().definitionType(EDefinitionType.LEAVE_TYPE).name("MARRIAGE").build());
+        definitionService.saveLeaveType(Definition.builder().definitionType(EDefinitionType.LEAVE_TYPE).name("JURY_DUTY").build());
+        definitionService.saveLeaveType(Definition.builder().definitionType(EDefinitionType.LEAVE_TYPE).name("UNPAID").build());
+        definitionService.saveLeaveType(Definition.builder().definitionType(EDefinitionType.LEAVE_TYPE).name("OTHER").build());
     }
 }

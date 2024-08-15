@@ -1,10 +1,11 @@
 package com.humanresourcesapp.services;
 
 import com.humanresourcesapp.dto.requests.DefinitionSaveRequestDto;
-import com.humanresourcesapp.entities.definitions.DLeaveType;
+import com.humanresourcesapp.entities.Definition;
+import com.humanresourcesapp.entities.enums.EDefinitionType;
 import com.humanresourcesapp.exception.ErrorType;
 import com.humanresourcesapp.exception.HumanResourcesAppException;
-import com.humanresourcesapp.repositories.DLeaveTypeRepository;
+import com.humanresourcesapp.repositories.DefinitionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,33 +14,33 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class DefinitionService {
-    private final DLeaveTypeRepository dLeaveTypeRepository;
+    private final DefinitionRepository definitionRepository;
 
-    public List<DLeaveType> getAll() {
-        return dLeaveTypeRepository.findAll();
-    }
 
-    public DLeaveType findById(Long id) {
-        return dLeaveTypeRepository.findById(id).orElse(null);
+    public Definition findById(Long id) {
+        return definitionRepository.findById(id).orElseThrow(() -> new HumanResourcesAppException(ErrorType.DEFINITION_NOT_FOUND));
     }
 
     public Boolean save(DefinitionSaveRequestDto dto) {
-        if(dto.definitionType().equals("LEAVE_TYPE")) {
-            DLeaveType dLeaveType = DLeaveType.builder()
-                    .name(dto.name())
-                    .build();
-            dLeaveTypeRepository.save(dLeaveType);
-            return true;
-        }
-        return false;
+        definitionRepository.save(Definition.builder()
+                        .definitionType(dto.definitionType())
+                        .name(dto.name())
+                .build());
+        return true;
     }
 
-    public DLeaveType findByName(String name) {
-        return dLeaveTypeRepository.findByName(name).orElseThrow(() -> new HumanResourcesAppException(ErrorType.LEAVE_TYPE_NOT_FOUND));
+    public Definition findByName(String name) {
+        return definitionRepository.findByName(name).orElseThrow(() -> new HumanResourcesAppException(ErrorType.DEFINITION_NOT_FOUND));
     }
 
-    public Boolean saveLeaveType(DLeaveType dLeaveType) {
-        dLeaveTypeRepository.save(dLeaveType);
+
+    public List<Definition> getAllByDefinitionType(EDefinitionType definitionType) {
+
+        return definitionRepository.findAllByDefinitionType(definitionType);
+    }
+
+    public Boolean saveLeaveType(Definition definition) {
+        definitionRepository.save(definition);
         return true;
     }
 }

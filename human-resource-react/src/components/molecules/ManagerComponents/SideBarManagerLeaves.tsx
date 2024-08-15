@@ -32,8 +32,9 @@ import {
     fetchAssignLeave,
 } from "../../../store/feature/leaveSlice";
 
-import {fetchGetDLeaveTypes} from "../../../store/feature/definitionSlice";
+import {fetchGetDefinitions} from "../../../store/feature/definitionSlice";
 import { clearToken, fetchGetAllUsersOfManager } from "../../../store/feature/authSlice";
+import { EDefinitionType } from "../../../models/IDefinitionType";
 
 const SideBarManagerLeaves = () => {
     const [selectedRowIds, setSelectedRowIds] = useState<number[]>([]);
@@ -42,7 +43,7 @@ const SideBarManagerLeaves = () => {
     const dispatch = useDispatch<HumanResources>();
     const token = useAppSelector((state) => state.auth.token);
     const leaves = useAppSelector((state) => state.leave.leaveList);
-    const leaveTypes = useAppSelector((state) => state.definition.leaveTypeList);
+    const leaveTypes = useAppSelector((state) => state.definition.definitionList);
     const [loading, setLoading] = useState(false);
     const [isActivating, setIsActivating] = useState(false);
     const [openChangeAnnualLeaveDayModal, setOpenChangeAnnualLeaveDayModal] = useState(false);
@@ -55,6 +56,7 @@ const SideBarManagerLeaves = () => {
     const [startDate, setStartDate] = useState<Date | null>(null);
     const [endDate, setEndDate] = useState<Date | null>(null);
     const [files, setFiles] = useState<File[]>([]);
+    const [definitionType, setDefinitionType] = useState<EDefinitionType>(EDefinitionType.LEAVE_TYPE);
 
     const columns: GridColDef[] = [
         { field: "fullName", headerName: "Name", width: 150, headerAlign: "center" },
@@ -94,7 +96,10 @@ const SideBarManagerLeaves = () => {
                 pageSize: 100,
                 searchText: searchText,
             })).then(()=> {
-                dispatch(fetchGetDLeaveTypes(token))
+                dispatch(fetchGetDefinitions({
+                    token : token,
+                    definitionType: definitionType
+                }))
             })
             .catch(() => {
                 dispatch(clearToken());

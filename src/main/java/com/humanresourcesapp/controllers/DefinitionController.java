@@ -1,7 +1,8 @@
 package com.humanresourcesapp.controllers;
 
 import com.humanresourcesapp.dto.requests.DefinitionSaveRequestDto;
-import com.humanresourcesapp.entities.definitions.DLeaveType;
+import com.humanresourcesapp.entities.Definition;
+import com.humanresourcesapp.entities.enums.EDefinitionType;
 import com.humanresourcesapp.services.DefinitionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,11 +19,11 @@ import static com.humanresourcesapp.constants.Endpoints.*;
 @CrossOrigin("*")
 public class DefinitionController {
     private final DefinitionService definitionService;
-    @PostMapping(GET_LEAVE_TYPES)
+    @PostMapping(GET_ALL)
     @CrossOrigin("*")
     @PreAuthorize("hasAnyAuthority('MANAGER','EMPLOYEE','ADMIN')")
-    public ResponseEntity<List<DLeaveType>> getLeaveTypes(){
-        return ResponseEntity.ok(definitionService.getAll());
+    public ResponseEntity<List<Definition>> getAllByDefinitionType(@RequestBody EDefinitionType definitionType){
+        return ResponseEntity.ok(definitionService.getAllByDefinitionType(definitionType));
     }
 
     @PostMapping(SAVE)

@@ -1,24 +1,35 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { ILeaveType } from "./leaveSlice";
+import { EDefinitionType } from "../../models/IDefinitionType";
 
 interface IInitialLeave {
-    leaveTypeList: ILeaveType[]
+    definitionList: IDefinition[]
+}
+export interface IDefinition {
+    id: number,
+    name: string,
+    definitionType: EDefinitionType
 }
 
 const initialLeaveState: IInitialLeave = {
-    leaveTypeList: []
+    definitionList: []
 }
+export interface IFetchGetDefinitions {
+    token: string,
+    definitionType: EDefinitionType
+}
+export const fetchGetDefinitions = createAsyncThunk(
+    'leave/fetchGetDefinitions',
+    async (payload: IFetchGetDefinitions) => {
 
-export const fetchGetDLeaveTypes = createAsyncThunk(
-    'leave/fetchGetDLeaveTypes',
-    async (payload: string) => {
-
-        const response = await fetch('http://localhost:9090/dev/v1/definition/get-leave-types', {
+        const response = await fetch('http://localhost:9090/dev/v1/definition/get-all', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ` + payload
-            }
+                'Authorization': `Bearer ` + payload.token
+            },
+            body: JSON.stringify(
+               payload.definitionType,
+            )
         });
 
         return await response.json();
@@ -27,7 +38,7 @@ export const fetchGetDLeaveTypes = createAsyncThunk(
 )
 export interface IFetchSaveDefinition {
     token: string,
-    definitionType: string,
+    definitionType: EDefinitionType,
     name: string,
 }
 
@@ -57,8 +68,8 @@ const definitionSlice = createSlice({
     initialState: initialLeaveState,
     reducers: {},
     extraReducers: (build) => {
-        build.addCase(fetchGetDLeaveTypes.fulfilled,(state,action) => {
-            state.leaveTypeList = action.payload
+        build.addCase(fetchGetDefinitions.fulfilled,(state,action) => {
+            state.definitionList = action.payload
         })
     }
 });

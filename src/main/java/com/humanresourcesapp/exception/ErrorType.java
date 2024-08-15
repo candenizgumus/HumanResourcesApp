@@ -48,9 +48,10 @@ public enum ErrorType
     ANNUAL_LEAVE_EXCEEDED(1036, "Annual Leave Exceeded",HttpStatus.BAD_REQUEST ),
     INSUFFICIENT_PERMISSION(1037, "Insufficient Permission",HttpStatus.BAD_REQUEST),
     BONUS_NOT_FOUND(    1038, "Bonus Not Found",    HttpStatus.BAD_REQUEST ),
-    LEAVE_TYPE_NOT_FOUND(1039,"Leave Type Not Found" ,HttpStatus.BAD_REQUEST ),
+    DEFINITION_NOT_FOUND(1039,"Definition Not Found" ,HttpStatus.BAD_REQUEST ),
     HOLIDAY_ALREADY_EXISTS(1040, "Holiday Already Exists",HttpStatus.BAD_REQUEST),
     SHIFT_NOT_FOUND(    1041, "Shift Not Found",    HttpStatus.BAD_REQUEST ),
+    DEFINITION_ALREADY_EXISTS(1039,"Definition Already Exists" ,HttpStatus.BAD_REQUEST ),
     ;
     private final Integer code;
     private final String message;

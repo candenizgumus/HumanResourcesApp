@@ -6,15 +6,13 @@ import { HumanResources } from '../../../store';
 import Swal from "sweetalert2";
 import { fetchCreateFeature } from '../../../store/feature/featureSlice';
 import { fetchSaveDefinition } from '../../../store/feature/definitionSlice';
+import { EDefinitionType } from '../../../models/IDefinitionType';
 
 const UserForm: React.FC = () => {
   const dispatch = useDispatch<HumanResources>();
   const [name, setName] = useState('');
-  const [shortDescription, setShortDescription] = useState('');
-  const [iconPath, setIconPath] = useState('');
   const [loading, setLoading] = useState(false);
-  const [definitionType, setDefinitionType] = useState('LEAVE_TYPE');
-  const [definitionTypes, setDefinitionTypes] = useState(["LEAVE_TYPE"]);
+  const [definitionType, setDefinitionType] = useState<EDefinitionType>(EDefinitionType.LEAVE_TYPE);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     setLoading(true);
@@ -50,6 +48,10 @@ const UserForm: React.FC = () => {
     }
   };
 
+  const handleDefinitionTypeChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setDefinitionType(EDefinitionType[e.target.value as keyof typeof EDefinitionType]);
+  };
+
   return (
     <Box
       component="form"
@@ -68,13 +70,17 @@ const UserForm: React.FC = () => {
           select
           label="Definition Type"
           value={definitionType}
-          onChange={e => setDefinitionType(e.target.value)}
+          onChange={handleDefinitionTypeChange}
           required
           fullWidth
           SelectProps={{ native: true }}
       >
-          {Object.values(definitionTypes).map(type => (
-              <option key={type} value={type}>{type}</option>
+          {Object.keys(EDefinitionType)
+          .filter((key) => isNaN(Number(key))) // Filter out the numeric keys
+          .map((type) => (
+            <option key={type} value={type}>
+              {type}
+            </option>
           ))}
       </TextField>
       <TextField

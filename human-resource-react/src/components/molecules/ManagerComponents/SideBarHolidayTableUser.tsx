@@ -6,7 +6,7 @@ import {HumanResources, RootState, useAppSelector} from '../../../store';
 import {
     fetchChangeHolidayStatus,
     fetchCreateHolidayManager,
-    fetchDeleteHoliday,
+    fetchDeleteHoliday, fetchHolidaysEmployee,
     fetchHolidaysUser
 } from '../../../store/feature/holidaySlice';
 import {IHoliday} from '../../../models/IHoliday';
@@ -14,6 +14,7 @@ import {Button, Grid, Box, Divider} from '@mui/material';
 import {IHolidayFormatted} from "../../../models/IHolidayFormatted";
 import SideBarHolidayFormUser from "./SideBarHolidayFormUser";
 import {format} from "date-fns";
+import Swal from "sweetalert2";
 
 // Helper function to format epoch timestamp to human-readable date
 
@@ -64,7 +65,7 @@ export default function SideBarHolidayTableUser() {
         return `${day} ${month}`;
     };
     useEffect(() => {
-        dispatch(fetchHolidaysUser(token));
+        dispatch(fetchHolidaysEmployee(token));
     }, [dispatch]);
 
     useEffect(() => {
@@ -86,9 +87,23 @@ export default function SideBarHolidayTableUser() {
     const handleConfirmDeletion = () => {
         selectedRowIds.forEach((id) => {
             dispatch(fetchDeleteHoliday({token, id}))
-                .then(() => {
-                    dispatch(fetchHolidaysUser(token));
-                });
+                .then(data => {
+                    if (data.payload.message) {
+                        Swal.fire({
+                            icon: 'error',
+                            text: data.payload.message ?? 'Failed to delete holiday',
+                            showConfirmButton: true
+                        })
+                    }else{
+                        Swal.fire({
+                            icon: 'success',
+                            text: 'Holiday has been deleted',
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
+                    }
+                    dispatch(fetchHolidaysEmployee(token));
+                })
         });
     };
 
@@ -96,7 +111,7 @@ export default function SideBarHolidayTableUser() {
         selectedRowIds.forEach((id) => {
             dispatch(fetchChangeHolidayStatus({token, id}))
                 .then(() => {
-                    dispatch(fetchHolidaysUser(token));
+                    dispatch(fetchHolidaysEmployee(token));
                 });
         });
     }

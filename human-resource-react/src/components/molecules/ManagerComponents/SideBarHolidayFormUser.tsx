@@ -1,12 +1,22 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import { useDispatch } from 'react-redux';
 import {HumanResources, useAppSelector} from '../../../store';
 import {
-    fetchCreateHolidayManager,
+    fetchCreateHolidayManager, fetchHolidaysAdmin, fetchHolidaysEmployee,
     fetchHolidaysUser
 } from '../../../store/feature/holidaySlice';
 import Swal from 'sweetalert2';
-import { Box, TextField, Button, Grid, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
+import {
+    Box,
+    TextField,
+    Button,
+    Grid,
+    FormControl,
+    InputLabel,
+    Select,
+    MenuItem,
+    SelectChangeEvent, Typography, Divider
+} from '@mui/material';
 
 import 'react-datepicker/dist/react-datepicker.css';
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
@@ -22,6 +32,26 @@ const SideBarHolidayFormUser: React.FC = () => {
     const [holidayType, setHolidayType] = useState<string>('');
     const [holidayStartDate, setHolidayStartDate] = useState<Date | null>(null);
     const [holidayEndDate, setHolidayEndDate] = useState<Date | null>(null);
+    const [holidays, setHolidays] = useState<any[]>([]);
+    const [selectedHolidayId, setSelectedHolidayId] = useState<number | null>(null);
+
+    useEffect(() => {
+        dispatch(fetchHolidaysAdmin(token)).then((action: any) => {
+            setHolidays(action.payload);
+        });
+    }, [dispatch, token]);
+
+    const handleHolidaySelect = (event: SelectChangeEvent<number>) => {
+        const selectedId = event.target.value as number;
+        setSelectedHolidayId(selectedId);
+        const selectedHoliday = holidays.find(holiday => holiday.id === selectedId);
+        if (selectedHoliday) {
+            setHolidayName(selectedHoliday.holidayName);
+            setHolidayType(selectedHoliday.holidayType);
+            setHolidayStartDate(new Date(selectedHoliday.startDate));
+            setHolidayEndDate(new Date(selectedHoliday.endDate));
+        }
+    };
 
     const handleSubmit = () => {
         if (!holidayName || !holidayType || !holidayStartDate || !holidayEndDate) {
@@ -42,26 +72,51 @@ const SideBarHolidayFormUser: React.FC = () => {
             endDate: new Date(holidayEndDate.setHours(12)), // Convert Dayjs to JS Date and add 12 hours
             token
         }))
-            .then(() => {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Success!',
-                    text: 'Holiday has been submitted successfully.',
-                });
-                dispatch(fetchHolidaysUser(token));
-            })
-            .catch(() => {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'There was an error. Please try again later.',
-                });
+            .then(data => {
+                if (data.payload.message) {
+                    Swal.fire({
+                        icon: 'error',
+                        text: data.payload.message ?? 'Failed to add holiday',
+                        showConfirmButton: true
+                    })
+                }else{
+                    Swal.fire({
+                        icon: 'success',
+                        text: 'Holiday has been added',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                }
+                dispatch(fetchHolidaysEmployee(token));
             });
     };
 
     return (
         <Box sx={{ flexGrow: 1, padding: 2 }}>
             <Grid container spacing={2}>
+                <Grid item xs={12}>
+                    <Typography variant="h6" sx={{ fontWeight: 'bold'}}>
+                        Add From Menu
+                    </Typography>
+                </Grid>
+                <Grid item xs={12}>
+                    <FormControl fullWidth>
+                        <InputLabel>Select Holiday</InputLabel>
+                        <Select
+                            value={selectedHolidayId || ''}
+                            onChange={handleHolidaySelect}
+                        >
+                            {holidays.map(holiday => (
+                                <MenuItem key={holiday.id} value={holiday.id}>
+                                    {holiday.holidayName}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+                </Grid>
+                <Grid item xs={12}>
+                    <Divider sx={{ my: 2, backgroundColor: 'rgba(0, 0, 0, 0.87)' }} />
+                </Grid>
                 <Grid item xs={12}>
                     <TextField
                         label="Holiday Name"
@@ -127,3 +182,6 @@ const SideBarHolidayFormUser: React.FC = () => {
 };
 
 export default SideBarHolidayFormUser;
+
+
+

@@ -108,7 +108,7 @@ export const fetchAssignLeave = createAsyncThunk(
         return await response.json();
     }
 )
-export interface IRequestWıthIdAndToken{
+export interface IRequestWithIdAndToken{
     token: string,
     id: number,
 }
@@ -143,7 +143,7 @@ export const fetchGetLeavesOfEmployee = createAsyncThunk(
 
 export const fetchGetLeaveById = createAsyncThunk(
     'leave/fetchGetLeaveById',
-    async (payload: IRequestWıthIdAndToken) => {
+    async (payload: IRequestWithIdAndToken) => {
 
         const response = await fetch(`http://localhost:9090/dev/v1/leave/search-by-leave-id?id=`+payload.id, {
             method: 'POST',

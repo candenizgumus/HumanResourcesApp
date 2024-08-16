@@ -4,6 +4,8 @@ import com.humanresourcesapp.dto.requests.DefinitionSaveRequestDto;
 import com.humanresourcesapp.entities.Definition;
 import com.humanresourcesapp.entities.User;
 import com.humanresourcesapp.entities.enums.EDefinitionType;
+import com.humanresourcesapp.entities.enums.EStatus;
+import com.humanresourcesapp.entities.enums.EUserType;
 import com.humanresourcesapp.exception.ErrorType;
 import com.humanresourcesapp.exception.HumanResourcesAppException;
 import com.humanresourcesapp.repositories.DefinitionRepository;
@@ -40,20 +42,40 @@ public class DefinitionService {
         Optional<Definition> optionalDefinition = definitionRepository.findByName(dto.name());
         Definition definition;
 
-        if(optionalDefinition.isPresent() && user.getCompanyId() != null){
-            throw new HumanResourcesAppException(ErrorType.DEFINITION_ALREADY_EXISTS);
-        }else if (optionalDefinition.isPresent() && user.getCompanyId() == null){
+        if(optionalDefinition.isPresent()){
             definition = optionalDefinition.get();
-            definition.setCompanyId(user.getCompanyId());
+            if(user.getUserType().equals(EUserType.ADMIN)){
+                definition.setCompanyId(user.getCompanyId());
+                definition.setStatus(EStatus.ACTIVE);
+                definitionRepository.save(definition);
+                return true;
+            }else {
+                if(definition.getCompanyId() == null){
+                    throw new HumanResourcesAppException(ErrorType.INSUFFICIENT_PERMISSION);
+                }else {
+                    if(!definition.getCompanyId().equals(user.getCompanyId())){
+                        throw new HumanResourcesAppException(ErrorType.INSUFFICIENT_PERMISSION);
+                    }else {
+                        if(definition.getStatus().equals(EStatus.ACTIVE)){
+                            throw new HumanResourcesAppException(ErrorType.DEFINITION_ALREADY_EXISTS);
+                        } else {
+                            definition.setStatus(EStatus.ACTIVE);
+                            definitionRepository.save(definition);
+                            return true;
+                        }
+                    }
+                }
+            }
         } else {
             definition = Definition.builder()
                     .definitionType(dto.definitionType())
                     .name(dto.name())
                     .companyId(user.getCompanyId())
+                    .status(EStatus.ACTIVE)
                     .build();
+            definitionRepository.save(definition);
+            return true;
         }
-        definitionRepository.save(definition);
-        return true;
     }
 
     public Definition findByName(String name) {
@@ -66,15 +88,33 @@ public class DefinitionService {
         User user = userService.findByEmail(userEmail).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
         List<Definition> definitions;
         if(user.getCompanyId() == null){
-            definitions = definitionRepository.findAllByDefinitionTypeAndCompanyIdIsNull(definitionType);
+            definitions = definitionRepository.findAllByDefinitionTypeAndStatusAndCompanyIdIsNull(definitionType, EStatus.ACTIVE);
         }else {
-            definitions = definitionRepository.findAllByDefinitionTypeAndCompanyId(definitionType, user.getCompanyId());
-            definitions.addAll(definitionRepository.findAllByDefinitionTypeAndCompanyIdIsNull(definitionType));
+            definitions = definitionRepository.findAllByDefinitionTypeAndStatusAndCompanyId(definitionType, EStatus.ACTIVE, user.getCompanyId());
+            definitions.addAll(definitionRepository.findAllByDefinitionTypeAndStatusAndCompanyIdIsNull(definitionType, EStatus.ACTIVE));
         }
         return definitions;
     }
 
     public void save(Definition definition) {
         definitionRepository.save(definition);
+    }
+
+    public Boolean delete(Long id) {
+        String userEmail = UserInfoSecurityContext.getUserInfoFromSecurityContext();
+        User user = userService.findByEmail(userEmail).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
+        Definition definition = definitionRepository.findById(id).orElseThrow(() -> new HumanResourcesAppException(ErrorType.DEFINITION_NOT_FOUND));
+
+        if(user.getUserType().equals(EUserType.ADMIN) && !definition.getStatus().equals(EStatus.DELETED)){
+            definition.setStatus(EStatus.DELETED);
+            definitionRepository.save(definition);
+            return true;
+        } else if(user.getCompanyId() != null && user.getCompanyId().equals(definition.getCompanyId()) && definition.getCompanyId() != null && !definition.getStatus().equals(EStatus.DELETED)){
+            definition.setStatus(EStatus.DELETED);
+            definitionRepository.save(definition);
+            return true;
+        } else {
+            throw new HumanResourcesAppException(ErrorType.PREDEFINED_DEFINITION_CANNOT_BE_DELETED);
+        }
     }
 }

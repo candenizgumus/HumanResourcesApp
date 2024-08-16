@@ -33,5 +33,10 @@ public class DefinitionController {
         return ResponseEntity.ok(definitionService.save(dto));
     }
 
-
+    @PostMapping(DELETE)
+    @CrossOrigin("*")
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
+    public ResponseEntity<Boolean> delete( Long id){
+        return ResponseEntity.ok(definitionService.delete(id));
+    }
 }

@@ -1,25 +1,36 @@
-import React, { useState, ChangeEvent, FormEvent } from 'react';
-import { TextField, Button, Box, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
+import React, { useState, ChangeEvent, useEffect } from 'react';
+import { TextField, Button, Box, FormControl, InputLabel, Select, MenuItem, Grid } from '@mui/material';
 import { useDispatch } from 'react-redux';
-import { fetchSaveDefinition } from '../../store/feature/definitionSlice';
+import { fetchDeleteDefinition, fetchGetDefinitions, fetchSaveDefinition } from '../../store/feature/definitionSlice';
 import { EDefinitionType } from '../../models/IDefinitionType';
 import Swal from "sweetalert2";
-import { HumanResources } from '../../store';
+import { HumanResources, useAppSelector } from '../../store';
+import { DataGrid, GridColDef, GridRowSelectionModel, GridToolbar  } from "@mui/x-data-grid";
+import DeleteIcon from '@mui/icons-material/Delete';
+
+const columns: GridColDef[] = [
+  {field: "name", headerName: "Name", flex: 1, headerAlign: "center"},
+  {field: "definitionType", headerName: "Type", flex: 1, headerAlign: "center"},
+  {field: "companyId", headerName: "Predefined", flex: 1, headerAlign: "center", valueGetter: (params) => (params === null ? "True" : "False")},
+];
+
 
 const UserForm: React.FC = () => {
   const dispatch = useDispatch<HumanResources>();
   const [name, setName] = useState('');
   const [loading, setLoading] = useState(false);
-  const [definitionType, setDefinitionType] = useState<EDefinitionType | ''>('');
+  const [isSelected, setIsSelected] = useState(true);
+  const [definitionType, setDefinitionType] = useState<EDefinitionType>(EDefinitionType.EMPLOYEE_TYPE);
+  const definitionList = useAppSelector((state) => state.definition.definitionList);
+  const [selectedRowIds, setSelectedRowIds] = useState<number[]>([]);
+  const token = useAppSelector((state) => state.auth.token);
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  const handleCreateClick = async () => {
     setLoading(true);
-    e.preventDefault();
-
     try {
       let result = await dispatch(fetchSaveDefinition({
         name: name.toUpperCase(),
-        definitionType: definitionType as EDefinitionType, // Cast to EDefinitionType
+        definitionType: definitionType as EDefinitionType,
         token: localStorage.getItem('token') ?? ''
       })).unwrap();
 
@@ -40,64 +51,153 @@ const UserForm: React.FC = () => {
         text: 'Definition Created.',
         confirmButtonColor: '#1976D2',
       });
-
+      dispatch(fetchGetDefinitions({token, definitionType}))
       setLoading(false);
     } catch (error) {
       console.error("Error creating definition:", error);
-      Swal.fire("Error", "There was a problem creating definition.", "error");
+      Swal.fire("Error", "There was a problem creating the definition.", "error");
     }
   };
 
+  useEffect(() => {
+    if (name && definitionType) {
+      setIsSelected(false);
+    }
+
+    dispatch(fetchGetDefinitions({token, definitionType}))
+  }, [name, definitionType]);
+
   const handleDefinitionTypeChange = (e: ChangeEvent<HTMLInputElement>) => {
     const selectedValue = e.target.value;
-
-    // Cast to unknown first, then to EDefinitionType
     setDefinitionType(selectedValue as unknown as EDefinitionType);
   };
 
-  return (
-    <Box
-      component="form"
-      onSubmit={handleSubmit}
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        gap: 2,
-        maxWidth: 400,
-        margin: 'auto',
-        padding: 2,
-      }}
-    >
-      
+  const handleRowSelection = (newSelectionModel: GridRowSelectionModel) => {
+    setSelectedRowIds(newSelectionModel as number[]);
+  };
 
-      <FormControl required variant="outlined">
-        <InputLabel>{'Please Select Definiton'}</InputLabel>
-        <Select
-            value={definitionType}
-            onChange={handleDefinitionTypeChange as any} // Type casting here
-            label="Position"
-        >
-          {Object.values(EDefinitionType).map(position => (
-              <MenuItem key={position} value={position}>
-                {position}
-              </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-      
-      <TextField
-        label="Definition Name"
-        name="name"
-        value={name}
-        onChange={e => setName(e.target.value)}
-        fullWidth
-        required
-        inputProps={{ maxLength: 64 }}
+  const handleDeleteClick = async () => {
+    if (selectedRowIds.length > 0) {
+      try {
+        for (const id of selectedRowIds) {
+          const result = await dispatch(fetchDeleteDefinition({
+              token: token,
+              id: id,
+          }));
+
+          if(result.payload.message){
+            Swal.fire({
+              icon: 'error',
+              title: result.payload.message,
+              timer: 1500
+            })
+          }else {
+            dispatch(fetchGetDefinitions({token, definitionType}))
+            Swal.fire("Success", "Definition deleted successfully", "success");
+          }
+      }
+      } catch (error) {
+        console.error("Error deleting definitions:", error);
+        Swal.fire("Error", "There was a problem deleting the definitions.", "error");
+      }
+    } else {
+      Swal.fire("Please select at least one definition to delete.");
+    }
+  };
+
+  return (
+    <div style={{ height: '70vh', width: "inherit" }}>
+      <DataGrid
+        paginationMode="server"
+        rows={definitionList}
+        columns={columns}
+        checkboxSelection
+        onRowSelectionModelChange={handleRowSelection}
+        slots={{
+          toolbar: GridToolbar,
+        }}
+        getRowClassName={(params) =>
+          params.row.isRead === false ? 'MuiDataGrid-row--highlighted' : ''
+        }
+        sx={{
+          "& .MuiDataGrid-columnHeaderTitle": {
+            textAlign: "center",
+            fontWeight: "bold",
+          },
+          "& .MuiDataGrid-cell": {
+            textAlign: "center",
+          },
+          "& .MuiDataGrid-row--highlighted": {
+            backgroundColor: "#C8E6C9",
+          },
+          "& .MuiDataGrid-footerContainer .MuiTablePagination-displayedRows": {
+            display: "none",
+          },
+          "& .MuiTablePagination-input": {
+            display: "none",
+          },
+          "& .MuiTablePagination-actions": {
+            display: "none",
+          },
+          "& .MuiToolbar-regular": {
+            display: "none",
+          },
+        }}
       />
-      <Button type="submit" variant="contained" color="primary" disabled={loading}>
-        {loading ? "Processing..." : "Create"}
-      </Button>
-    </Box>
+      <Grid sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-start', alignItems: 'center', marginTop: '1%' }}>
+        <Grid item>
+          <Button
+            onClick={handleDeleteClick}
+            variant="contained"
+            color="error"
+            disabled={selectedRowIds.length === 0}
+            startIcon={<DeleteIcon />}
+            sx={{ marginRight: '1%' }}
+          >
+            Delete
+          </Button>
+        </Grid>
+        <Grid item sx={{ marginLeft: '10px' }}>
+          <Button onClick={handleCreateClick} variant="contained" color="primary" disabled={loading || name === ''}>
+            Create
+          </Button>
+        </Grid>
+      </Grid>
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'row',
+          gap: 2,
+          marginTop: '1%',
+          maxHeight: '36.5px',
+        }}
+      >
+        <FormControl required variant="outlined" sx={{ flex: 1 }}>
+          <InputLabel>{'Please Select Definition'}</InputLabel>
+          <Select
+            value={definitionType}
+            onChange={handleDefinitionTypeChange as any}
+            label="Position"
+          >
+            {Object.values(EDefinitionType).map(type => (
+              <MenuItem key={type} value={type}>
+                {type}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+
+        <TextField
+          label="Definition Name"
+          name="name"
+          value={name}
+          onChange={e => setName(e.target.value)}
+          required
+          inputProps={{ maxLength: 64 }}
+          sx={{ flex: 2 }}
+        />
+      </Box>
+    </div>
   );
 };
 

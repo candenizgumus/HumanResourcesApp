@@ -2,6 +2,7 @@ package com.humanresourcesapp.repositories;
 
 import com.humanresourcesapp.entities.Definition;
 import com.humanresourcesapp.entities.enums.EDefinitionType;
+import com.humanresourcesapp.entities.enums.EStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -14,7 +15,7 @@ public interface DefinitionRepository extends JpaRepository<Definition, Long> {
 
     List<Definition> findAllByDefinitionType(EDefinitionType definitionType);
 
-    List<Definition> findAllByDefinitionTypeAndCompanyIdIsNull(EDefinitionType definitionType);
+    List<Definition> findAllByDefinitionTypeAndStatusAndCompanyIdIsNull(EDefinitionType definitionType, EStatus status);
 
-    List<Definition> findAllByDefinitionTypeAndCompanyId(EDefinitionType definitionType, Long companyId);
+    List<Definition> findAllByDefinitionTypeAndStatusAndCompanyId(EDefinitionType definitionType, EStatus status, Long companyId);
 }

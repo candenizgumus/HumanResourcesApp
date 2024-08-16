@@ -13,7 +13,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs, { Dayjs } from "dayjs";
 import sweetalert2 from "sweetalert2";
 import Swal from "sweetalert2";
-import { fetchGetDefinitions } from '../../../store/feature/definitionSlice';
+import { fetchGetDefinitions, IDefinition } from '../../../store/feature/definitionSlice';
 import { EDefinitionType } from '../../../models/IDefinitionType';
 import { setHours } from 'date-fns';
 
@@ -35,11 +35,11 @@ const EditEmployee: React.FC = () => {
     const [photo, setPhoto] = useState<string>('');
     const [hireDate, setHireDate] = useState<Date | null>(null);
     const [location, setLocation] = useState<string>('') ;
-    const employeeTypes = useAppSelector((state) => state.definition.definitionList);
-    const [positions, setPositions] = useState([]);
-    const [selectedPositions, setSelectedPositions] = useState<string>('');
+    const [positions, setPositions] = useState<IDefinition[]>([]);
+    const [employeeTypes, setEmployeeTypes] = useState<IDefinition[]>([]);
+    const [selectedPosition, setSelectedPosition] = useState<string>('');
 
-    const [selectedEmployeeTypeId, setSelectedEmployeeTypeId] = useState<number>(14); //default to FULL_TIME
+    const [selectedEmployeeType, setSelectedEmployeeType] = useState<string>("FULL_TIME"); //default to FULL_TIME
 
 
 
@@ -66,10 +66,13 @@ const EditEmployee: React.FC = () => {
             setPhoto(employeeData.payload.photo);
             setHireDate(employeeData.payload.hireDate);
             setLocation(employeeData.payload.location);
-            setSelectedPositions(employeeData.payload.position);
-            setSelectedEmployeeTypeId(employeeData.payload.employeeTypeDefinitionId);
+            setSelectedPosition(employeeData.payload.position);
+            setSelectedEmployeeType(employeeData.payload.employeeType);
 
-            dispatch(fetchGetPositions())
+            dispatch(fetchGetDefinitions({
+                token,
+                definitionType: EDefinitionType.POSITION
+            }))
                 .then(data => {
                     console.log('Positions Response:', data);  // Log the response
                     setPositions(data.payload);
@@ -82,8 +85,12 @@ const EditEmployee: React.FC = () => {
                 token: token,
                 definitionType: EDefinitionType.EMPLOYEE_TYPE
             }))
+                .then(data => {
+                    console.log('EmployeTypes Response:', data);  // Log the response
+                    setEmployeeTypes(data.payload);
+                })
                 .catch(error => {
-                    console.error('Error fetching positions:', error);  // Handle fetch errors
+                    console.error('Error fetching employeTypes:', error);  // Handle fetch errors
                 });
 
 
@@ -104,7 +111,7 @@ const EditEmployee: React.FC = () => {
 
     const updateEmployee = () => {
 
-        if (!name || !surname   || !phone || !title  || !birthDate  || !selectedEmployeeTypeId || !location || !hireDate || !selectedPositions) {
+        if (!name || !surname   || !phone || !title  || !birthDate  || !selectedEmployeeType || !location || !hireDate || !selectedPosition) {
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
@@ -113,7 +120,7 @@ const EditEmployee: React.FC = () => {
             return;
         }
 
-        console.log(selectedEmployeeTypeId)
+        console.log(selectedEmployeeType)
         dispatch(fetchUpdateEmployeeByManager({
             employeeId: employeeId,
             token: token,
@@ -122,10 +129,10 @@ const EditEmployee: React.FC = () => {
             phone: phone,
             title: title,
             birthDate: birthDate,
-            position: selectedPositions,
+            position: selectedPosition,
             location: location,
             hireDate: hireDate,
-            employeeTypeDefinitionId: selectedEmployeeTypeId
+            employeeType: selectedEmployeeType
 
         })).then((data) => {
             if (data.payload.message) {
@@ -147,11 +154,6 @@ const EditEmployee: React.FC = () => {
         })
     }
 
-    const handleEmployeeTypeChange = (event: SelectChangeEvent<number>) => {
-        // Convert the value to a number
-        const newValue = parseInt(event.target.value as string, 10);
-        setSelectedEmployeeTypeId(newValue);
-      };
 
     return (
 
@@ -270,13 +272,13 @@ const EditEmployee: React.FC = () => {
                     <FormControl required variant="outlined">
                         <InputLabel>{'Please Select Your Position'}</InputLabel>
                         <Select
-                            value={selectedPositions}
-                            onChange={event => setSelectedPositions(event.target.value as string)}
+                            value={selectedPosition}
+                            onChange={event => setSelectedPosition(event.target.value as string)}
                             label="Position"
                         >
-                            {positions.map((position) => (
-                                <MenuItem key={position} value={position}>
-                                    {position}
+                            {Object.values(positions).map(position => (
+                                <MenuItem key={position.name} value={position.name}>
+                                    {position.name}
                                 </MenuItem>
                             ))}
                         </Select>
@@ -285,12 +287,12 @@ const EditEmployee: React.FC = () => {
                     <FormControl required variant="outlined">
                         <InputLabel>{'Please Select Employee Type'}</InputLabel>
                         <Select
-                            value={selectedEmployeeTypeId}
-                            onChange={handleEmployeeTypeChange}
+                            value={selectedEmployeeType}
+                            onChange={event => setSelectedEmployeeType(event.target.value as string)}
                             label="Employee Type"
                         >
                             {Object.values(employeeTypes).map(employeeType => (
-                                <MenuItem key={employeeType.name} value={employeeType.id}>
+                                <MenuItem key={employeeType.name} value={employeeType.name}>
                                     {employeeType.name}
                                 </MenuItem>
                             ))}

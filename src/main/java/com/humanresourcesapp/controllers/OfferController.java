@@ -6,6 +6,7 @@ import com.humanresourcesapp.dto.requests.PageCountRequestDto;
 import com.humanresourcesapp.dto.requests.PageRequestDto;
 import com.humanresourcesapp.services.OfferService;
 import com.humanresourcesapp.views.VwGetAllOffer;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -24,7 +25,7 @@ public class OfferController
     private final OfferService offerService;
 
     @PostMapping(SAVE)
-    public ResponseEntity<Boolean> save(@RequestBody OfferSaveRequestDto dto)
+    public ResponseEntity<Boolean> save(@Valid @RequestBody OfferSaveRequestDto dto)
     {
         return ResponseEntity.ok(offerService.saveWithDto(dto));
     }

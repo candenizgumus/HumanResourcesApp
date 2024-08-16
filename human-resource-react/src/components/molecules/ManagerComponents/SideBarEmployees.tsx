@@ -60,16 +60,7 @@ export default function SideBarEmployees() {
         { field: "phone", headerName: "Phone", sortable: false, headerAlign: "center", width: 140 },
         { field: "position", headerName: "Position", type: "string", width: 220, headerAlign: "center" },
         { field: "userType", headerName: "User Type", width: 150, headerAlign: "center" },
-        {
-            field: "employeeTypeDefinitionId",
-            headerName: "Employee Type",
-            width: 150,
-            headerAlign: "center",
-            renderCell: (params) => {
-                const employeeType = employeeTypes.find(lt => lt.id === params.value);
-                return employeeType ? employeeType.name : "Unknown";
-            }
-        },
+        { field: "employeeType", headerName: "Employee Type", width: 150, headerAlign: "center" },
         { field: "status", headerName: "Status", width: 120, headerAlign: "center" },
         {
             field: "photo",

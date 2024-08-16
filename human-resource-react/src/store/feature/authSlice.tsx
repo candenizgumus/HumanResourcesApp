@@ -230,7 +230,7 @@ interface IfetchUpdateEmployeeByManager {
     hireDate: Date | null;
     position: string;
     location: string;
-    employeeTypeDefinitionId: number
+    employeeType: string
 
 }
 export const fetchUpdateEmployeeByManager = createAsyncThunk(
@@ -253,7 +253,7 @@ export const fetchUpdateEmployeeByManager = createAsyncThunk(
                 'location': payload.location,
                 'hireDate': payload.hireDate,
                 'employeeId': payload.employeeId,
-                'employeeTypeDefinitionId': payload.employeeTypeDefinitionId
+                'employeeType': payload.employeeType
             })
         });
 
@@ -335,8 +335,8 @@ interface IfetchAddEmployeeToCompany {
     location: string;
     birthDate: Date;
     hireDate: Date;
-    ePosition: string;
-    employeeTypeDefinitionId: number;
+    position: string;
+    employeeType: string;
     salary: number
 }
 export const fetchAddEmployeeToCompany = createAsyncThunk(
@@ -356,8 +356,8 @@ export const fetchAddEmployeeToCompany = createAsyncThunk(
                 'location': payload.location,
                 'birthDate': payload.birthDate,
                 'hireDate': payload.hireDate,
-                'ePosition': payload.ePosition,
-                'employeeTypeDefinitionId': payload.employeeTypeDefinitionId,
+                'position': payload.position,
+                'employeeType': payload.employeeType,
                 'salary': payload.salary
             })
         });

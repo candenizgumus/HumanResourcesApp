@@ -38,7 +38,7 @@ public class User extends BaseEntity
     Double salary;
 
     //EMPLOYEE
-   Long employeeTypeDefinitionId;
+    String employeeType;
 
     // ALL USERS
     String email;
@@ -77,8 +77,7 @@ public class User extends BaseEntity
     EUserType userType;
 
     // ALL USERS
-    @Enumerated(EnumType.STRING)
-    EPosition position;
+    String position;
     
     //
     @Enumerated(EnumType.STRING)

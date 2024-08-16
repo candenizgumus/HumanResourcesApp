@@ -1,7 +1,5 @@
 package com.humanresourcesapp.dto.requests;
 
-import com.humanresourcesapp.entities.enums.EPosition;
-
 import java.time.LocalDate;
 
 public record UpdateEmployeeByManagerDto(
@@ -12,8 +10,8 @@ public record UpdateEmployeeByManagerDto(
         String title,
         LocalDate birthDate,
         LocalDate hireDate,
-        EPosition position,
-        Long employeeTypeDefinitionId,
+        String position,
+        String employeeType,
         String location
 )
 {

@@ -23,6 +23,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { changePageState } from '../../store/feature/authSlice';
 import {NotificationIcon} from "../../components/atoms/NotificationIcon";
 import { useNavigate } from 'react-router-dom';
+import DesignServicesIcon from '@mui/icons-material/DesignServices';
 import NavbarProfile from "../../components/atoms/NavbarProfile";
 import {ManagerMenuContentRenderer} from "../../components/organisms/ManagerMenuContentRenderer";
 import {
@@ -171,23 +172,24 @@ export default function AdminPage() {
         </DrawerHeader>
         <Divider />
         <List>
-          {['Employees', 'Add Employee','Create Manager', 'Profile', 'Company', 'Add Comment', 'Holidays','Notifications', 'Expenditure', 'Leaves','Payments','Personal Documents','Bonus'].map((text, index) => (
+          {['Employees', 'Add Employee','Create Manager','Create Definition', 'Profile', 'Company', 'Add Comment', 'Holidays','Notifications', 'Expenditure', 'Leaves','Payments','Personal Documents','Bonus'].map((text, index) => (
             <ListItem key={text} disablePadding>
               <ListItemButton onClick={() => handleListItemClick(text)}>
                 <ListItemIcon>
                   {index === 0 && <Person/>}
                   {index === 1 && <PersonAdd />}
                   {index === 2 && <AdminPanelSettings />}
-                  {index === 3 && <AccountBox />}
-                  {index === 4 && <Apartment />}
-                  {index === 5 && <AddCommentIcon/>}
-                  {index === 6 && <Weekend/>}
-                  {index === 7 && <NotificationsIcon/>}
-                  {index === 8 && <PointOfSale/>}
-                  {index === 9 && <HikingIcon/>}
-                  {index === 10 && <Payments/>}
-                  {index === 11 && <DocumentScanner/>}
-                  {index === 12 && <Paid/>}
+                  {index === 3 && <DesignServicesIcon /> }
+                  {index === 4 && <AccountBox />}
+                  {index === 5 && <Apartment />}
+                  {index === 6 && <AddCommentIcon/>}
+                  {index === 7 && <Weekend/>}
+                  {index === 8 && <NotificationsIcon/>}
+                  {index === 9 && <PointOfSale/>}
+                  {index === 10 && <HikingIcon/>}
+                  {index === 11 && <Payments/>}
+                  {index === 12 && <DocumentScanner/>}
+                  {index === 13 && <Paid/>}
                 </ListItemIcon>
                 <ListItemText primary={text} />
               </ListItemButton>

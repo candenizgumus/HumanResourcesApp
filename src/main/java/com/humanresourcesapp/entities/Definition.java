@@ -25,5 +25,5 @@ public class Definition {
     @Enumerated(EnumType.STRING)
     EDefinitionType definitionType;
 
-
+    Long companyId;
 }

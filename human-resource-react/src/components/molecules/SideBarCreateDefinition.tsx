@@ -1,10 +1,10 @@
 import React, { useState, ChangeEvent, FormEvent } from 'react';
 import { TextField, Button, Box } from '@mui/material';
 import { useDispatch } from 'react-redux';
-import { fetchSaveDefinition } from '../../../store/feature/definitionSlice';
-import { EDefinitionType } from '../../../models/IDefinitionType';
+import { fetchSaveDefinition } from '../../store/feature/definitionSlice';
+import { EDefinitionType } from '../../models/IDefinitionType';
 import Swal from "sweetalert2";
-import { HumanResources } from '../../../store';
+import { HumanResources } from '../../store';
 
 const UserForm: React.FC = () => {
   const dispatch = useDispatch<HumanResources>();
@@ -36,13 +36,13 @@ const UserForm: React.FC = () => {
       Swal.fire({
         icon: 'success',
         title: 'Success!',
-        text: 'Feature Created.',
+        text: 'Definition Created.',
       });
 
       setLoading(false);
     } catch (error) {
-      console.error("Error creating feature:", error);
-      Swal.fire("Error", "There was a problem creating feature.", "error");
+      console.error("Error creating definition:", error);
+      Swal.fire("Error", "There was a problem creating definition.", "error");
     }
   };
 
@@ -75,7 +75,6 @@ const UserForm: React.FC = () => {
         fullWidth
         SelectProps={{ native: true }}
       >
-        <option value="">Select a type</option> {/* Optional default empty option */}
         {Object.values(EDefinitionType).map((value) => (
           <option key={value} value={value}>
             {value}

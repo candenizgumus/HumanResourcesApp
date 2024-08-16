@@ -18,7 +18,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import { Button, Grid} from '@mui/material';
-import { HumanResources, RootState} from '../../store';
+import {HumanResources, RootState, useAppSelector} from '../../store';
 import { useDispatch, useSelector } from 'react-redux';
 import { changePageState} from '../../store/feature/authSlice';
 import {NotificationIcon} from "../../components/atoms/NotificationIcon";
@@ -27,14 +27,14 @@ import NavbarProfile from "../../components/atoms/NavbarProfile";
 import HikingIcon from '@mui/icons-material/Hiking';
 
 import {
-    AccountBox,
-    AdminPanelSettings,
+    AccountBox, Dashboard,
     FeaturedPlayList, Paid, PointOfSale,
     Weekend
 } from "@mui/icons-material";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import {EmployeeHomeContent} from "../../components/molecules/EmployeeComponents/EmployeeHomeContent";
 import {EmployeeMenuContentRenderer} from "../../components/organisms/EmployeeMenuContentRenderer";
+import {useState} from "react";
 
 const drawerWidth = 240;
 
@@ -102,8 +102,8 @@ export default function EmployeePage() {
     const [selectedIndex, setSelectedIndex] = React.useState<string>('Inbox');
     const dispatch = useDispatch<HumanResources>();
     const pageState = useSelector((state: RootState) => state.auth.pageState);
-
-
+    const [selectedIndex2, setSelectedIndex2] = useState(null);
+    const page = useAppSelector((state) => state.auth.pageState);
     const handleDrawerOpen = () => {
         setOpen(true);
     };
@@ -112,13 +112,18 @@ export default function EmployeePage() {
         setOpen(false);
     };
     const navigateToHome = () => {
-        dispatch(changePageState(''));
+        dispatch(changePageState('Dashboard'));
     };
 
     const handleListItemClick = (text: string) => {
         setSelectedIndex(text);
         dispatch(changePageState(text));
     };
+    const handleListItemClick2 = (index:any) => {
+        setSelectedIndex2(index);
+        // Perform your action here
+    };
+
     return (
         <Box sx={{ display: 'flex'  }}>
             <CssBaseline />
@@ -137,6 +142,9 @@ export default function EmployeePage() {
                         <Button style={{ marginRight: '20px' }} onClick={navigateToHome} color="inherit">
                             Kolay IK
                         </Button>
+                    </Typography>
+                    <Typography sx={{ fontSize: '20px' }} >
+                        {page ? page : 'Dashboard'}
                     </Typography>
                     <Box sx={{ flexGrow: 1 }} />
                     <NotificationIcon />
@@ -164,18 +172,33 @@ export default function EmployeePage() {
                 </DrawerHeader>
                 <Divider />
                 <List>
-                    {['Shifts & Breaks', 'Holidays', 'Profile', 'Company Items','Notifications','Expenditure', 'Leaves','Bonus'].map((text, index) => (
+                    {['Dashboard','Shifts & Breaks', 'Holidays', 'Profile', 'Company Items','Notifications','Expenditure', 'Leaves','Bonus'].map((text, index) => (
                         <ListItem key={text} disablePadding>
-                            <ListItemButton onClick={() => handleListItemClick(text)}>
+                            <ListItemButton
+                                selected={selectedIndex2 === index}
+                                onClick={() => {
+                                    handleListItemClick2(index);
+                                    handleListItemClick(text);
+                                }}
+                                sx={{
+                                    '&.Mui-selected': {
+                                        backgroundColor: 'rgba(0, 123, 255, 0.1)', // Change background color when selected
+                                        '&:hover': {
+                                            backgroundColor: 'rgba(0, 123, 255, 0.2)', // Change background color on hover
+                                        },
+                                    }
+                                }}
+                            >
                                 <ListItemIcon>
-                                    { index === 0 && <LocalOfferIcon />}
-                                    {index  === 1 && <Weekend />}
-                                    {index  === 2 && <AccountBox /> }
-                                    {index  === 3 && <FeaturedPlayList /> }
-                                    {index === 4 && <NotificationsIcon/>}
-                                    {index === 5 && <PointOfSale/>}
-                                    {index === 6 && <HikingIcon/>}
-                                    {index === 7 && <Paid/>}
+                                    {index  === 0 && <Dashboard/>}
+                                    { index === 1 && <LocalOfferIcon />}
+                                    {index  === 2 && <Weekend />}
+                                    {index  === 3 && <AccountBox /> }
+                                    {index  === 4 && <FeaturedPlayList /> }
+                                    {index === 5 && <NotificationsIcon/>}
+                                    {index === 6 && <PointOfSale/>}
+                                    {index === 7 && <HikingIcon/>}
+                                    {index === 8 && <Paid/>}
                                 </ListItemIcon>
                                 <ListItemText primary={text} />
                             </ListItemButton>
@@ -187,7 +210,7 @@ export default function EmployeePage() {
             <Main open={open}>
                 <DrawerHeader />
                 <Grid container spacing={2}>
-                    { pageState=== '' ? <EmployeeHomeContent/> : <EmployeeMenuContentRenderer/>}
+                    { pageState=== 'Dashboard' ? <EmployeeHomeContent/> : <EmployeeMenuContentRenderer/>}
                 </Grid>
             </Main>
         </Box>

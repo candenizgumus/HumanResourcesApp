@@ -116,6 +116,7 @@ export default function SideBarEmployees() {
                     text: data.payload.message,
                     icon: "error",
                     confirmButtonText: "OK",
+                    confirmButtonColor: '#1976D2',
 
                 });
                 return
@@ -126,6 +127,7 @@ export default function SideBarEmployees() {
                 text: "Bonus added successfully",
                 icon: "success",
                 confirmButtonText: "OK",
+                confirmButtonColor: '#1976D2',
             });
 
         })
@@ -190,6 +192,7 @@ export default function SideBarEmployees() {
                     showCancelButton: true,
                     confirmButtonText: "Confirm",
                     input: "radio",
+                    confirmButtonColor: '#1976D2',
 
                 });
 
@@ -208,6 +211,7 @@ export default function SideBarEmployees() {
                                 text: data.payload.message,
                                 icon: "error",
                                 confirmButtonText: "OK",
+                                confirmButtonColor: '#1976D2',
 
                             });
                             return
@@ -217,6 +221,7 @@ export default function SideBarEmployees() {
                             text: "Deletion completed",
                             icon: "success",
                             confirmButtonText: "OK",
+                            confirmButtonColor: '#1976D2',
                         });
 
                         fetchGetAllUsersOfManager({
@@ -264,6 +269,7 @@ export default function SideBarEmployees() {
                     showCancelButton: true,
                     confirmButtonText: "Confirm",
                     input: "radio",
+                    confirmButtonColor: '#1976D2',
 
                 });
 
@@ -282,6 +288,7 @@ export default function SideBarEmployees() {
                                 text: data.payload.message,
                                 icon: "error",
                                 confirmButtonText: "OK",
+                                confirmButtonColor: '#1976D2',
 
                             });
                             return
@@ -291,6 +298,7 @@ export default function SideBarEmployees() {
                             text: "Activation has been competed",
                             icon: "success",
                             confirmButtonText: "OK",
+                            confirmButtonColor: '#1976D2',
                         });
 
                         fetchGetAllUsersOfManager({

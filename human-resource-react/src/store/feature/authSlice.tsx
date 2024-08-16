@@ -22,7 +22,7 @@ const initalAuthState: IAuthState = {
     upcomingBirthdayUsers: [],
     token: '',
     isAuth: false,
-    pageState: '',
+    pageState: 'Dashboard',
     userType: '',
     selectedEmployeeId: 0
 };
@@ -640,7 +640,7 @@ const authSlice = createSlice({
             state.isAuth = false;
             state.token = '';
             localStorage.removeItem('token');
-            state.pageState = ''
+            state.pageState = 'Dashboard'
         },
         setUserType(state, action: PayloadAction<string>) {
             state.userType = action.payload;

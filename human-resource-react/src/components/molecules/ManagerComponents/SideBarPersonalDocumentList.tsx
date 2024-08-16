@@ -76,7 +76,8 @@ const SideBarPersonalDocumentList: React.FC = () => {
                                 Swal.fire({
                                     icon: 'error',
                                     text: data.payload.message ?? 'Failed to delete document',
-                                    showConfirmButton: true
+                                    showConfirmButton: true,
+                                    confirmButtonColor: '#1976D2',
                                 });
                             } else {
                                 Swal.fire({

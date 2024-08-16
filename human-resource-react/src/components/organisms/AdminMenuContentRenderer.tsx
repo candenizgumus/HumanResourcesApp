@@ -14,6 +14,7 @@ import SideBarCompany from "../molecules/ManagerComponents/SideBarCompany";
 import SideBarHolidayTableAdmin from "../molecules/AdminPageComponents/SideBarHolidayTableAdmin";
 import SideBarCreateDefinition from "../molecules/SideBarCreateDefinition";
 import SideBarNotifications from "../molecules/SideBarNotifications";
+import AdminHomeContent from "../molecules/AdminPageComponents/AdminHomeContent";
 const EditEmployee = lazy(() => import('../molecules/ManagerComponents/EditEmployee'));
 const SideBarCreateComment = lazy(() => import('../molecules/ManagerComponents/SideBarCreateComment'));
 export const AdminMenuContentRenderer = () => {
@@ -21,6 +22,7 @@ export const AdminMenuContentRenderer = () => {
 
     return (
         <>
+
             <Grid item xs={12}>
                 {page === 'Offers' && <SideBarOffers />}
                 {page === 'Create Admin' && <SideBarCreateAdmin />}
@@ -37,6 +39,7 @@ export const AdminMenuContentRenderer = () => {
                 {page === 'Notifications' && <SideBarNotifications/>}
                 {page === 'Edit Company' && <SideBarCompany/>}
                 {page === 'Create Definition' && <SideBarCreateDefinition/>}
+                {page === 'Dashboard' && <AdminHomeContent/>}
             </Grid>
         </>
     );

@@ -29,6 +29,7 @@ const UserForm: React.FC = () => {
           icon: 'error',
           title: 'Error',
           text: result.message,
+            confirmButtonColor: '#1976D2',
         });
         setLoading(false);
         return; // Stop the process and prevent further then block executions
@@ -38,6 +39,7 @@ const UserForm: React.FC = () => {
         icon: 'success',
         title: 'Success!',
         text: 'Admin Account Created.',
+          confirmButtonColor: '#1976D2',
       });
       setEmail('');
       setPassword('');

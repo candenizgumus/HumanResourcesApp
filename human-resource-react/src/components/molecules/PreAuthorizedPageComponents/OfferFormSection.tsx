@@ -48,6 +48,7 @@ const OfferFormSection = () => {
                 icon: 'warning',
                 title: 'Warning',
                 text: 'You must agree to the terms before submitting.',
+                confirmButtonColor: '#1976D2',
             });
             return;
         }
@@ -69,6 +70,7 @@ const OfferFormSection = () => {
                         icon: 'error',
                         title: 'Error',
                         text: data.payload.message,
+                        confirmButtonColor: '#1976D2',
                     });
                     return;
                 }

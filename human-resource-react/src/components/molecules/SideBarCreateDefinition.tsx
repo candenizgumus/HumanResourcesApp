@@ -28,6 +28,7 @@ const UserForm: React.FC = () => {
           icon: 'error',
           title: 'Error',
           text: result.message,
+          confirmButtonColor: '#1976D2',
         });
         setLoading(false);
         return;
@@ -37,6 +38,7 @@ const UserForm: React.FC = () => {
         icon: 'success',
         title: 'Success!',
         text: 'Definition Created.',
+        confirmButtonColor: '#1976D2',
       });
 
       setLoading(false);

@@ -18,7 +18,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import {Button, Grid} from '@mui/material';
-import {HumanResources, RootState} from '../../store';
+import {HumanResources, RootState, useAppSelector} from '../../store';
 import {useDispatch, useSelector} from 'react-redux';
 import {changePageState} from '../../store/feature/authSlice';
 import {NotificationIcon} from "../../components/atoms/NotificationIcon";
@@ -35,11 +35,12 @@ import {
     PersonAdd,
     PointOfSale,
     AdminPanelSettings,
-    Weekend, Laptop
+    Weekend, Laptop, Dashboard
 } from "@mui/icons-material";
 import AddCommentIcon from '@mui/icons-material/AddComment';
 import {ManagerHomeContent} from "../../components/molecules/ManagerComponents/ManagerHomeContent";
 import HikingIcon from '@mui/icons-material/Hiking';
+import {useState} from "react";
 
 
 const drawerWidth = 240;
@@ -109,8 +110,8 @@ export default function AdminPage() {
     const [selectedIndex, setSelectedIndex] = React.useState<string>('Inbox');
     const dispatch = useDispatch<HumanResources>();
     const pageState = useSelector((state: RootState) => state.auth.pageState);
-
-
+    const [selectedIndex2, setSelectedIndex2] = useState(null);
+    const page = useAppSelector((state) => state.auth.pageState);
     const handleDrawerOpen = () => {
         setOpen(true);
     };
@@ -119,7 +120,7 @@ export default function AdminPage() {
         setOpen(false);
     };
     const navigateToHome = () => {
-        dispatch(changePageState(''));
+        dispatch(changePageState('Dashboard'));
     };
 
     const handleListItemClick = (text: string) => {
@@ -127,6 +128,11 @@ export default function AdminPage() {
         dispatch(changePageState(text));
     };
 
+
+    const handleListItemClick2 = (index:any) => {
+        setSelectedIndex2(index);
+        // Perform your action here
+    };
 
     return (
         <Box sx={{display: 'flex'}}>
@@ -146,6 +152,9 @@ export default function AdminPage() {
                         <Button style={{marginRight: '20px'}} onClick={navigateToHome} color="inherit">
                             Easy HR
                         </Button>
+                    </Typography>
+                    <Typography sx={{ fontSize: '20px' }} >
+                        {page ? page : 'Dashboard'}
                     </Typography>
                     <Box sx={{flexGrow: 1}}/>
                     <NotificationIcon/>
@@ -173,25 +182,41 @@ export default function AdminPage() {
                 </DrawerHeader>
                 <Divider/>
                 <List>
-                    {['Employees', 'Add Employee', 'Create Manager', 'Create Definition', 'Profile', 'Company', 'Add Comment', 'Holidays', 'Notifications', 'Expenditure', 'Leaves', 'Payments', 'Personal Documents', 'Bonus', 'Company Items'].map((text, index) => (
+                    {['Dashboard','Employees', 'Add Employee', 'Create Manager', 'Create Definition', 'Profile', 'Company', 'Add Comment', 'Holidays', 'Notifications', 'Expenditure', 'Leaves', 'Payments', 'Personal Documents', 'Bonus', 'Company Items'].map((text, index) => (
                         <ListItem key={text} disablePadding>
-                            <ListItemButton onClick={() => handleListItemClick(text)}>
+                            <ListItemButton
+                                selected={selectedIndex2 === index}
+                                onClick={() => {
+                                    handleListItemClick2(index);
+                                    handleListItemClick(text);
+                                }}
+                                sx={{
+                                    '&.Mui-selected': {
+                                        backgroundColor: 'rgba(0, 123, 255, 0.1)', // Change background color when selected
+                                        '&:hover': {
+                                            backgroundColor: 'rgba(0, 123, 255, 0.2)', // Change background color on hover
+                                        },
+                                    }
+                                }}
+                            >
+
                                 <ListItemIcon>
-                                    {index === 0 && <Person/>}
-                                    {index === 1 && <PersonAdd/>}
-                                    {index === 2 && <AdminPanelSettings/>}
-                                    {index === 3 && <DesignServicesIcon/>}
-                                    {index === 4 && <AccountBox/>}
-                                    {index === 5 && <Apartment/>}
-                                    {index === 6 && <AddCommentIcon/>}
-                                    {index === 7 && <Weekend/>}
-                                    {index === 8 && <NotificationsIcon/>}
-                                    {index === 9 && <PointOfSale/>}
-                                    {index === 10 && <HikingIcon/>}
-                                    {index === 11 && <Payments/>}
-                                    {index === 12 && <DocumentScanner/>}
-                                    {index === 13 && <Paid/>}
-                                    {index === 14 && <Laptop/>}
+                                    {index  === 0 && <Dashboard/>}
+                                    {index === 1 && <Person/>}
+                                    {index === 2 && <PersonAdd/>}
+                                    {index === 3 && <AdminPanelSettings/>}
+                                    {index === 4 && <DesignServicesIcon/>}
+                                    {index === 5 && <AccountBox/>}
+                                    {index === 6 && <Apartment/>}
+                                    {index === 7 && <AddCommentIcon/>}
+                                    {index === 8 && <Weekend/>}
+                                    {index === 9 && <NotificationsIcon/>}
+                                    {index === 10 && <PointOfSale/>}
+                                    {index === 11 && <HikingIcon/>}
+                                    {index === 12 && <Payments/>}
+                                    {index === 13 && <DocumentScanner/>}
+                                    {index === 14 && <Paid/>}
+                                    {index === 15 && <Laptop/>}
 
                                 </ListItemIcon>
                                 <ListItemText primary={text}/>
@@ -204,7 +229,7 @@ export default function AdminPage() {
             <Main open={open}>
                 <DrawerHeader/>
                 <Grid container spacing={2}>
-                    {pageState === '' ? <ManagerHomeContent/> : <ManagerMenuContentRenderer/>}
+                    {pageState === 'Dashboard' ? <ManagerHomeContent/> : <ManagerMenuContentRenderer/>}
                 </Grid>
             </Main>
         </Box>

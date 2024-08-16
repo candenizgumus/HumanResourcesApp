@@ -102,6 +102,7 @@ export default function SideBarEmployeeLeaves() {
                     text: 'Leave already approved',
                     icon: "error",
                     confirmButtonText: "OK",
+                    confirmButtonColor: '#1976D2',
                 });
                 continue;
             }
@@ -123,7 +124,8 @@ export default function SideBarEmployeeLeaves() {
                     await Swal.fire({
                         title: "Deleted!",
                         text: "Your leave has been deleted.",
-                        icon: "success"
+                        icon: "success",
+                        confirmButtonColor: '#1976D2',
                     });
                     dispatch(fetchGetLeavesOfEmployee({ token, page: 0, pageSize: 100, searchText }));
                 }

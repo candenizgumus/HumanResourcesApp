@@ -107,6 +107,7 @@ const  SideBarManagerExpenditures = () => {
                     text: 'Expenditure already approved',
                     icon: "error",
                     confirmButtonText: "OK",
+                    confirmButtonColor: '#1976D2',
 
                 });
                 return
@@ -138,13 +139,15 @@ const  SideBarManagerExpenditures = () => {
                             text: data.payload.message,
                             icon: "error",
                             confirmButtonText: "OK",
+                            confirmButtonColor: '#1976D2',
                         });
                         return;
                     } else {
                         await Swal.fire({
                             title: "Approved!",
                             text: "Your expenditure has been approved.",
-                            icon: "success"
+                            icon: "success",
+                            confirmButtonColor: '#1976D2',
                         });
 
                         // Silme işlemi sonrasında listeyi hemen güncelleyin
@@ -179,6 +182,7 @@ const  SideBarManagerExpenditures = () => {
                     text: 'Expenditure already approved',
                     icon: "error",
                     confirmButtonText: "OK",
+                    confirmButtonColor: '#1976D2',
                 });
                 continue; // Diğer id'lere geçmek için continue kullanın
             }
@@ -189,6 +193,7 @@ const  SideBarManagerExpenditures = () => {
                     text: 'Expenditure already declined',
                     icon: "error",
                     confirmButtonText: "OK",
+                    confirmButtonColor: '#1976D2',
                 });
                 continue; // Diğer id'lere geçmek için continue kullanın
             }
@@ -216,13 +221,15 @@ const  SideBarManagerExpenditures = () => {
                             text: data.payload.message,
                             icon: "error",
                             confirmButtonText: "OK",
+                            confirmButtonColor: '#1976D2',
                         });
                         return;
                     } else {
                         await Swal.fire({
                             title: "Rejected!",
                             text: "Your expenditure has been rejected.",
-                            icon: "success"
+                            icon: "success",
+                            confirmButtonColor: '#1976D2',
                         });
 
                         // Silme işlemi sonrasında listeyi hemen güncelleyin
@@ -256,6 +263,7 @@ const  SideBarManagerExpenditures = () => {
                     text: 'Expenditure not yet approved, cannot cancel.',
                     icon: "error",
                     confirmButtonText: "OK",
+                    confirmButtonColor: '#1976D2',
                 });
                 continue;
             }
@@ -283,13 +291,15 @@ const  SideBarManagerExpenditures = () => {
                             text: data.payload.message,
                             icon: "error",
                             confirmButtonText: "OK",
+                            confirmButtonColor: '#1976D2',
                         });
                         return;
                     } else {
                         await Swal.fire({
                             title: "Cancelled!",
                             text: "Your expenditure has been cancelled.",
-                            icon: "success"
+                            icon: "success",
+                            confirmButtonColor: '#1976D2',
                         });
 
                         await dispatch(fetchGetExpendituresOfManager({

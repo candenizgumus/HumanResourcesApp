@@ -19,7 +19,7 @@ import ListItemText from '@mui/material/ListItemText';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import DesignServicesIcon from '@mui/icons-material/DesignServices';
 import { Button, Grid} from '@mui/material';
-import { HumanResources, RootState} from '../../store';
+import {HumanResources, RootState, useAppSelector} from '../../store';
 import { useDispatch, useSelector } from 'react-redux';
 import { changePageState} from '../../store/feature/authSlice';
 import {NotificationIcon} from "../../components/atoms/NotificationIcon";
@@ -30,12 +30,13 @@ import AdminHomeContent  from "../../components/molecules/AdminPageComponents/Ad
 import {
   AccountBox,
   AdminPanelSettings,
-  Apartment,
+  Apartment, Dashboard,
   FeaturedPlayList,
   Person,
   Weekend
 } from "@mui/icons-material";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
+import {useState} from "react";
 
 const drawerWidth = 240;
 
@@ -103,8 +104,8 @@ export default function AdminPage() {
   const [selectedIndex, setSelectedIndex] = React.useState<string>('Inbox');
   const dispatch = useDispatch<HumanResources>();
   const pageState = useSelector((state: RootState) => state.auth.pageState);
-  
-
+  const [selectedIndex2, setSelectedIndex2] = useState(null);
+  const page = useAppSelector((state) => state.auth.pageState);
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -113,7 +114,7 @@ export default function AdminPage() {
     setOpen(false);
   };
   const navigateToHome = () => {
-    dispatch(changePageState(''));
+    dispatch(changePageState('Dashboard'));
   };
   
   const handleListItemClick = (text: string) => {
@@ -121,7 +122,11 @@ export default function AdminPage() {
     dispatch(changePageState(text));
   };
 
-  
+  const handleListItemClick2 = (index:any) => {
+    setSelectedIndex2(index);
+    // Perform your action here
+  };
+
   return (
     <Box sx={{ display: 'flex'  }}>
       <CssBaseline />
@@ -141,6 +146,9 @@ export default function AdminPage() {
                 Easy HR
             </Button>
         </Typography>
+          <Typography sx={{ fontSize: '20px' }} >
+            {page ? page : 'Dashboard'}
+          </Typography>
             <Box sx={{ flexGrow: 1 }} />
             <NotificationIcon/>
             <NavbarProfile />
@@ -167,19 +175,35 @@ export default function AdminPage() {
         </DrawerHeader>
         <Divider />
         <List>
-          {['Offers', 'Users', 'Create Admin', 'Create Feature', 'Create Definition', 'Holidays', 'Profile','Companies', 'Notifications'].map((text, index) => (
+          {['Dashboard','Offers', 'Users', 'Create Admin', 'Create Feature', 'Create Definition', 'Holidays', 'Profile','Companies', 'Notifications'].map((text, index) => (
             <ListItem key={text} disablePadding>
-              <ListItemButton onClick={() => handleListItemClick(text)}>
+              <ListItemButton
+                  selected={selectedIndex2 === index}
+                  onClick={() => {
+                    handleListItemClick2(index);
+                    handleListItemClick(text);
+                  }}
+                  sx={{
+                    '&.Mui-selected': {
+                      backgroundColor: 'rgba(0, 123, 255, 0.1)', // Change background color when selected
+                      '&:hover': {
+                        backgroundColor: 'rgba(0, 123, 255, 0.2)', // Change background color on hover
+                      },
+                    }
+                  }}
+              >
                 <ListItemIcon>
-                  { index === 0 && <LocalOfferIcon />}
-                  {index  === 1 && <Person />}
-                  {index  === 2 && <AdminPanelSettings />}
-                  {index  === 3 && <FeaturedPlayList /> }
-                  {index  === 4 && <DesignServicesIcon /> }
-                  {index  === 5 && <Weekend /> }
-                  {index  === 6 && <AccountBox /> }
-                  {index  === 7 && <Apartment /> }
-                  {index  === 8 && <NotificationsIcon/>}
+                  {index  === 0 && <Dashboard/>}
+                  { index === 1 && <LocalOfferIcon />}
+                  {index  === 2 && <Person />}
+                  {index  === 3 && <AdminPanelSettings />}
+                  {index  === 4 && <FeaturedPlayList /> }
+                  {index  === 5 && <DesignServicesIcon /> }
+                  {index  === 6 && <Weekend /> }
+                  {index  === 7 && <AccountBox /> }
+                  {index  === 8 && <Apartment /> }
+                  {index  === 9 && <NotificationsIcon/>}
+
                 </ListItemIcon>
                 <ListItemText primary={text} />
               </ListItemButton>
@@ -191,7 +215,7 @@ export default function AdminPage() {
       <Main open={open}>
         <DrawerHeader />
         <Grid container spacing={2}>
-          { pageState=== '' ? <AdminHomeContent/> : <AdminMenuContentRenderer/>}
+          { pageState=== 'Dashboard' ? <AdminHomeContent/> : <AdminMenuContentRenderer/>}
         </Grid>
       </Main>
     </Box>

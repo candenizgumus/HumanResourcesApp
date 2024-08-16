@@ -82,7 +82,8 @@ export default function SideBarHolidayTableUser() {
                         Swal.fire({
                             icon: 'error',
                             text: data.payload.message ?? 'Failed to delete holiday',
-                            showConfirmButton: true
+                            showConfirmButton: true,
+                            confirmButtonColor: '#1976D2',
                         })
                     }else{
                         Swal.fire({

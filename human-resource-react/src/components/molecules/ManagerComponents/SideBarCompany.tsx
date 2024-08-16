@@ -1,9 +1,9 @@
-import React, {useState, FormEvent, useEffect} from 'react';
-import {TextField, Button, Box, Grid, Avatar} from '@mui/material';
-import {HumanResources, useAppSelector} from "../../../store";
-import {useDispatch} from "react-redux";
+import React, { useState, FormEvent, useEffect } from 'react';
+import { TextField, Button, Box, Grid, Avatar } from '@mui/material';
+import { HumanResources, useAppSelector } from "../../../store";
+import { useDispatch } from "react-redux";
 import Swal from "sweetalert2";
-import {fetchGetCompanyDataOfManager, fetchUpdateCompanyByManager} from "../../../store/feature/companySlice";
+import { fetchGetCompanyDataOfManager, fetchUpdateCompanyByManager } from "../../../store/feature/companySlice";
 import sweetalert2 from "sweetalert2";
 
 const SideBarCompany: React.FC = () => {
@@ -12,17 +12,17 @@ const SideBarCompany: React.FC = () => {
     const token = useAppSelector((state) => state.auth.token);
     const dispatch = useDispatch<HumanResources>();
     const company = useAppSelector((state) => state.company.company);
-    const [name, setName] = useState<string>( '');
+    const [name, setName] = useState<string>('');
     const [description, setDescription] = useState<string>('');
     const [country, setCountry] = useState<string>('');
-    const[numberOfEmployee, setNumberOfEmployee] = useState<string>('');
+    const [numberOfEmployee, setNumberOfEmployee] = useState<string>('');
     const [logo, setLogo] = useState<string>('');
 
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         // Handle form submission
-        console.log('Form submitted:', );
+        console.log('Form submitted:',);
     };
 
     const setCompanyData = async () => {
@@ -45,12 +45,12 @@ const SideBarCompany: React.FC = () => {
     useEffect(() => {
         setCompanyData();
 
-    },[])
+    }, [])
 
 
     const updateCompany = () => {
 
-        if (!name || !description   || !country) {
+        if (!name || !description || !country) {
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
@@ -74,7 +74,7 @@ const SideBarCompany: React.FC = () => {
                     showConfirmButton: true
                 })
 
-            }else{
+            } else {
                 sweetalert2.fire({
                     icon: 'success',
                     title: 'Your profile has been updated successfully',
@@ -88,7 +88,7 @@ const SideBarCompany: React.FC = () => {
     return (
 
         <Grid container spacing={2}>
-            <Grid item xs ={12}>
+            <Grid item xs={12}>
                 <Box
                     component="form"
                     onSubmit={handleSubmit}
@@ -100,13 +100,28 @@ const SideBarCompany: React.FC = () => {
                         alignItems: 'center',
                     }}
                 >
-                    <Avatar
-                        alt="Remy Sharp"
-                        src={company.logo}
-                        sx={{ width: 150, height: 150 }}
-                    />
+                    <Box
+                        sx={{
+                            width: 150,
+                            height: 150,
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                        }}
+                    >
+                        <Avatar
+                            alt="Company Logo"
+                            src={company.logo}
+                            sx={{
+                                width: '100%',
+                                height: '100%',
+                                '& img': {
+                                    objectFit: 'contain', // Ensures the image fits within the Avatar
+                                },
+                            }}
+                        />
+                    </Box>
                 </Box>
-
             </Grid>
             <Grid item xs={6}>
                 <Box
@@ -150,7 +165,7 @@ const SideBarCompany: React.FC = () => {
                         required
                         inputProps={{ maxLength: 50 }}
                     />
-                    <Button onClick={updateCompany} sx={{mt: 5}} type="button" variant="contained" color="primary">
+                    <Button onClick={updateCompany} sx={{ mt: 5 }} type="button" variant="contained" color="primary">
                         Update Company
                     </Button>
                 </Box>
@@ -177,13 +192,6 @@ const SideBarCompany: React.FC = () => {
                 </Box>
             </Grid>
         </Grid>
-
-
-
-
-
-
-
     );
 };
 

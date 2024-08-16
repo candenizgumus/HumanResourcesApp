@@ -34,14 +34,26 @@ const columns: GridColDef[] = [
         headerAlign: "center",
         sortable: false,
         renderCell: (params) => (
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '100%' }}>
+            <div
+                style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    width: '100%',
+                    height: '100%',
+                }}
+            >
                 <Avatar
                     alt={params.row.name}
                     src={params.value}
                     style={{
-                        width: 40,  // Avatar boyutunu küçültme
-                        height: 40, // Avatar boyutunu küçültme
-                        objectFit: 'contain'  // Görselin sığmasını sağlama
+                        width: 40,
+                        height: 40,
+                    }}
+                    imgProps={{
+                        style: {
+                            objectFit: 'contain', // Ensures the image fits within the Avatar
+                        },
                     }}
                 />
             </div>

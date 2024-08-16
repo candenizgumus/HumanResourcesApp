@@ -28,7 +28,7 @@ public class DefinitionController {
 
     @PostMapping(SAVE)
     @CrossOrigin("*")
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
     public ResponseEntity<Boolean> save(@RequestBody DefinitionSaveRequestDto dto){
         return ResponseEntity.ok(definitionService.save(dto));
     }

@@ -97,7 +97,14 @@ const SideBarManagerLeaves = () => {
                 dispatch(fetchGetDefinitions({
                     token : token,
                     definitionType: EDefinitionType.LEAVE_TYPE
-                }))
+                })).then(()=> {
+                    dispatch(fetchGetAllUsersOfManager({
+                        token: token,
+                        page: 0,
+                        pageSize: 100,
+                        searchText: searchText,
+                    }))
+                })
             })
             .catch(() => {
                 dispatch(clearToken());

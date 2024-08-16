@@ -86,6 +86,7 @@ const UserForm: React.FC = () => {
       <TextField
         label="Password"
         name="password"
+        type="password"
         value={password}
         onChange={e => setPassword(e.target.value)}
         fullWidth

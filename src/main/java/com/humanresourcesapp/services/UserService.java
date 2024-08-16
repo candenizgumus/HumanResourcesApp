@@ -29,6 +29,8 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.Year;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static com.humanresourcesapp.constants.FrontendPaths.*;
 
@@ -72,6 +74,8 @@ public class UserService {
                 .build());
         return user;
     }
+
+
 
     public Optional<User> findByPhone(String phone) {
         return userRepository.findByPhone(phone);
@@ -152,13 +156,108 @@ public class UserService {
         return userRepository.findById(id).orElseThrow(() -> new HumanResourcesAppException(ErrorType.ID_NOT_FOUND));
     }
 
-    public User addEmployeeToCompany(AddEmployeeToCompanyRequestDto dto) {
+//    public User addEmployeeToCompany(AddEmployeeToCompanyRequestDto dto) {
+//        String userEmail = UserInfoSecurityContext.getUserInfoFromSecurityContext();
+//        User manager = userRepository.findByEmail(userEmail).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
+//
+//        //Checking email and phone
+//        if (userRepository.findByEmailAndPhone(dto.email(), dto.phone()).isPresent()) {
+//            throw new HumanResourcesAppException(ErrorType.EMAIL_OR_PHONE_TAKEN);
+//        }
+//
+//        //Generating new password for customer
+//        String newPassword = PasswordGenerator.generatePassword();
+//        String encodedPassword = passwordEncoder.bCryptPasswordEncoder().encode(newPassword);
+//
+//        //Send email with new password
+//        emailService.send(MailModel.builder().to(dto.email()).subject("Your new password").message("Your new password is: " + newPassword).build());
+//
+//        //Creating new auth and user entities for new employee.
+//
+//        Auth auth = authService.save(Auth
+//                .builder()
+//                .email(dto.email())
+//                .password(encodedPassword)
+//                .userType(EUserType.EMPLOYEE)
+//                .status(EStatus.ACTIVE)
+//                        .subscriptionType(manager.getSubscriptionType())
+//                        .subscriptionStartDate(manager.getSubscriptionStartDate())
+//                        .subscriptionEndDate(manager.getSubscriptionEndDate())
+//                .build()
+//        );
+//
+//        User employee = userRepository.save(User
+//                .builder()
+//                .authId(auth.getId())
+//                .email(dto.email())
+//                .phone(dto.phone())
+//                .name(dto.name())
+//                .surname(dto.surname())
+//                .companyId(manager.getCompanyId())
+//                .userType(EUserType.EMPLOYEE)
+//                .hireDate(dto.hireDate().plusDays(1))
+//                .birthDate(dto.birthDate().plusDays(1))
+//                .status(EStatus.ACTIVE)
+//                .position(dto.position())
+//                .position(dto.position())
+//                .location(dto.location())
+//                .remainingAnnualLeave(0)
+//                .title(dto.title())
+//                .sector(manager.getSector())
+//                .employeeType(dto.employeeType())
+//                .subscriptionType(manager.getSubscriptionType())
+//                .subscriptionStartDate(manager.getSubscriptionStartDate())
+//                .subscriptionEndDate(manager.getSubscriptionEndDate())
+//                .salary(dto.salary())
+//                .build());
+//
+//        //Increasing number of employee in company
+//        companyService.findById(manager.getCompanyId()).ifPresent(c-> {
+//            c.setNumberOfEmployee(c.getNumberOfEmployee() + 1);
+//            companyService.update(c);
+//        });
+//        User save = userRepository.save(employee);
+//        notificationService.save(NotificationSaveRequestDto.builder()
+//                .notificationText(ENotificationTextBase.WELCOME_NOTIFICATION.getText())
+//                .userType(null)
+//                .userId(save.getId())
+//                .isRead(false)
+//                .notificationType(ENotificationType.SUCCESS)
+//                .url(HOME)
+//                .status(EStatus.ACTIVE)
+//                .build());
+//        return save;
+//    }
+    public  boolean isValidEmail(String email) {
+        if (email == null || email.isEmpty()) {
+            return false;
+        }
+
+        // Email düzenli ifadesi (regex)
+        String emailRegex = "^[\\w-_.+]+@[\\w-]+\\.[a-zA-Z]{2,}$";
+        Pattern pattern = Pattern.compile(emailRegex);
+        Matcher matcher = pattern.matcher(email);
+
+        return matcher.matches();
+    }
+
+
+    public User addEmployeeToCompany2(AddEmployeeToCompanyRequestDto dto)
+    {
         String userEmail = UserInfoSecurityContext.getUserInfoFromSecurityContext();
         User manager = userRepository.findByEmail(userEmail).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
 
         //Checking email and phone
-        if (userRepository.findByEmailAndPhone(dto.email(), dto.phone()).isPresent()) {
+        if (userRepository.findByEmail(dto.email()).isPresent()) {
             throw new HumanResourcesAppException(ErrorType.EMAIL_OR_PHONE_TAKEN);
+        }
+        if (userRepository.findByEmail(dto.phone()).isPresent()) {
+            throw new HumanResourcesAppException(ErrorType.EMAIL_OR_PHONE_TAKEN);
+        }
+
+        if (!isValidEmail(dto.email()))
+        {
+            throw new HumanResourcesAppException(ErrorType.EMAIL_NOT_VALID);
         }
 
         //Generating new password for customer
@@ -176,9 +275,9 @@ public class UserService {
                 .password(encodedPassword)
                 .userType(EUserType.EMPLOYEE)
                 .status(EStatus.ACTIVE)
-                        .subscriptionType(manager.getSubscriptionType())
-                        .subscriptionStartDate(manager.getSubscriptionStartDate())
-                        .subscriptionEndDate(manager.getSubscriptionEndDate())
+                .subscriptionType(manager.getSubscriptionType())
+                .subscriptionStartDate(manager.getSubscriptionStartDate())
+                .subscriptionEndDate(manager.getSubscriptionEndDate())
                 .build()
         );
 
@@ -212,6 +311,40 @@ public class UserService {
             c.setNumberOfEmployee(c.getNumberOfEmployee() + 1);
             companyService.update(c);
         });
+
+        if (dto.photo() != null)
+        {
+            String profileImageId = UUID.randomUUID().toString();
+            String existingProfileImageId = employee.getProfileImageId(); // Store the old image ID
+
+            try {
+                // Delete the old file in the S3 bucket if it exists
+                if (existingProfileImageId != null && !existingProfileImageId.isEmpty()) {
+                    s3Service.deleteObject(s3Buckets.getCustomer(),
+                            "profile-images/%s/%s".formatted(employee.getId(), existingProfileImageId));
+                }
+
+                // Upload the new file
+                s3Service.putObject(s3Buckets.getCustomer(),
+                        "profile-images/%s/%s".formatted(employee.getId(), profileImageId),
+                        dto.photo().getBytes()
+                );
+
+                String profileImageUrl = s3Service.createPresignedGetUrl(
+                        s3Buckets.getCustomer(), "profile-images/%s/%s".formatted(employee.getId(), profileImageId));
+
+                employee.setProfileImageId(profileImageId);
+                employee.setPhoto(profileImageUrl);
+
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+
+
+
+
         User save = userRepository.save(employee);
         notificationService.save(NotificationSaveRequestDto.builder()
                 .notificationText(ENotificationTextBase.WELCOME_NOTIFICATION.getText())
@@ -326,7 +459,7 @@ public class UserService {
             if (user.getUserType() == EUserType.MANAGER)
             {
                 //Updating users
-                List<User> userList = userRepository.findAllByCompanyId(user.getId());
+                List<User> userList = userRepository.findAllByCompanyId(user.getCompanyId());
                 userList.forEach(employee -> {
                         if (employee.getStatus() != EStatus.DELETED)
                         {
@@ -610,6 +743,16 @@ public class UserService {
 
         userRepository.save(saveUser);
 
+        if (dto.userType() == EUserType.MANAGER)
+        {
+            //adding company employee count
+            companyService.findById(user.getCompanyId()).ifPresent(company -> {
+                company.setNumberOfEmployee(company.getNumberOfEmployee() + 1);
+                companyService.update(company);
+            });
+        }
+
+
         return saveAuth;
     }
 
@@ -621,4 +764,6 @@ public class UserService {
     public List<User> findAllByCompanyId(Long companyId) {
         return userRepository.findAllByCompanyId(companyId);
     }
+
+
 }

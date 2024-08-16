@@ -9,11 +9,11 @@ import {
     MenuItem,
     FormControl,
     Avatar,
-    OutlinedInput, InputAdornment
+    OutlinedInput, InputAdornment, Typography, IconButton
 } from '@mui/material';
 import {HumanResources, useAppSelector} from "../../../store";
 import {
-    fetchAddEmployeeToCompany,
+    fetchAddEmployeeToCompany, fetchFindUserByToken,
 } from "../../../store/feature/authSlice";
 import {useDispatch} from "react-redux";
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -24,6 +24,11 @@ import sweetalert2 from "sweetalert2";
 import Swal from "sweetalert2";
 import { fetchGetDefinitions, IDefinition } from '../../../store/feature/definitionSlice';
 import { EDefinitionType } from '../../../models/IDefinitionType';
+import styled from "@emotion/styled";
+import {IUpdateUserProfile} from "../../../models/IUpdateUserProfile";
+import {IFile} from "../../../models/IFile";
+import {CloudUpload} from "@mui/icons-material";
+import {uploadPlayerProfileImage} from "../../../store/feature/awsSlice";
 
 
 
@@ -47,9 +52,11 @@ const SideBarAddEmployee: React.FC = () => {
     const [positions, setPositions] = useState<IDefinition[]>([]);
     const [employeeTypes, setEmployeeTypes] = useState<IDefinition[]>([]);
     const [selectedPosition, setSelectedPosition] = useState<string>('');
-
+    const [isUploading, setIsUploading] = useState(false);
     const [selectedEmployeeType, setSelectedEmployeeType] = useState<string>('');
-
+    const [formState, setFormState] = useState<IFile>({
+        photo: null
+    });
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -117,7 +124,8 @@ const SideBarAddEmployee: React.FC = () => {
             hireDate:hireDate,
             employeeType: selectedEmployeeType,
             email: email,
-            salary: salary
+            salary: salary,
+            photo: formState.photo
         }))
         if (result.payload.message) {
             sweetalert2.fire({
@@ -130,7 +138,7 @@ const SideBarAddEmployee: React.FC = () => {
         }else{
             sweetalert2.fire({
                 icon: 'success',
-                title: 'Your profile has been updated successfully',
+                title: 'Added employee successfully',
                 showConfirmButton: false,
                 timer: 1500
             })
@@ -138,7 +146,74 @@ const SideBarAddEmployee: React.FC = () => {
         }
 
     }
+    const VisuallyHiddenInput = styled('input')({
+        clip: 'rect(0 0 0 0)',
+        clipPath: 'inset(50%)',
+        height: 1,
+        overflow: 'hidden',
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        whiteSpace: 'nowrap',
+        width: 1,
+    });
+    // 3073272
+    const validImageTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/heic']
+    const maxImageSize = 103073272
+    const [error, setError] = useState('');
+    const [isSelected, setIsSelected] = useState(false);
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files[0]) {
 
+            const file = e.target.files[0];
+            console.log(file);
+            if (!validImageTypes.find(fileType => fileType === file.type) || file.size > maxImageSize) {
+                setError('File must be in [jpg, png, heic] format. Max size 3.1 Mb!');
+                return;
+            }
+            console.log('not reachable')
+            setFormState({
+                ...formState,
+                photo: e.target.files[0]
+            });
+            setIsSelected(true)
+        }
+
+    };
+
+    const updatePhoto = () => {
+        if (!formState.photo) {
+            return;
+        }
+
+        setIsUploading(true);
+        const formData = new FormData();
+        formData.append('file', formState.photo);
+        try {
+            dispatch(uploadPlayerProfileImage(formData))
+                .then(() => {
+                    return dispatch(fetchFindUserByToken(token));
+                })
+                .finally(() => {
+                    setIsUploading(false);
+                    setIsSelected(false);
+                    sweetalert2.fire({
+                        icon: 'success',
+                        title: 'Your profile picture has been updated successfully',
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                })
+        } catch (error) {
+            const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
+            sweetalert2.fire({
+                icon: 'error',
+                title: 'Failed to upload your profile image',
+                text: errorMessage,
+                showConfirmButton: true,
+            });
+        };
+    };
     return (
 
 
@@ -155,13 +230,48 @@ const SideBarAddEmployee: React.FC = () => {
                         alignItems: 'center',
                     }}
                 >
-                    <Avatar
-                        alt="Remy Sharp"
-                        src={photo}
-                        sx={{ width: 150, height: 150 }}
+                    <label htmlFor="upload-photo">
+                        <Box sx={{position: 'relative', display: 'inline-block'}}>
+                            <Avatar
+                                src={formState.photo ? URL.createObjectURL(formState.photo) : photo}
+                                sx={{
+                                    width: 100,
+                                    height: 100,
+                                    objectFit: 'cover',
+                                    objectPosition: 'top',
+                                    border: '1px solid',
+                                    cursor: 'pointer',
+                                }}
+                            />
+                            <IconButton
+                                sx={{
+                                    position: 'absolute',
+                                    bottom: 0,
+                                    right: 0,
+                                    backgroundColor: 'white',
+                                    borderRadius: '50%',
+                                    padding: 0.5,
+                                }}
+                                component="span"
+                            >
+                                <CloudUpload/>
+                            </IconButton>
+                        </Box>
+                    </label>
+                    <VisuallyHiddenInput
+                        id="upload-photo"
+                        type="file"
+                        onChange={handleFileChange}
                     />
                 </Box>
 
+            </Grid>
+            <Grid sx={{justifyContent: 'center', marginY: 3, marginLeft: 0.8}} container spacing={2}>
+                <Grid>
+                    {error && (
+                        <Typography color="error">{error}</Typography>
+                    )}
+                </Grid>
             </Grid>
             <Grid item xs={6}>
                 <Box
@@ -184,7 +294,7 @@ const SideBarAddEmployee: React.FC = () => {
                         onChange={event => setName(event.target.value)}
                         fullWidth
                         required
-                        inputProps={{ maxLength: 50 }}
+                        inputProps={{maxLength: 50}}
                     />
                     <TextField
                         label='Surname'
@@ -193,7 +303,7 @@ const SideBarAddEmployee: React.FC = () => {
                         onChange={event => setSurname(event.target.value)}
                         fullWidth
                         required
-                        inputProps={{ maxLength: 50 }}
+                        inputProps={{maxLength: 50}}
                     />
                     <TextField
                         label='E-mail'
@@ -202,7 +312,7 @@ const SideBarAddEmployee: React.FC = () => {
                         onChange={event => setEmail(event.target.value)}
                         fullWidth
                         required
-                        inputProps={{ maxLength: 50 }}
+                        inputProps={{maxLength: 50}}
                     />
                     <TextField
                         label='Phone'

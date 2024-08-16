@@ -52,7 +52,8 @@ public enum ErrorType
     HOLIDAY_ALREADY_EXISTS(1040, "Holiday Already Exists",HttpStatus.BAD_REQUEST),
     SHIFT_NOT_FOUND(    1041, "Shift Not Found",    HttpStatus.BAD_REQUEST ),
     DEFINITION_ALREADY_EXISTS(1039,"Definition Already Exists" ,HttpStatus.BAD_REQUEST ),
-    ;
+    EMAIL_NOT_VALID(    1042, "Email Not Valid",    HttpStatus.BAD_REQUEST );
+
     private final Integer code;
     private final String message;
     private final HttpStatus httpStatus;

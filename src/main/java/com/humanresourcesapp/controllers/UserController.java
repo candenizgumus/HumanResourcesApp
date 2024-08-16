@@ -9,14 +9,17 @@ import com.humanresourcesapp.entities.User;
 import com.humanresourcesapp.entities.enums.*;
 import com.humanresourcesapp.services.UserService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import static com.humanresourcesapp.constants.Endpoints.*;
@@ -112,13 +115,38 @@ public class UserController
         return ResponseEntity.ok(userService.findById(id));
     }
 
+//    @PostMapping(ADD_EMPLOYEE_TO_COMPANY)
+//    @PreAuthorize("hasAnyAuthority('MANAGER')")
+//    @CrossOrigin("*")
+//    public ResponseEntity<User> addEmployeeToCompany(@Valid @RequestBody AddEmployeeToCompanyRequestDto dto)
+//    {
+//        return ResponseEntity.ok(userService.addEmployeeToCompany(dto));
+//    }
+
     @PostMapping(ADD_EMPLOYEE_TO_COMPANY)
     @PreAuthorize("hasAnyAuthority('MANAGER')")
     @CrossOrigin("*")
-    public ResponseEntity<User> addEmployeeToCompany(@Valid @RequestBody AddEmployeeToCompanyRequestDto dto)
-    {
-        return ResponseEntity.ok(userService.addEmployeeToCompany(dto));
+    public ResponseEntity<User> addEmployeeToCompany(
+            @RequestParam("email") String email,
+            @RequestParam("name") String name,
+            @RequestParam("surname") String surname,
+            @RequestParam("phone") String phone,
+            @RequestParam("title") String title,
+            @RequestParam("location") String location,
+            @RequestParam("birthDate")  LocalDate birthDate,
+            @RequestParam("hireDate") LocalDate hireDate,
+            @RequestParam("position") String position,
+            @RequestParam("employeeType") String employeeType,
+            @RequestParam("salary") Double salary,
+            @Nullable @RequestParam("photo") MultipartFile photo) {
+
+        // DTO nesnesini elle oluşturun
+        AddEmployeeToCompanyRequestDto dto = new AddEmployeeToCompanyRequestDto(title,email,name,surname,phone,location,birthDate,hireDate,position,employeeType,salary,photo);
+
+        // Hizmet çağrısı
+        return ResponseEntity.ok(userService.addEmployeeToCompany2(dto));
     }
+
 
     @GetMapping(FIND_BY_TOKEN)
     @CrossOrigin("*")

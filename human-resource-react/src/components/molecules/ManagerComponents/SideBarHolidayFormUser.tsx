@@ -56,8 +56,8 @@ const SideBarHolidayFormUser: React.FC = () => {
         if (!holidayName || !holidayType || !holidayStartDate || !holidayEndDate) {
             Swal.fire({
                 icon: 'error',
-                title: 'Oops...',
                 text: 'Please fill all the fields!',
+                confirmButtonColor: '#1976D2',
             });
             return;
         }

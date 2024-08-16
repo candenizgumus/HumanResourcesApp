@@ -50,6 +50,7 @@ const AddDocument: React.FC = () => {
             Swal.fire({
                 icon: 'error',
                 text: 'Please fill all the fields!',
+                confirmButtonColor: '#1976D2',
             });
             return;
         }

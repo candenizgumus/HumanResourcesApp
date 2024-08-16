@@ -53,8 +53,8 @@ const SideBarCompany: React.FC = () => {
         if (!name || !description || !country) {
             Swal.fire({
                 icon: 'error',
-                title: 'Oops...',
                 text: 'Please fill all the fields!',
+                confirmButtonColor: '#1976D2',
             });
             return;
         }
@@ -69,7 +69,6 @@ const SideBarCompany: React.FC = () => {
             if (data.payload.message) {
                 sweetalert2.fire({
                     icon: 'error',
-                    title: 'Oops...',
                     text: data.payload.message ?? 'Failed to update company',
                     showConfirmButton: true
                 })
@@ -77,7 +76,7 @@ const SideBarCompany: React.FC = () => {
             } else {
                 sweetalert2.fire({
                     icon: 'success',
-                    title: 'Your profile has been updated successfully',
+                    title: 'Your company has been updated successfully',
                     showConfirmButton: false,
                     timer: 1500
                 })

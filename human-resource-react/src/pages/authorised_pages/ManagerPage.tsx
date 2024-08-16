@@ -48,6 +48,7 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
 }>(({ theme, open }) => ({
   flexGrow: 1,
   padding: theme.spacing(3),
+  width: `calc(100% - ${drawerWidth}px)`, // Genişliği sabit tut, Drawer açıldığında içerik sağa itilmez
   transition: theme.transitions.create('margin', {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
@@ -74,17 +75,19 @@ interface AppBarProps extends MuiAppBarProps {
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== 'open',
 })<AppBarProps>(({ theme, open }) => ({
+  width: `calc(100% - ${drawerWidth}px)`, // Genişliği sabit tut, Drawer açıkken de değişmez
+  marginLeft: `${drawerWidth}px`,
   transition: theme.transitions.create(['margin', 'width'], {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
   ...(open && {
+    marginLeft: drawerWidth,
     width: `calc(100% - ${drawerWidth}px)`,
-    marginLeft: `${drawerWidth}px`,
-    transition: theme.transitions.create(['margin', 'width'], {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
+  }),
+  ...(!open && {
+    marginLeft: 0,
+    width: '100%',
   }),
 }));
 
@@ -102,7 +105,9 @@ export default function AdminPage() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const [selectedIndex, setSelectedIndex] = React.useState<string>('Inbox');
+  const dispatch = useDispatch<HumanResources>();
   const pageState = useSelector((state: RootState) => state.auth.pageState);
+
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -114,49 +119,51 @@ export default function AdminPage() {
   const navigateToHome = () => {
     dispatch(changePageState(''));
   };
-  const dispatch = useDispatch<HumanResources>();
+
   const handleListItemClick = (text: string) => {
     setSelectedIndex(text);
     dispatch(changePageState(text));
   };
+
+
   return (
-    <Box sx={{ display: 'flex'  }}>
-      <CssBaseline />
-      <AppBar position="fixed" open={open}>
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            edge="start"
-            sx={{ mr: 2, ...(open && { display: 'none' }) }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" sx={logoStyle}>
-            <Button style={{ marginRight: '20px' }} onClick={navigateToHome} color="inherit">
+      <Box sx={{ display: 'flex'  }}>
+        <CssBaseline />
+        <AppBar position="fixed" open={open}>
+          <Toolbar>
+            <IconButton
+                color="inherit"
+                aria-label="open drawer"
+                onClick={handleDrawerOpen}
+                edge="start"
+                sx={{ mr: 2, ...(open && { display: 'none' }) }}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Typography variant="h6" sx={logoStyle}>
+              <Button style={{ marginRight: '20px' }} onClick={navigateToHome} color="inherit">
                 Easy HR
-            </Button>
-        </Typography>
+              </Button>
+            </Typography>
             <Box sx={{ flexGrow: 1 }} />
-            <NotificationIcon />
+            <NotificationIcon/>
             <NavbarProfile />
 
-        </Toolbar>
-      </AppBar>
-      <Drawer
-        sx={{
-          width: drawerWidth,
-          flexShrink: 0,
-          '& .MuiDrawer-paper': {
-            width: drawerWidth,
-            boxSizing: 'border-box',
-          },
-        }}
-        variant="persistent"
-        anchor="left"
-        open={open}
-      >
+          </Toolbar>
+        </AppBar>
+        <Drawer
+            sx={{
+              width: drawerWidth,
+              flexShrink: 0,
+              '& .MuiDrawer-paper': {
+                width: drawerWidth,
+                boxSizing: 'border-box',
+              },
+            }}
+            variant="persistent"
+            anchor="left"
+            open={open}
+        >
         <DrawerHeader>
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}

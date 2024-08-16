@@ -14,14 +14,13 @@ import {
     DialogContent,
     DialogTitle,
     Autocomplete,
-    Typography,
     Box,
 } from "@mui/material";
 import { HumanResources, useAppSelector } from "../../../store";
 import { useDispatch } from "react-redux";
 import Swal from "sweetalert2";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import dayjs, { Dayjs } from "dayjs";
+import dayjs from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import MyDropzone from "../../atoms/DropZone";
@@ -58,27 +57,27 @@ const SideBarManagerLeaves = () => {
     const [files, setFiles] = useState<File[]>([]);
 
     const columns: GridColDef[] = [
-        { field: "fullName", headerName: "Name", width: 150, headerAlign: "center" },
-        { field: "email", headerName: "Email", width: 150, headerAlign: "center" },
-        { field: "description", headerName: "Description", width: 200, headerAlign: "center" },
+        { field: "fullName", headerName: "Name", flex :1, headerAlign: "center" },
+        { field: "email", headerName: "Email", flex :1, headerAlign: "center" },
+        { field: "description", headerName: "Description", flex :2, headerAlign: "center" },
     
-        { field: "startDate", headerName: "Start Date", width: 150, headerAlign: "center" },
-        { field: "endDate", headerName: "End Date", width: 150, headerAlign: "center" },
+        { field: "startDate", headerName: "Start Date", flex :1, headerAlign: "center" },
+        { field: "endDate", headerName: "End Date", flex :1, headerAlign: "center" },
         { 
             field: "dleaveTypeId", 
-            headerName: "Leave Type", 
-            width: 150, 
+            headerName: "Leave Type",
+            flex :1,
             headerAlign: "center", 
             renderCell: (params) => {
                 const leaveType = leaveTypes.find(lt => lt.id === params.value);
                 return leaveType ? leaveType.name : "Unknown";
             }
         },
-        { field: "isLeaveApproved", headerName: "Approval Status", headerAlign: "center", width: 250 },
-        { field: "approveDate", headerName: "Approval Date", width: 150, headerAlign: "center" },
-        { field: "status", headerName: "Status", width: 120, headerAlign: "center" },
+        { field: "isLeaveApproved", headerName: "Approval Status", headerAlign: "center", flex :1 },
+        { field: "approveDate", headerName: "Approval Date", flex :1, headerAlign: "center" },
+        { field: "status", headerName: "Status", flex :1, headerAlign: "center" },
         {
-            field: "attachedFile", headerName: "Document", headerAlign: "center", width: 100,
+            field: "attachedFile", headerName: "Document", headerAlign: "center", flex :1,
             renderCell: (params) => (
                 <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '100%' }}>
                     {params.value && <DownloadButtonFromS3 fileKey={params.value} />}

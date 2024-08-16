@@ -29,9 +29,9 @@ import MyDropzone from "../../atoms/DropZone";
 import DownloadButtonFromS3 from "../../atoms/DownloadButtonFromS3";
 
 const columns: GridColDef[] = [
-    { field: "id", headerName: "ID", width: 70, headerAlign: "center" },
+
     {
-        field: "price", headerName: "Price $", width: 150, headerAlign: "center",
+        field: "price", headerName: "Price $", flex :1, headerAlign: "center",
         renderCell: (params) => {
             const value = params.value;
             if (typeof value === 'number' && !isNaN(value)) {
@@ -45,63 +45,17 @@ const columns: GridColDef[] = [
             return '$0.00';
         },
     },
-    { field: "description", headerName: "Description", width: 120, headerAlign: "center" },
-    { field: "isExpenditureApproved", headerName: "Approval Status", headerAlign: "center", width: 250 },
-    { field: "approveDate", headerName: "Approval Date", headerAlign: "center", width: 250 },
-    { field: "status", headerName: "Status", headerAlign: "center", width: 250 },
+    { field: "description", headerName: "Description", flex :3, headerAlign: "center" },
+    { field: "isExpenditureApproved", headerName: "Approval Status", headerAlign: "center", flex :1 },
+    { field: "approveDate", headerName: "Approval Date", headerAlign: "center", flex :1 },
+    { field: "status", headerName: "Status", headerAlign: "center", flex :1 },
     {
-        field: "attachedFile", headerName: "Document", headerAlign: "center", width: 100,
+        field: "attachedFile", headerName: "Document", headerAlign: "center", flex :1,
         renderCell: (params) => (
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '100%' }}>
                 {params.value && <DownloadButtonFromS3 fileKey={params.value}/> }
             </div>
         ),
-        // renderCell: (params) => {
-        //     // const fileKey = params.value;
-        //     // const dispatch = useDispatch();
-        //     // const email = useAppSelector((state) => state.auth.user.email);
-        //     // const token = useAppSelector((state) => state.auth.token);
-
-        //     // const [modalOpen, setModalOpen] = useState(false);
-        //     // const [fileUrl, setFileUrl] = useState<string | null>(null);
-
-        //     // const handleOpenModal = async () => {
-        //     //     console.log('clickedd')
-        //     //     if (fileKey) {
-        //     //         console.log(fileKey)
-        //     //         try {
-        //     //             const url = await dispatch(fetchDownloadExpenditureFile({
-        //     //                 email: email,
-        //     //                 fileName: fileKey,
-        //     //                 token: token
-        //     //             }) as any);
-        //     //             console.log(url);
-        //     //             setFileUrl(url);
-        //     //             setModalOpen(true);
-        //     //         } catch (error) {
-        //     //             console.error('Failed to get file from S3', error);
-        //     //         }
-        //     //     }
-        //     // };
-
-        //     // return (
-        //     //     <>
-        //     //         <DownloadButtonFromS3 fileKey={params.value} />
-        //     //         {/* <IconButton
-        //     //             color="primary"
-        //     //             onClick={handleOpenModal}
-        //     //         >
-        //     //             <FileDownload />
-        //     //         </IconButton>
-        //     //         <FilePreviewModal
-        //     //             open={modalOpen}
-        //     //             onClose={() => setModalOpen(false)}
-        //     //             fileUrl={fileUrl || ''}
-        //     //             fileName={fileKey || ''}
-        //     //         /> */}
-        //     //     </>
-        //     // );
-        // }
     }
 ];
 

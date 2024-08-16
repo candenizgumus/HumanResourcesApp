@@ -25,10 +25,9 @@ import {
 import DownloadButtonFromS3 from "../../atoms/DownloadButtonFromS3";
 
 const columns: GridColDef[] = [
-    {field: "id", headerName: "ID", width: 70, headerAlign: "center"},
-    {field: "employeeName", headerName: "Name", width: 120, headerAlign: "center"},
-    {field: "employeeSurname", headerName: "Surname", width: 120, headerAlign: "center"},
-    {field: "price", headerName: "Price $", width: 150, headerAlign: "center",
+    {field: "employeeName", headerName: "Name", flex :1.5, headerAlign: "center"},
+    {field: "employeeSurname", headerName: "Surname", flex :1.5, headerAlign: "center"},
+    {field: "price", headerName: "Price $", flex :1, headerAlign: "center",
         renderCell: (params) => {
             // Check if the value is valid
             const value = params.value;
@@ -45,12 +44,12 @@ const columns: GridColDef[] = [
         },
     },
 
-    {field: "description", headerName: "Description", width: 120, headerAlign: "center"},
-    {field: "isExpenditureApproved", headerName: "Approval Status", headerAlign: "center", width: 250},
-    {field: "approveDate", headerName: "Approval Date", headerAlign: "center", width: 250},
-    {field: "status", headerName: "Status", headerAlign: "center", width: 250},
+    {field: "description", headerName: "Description", flex :3, headerAlign: "center"},
+    {field: "isExpenditureApproved", headerName: "Approval Status", headerAlign: "center", flex :1},
+    {field: "approveDate", headerName: "Approval Date", headerAlign: "center", flex :1},
+    {field: "status", headerName: "Status", headerAlign: "center", flex :1},
     {
-        field: "attachedFile", headerName: "Document", headerAlign: "center", width: 100,
+        field: "attachedFile", headerName: "Document", headerAlign: "center", flex :1,
         renderCell: (params) => (
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '100%' }}>
                 {params.value && <DownloadButtonFromS3 fileKey={params.value}/> }

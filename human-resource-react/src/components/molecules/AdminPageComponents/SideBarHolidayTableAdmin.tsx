@@ -12,19 +12,18 @@ import { IHolidayFormatted } from "../../../models/IHolidayFormatted";
 
 // Define the columns
 const columns: GridColDef[] = [
-    { field: 'id', headerName: 'ID', width: 70 , headerAlign: "center"},
-    { field: 'holidayName', headerName: 'Holiday', width: 250 , headerAlign: "center"},
-    { field: 'holidayType', headerName: 'Type', width: 160 , headerAlign: "center"},
+    { field: 'holidayName', headerName: 'Holiday', flex :2 , headerAlign: "center"},
+    { field: 'holidayType', headerName: 'Type', flex :1 , headerAlign: "center"},
     {
         field: 'holidayStartDate',
         headerName: 'Start Date',
-        width: 200
+        flex :1
     , headerAlign: "center"
     },
     {
         field: 'holidayEndDate',
         headerName: 'End Date',
-        width: 200
+        flex :1
         , headerAlign: "center"
     },
 ];

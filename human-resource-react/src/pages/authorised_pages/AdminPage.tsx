@@ -19,9 +19,9 @@ import ListItemText from '@mui/material/ListItemText';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import DesignServicesIcon from '@mui/icons-material/DesignServices';
 import { Button, Grid} from '@mui/material';
-import { HumanResources, RootState, useAppSelector} from '../../store';
+import { HumanResources, RootState} from '../../store';
 import { useDispatch, useSelector } from 'react-redux';
-import { changePageState, clearToken, fetchFindUserByToken} from '../../store/feature/authSlice';
+import { changePageState} from '../../store/feature/authSlice';
 import {NotificationIcon} from "../../components/atoms/NotificationIcon";
 import {AdminMenuContentRenderer} from "../../components/organisms/AdminMenuContentRenderer";
 import { useNavigate } from 'react-router-dom';
@@ -44,6 +44,7 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
 }>(({ theme, open }) => ({
   flexGrow: 1,
   padding: theme.spacing(3),
+  width: `calc(100% - ${drawerWidth}px)`, // Genişliği sabit tut, Drawer açıldığında içerik sağa itilmez
   transition: theme.transitions.create('margin', {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
@@ -70,17 +71,19 @@ interface AppBarProps extends MuiAppBarProps {
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== 'open',
 })<AppBarProps>(({ theme, open }) => ({
+  width: `calc(100% - ${drawerWidth}px)`, // Genişliği sabit tut, Drawer açıkken de değişmez
+  marginLeft: `${drawerWidth}px`,
   transition: theme.transitions.create(['margin', 'width'], {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
   ...(open && {
+    marginLeft: drawerWidth,
     width: `calc(100% - ${drawerWidth}px)`,
-    marginLeft: `${drawerWidth}px`,
-    transition: theme.transitions.create(['margin', 'width'], {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
+  }),
+  ...(!open && {
+    marginLeft: 0,
+    width: '100%',
   }),
 }));
 

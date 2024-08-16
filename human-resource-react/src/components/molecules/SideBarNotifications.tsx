@@ -42,14 +42,14 @@ const columns: GridColDef[] = [
     {
         field: "notificationType",
         headerName: "Type",
-        width: 150,
+        flex :1,
         headerAlign: "center",
         renderCell: renderNotificationType,
     },
     {
         field: "notificationText",
         headerName: "Text",
-        width: 1430,
+        flex :8,
         headerAlign: "center"
     },
 ];

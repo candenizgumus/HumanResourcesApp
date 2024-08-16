@@ -5,7 +5,7 @@ import { DataGrid, GridColDef, GridRowSelectionModel } from '@mui/x-data-grid';
 import { HumanResources, RootState, useAppSelector } from '../../../store';
 import { fetchHolidaysEmployee } from '../../../store/feature/holidaySlice';
 import { IHoliday } from '../../../models/IHoliday';
-import { Grid, Box, Divider } from '@mui/material';
+import { Grid, Box } from '@mui/material';
 import { IHolidayFormatted } from "../../../models/IHolidayFormatted";
 
 // Helper function to format epoch timestamp to human-readable date
@@ -13,19 +13,18 @@ import { IHolidayFormatted } from "../../../models/IHolidayFormatted";
 
 // Define the columns
 const columns: GridColDef[] = [
-    { field: 'id', headerName: 'ID', width: 70 , headerAlign: "center"},
-    { field: 'holidayName', headerName: 'Holiday', width: 250 , headerAlign: "center"},
-    { field: 'holidayType', headerName: 'Type', width: 160 , headerAlign: "center"},
+    { field: 'holidayName', headerName: 'Holiday', flex :3 , headerAlign: "center"},
+    { field: 'holidayType', headerName: 'Type', flex :1 , headerAlign: "center"},
     {
         field: 'holidayStartDate',
         headerName: 'Start Date',
-        width: 200
+        flex :1
         , headerAlign: "center"
     },
     {
         field: 'holidayEndDate',
         headerName: 'End Date',
-        width: 200
+        flex :1
         , headerAlign: "center"
     },
 ];

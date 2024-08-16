@@ -53,19 +53,18 @@ export default function SideBarEmployees() {
     const handleClose = () => setOpen(false);
 
     const columns: GridColDef[] = [
-        { field: "id", headerName: "ID", width: 70, headerAlign: "center" },
-        { field: "name", headerName: "First name", width: 150, headerAlign: "center" },
-        { field: "surname", headerName: "Last name", width: 120, headerAlign: "center" },
-        { field: "email", headerName: "Email", headerAlign: "center", width: 250 },
-        { field: "phone", headerName: "Phone", sortable: false, headerAlign: "center", width: 140 },
-        { field: "position", headerName: "Position", type: "string", width: 220, headerAlign: "center" },
-        { field: "userType", headerName: "User Type", width: 150, headerAlign: "center" },
-        { field: "employeeType", headerName: "Employee Type", width: 150, headerAlign: "center" },
-        { field: "status", headerName: "Status", width: 120, headerAlign: "center" },
+        { field: "name", headerName: "First name", flex :2, headerAlign: "center" },
+        { field: "surname", headerName: "Last name", flex :2, headerAlign: "center" },
+        { field: "email", headerName: "Email", headerAlign: "center", flex :2 },
+        { field: "phone", headerName: "Phone", sortable: false, headerAlign: "center", flex :1 },
+        { field: "position", headerName: "Position", type: "string", flex :2, headerAlign: "center" },
+        { field: "userType", headerName: "User Type", flex :1, headerAlign: "center" },
+        { field: "employeeType", headerName: "Employee Type", flex :1, headerAlign: "center" },
+        { field: "status", headerName: "Status", flex :1, headerAlign: "center" },
         {
             field: "photo",
             headerName: "Photo",
-            width: 100,
+            flex :1,
             headerAlign: "center",
             sortable: false,
             renderCell: (params) => (

@@ -14,10 +14,8 @@ import {
 import {HumanResources, useAppSelector} from "../../../store";
 import {
     fetchAddEmployeeToCompany,
-    fetchGetPositions
 } from "../../../store/feature/authSlice";
 import {useDispatch} from "react-redux";
-import { SelectChangeEvent } from '@mui/material/Select';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';

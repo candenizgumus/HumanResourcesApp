@@ -761,6 +761,9 @@ public class InsertDemoData
                 ESectors.TOURISM
         ));
 
+        offerService.approveOfferAndRegisterAuthAndUser(new OfferApproveRequestDto(1L, ESubscriptionType.MONTHLY));
+        offerService.approveOfferAndRegisterAuthAndUser(new OfferApproveRequestDto(5L, ESubscriptionType.YEARLY));
+
 
     }
 

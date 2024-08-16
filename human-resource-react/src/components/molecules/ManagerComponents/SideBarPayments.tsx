@@ -17,11 +17,6 @@ import {
      setSelectedEmployeeId
 } from "../../../store/feature/authSlice";
 import Swal from "sweetalert2";
-import {
-    fetchDeleteExpenditure,
-    fetchGetExpendituresOfEmployee,
-    fetchCancelExpenditure // Import the cancel action
-} from "../../../store/feature/expenditureSlice";
 import {fetchDeletePayment, fetchGetPayments, fetchPaymentSave} from "../../../store/feature/paymentSlice";
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import {DatePicker} from "@mui/x-date-pickers/DatePicker";
@@ -29,9 +24,8 @@ import dayjs from "dayjs";
 import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
 
 const columns: GridColDef[] = [
-    { field: "id", headerName: "ID", width: 70, headerAlign: "center" },
     {
-        field: "payment", headerName: "Payment $", width: 150, headerAlign: "center",
+        field: "payment", headerName: "Payment $", flex :1, headerAlign: "center",
         renderCell: (params) => {
             const value = params.value;
             if (typeof value === 'number' && !isNaN(value)) {
@@ -45,9 +39,9 @@ const columns: GridColDef[] = [
             return '$0.00';
         },
     },
-    { field: "description", headerName: "Description", width: 600, headerAlign: "center" },
-    { field: "paymentDate", headerName: "Payment Date", headerAlign: "center", width: 180 },
-    { field: "status", headerName: "Status", headerAlign: "center", width: 150 },
+    { field: "description", headerName: "Description", flex :4, headerAlign: "center" },
+    { field: "paymentDate", headerName: "Payment Date", headerAlign: "center", flex :2 },
+    { field: "status", headerName: "Status", headerAlign: "center", flex :1.5 },
 ];
 
 export default function SideBarPayments() {

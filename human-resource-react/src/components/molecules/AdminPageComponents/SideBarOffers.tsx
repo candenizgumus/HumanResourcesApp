@@ -27,7 +27,6 @@ import Swal from "sweetalert2";
 import Loader from "../../atoms/loader/Loader";
 
 const columns: GridColDef[] = [
-    { field: "id", headerName: "ID", flex: 0.7, headerAlign: "center" },
     { field: "name", headerName: "First name", flex: 1.6, headerAlign: "center" },
     { field: "surname", headerName: "Last name", flex: 1.6, headerAlign: "center" },
     { field: "email", headerName: "Email", flex: 2.0, headerAlign: "center" },

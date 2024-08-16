@@ -5,42 +5,32 @@ import {DataGrid, GridColDef, GridRowSelectionModel} from '@mui/x-data-grid';
 import {HumanResources, RootState, useAppSelector} from '../../../store';
 import {
     fetchChangeHolidayStatus,
-    fetchCreateHolidayManager,
     fetchDeleteHoliday, fetchHolidaysEmployee,
-    fetchHolidaysUser
+
 } from '../../../store/feature/holidaySlice';
 import {IHoliday} from '../../../models/IHoliday';
 import {Button, Grid, Box, Divider} from '@mui/material';
 import {IHolidayFormatted} from "../../../models/IHolidayFormatted";
 import SideBarHolidayFormUser from "./SideBarHolidayFormUser";
-import {format} from "date-fns";
 import Swal from "sweetalert2";
-
-// Helper function to format epoch timestamp to human-readable date
-
-
-function dateToEpoch(date: string): number {
-    return new Date(date).getTime() / 1000;
-}
 
 // Define the columns
 const columns: GridColDef[] = [
-    {field: 'id', headerName: 'ID', width: 70, headerAlign: "center"},
-    {field: 'holidayName', headerName: 'Holiday', width: 250, headerAlign: "center"},
-    {field: 'holidayType', headerName: 'Type', width: 160, headerAlign: "center"},
+    {field: 'holidayName', headerName: 'Holiday', flex :2.5, headerAlign: "center"},
+    {field: 'holidayType', headerName: 'Type', flex :1, headerAlign: "center"},
     {
         field: 'holidayStartDate',
         headerName: 'Start Date',
-        width: 200
+        flex :1
         , headerAlign: "center"
     },
     {
         field: 'holidayEndDate',
         headerName: 'End Date',
-        width: 200
+        flex :1
         , headerAlign: "center"
     },
-    {field: 'status', headerName: 'Status', width: 150, headerAlign: "center"},
+    {field: 'status', headerName: 'Status', flex :1, headerAlign: "center"},
 ];
 
 export default function SideBarHolidayTableUser() {

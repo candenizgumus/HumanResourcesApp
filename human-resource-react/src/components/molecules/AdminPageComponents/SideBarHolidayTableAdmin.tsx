@@ -80,7 +80,7 @@ export default function SideBarHolidayTableAdmin() {
         <Box sx={{ flexGrow: 1, padding: 2 }}>
             <Grid container spacing={2}>
                 <Grid item xs={12}>
-                    <div style={{ height: 400, width: '100%' }}>
+                    <div style={{ height: "auto", width: '100%' }}>
                         <DataGrid
                             rows={newHolidayList}
                             columns={columns}
@@ -117,9 +117,6 @@ export default function SideBarHolidayTableAdmin() {
                             </Grid>
                         </Grid>
                     </div>
-                </Grid>
-                <Grid item xs={12}>
-                    <Divider sx={{ my: 4 }} />
                 </Grid>
                 <Grid item xs={12}>
                     <SideBarHolidayFormAdmin />

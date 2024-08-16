@@ -95,7 +95,7 @@ const SideBarPersonalDocumentList: React.FC = () => {
     };
 
     return (
-        <div style={{height: 400, width: "inherit"}}>
+        <div style={{height: "auto", width: "inherit"}}>
             <TextField
                 label="Email"
                 variant="outlined"

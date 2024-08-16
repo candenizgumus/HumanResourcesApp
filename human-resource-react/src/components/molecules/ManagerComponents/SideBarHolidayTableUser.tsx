@@ -112,7 +112,7 @@ export default function SideBarHolidayTableUser() {
         <Box sx={{flexGrow: 1, padding: 2}}>
             <Grid container spacing={2}>
                 <Grid item xs={12}>
-                    <div style={{height: 400, width: '100%'}}>
+                    <div style={{height: "auto", width: '100%'}}>
                         <DataGrid
                             rows={newHolidayList}
                             columns={columns}

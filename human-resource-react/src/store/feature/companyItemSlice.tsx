@@ -43,17 +43,13 @@ export const fetchSaveCompanyItem = createAsyncThunk(
 export const fetchDeleteCompanyItem = createAsyncThunk(
     'companyItem/fetchDeleteCompanyItem',
     async (payload: { id: number, token: string }, { rejectWithValue }) => {
-            const response = await fetch(`http://localhost:9090/dev/v1/company-item/delete`, {
+            const response = await fetch(`http://localhost:9090/dev/v1/company-item/delete/${payload.id}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ` + payload.token
-                },
-                body: JSON.stringify({
-                    'id': payload.id
-                })
+                }
             });
-
             return await response.json();
         }
     );

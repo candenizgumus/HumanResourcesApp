@@ -10,7 +10,7 @@ import {DataGrid, GridColDef, GridRowSelectionModel} from "@mui/x-data-grid";
 import DownloadButtonFromS3 from "../../atoms/DownloadButtonFromS3";
 import Swal from "sweetalert2";
 import {IPersonalDocument} from "../../../models/IPersonalDocument";
-import {fetchCompanyItems} from "../../../store/feature/companyItemSlice";
+import {fetchCompanyItems, fetchDeleteCompanyItem} from "../../../store/feature/companyItemSlice";
 import {ICompanyItem} from "../../../models/ICompanyItem";
 import {changePageState, setSelectedEmployeeId} from "../../../store/feature/authSlice";
 
@@ -48,58 +48,100 @@ const SideBarCompanyItems: React.FC = () => {
         setSelectedRowIds(newSelectionModel as number[]);
     };
 
-    const handleOnClickAddCompanyItem= () => {
+    const handleOnClickAddCompanyItem = () => {
         dispatch(changePageState("Add Item"))
     }
 
-    return (
-        <div style={{height: 400, width: "inherit"}}>
-            <TextField
-                label="Serial Number"
-                variant="outlined"
-                onChange={(event) => setSearchText(event.target.value)}
-                value={searchText}
-                style={{marginBottom: "10px"}}
-            />
-            <DataGrid
-                rows={companyItems}
-                columns={columns}
-                initialState={{
-                    pagination: {
-                        paginationModel: {page: 0, pageSize: 5},
-                    },
-                }}
-                pageSizeOptions={[5, 10]}
-                checkboxSelection
-                onRowSelectionModelChange={handleRowSelection}
-                sx={{
-                    "& .MuiDataGrid-columnHeaders": {
-                        backgroundColor: "rgba(224, 224, 224, 1)",
-                    },
-                    "& .MuiDataGrid-columnHeaderTitle": {
-                        textAlign: "center",
-                        fontWeight: "bold",
-                    },
-                    "& .MuiDataGrid-cell": {
-                        textAlign: "center",
-                    },
-                }}
-            />
-            <Grid container spacing={1} style={{ marginTop: 16 }} direction="row">
-                <Grid item>
-                    <Button
-                        onClick={handleOnClickAddCompanyItem}
-                        variant="contained"
-                        color="primary"
-                    >
-                        Add Item
-                    </Button>
+    const handleDelete = () => {
+        selectedRowIds.forEach((id) => {
+            setLoading(true);
+            dispatch(fetchDeleteCompanyItem({token, id}))
+                .then(data => {
+                    if (data.payload.message) {
+                        Swal.fire({
+                            icon: 'error',
+                            text: data.payload.message ?? 'Failed to delete the item',
+                            showConfirmButton: true
+                        })
+                    } else {
+                        Swal.fire({
+                            icon: 'success',
+                            text: 'Item has been deleted',
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
+                    }
+                    setLoading(false);
+                    dispatch(fetchCompanyItems({
+                        token: token,
+                        page: 0,
+                        searchText: searchText,
+                        pageSize: 100,
+                    })).then(data => {
+                        setCompanyItems(data.payload);
+                    })
+                });
+        });
+    };
+
+        return (
+            <div style={{height: 400, width: "inherit"}}>
+                <TextField
+                    label="Serial Number"
+                    variant="outlined"
+                    onChange={(event) => setSearchText(event.target.value)}
+                    value={searchText}
+                    style={{marginBottom: "10px"}}
+                />
+                <DataGrid
+                    rows={companyItems}
+                    columns={columns}
+                    initialState={{
+                        pagination: {
+                            paginationModel: {page: 0, pageSize: 5},
+                        },
+                    }}
+                    pageSizeOptions={[5, 10]}
+                    checkboxSelection
+                    onRowSelectionModelChange={handleRowSelection}
+                    sx={{
+                        "& .MuiDataGrid-columnHeaders": {
+                            backgroundColor: "rgba(224, 224, 224, 1)",
+                        },
+                        "& .MuiDataGrid-columnHeaderTitle": {
+                            textAlign: "center",
+                            fontWeight: "bold",
+                        },
+                        "& .MuiDataGrid-cell": {
+                            textAlign: "center",
+                        },
+                    }}
+                />
+                <Grid container spacing={1} style={{marginTop: 16}} direction="row">
+                    <Grid item>
+                        <Button
+                            onClick={handleOnClickAddCompanyItem}
+                            variant="contained"
+                            color="primary"
+                        >
+                            Add Item
+                        </Button>
+                    </Grid>
+                    <Grid item>
+                        <Button
+                            onClick={handleDelete}
+                            variant="contained"
+                            color="error"
+                            disabled={loading || selectedRowIds.length === 0}
+                        >
+                            Delete Item
+                        </Button>
+                    </Grid>
                 </Grid>
-            </Grid>
-        </div>
+            </div>
 
 
-    );
-};
+        );
+    };
 
-export default SideBarCompanyItems;
+    export default SideBarCompanyItems;

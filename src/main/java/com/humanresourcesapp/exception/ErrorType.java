@@ -51,9 +51,12 @@ public enum ErrorType
     DEFINITION_NOT_FOUND(1039,"Definition Not Found" ,HttpStatus.BAD_REQUEST ),
     HOLIDAY_ALREADY_EXISTS(1040, "Holiday Already Exists",HttpStatus.BAD_REQUEST),
     SHIFT_NOT_FOUND(    1041, "Shift Not Found",    HttpStatus.BAD_REQUEST ),
-    DEFINITION_ALREADY_EXISTS(1039,"Definition Already Exists" ,HttpStatus.BAD_REQUEST ),
-    EMAIL_NOT_VALID(    1042, "Email Not Valid",    HttpStatus.BAD_REQUEST );
-
+    DEFINITION_ALREADY_EXISTS(1042,"Definition Already Exists" ,HttpStatus.BAD_REQUEST ),
+    EMAIL_NOT_VALID(    1043, "Email Not Valid",    HttpStatus.BAD_REQUEST ),
+    CAN_NOT_UPDATE_DELETED_LEAVE(1044, "Can Not Update Deleted Leave",HttpStatus.BAD_REQUEST ),
+    CAN_NOT_UPDATE_CANCELED_LEAVE(1045, "Can Not Update Canceled Leave" , HttpStatus.BAD_REQUEST ),
+    CAN_NOT_UPDATE_APPROVED_LEAVE(1046, "Can Not Update Approved Leave" , HttpStatus.BAD_REQUEST),
+    ;
     private final Integer code;
     private final String message;
     private final HttpStatus httpStatus;

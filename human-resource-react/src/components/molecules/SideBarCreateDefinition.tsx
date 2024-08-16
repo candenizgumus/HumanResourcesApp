@@ -1,5 +1,5 @@
 import React, { useState, ChangeEvent, FormEvent } from 'react';
-import { TextField, Button, Box } from '@mui/material';
+import { TextField, Button, Box, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { fetchSaveDefinition } from '../../store/feature/definitionSlice';
 import { EDefinitionType } from '../../models/IDefinitionType';
@@ -66,21 +66,22 @@ const UserForm: React.FC = () => {
         padding: 2,
       }}
     >
-      <TextField
-        select
-        label="Definition Type"
-        value={definitionType}
-        onChange={handleDefinitionTypeChange as any} // Type casting here
-        required
-        fullWidth
-        SelectProps={{ native: true }}
-      >
-        {Object.values(EDefinitionType).map((value) => (
-          <option key={value} value={value}>
-            {value}
-          </option>
-        ))}
-      </TextField>
+      
+
+      <FormControl required variant="outlined">
+        <InputLabel>{'Please Select Definiton'}</InputLabel>
+        <Select
+            value={definitionType}
+            onChange={handleDefinitionTypeChange as any} // Type casting here
+            label="Position"
+        >
+          {Object.values(EDefinitionType).map(position => (
+              <MenuItem key={position} value={position}>
+                {position}
+              </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
       
       <TextField
         label="Definition Name"

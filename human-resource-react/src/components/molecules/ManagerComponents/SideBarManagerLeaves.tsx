@@ -29,11 +29,15 @@ import {
     fetchGetLeavesOfManager, fetchApproveLeave,
     fetchDeleteLeave, fetchCancelLeave, fetchUpdateAnnualLeaveDays,
     fetchAssignLeave,
+    ILeave,
+    fetchGetLeaveById,
+    fetchUpdateLeave,
 } from "../../../store/feature/leaveSlice";
 
 import {fetchGetDefinitions} from "../../../store/feature/definitionSlice";
 import { clearToken, fetchGetAllUsersOfManager } from "../../../store/feature/authSlice";
 import { EDefinitionType } from "../../../models/IDefinitionType";
+import { idID } from "@mui/material/locale";
 
 const SideBarManagerLeaves = () => {
     const [selectedRowIds, setSelectedRowIds] = useState<number[]>([]);
@@ -47,14 +51,20 @@ const SideBarManagerLeaves = () => {
     const [isActivating, setIsActivating] = useState(false);
     const [openChangeAnnualLeaveDayModal, setOpenChangeAnnualLeaveDayModal] = useState(false);
     const [openAssignLeaveModal, setOpenAssignLeaveModal] = useState(false);
+    const [openEditLeaveModal, setOpenEditLeaveModal] = useState(false);
     const [selectedEmployee, setSelectedEmployee] = useState<any>(null);
     const [newLeaveDays, setNewLeaveDays] = useState(0);
     const employees = useAppSelector((state) => state.auth.userList);
     const [description, setDescription] = useState('');
-    const [dLeaveTypeId, setDLeaveTypeId] = useState(1); // Default to ANNUAL
+    const [leaveType, setLeaveType] = useState('ANNUAL'); // Default to ANNUAL
     const [startDate, setStartDate] = useState<Date | null>(null);
     const [endDate, setEndDate] = useState<Date | null>(null);
+    const selectedLeave = useAppSelector((state) => state.leave.selectedLeave);
+    const [updateStartDate, setUpdateStartDate] = useState<Date>(selectedLeave.startDate);
+    const [updateEndDate, setUpdateEndDate] = useState<Date>(selectedLeave.endDate);
+    
     const [files, setFiles] = useState<File[]>([]);
+   
 
     const columns: GridColDef[] = [
         { field: "fullName", headerName: "Name", flex :1, headerAlign: "center" },
@@ -63,16 +73,7 @@ const SideBarManagerLeaves = () => {
     
         { field: "startDate", headerName: "Start Date", flex :1, headerAlign: "center" },
         { field: "endDate", headerName: "End Date", flex :1, headerAlign: "center" },
-        { 
-            field: "dleaveTypeId", 
-            headerName: "Leave Type",
-            flex :1,
-            headerAlign: "center", 
-            renderCell: (params) => {
-                const leaveType = leaveTypes.find(lt => lt.id === params.value);
-                return leaveType ? leaveType.name : "Unknown";
-            }
-        },
+        { field: "leaveType", headerName: "Leave Type", flex :1, headerAlign: "center" },
         { field: "isLeaveApproved", headerName: "Approval Status", headerAlign: "center", flex :1 },
         { field: "approveDate", headerName: "Approval Date", flex :1, headerAlign: "center" },
         { field: "status", headerName: "Status", flex :1, headerAlign: "center" },
@@ -119,35 +120,43 @@ const SideBarManagerLeaves = () => {
         for (let id of selectedRowIds) {
             const selectedLeave = leaves.find((leave) => leave.id === id);
             if (!selectedLeave) continue;
-
+    
             if (selectedLeave.isLeaveApproved) {
-                Swal.fire({
+                await Swal.fire({
                     title: "Error",
                     text: 'Leave already approved',
                     icon: "error",
                     confirmButtonText: "OK",
                 });
-                return
+                return;
             }
+    
             setLoading(true);
-
             try {
                 const result = await Swal.fire({
                     title: "Are you sure?",
-                    text: "You won't be able to revert this!",
+                    text: "Please provide a reason for approval:",
                     icon: "warning",
+                    input: "textarea",
+                    inputPlaceholder: "Enter your reason here...",
+                    inputValidator: (value) => {
+                        if (!value) {
+                            return "You need to provide a reason!";
+                        }
+                    },
                     showCancelButton: true,
                     confirmButtonColor: '#1976D2',
                     cancelButtonColor: "#d33",
                     confirmButtonText: "Yes, approve it!"
                 });
-
-                if (result.isConfirmed) {
+    
+                if (result.isConfirmed && result.value) {
                     const data = await dispatch(fetchApproveLeave({
                         token: token,
                         id: selectedLeave.id,
+                        responseMessage: result.value
                     }));
-
+    
                     if (data.payload.message) {
                         await Swal.fire({
                             title: "Error",
@@ -155,15 +164,13 @@ const SideBarManagerLeaves = () => {
                             icon: "error",
                             confirmButtonText: "OK",
                         });
-                        setLoading(false);
-                        return;
                     } else {
                         await Swal.fire({
                             title: "Approved!",
                             text: "The leave has been approved.",
                             icon: "success"
                         });
-
+    
                         await dispatch(fetchGetLeavesOfManager({
                             token: token,
                             page: 0,
@@ -175,16 +182,17 @@ const SideBarManagerLeaves = () => {
             } catch (error) {
                 localStorage.removeItem("token");
                 dispatch(clearToken());
+            } finally {
+                setLoading(false);
             }
         }
-        setLoading(false);
     };
 
     const handleReject = async () => {
         for (let id of selectedRowIds) {
             const selectedLeave = leaves.find((leave) => leave.id === id);
             if (!selectedLeave) continue;
-
+    
             if (selectedLeave.isLeaveApproved) {
                 await Swal.fire({
                     title: "Error",
@@ -194,25 +202,33 @@ const SideBarManagerLeaves = () => {
                 });
                 continue;
             }
-
+    
             setIsActivating(true);
             try {
                 const result = await Swal.fire({
                     title: "Are you sure?",
-                    text: "You won't be able to revert this!",
+                    text: "Please provide a reason for rejection:",
                     icon: "warning",
+                    input: "textarea",
+                    inputPlaceholder: "Enter your reason here...",
+                    inputValidator: (value) => {
+                        if (!value) {
+                            return "You need to provide a reason!";
+                        }
+                    },
                     showCancelButton: true,
                     confirmButtonColor: '#1976D2',
                     cancelButtonColor: "#d33",
                     confirmButtonText: "Yes, reject it!"
                 });
-
-                if (result.isConfirmed) {
+    
+                if (result.isConfirmed && result.value) {
                     const data = await dispatch(fetchDeleteLeave({
                         token: token,
                         id: selectedLeave.id,
+                        responseMessage: result.value
                     }));
-
+    
                     if (data.payload.message) {
                         await Swal.fire({
                             title: "Error",
@@ -220,14 +236,13 @@ const SideBarManagerLeaves = () => {
                             icon: "error",
                             confirmButtonText: "OK",
                         });
-                        return;
                     } else {
                         await Swal.fire({
                             title: "Rejected!",
                             text: "The leave has been rejected.",
                             icon: "success"
                         });
-
+    
                         await dispatch(fetchGetLeavesOfManager({
                             token: token,
                             page: 0,
@@ -239,16 +254,17 @@ const SideBarManagerLeaves = () => {
             } catch (error) {
                 localStorage.removeItem("token");
                 dispatch(clearToken());
+            } finally {
+                setIsActivating(false);
             }
         }
-        setIsActivating(false);
     };
-
+    
     const handleCancel = async () => {
         for (let id of selectedRowIds) {
             const selectedLeave = leaves.find((leave) => leave.id === id);
             if (!selectedLeave) continue;
-
+    
             if (!selectedLeave.isLeaveApproved) {
                 await Swal.fire({
                     title: "Error",
@@ -258,24 +274,33 @@ const SideBarManagerLeaves = () => {
                 });
                 continue;
             }
+    
             setLoading(true);
             try {
                 const result = await Swal.fire({
                     title: "Are you sure?",
-                    text: "You won't be able to revert this!",
+                    text: "Please provide a reason for cancellation:",
                     icon: "warning",
+                    input: "textarea",
+                    inputPlaceholder: "Enter your reason here...",
+                    inputValidator: (value) => {
+                        if (!value) {
+                            return "You need to provide a reason!";
+                        }
+                    },
                     showCancelButton: true,
                     confirmButtonColor: '#1976D2',
                     cancelButtonColor: "#d33",
                     confirmButtonText: "Yes, cancel it!"
                 });
-
-                if (result.isConfirmed) {
+    
+                if (result.isConfirmed && result.value) {
                     const data = await dispatch(fetchCancelLeave({
                         token: token,
                         id: selectedLeave.id,
+                        responseMessage: result.value
                     }));
-
+    
                     if (data.payload.message) {
                         await Swal.fire({
                             title: "Error",
@@ -283,14 +308,13 @@ const SideBarManagerLeaves = () => {
                             icon: "error",
                             confirmButtonText: "OK",
                         });
-                        return;
                     } else {
                         await Swal.fire({
                             title: "Cancelled!",
                             text: "The leave has been cancelled.",
                             icon: "success"
                         });
-
+    
                         await dispatch(fetchGetLeavesOfManager({
                             token: token,
                             page: 0,
@@ -302,10 +326,12 @@ const SideBarManagerLeaves = () => {
             } catch (error) {
                 localStorage.removeItem("token");
                 dispatch(clearToken());
+            } finally {
+                setLoading(false);
             }
         }
-        setLoading(false);
     };
+    
 
     const handleUpdateAnnualLeaveDays = async () => {
         setOpenChangeAnnualLeaveDayModal(true);
@@ -313,6 +339,29 @@ const SideBarManagerLeaves = () => {
 
     const handleAssignLeave = async () => {
         setOpenAssignLeaveModal(true)
+    }
+
+    const handleEditLeave = () => {
+        dispatch(fetchGetLeaveById({
+            token,
+            id: selectedRowIds[0]
+        })).then(data => {
+            if (data.payload.message) {
+                Swal.fire({
+                    title: "Error",
+                    text: data.payload.message,
+                    icon: "error",
+                    confirmButtonText: "OK",
+                });
+                return;
+            }
+            console.log(data.payload)
+            setDescription(data.payload.description)
+            setUpdateStartDate(data.payload.startDate)
+            setUpdateEndDate(data.payload.endDate)
+            setLeaveType(data.payload.leaveType)
+        })
+        setOpenEditLeaveModal(true)
     }
 
     const handleCloseChangeAnnualLeaveDayModal = () => {
@@ -327,8 +376,12 @@ const SideBarManagerLeaves = () => {
         setDescription('');
         setEndDate(null);
         setStartDate(null);
-        setDLeaveTypeId(1);
+        setLeaveType('ANNUAL');
         setFiles([]);
+    };
+
+    const handleCloseEditLeaveModal = () => {
+        setOpenEditLeaveModal(false);
     };
 
     const handleEmployeeChange = (event: any, selectedEmployee: any) => {
@@ -418,7 +471,7 @@ const SideBarManagerLeaves = () => {
 
         setLoading(true);
 
-        if (!description || !startDate || !endDate || !dLeaveTypeId) {
+        if (!description || !startDate || !endDate || !leaveType) {
             handleCloseAssignLeaveModal();
             Swal.fire({
                 title: "Error",
@@ -436,7 +489,7 @@ const SideBarManagerLeaves = () => {
                     description,
                     startDate: startDate,
                     endDate: endDate,
-                    dLeaveTypeId,
+                    leaveType,
                     files: files,
                     employeeId: selectedEmployee.id
                 })
@@ -499,6 +552,72 @@ const SideBarManagerLeaves = () => {
         setFiles(prevFiles => prevFiles.filter(file => file !== fileToRemove));
         // Ekstra işlemler burada yapılabilir
     };
+
+    const handleUpdateLeave = async () => {
+        setLoading(true);
+        try {
+            const result = await dispatch(
+                fetchUpdateLeave({
+                    token,
+                    id: selectedLeave.id,
+                    description: description,
+                    startDate: updateStartDate,
+                    endDate: updateEndDate,
+                    leaveType: leaveType,
+                })
+            );
+
+            if (result.payload.message) {
+                handleCloseEditLeaveModal();
+                Swal.fire({
+                    title: "Error",
+                    text: result.payload.message,
+                    icon: "error",
+                    confirmButtonText: "OK",
+                });
+            } else {
+                handleCloseEditLeaveModal();
+                Swal.fire({
+                    title: "Success",
+                    text: "Leave edited successfully.",
+                    icon: "success",
+                    confirmButtonText: "OK",
+                });
+
+                dispatch(
+                    fetchGetAllUsersOfManager({
+                        token: token,
+                        page: 0,
+                        pageSize: 100,
+                        searchText: searchText,
+                    })
+                ).then(() => {
+                    dispatch(fetchGetLeavesOfManager({
+                        token: token,
+                        page: 0,
+                        pageSize: 100,
+                        searchText: searchText,
+                    }))
+                })
+                    .catch(() => {
+                        dispatch(clearToken());
+                    });
+
+
+                handleCloseEditLeaveModal();
+            }
+        } catch (error) {
+            handleCloseEditLeaveModal();
+            Swal.fire({
+                title: "Error",
+                text: "An error occurred while editing leave.",
+                icon: "error",
+                confirmButtonText: "OK",
+            });
+        }
+        setLoading(false);
+    }
+
     return (
         <>
             <div style={{ height: 400, width: "inherit" }}>
@@ -552,7 +671,7 @@ const SideBarManagerLeaves = () => {
                             color="primary"
                             disabled={loading || selectedRowIds.length === 0}
                         >
-                            {loading ? "Approving..." : "Approve"}
+                            Approve
                         </Button>
                     </Grid>
 
@@ -563,7 +682,7 @@ const SideBarManagerLeaves = () => {
                             color="secondary"
                             disabled={loading || selectedRowIds.length === 0}
                         >
-                            {loading ? "Rejecting..." : "Reject"}
+                            Reject
                         </Button>
                     </Grid>
 
@@ -574,7 +693,18 @@ const SideBarManagerLeaves = () => {
                             color="error"
                             disabled={loading || selectedRowIds.length === 0}
                         >
-                            {loading ? "Cancelling..." : "Cancel"}
+                            Cancel
+                        </Button>
+                    </Grid>
+
+                    <Grid item>
+                        <Button
+                            onClick={handleEditLeave}
+                            variant="contained"
+                            color="error"
+                            disabled={loading || selectedRowIds.length === 0}
+                        >
+                            Edit
                         </Button>
                     </Grid>
                 </Grid>
@@ -694,8 +824,8 @@ const SideBarManagerLeaves = () => {
                                         <TextField
                                             select
                                             label="Leave Type"
-                                            value={dLeaveTypeId}
-                                            onChange={e => setDLeaveTypeId(parseInt(e.target.value, 10))}
+                                            value={leaveType}
+                                            onChange={e => setLeaveType(e.target.value)}
                                             required
                                             fullWidth
                                             SelectProps={{ native: true }}
@@ -725,6 +855,77 @@ const SideBarManagerLeaves = () => {
                             Cancel
                         </Button>
                         <Button onClick={handleSaveLeave} color="primary">
+                            Save
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+                <Dialog open={openEditLeaveModal} onClose={handleCloseEditLeaveModal} fullWidth maxWidth='sm'>
+                    <DialogTitle>Edit Leave</DialogTitle>
+                    <DialogContent>
+                        <Box mt={2}>
+                            {selectedRowIds.length === 1 && (
+                                <>
+                                    <Grid item mt={2}>
+                                        <TextField
+                                            label="Description"
+                                            name="description"
+                                            value={description}
+                                            onChange={e => setDescription(e.target.value)}
+                                            required
+                                            fullWidth
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12} mt={2}>
+                                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                            <DatePicker
+                                                shouldDisableDate={(date) => date.isBefore(dayjs().subtract(1, 'day'))}
+                                                label="Leave Start Date"
+                                                value={dayjs(updateStartDate)}
+                                                onChange={(newValue) => setUpdateStartDate(newValue ? newValue.toDate() : selectedLeave.startDate)}
+                                                sx={{ width: '100%' }}
+                                            />
+                                        </LocalizationProvider>
+                                    </Grid>
+                                    <Grid item xs={12} mt={2}>
+                                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                            <DatePicker
+                                                shouldDisableDate={startDate ? (date) => date.isBefore(startDate) : undefined}
+                                                label="Leave End Date"
+                                                value={dayjs(updateEndDate)}
+                                                onChange={(newValue) => setUpdateEndDate(newValue ? newValue.toDate() : selectedLeave.startDate)}
+                                                sx={{ width: '100%' }}
+                                            />
+                                        </LocalizationProvider>
+                                    </Grid>
+                                    <Grid item mt={2}>
+                                        <TextField
+                                            select
+                                            label="Leave Type"
+                                            value={leaveType}
+                                            onChange={e => setLeaveType(e.target.value)}
+                                            required
+                                            fullWidth
+                                            SelectProps={{ native: true }}
+                                        >
+                                            {Object.values(leaveTypes).map(type => (
+                                                <option key={type.name} value={type.name}>{type.name}</option>
+                                            ))}
+                                        </TextField>
+                                    </Grid>
+                                </>
+                            )}
+                        </Box>
+                        {loading && (
+                            <Box display="flex" justifyContent="center" alignItems="center" mb={2}>
+                                <CircularProgress />
+                            </Box>
+                        )}
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={handleCloseEditLeaveModal} color="secondary">
+                            Cancel
+                        </Button>
+                        <Button onClick={handleUpdateLeave} color="primary">
                             Save
                         </Button>
                     </DialogActions>

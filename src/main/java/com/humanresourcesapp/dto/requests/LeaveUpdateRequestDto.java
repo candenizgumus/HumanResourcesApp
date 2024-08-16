@@ -7,10 +7,10 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Builder
-public record LeaveSaveRequestDto(
+public record LeaveUpdateRequestDto(
+        Long id,
         String description,
         LocalDate startDate,
         LocalDate endDate,
-        String leaveType,
-        List<MultipartFile> files) {
+        String leaveType) {
 }

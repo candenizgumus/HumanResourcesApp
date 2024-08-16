@@ -53,6 +53,7 @@ public class Endpoints
     public static final String UPDATE = "/update";
     public static final String GET = "/get";
     public static final String GET_ALL = "/get-all";
+    public static final String GET_TYPES = "/get-types";
     public static final String GET_BY_ID = "/get-by-id";
     public static final String GET_BY_EMPLOYEE_ID = "/get-by-employee-id";
     public static final String LOGIN = "/login";
@@ -117,4 +118,5 @@ public class Endpoints
     public static final String CHANGE_LEAVE_DAY = "/change-leave-day";
     public static final String ASSIGN_LEAVE = "/assign-leave";
     public static final String GET_LEAVE_TYPES = "/get-leave-types";
+
 }

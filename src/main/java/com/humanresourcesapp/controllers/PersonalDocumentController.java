@@ -57,19 +57,6 @@ public class PersonalDocumentController {
         return ResponseEntity.ok(personalDocumentService.getAllByEmail(dto));
     }
 
-//    @DeleteMapping(DELETE + "/{id}")
-//    @PreAuthorize("hasAnyAuthority('MANAGER')")
-//    public ResponseEntity<PersonalDocument> deletePersonalDocument(@PathVariable Long id) {
-//        return ResponseEntity.ok(personalDocumentService.delete(id));
-//    }
-//
-//    @DeleteMapping(DELETE_FROM_BUCKET)
-//    @PreAuthorize("hasAnyAuthority('MANAGER')")
-//    public ResponseEntity<Void> deletePersonalDocumentFromBucket(@RequestParam String attachedFile) {
-//        personalDocumentService.deleteFromBucket(attachedFile);
-//        return ResponseEntity.ok().build();
-//    }
-
     @DeleteMapping(DELETE)
     @PreAuthorize("hasAnyAuthority('MANAGER')")
     public ResponseEntity<PersonalDocument> deletePersonalDocument(@RequestBody DeletePersonalDocumentRequestDto dto) {

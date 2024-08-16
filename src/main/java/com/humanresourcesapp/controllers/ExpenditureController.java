@@ -2,6 +2,7 @@ package com.humanresourcesapp.controllers;
 
 import static com.humanresourcesapp.constants.Endpoints.*;
 
+import com.humanresourcesapp.dto.requests.DeleteExpenditureRequestDto;
 import com.humanresourcesapp.dto.requests.ExpenditureDownloadRequestDto;
 import com.humanresourcesapp.dto.requests.ExpenditureSaveRequestDto;
 import com.humanresourcesapp.dto.requests.PageRequestDto;

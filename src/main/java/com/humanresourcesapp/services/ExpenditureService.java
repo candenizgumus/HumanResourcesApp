@@ -15,6 +15,7 @@ import com.humanresourcesapp.exception.HumanResourcesAppException;
 import com.humanresourcesapp.repositories.ExpenditureRepository;
 import com.humanresourcesapp.utility.UserInfoSecurityContext;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -33,6 +34,8 @@ public class ExpenditureService {
     private final NotificationService notificationService;
     private final S3Service s3Service;
     private final S3Buckets s3Buckets;
+    @Value("${AWS_BUCKET_NAME}")
+    private String bucketName;
 
     public Expenditure save(ExpenditureSaveRequestDto dto) {
         String userEmail = UserInfoSecurityContext.getUserInfoFromSecurityContext();
@@ -48,7 +51,7 @@ public class ExpenditureService {
                 String key;
                 try {
                     fileContent = file.getBytes();
-                    key = "personelDocuments/%s".formatted( fileName);
+                    key = "personelDocuments/%s".formatted(fileName);
                 } catch (IOException e) {
                     throw new RuntimeException("Failed to read file content", e);
                 }
@@ -180,6 +183,9 @@ public class ExpenditureService {
         // if the delete request comes from manager, it is actually a decline request
         expenditure.setStatus(EStatus.DECLINED);
         expenditureRepository.save(expenditure);
+
+//        String key = "personelDocuments/" + attachedFile;
+//        s3Service.deleteObject(bucketName, key);
 
         notificationService.save(NotificationSaveRequestDto.builder()
                 .notificationText(ENotificationTextBase.EXPENDITURE_REJECT_NOTIFICATION.getText() + expenditure.getDescription())

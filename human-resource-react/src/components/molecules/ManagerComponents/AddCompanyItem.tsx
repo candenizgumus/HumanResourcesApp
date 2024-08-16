@@ -2,42 +2,25 @@ import React, {useState, FormEvent, useEffect} from 'react';
 import {TextField, Button, Box, Grid, InputLabel, Select, MenuItem, FormControl, Avatar} from '@mui/material';
 import {HumanResources, useAppSelector} from "../../../store";
 import {useDispatch} from "react-redux";
-import {
-    fetchPersonalDocumentTypes,
-    fetchSavePersonalDocument
-} from "../../../store/feature/personalDocumentSlice";
-import MyDropzone from "../../atoms/DropZone";
 import Swal from "sweetalert2";
-import sweetalert2 from "sweetalert2";
+import {fetchCompanyItemTypes, fetchSaveCompanyItem} from "../../../store/feature/companyItemSlice";
 
 
-const AddDocument: React.FC = () => {
-
+const AddCompanyItem: React.FC = () => {
 
     const token = useAppSelector((state) => state.auth.token);
-    const employeeId = useAppSelector((state) => state.auth.selectedEmployeeId);
     const dispatch = useDispatch<HumanResources>();
-    const [documentType, setDocumentType] = useState([]);
-    const [documentFile, setDocumentFile] = useState<string>('');
-    const [selectedDocumentType, setSelectedDocumentType] = useState<string>('');
-    const [files, setFiles] = useState<File[]>([]);
-    const [description, setDescription] = useState<string>('');
+    const [name, setName] = useState<string>('');
+    const [companyItemType, setCompanyItemType] = useState([]);
+    const [selectedCompanyItemType, setSelectedCompanyItemType] = useState<string>('');
+    const [serialNumber, setSerialNumber] = useState<string>('');
     const [loading, setLoading] = useState(false);
 
 
-    const handleFilesAdded = (newFiles: File[]) => {
-        setFiles(prevFiles => [...prevFiles, ...newFiles]);
-    };
-
-    const handleFileRemoved = (fileToRemove: File) => {
-        setFiles(prevFiles => prevFiles.filter(file => file !== fileToRemove));
-        // Ekstra işlemler burada yapılabilir
-    };
-
     useEffect(() => {
-        dispatch(fetchPersonalDocumentTypes(token))
+        dispatch(fetchCompanyItemTypes(token))
             .then(data => {
-                setDocumentType(data.payload);
+                setCompanyItemType(data.payload);
             });
     }, [dispatch]);
 
@@ -45,8 +28,8 @@ const AddDocument: React.FC = () => {
         e.preventDefault();
     };
 
-    const addDocument = () => {
-        if (selectedDocumentType === '' || files.length === 0 || description === '') {
+    const addCompanyItem = () => {
+        if (selectedCompanyItemType === '' || name === '' || serialNumber === '') {
             Swal.fire({
                 icon: 'error',
                 text: 'Please fill all the fields!',
@@ -56,25 +39,24 @@ const AddDocument: React.FC = () => {
 
         setLoading(true)
 
-        dispatch(fetchSavePersonalDocument({
-            employeeId: employeeId,
-            documentType: selectedDocumentType,
-            documentFile: files,
-            description: description,
+        dispatch(fetchSaveCompanyItem({
+            name: name,
+            companyItemType: selectedCompanyItemType,
+            serialNumber: serialNumber,
             token: token
         }))
             .then((data) => {
                 if (data.payload.message) {
                     Swal.fire({
                         icon: 'error',
-                        text: data.payload.message ?? 'Failed to add document',
+                        text: data.payload.message ?? 'Failed to add item',
                         showConfirmButton: true
                     })
 
                 } else {
                     Swal.fire({
                         icon: 'success',
-                        text: 'Document has been added',
+                        text: 'Item has been added',
                         showConfirmButton: false,
                         timer: 1500
                     })
@@ -100,42 +82,42 @@ const AddDocument: React.FC = () => {
                         padding: 2,
                     }}
                 >
+                    <TextField
+                        required
+                        label="Name"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                    />
                     <FormControl required variant="outlined">
-                        <InputLabel>{'Document Type'}</InputLabel>
+                        <InputLabel>{'Item Type'}</InputLabel>
                         <Select
-                            value={selectedDocumentType}
-                            onChange={event => setSelectedDocumentType(event.target.value as string)}
-                            label="Document Type"
+                            value={selectedCompanyItemType}
+                            onChange={event => setSelectedCompanyItemType(event.target.value as string)}
+                            label="Item Type"
                         >
-                            {documentType.map((documentType) => (
-                                <MenuItem key={documentType} value={documentType}>
-                                    {documentType}
+                            {companyItemType.map((companyItemType) => (
+                                <MenuItem key={companyItemType} value={companyItemType}>
+                                    {companyItemType}
                                 </MenuItem>
                             ))}
                         </Select>
                     </FormControl>
                     <TextField
                         required
-                        label="Description"
-                        value={description}
-                        onChange={(e) => setDescription(e.target.value)}
+                        label="Serial Number"
+                        value={serialNumber}
+                        onChange={(e) => setSerialNumber(e.target.value)}
                     />
-                    <Grid item style={{width: 399, height: 72, marginBottom: 5}}>
-                        <MyDropzone
-                            onFilesAdded={handleFilesAdded}
-                            onFileRemoved={handleFileRemoved}
-                        />
-                    </Grid>
                     <Grid item style={{marginBottom: 5}}></Grid>
-                        <Button
-                        onClick={addDocument}
+                    <Button
+                        onClick={addCompanyItem}
                         sx={{mt: 5}}
                         type="button"
                         variant="contained"
                         color="primary"
                         disabled={loading}
                     >
-                        {loading ? "Adding Document..." : "Add Document"}
+                        {loading ? "Adding Item..." : "Add Item"}
                     </Button>
                 </Box>
             </Grid>
@@ -150,6 +132,8 @@ const AddDocument: React.FC = () => {
                         padding: 2,
                     }}
                 >
+
+
                 </Box>
             </Grid>
         </Grid>
@@ -158,4 +142,4 @@ const AddDocument: React.FC = () => {
     );
 };
 
-export default AddDocument;
+export default AddCompanyItem;

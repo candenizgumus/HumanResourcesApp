@@ -18,15 +18,15 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import DesignServicesIcon from '@mui/icons-material/DesignServices';
-import { Button, Grid} from '@mui/material';
-import {HumanResources, RootState, useAppSelector} from '../../store';
+import { Button, Grid } from '@mui/material';
+import { HumanResources, RootState, useAppSelector } from '../../store';
 import { useDispatch, useSelector } from 'react-redux';
-import { changePageState} from '../../store/feature/authSlice';
-import {NotificationIcon} from "../../components/atoms/NotificationIcon";
-import {AdminMenuContentRenderer} from "../../components/organisms/AdminMenuContentRenderer";
+import { changePageState } from '../../store/feature/authSlice';
+import { NotificationIcon } from "../../components/atoms/NotificationIcon";
+import { AdminMenuContentRenderer } from "../../components/organisms/AdminMenuContentRenderer";
 import { useNavigate } from 'react-router-dom';
 import NavbarProfile from "../../components/atoms/NavbarProfile";
-import AdminHomeContent  from "../../components/molecules/AdminPageComponents/AdminHomeContent"
+import AdminHomeContent from "../../components/molecules/AdminPageComponents/AdminHomeContent"
 import {
   AccountBox,
   AdminPanelSettings,
@@ -36,8 +36,8 @@ import {
   Weekend
 } from "@mui/icons-material";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
-import {useState} from "react";
-
+import { useState } from "react";
+import logo from '../../images/logo.png';
 const drawerWidth = 240;
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
@@ -116,19 +116,19 @@ export default function AdminPage() {
   const navigateToHome = () => {
     dispatch(changePageState('Dashboard'));
   };
-  
+
   const handleListItemClick = (text: string) => {
     setSelectedIndex(text);
     dispatch(changePageState(text));
   };
 
-  const handleListItemClick2 = (index:any) => {
+  const handleListItemClick2 = (index: any) => {
     setSelectedIndex2(index);
     // Perform your action here
   };
 
   return (
-    <Box sx={{ display: 'flex'  }}>
+    <Box sx={{ display: 'flex' }}>
       <CssBaseline />
       <AppBar position="fixed" open={open}>
         <Toolbar>
@@ -143,15 +143,15 @@ export default function AdminPage() {
           </IconButton>
           <Typography variant="h6" sx={logoStyle}>
             <Button style={{ marginRight: '20px' }} onClick={navigateToHome} color="inherit">
-                Easy HR
+              <img src={logo} alt="logo" style={{ height: '64px' }} />
             </Button>
-        </Typography>
+          </Typography>
           <Typography sx={{ fontSize: '20px' }} >
             {page ? page : 'Dashboard'}
           </Typography>
-            <Box sx={{ flexGrow: 1 }} />
-            <NotificationIcon/>
-            <NavbarProfile />
+          <Box sx={{ flexGrow: 1 }} />
+          <NotificationIcon />
+          <NavbarProfile />
 
         </Toolbar>
       </AppBar>
@@ -175,34 +175,34 @@ export default function AdminPage() {
         </DrawerHeader>
         <Divider />
         <List>
-          {['Dashboard','Offers', 'Users', 'Create Admin', 'Create Feature', 'Create Definition', 'Holidays', 'Profile','Companies', 'Notifications'].map((text, index) => (
+          {['Dashboard', 'Offers', 'Users', 'Create Admin', 'Create Feature', 'Create Definition', 'Holidays', 'Profile', 'Companies', 'Notifications'].map((text, index) => (
             <ListItem key={text} disablePadding>
               <ListItemButton
-                  selected={selectedIndex2 === index}
-                  onClick={() => {
-                    handleListItemClick2(index);
-                    handleListItemClick(text);
-                  }}
-                  sx={{
-                    '&.Mui-selected': {
-                      backgroundColor: 'rgba(0, 123, 255, 0.1)', // Change background color when selected
-                      '&:hover': {
-                        backgroundColor: 'rgba(0, 123, 255, 0.2)', // Change background color on hover
-                      },
-                    }
-                  }}
+                selected={selectedIndex2 === index}
+                onClick={() => {
+                  handleListItemClick2(index);
+                  handleListItemClick(text);
+                }}
+                sx={{
+                  '&.Mui-selected': {
+                    backgroundColor: 'rgba(0, 123, 255, 0.1)', // Change background color when selected
+                    '&:hover': {
+                      backgroundColor: 'rgba(0, 123, 255, 0.2)', // Change background color on hover
+                    },
+                  }
+                }}
               >
                 <ListItemIcon>
-                  {index  === 0 && <Dashboard/>}
-                  { index === 1 && <LocalOfferIcon />}
-                  {index  === 2 && <Person />}
-                  {index  === 3 && <AdminPanelSettings />}
-                  {index  === 4 && <FeaturedPlayList /> }
-                  {index  === 5 && <DesignServicesIcon /> }
-                  {index  === 6 && <Weekend /> }
-                  {index  === 7 && <AccountBox /> }
-                  {index  === 8 && <Apartment /> }
-                  {index  === 9 && <NotificationsIcon/>}
+                  {index === 0 && <Dashboard />}
+                  {index === 1 && <LocalOfferIcon />}
+                  {index === 2 && <Person />}
+                  {index === 3 && <AdminPanelSettings />}
+                  {index === 4 && <FeaturedPlayList />}
+                  {index === 5 && <DesignServicesIcon />}
+                  {index === 6 && <Weekend />}
+                  {index === 7 && <AccountBox />}
+                  {index === 8 && <Apartment />}
+                  {index === 9 && <NotificationsIcon />}
 
                 </ListItemIcon>
                 <ListItemText primary={text} />
@@ -215,7 +215,7 @@ export default function AdminPage() {
       <Main open={open}>
         <DrawerHeader />
         <Grid container spacing={2}>
-          { pageState=== 'Dashboard' ? <AdminHomeContent/> : <AdminMenuContentRenderer/>}
+          {pageState === 'Dashboard' ? <AdminHomeContent /> : <AdminMenuContentRenderer />}
         </Grid>
       </Main>
     </Box>

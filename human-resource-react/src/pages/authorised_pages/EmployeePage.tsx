@@ -17,24 +17,24 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import { Button, Grid} from '@mui/material';
-import {HumanResources, RootState, useAppSelector} from '../../store';
+import { Button, Grid } from '@mui/material';
+import { HumanResources, RootState, useAppSelector } from '../../store';
 import { useDispatch, useSelector } from 'react-redux';
-import { changePageState} from '../../store/feature/authSlice';
-import {NotificationIcon} from "../../components/atoms/NotificationIcon";
+import { changePageState } from '../../store/feature/authSlice';
+import { NotificationIcon } from "../../components/atoms/NotificationIcon";
 import { useNavigate } from 'react-router-dom';
 import NavbarProfile from "../../components/atoms/NavbarProfile";
 import HikingIcon from '@mui/icons-material/Hiking';
-
+import logo from '../../images/logo.png';
 import {
     AccountBox, Dashboard,
     FeaturedPlayList, Paid, PointOfSale,
     Weekend
 } from "@mui/icons-material";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
-import {EmployeeHomeContent} from "../../components/molecules/EmployeeComponents/EmployeeHomeContent";
-import {EmployeeMenuContentRenderer} from "../../components/organisms/EmployeeMenuContentRenderer";
-import {useState} from "react";
+import { EmployeeHomeContent } from "../../components/molecules/EmployeeComponents/EmployeeHomeContent";
+import { EmployeeMenuContentRenderer } from "../../components/organisms/EmployeeMenuContentRenderer";
+import { useState } from "react";
 
 const drawerWidth = 240;
 
@@ -119,13 +119,13 @@ export default function EmployeePage() {
         setSelectedIndex(text);
         dispatch(changePageState(text));
     };
-    const handleListItemClick2 = (index:any) => {
+    const handleListItemClick2 = (index: any) => {
         setSelectedIndex2(index);
         // Perform your action here
     };
 
     return (
-        <Box sx={{ display: 'flex'  }}>
+        <Box sx={{ display: 'flex' }}>
             <CssBaseline />
             <AppBar position="fixed" open={open}>
                 <Toolbar>
@@ -140,7 +140,7 @@ export default function EmployeePage() {
                     </IconButton>
                     <Typography variant="h6" sx={logoStyle}>
                         <Button style={{ marginRight: '20px' }} onClick={navigateToHome} color="inherit">
-                            Kolay IK
+                            <img src={logo} alt="logo" style={{ height: '64px' }} />
                         </Button>
                     </Typography>
                     <Typography sx={{ fontSize: '20px' }} >
@@ -172,7 +172,7 @@ export default function EmployeePage() {
                 </DrawerHeader>
                 <Divider />
                 <List>
-                    {['Dashboard','Shifts & Breaks', 'Holidays', 'Profile', 'Company Items','Notifications','Expenditure', 'Leaves','Bonus'].map((text, index) => (
+                    {['Dashboard', 'Shifts & Breaks', 'Holidays', 'Profile', 'Company Items', 'Notifications', 'Expenditure', 'Leaves', 'Bonus'].map((text, index) => (
                         <ListItem key={text} disablePadding>
                             <ListItemButton
                                 selected={selectedIndex2 === index}
@@ -190,15 +190,15 @@ export default function EmployeePage() {
                                 }}
                             >
                                 <ListItemIcon>
-                                    {index  === 0 && <Dashboard/>}
-                                    { index === 1 && <LocalOfferIcon />}
-                                    {index  === 2 && <Weekend />}
-                                    {index  === 3 && <AccountBox /> }
-                                    {index  === 4 && <FeaturedPlayList /> }
-                                    {index === 5 && <NotificationsIcon/>}
-                                    {index === 6 && <PointOfSale/>}
-                                    {index === 7 && <HikingIcon/>}
-                                    {index === 8 && <Paid/>}
+                                    {index === 0 && <Dashboard />}
+                                    {index === 1 && <LocalOfferIcon />}
+                                    {index === 2 && <Weekend />}
+                                    {index === 3 && <AccountBox />}
+                                    {index === 4 && <FeaturedPlayList />}
+                                    {index === 5 && <NotificationsIcon />}
+                                    {index === 6 && <PointOfSale />}
+                                    {index === 7 && <HikingIcon />}
+                                    {index === 8 && <Paid />}
                                 </ListItemIcon>
                                 <ListItemText primary={text} />
                             </ListItemButton>
@@ -210,7 +210,7 @@ export default function EmployeePage() {
             <Main open={open}>
                 <DrawerHeader />
                 <Grid container spacing={2}>
-                    { pageState=== 'Dashboard' ? <EmployeeHomeContent/> : <EmployeeMenuContentRenderer/>}
+                    {pageState === 'Dashboard' ? <EmployeeHomeContent /> : <EmployeeMenuContentRenderer />}
                 </Grid>
             </Main>
         </Box>

@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { EDefinitionType } from "../../models/IDefinitionType";
+import { IRequestWithIdAndToken } from "./leaveSlice";
 
 interface IInitialLeave {
     definitionList: IDefinition[]
@@ -7,15 +8,16 @@ interface IInitialLeave {
 export interface IDefinition {
     id: number,
     name: string,
-    definitionType: EDefinitionType
+    definitionType: EDefinitionType,
+    companyId: number
 }
 
 const initialLeaveState: IInitialLeave = {
     definitionList: []
 }
 export interface IFetchGetDefinitions {
-    token: string,
-    definitionType: EDefinitionType
+    token: string;
+    definitionType: EDefinitionType ;
 }
 export const fetchGetDefinitions = createAsyncThunk(
     'leave/fetchGetDefinitions',
@@ -56,6 +58,23 @@ export const fetchSaveDefinition = createAsyncThunk(
                 'definitionType': payload.definitionType,
                 'name': payload.name,
             })
+        });
+
+        return await response.json();
+    }
+
+)
+
+export const fetchDeleteDefinition = createAsyncThunk(
+    'leave/fetchDeleteDefinition',
+    async (payload: IRequestWithIdAndToken) => {
+
+        const response = await fetch('http://localhost:9090/dev/v1/definition/delete?id='+payload.id, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ` + payload.token
+            }
         });
 
         return await response.json();

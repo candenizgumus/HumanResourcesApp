@@ -119,4 +119,5 @@ public class Endpoints
     public static final String ASSIGN_LEAVE = "/assign-leave";
     public static final String GET_LEAVE_TYPES = "/get-leave-types";
     public static final String SEARCH_BY_LEAVE_ID = "/search-by-leave-id";
+    public static final String GET_ALL_RELATED = "/get-all-related";
 }

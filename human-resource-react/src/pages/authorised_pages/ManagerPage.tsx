@@ -41,7 +41,7 @@ import AddCommentIcon from '@mui/icons-material/AddComment';
 import {ManagerHomeContent} from "../../components/molecules/ManagerComponents/ManagerHomeContent";
 import HikingIcon from '@mui/icons-material/Hiking';
 import {useState} from "react";
-
+import logo from '../../images/logo.png';
 
 const drawerWidth = 240;
 
@@ -150,7 +150,7 @@ export default function AdminPage() {
                     </IconButton>
                     <Typography variant="h6" sx={logoStyle}>
                         <Button style={{marginRight: '20px'}} onClick={navigateToHome} color="inherit">
-                            Easy HR
+                            <img src={logo} alt="logo" style={{ height: '64px' }} />
                         </Button>
                     </Typography>
                     <Typography sx={{ fontSize: '20px' }} >

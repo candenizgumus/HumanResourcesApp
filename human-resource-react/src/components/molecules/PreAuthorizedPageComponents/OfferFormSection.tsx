@@ -133,8 +133,8 @@ const OfferFormSection = () => {
                                 fullWidth
                                 label="Phone"
                                 variant="outlined"
-                                type={"tel"}
                                 value={phone}
+                                type={"number"}
                                 inputProps={{ maxLength: 50 }}
                             />
                         </Grid>
@@ -155,6 +155,7 @@ const OfferFormSection = () => {
                                 label="Employee Count"
                                 variant="outlined"
                                 value={numberOfEmployees}
+                                type={"number"}
                                 inputProps={{ maxLength: 50 }}
                             />
                         </Grid>

@@ -20,7 +20,7 @@ import styled from '@emotion/styled';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import { uploadPlayerProfileImage } from '../../store/feature/awsSlice';
 import { IUpdateUserProfile } from '../../models/IUpdateUserProfile';
-import { fetchGetDefinitions } from '../../store/feature/definitionSlice';
+import { fetchGetDefinitions, IDefinition } from '../../store/feature/definitionSlice';
 import { EDefinitionType } from '../../models/IDefinitionType';
 
 
@@ -28,19 +28,20 @@ const SideBarProfile = () => {
     const dispatch = useDispatch<HumanResources>();
     const token = useAppSelector((state) => state.auth.token);
     const user: IUser = useAppSelector((state) => state.auth.user);
-    const employeeTypes = useAppSelector((state) => state.definition.definitionList);
-    const [positions, setPositions] = useState([]);
     const [hireDate, setHireDate] = useState(user.hireDate ?? '');
     const [userType, setUserType] = useState<string>(user.userType ?? '');
     const [sector, setSector] = useState<string>(user.sector ?? '');
-    const [employeeType, setEmployeeType] = useState<number>(user.employeeTypeDefinitionId ?? null);
+    const [employeeType, setEmployeeType] = useState<string>(user.employeeType ?? '');
     const [subscriptionType, setSubscriptionType] = useState<string>(user.subscriptionType ?? '');
     const [subscriptionStartDate, setSubscriptionStartDate] = useState(user.subscriptionStartDate ?? '');
     const [subscriptionEndDate, setSubscriptionEndDate] = useState(user.subscriptionEndDate ?? '');
 
+    const [positions, setPositions] = useState<IDefinition[]>([]);
+    const [employeeTypes, setEmployeeTypes] = useState<IDefinition[]>([]);
+
     const [companyName, setCompanyName] = useState<string>('');
 
-    const [selectedPositions, setSelectedPositions] = useState<string>(user.position ?? '');
+    const [selectedPosition, setSelectedPosition] = useState<string>(user.position ?? '');
     const [loading, setLoading] = useState(true);
 
     const defaultDate = dayjs('1996-07-27');
@@ -79,23 +80,32 @@ const SideBarProfile = () => {
             }
 
             setCompanyName(result.companyName ?? '');
-
-            const positionsResult = await dispatch(fetchGetPositions()).unwrap();
-            setPositions(positionsResult);
-
-            setHireDate(user.hireDate ?? '');
-            setUserType(user.userType ?? '');
-            setSector(user.sector ?? '');
-            setEmployeeType(user.employeeTypeDefinitionId ?? null);
-            setSubscriptionType(user.subscriptionType ?? '');
-            setSubscriptionStartDate(user.subscriptionStartDate ?? '');
-            setSubscriptionEndDate(user.subscriptionEndDate ?? '');
-            setSelectedPositions(user.position ?? '');
-
             dispatch(fetchGetDefinitions({
                 token: token,
                 definitionType: EDefinitionType.EMPLOYEE_TYPE
             }))
+
+            const positions = await dispatch(fetchGetDefinitions({
+                token: token,
+                definitionType: EDefinitionType.POSITION
+            })).unwrap();
+            setPositions(positions)
+
+            setHireDate(user.hireDate ?? '');
+            setUserType(user.userType ?? '');
+            setSector(user.sector ?? '');
+            setEmployeeType(user.employeeType ?? '');
+            setSubscriptionType(user.subscriptionType ?? '');
+            setSubscriptionStartDate(user.subscriptionStartDate ?? '');
+            setSubscriptionEndDate(user.subscriptionEndDate ?? '');
+            setSelectedPosition(user.position ?? '');
+
+            const employeeTypes = await dispatch(fetchGetDefinitions({
+                token: token,
+                definitionType: EDefinitionType.EMPLOYEE_TYPE
+            })).unwrap();
+            setEmployeeTypes(employeeTypes)
+
         } catch (error) {
             console.error('Error in setUserInfos:', error);
         } finally {
@@ -121,18 +131,18 @@ const SideBarProfile = () => {
             setHireDate(user.hireDate ?? '');
             setUserType(user.userType ?? '');
             setSector(user.sector ?? '');
-            setEmployeeType(user.employeeTypeDefinitionId ?? null);
+            setEmployeeType(user.employeeType ?? '');
             setSubscriptionType(user.subscriptionType ?? '');
             setSubscriptionStartDate(user.subscriptionStartDate ?? '');
             setSubscriptionEndDate(user.subscriptionEndDate ?? '');
-            setSelectedPositions(user.position ?? '');
+            setSelectedPosition(user.position ?? '');
         }
     }, [user, loading]);
 
     const updateUserProfile = async () => {
 
 
-        if (!formState.name || !formState.surname || !formState.phone || !formState.title || birthDate === null || !selectedPositions || !formState.location) {
+        if (!formState.name || !formState.surname || !formState.phone || !formState.title || birthDate === null || !selectedPosition || !formState.location) {
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
@@ -152,7 +162,7 @@ const SideBarProfile = () => {
             phone: formState.phone,
             title: formState.title,
             birthDate: birthDate,
-            position: selectedPositions,
+            position: selectedPosition,
             location: formState.location
         })).then((data) => {
             // Handle the result of the profile update
@@ -249,11 +259,6 @@ const SideBarProfile = () => {
         }
 
     };
-
-    const employeeTypeFunc = () =>{
-        const leaveType = employeeTypes.find(lt => lt.id === user.employeeTypeDefinitionId);
-        return leaveType ? leaveType.name : "Unknown";
-    }
 
     console.log(user);
     return (
@@ -402,13 +407,13 @@ const SideBarProfile = () => {
                     <FormControl variant="outlined">
                         <InputLabel>{'Please Select Your Position'}</InputLabel>
                         <Select
-                            value={selectedPositions}
-                            onChange={event => setSelectedPositions(event.target.value as string)}
+                            value={selectedPosition}
+                            onChange={event => setSelectedPosition(event.target.value as string)}
                             label="Position"
                         >
-                            {positions.map((position) => (
-                                <MenuItem key={position} value={position}>
-                                    {position}
+                            {Object.values(positions).map(position => (
+                                <MenuItem key={position.name} value={position.name}>
+                                    {position.name}
                                 </MenuItem>
                             ))}
                         </Select>
@@ -447,11 +452,11 @@ const SideBarProfile = () => {
                     />
                     
                     {
-                        user.employeeTypeDefinitionId && (
+                        user.employeeType && (
                             <TextField
                                 label="Employe Type"
                                 name="employeeTypeDefinitionId"
-                                value={employeeTypeFunc()}
+                                value={user.employeeType}
                                 fullWidth
                                 disabled
                             />

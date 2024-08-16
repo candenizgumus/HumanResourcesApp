@@ -1,8 +1,5 @@
 package com.humanresourcesapp.dto.requests;
 
-import com.humanresourcesapp.entities.enums.EPosition;
-import com.humanresourcesapp.entities.enums.EStatus;
-
 import java.time.LocalDate;
 
 public record UpdateUserRequestDto(
@@ -11,7 +8,7 @@ public record UpdateUserRequestDto(
         String phone,
         String title,
         LocalDate birthDate,
-        EPosition position,
+        String position,
         String location
 )
 {

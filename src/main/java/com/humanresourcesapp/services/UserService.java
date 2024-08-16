@@ -194,13 +194,13 @@ public class UserService {
                 .hireDate(dto.hireDate().plusDays(1))
                 .birthDate(dto.birthDate().plusDays(1))
                 .status(EStatus.ACTIVE)
-                .position(dto.ePosition())
-                .position(dto.ePosition())
+                .position(dto.position())
+                .position(dto.position())
                 .location(dto.location())
                 .remainingAnnualLeave(0)
                 .title(dto.title())
                 .sector(manager.getSector())
-                .employeeTypeDefinitionId(dto.employeeTypeDefinitionId())
+                .employeeType(dto.employeeType())
                 .subscriptionType(manager.getSubscriptionType())
                 .subscriptionStartDate(manager.getSubscriptionStartDate())
                 .subscriptionEndDate(manager.getSubscriptionEndDate())
@@ -461,9 +461,9 @@ public class UserService {
         {
             user.setLocation(dto.location());
         }
-        if (dto.employeeTypeDefinitionId() != null)
+        if (!dto.employeeType().isEmpty())
         {
-            user.setEmployeeTypeDefinitionId(dto.employeeTypeDefinitionId());
+            user.setEmployeeType(dto.employeeType());
         }
         if (dto.position() != null)
         {
@@ -574,22 +574,22 @@ public class UserService {
 
     }
 
-    public Auth createUserWithUserType(Auth auth) {
+    public Auth createUserWithUserType(CreateUserRequestDto dto) {
         String userEmail = UserInfoSecurityContext.getUserInfoFromSecurityContext();
         User user = userRepository.findByEmail(userEmail).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
 
-        if(user.getUserType().equals(EUserType.MANAGER) && auth.getUserType().equals(EUserType.ADMIN))
+        if(user.getUserType().equals(EUserType.MANAGER) && dto.userType().equals(EUserType.ADMIN))
             throw new HumanResourcesAppException(ErrorType.INSUFFICIENT_PERMISSION);
 
-        if(authService.findByEmail(auth.getEmail()).isPresent())
+        if(authService.findByEmail(dto.email()).isPresent())
         {
             throw new HumanResourcesAppException(ErrorType.EMAIL_TAKEN);
         }
-        emailService.send(MailModel.builder().to(auth.getEmail()).subject("Your account is created").message("You can log in with email: " + auth.getEmail() + " and password: " + auth.getPassword()).build());
-        String encodedPassword = passwordEncoder.bCryptPasswordEncoder().encode(auth.getPassword());
+        emailService.send(MailModel.builder().to(dto.email()).subject("Your account is created").message("You can log in with email: " + dto.email() + " and password: " + dto.password()).build());
+        String encodedPassword = passwordEncoder.bCryptPasswordEncoder().encode(dto.password());
         Auth saveAuth = Auth.builder()
-                .email(auth.getEmail())
-                .userType(auth.getUserType())
+                .email(dto.email())
+                .userType(dto.userType())
                 .password(encodedPassword)
                 .status(EStatus.ACTIVE)
                 .build();
@@ -598,8 +598,8 @@ public class UserService {
 
         User saveUser = User.builder()
                 .authId(saveAuth.getId())
-                .email(auth.getEmail())
-                .userType(auth.getUserType())
+                .email(dto.email())
+                .userType(dto.userType())
                 .status(EStatus.ACTIVE)
                 .companyId(user.getCompanyId())
                 .sector(user.getSector())

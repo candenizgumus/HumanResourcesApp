@@ -8,6 +8,7 @@ import com.humanresourcesapp.entities.Auth;
 import com.humanresourcesapp.entities.User;
 import com.humanresourcesapp.entities.enums.*;
 import com.humanresourcesapp.services.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -64,12 +65,12 @@ public class UserController
         userService.uploadPlayerProfileImage(file, authentication);
     }
 
-    @GetMapping(GET_POSITIONS)
-    @CrossOrigin("*")
-    public ResponseEntity<EPosition[]> getPositions()
-    {
-        return ResponseEntity.ok(EPosition.values());
-    }
+//    @GetMapping(GET_POSITIONS)
+//    @CrossOrigin("*")
+//    public ResponseEntity<EPosition[]> getPositions()
+//    {
+//        return ResponseEntity.ok(EPosition.values());
+//    }
 
     @GetMapping(GET_SECTORS)
     @CrossOrigin("*")
@@ -114,7 +115,7 @@ public class UserController
     @PostMapping(ADD_EMPLOYEE_TO_COMPANY)
     @PreAuthorize("hasAnyAuthority('MANAGER')")
     @CrossOrigin("*")
-    public ResponseEntity<User> addEmployeeToCompany(@RequestBody AddEmployeeToCompanyRequestDto dto)
+    public ResponseEntity<User> addEmployeeToCompany(@Valid @RequestBody AddEmployeeToCompanyRequestDto dto)
     {
         return ResponseEntity.ok(userService.addEmployeeToCompany(dto));
     }
@@ -167,9 +168,9 @@ public class UserController
     @PostMapping(CREATE_USER_WITH_USERTYPE)
     @CrossOrigin("*")
     @PreAuthorize("hasAnyAuthority('MANAGER','ADMIN')")
-    public ResponseEntity<Auth> createUserWithUserType(@RequestBody Auth auth)
+    public ResponseEntity<Auth> createUserWithUserType(@Valid @RequestBody CreateUserRequestDto dto)
     {
-        return ResponseEntity.ok(userService.createUserWithUserType(auth));
+        return ResponseEntity.ok(userService.createUserWithUserType(dto));
     }
 
     @PostMapping(COUNT_OF_CUSTOMERS_FOR_GRAPH)

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler
@@ -53,19 +54,36 @@ public class GlobalExceptionHandler
                 .build();
     }
 
+    private ErrorMessage createErrorMessage(MethodArgumentNotValidException ex) {
+
+
+        List<String> fieldErrors = ex.getBindingResult().getFieldErrors()
+                .stream()
+                .map(fieldError -> fieldError.getField() + ": " + fieldError.getDefaultMessage())
+                .collect(Collectors.toList());
+
+        ErrorMessage errorMessage = ErrorMessage.builder()
+                .code(ex.hashCode())
+                .message(fieldErrors.toString()) // Or any general message
+                .build();
+
+        errorMessage.setFields(fieldErrors);
+        return errorMessage;
+    }
+
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public final ResponseEntity<ErrorMessage> handleMethodArgumentNotValidException(
             MethodArgumentNotValidException exception)
     {
-
+        System.out.println("Validation error occurred!");
         ErrorType errorType = ErrorType.BAD_REQUEST_ERROR;
         List<String> fields = new ArrayList<>();
         exception
                 .getBindingResult()
                 .getFieldErrors()
                 .forEach(e -> fields.add(e.getField() + ": " + e.getDefaultMessage()));
-        ErrorMessage errorMessage = createErrorMessage(exception,
-                errorType);
+        ErrorMessage errorMessage = createErrorMessage(exception);
         errorMessage.setFields(fields);
         return new ResponseEntity<>(errorMessage,
                 errorType.getHttpStatus());

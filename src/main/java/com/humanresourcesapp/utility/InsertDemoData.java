@@ -403,7 +403,7 @@ public class InsertDemoData
                     .subscriptionEndDate(auth.getSubscriptionEndDate())
                     .location("Turkey")
                     .birthDate(LocalDate.of(1989, currentDate.getMonthValue(), 1))
-                    .position(EPosition.CARTOGRAPHER)
+                    .position("CARTOGRAPHER")
                     .companyId(1L)
                     .phone("5555555555")
                     .photo("https://xsgames.co/randomusers/assets/avatars/male/38.jpg")
@@ -436,7 +436,7 @@ public class InsertDemoData
                     .subscriptionEndDate(auth2.getSubscriptionEndDate())
                     .location("Turkey")
                     .birthDate(LocalDate.of(1989, 1, 1))
-                    .position(EPosition.CARTOGRAPHER)
+                    .position("CARTOGRAPHER")
                     .companyId(2L)
                     .phone("5555555555")
                     .photo("https://xsgames.co/randomusers/assets/avatars/male/34.jpg")
@@ -468,7 +468,7 @@ public class InsertDemoData
                     .subscriptionEndDate(auth3.getSubscriptionEndDate())
                     .location("Turkey")
                     .birthDate(LocalDate.of(1989, 1, 1))
-                    .position(EPosition.CARTOGRAPHER)
+                    .position("CARTOGRAPHER")
                     .companyId(3L)
                     .phone("5555555555")
                     .photo("https://xsgames.co/randomusers/assets/avatars/male/39.jpg")
@@ -500,7 +500,7 @@ public class InsertDemoData
                     .subscriptionEndDate(auth4.getSubscriptionEndDate())
                     .location("Turkey")
                     .birthDate(LocalDate.of(1989, 1, 1))
-                    .position(EPosition.CARTOGRAPHER)
+                    .position("CARTOGRAPHER")
                     .companyId(10L)
                     .phone("5555555555")
                     .photo("https://xsgames.co/randomusers/assets/avatars/male/31.jpg")
@@ -534,13 +534,13 @@ public class InsertDemoData
                     .subscriptionEndDate(authEmployee.getSubscriptionEndDate())
                     .location("England")
                     .birthDate(LocalDate.of(1999, currentDate.getMonthValue(), 1))
-                    .position(EPosition.ADMINISTRATIVE_ASSISTANT)
+                    .position("ADMINISTRATIVE_ASSISTANT")
                     .companyId(user.getCompanyId())
                     .remainingAnnualLeave(25)
                     .phone("5305443221")
                     .photo("https://t4.ftcdn.net/jpg/03/64/21/11/360_F_364211147_1qgLVxv1Tcq0Ohz3FawUfrtONzz8nq3e.jpg")
                     .userType(EUserType.EMPLOYEE)
-                    .employeeTypeDefinitionId(15L)
+                    .employeeType("FULL_TIME")
                     .sector(ESectors.TECHNOLOGY)
                     .title("Turkey Operations Employee")
                     .salary(1950.00)
@@ -570,13 +570,13 @@ public class InsertDemoData
                     .subscriptionEndDate(authEmployee.getSubscriptionEndDate())
                     .location("Turkey")
                     .birthDate(LocalDate.of(1990, currentDate.getMonthValue() + 1, 15))
-                    .position(EPosition.COMPUTER_PROGRAMMER)
+                    .position("COMPUTER_PROGRAMMER")
                     .companyId(user.getCompanyId())
                     .remainingAnnualLeave(15)
                     .phone("5395558471")
                     .photo("https://t4.ftcdn.net/jpg/03/64/21/11/360_F_364211147_1qgLVxv1Tcq0Ohz3FawUfrtONzz8nq3e.jpg")
                     .userType(EUserType.EMPLOYEE)
-                    .employeeTypeDefinitionId(14L)
+                    .employeeType("FULL_TIME")
                     .sector(ESectors.TECHNOLOGY)
                     .salary(2650.00)
                     .title("Dr.")
@@ -825,23 +825,136 @@ public class InsertDemoData
     }
 
     private void insertDefinitionDemoData(){
-        definitionService.saveLeaveType(Definition.builder().definitionType(EDefinitionType.LEAVE_TYPE).name("ANNUAL").build());
-        definitionService.saveLeaveType(Definition.builder().definitionType(EDefinitionType.LEAVE_TYPE).name("HALF_ANNUAL").build());
-        definitionService.saveLeaveType(Definition.builder().definitionType(EDefinitionType.LEAVE_TYPE).name("MATERNITY").build());
-        definitionService.saveLeaveType(Definition.builder().definitionType(EDefinitionType.LEAVE_TYPE).name("PATERNITY").build());
-        definitionService.saveLeaveType(Definition.builder().definitionType(EDefinitionType.LEAVE_TYPE).name("SICK").build());
-        definitionService.saveLeaveType(Definition.builder().definitionType(EDefinitionType.LEAVE_TYPE).name("BEREAVEMENT").build());
-        definitionService.saveLeaveType(Definition.builder().definitionType(EDefinitionType.LEAVE_TYPE).name("PERSONAL").build());
-        definitionService.saveLeaveType(Definition.builder().definitionType(EDefinitionType.LEAVE_TYPE).name("FAMILY_CARE").build());
-        definitionService.saveLeaveType(Definition.builder().definitionType(EDefinitionType.LEAVE_TYPE).name("MILITARY").build());
-        definitionService.saveLeaveType(Definition.builder().definitionType(EDefinitionType.LEAVE_TYPE).name("MARRIAGE").build());
-        definitionService.saveLeaveType(Definition.builder().definitionType(EDefinitionType.LEAVE_TYPE).name("JURY_DUTY").build());
-        definitionService.saveLeaveType(Definition.builder().definitionType(EDefinitionType.LEAVE_TYPE).name("UNPAID").build());
-        definitionService.saveLeaveType(Definition.builder().definitionType(EDefinitionType.LEAVE_TYPE).name("OTHER").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.LEAVE_TYPE).name("ANNUAL").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.LEAVE_TYPE).name("HALF_ANNUAL").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.LEAVE_TYPE).name("MATERNITY").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.LEAVE_TYPE).name("PATERNITY").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.LEAVE_TYPE).name("SICK").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.LEAVE_TYPE).name("BEREAVEMENT").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.LEAVE_TYPE).name("PERSONAL").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.LEAVE_TYPE).name("FAMILY_CARE").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.LEAVE_TYPE).name("MILITARY").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.LEAVE_TYPE).name("MARRIAGE").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.LEAVE_TYPE).name("JURY_DUTY").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.LEAVE_TYPE).name("UNPAID").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.LEAVE_TYPE).name("OTHER").build());
 
-        definitionService.saveLeaveType(Definition.builder().definitionType(EDefinitionType.EMPLOYEE_TYPE).name("FULL_TIME").build());
-        definitionService.saveLeaveType(Definition.builder().definitionType(EDefinitionType.EMPLOYEE_TYPE).name("PART_TIME").build());
-        definitionService.saveLeaveType(Definition.builder().definitionType(EDefinitionType.EMPLOYEE_TYPE).name("CONTRACT").build());
-        definitionService.saveLeaveType(Definition.builder().definitionType(EDefinitionType.EMPLOYEE_TYPE).name("OTHER").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.EMPLOYEE_TYPE).name("FULL_TIME").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.EMPLOYEE_TYPE).name("PART_TIME").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.EMPLOYEE_TYPE).name("CONTRACT").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.EMPLOYEE_TYPE).name("OTHER").build());
+
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("ACCOUNTANT").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("ACTUARY").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("ADMINISTRATIVE_ASSISTANT").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("ADVERTISING_MANAGER").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("AEROSPACE_ENGINEER").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("AGRICULTURAL_ENGINEER").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("AIR_TRAFFIC_CONTROLLER").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("ANESTHESIOLOGIST").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("ARCHITECT").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("ART_DIRECTOR").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("AUDITOR").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("BANK_TELLER").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("BIOCHEMIST").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("BIOLOGIST").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("BIOMEDICAL_ENGINEER").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("BOOKKEEPER").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("BROADCAST_ENGINEER").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("BUSINESS_ANALYST").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("CAD_TECHNICIAN").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("CARTOGRAPHER").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("CHEMICAL_ENGINEER").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("CHEMIST").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("CHIROPRACTOR").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("CIVIL_ENGINEER").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("CLAIMS_ADJUSTER").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("CLINICAL_LAB_TECHNICIAN").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("COMPUTER_ENGINEER").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("COMPUTER_PROGRAMMER").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("COMPUTER_SUPPORT_SPECIALIST").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("CONSTRUCTION_MANAGER").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("CREDIT_ANALYST").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("CUSTOMER_SERVICE_REPRESENTATIVE").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("DATA_ANALYST").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("DATABASE_ADMINISTRATOR").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("DENTAL_ASSISTANT").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("DENTIST").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("DERMATOLOGIST").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("DIETITIAN").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("DOCTOR").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("ECONOMIST").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("EDITOR").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("ELECTRICAL_ENGINEER").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("ELECTRICIAN").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("ELEMENTARY_SCHOOL_TEACHER").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("ENGINEER").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("ENVIRONMENTAL_ENGINEER").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("EPIDEMIOLOGIST").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("EVENT_PLANNER").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("EXECUTIVE_ASSISTANT").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("FINANCIAL_ADVISOR").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("FINANCIAL_ANALYST").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("FLIGHT_ATTENDANT").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("FLORIST").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("FORENSIC_SCIENTIST").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("GRAPHIC_DESIGNER").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("HEALTH_EDUCATOR").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("HOSPITAL_ADMINISTRATOR").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("HOTEL_MANAGER").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("HUMAN_RESOURCES_SPECIALIST").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("HVAC_TECHNICIAN").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("INDUSTRIAL_ENGINEER").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("INFORMATION_SECURITY_ANALYST").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("INSURANCE_AGENT").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("INTERIOR_DESIGNER").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("IT_MANAGER").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("JANITOR").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("JOURNALIST").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("LANDSCAPE_ARCHITECT").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("LAWYER").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("LIBRARIAN").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("LOGISTICS_MANAGER").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("MANAGEMENT_ANALYST").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("MARKETING_MANAGER").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("MARKET_RESEARCH_ANALYST").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("MECHANICAL_ENGINEER").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("MEDICAL_ASSISTANT").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("MEDICAL_LAB_TECHNICIAN").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("MEDICAL_RECORDS_TECHNICIAN").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("MIDDLE_SCHOOL_TEACHER").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("NETWORK_ADMINISTRATOR").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("NURSE").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("OCCUPATIONAL_THERAPIST").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("OPERATIONS_MANAGER").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("OPTOMETRIST").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("PARALEGAL").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("PARAMEDIC").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("PHARMACIST").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("PHYSICAL_THERAPIST").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("PHYSICIAN_ASSISTANT").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("PILOT").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("PLUMBER").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("POLICE_OFFICER").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("PRINCIPAL").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("PROJECT_MANAGER").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("PSYCHOLOGIST").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("PUBLIC_RELATIONS_SPECIALIST").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("RADIOLOGIC_TECHNOLOGIST").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("REAL_ESTATE_AGENT").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("RECEPTIONIST").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("REGISTERED_NURSE").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("RESEARCH_SCIENTIST").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("SALES_MANAGER").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("SECRETARY").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("SOCIAL_WORKER").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("SOFTWARE_DEVELOPER").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("SOFTWARE_ENGINEER").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("STATISTICIAN").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("SURVEYOR").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("TECHNICAL_DIRECTOR").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("TECHNICAL_WRITER").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("VETERINARIAN").build());
+        definitionService.save(Definition.builder().definitionType(EDefinitionType.POSITION).name("WEB_DEVELOPER").build());
     }
 }

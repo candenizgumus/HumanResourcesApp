@@ -42,8 +42,7 @@ public class DefinitionService {
         return definitionRepository.findAllByDefinitionType(definitionType);
     }
 
-    public Boolean saveLeaveType(Definition definition) {
+    public void save(Definition definition) {
         definitionRepository.save(definition);
-        return true;
     }
 }

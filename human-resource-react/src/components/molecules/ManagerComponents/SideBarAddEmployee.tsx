@@ -24,7 +24,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from "dayjs";
 import sweetalert2 from "sweetalert2";
 import Swal from "sweetalert2";
-import { fetchGetDefinitions } from '../../../store/feature/definitionSlice';
+import { fetchGetDefinitions, IDefinition } from '../../../store/feature/definitionSlice';
 import { EDefinitionType } from '../../../models/IDefinitionType';
 
 
@@ -34,7 +34,6 @@ const SideBarAddEmployee: React.FC = () => {
 
 
     const token = useAppSelector((state) => state.auth.token);
-    const employeeTypes = useAppSelector((state) => state.definition.definitionList);
     const dispatch = useDispatch<HumanResources>();
     const [name, setName] = useState<string>( '');
     const [surname, setSurname] = useState<string>( '');
@@ -46,11 +45,12 @@ const SideBarAddEmployee: React.FC = () => {
     const [hireDate, setHireDate] = useState<Date | null>(null);
     const [location, setLocation] = useState<string>('') ;
     const[salary,setSalary]=useState<number>(0)
+    const [loading, setLoading] = useState(false);
+    const [positions, setPositions] = useState<IDefinition[]>([]);
+    const [employeeTypes, setEmployeeTypes] = useState<IDefinition[]>([]);
+    const [selectedPosition, setSelectedPosition] = useState<string>('');
 
-    const [positions, setPositions] = useState([]);
-    const [selectedPositions, setSelectedPositions] = useState<string>('');
-
-    const [selectedEmployeeTypeId, setSelectedEmployeeTypeId] = useState<number>(14);
+    const [selectedEmployeeType, setSelectedEmployeeType] = useState<string>('');
 
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -62,7 +62,10 @@ const SideBarAddEmployee: React.FC = () => {
     const setUserInfos = async () => {
         try {
 
-            dispatch(fetchGetPositions())
+            dispatch(fetchGetDefinitions({
+                token,
+                definitionType: EDefinitionType.POSITION
+            }))
                 .then(data => {
                     console.log('Positions Response:', data);  // Log the response
                     setPositions(data.payload);
@@ -75,6 +78,10 @@ const SideBarAddEmployee: React.FC = () => {
                 token: token,
                 definitionType: EDefinitionType.EMPLOYEE_TYPE
             }))
+                .then(data => {
+                    console.log('EmployeeTypes Response:', data);  // Log the response
+                    setEmployeeTypes(data.payload);
+                })
                 .catch(error => {
                     console.error('Error fetching positions:', error);  // Handle fetch errors
                 });
@@ -88,10 +95,10 @@ const SideBarAddEmployee: React.FC = () => {
         setUserInfos();
     },[])
 
-    console.log(name, surname, phone, title, birthDate, selectedPositions, location);
-    const addEmployee = () => {
+    console.log(name, surname, phone, title, birthDate, selectedPosition, location);
+    const addEmployee = async () => {
 
-        if (!salary || !name || !surname    || !surname  || !phone || !title  || !birthDate  || !selectedEmployeeTypeId || !location || !hireDate || !selectedPositions) {
+        if (!salary || !name || !surname    || !surname  || !phone || !title  || !birthDate  || !selectedEmployeeType || !location || !hireDate || !selectedPosition) {
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
@@ -99,44 +106,40 @@ const SideBarAddEmployee: React.FC = () => {
             });
             return;
         }
-        dispatch(fetchAddEmployeeToCompany({
+        setLoading(true);
+        const result = await dispatch(fetchAddEmployeeToCompany({
             token: token,
             name: name,
             surname: surname,
             phone: phone,
             title: title,
             birthDate: birthDate,
-            ePosition: selectedPositions,
+            position: selectedPosition,
             location: location,
             hireDate:hireDate,
-            employeeTypeDefinitionId: selectedEmployeeTypeId,
+            employeeType: selectedEmployeeType,
             email: email,
             salary: salary
-        })).then((data) => {
-            if (data.payload.message) {
-                sweetalert2.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: data.payload.message ?? 'Failed to add employee',
-                    showConfirmButton: true
-                })
+        }))
+        if (result.payload.message) {
+            sweetalert2.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: result.payload.message ?? 'Failed to add employee',
+                showConfirmButton: true
+            })
+            setLoading(false);
+        }else{
+            sweetalert2.fire({
+                icon: 'success',
+                title: 'Your profile has been updated successfully',
+                showConfirmButton: false,
+                timer: 1500
+            })
+            setLoading(false);
+        }
 
-            }else{
-                sweetalert2.fire({
-                    icon: 'success',
-                    title: 'Your profile has been updated successfully',
-                    showConfirmButton: false,
-                    timer: 1500
-                })
-            }
-        })
     }
-
-    const handleEmployeeTypeChange = (event: SelectChangeEvent<number>) => {
-        // Convert the value to a number
-        const newValue = parseInt(event.target.value as string, 10);
-        setSelectedEmployeeTypeId(newValue);
-      };
 
     return (
 
@@ -237,8 +240,8 @@ const SideBarAddEmployee: React.FC = () => {
 
 
 
-                    <Button onClick={addEmployee} sx={{mt: 5}} type="button" variant="contained" color="primary">
-                        Add Employee
+                    <Button onClick={addEmployee} sx={{mt: 5}} type="button" variant="contained" color="primary" disabled={loading}>
+                        {loading ? "SAVING..." : "ADD EMPLOYEE"}
                     </Button>
                 </Box>
             </Grid>
@@ -254,15 +257,15 @@ const SideBarAddEmployee: React.FC = () => {
                     }}
                 >
                     <FormControl required variant="outlined">
-                        <InputLabel>{'Please Select Your Position'}</InputLabel>
+                        <InputLabel>{'Please Select Position'}</InputLabel>
                         <Select
-                            value={selectedPositions}
-                            onChange={event => setSelectedPositions(event.target.value as string)}
+                            value={selectedPosition}
+                            onChange={event => setSelectedPosition(event.target.value as string)}
                             label="Position"
                         >
-                            {positions.map((position) => (
-                                <MenuItem key={position} value={position}>
-                                    {position}
+                            {Object.values(positions).map(position => (
+                                <MenuItem key={position.name} value={position.name}>
+                                    {position.name}
                                 </MenuItem>
                             ))}
                         </Select>
@@ -271,12 +274,12 @@ const SideBarAddEmployee: React.FC = () => {
                     <FormControl required variant="outlined">
                         <InputLabel>{'Please Select Employee Type'}</InputLabel>
                         <Select
-                            value={selectedEmployeeTypeId}
-                            onChange={handleEmployeeTypeChange}
+                            value={selectedEmployeeType}
+                            onChange={event => setSelectedEmployeeType(event.target.value as string)}
                             label="Employee Type"
                         >
                             {Object.values(employeeTypes).map(employeeType => (
-                                <MenuItem key={employeeType.name} value={employeeType.id}>
+                                <MenuItem key={employeeType.name} value={employeeType.name}>
                                     {employeeType.name}
                                 </MenuItem>
                             ))}

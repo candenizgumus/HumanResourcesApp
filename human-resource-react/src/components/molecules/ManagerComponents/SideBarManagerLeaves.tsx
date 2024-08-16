@@ -127,6 +127,7 @@ const SideBarManagerLeaves = () => {
                     text: 'Leave already approved',
                     icon: "error",
                     confirmButtonText: "OK",
+                    confirmButtonColor: '#1976D2',
                 });
                 return;
             }

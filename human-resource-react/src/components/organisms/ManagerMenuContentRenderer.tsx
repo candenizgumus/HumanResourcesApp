@@ -20,6 +20,7 @@ import SideBarCreateDefinition from "../molecules/SideBarCreateDefinition";
 import {SetShifts} from "../molecules/ManagerComponents/SetShifts";
 import AddCompanyItem from "../molecules/ManagerComponents/AddCompanyItem";
 import SideBarCompanyItems from "../molecules/ManagerComponents/SideBarCompanyItems";
+import {EmployeeHomeContent} from "../molecules/EmployeeComponents/EmployeeHomeContent";
 export const ManagerMenuContentRenderer = () => {
     const page = useAppSelector((state) => state.auth.pageState);
 
@@ -46,6 +47,7 @@ export const ManagerMenuContentRenderer = () => {
                 {page === 'Add Item' && <AddCompanyItem/>}
                 {page === 'Company Items' && <SideBarCompanyItems/>}
                 {page === 'Create Definition' && <SideBarCreateDefinition/>}
+                {page === 'Dashboard' && <EmployeeHomeContent/>}
             </Grid>
         </>
     );

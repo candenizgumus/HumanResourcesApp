@@ -51,7 +51,8 @@ const AddCompanyItem: React.FC = () => {
                     Swal.fire({
                         icon: 'error',
                         text: data.payload.message ?? 'Failed to add item',
-                        showConfirmButton: true
+                        showConfirmButton: true,
+                        confirmButtonColor: '#1976D2',
                     })
 
                 } else {

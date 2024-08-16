@@ -47,6 +47,7 @@ const SideBarHolidayFormAdmin: React.FC = () => {
                     icon: 'success',
                     title: 'Success!',
                     text: 'Holiday has been submitted successfully.',
+                    confirmButtonColor: '#1976D2',
                 });
                 dispatch(fetchHolidaysAdmin(token));
             })
@@ -55,6 +56,7 @@ const SideBarHolidayFormAdmin: React.FC = () => {
                     icon: 'error',
                     title: 'Error',
                     text: 'There was an error. Please try again later.',
+                    confirmButtonColor: '#1976D2',
                 });
             });
     };

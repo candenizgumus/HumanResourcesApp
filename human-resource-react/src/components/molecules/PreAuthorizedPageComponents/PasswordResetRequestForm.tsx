@@ -78,6 +78,7 @@ const PasswordResetRequestForm: React.FC = () => {
             icon: 'error',
             title: 'Error',
             text: result.message,
+              confirmButtonColor: '#1976D2',
           });
           dispatch(setIsCodeSend(false));
                     setIsDisabled(false);
@@ -88,6 +89,7 @@ const PasswordResetRequestForm: React.FC = () => {
           icon: 'success',
           title: 'Success!',
           text: 'Password reset code has been sent.',
+            confirmButtonColor: '#1976D2',
         });
         dispatch(setIsCodeSend(true));
       };

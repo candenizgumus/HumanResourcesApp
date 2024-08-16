@@ -144,6 +144,7 @@ export default function SideBarOffers() {
                         text: "Offer has been approved",
                         icon: "success",
                         confirmButtonText: "OK",
+                        confirmButtonColor: '#1976D2',
                     });
 
                     await dispatch(
@@ -209,6 +210,7 @@ export default function SideBarOffers() {
                         text: "Offer has been approved",
                         icon: "success",
                         confirmButtonText: "OK",
+                        confirmButtonColor: '#1976D2',
                     });
                     await dispatch(
                         fetchGetOffers({
@@ -265,6 +267,7 @@ export default function SideBarOffers() {
                     text: "Email has not been sent",
                     icon: "error",
                     confirmButtonText: "OK",
+                    confirmButtonColor: '#1976D2',
                 });
             }
         });

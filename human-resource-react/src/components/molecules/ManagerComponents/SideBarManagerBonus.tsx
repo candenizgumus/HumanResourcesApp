@@ -118,13 +118,15 @@ const  SideBarManagerBonus = () => {
                             text: data.payload.message,
                             icon: "error",
                             confirmButtonText: "OK",
+                            confirmButtonColor: '#1976D2',
                         });
                         return;
                     } else {
                         await Swal.fire({
                             title: "Deleted!",
                             text: "Your bonus has been cancelled.",
-                            icon: "success"
+                            icon: "success",
+                            confirmButtonColor: '#1976D2',
                         });
 
                         await dispatch(fetchGetBonusesOfManager({

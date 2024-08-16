@@ -102,6 +102,7 @@ export default function SideBarExpenditure() {
                     text: 'Expenditure already approved',
                     icon: "error",
                     confirmButtonText: "OK",
+                    confirmButtonColor: '#1976D2',
                 });
                 continue;
             }
@@ -129,13 +130,15 @@ export default function SideBarExpenditure() {
                             text: data.payload.message,
                             icon: "error",
                             confirmButtonText: "OK",
+                            confirmButtonColor: '#1976D2',
                         });
                         return;
                     } else {
                         await Swal.fire({
                             title: "Deleted!",
                             text: "Your expenditure has been deleted.",
-                            icon: "success"
+                            icon: "success",
+                            confirmButtonColor: '#1976D2',
                         });
 
                         await dispatch(fetchGetExpendituresOfEmployee({
@@ -167,6 +170,7 @@ export default function SideBarExpenditure() {
                     text: 'Expenditure not yet approved, cannot cancel.',
                     icon: "error",
                     confirmButtonText: "OK",
+                    confirmButtonColor: '#1976D2',
                 });
                 continue;
             }
@@ -194,13 +198,15 @@ export default function SideBarExpenditure() {
                             text: data.payload.message,
                             icon: "error",
                             confirmButtonText: "OK",
+                            confirmButtonColor: '#1976D2',
                         });
                         return;
                     } else {
                         await Swal.fire({
                             title: "Cancelled!",
                             text: "Your expenditure has been cancelled.",
-                            icon: "success"
+                            icon: "success",
+                            confirmButtonColor: '#1976D2',
                         });
 
                         await dispatch(fetchGetExpendituresOfEmployee({
@@ -244,6 +250,7 @@ export default function SideBarExpenditure() {
                         text: data.payload.message,
                         icon: "error",
                         confirmButtonText: "OK",
+                        confirmButtonColor: '#1976D2',
                     });
                     return;
                 }
@@ -252,6 +259,7 @@ export default function SideBarExpenditure() {
                     text: "Expense has been added",
                     icon: "success",
                     confirmButtonText: "OK",
+                    confirmButtonColor: '#1976D2',
                 });
 
                 fetchGetAllUsersOfManager({

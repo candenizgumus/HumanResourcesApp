@@ -43,6 +43,7 @@ const PasswordResetForm: React.FC = () => {
               icon: 'error',
               title: 'Error',
               text: result.message,
+                confirmButtonColor: '#1976D2',
             });
         }
 
@@ -50,6 +51,7 @@ const PasswordResetForm: React.FC = () => {
             icon: 'success',
             title: 'Success!',
             text: 'Password Reset Successfull.',
+            confirmButtonColor: '#1976D2',
           }).then(()=>{
             navigate("/login")
           })

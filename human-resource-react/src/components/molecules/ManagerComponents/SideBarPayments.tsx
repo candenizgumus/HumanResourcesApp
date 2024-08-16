@@ -109,13 +109,15 @@ export default function SideBarPayments() {
                             text: data.payload.message,
                             icon: "error",
                             confirmButtonText: "OK",
+                            confirmButtonColor: '#1976D2',
                         });
                         return;
                     } else {
                         await Swal.fire({
                             title: "Deleted!",
                             text: "Your Payment has been deleted.",
-                            icon: "success"
+                            icon: "success",
+                            confirmButtonColor: '#1976D2',
                         });
 
                         await dispatch(fetchGetPayments({
@@ -143,6 +145,7 @@ export default function SideBarPayments() {
                     text: "Please fill out all required fields",
                     icon: "error",
                     confirmButtonText: "OK",
+                    confirmButtonColor: '#1976D2',
                 });
                 return;
             }
@@ -160,6 +163,7 @@ export default function SideBarPayments() {
                         text: data.payload.message,
                         icon: "error",
                         confirmButtonText: "OK",
+                        confirmButtonColor: '#1976D2',
                     });
                     return;
                 }

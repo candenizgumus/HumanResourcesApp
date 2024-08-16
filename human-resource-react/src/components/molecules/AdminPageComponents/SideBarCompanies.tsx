@@ -22,15 +22,14 @@ import Swal from "sweetalert2";
 import {ICompany} from "../../../models/ICompany";
 
 const columns: GridColDef[] = [
-    { field: "id", headerName: "ID", width: 70, headerAlign: "center" },
-    { field: "name", headerName: "Company Name", width: 160, headerAlign: "center" },
-    { field: "description", headerName: "Description", headerAlign: "center", width: 300 },
-    { field: "numberOfEmployee", headerName: "Employee Count", headerAlign: "center", width: 150 },
-    { field: "status", headerName: "Status", headerAlign: "center", width: 160 },
+    { field: "name", headerName: "Company Name", flex:1, headerAlign: "center" },
+    { field: "description", headerName: "Description", headerAlign: "center", flex:3 },
+    { field: "numberOfEmployee", headerName: "Employee Count", headerAlign: "center", flex:1 },
+    { field: "status", headerName: "Status", headerAlign: "center", flex:1 },
     {
         field: "logo",
         headerName: "Logo",
-        width: 100,
+        flex:1,
         headerAlign: "center",
         sortable: false,
         renderCell: (params) => (
@@ -173,7 +172,7 @@ export default function OfferList() {
     };
 
     return (
-        <div style={{ height: 400, width: "inherit" }}>
+        <div style={{ height: "auto", width: "inherit" }}>
             <TextField
                 label="Name"
                 variant="outlined"

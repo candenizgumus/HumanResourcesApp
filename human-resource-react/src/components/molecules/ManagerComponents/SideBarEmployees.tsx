@@ -320,7 +320,7 @@ export default function SideBarEmployees() {
     };
 
     return (
-        <div style={{ height: 400, width: "inherit" }}>
+        <div style={{ height: "auto", width: "inherit" }}>
             <TextField
                 label="Email"
                 variant="outlined"

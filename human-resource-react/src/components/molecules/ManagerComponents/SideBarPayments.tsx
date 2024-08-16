@@ -190,7 +190,7 @@ export default function SideBarPayments() {
     };
 
     return (
-        <div style={{ height: 400, width: "inherit" }}>
+        <div style={{ height: "auto", width: "inherit" }}>
             <TextField
                 label="Description"
                 variant="outlined"

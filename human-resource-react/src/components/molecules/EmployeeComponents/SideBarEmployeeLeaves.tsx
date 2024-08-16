@@ -240,7 +240,7 @@ export default function SideBarEmployeeLeaves() {
 
 
     return (
-        <div style={{ height: 400, width: "inherit" }}>
+        <div style={{ height: "auto", width: "inherit" }}>
             <Grid container spacing={1} style={{ marginTop: 16 }} direction="row" alignItems="center">
                 <Grid item>
                     <TextField

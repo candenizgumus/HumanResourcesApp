@@ -64,7 +64,7 @@ const SideBarHolidayFormAdmin: React.FC = () => {
     return (
         <Box sx={{ flexGrow: 1, padding: 2 }}>
             <Grid container spacing={2}>
-                <Grid item xs={12}>
+                <Grid item xs={6}>
                     <TextField
                         label="Holiday Name"
                         value={holidayName}
@@ -74,7 +74,7 @@ const SideBarHolidayFormAdmin: React.FC = () => {
                         autoComplete="off"
                     />
                 </Grid>
-                <Grid item xs={12}>
+                <Grid item xs={6}>
                     <FormControl fullWidth required>
                         <InputLabel>Holiday Type</InputLabel>
                         <Select
@@ -89,22 +89,23 @@ const SideBarHolidayFormAdmin: React.FC = () => {
                         </Select>
                     </FormControl>
                 </Grid>
-                <Grid item xs={12}>
+                <Grid item xs={6}>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DatePicker
                             label="Holiday Start Date"
                             value={holidayStartDate ? dayjs(holidayStartDate) : null}
-
+                            sx={{ width: '100%' }}
                             onChange={(newValue) => setHolidayStartDate(newValue ? newValue.toDate() : null)}
 
                         />
                     </LocalizationProvider>
                 </Grid>
-                <Grid item xs={12}>
+                <Grid item xs={6}>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DatePicker
                             shouldDisableDate={holidayStartDate ? (date) => date.isBefore(holidayStartDate) : undefined}
                             label="Holiday End Date"
+                            sx={{ width: '100%' }}
                             value={holidayEndDate ? dayjs(holidayEndDate) : null}
                             onChange={(newValue) => setHolidayEndDate(newValue ? newValue.toDate() : null)}
                         />

@@ -92,14 +92,14 @@ const SideBarHolidayFormUser: React.FC = () => {
     };
 
     return (
-        <Box sx={{ flexGrow: 1, padding: 2 }}>
+        <Box sx={{ flexGrow: 1}}>
             <Grid container spacing={2}>
                 <Grid item xs={12}>
                     <Typography variant="h6" sx={{ fontWeight: 'bold'}}>
                         Add From Menu
                     </Typography>
                 </Grid>
-                <Grid item xs={12}>
+                <Grid item xs={6}>
                     <FormControl fullWidth>
                         <InputLabel>Select Holiday</InputLabel>
                         <Select
@@ -117,7 +117,7 @@ const SideBarHolidayFormUser: React.FC = () => {
                 <Grid item xs={12}>
                     <Divider sx={{ my: 2, backgroundColor: 'rgba(0, 0, 0, 0.87)' }} />
                 </Grid>
-                <Grid item xs={12}>
+                <Grid item xs={6}>
                     <TextField
                         label="Holiday Name"
                         value={holidayName}
@@ -128,7 +128,7 @@ const SideBarHolidayFormUser: React.FC = () => {
                         inputProps={{ maxLength: 50 }}
                     />
                 </Grid>
-                <Grid item xs={12}>
+                <Grid item xs={6}>
                     <FormControl fullWidth required>
                         <InputLabel>Holiday Type</InputLabel>
                         <Select
@@ -144,29 +144,29 @@ const SideBarHolidayFormUser: React.FC = () => {
                     </FormControl>
                 </Grid>
 
-                <Grid item xs={12}>
+                <Grid item xs={6}>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DatePicker
                             label="Holiday Start Date"
                             value={holidayStartDate ? dayjs(holidayStartDate) : null}
-
+                            sx={{ width: '100%' }}
                             onChange={(newValue) => setHolidayStartDate(newValue ? newValue.toDate() : null)}
 
                         />
                     </LocalizationProvider>
                 </Grid>
-                <Grid item xs={12}>
+                <Grid item xs={6}>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DatePicker
                             label="Holiday End Date"
                             value={holidayEndDate ? dayjs(holidayEndDate) : null}
                             shouldDisableDate={holidayStartDate ? (date) => date.isBefore(holidayStartDate) : undefined}
                             onChange={(newValue) => setHolidayEndDate(newValue ? newValue.toDate() : null)}
-
+                            sx={{ width: '100%' }}
                         />
                     </LocalizationProvider>
                 </Grid>
-                <Grid item xs={12}>
+                <Grid item xs={6}>
                     <Button
                         variant="contained"
                         color="primary"

@@ -163,7 +163,7 @@ export default function SideBarUsers() {
     };
 
     return (
-        <div style={{ height: 410, width: "inherit" }}>
+        <div style={{ height: "auto", width: "inherit" }}>
             <TextField
                 label="Email"
                 variant="outlined"

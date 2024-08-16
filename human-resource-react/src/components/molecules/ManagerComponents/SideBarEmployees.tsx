@@ -29,8 +29,6 @@ import {DatePicker} from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
 import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
 import {fetchSaveBonus} from "../../../store/feature/bonusSlice";
-import {Simulate} from "react-dom/test-utils";
-import error = Simulate.error;
 import {setEmployeeIdAndCompanyId} from "../../../store/feature/shiftSlice";
 import { fetchGetDefinitions } from "../../../store/feature/definitionSlice";
 import { EDefinitionType } from "../../../models/IDefinitionType";
@@ -49,6 +47,7 @@ export default function SideBarEmployees() {
     const [description, setDescription] = useState('');
     const [bonusAmount, setBonusAmount] = useState(0);
     const [bonusDate, setBonusDate] = useState<Date | null>(null);
+    const [isDeleting, setIsDeleting] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
@@ -165,7 +164,7 @@ export default function SideBarEmployees() {
     }
 
     const handleDeleteEmployee = async () => {
-        setLoading(true);
+        setIsDeleting(true);
 
         for (let id of selectedRowIds) {
             const selectedEmployee = userList.find((selectedEmployee) => selectedEmployee.id === id);
@@ -179,7 +178,7 @@ export default function SideBarEmployees() {
                     confirmButtonText: "OK",
                     confirmButtonColor: "#D32F2F",
                 });
-                setLoading(false);
+                setIsDeleting(false);
                 return;
             }
 
@@ -235,7 +234,7 @@ export default function SideBarEmployees() {
             }
         }
 
-        setLoading(false);
+        setIsDeleting(false);
     };
 
     const handleActivateEmployee = async () => {
@@ -354,7 +353,7 @@ export default function SideBarEmployees() {
                         color="success"
                         disabled={ isActivating || selectedRowIds.length === 0}
                     >
-                        {loading ? "Activate..." : "Activate Employee"}
+                        Activate Employee
                     </Button>
                 </Grid>
                 <Grid item>
@@ -362,9 +361,9 @@ export default function SideBarEmployees() {
                         onClick={handleDeleteEmployee}
                         variant="contained"
                         color="error"
-                        disabled={ loading || selectedRowIds.length === 0}
+                        disabled={ isDeleting || selectedRowIds.length === 0}
                     >
-                        {loading ? "Deleting..." : "Delete Employee"}
+                        Delete Employee
                     </Button>
                 </Grid>
 

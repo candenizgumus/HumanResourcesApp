@@ -1,10 +1,15 @@
 package com.humanresourcesapp.dto.requests;
 
 import jakarta.validation.constraints.Email;
+import lombok.Builder;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 
-public record AddEmployeeToCompanyRequestDto(Long companyId,
+public record AddEmployeeToCompanyRequestDto(
                                              String title,
                                              @Email(message = "Not a valid Email")
                                              String email,
@@ -16,7 +21,8 @@ public record AddEmployeeToCompanyRequestDto(Long companyId,
                                              LocalDate hireDate,
                                              String position,
                                              String employeeType,
-                                             Double salary
+                                             Double salary,
+                                             MultipartFile photo
 
 
 )

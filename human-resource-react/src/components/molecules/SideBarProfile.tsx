@@ -5,7 +5,7 @@ import { IUser } from "../../models/IUser";
 import {
     fetchFindCompanyNameAndManagerNameOfUser,
     fetchFindUserByToken,
-    fetchGetPositions, fetchUpdateUser
+     fetchUpdateUser
 } from "../../store/feature/authSlice";
 import { useDispatch } from "react-redux";
 
@@ -17,7 +17,6 @@ import sweetalert2 from "sweetalert2";
 import Swal from "sweetalert2";
 import { CloudUpload } from '@mui/icons-material';
 import styled from '@emotion/styled';
-import UploadFileIcon from '@mui/icons-material/UploadFile';
 import { uploadPlayerProfileImage } from '../../store/feature/awsSlice';
 import { IUpdateUserProfile } from '../../models/IUpdateUserProfile';
 import { fetchGetDefinitions, IDefinition } from '../../store/feature/definitionSlice';

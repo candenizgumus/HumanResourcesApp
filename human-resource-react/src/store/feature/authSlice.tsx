@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ILogin } from "../../models/ILogin";
 import { IUser } from "../../models/IUser";
 import { ICreateUser } from '../../models/ICreateUser';
+import {formatDate} from "date-fns";
 
 
 interface IAuthState {
@@ -338,28 +339,36 @@ interface IfetchAddEmployeeToCompany {
     position: string;
     employeeType: string;
     salary: number
+    photo: File | null
 }
 export const fetchAddEmployeeToCompany = createAsyncThunk(
     'user/fetchAddEmployeeToCompany',
     async (payload: IfetchAddEmployeeToCompany, { dispatch }) => {
+        const formData = new FormData();
+
+        // JSON verilerini formData'ya ekleyin
+        formData.append('email', payload.email);
+        formData.append('name', payload.name);
+        formData.append('surname', payload.surname);
+        formData.append('phone', payload.phone);
+        formData.append('title', payload.title);
+        formData.append('location', payload.location);
+
+        // Tarihleri uygun formatta ekleyin
+        formData.append('birthDate', payload.birthDate.toISOString().split('T')[0]);
+        formData.append('hireDate', payload.hireDate.toISOString().split('T')[0]);
+
+        formData.append('position', payload.position);
+        formData.append('employeeType', payload.employeeType);
+        formData.append('salary', payload.salary.toString());
+        if (payload.photo) {
+            formData.append('photo', payload.photo);
+        }
         const response = await fetch('http://localhost:9090/dev/v1/user/add-employee-to-company', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
                 'Authorization': `Bearer ` + payload.token
-            }, body: JSON.stringify({
-                'email': payload.email,
-                'name': payload.name,
-                'surname': payload.surname,
-                'phone': payload.phone,
-                'title': payload.title,
-                'location': payload.location,
-                'birthDate': payload.birthDate,
-                'hireDate': payload.hireDate,
-                'position': payload.position,
-                'employeeType': payload.employeeType,
-                'salary': payload.salary
-            })
+            }, body: formData
         });
 
 

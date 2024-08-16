@@ -1,10 +1,11 @@
 package com.humanresourcesapp.dto.requests;
 
+import com.humanresourcesapp.entities.enums.ECompanyItemType;
 import lombok.Builder;
 
 @Builder
 public record CompanyItemSaveRequestDto(
-        Long companyId,
         String name,
-        String description) {
+        ECompanyItemType companyItemType,
+        String serialNumber) {
 }

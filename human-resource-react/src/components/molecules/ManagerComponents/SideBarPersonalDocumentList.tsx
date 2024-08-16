@@ -12,9 +12,8 @@ import Swal from "sweetalert2";
 import {IPersonalDocument} from "../../../models/IPersonalDocument";
 
 const columns: GridColDef[] = [
-    {field: "id", headerName: "Id", flex: 1, headerAlign: "center"},
     {field: "email", headerName: "Email", flex: 1, headerAlign: "center"},
-    {field: "description", headerName: "Description", flex: 1, headerAlign: "center"},
+    {field: "description", headerName: "Description", flex: 3, headerAlign: "center"},
     {field: "documentType", headerName: "Document Type", flex: 1, headerAlign: "center"},
     {
         field: "attachedFile", headerName: "Document", headerAlign: "center", flex: 1,

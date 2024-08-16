@@ -81,9 +81,7 @@ export default function LoginCard() {
                                 alignItems: 'center',
                             }}
                         >
-
-                            {error + ' '}
-                            <strong>Try Again!</strong>
+                            {error}
                         </Alert>
                     </Box>
                 )}

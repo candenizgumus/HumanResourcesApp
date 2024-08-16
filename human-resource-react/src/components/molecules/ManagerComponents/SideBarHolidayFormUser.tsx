@@ -3,7 +3,6 @@ import { useDispatch } from 'react-redux';
 import {HumanResources, useAppSelector} from '../../../store';
 import {
     fetchCreateHolidayManager, fetchHolidaysAdmin, fetchHolidaysEmployee,
-    fetchHolidaysUser
 } from '../../../store/feature/holidaySlice';
 import Swal from 'sweetalert2';
 import {

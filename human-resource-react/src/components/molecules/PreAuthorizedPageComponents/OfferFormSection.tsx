@@ -39,6 +39,7 @@ const OfferFormSection = () => {
                 icon: 'error',
                 title: 'Oops...',
                 text: 'Please fill all the fields!',
+                confirmButtonColor: '#1976D2',
             });
             return;
         }
@@ -76,6 +77,7 @@ const OfferFormSection = () => {
                     icon: 'success',
                     title: 'Success!',
                     text: 'Your offer has been submitted successfully.',
+                    confirmButtonColor: '#1976D2',
                 });
             })
 

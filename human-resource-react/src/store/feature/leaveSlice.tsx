@@ -15,17 +15,21 @@ export interface ILeave {
     attachedFile:string
     fullName: string
     email: string
-    dLeaveTypeId: number
+    leaveType: string
+    responseMessage: string
+    managerName: string
 }
 
 interface IInitialLeave {
     leaveList: ILeave[],
     isLeaveListLoading: boolean;
+    selectedLeave: ILeave;
 }
 
 const initialLeaveState: IInitialLeave = {
     leaveList: [],
     isLeaveListLoading: false,
+    selectedLeave: {} as ILeave
 }
 
 interface IFetchSaveLeave {
@@ -33,7 +37,7 @@ interface IFetchSaveLeave {
     description: string;
     startDate: Date;
     endDate: Date;
-    dLeaveTypeId: number;
+    leaveType: string;
     files: File[];
 }
 
@@ -48,7 +52,7 @@ export const fetchSaveLeave = createAsyncThunk(
         formData.append('startDate', formatDate(payload.startDate));
         formData.append('endDate', formatDate(payload.endDate));
 
-        formData.append('dLeaveTypeId', payload.dLeaveTypeId.toString());
+        formData.append('leaveType', payload.leaveType.toString());
 
         payload.files.forEach((file) => {
             formData.append('files', file);
@@ -71,7 +75,7 @@ interface IFetchSaveLeaveAsManager {
     description: string;
     startDate: Date;
     endDate: Date;
-    dLeaveTypeId: number;
+    leaveType: string;
     files: File[];
     employeeId: number;
 }
@@ -87,7 +91,7 @@ export const fetchAssignLeave = createAsyncThunk(
         formData.append('startDate', formatDate(payload.startDate));
         formData.append('endDate', formatDate(payload.endDate));
 
-        formData.append('dLeaveTypeId', payload.dLeaveTypeId.toString());
+        formData.append('leaveType', payload.leaveType.toString());
         formData.append('employeeId', payload.employeeId.toString());
         payload.files.forEach((file) => {
             formData.append('files', file);
@@ -137,6 +141,23 @@ export const fetchGetLeavesOfEmployee = createAsyncThunk(
 
 )
 
+export const fetchGetLeaveById = createAsyncThunk(
+    'leave/fetchGetLeaveById',
+    async (payload: IRequestWıthIdAndToken) => {
+
+        const response = await fetch(`http://localhost:9090/dev/v1/leave/search-by-leave-id?id=`+payload.id, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ` + payload.token
+            }
+        });
+
+        return await response.json();
+    }
+
+)
+
 export const fetchGetLeavesOfManager = createAsyncThunk(
     'leave/fetchGetLeavesOfManager',
     async (payload: IfetchGetAllLeaves) => {
@@ -158,17 +179,26 @@ export const fetchGetLeavesOfManager = createAsyncThunk(
     }
 
 )
+interface IRequestWithIdAndTokenAndResponse {
+    id: number,
+    token: string,
+    responseMessage: string
+}
 
 export const fetchApproveLeave = createAsyncThunk(
     'leave/fetchApproveLeave',
-    async (payload: IRequestWıthIdAndToken) => {
+    async (payload: IRequestWithIdAndTokenAndResponse) => {
 
-        const response = await fetch(`http://localhost:9090/dev/v1/leave/approve-leave?id=` + payload.id, {
+        const response = await fetch(`http://localhost:9090/dev/v1/leave/approve-leave`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ` + payload.token
-            }
+            },
+            body: JSON.stringify({
+                'id': payload.id,
+                'responseMessage': payload.responseMessage
+            })
         });
 
         return await response.json();
@@ -178,14 +208,18 @@ export const fetchApproveLeave = createAsyncThunk(
 
 export const fetchDeleteLeave = createAsyncThunk(
     'leave/fetchDeleteLeave',
-    async (payload: IRequestWıthIdAndToken) => {
+    async (payload: IRequestWithIdAndTokenAndResponse) => {
 
-        const response = await fetch(`http://localhost:9090/dev/v1/leave/delete?id=` + payload.id, {
+        const response = await fetch(`http://localhost:9090/dev/v1/leave/delete`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ` + payload.token
-            }
+            },
+            body: JSON.stringify({
+                'id': payload.id,
+                'responseMessage': payload.responseMessage
+            })
         });
 
         return await response.json();
@@ -195,14 +229,18 @@ export const fetchDeleteLeave = createAsyncThunk(
 
 export const fetchCancelLeave = createAsyncThunk(
     'leave/fetchCancelLeave',
-    async (payload: IRequestWıthIdAndToken) => {
+    async (payload: IRequestWithIdAndTokenAndResponse) => {
 
-        const response = await fetch(`http://localhost:9090/dev/v1/leave/cancel?id=` + payload.id, {
+        const response = await fetch(`http://localhost:9090/dev/v1/leave/cancel`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ` + payload.token
-            }
+            },
+            body: JSON.stringify({
+                'id': payload.id,
+                'responseMessage': payload.responseMessage
+            })
         });
 
         return await response.json();
@@ -232,9 +270,38 @@ export const fetchUpdateAnnualLeaveDays = createAsyncThunk(
 
 )
 
+interface IFetchUpdateLeave {
+    token : string;
+    id : number;
+    description: string;
+    startDate: Date;
+    endDate: Date;
+    leaveType: string;
+}
 
+export const fetchUpdateLeave = createAsyncThunk(
+    'leave/fetchUpdateLeave',
+    async (payload: IFetchUpdateLeave) => {
 
+        const response = await fetch(`http://localhost:9090/dev/v1/leave/update`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ` + payload.token
+            },
+            body: JSON.stringify({
+                'id': payload.id,
+                'description': payload.description,
+                'startDate': payload.startDate,
+                'endDate': payload.endDate,
+                'leaveType': payload.leaveType
+            })
+        });
 
+        return await response.json();
+    }
+
+)
 
 const leaveSlice = createSlice({
     name: 'leave',
@@ -258,6 +325,9 @@ const leaveSlice = createSlice({
         })
         build.addCase(fetchGetLeavesOfManager.rejected, (state, action) => {
             
+        })
+        build.addCase(fetchGetLeaveById.fulfilled, (state, action) => {
+            state.selectedLeave = action.payload;
         })
     }
 });

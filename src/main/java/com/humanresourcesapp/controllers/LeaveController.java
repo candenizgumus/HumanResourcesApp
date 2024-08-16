@@ -1,8 +1,6 @@
 package com.humanresourcesapp.controllers;
 
-import com.humanresourcesapp.dto.requests.AssignLeaveRequestDto;
-import com.humanresourcesapp.dto.requests.LeaveSaveRequestDto;
-import com.humanresourcesapp.dto.requests.PageRequestDto;
+import com.humanresourcesapp.dto.requests.*;
 import com.humanresourcesapp.entities.Leave;
 import com.humanresourcesapp.services.LeaveService;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +26,12 @@ public class LeaveController {
         return ResponseEntity.ok(leaveService.searchByEmployeeId(dto));
     }
 
+    @PostMapping(SEARCH_BY_LEAVE_ID)
+    @PreAuthorize("hasAnyAuthority('MANAGER')")
+    public ResponseEntity<Leave> searchByLeaveId( Long id){
+        return ResponseEntity.ok(leaveService.searchByLeaveId(id));
+    }
+
     @PostMapping(SEARCH_BY_COMPANY_ID)
     @PreAuthorize("hasAnyAuthority('MANAGER')")
     public ResponseEntity<List<Leave>> searchByCompanyId(@RequestBody PageRequestDto dto){
@@ -39,14 +43,14 @@ public class LeaveController {
     public ResponseEntity<Boolean> addLeaveRequest(@RequestParam ("description") String description,
                                                    @RequestParam ("startDate") LocalDate startDate,
                                                    @RequestParam ("endDate") LocalDate endDate,
-                                                   @RequestParam ("dLeaveTypeId") Long dLeaveTypeId,
+                                                   @RequestParam ("leaveType") String leaveType,
                                                    @Nullable @RequestParam("files") List<MultipartFile> files) {
 
         LeaveSaveRequestDto dto = LeaveSaveRequestDto.builder()
                 .description(description)
                 .startDate(startDate)
                 .endDate(endDate)
-                .dLeaveTypeId(dLeaveTypeId)
+                .leaveType(leaveType)
                 .files(files)
                 .build();
         return ResponseEntity.ok(leaveService.save(dto));
@@ -57,7 +61,7 @@ public class LeaveController {
     public ResponseEntity<Boolean> assignLeave(@RequestParam ("description") String description,
                                                    @RequestParam ("startDate") LocalDate startDate,
                                                    @RequestParam ("endDate") LocalDate endDate,
-                                                   @RequestParam ("dLeaveTypeId") Long dLeaveTypeId,
+                                                   @RequestParam ("leaveType") String leaveType,
                                                    @Nullable @RequestParam("files") List<MultipartFile> files,
                                                    @RequestParam ("employeeId") Long employeeId) {
 
@@ -65,7 +69,7 @@ public class LeaveController {
                 .description(description)
                 .startDate(startDate)
                 .endDate(endDate)
-                .dLeaveTypeId(dLeaveTypeId)
+                .leaveType(leaveType)
                 .files(files)
                 .employeeId(employeeId)
                 .build();
@@ -74,20 +78,20 @@ public class LeaveController {
 
     @PostMapping(APPROVE_LEAVE)
     @PreAuthorize("hasAnyAuthority('MANAGER')")
-    public ResponseEntity<Boolean> approveLeaveRequest(Long id) {
-        return ResponseEntity.ok(leaveService.approveLeaveRequest(id));
+    public ResponseEntity<Boolean> approveLeaveRequest(@RequestBody LeaveOperationWithResponseDto dto) {
+        return ResponseEntity.ok(leaveService.approveLeaveRequest(dto));
     }
 
     @DeleteMapping(DELETE)
     @PreAuthorize("hasAnyAuthority('EMPLOYEE','MANAGER')")
-    public ResponseEntity<Boolean> delete(Long id){
-        return ResponseEntity.ok(leaveService.delete(id));
+    public ResponseEntity<Boolean> delete(@RequestBody LeaveOperationWithResponseDto dto){
+        return ResponseEntity.ok(leaveService.delete(dto));
     }
 
     @PostMapping(CANCEL)
     @PreAuthorize("hasAnyAuthority('EMPLOYEE','MANAGER')")
-    public ResponseEntity<Boolean> cancel(Long id){
-        return ResponseEntity.ok(leaveService.cancel(id));
+    public ResponseEntity<Boolean> cancel(@RequestBody LeaveOperationWithResponseDto dto){
+        return ResponseEntity.ok(leaveService.cancel(dto));
     }
 
     @PostMapping(CHANGE_LEAVE_DAY)
@@ -95,6 +99,12 @@ public class LeaveController {
     public ResponseEntity<Boolean> changeLeaveDay(@RequestParam ("id") Long id,
                                                @RequestParam ("leaveDay") Integer leaveDay) {
         return ResponseEntity.ok(leaveService.changeLeaveDay(id,leaveDay));
+    }
+
+    @PostMapping(UPDATE)
+    @PreAuthorize("hasAnyAuthority('MANAGER')")
+    public ResponseEntity<Boolean> update(@RequestBody LeaveUpdateRequestDto dto) {
+        return ResponseEntity.ok(leaveService.update(dto));
     }
 
 }

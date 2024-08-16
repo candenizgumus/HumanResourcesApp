@@ -43,6 +43,7 @@ public class NotificationService {
                 .notificationText(notificationSaveRequestDto.notificationText())
                 .notificationType(notificationSaveRequestDto.notificationType())
                 .userType(notificationSaveRequestDto.userType())
+                .companyId(notificationSaveRequestDto.companyId())
                 .url(notificationSaveRequestDto.url())
                 .status(EStatus.ACTIVE)
                 .build());

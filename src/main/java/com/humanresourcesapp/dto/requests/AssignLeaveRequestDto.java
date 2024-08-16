@@ -11,7 +11,7 @@ public record AssignLeaveRequestDto(
         String description,
         LocalDate startDate,
         LocalDate endDate,
-        Long dLeaveTypeId,
+        String leaveType,
         List<MultipartFile> files,
         Long employeeId) {
 }

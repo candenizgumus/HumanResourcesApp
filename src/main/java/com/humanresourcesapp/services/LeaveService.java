@@ -2,10 +2,7 @@ package com.humanresourcesapp.services;
 
 import com.humanresourcesapp.configs.aws.S3Buckets;
 import com.humanresourcesapp.constants.ENotificationTextBase;
-import com.humanresourcesapp.dto.requests.AssignLeaveRequestDto;
-import com.humanresourcesapp.dto.requests.LeaveSaveRequestDto;
-import com.humanresourcesapp.dto.requests.NotificationSaveRequestDto;
-import com.humanresourcesapp.dto.requests.PageRequestDto;
+import com.humanresourcesapp.dto.requests.*;
 import com.humanresourcesapp.entities.Leave;
 import com.humanresourcesapp.entities.User;
 import com.humanresourcesapp.entities.enums.ENotificationType;
@@ -72,7 +69,7 @@ public class LeaveService {
                         .employeeName(employee.getName())
                         .employeeSurname(employee.getSurname())
                         .companyId(employee.getCompanyId())
-                        .dLeaveTypeId(dto.dLeaveTypeId())
+                        .leaveType(dto.leaveType())
                         .startDate(dto.startDate().plusDays(1))
                         .endDate(dto.endDate().plusDays(1))
                         .fullName(employee.getName() + " " + employee.getSurname())
@@ -93,11 +90,11 @@ public class LeaveService {
         return true;
     }
 
-    public Boolean approveLeaveRequest(Long id) {
+    public Boolean approveLeaveRequest(LeaveOperationWithResponseDto dto) {
         String email = UserInfoSecurityContext.getUserInfoFromSecurityContext();
         User manager = userService.findByEmail(email).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
 
-        Leave leave = leaveRepository.findById(id).orElseThrow(()-> new HumanResourcesAppException(ErrorType.LEAVE_NOT_FOUND));
+        Leave leave = leaveRepository.findById(dto.id()).orElseThrow(()-> new HumanResourcesAppException(ErrorType.LEAVE_NOT_FOUND));
         if (!leave.getCompanyId().equals(manager.getCompanyId()))
         {
             throw new HumanResourcesAppException(ErrorType.INVALID_ACCOUNT);
@@ -105,7 +102,7 @@ public class LeaveService {
 
         if (!leave.getIsLeaveApproved())
         {
-            if(leave.getDLeaveTypeId().equals(definitionService.findByName("ANNUAL").getId())){
+            if(leave.getLeaveType().equals("ANNUAL")){
                 User employee = userService.findById(leave.getEmployeeId());
                 if(employee.getRemainingAnnualLeave() < ChronoUnit.DAYS.between(leave.getStartDate(), leave.getEndDate())){
                     throw new HumanResourcesAppException(ErrorType.ANNUAL_LEAVE_EXCEEDED);
@@ -117,6 +114,8 @@ public class LeaveService {
             leave.setIsLeaveApproved(true);
             leave.setApproveDate(LocalDate.now());
             leave.setStatus(EStatus.ACTIVE);
+            leave.setResponseMessage(dto.responseMessage());
+            leave.setManagerName(manager.getName() + " " + manager.getSurname());
             leaveRepository.save(leave);
 
             notificationService.save(NotificationSaveRequestDto.builder()
@@ -151,12 +150,12 @@ public class LeaveService {
 
     }
 
-    public Boolean delete(Long id)
+    public Boolean delete(LeaveOperationWithResponseDto dto)
     {
         String userEmail = UserInfoSecurityContext.getUserInfoFromSecurityContext();
         User user = userService.findByEmail(userEmail).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
 
-        Leave leave = leaveRepository.findById(id).orElseThrow(() -> new HumanResourcesAppException(ErrorType.LEAVE_NOT_FOUND));
+        Leave leave = leaveRepository.findById(dto.id()).orElseThrow(() -> new HumanResourcesAppException(ErrorType.LEAVE_NOT_FOUND));
 
         if (leave.getIsLeaveApproved())
         {
@@ -171,6 +170,8 @@ public class LeaveService {
         }
         // if the delete request comes from manager, it is actually a decline request
         leave.setStatus(EStatus.DECLINED);
+        leave.setResponseMessage(dto.responseMessage());
+        leave.setManagerName(user.getName() + " " + user.getSurname());
         leaveRepository.save(leave);
 
         notificationService.save(NotificationSaveRequestDto.builder()
@@ -185,11 +186,11 @@ public class LeaveService {
         return true;
     }
 
-    public Boolean cancel(Long id) {
+    public Boolean cancel(LeaveOperationWithResponseDto dto) {
         String userEmail = UserInfoSecurityContext.getUserInfoFromSecurityContext();
         User user = userService.findByEmail(userEmail).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
 
-        Leave leave = leaveRepository.findById(id).orElseThrow(() -> new HumanResourcesAppException(ErrorType.LEAVE_NOT_FOUND));
+        Leave leave = leaveRepository.findById(dto.id()).orElseThrow(() -> new HumanResourcesAppException(ErrorType.LEAVE_NOT_FOUND));
 
         // if the leave is approved, it can be canceled
         if (leave.getIsLeaveApproved()) {
@@ -217,11 +218,13 @@ public class LeaveService {
                         .notificationType(ENotificationType.WARNING)
                         .url(LEAVES)
                         .build());
+                leave.setResponseMessage(dto.responseMessage());
+                leave.setManagerName(user.getName() + " " + user.getSurname());
             }
             leave.setStatus(EStatus.CANCELED);
             // if the leave is not approved, it can not be canceled, and it will be deleted or rejected
         }else {
-            delete(id);
+            delete(dto);
             return true;
         }
 
@@ -282,7 +285,7 @@ public class LeaveService {
                 .employeeName(employee.getName())
                 .employeeSurname(employee.getSurname())
                 .companyId(employee.getCompanyId())
-                .dLeaveTypeId(dto.dLeaveTypeId())
+                .leaveType(dto.leaveType())
                 .startDate(dto.startDate().plusDays(1))
                 .endDate(dto.endDate().plusDays(1))
                 .approveDate(LocalDate.now())
@@ -305,7 +308,26 @@ public class LeaveService {
         return true;
     }
 
-    // TODO Update Leaves
+    public Leave searchByLeaveId(Long id) {
+        return leaveRepository.findById(id).orElseThrow(() -> new HumanResourcesAppException(ErrorType.LEAVE_NOT_FOUND));
+    }
+
+    public Boolean update(LeaveUpdateRequestDto dto) {
+        Leave leave = searchByLeaveId(dto.id());
+        if(leave.getStatus().equals(EStatus.DELETED)){
+            throw new HumanResourcesAppException(ErrorType.CAN_NOT_UPDATE_DELETED_LEAVE);
+        }else if (leave.getStatus().equals(EStatus.CANCELED)){
+            throw new HumanResourcesAppException(ErrorType.CAN_NOT_UPDATE_CANCELED_LEAVE);
+        }else if (leave.getIsLeaveApproved()){
+            throw new HumanResourcesAppException(ErrorType.CAN_NOT_UPDATE_APPROVED_LEAVE);
+        }
+        leave.setDescription(dto.description());
+        leave.setStartDate(dto.startDate());
+        leave.setEndDate(dto.endDate());
+        leave.setLeaveType(dto.leaveType());
+        leaveRepository.save(leave);
+        return true;
+    }
 }
 
 

@@ -38,38 +38,31 @@ export default function SideBarEmployeeLeaves() {
     const leaveList = useAppSelector((state) => state.leave.leaveList);
     const [loading, setLoading] = useState(false);
     const [description, setDescription] = useState('');
-    const [dLeaveTypeId, setDLeaveTypeId] = useState(1); // Default to ANNUAL
+    const [leaveType, setLeaveType] = useState('ANNUAL'); // Default to ANNUAL
     const [startDate, setStartDate] = useState<Date | null>(null);
     const [endDate, setEndDate] = useState<Date | null>(null);
     const [files, setFiles] = useState<File[]>([]);
     const leaveTypes = useAppSelector((state) => state.definition.definitionList);
     const leaveColumns: GridColDef[] = [
-        { field: "id", headerName: "ID", width: 70, headerAlign: "center" },
-        { field: "description", headerName: "Description", width: 200, headerAlign: "center" },
+        { field: "id", headerName: "ID",flex :1, headerAlign: "center" },
+        { field: "description", headerName: "Description", flex :2, headerAlign: "center" },
     
-        { field: "startDate", headerName: "Start Date", width: 150, headerAlign: "center" },
-        { field: "endDate", headerName: "End Date", width: 150, headerAlign: "center" },
-        { 
-            field: "dleaveTypeId", 
-            headerName: "Leave Type", 
-            width: 150, 
-            headerAlign: "center", 
-            renderCell: (params) => {
-                const leaveType = leaveTypes.find(lt => lt.id === params.value);
-                return leaveType ? leaveType.name : "Unknown";
-            }
-        },
-        { field: "isLeaveApproved", headerName: "Approval Status", headerAlign: "center", width: 250 },
-        { field: "approveDate", headerName: "Approval Date", width: 150, headerAlign: "center" },
-        { field: "status", headerName: "Status", width: 120, headerAlign: "center" },
+        { field: "startDate", headerName: "Start Date", flex :2, headerAlign: "center" },
+        { field: "endDate", headerName: "End Date", flex :2, headerAlign: "center" },
+        { field: "leaveType", headerName: "Leave Type", flex :2, headerAlign: "center" },
+        { field: "isLeaveApproved", headerName: "Approval Status", flex :2, headerAlign: "center" },
+        { field: "approveDate", headerName: "Approval Date", flex :2, headerAlign: "center" },
+        { field: "status", headerName: "Status", flex :1, headerAlign: "center" },
         {
-            field: "attachedFile", headerName: "Document", headerAlign: "center", width: 100,
+            field: "attachedFile", headerName: "Document", flex :1, headerAlign: "center",
             renderCell: (params) => (
                 <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '100%' }}>
                     {params.value && <DownloadButtonFromS3 fileKey={params.value}/> }
                 </div>
             )
         },
+        { field: "managerName", headerName: "Manager Name", flex :2, headerAlign: "center" },
+        { field: "responseMessage", headerName: "Response Message",flex :2, headerAlign: "center" },
     
     ];
 
@@ -126,7 +119,7 @@ export default function SideBarEmployeeLeaves() {
                 });
 
                 if (result.isConfirmed) {
-                    await dispatch(fetchDeleteLeave({ token, id: selectedLeave.id }));
+                    await dispatch(fetchDeleteLeave({ token, id: selectedLeave.id, responseMessage: '' }));
                     await Swal.fire({
                         title: "Deleted!",
                         text: "Your leave has been deleted.",
@@ -172,7 +165,7 @@ export default function SideBarEmployeeLeaves() {
                 });
 
                 if (result.isConfirmed) {
-                    await dispatch(fetchCancelLeave({ token, id: selectedLeave.id }));
+                    await dispatch(fetchCancelLeave({ token, id: selectedLeave.id, responseMessage: '' }));
                     await Swal.fire({
                         title: "Cancelled!",
                         text: "Your leave has been cancelled.",
@@ -190,7 +183,7 @@ export default function SideBarEmployeeLeaves() {
 
     const handleSaveLeave = async () => {
         // Validate required fields
-        if (!description || !startDate || !endDate || !dLeaveTypeId) {
+        if (!description || !startDate || !endDate || !leaveType) {
             Swal.fire({
                 title: "Error",
                 text: "Please fill in all required fields.",
@@ -207,7 +200,7 @@ export default function SideBarEmployeeLeaves() {
                 description,
                 startDate: startDate,
                 endDate:endDate,
-                dLeaveTypeId,
+                leaveType,
                 files: files,
             })).unwrap();
 
@@ -380,8 +373,8 @@ export default function SideBarEmployeeLeaves() {
                         <TextField
                             select
                             label="Leave Type"
-                            value={dLeaveTypeId}
-                            onChange={e => setDLeaveTypeId(parseInt(e.target.value, 10))}
+                            value={leaveType}
+                            onChange={e => setLeaveType(e.target.value)}
                             required
                             SelectProps={{ native: true }}
                             style={{ width: 259 }}

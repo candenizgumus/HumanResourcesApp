@@ -31,7 +31,9 @@ public class Leave extends BaseEntity {
     @Builder.Default
     Boolean isLeaveApproved = false;
     String attachedFile;
-    Long dLeaveTypeId;
+    String leaveType;
     String fullName;
     String email;
+    String responseMessage;
+    String managerName;
 }

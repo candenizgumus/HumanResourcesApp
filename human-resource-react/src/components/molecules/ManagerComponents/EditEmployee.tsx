@@ -114,8 +114,8 @@ const EditEmployee: React.FC = () => {
         if (!name || !surname   || !phone || !title  || !birthDate  || !selectedEmployeeType || !location || !hireDate || !selectedPosition) {
             Swal.fire({
                 icon: 'error',
-                title: 'Oops...',
                 text: 'Please fill all the fields!',
+                confirmButtonColor: '#1976D2',
             });
             return;
         }
@@ -138,7 +138,6 @@ const EditEmployee: React.FC = () => {
             if (data.payload.message) {
                 sweetalert2.fire({
                     icon: 'error',
-                    title: 'Oops...',
                     text: data.payload.message ?? 'Failed to add employee',
                     showConfirmButton: true
                 })

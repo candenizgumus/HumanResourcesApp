@@ -37,7 +37,6 @@ const OfferFormSection = () => {
         if (!name || !surname || !email || !phone || !title || !numberOfEmployees || !companyName || !selectedSector) {
             Swal.fire({
                 icon: 'error',
-                title: 'Oops...',
                 text: 'Please fill all the fields!',
                 confirmButtonColor: '#1976D2',
             });

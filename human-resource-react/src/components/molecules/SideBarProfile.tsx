@@ -144,8 +144,8 @@ const SideBarProfile = () => {
         if (!formState.name || !formState.surname || !formState.phone || !formState.title || birthDate === null || !selectedPosition || !formState.location) {
             Swal.fire({
                 icon: 'error',
-                title: 'Oops...',
                 text: 'Please fill all the fields!',
+                confirmButtonColor: '#1976D2'
             });
             return;
         }

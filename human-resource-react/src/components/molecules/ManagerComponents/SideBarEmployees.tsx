@@ -103,7 +103,7 @@ export default function SideBarEmployees() {
                 text: "Please fill all the fields",
                 icon: "error",
                 confirmButtonText: "OK",
-                confirmButtonColor: "#D32F2F",
+                confirmButtonColor: '#1976D2',
             });
             setIsActivating(false);
             return;
@@ -176,7 +176,7 @@ export default function SideBarEmployees() {
                     text: "Employee already deleted",
                     icon: "error",
                     confirmButtonText: "OK",
-                    confirmButtonColor: "#D32F2F",
+                    confirmButtonColor: '#1976D2',
                 });
                 setIsDeleting(false);
                 return;
@@ -250,7 +250,7 @@ export default function SideBarEmployees() {
                     text: "Employee already active",
                     icon: "error",
                     confirmButtonText: "OK",
-                    confirmButtonColor: "#D32F2F",
+                    confirmButtonColor: '#1976D2',
                 });
                 setIsActivating(false);
                 return;

@@ -106,8 +106,8 @@ const SideBarAddEmployee: React.FC = () => {
         if (!salary || !name || !surname    || !surname  || !phone || !title  || !birthDate  || !selectedEmployeeType || !location || !hireDate || !selectedPosition) {
             Swal.fire({
                 icon: 'error',
-                title: 'Oops...',
                 text: 'Please fill all the fields!',
+                confirmButtonColor: '#1976D2',
             });
             return;
         }
@@ -130,7 +130,6 @@ const SideBarAddEmployee: React.FC = () => {
         if (result.payload.message) {
             sweetalert2.fire({
                 icon: 'error',
-                title: 'Oops...',
                 text: result.payload.message ?? 'Failed to add employee',
                 showConfirmButton: true
             })

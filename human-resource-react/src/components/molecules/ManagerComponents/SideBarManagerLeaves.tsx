@@ -137,7 +137,7 @@ const SideBarManagerLeaves = () => {
                     text: "You won't be able to revert this!",
                     icon: "warning",
                     showCancelButton: true,
-                    confirmButtonColor: "#3085d6",
+                    confirmButtonColor: '#1976D2',
                     cancelButtonColor: "#d33",
                     confirmButtonText: "Yes, approve it!"
                 });
@@ -202,7 +202,7 @@ const SideBarManagerLeaves = () => {
                     text: "You won't be able to revert this!",
                     icon: "warning",
                     showCancelButton: true,
-                    confirmButtonColor: "#3085d6",
+                    confirmButtonColor: '#1976D2',
                     cancelButtonColor: "#d33",
                     confirmButtonText: "Yes, reject it!"
                 });
@@ -265,7 +265,7 @@ const SideBarManagerLeaves = () => {
                     text: "You won't be able to revert this!",
                     icon: "warning",
                     showCancelButton: true,
-                    confirmButtonColor: "#3085d6",
+                    confirmButtonColor: '#1976D2',
                     cancelButtonColor: "#d33",
                     confirmButtonText: "Yes, cancel it!"
                 });

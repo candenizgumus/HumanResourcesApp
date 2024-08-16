@@ -30,7 +30,7 @@ export const SetShifts: React.FC = () => {
                 text: "Please fill all the fields",
                 icon: "error",
                 confirmButtonText: "OK",
-                confirmButtonColor: "#D32F2F",
+                confirmButtonColor: '#1976D2',
             });
             return;
         }

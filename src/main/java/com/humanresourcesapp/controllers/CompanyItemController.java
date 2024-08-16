@@ -26,7 +26,6 @@ public class CompanyItemController {
         return ResponseEntity.ok(companyItemService.save(dto));
     }
 
-
     @PostMapping(GET_ALL)
     @PreAuthorize("hasAnyAuthority('MANAGER')")
     public List<CompanyItem> findAll(@RequestBody PageRequestDto dto) {
@@ -37,6 +36,13 @@ public class CompanyItemController {
     @PreAuthorize("hasAnyAuthority('MANAGER')")
     public List<String> getTypes() {
         return companyItemService.getCompanyItemTypes();
+    }
+
+    @DeleteMapping(DELETE + "/{id}")
+    @PreAuthorize("hasAnyAuthority('MANAGER')")
+    public ResponseEntity<CompanyItem> delete(@PathVariable Long id) {
+        CompanyItem deletedItem = companyItemService.delete(id);
+        return ResponseEntity.ok(deletedItem);
     }
 
 }

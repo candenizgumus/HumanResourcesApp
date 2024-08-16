@@ -56,6 +56,10 @@ public enum ErrorType
     CAN_NOT_UPDATE_DELETED_LEAVE(1044, "Can Not Update Deleted Leave",HttpStatus.BAD_REQUEST ),
     CAN_NOT_UPDATE_CANCELED_LEAVE(1045, "Can Not Update Canceled Leave" , HttpStatus.BAD_REQUEST ),
     CAN_NOT_UPDATE_APPROVED_LEAVE(1046, "Can Not Update Approved Leave" , HttpStatus.BAD_REQUEST),
+    ITEM_ALREADY_EXISTS(1047, "Item Already Exists", HttpStatus.BAD_REQUEST),
+    ITEM_NOT_FOUND(1048, "Item Not Found", HttpStatus.BAD_REQUEST),;
+
+
     ;
     private final Integer code;
     private final String message;

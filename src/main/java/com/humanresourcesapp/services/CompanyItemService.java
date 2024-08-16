@@ -35,7 +35,12 @@ public class CompanyItemService {
     public CompanyItem save(CompanyItemSaveRequestDto dto) {
         String managerEmail = UserInfoSecurityContext.getUserInfoFromSecurityContext();
         Optional<User> manager = userService.findByEmail(managerEmail);
-
+        List<CompanyItem> allCompanyItems = companyItemRepository.findAll();
+        for (CompanyItem companyItem : allCompanyItems) {
+            if (companyItem.getSerialNumber().equals(dto.serialNumber())) {
+                throw new HumanResourcesAppException(ErrorType.ITEM_ALREADY_EXISTS);
+            }
+        }
         return companyItemRepository.save(
                 CompanyItem.builder()
                         .companyId(manager.get().getCompanyId())
@@ -50,7 +55,10 @@ public class CompanyItemService {
         String managerEmail = UserInfoSecurityContext.getUserInfoFromSecurityContext();
         User manager = userService.findByEmail(managerEmail).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
 
-        return companyItemRepository.findBySerialNumberContainingAndCompanyId(dto.searchText(), manager.getCompanyId(), PageRequest.of(dto.page(), dto.pageSize()));
+        List<CompanyItem> companyItems = companyItemRepository.findBySerialNumberContainingAndCompanyId(dto.searchText(), manager.getCompanyId(), PageRequest.of(dto.page(), dto.pageSize()));
+        companyItems.removeIf(companyItem -> companyItem.getStatus().equals(EStatus.DELETED));
+
+        return companyItems;
     }
 
     public List<String> getCompanyItemTypes() {
@@ -59,5 +67,11 @@ public class CompanyItemService {
             companyItemTypes.add(type.name());
         }
         return companyItemTypes;
+    }
+
+    public CompanyItem delete(Long id) {
+        CompanyItem companyItem = companyItemRepository.findById(id).orElseThrow(() -> new HumanResourcesAppException(ErrorType.ITEM_NOT_FOUND));
+        companyItem.setStatus(EStatus.DELETED);
+        return companyItemRepository.save(companyItem);
     }
 }

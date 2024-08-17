@@ -36,6 +36,11 @@ export default function NavbarProfile() {
         handleMenuClose();
     };
 
+    const handleDeactivateAccount = () => {
+        dispatch(changePageState('Deactivate Account'));
+        handleMenuClose();
+    };
+
     const handleLogout = () => {
         dispatch(clearToken())
 
@@ -101,7 +106,9 @@ export default function NavbarProfile() {
             >
                 <MenuItem onClick={handleProfile}>Profile</MenuItem>
                 <MenuItem onClick={handleChangePassword}>Change Password</MenuItem>
+                <MenuItem onClick={handleDeactivateAccount}>Deactivate Account</MenuItem>
                 <MenuItem onClick={handleLogout}>Logout</MenuItem>
+
             </Menu>
         </div>
     );

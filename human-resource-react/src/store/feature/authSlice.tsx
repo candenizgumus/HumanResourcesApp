@@ -625,6 +625,35 @@ export const fetchGetMonthlyPaymentOfEmployees = createAsyncThunk(
 
 )
 
+interface IfetchDeactivateMyAccount {
+    token: string;
+    password: string,
+
+}
+export const fetchDeactivateMyAccount = createAsyncThunk(
+    'auth/fetchDeactivateMyAccount',
+    async (payload: IfetchDeactivateMyAccount, { dispatch }) => {
+
+        const response = await fetch('http://localhost:9090/dev/v1/auth/deactivate-account', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ` + payload.token
+            },
+            body: JSON.stringify({
+                'password': payload.password,
+
+            })
+        });
+
+
+        return await response.json();
+
+    }
+);
+
+
+
 const authSlice = createSlice({
     name: 'auth',
     initialState: initalAuthState,

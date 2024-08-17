@@ -196,6 +196,7 @@ export default function SideBarOffers() {
                     showCancelButton: true,
                     confirmButtonText: "Confirm",
                     input: "radio",
+                    confirmButtonColor: '#1976D2',
                 });
 
                 if (result.isConfirmed) {

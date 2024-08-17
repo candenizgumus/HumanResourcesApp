@@ -3,6 +3,7 @@ package com.humanresourcesapp.controllers;
 import static com.humanresourcesapp.constants.Endpoints.*;
 
 import com.humanresourcesapp.dto.requests.AuthLoginRequestDto;
+import com.humanresourcesapp.dto.requests.DeactivateAccountRequestDto;
 import com.humanresourcesapp.dto.requests.PasswordChangeRequestDto;
 import com.humanresourcesapp.dto.responses.LoginResponseDto;
 import com.humanresourcesapp.entities.Auth;
@@ -74,6 +75,15 @@ public class AuthController
     public ResponseEntity<Boolean> changePassword(@RequestBody PasswordChangeRequestDto dto)
     {
        return ResponseEntity.ok(authService.changePassword(dto));
+
+    }
+
+    @PutMapping(DEACTIVATE_ACCOUNT)
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','EMPLOYEE')")
+    @CrossOrigin("*")
+    public ResponseEntity<Boolean> deactivateAccount(@RequestBody DeactivateAccountRequestDto dto)
+    {
+        return ResponseEntity.ok(authService.deactivateAccount(dto));
 
     }
 

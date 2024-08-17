@@ -25,7 +25,9 @@ import { IOfferList } from "../../../models/IOfferList";
 import { clearToken } from "../../../store/feature/authSlice";
 import Swal from "sweetalert2";
 import Loader from "../../atoms/loader/Loader";
-
+import EmailIcon from '@mui/icons-material/Email';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
 const columns: GridColDef[] = [
     { field: "name", headerName: "First name", flex: 1.6, headerAlign: "center" },
     { field: "surname", headerName: "Last name", flex: 1.6, headerAlign: "center" },
@@ -87,7 +89,7 @@ export default function SideBarOffers() {
         };
 
         fetchData();
-    }, [dispatch, searchText, token, paginationModel,rowCount]);
+    }, [dispatch, searchText, token, paginationModel, rowCount]);
 
     const handleRowSelection = (newSelectionModel: GridRowSelectionModel) => {
         setSelectedRowIds(newSelectionModel as number[]);
@@ -254,7 +256,7 @@ export default function SideBarOffers() {
                     text: "Email has been sent",
                     icon: "success",
                     timer: 1500
-                }).then(()=> {
+                }).then(() => {
                     dispatch(fetchGetOffers({
                         token: token,
                         page: paginationModel.page,
@@ -286,13 +288,14 @@ export default function SideBarOffers() {
     };
 
     return (
-        <div style={{ height: "auto", width: "inherit" }}>
+        <div style={{ height: "auto" }}>
             <TextField
-                label="Email"
+                label="Search By Email"
                 variant="outlined"
                 onChange={(event) => setSearchText(event.target.value)}
                 value={searchText}
-                style={{ marginBottom: "10px" }}
+                style={{ marginBottom: "1%", marginTop: "1%" }}
+                fullWidth
                 inputProps={{ maxLength: 50 }}
             />
             <DataGrid
@@ -323,40 +326,40 @@ export default function SideBarOffers() {
                     "& .MuiDataGrid-cell": {
                         textAlign: "center",
                         fontsize: "8px",
-                    },
+                    }
                 }}
             />
-            <Grid container spacing={1} style={{ marginTop: 16 }} direction="row">
-                <Grid item>
-                    <Button
-                        onClick={handleConfirmSelection}
-                        variant="contained"
-                        color="primary"
-                        disabled={loading || selectedRowIds.length === 0}
-                    >
-                        {loading ? "Processing..." : "Approve Offers"}
-                    </Button>
-                </Grid>
-                <Grid item>
-                    <Button
-                        variant="contained"
-                        color="error"
-                        onClick={handleDeclineOffers}
-                        disabled={selectedRowIds.length === 0 || isSendFalse}
-                    >
-                        Decline Offer
-                    </Button>
-                </Grid>
-                <Grid item>
-                    <Button
-                        variant="contained"
-                        color="secondary"
-                        onClick={handleOpenEmailModals}
-                        disabled={selectedRowIds.length === 0 || selectedRowIds.length >1}
-                    >
-                        Send Email
-                    </Button>
-                </Grid>
+            <Grid sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-start', alignItems: 'center', marginTop: '1%' }}>
+                <Button
+                    onClick={handleConfirmSelection}
+                    variant="contained"
+                    color="primary"
+                    disabled={loading || selectedRowIds.length === 0}
+                    sx={{ marginRight: '1%', width: '200px' }}
+                    startIcon={<CheckCircleIcon />}
+                >
+                    Approve
+                </Button>
+                <Button
+                    variant="contained"
+                    color="error"
+                    onClick={handleDeclineOffers}
+                    disabled={selectedRowIds.length === 0 || isSendFalse}
+                    sx={{ marginRight: '1%', width: '200px' }}
+                    startIcon={<ThumbDownAltIcon />}
+                >
+                    Decline
+                </Button>
+                <Button
+                    variant="contained"
+                    color="secondary"
+                    onClick={handleOpenEmailModals}
+                    disabled={selectedRowIds.length === 0 || selectedRowIds.length > 1}
+                    sx={{ marginRight: '1%', width: '200px' }}
+                    startIcon={<EmailIcon />}
+                >
+                    Contact
+                </Button>
             </Grid>
             {currentModalIndex !== null && (
                 <Modal
@@ -374,14 +377,14 @@ export default function SideBarOffers() {
                             variant="outlined"
                             fullWidth
                             required
-                            value = {emailText}
+                            value={emailText}
                             onChange={(e) => setEmailText(e.target.value)}
                             style={{ marginTop: "16px" }}
                         />
                         <Button
                             variant="contained"
                             color="primary"
-                            disabled = {isSendTrue || emailText === ''}
+                            disabled={isSendTrue || emailText === ''}
                             onClick={() => handleSendEmail(selectedRowIds[currentModalIndex])}
                             style={{ marginTop: "16px" }}
                         >
@@ -391,7 +394,7 @@ export default function SideBarOffers() {
                 </Modal>
             )}
             <Backdrop open={loading}>
-                <Loader/>
+                <Loader />
             </Backdrop>
         </div>
     );

@@ -26,6 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Year;
 import java.util.*;
@@ -765,5 +766,11 @@ public class UserService {
         return userRepository.findAllByCompanyId(companyId);
     }
 
+    public List<Long> findDistinctCompanyIdsWithSubscriptionEndingSoon(LocalDate now, LocalDate endRange) {
+        return userRepository.findDistinctCompanyIdsWithSubscriptionEndingSoon(now, endRange);
+    }
 
+    public Optional<User> findFirstUserByCompanyId(Long companyId) {
+        return userRepository.findFirstUserByCompanyId(companyId);
+    }
 }

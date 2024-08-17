@@ -19,17 +19,18 @@ import { useDispatch } from "react-redux";
 import { fetchGetCompanies, fetchGetCompanyCount, fetchUpdateCompany } from "../../../store/feature/companySlice";
 import { clearToken } from "../../../store/feature/authSlice";
 import Swal from "sweetalert2";
-import {ICompany} from "../../../models/ICompany";
+import { ICompany } from "../../../models/ICompany";
+import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
 
 const columns: GridColDef[] = [
-    { field: "name", headerName: "Company Name", flex:1, headerAlign: "center" },
-    { field: "description", headerName: "Description", headerAlign: "center", flex:3 },
-    { field: "numberOfEmployee", headerName: "Employee Count", headerAlign: "center", flex:1 },
-    { field: "status", headerName: "Status", headerAlign: "center", flex:1 },
+    { field: "name", headerName: "Company Name", flex: 1, headerAlign: "center" },
+    { field: "description", headerName: "Description", headerAlign: "center", flex: 3 },
+    { field: "numberOfEmployee", headerName: "Employee Count", headerAlign: "center", flex: 1 },
+    { field: "status", headerName: "Status", headerAlign: "center", flex: 1 },
     {
         field: "logo",
         headerName: "Logo",
-        flex:1,
+        flex: 1,
         headerAlign: "center",
         sortable: false,
         renderCell: (params) => (
@@ -86,7 +87,7 @@ export default function OfferList() {
     const dispatch = useDispatch<HumanResources>();
     const token = useAppSelector((state) => state.auth.token);
     const [rowCount, setRowCount] = useState<number>(0);
-    
+
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -172,13 +173,14 @@ export default function OfferList() {
     };
 
     return (
-        <div style={{ height: "auto", width: "inherit" }}>
+        <div style={{ height: "auto" }}>
             <TextField
-                label="Name"
+                label="Search By Name"
                 variant="outlined"
+                fullWidth
                 onChange={(event) => setSearchText(event.target.value)}
                 value={searchText}
-                style={{ marginBottom: "10px" }}
+                style={{ marginBottom: "1%", marginTop: "1%" }}
             />
             <DataGrid
                 slots={{
@@ -213,10 +215,12 @@ export default function OfferList() {
                     <Button
                         onClick={handleEditClick}
                         variant="contained"
-                        color="primary"
+                        color="secondary"
+                        startIcon={<DriveFileRenameOutlineIcon />}
                         disabled={loading || selectedRowIds.length !== 1}
+                        sx={{ marginRight: '1%', width: '200px' }}
                     >
-                        {loading ? "Processing..." : "Edit"}
+                        Edit
                     </Button>
                 </Grid>
             </Grid>

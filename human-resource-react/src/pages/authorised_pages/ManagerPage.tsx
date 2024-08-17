@@ -1,9 +1,9 @@
 import * as React from 'react';
-import {styled, useTheme} from '@mui/material/styles';
+import { styled, useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import CssBaseline from '@mui/material/CssBaseline';
-import MuiAppBar, {AppBarProps as MuiAppBarProps} from '@mui/material/AppBar';
+import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import List from '@mui/material/List';
 import Typography from '@mui/material/Typography';
@@ -17,15 +17,15 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import {Button, Grid} from '@mui/material';
-import {HumanResources, RootState, useAppSelector} from '../../store';
-import {useDispatch, useSelector} from 'react-redux';
-import {changePageState} from '../../store/feature/authSlice';
-import {NotificationIcon} from "../../components/atoms/NotificationIcon";
-import {useNavigate} from 'react-router-dom';
+import { Button, Grid } from '@mui/material';
+import { HumanResources, RootState, useAppSelector } from '../../store';
+import { useDispatch, useSelector } from 'react-redux';
+import { changePageState } from '../../store/feature/authSlice';
+import { NotificationIcon } from "../../components/atoms/NotificationIcon";
+import { useNavigate } from 'react-router-dom';
 import DesignServicesIcon from '@mui/icons-material/DesignServices';
 import NavbarProfile from "../../components/atoms/NavbarProfile";
-import {ManagerMenuContentRenderer} from "../../components/organisms/ManagerMenuContentRenderer";
+import { ManagerMenuContentRenderer } from "../../components/organisms/ManagerMenuContentRenderer";
 import {
     AccountBox,
     Apartment,
@@ -38,16 +38,16 @@ import {
     Weekend, Laptop, Dashboard
 } from "@mui/icons-material";
 import AddCommentIcon from '@mui/icons-material/AddComment';
-import {ManagerHomeContent} from "../../components/molecules/ManagerComponents/ManagerHomeContent";
+import { ManagerHomeContent } from "../../components/molecules/ManagerComponents/ManagerHomeContent";
 import HikingIcon from '@mui/icons-material/Hiking';
-import {useState} from "react";
-import logo from '../../images/logo.png';
+import { useState } from "react";
+import logo from '../../images/logo-nobg.png';
 
 const drawerWidth = 240;
 
-const Main = styled('main', {shouldForwardProp: (prop) => prop !== 'open'})<{
+const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
     open?: boolean;
-}>(({theme, open}) => ({
+}>(({ theme, open }) => ({
     flexGrow: 1,
     padding: theme.spacing(3),
     width: `calc(100% - ${drawerWidth}px)`, // Genişliği sabit tut, Drawer açıldığında içerik sağa itilmez
@@ -77,7 +77,7 @@ interface AppBarProps extends MuiAppBarProps {
 
 const AppBar = styled(MuiAppBar, {
     shouldForwardProp: (prop) => prop !== 'open',
-})<AppBarProps>(({theme, open}) => ({
+})<AppBarProps>(({ theme, open }) => ({
     width: `calc(100% - ${drawerWidth}px)`, // Genişliği sabit tut, Drawer açıkken de değişmez
     marginLeft: `${drawerWidth}px`,
     transition: theme.transitions.create(['margin', 'width'], {
@@ -94,7 +94,7 @@ const AppBar = styled(MuiAppBar, {
     }),
 }));
 
-const DrawerHeader = styled('div')(({theme}) => ({
+const DrawerHeader = styled('div')(({ theme }) => ({
     display: 'flex',
     alignItems: 'center',
     padding: theme.spacing(0, 1),
@@ -129,14 +129,14 @@ export default function AdminPage() {
     };
 
 
-    const handleListItemClick2 = (index:any) => {
+    const handleListItemClick2 = (index: any) => {
         setSelectedIndex2(index);
         // Perform your action here
     };
 
     return (
-        <Box sx={{display: 'flex'}}>
-            <CssBaseline/>
+        <Box sx={{ display: 'flex' }}>
+            <CssBaseline />
             <AppBar position="fixed" open={open}>
                 <Toolbar>
                     <IconButton
@@ -144,21 +144,21 @@ export default function AdminPage() {
                         aria-label="open drawer"
                         onClick={handleDrawerOpen}
                         edge="start"
-                        sx={{mr: 2, ...(open && {display: 'none'})}}
+                        sx={{ mr: 2, ...(open && { display: 'none' }) }}
                     >
-                        <MenuIcon/>
+                        <MenuIcon />
                     </IconButton>
                     <Typography variant="h6" sx={logoStyle}>
-                        <Button style={{marginRight: '20px'}} onClick={navigateToHome} color="inherit">
-                            <img src={logo} alt="logo" style={{ height: '64px' }} />
+                        <Button style={{ marginRight: '20px' }} onClick={navigateToHome} color="inherit">
+                            <img src={logo} alt="logo" style={{ height: '52px' }} />
                         </Button>
                     </Typography>
                     <Typography sx={{ fontSize: '20px' }} >
                         {page ? page : 'Dashboard'}
                     </Typography>
-                    <Box sx={{flexGrow: 1}}/>
-                    <NotificationIcon/>
-                    <NavbarProfile/>
+                    <Box sx={{ flexGrow: 1 }} />
+                    <NotificationIcon />
+                    <NavbarProfile />
 
                 </Toolbar>
             </AppBar>
@@ -177,12 +177,12 @@ export default function AdminPage() {
             >
                 <DrawerHeader>
                     <IconButton onClick={handleDrawerClose}>
-                        {theme.direction === 'ltr' ? <ChevronLeftIcon/> : <ChevronRightIcon/>}
+                        {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
                     </IconButton>
                 </DrawerHeader>
-                <Divider/>
+                <Divider />
                 <List>
-                    {['Dashboard','Employees', 'Add Employee', 'Create Manager', 'Create Definition', 'Profile', 'Company', 'Add Comment', 'Holidays', 'Notifications', 'Expenditure', 'Leaves', 'Payments', 'Personal Documents', 'Bonus', 'Company Items'].map((text, index) => (
+                    {['Dashboard', 'Employees', 'Add Employee', 'Create Manager', 'Create Definition', 'Profile', 'Company', 'Add Comment', 'Holidays', 'Notifications', 'Expenditure', 'Leaves', 'Payments', 'Personal Documents', 'Bonus', 'Company Items'].map((text, index) => (
                         <ListItem key={text} disablePadding>
                             <ListItemButton
                                 selected={selectedIndex2 === index}
@@ -201,35 +201,35 @@ export default function AdminPage() {
                             >
 
                                 <ListItemIcon>
-                                    {index  === 0 && <Dashboard/>}
-                                    {index === 1 && <Person/>}
-                                    {index === 2 && <PersonAdd/>}
-                                    {index === 3 && <AdminPanelSettings/>}
-                                    {index === 4 && <DesignServicesIcon/>}
-                                    {index === 5 && <AccountBox/>}
-                                    {index === 6 && <Apartment/>}
-                                    {index === 7 && <AddCommentIcon/>}
-                                    {index === 8 && <Weekend/>}
-                                    {index === 9 && <NotificationsIcon/>}
-                                    {index === 10 && <PointOfSale/>}
-                                    {index === 11 && <HikingIcon/>}
-                                    {index === 12 && <Payments/>}
-                                    {index === 13 && <DocumentScanner/>}
-                                    {index === 14 && <Paid/>}
-                                    {index === 15 && <Laptop/>}
+                                    {index === 0 && <Dashboard />}
+                                    {index === 1 && <Person />}
+                                    {index === 2 && <PersonAdd />}
+                                    {index === 3 && <AdminPanelSettings />}
+                                    {index === 4 && <DesignServicesIcon />}
+                                    {index === 5 && <AccountBox />}
+                                    {index === 6 && <Apartment />}
+                                    {index === 7 && <AddCommentIcon />}
+                                    {index === 8 && <Weekend />}
+                                    {index === 9 && <NotificationsIcon />}
+                                    {index === 10 && <PointOfSale />}
+                                    {index === 11 && <HikingIcon />}
+                                    {index === 12 && <Payments />}
+                                    {index === 13 && <DocumentScanner />}
+                                    {index === 14 && <Paid />}
+                                    {index === 15 && <Laptop />}
 
                                 </ListItemIcon>
-                                <ListItemText primary={text}/>
+                                <ListItemText primary={text} />
                             </ListItemButton>
                         </ListItem>
                     ))}
                 </List>
-                <Divider/>
+                <Divider />
             </Drawer>
             <Main open={open}>
-                <DrawerHeader/>
+                <DrawerHeader />
                 <Grid container spacing={2}>
-                    {pageState === 'Dashboard' ? <ManagerHomeContent/> : <ManagerMenuContentRenderer/>}
+                    {pageState === 'Dashboard' ? <ManagerHomeContent /> : <ManagerMenuContentRenderer />}
                 </Grid>
             </Main>
         </Box>

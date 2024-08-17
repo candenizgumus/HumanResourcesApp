@@ -13,6 +13,7 @@ import paymentSlice from "./paymentSlice";
 import bonusSlice from "./bonusSlice";
 import shiftSlice from "./shiftSlice";
 import definitionSlice from "./definitionSlice";
+import emailSlice from "./emailSlice";
 
 
 
@@ -32,5 +33,6 @@ export{
     paymentSlice,
     bonusSlice,
     shiftSlice,
-    definitionSlice
+    definitionSlice,
+    emailSlice
 }

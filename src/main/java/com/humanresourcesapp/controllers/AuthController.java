@@ -56,6 +56,7 @@ public class AuthController
         if (auth.getUserType() != EUserType.ADMIN && auth.getSubscriptionEndDate() != null && auth.getSubscriptionEndDate().isBefore(LocalDate.now()))
         {
             //Inactivating all related accounts
+            System.out.println("Expired");
             authService.inactivateAllRelatedAccounts(auth.getId());
 
             throw new HumanResourcesAppException(ErrorType.SUBSCRIPTION_EXPIRED);

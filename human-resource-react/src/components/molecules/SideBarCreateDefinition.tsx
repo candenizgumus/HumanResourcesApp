@@ -7,7 +7,7 @@ import Swal from "sweetalert2";
 import { HumanResources, useAppSelector } from '../../store';
 import { DataGrid, GridColDef, GridRowSelectionModel, GridToolbar  } from "@mui/x-data-grid";
 import DeleteIcon from '@mui/icons-material/Delete';
-
+import AddBoxIcon from '@mui/icons-material/AddBox';
 const columns: GridColDef[] = [
   {field: "name", headerName: "Name", flex: 1, headerAlign: "center"},
   {field: "definitionType", headerName: "Type", flex: 1, headerAlign: "center"},
@@ -106,7 +106,7 @@ const UserForm: React.FC = () => {
   };
 
   return (
-    <div style={{ height: '70vh', width: "inherit" }}>
+    <div style={{ height: '407px', width: "inherit" }}>
       <DataGrid
         paginationMode="server"
         rows={definitionList}
@@ -142,61 +142,62 @@ const UserForm: React.FC = () => {
           "& .MuiToolbar-regular": {
             display: "none",
           },
+          marginTop:'2%'
         }}
       />
-      <Grid sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-start', alignItems: 'center', marginTop: '1%' }}>
-        <Grid item>
+      <Grid sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-start', alignItems: 'center', marginTop: '2%', marginBottom: '1%' }}>
           <Button
             onClick={handleDeleteClick}
             variant="contained"
             color="error"
             disabled={selectedRowIds.length === 0}
             startIcon={<DeleteIcon />}
-            sx={{ marginRight: '1%' }}
+            sx={{ marginRight: '1%', width:'200px' }}
           >
             Delete
           </Button>
-        </Grid>
-        <Grid item sx={{ marginLeft: '10px' }}>
-          <Button onClick={handleCreateClick} variant="contained" color="primary" disabled={loading || name === ''}>
+          <Button 
+          onClick={handleCreateClick} 
+          variant="contained" 
+          color="primary" 
+          disabled={loading || name === ''}
+          startIcon={<AddBoxIcon />}
+          sx={{ marginRight: '1%', width:'200px' }}
+          >
             Create
           </Button>
+      </Grid>
+      <Grid item xs={12}>
+        <Grid container spacing={2}>
+          <Grid item xs={6}>
+            <FormControl fullWidth required>
+              <InputLabel>Definition Type</InputLabel>
+              <Select
+                value={definitionType}
+                onChange={handleDefinitionTypeChange as any}
+                label="Position"
+              >
+                {Object.values(EDefinitionType).map(type => (
+                  <MenuItem key={type} value={type}>
+                    {type}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid item xs={6}>
+            <TextField
+              label="Definition Name"
+              name="name"
+              value={name}
+              onChange={e => setName(e.target.value)}
+              required
+              fullWidth
+              inputProps={{ maxLength: 64 }}
+            />
+          </Grid>
         </Grid>
       </Grid>
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: 'row',
-          gap: 2,
-          marginTop: '1%',
-          maxHeight: '36.5px',
-        }}
-      >
-        <FormControl required variant="outlined" sx={{ flex: 1 }}>
-          <InputLabel>{'Please Select Definition'}</InputLabel>
-          <Select
-            value={definitionType}
-            onChange={handleDefinitionTypeChange as any}
-            label="Position"
-          >
-            {Object.values(EDefinitionType).map(type => (
-              <MenuItem key={type} value={type}>
-                {type}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-
-        <TextField
-          label="Definition Name"
-          name="name"
-          value={name}
-          onChange={e => setName(e.target.value)}
-          required
-          inputProps={{ maxLength: 64 }}
-          sx={{ flex: 2 }}
-        />
-      </Box>
     </div>
   );
 };

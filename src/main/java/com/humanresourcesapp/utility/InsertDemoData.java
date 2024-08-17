@@ -485,6 +485,7 @@ public class InsertDemoData
                     .password(encodedPassword)
                     .userType(EUserType.MANAGER)
                     .subscriptionType(ESubscriptionType.MONTHLY)
+                    .subscriptionStartDate(LocalDate.now().minusMonths(1).plusDays(7))
                     .build());
 
 

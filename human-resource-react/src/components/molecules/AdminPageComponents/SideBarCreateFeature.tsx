@@ -5,6 +5,7 @@ import { fetchCreateUserWithUserType } from '../../../store/feature/authSlice';
 import { HumanResources } from '../../../store';
 import Swal from "sweetalert2";
 import { fetchCreateFeature } from '../../../store/feature/featureSlice';
+import AddBoxIcon from '@mui/icons-material/AddBox';
 
 const UserForm: React.FC = () => {
   const dispatch = useDispatch<HumanResources>();
@@ -24,7 +25,7 @@ const UserForm: React.FC = () => {
         iconPath: iconPath,
         token: localStorage.getItem('token') ?? ''
       })).unwrap();
-  
+
       if (result.code) {
         Swal.fire({
           icon: 'error',
@@ -34,13 +35,13 @@ const UserForm: React.FC = () => {
         setLoading(false);
         return; // Stop the process and prevent further then block executions
       }
-  
+
       Swal.fire({
         icon: 'success',
         title: 'Success!',
         text: 'Feature Created.',
       });
-  
+
       setLoading(false);
     } catch (error) {
       console.error("Error creating feature:", error);
@@ -59,6 +60,7 @@ const UserForm: React.FC = () => {
         maxWidth: 400,
         margin: 'auto',
         padding: 2,
+        marginTop: '2%'
       }}
     >
       <TextField
@@ -90,8 +92,14 @@ const UserForm: React.FC = () => {
         required
         inputProps={{ maxLength: 64 }}
       />
-      <Button type="submit" variant="contained" color="primary" disabled={loading}>
-        {loading ? "Processing..." : "Create"}
+      <Button
+        type="submit"
+        variant="contained"
+        color="primary"
+        disabled={loading || !name || !shortDescription || !iconPath}
+        startIcon={<AddBoxIcon />}
+      >
+        Create
       </Button>
     </Box>
   );

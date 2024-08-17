@@ -27,6 +27,7 @@ import { AdminMenuContentRenderer } from "../../components/organisms/AdminMenuCo
 import { useNavigate } from 'react-router-dom';
 import NavbarProfile from "../../components/atoms/NavbarProfile";
 import AdminHomeContent from "../../components/molecules/AdminPageComponents/AdminHomeContent"
+import AlarmIcon from '@mui/icons-material/Alarm';
 import {
   AccountBox,
   AdminPanelSettings,
@@ -37,7 +38,7 @@ import {
 } from "@mui/icons-material";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import { useState } from "react";
-import logo from '../../images/logo.png';
+import logo from '../../images/logo-nobg.png';
 const drawerWidth = 240;
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
@@ -143,7 +144,7 @@ export default function AdminPage() {
           </IconButton>
           <Typography variant="h6" sx={logoStyle}>
             <Button style={{ marginRight: '20px' }} onClick={navigateToHome} color="inherit">
-              <img src={logo} alt="logo" style={{ height: '64px' }} />
+              <img src={logo} alt="logo" style={{ height: '52px' }} />
             </Button>
           </Typography>
           <Typography sx={{ fontSize: '20px' }} >
@@ -175,7 +176,7 @@ export default function AdminPage() {
         </DrawerHeader>
         <Divider />
         <List>
-          {['Dashboard', 'Offers', 'Users', 'Create Admin', 'Create Feature', 'Create Definition', 'Holidays', 'Profile', 'Companies', 'Notifications'].map((text, index) => (
+          {['Dashboard', 'Offers', 'Users', 'Create Admin', 'Create Feature', 'Create Definition', 'Holidays', 'Profile', 'Companies', 'Notifications', 'Upcoming Expiries'].map((text, index) => (
             <ListItem key={text} disablePadding>
               <ListItemButton
                 selected={selectedIndex2 === index}
@@ -203,6 +204,7 @@ export default function AdminPage() {
                   {index === 7 && <AccountBox />}
                   {index === 8 && <Apartment />}
                   {index === 9 && <NotificationsIcon />}
+                  {index === 10 && <AlarmIcon />}
 
                 </ListItemIcon>
                 <ListItemText primary={text} />

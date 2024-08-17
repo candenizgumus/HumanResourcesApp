@@ -25,7 +25,7 @@ import { NotificationIcon } from "../../components/atoms/NotificationIcon";
 import { useNavigate } from 'react-router-dom';
 import NavbarProfile from "../../components/atoms/NavbarProfile";
 import HikingIcon from '@mui/icons-material/Hiking';
-import logo from '../../images/logo.png';
+import logo from '../../images/logo-nobg.png';
 import {
     AccountBox, Dashboard,
     FeaturedPlayList, Paid, PointOfSale,
@@ -140,7 +140,7 @@ export default function EmployeePage() {
                     </IconButton>
                     <Typography variant="h6" sx={logoStyle}>
                         <Button style={{ marginRight: '20px' }} onClick={navigateToHome} color="inherit">
-                            <img src={logo} alt="logo" style={{ height: '64px' }} />
+                            <img src={logo} alt="logo" style={{ height: '52px' }} />
                         </Button>
                     </Typography>
                     <Typography sx={{ fontSize: '20px' }} >

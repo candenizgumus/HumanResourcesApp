@@ -7,12 +7,12 @@ import com.humanresourcesapp.dto.requests.UpdateCompanyByManagerDto;
 import com.humanresourcesapp.entities.Company;
 import com.humanresourcesapp.services.CompanyService;
 import com.humanresourcesapp.views.VwGetCompanyLogos;
+import com.humanresourcesapp.views.VwUpcomingMembershipExpiry;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.Month;
 import java.util.List;
 import java.util.Map;
 
@@ -59,6 +59,7 @@ public class CompanyController
         return ResponseEntity.ok(companyService.update(dto));
     }
 
+    // I don't remember why I wrote this method. Aslan
     @GetMapping("/getCompanyCountByMonth")
     @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<Map<Integer, Long>> getAy()
@@ -78,5 +79,12 @@ public class CompanyController
     public ResponseEntity<Company> updateCompanyByManager(@RequestBody UpdateCompanyByManagerDto dto)
     {
         return ResponseEntity.ok(companyService.updateCompanyByManager(dto));
+    }
+
+    @PostMapping("/get-upcoming-membership-expiries")
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    public ResponseEntity<List<VwUpcomingMembershipExpiry>> getUpcomingMembershipExpiries()
+    {
+        return ResponseEntity.ok(companyService.getUpcomingMembershipExpiries());
     }
 }

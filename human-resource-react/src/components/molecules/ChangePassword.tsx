@@ -6,7 +6,7 @@ import {useDispatch} from "react-redux";
 import {HumanResources, useAppSelector} from "../../store";
 import {fetchChangePassword} from "../../store/feature/authSlice";
 import sweetalert2 from "sweetalert2";
-
+import PinIcon from '@mui/icons-material/Pin';
 const ChangePassword: React.FC = () => {
     const dispatch = useDispatch<HumanResources>();
     const token = useAppSelector((state) => state.auth.token);
@@ -70,75 +70,70 @@ const ChangePassword: React.FC = () => {
         });
     }
     return (
-        <Grid container spacing={2} >
-            <Grid item xs={4} />
-
-            <Grid item sx={{ alignItems: 'center', textAlign: 'center', width: '90%' }} xs={4}>
-
-
-                    <Collapse in={isPasswordValid}>
-                        <Box sx={{ width: '100%' }}>
-                            <Alert severity="error"
-                                   sx={{
-                                       width: '100%',
-                                       textAlign: 'center', // Metni ortala
-                                       display: 'flex',
-                                       flexDirection: 'column',
-                                       alignItems: 'center',
-                                   }}
-                            >
-                                {error}
-
-                            </Alert>
-                        </Box>
-                    </Collapse>
-
-
-                    <TextField
-                        sx={{ marginY: 5 }}
-                        fullWidth
-                        id="outlined-basic"
-                        label="Please Enter Your Password"
-                        variant="outlined"
-                        type="password"
-                        value={password}
-                        onChange={event => setPassword(event.target.value)}
-                    />
-
-
-
-
-                    <TextField
-                        sx={{ marginBottom: 5 }}
-                        fullWidth
-                        id="outlined-basic"
-                        label="Please Enter Your New Password"
-                        variant="outlined"
-                        type="password"
-                        value={newPassword}
-                        onChange={event => setNewPassword(event.target.value)}
-                    />
-
-                    <TextField
-                        sx={{ marginBottom: 5 }}
-                        fullWidth
-                        id="outlined-basic"
-                        label="Please Enter Your Re Password"
-                        variant="outlined"
-                        type="password"
-                        value={reNewPassword}
-                        onChange={event => setReNewPassword(event.target.value)}
-                    />
-
-                <Button disabled={isPasswordValid} onClick={handleChangePassword}    sx={{ marginBottom: 5 }} variant="contained">Change Password</Button>
-
-
-
-            </Grid>
-
-            <Grid item xs={4} />
-        </Grid>
-    );
+        <Box
+            sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 2,
+                maxWidth: 400,
+                margin: 'auto',
+                padding: 2,
+                marginTop: '2%'
+            }}
+        >
+            <Collapse in={isPasswordValid}>
+                <Box sx={{ width: '100%' }}>
+                    <Alert severity="error"
+                            sx={{
+                                width: '100%',
+                                textAlign: 'center', // Metni ortala
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'center',
+                            }}
+                    >
+                        {error}
+                    </Alert>
+                </Box>
+            </Collapse>
+            <TextField
+                fullWidth
+                id="outlined-basic"
+                label="Please Enter Your Password"
+                variant="outlined"
+                type="password"
+                value={password}
+                onChange={event => setPassword(event.target.value)}
+            />
+            <TextField
+                fullWidth
+                id="outlined-basic"
+                label="Please Enter Your New Password"
+                variant="outlined"
+                type="password"
+                value={newPassword}
+                onChange={event => setNewPassword(event.target.value)}
+            />
+            <TextField
+                fullWidth
+                id="outlined-basic"
+                label="Please Enter Your Re Password"
+                variant="outlined"
+                type="password"
+                value={reNewPassword}
+                onChange={event => setReNewPassword(event.target.value)}
+            />
+            <Button
+                variant="contained"
+                color="primary"
+                onClick={handleChangePassword}
+                disabled={isPasswordValid || !password || !newPassword || !reNewPassword}
+                startIcon={<PinIcon />}
+            >
+                Change Password
+            </Button>
+        </Box>
+  );
 }
 
 export default ChangePassword;

@@ -36,4 +36,13 @@ public class EmailController
         return ResponseEntity.ok(true);
 
     }
+
+    @PostMapping("/send-email")
+    @CrossOrigin("*")
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    public ResponseEntity<Boolean> sendEmail(@RequestBody MailModel mailModel)
+    {
+        emailService.send(MailModel.builder().to(mailModel.getTo()).subject(mailModel.getSubject()).message(mailModel.getMessage()).build());
+        return ResponseEntity.ok(true);
+    }
 }

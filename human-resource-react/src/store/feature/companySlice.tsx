@@ -19,6 +19,18 @@ export interface IUpdateCompany {
     numberOfEmployee: number
 }
 
+export interface IUpcomingExpiry {
+    id: number,
+    name: string,
+    logo: string,
+    numberOfEmployee: number,
+    status : string,
+    contactEmail: string,
+    subscriptionType: string,
+    subscriptionStartDate: Date,
+    subscriptionEndDate: Date
+}
+
 interface IInitialCompany{
     company: ICompany;
     companyList: ICompany[],
@@ -27,10 +39,12 @@ interface IInitialCompany{
     isCompanyListLoading: boolean;
     islogoListLoading: boolean;
     isCompanyCountLoading: boolean;
+    upcomingExpiries: IUpcomingExpiry[];
 }
 
 const initialCompanyState: IInitialCompany = {
     company : {} as ICompany,
+    upcomingExpiries : [],
     companyList: [],
     logoList: [],
     isCompanyListLoading: false,
@@ -212,6 +226,20 @@ export const fetchUpdateCompanyByManager = createAsyncThunk(
     }
 );
 
+export const fetchGetUpcomingMembershipExpiries = createAsyncThunk(
+    'company/fetchGetUpcomingMembershipExpiries',
+    async (token:string) => {
+
+        const response = await fetch('http://localhost:9090/dev/v1/company/get-upcoming-membership-expiries', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ` + token
+            }
+        });
+        return await response.json();
+    }
+);
 
 const companySlice = createSlice({
     name: 'company',
@@ -241,6 +269,9 @@ const companySlice = createSlice({
         })
         build.addCase(fetchUpdateCompanyByManager.fulfilled,(state,action:PayloadAction<ICompany>)=>{
             state.company = action.payload;
+        })
+        build.addCase(fetchGetUpcomingMembershipExpiries.fulfilled,(state,action)=>{
+            state.upcomingExpiries = action.payload;
         })
     }
 });

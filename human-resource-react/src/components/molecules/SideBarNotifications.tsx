@@ -180,7 +180,7 @@ export default function NotificationsPage() {
     };
     
     return (
-        <div style={{ height: '80vh', width: "inherit" }}>
+        <div style={{ height: '407px', width: "inherit" }}>
             <DataGrid
                 paginationMode="server"
                 rows={notificationAllList}
@@ -217,7 +217,8 @@ export default function NotificationsPage() {
                     },
                     "& .MuiToolbar-regular": {
                         display: "none"
-                    }
+                    },
+                    marginTop:'2%'
                 }}
             />
             <Grid sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-start', alignItems: 'center', marginTop: '1%' }}>
@@ -227,7 +228,7 @@ export default function NotificationsPage() {
                     color="error"
                     disabled={selectedRowIds.length === 0}
                     startIcon={<DeleteIcon />}
-                    sx={{ marginRight: '1%' }}
+                    sx={{ marginRight: '1%', width:'200px' }}
                 >
                     Delete
                 </Button>
@@ -237,6 +238,7 @@ export default function NotificationsPage() {
                     color="secondary"
                     disabled={selectedRowIds.length === 0 || allSelectedRead} // Disable if all selected are read
                     startIcon={<CheckCircleIcon />}
+                    sx={{ marginRight: '1%', width:'200px' }}
                 >
                     Mark as Read
                 </Button>

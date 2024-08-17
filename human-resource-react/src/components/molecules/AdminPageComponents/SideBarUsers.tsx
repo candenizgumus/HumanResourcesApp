@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 import { HumanResources, useAppSelector } from "../../../store";
 import { useDispatch } from "react-redux";
-
+import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
 import {
     clearToken,
     fetchGetAllUsers,
@@ -27,21 +27,21 @@ import { IUser } from "../../../models/IUser";
 
 
 const columns: GridColDef[] = [
-    { field: "companyId", headerName: "Company Id", flex :1 , headerAlign: "center" },
-    { field: "name", headerName: "First name", flex :1, headerAlign: "center" },
-    { field: "surname", headerName: "Last name", flex :1, headerAlign: "center" },
-    { field: "email", headerName: "Email", headerAlign: "center", flex :2},
-    { field: "phone", headerName: "Phone", sortable: false, headerAlign: "center", flex :1 },
-    { field: "sector", headerName: "Sector", type: "string", flex :2, headerAlign: "center" },
-    { field: "userType", headerName: "User Type", flex :1, headerAlign: "center" },
-    { field: "subscriptionType", headerName: "Sub. Type", flex :1, headerAlign: "center" },
-    { field: "subscriptionStartDate", headerName: "Sub. Start Date", type: "string", flex :1, headerAlign: "center" },
-    { field: "subscriptionEndDate", headerName: "Sub. End Date", type: "string", flex :1, headerAlign: "center" },
-    { field: "status", headerName: "Status", type: "string", flex :1, headerAlign: "center" },
+    { field: "companyId", headerName: "Company Id", flex: 1, headerAlign: "center" },
+    { field: "name", headerName: "First name", flex: 1, headerAlign: "center" },
+    { field: "surname", headerName: "Last name", flex: 1, headerAlign: "center" },
+    { field: "email", headerName: "Email", headerAlign: "center", flex: 2 },
+    { field: "phone", headerName: "Phone", sortable: false, headerAlign: "center", flex: 1 },
+    { field: "sector", headerName: "Sector", type: "string", flex: 2, headerAlign: "center" },
+    { field: "userType", headerName: "User Type", flex: 1, headerAlign: "center" },
+    { field: "subscriptionType", headerName: "Sub. Type", flex: 1, headerAlign: "center" },
+    { field: "subscriptionStartDate", headerName: "Sub. Start Date", type: "string", flex: 1, headerAlign: "center" },
+    { field: "subscriptionEndDate", headerName: "Sub. End Date", type: "string", flex: 1, headerAlign: "center" },
+    { field: "status", headerName: "Status", type: "string", flex: 1, headerAlign: "center" },
     {
         field: "photo",
         headerName: "Photo",
-        flex :1,
+        flex: 1,
         headerAlign: "center",
         sortable: false,
         renderCell: (params) => (
@@ -163,14 +163,15 @@ export default function SideBarUsers() {
     };
 
     return (
-        <div style={{ height: "auto", width: "inherit" }}>
+        <div style={{ height: "auto" }}>
             <TextField
-                label="Email"
+                label="Search By Email"
                 variant="outlined"
                 onChange={(event) => setSearchText(event.target.value)}
                 value={searchText}
-                style={{ marginBottom: "10px" }}
+                style={{ marginBottom: "1%", marginTop: "1%" }}
                 inputProps={{ maxLength: 50 }}
+                fullWidth
             />
             <DataGrid
                 slots={{
@@ -205,13 +206,16 @@ export default function SideBarUsers() {
             />
             <Grid container spacing={1} style={{ marginTop: 16 }} direction="row">
                 <Grid item>
+
                     <Button
                         onClick={handleEditClick}
                         variant="contained"
-                        color="primary"
+                        color="secondary"
+                        startIcon={<DriveFileRenameOutlineIcon />}
                         disabled={loading || selectedRowIds.length !== 1}
+                        sx={{ marginRight: '1%', width: '200px' }}
                     >
-                        {loading ? "Processing..." : "Edit"}
+                        Edit
                     </Button>
                 </Grid>
             </Grid>

@@ -5,6 +5,7 @@ import { fetchCreateUserWithUserType } from '../../../store/feature/authSlice';
 import { HumanResources } from '../../../store';
 import Swal from "sweetalert2";
 import { IUserType } from '../../../models/IUserType';
+import AddBoxIcon from '@mui/icons-material/AddBox';
 
 const UserForm: React.FC = () => {
   const dispatch = useDispatch<HumanResources>();
@@ -29,7 +30,7 @@ const UserForm: React.FC = () => {
           icon: 'error',
           title: 'Error',
           text: result.message,
-            confirmButtonColor: '#1976D2',
+          confirmButtonColor: '#1976D2',
         });
         setLoading(false);
         return; // Stop the process and prevent further then block executions
@@ -39,7 +40,7 @@ const UserForm: React.FC = () => {
         icon: 'success',
         title: 'Success!',
         text: 'Admin Account Created.',
-          confirmButtonColor: '#1976D2',
+        confirmButtonColor: '#1976D2',
       });
       setEmail('');
       setPassword('');
@@ -61,6 +62,7 @@ const UserForm: React.FC = () => {
         maxWidth: 400,
         margin: 'auto',
         padding: 2,
+        marginTop: '2%'
       }}
     >
       <Box
@@ -103,8 +105,14 @@ const UserForm: React.FC = () => {
         }
         label="I understand the consequences of creating an admin account."
       />
-      <Button type="submit" variant="contained" color="primary" disabled={loading || !accepted}>
-        {loading ? "Processing..." : "Create"}
+      <Button
+        type="submit"
+        variant="contained"
+        color="primary"
+        disabled={loading || !accepted || !password || !email}
+        startIcon={<AddBoxIcon />}
+      >
+        Create
       </Button>
     </Box>
   );

@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { AppBar, Button, Toolbar, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-
+import logo from '../../../images/logo-nobg.png';
+import logoBlue from '../../../images/logo-blue-nobg.png';
 // @ts-ignore
 export const NavBar = () => {
     const navigate = useNavigate();
@@ -85,7 +86,7 @@ export const NavBar = () => {
             <Toolbar sx={{ alignItems: 'center', display: 'flex', flexWrap: 'nowrap' }}>
                 <Typography variant="h6" sx={logoStyle}>
                     <Button style={{ marginRight: '20px' }} sx={navigationsStyle} onClick={() => navigate('/')} color="inherit">
-                        Easy HR
+                        {scrolled ? <img src={logoBlue} alt="logo" style={{ height: '52px' }} />: <img src={logo} alt="logo" style={{ height: '52px' }} />}
                     </Button>
                 </Typography>
                 <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'nowrap' }}>

@@ -15,6 +15,7 @@ import SideBarHolidayTableAdmin from "../molecules/AdminPageComponents/SideBarHo
 import SideBarCreateDefinition from "../molecules/SideBarCreateDefinition";
 import SideBarNotifications from "../molecules/SideBarNotifications";
 import AdminHomeContent from "../molecules/AdminPageComponents/AdminHomeContent";
+import SideBarUpcomingMembershipExpiries from "../molecules/AdminPageComponents/SideBarUpcomingMembershipExpiries";
 import DeactivateAccount from "../molecules/DeactivateAccount";
 const EditEmployee = lazy(() => import('../molecules/ManagerComponents/EditEmployee'));
 const SideBarCreateComment = lazy(() => import('../molecules/ManagerComponents/SideBarCreateComment'));
@@ -42,6 +43,7 @@ export const AdminMenuContentRenderer = () => {
                 {page === 'Create Definition' && <SideBarCreateDefinition/>}
                 {page === 'Dashboard' && <AdminHomeContent/>}
                 {page === 'Deactivate Account' && <DeactivateAccount/>}
+                {page === 'Upcoming Expiries' && <SideBarUpcomingMembershipExpiries/>}
             </Grid>
         </>
     );

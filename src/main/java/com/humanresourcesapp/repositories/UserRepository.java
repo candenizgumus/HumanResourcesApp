@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -50,5 +51,9 @@ public interface UserRepository extends JpaRepository<User,Long>
             "MONTH(u.birthDate) = MONTH(CURRENT_DATE) + 1")
     List<User> findEmployeesWithUpcomingBirthdays(@Param("userType") EUserType userType);
 
+    @Query("SELECT DISTINCT u.companyId FROM User u WHERE u.subscriptionEndDate BETWEEN :now AND :endRange")
+    List<Long> findDistinctCompanyIdsWithSubscriptionEndingSoon(@Param("now") LocalDate now, @Param("endRange") LocalDate endRange);
 
+    @Query("SELECT u FROM User u WHERE u.companyId = :companyId ORDER BY u.createdAt ASC")
+    Optional<User> findFirstUserByCompanyId(@Param("companyId") Long companyId);
 }

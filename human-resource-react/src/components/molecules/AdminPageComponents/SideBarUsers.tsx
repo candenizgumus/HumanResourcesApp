@@ -8,7 +8,10 @@ import {
 import {
     Avatar,
     Box, Button, FormControl, Grid, InputLabel, MenuItem, Modal, Select,
-
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
     TextField, Typography
 
 } from "@mui/material";
@@ -24,7 +27,7 @@ import {
 } from "../../../store/feature/authSlice";
 import Swal from "sweetalert2";
 import { IUser } from "../../../models/IUser";
-
+import CircularProgress from '@mui/material/CircularProgress';
 
 const columns: GridColDef[] = [
     { field: "companyId", headerName: "Company Id", flex: 1, headerAlign: "center" },
@@ -163,7 +166,7 @@ export default function SideBarUsers() {
     };
 
     return (
-        <div style={{ height: "auto" }}>
+        <div style={{ height: 'auto', width: "inherit" }}>
             <TextField
                 label="Search By Email"
                 variant="outlined"
@@ -202,92 +205,92 @@ export default function SideBarUsers() {
                         textAlign: "center",
                         fontSize: "11px",
                     },
+                    height: '407px'
                 }}
             />
-            <Grid container spacing={1} style={{ marginTop: 16 }} direction="row">
-                <Grid item>
-
-                    <Button
-                        onClick={handleEditClick}
-                        variant="contained"
-                        color="secondary"
-                        startIcon={<DriveFileRenameOutlineIcon />}
-                        disabled={loading || selectedRowIds.length !== 1}
-                        sx={{ marginRight: '1%', width: '200px' }}
-                    >
-                        Edit
-                    </Button>
-                </Grid>
+            <Grid sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-start', alignItems: 'center', marginTop: '2%', marginBottom: '2%' }}>
+                <Button
+                    onClick={handleEditClick}
+                    variant="contained"
+                    color="secondary"
+                    startIcon={<DriveFileRenameOutlineIcon />}
+                    disabled={loading || selectedRowIds.length !== 1}
+                    sx={{ marginRight: '1%', width: '200px' }}
+                >
+                    Edit
+                </Button>
             </Grid>
-            <Modal
-                open={open}
-                onClose={handleClose}
-                aria-labelledby="modal-title"
-                aria-describedby="modal-description"
-            >
-                <Box sx={style}>
-                    <Typography id="modal-title" variant="h6" component="h2">
-                        Edit User
-                    </Typography>
-                    {selectedUser && (
-                        <form >
-                            <TextField sx={{ marginTop: "25px" }}
-                                label="Name"
-                                name="name"
-                                variant="outlined"
-                                value={selectedUser.name}
-                                onChange={e => setSelectedUser({ ...selectedUser, name: e.target.value })}
-                                fullWidth
-                                style={{ marginBottom: "10px" }}
-                            />
-                            <TextField
-                                label="Surname"
-                                name="surname"
-                                variant="outlined"
-                                value={selectedUser.surname}
-                                onChange={e => setSelectedUser({ ...selectedUser, surname: e.target.value })}
-                                fullWidth
-                                style={{ marginBottom: "10px" }}
-                            />
-                            <TextField
-                                label="Phone"
-                                name="phone"
-                                variant="outlined"
-                                value={selectedUser.phone}
-                                onChange={e => setSelectedUser({ ...selectedUser, phone: e.target.value })}
-                                fullWidth
-                                style={{ marginBottom: "10px" }}
-                            />
-                            <FormControl sx={{ marginBottom: "25px" }} fullWidth>
-                                <InputLabel id="demo-simple-select-label">Status</InputLabel>
-                                <Select
-                                    labelId="demo-simple-select-label"
-                                    id="demo-simple-select"
-                                    value={selectedUser.status}
-                                    label="Status"
-                                    onChange={e => setSelectedUser({ ...selectedUser, status: e.target.value })}
-                                >
-                                    {
-                                        statusList.map((status) => (
-                                            <MenuItem key={status} value={status}>{status}</MenuItem>
-                                        ))
-                                    }
+            
+            <Dialog open={open} onClose={handleClose} fullWidth maxWidth='sm'>
+                <DialogTitle>Edit User</DialogTitle>
+                <DialogContent>
+                    <Box mt={2}>
+                        {selectedUser && (
+                            <>
+                                <Grid item mt={2}>
+                                    <TextField sx={{ marginTop: "25px" }}
+                                        label="Name"
+                                        name="name"
+                                        variant="outlined"
+                                        value={selectedUser.name}
+                                        onChange={e => setSelectedUser({ ...selectedUser, name: e.target.value })}
+                                        fullWidth
+                                        style={{ marginBottom: "10px" }}
+                                    />
+                                    <TextField
+                                        label="Surname"
+                                        name="surname"
+                                        variant="outlined"
+                                        value={selectedUser.surname}
+                                        onChange={e => setSelectedUser({ ...selectedUser, surname: e.target.value })}
+                                        fullWidth
+                                        style={{ marginBottom: "10px" }}
+                                    />
+                                    <TextField
+                                        label="Phone"
+                                        name="phone"
+                                        variant="outlined"
+                                        value={selectedUser.phone}
+                                        onChange={e => setSelectedUser({ ...selectedUser, phone: e.target.value })}
+                                        fullWidth
+                                        style={{ marginBottom: "10px" }}
+                                    />
+                                    <FormControl sx={{ marginBottom: "25px" }} fullWidth>
+                                        <InputLabel id="demo-simple-select-label">Status</InputLabel>
+                                        <Select
+                                            labelId="demo-simple-select-label"
+                                            id="demo-simple-select"
+                                            value={selectedUser.status}
+                                            label="Status"
+                                            onChange={e => setSelectedUser({ ...selectedUser, status: e.target.value })}
+                                        >
+                                            {
+                                                statusList.map((status) => (
+                                                    <MenuItem key={status} value={status}>{status}</MenuItem>
+                                                ))
+                                            }
 
-                                </Select>
-                            </FormControl>
-                            <Button
-                                onClick={handleUpdateUserByAdmin}
-                                variant="contained"
-                                color="primary"
-                                disabled={loading}
-                                fullWidth
-                            >
-                                {loading ? "Updating..." : "Update"}
-                            </Button>
-                        </form>
+                                        </Select>
+                                    </FormControl>
+                                </Grid>
+                            </>
+                        )}
+                    </Box>
+                    {loading && (
+                        <Box display="flex" justifyContent="center" alignItems="center" mb={2}>
+                            <CircularProgress />
+                        </Box>
                     )}
-                </Box>
-            </Modal>
+                </DialogContent>
+                <DialogActions>
+                    <Button variant="contained" onClick={handleClose} color="error" sx={{ marginRight: '17px', width: '100px' }}>
+                        Cancel
+                    </Button>
+                    <Button variant="contained" disabled={loading} onClick={handleUpdateUserByAdmin} color="primary" sx={{ marginRight: '17px', width: '100px' }}>
+                        Update
+                    </Button>
+                </DialogActions>
+            </Dialog>
 
 
         </div>

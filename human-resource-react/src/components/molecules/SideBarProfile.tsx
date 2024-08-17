@@ -15,7 +15,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs, { Dayjs } from "dayjs";
 import sweetalert2 from "sweetalert2";
 import Swal from "sweetalert2";
-import { CloudUpload } from '@mui/icons-material';
+import { CloudUploadIcon } from '../atoms/icons';
 import styled from '@emotion/styled';
 import { uploadPlayerProfileImage } from '../../store/feature/awsSlice';
 import { IUpdateUserProfile } from '../../models/IUpdateUserProfile';
@@ -323,7 +323,7 @@ const SideBarProfile = () => {
                         role={undefined}
                         variant="contained"
                         tabIndex={-1}
-                        startIcon={<CloudUpload />}
+                        startIcon={<CloudUploadIcon />}
                         onClick={updatePhoto}
                         disabled={isUploading || !isSelected}
                     >

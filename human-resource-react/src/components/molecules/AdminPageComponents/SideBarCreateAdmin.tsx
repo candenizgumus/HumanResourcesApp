@@ -5,7 +5,7 @@ import { fetchCreateUserWithUserType } from '../../../store/feature/authSlice';
 import { HumanResources } from '../../../store';
 import Swal from "sweetalert2";
 import { IUserType } from '../../../models/IUserType';
-import AddBoxIcon from '@mui/icons-material/AddBox';
+import {AddIcon} from '../../atoms/icons';
 
 const UserForm: React.FC = () => {
   const dispatch = useDispatch<HumanResources>();
@@ -110,7 +110,7 @@ const UserForm: React.FC = () => {
         variant="contained"
         color="primary"
         disabled={loading || !accepted || !password || !email}
-        startIcon={<AddBoxIcon />}
+        startIcon={<AddIcon />}
       >
         Create
       </Button>

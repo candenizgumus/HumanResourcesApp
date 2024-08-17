@@ -13,16 +13,20 @@ import {
     Box,
     Typography,
     Backdrop,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
     Avatar,
 } from "@mui/material";
+import CircularProgress from '@mui/material/CircularProgress';
 import Loader from "../../atoms/loader/Loader";
-import EmailIcon from '@mui/icons-material/Email';
+import {EmailIcon} from '../../atoms/icons';
 import { useDispatch } from "react-redux";
 import Swal from "sweetalert2";
 import { HumanResources, useAppSelector } from "../../../store";
 import { changePageState, clearToken } from "../../../store/feature/authSlice";
 import { fetchGetUpcomingMembershipExpiries } from "../../../store/feature/companySlice";
-import { fetchSendOfferEmail } from "../../../store/feature/offerSlice";
 import { fetchSendEmail } from "../../../store/feature/emailSlice";
 
 const columns: GridColDef[] = [
@@ -87,8 +91,9 @@ export default function NotificationsPage() {
     const [emailText, setEmailText] = useState<string>("");
     const [isSendTrue, setIsSendTrue] = useState(false);
     const [isSendFalse, setIsSendFalse] = useState(false);
-    const [currentModalIndex, setCurrentModalIndex] = useState<number | null>(null);
+
     const [loading, setLoading] = useState(false);
+    const [open, setOpen] = useState(false);
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -104,15 +109,15 @@ export default function NotificationsPage() {
         setSelectedRowIds(newSelectionModel as number[]);
     };
 
-    const handleSendEmail = async (id: number) => {
-        const selectedCompany = upcomingExpiries.find((company) => company.id === id);
+    const handleSendEmail = async () => {
+        const selectedCompany = upcomingExpiries.find((company) => company.id === selectedRowIds[0]);
         if (!selectedCompany) return;
         setIsSendTrue(true)
 
         await dispatch(
             fetchSendEmail({
                 token: token,
-                to: "hcaslan7@gmail.com",
+                to: "hcaslan7@gmail.com", // TODO company.contactEmail
                 message: emailText,
                 subject: "Upcoming Membership Expiry"
             })
@@ -136,15 +141,16 @@ export default function NotificationsPage() {
                 });
             }
         });
-        setIsSendTrue(false)
-        setCurrentModalIndex(null);
-    };
-    const handleOpenEmailModals = () => {
-        setCurrentModalIndex(0)
+        setIsSendTrue(false);
+        handleClose();
     };
 
+
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
+
     return (
-        <div style={{ height: '407px', width: "inherit" }}>
+        <div style={{ height: 'auto', width: "inherit" }}>
             <DataGrid
                 paginationMode="server"
                 rows={upcomingExpiries}
@@ -181,12 +187,13 @@ export default function NotificationsPage() {
                     "& .MuiToolbar-regular": {
                         display: "none"
                     },
-                    marginTop: '2%'
+                    marginTop: '2%',
+                    height: '407px'
                 }}
             />
-            <Grid sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-start', alignItems: 'center', marginTop: '1%' }}>
+            <Grid sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-start', alignItems: 'center', marginTop: '2%', marginBottom: '2%' }}>
                 <Button
-                    onClick={handleOpenEmailModals}
+                    onClick={handleOpen}
                     variant="contained"
                     color="secondary"
                     disabled={selectedRowIds.length === 0 || selectedRowIds.length > 1}
@@ -196,38 +203,46 @@ export default function NotificationsPage() {
                     Contact
                 </Button>
             </Grid>
-            {currentModalIndex !== null && (
-                <Modal
-                    open={true}
-                    onClose={() => setCurrentModalIndex(null)}
-                >
-                    <Box sx={style}>
-                        <Typography variant="h6" component="h2">
-                            E-Mail Text for {upcomingExpiries.find((offer) => offer.id === selectedRowIds[currentModalIndex])?.contactEmail}
-                        </Typography>
-                        <TextField
-                            label="Please type your offer"
-                            multiline
-                            rows={14}
-                            variant="outlined"
-                            fullWidth
-                            required
-                            value={emailText}
-                            onChange={(e) => setEmailText(e.target.value)}
-                            style={{ marginTop: "16px" }}
-                        />
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            disabled={isSendTrue || emailText === ''}
-                            onClick={() => handleSendEmail(selectedRowIds[currentModalIndex])}
-                            style={{ marginTop: "16px" }}
-                        >
-                            {isSendTrue ? "Processing..." : "Send"}
-                        </Button>
+            <Dialog open={open} onClose={handleClose} fullWidth maxWidth='sm'>
+                <DialogTitle>Send Mail to {upcomingExpiries.find((company) => company.id === selectedRowIds[0])?.contactEmail}</DialogTitle>
+                <DialogContent>
+                    <Box mt={2}>
+                        {setSelectedRowIds.length !== 0 && (
+                            <>
+                                <Grid item mt={2}>
+                                    <TextField
+                                        label="Please type your offer"
+                                        multiline
+                                        rows={14}
+                                        variant="outlined"
+                                        fullWidth
+                                        required
+                                        value={emailText}
+                                        onChange={(e) => setEmailText(e.target.value)}
+                                        style={{ marginTop: "16px" }}
+                                    />
+                                </Grid>
+                            </>
+                        )}
                     </Box>
-                </Modal>
-            )}
+                    {loading && (
+                        <Box display="flex" justifyContent="center" alignItems="center" mb={2}>
+                            <CircularProgress />
+                        </Box>
+                    )}
+                </DialogContent>
+                <DialogActions>
+                    <Button variant="contained" disabled={isSendTrue} onClick={handleClose} color="error" sx={{ marginRight: '17px', width: '100px' }}>
+                        Cancel
+                    </Button>
+                    <Button variant="contained" disabled={!emailText || isSendTrue} onClick={handleSendEmail} color="primary" sx={{ marginRight: '17px', width: '100px' }}>
+                        Send
+                    </Button>
+                </DialogActions>
+            </Dialog>
+
+
+
             <Backdrop open={loading}>
                 <Loader />
             </Backdrop>

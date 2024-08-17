@@ -30,7 +30,7 @@ const columns: GridColDef[] = [
 ];
 
 export default function SideBarEmployeeHolidays() {
-    const holidays: IHoliday[] = useAppSelector((state: RootState) => state.holiday.holidayList);
+    const holidays: IHoliday[] = useAppSelector((state: RootState) => state.holiday.holidayListEmployee);
     const dispatch = useDispatch<HumanResources>();
     const token = useAppSelector((state) => state.auth.token);
     const [selectedRowIds, setSelectedRowIds] = useState<number[]>([]);

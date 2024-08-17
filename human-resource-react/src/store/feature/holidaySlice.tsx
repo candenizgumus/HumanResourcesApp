@@ -5,7 +5,9 @@ import {ICreateHoliday} from "../../models/ICreateHoliday";
 
 
 const initialHolidayState = {
-    holidayList: [] as IHoliday[],
+    holidayListAdmin: [] as IHoliday[],
+    holidayListEmployee: [] as IHoliday[],
+    holidayListUser: [] as IHoliday[],
     isLoading: false,
     monthlyHolidayList: [] as IHoliday[]
 };
@@ -159,9 +161,9 @@ const holidaySlice = createSlice({
                 state.isLoading = true;
             })
             .addCase(fetchHolidaysUser.fulfilled, (state, action) => {
-                state.holidayList = action.payload;
+                state.holidayListUser = action.payload;
                 state.isLoading = false;
-                console.log('Holiday List:', state.holidayList);
+                console.log('Holiday List:', state.holidayListUser);
             })
             .addCase(fetchHolidaysUser.rejected, (state, action) => {
                 state.isLoading = false;
@@ -170,15 +172,15 @@ const holidaySlice = createSlice({
                 state.isLoading = true;
             })
             .addCase(fetchHolidaysAdmin.fulfilled, (state, action) => {
-                state.holidayList = action.payload;
+                state.holidayListAdmin = action.payload;
                 state.isLoading = false;
-                console.log('Holiday List By Admin:', state.holidayList);
+                console.log('Holiday List By Admin:', state.holidayListAdmin);
             })
             .addCase(fetchHolidaysAdmin.rejected, (state, action) => {
                 state.isLoading = false;
             })
             .addCase(fetchHolidaysEmployee.fulfilled, (state, action) => {
-                state.holidayList = action.payload;
+                state.holidayListEmployee = action.payload;
                 state.isLoading = false;
             })
             .addCase(fetchGetMonthlyHolidays.fulfilled, (state, action) => {

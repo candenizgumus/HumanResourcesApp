@@ -7,15 +7,14 @@ import {
 import {
     Avatar, Box,
     Button,
-    Grid,  Modal,
+    Grid, Modal,
 
     TextField, Typography
 
 } from "@mui/material";
 import { HumanResources, useAppSelector } from "../../../store";
 import { useDispatch } from "react-redux";
-
-
+import * as Icons from '../../atoms/icons';
 import {
     changePageState,
     clearToken, fetchActivateUserByManager,
@@ -23,13 +22,13 @@ import {
     fetchGetAllUsersOfManager, setSelectedEmployeeId
 } from "../../../store/feature/authSlice";
 import Swal from "sweetalert2";
-import {IUser} from "../../../models/IUser";
-import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
-import {DatePicker} from "@mui/x-date-pickers/DatePicker";
+import { IUser } from "../../../models/IUser";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
-import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
-import {fetchSaveBonus} from "../../../store/feature/bonusSlice";
-import {setEmployeeIdAndCompanyId} from "../../../store/feature/shiftSlice";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { fetchSaveBonus } from "../../../store/feature/bonusSlice";
+import { setEmployeeIdAndCompanyId } from "../../../store/feature/shiftSlice";
 import { fetchGetDefinitions } from "../../../store/feature/definitionSlice";
 import { EDefinitionType } from "../../../models/IDefinitionType";
 
@@ -52,18 +51,18 @@ export default function SideBarEmployees() {
     const handleClose = () => setOpen(false);
 
     const columns: GridColDef[] = [
-        { field: "name", headerName: "First name", flex :2, headerAlign: "center" },
-        { field: "surname", headerName: "Last name", flex :2, headerAlign: "center" },
-        { field: "email", headerName: "Email", headerAlign: "center", flex :2 },
-        { field: "phone", headerName: "Phone", sortable: false, headerAlign: "center", flex :1 },
-        { field: "position", headerName: "Position", type: "string", flex :2, headerAlign: "center" },
-        { field: "userType", headerName: "User Type", flex :1, headerAlign: "center" },
-        { field: "employeeType", headerName: "Employee Type", flex :1, headerAlign: "center" },
-        { field: "status", headerName: "Status", flex :1, headerAlign: "center" },
+        { field: "name", headerName: "First name", flex: 2, headerAlign: "center" },
+        { field: "surname", headerName: "Last name", flex: 2, headerAlign: "center" },
+        { field: "email", headerName: "Email", headerAlign: "center", flex: 2 },
+        { field: "phone", headerName: "Phone", sortable: false, headerAlign: "center", flex: 1 },
+        { field: "position", headerName: "Position", type: "string", flex: 2, headerAlign: "center" },
+        { field: "userType", headerName: "User Type", flex: 1, headerAlign: "center" },
+        { field: "employeeType", headerName: "Employee Type", flex: 1, headerAlign: "center" },
+        { field: "status", headerName: "Status", flex: 1, headerAlign: "center" },
         {
             field: "photo",
             headerName: "Photo",
-            flex :1,
+            flex: 1,
             headerAlign: "center",
             sortable: false,
             renderCell: (params) => (
@@ -74,11 +73,11 @@ export default function SideBarEmployees() {
         },
     ];
 
-    const handleSetShifts  = () => {
+    const handleSetShifts = () => {
         for (let id of selectedRowIds) {
             const selectedEmployee = userList.find((selectedEmployee) => selectedEmployee.id === id);
             if (!selectedEmployee) continue;
-            dispatch(setEmployeeIdAndCompanyId({  employeeId: selectedEmployee.id , companyId: selectedEmployee.companyId }));
+            dispatch(setEmployeeIdAndCompanyId({ employeeId: selectedEmployee.id, companyId: selectedEmployee.companyId }));
             dispatch(changePageState("Shift"));
 
         }
@@ -109,7 +108,7 @@ export default function SideBarEmployees() {
             return;
 
         }
-        dispatch(fetchSaveBonus({ token: token, description: description, bonusDate: bonusDate, bonusAmount: bonusAmount,employeeId:selectedRowIds[0] })).then(data => {
+        dispatch(fetchSaveBonus({ token: token, description: description, bonusDate: bonusDate, bonusAmount: bonusAmount, employeeId: selectedRowIds[0] })).then(data => {
             if (data.payload.message) {
                 Swal.fire({
                     title: "Error",
@@ -135,32 +134,32 @@ export default function SideBarEmployees() {
 
     useEffect(() => {
         dispatch(fetchGetDefinitions({
-            token : token,
+            token: token,
             definitionType: EDefinitionType.EMPLOYEE_TYPE
         })
-            ).then(()=> {
-                dispatch(fetchGetAllUsersOfManager({
-                    token: token,
-                    page: 0,
-                    pageSize: 100,
-                    searchText: searchText,
-                }))
-            })
+        ).then(() => {
+            dispatch(fetchGetAllUsersOfManager({
+                token: token,
+                page: 0,
+                pageSize: 100,
+                searchText: searchText,
+            }))
+        })
             .catch(() => {
-            dispatch(clearToken());
-        });
-    }, [dispatch, searchText, token,loading,isActivating]);
+                dispatch(clearToken());
+            });
+    }, [dispatch, searchText, token, loading, isActivating]);
 
     const handleRowSelection = (newSelectionModel: GridRowSelectionModel) => {
         setSelectedRowIds(newSelectionModel as number[]);
     };
 
-    const handleOnClickAddDocument= () => {
+    const handleOnClickAddDocument = () => {
         dispatch(setSelectedEmployeeId(selectedRowIds[0]))
         dispatch(changePageState("Add Document"))
     }
 
-    const handleOnClickEditEmployee= () => {
+    const handleOnClickEditEmployee = () => {
         dispatch(setSelectedEmployeeId(selectedRowIds[0]))
         dispatch(changePageState("Edit Employee"))
     }
@@ -322,11 +321,13 @@ export default function SideBarEmployees() {
     return (
         <div style={{ height: "auto", width: "inherit" }}>
             <TextField
-                label="Email"
+                label="Search By Email"
                 variant="outlined"
                 onChange={(event) => setSearchText(event.target.value)}
                 value={searchText}
-                style={{ marginBottom: "10px" }}
+                style={{ marginBottom: "1%", marginTop: "1%" }}
+                fullWidth
+                inputProps={{ maxLength: 50 }}
             />
             <DataGrid
                 rows={userList}
@@ -350,73 +351,70 @@ export default function SideBarEmployees() {
                     "& .MuiDataGrid-cell": {
                         textAlign: "center",
                     },
+                    height: '407px'
                 }}
             />
-
-            <Grid container spacing={1} style={{ marginTop: 16 }} direction="row">
-                <Grid item>
-                    <Button
-                        onClick={handleActivateEmployee}
-                        variant="contained"
-                        color="success"
-                        disabled={ isActivating || selectedRowIds.length === 0}
-                    >
-                        Activate Employee
-                    </Button>
-                </Grid>
-                <Grid item>
-                    <Button
-                        onClick={handleDeleteEmployee}
-                        variant="contained"
-                        color="error"
-                        disabled={ isDeleting || selectedRowIds.length === 0}
-                    >
-                        Delete Employee
-                    </Button>
-                </Grid>
-
-                <Grid item>
-                    <Button
-                        onClick={handleOnClickEditEmployee}
-                        variant="contained"
-                        color="warning"
-                        disabled={  selectedRowIds.length>1 || selectedRowIds.length === 0}
-                    >
-                        Edit Employee
-                    </Button>
-                </Grid>
-
-                <Grid item>
-                    <Button
-                        onClick={handleOnClickAddDocument}
-                        variant="contained"
-                        color="primary"
-                        disabled={  selectedRowIds.length>1 || selectedRowIds.length === 0}
-                    >
-                        Add Document
-                    </Button>
-                </Grid>
-
-                <Grid item>
-                    <Button
-                        onClick={openAddBonus}
-                        variant="contained"
-                        color="primary"
-                        disabled={  selectedRowIds.length>1 || selectedRowIds.length === 0}
-                    >
-                        Add Bonus
-                    </Button>
-                </Grid>
-                <Grid item>
-                    <Button
-                        onClick={handleSetShifts}
-                        variant="contained"
-                        color="primary"
-                        disabled={  selectedRowIds.length>1 || selectedRowIds.length === 0}
-                    >
-                        Set Shifts
-                    </Button>
-                </Grid>
+            <Grid sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-start', alignItems: 'center', marginTop: '2%', marginBottom: '2%' }}>
+                <Button
+                    onClick={handleActivateEmployee}
+                    variant="contained"
+                    color="primary"
+                    disabled={isActivating || selectedRowIds.length === 0}
+                    sx={{ marginRight: '1%', width: '200px' }}
+                    startIcon={<Icons.ActivateIcon />}
+                >
+                    Activate
+                </Button>
+                <Button
+                    onClick={handleDeleteEmployee}
+                    variant="contained"
+                    color="error"
+                    disabled={isDeleting || selectedRowIds.length === 0}
+                    sx={{ marginRight: '1%', width: '200px' }}
+                    startIcon={<Icons.DeleteIcon />}
+                >
+                    Delete
+                </Button>
+                <Button
+                    onClick={handleOnClickEditEmployee}
+                    variant="contained"
+                    color="secondary"
+                    disabled={selectedRowIds.length > 1 || selectedRowIds.length === 0}
+                    sx={{ marginRight: '1%', width: '200px' }}
+                    startIcon={<Icons.EditIcon />}
+                >
+                    Edit
+                </Button>
+                <Button
+                    onClick={handleOnClickAddDocument}
+                    variant="contained"
+                    color="success"
+                    disabled={selectedRowIds.length > 1 || selectedRowIds.length === 0}
+                    sx={{ marginRight: '1%', width: '200px' }}
+                    startIcon={<Icons.AddDocumentIcon />}
+                >
+                    Add Document
+                </Button>
+                <Button
+                    onClick={openAddBonus}
+                    variant="contained"
+                    color="success"
+                    disabled={selectedRowIds.length > 1 || selectedRowIds.length === 0}
+                    sx={{ marginRight: '1%', width: '200px' }}
+                    startIcon={<Icons.AddBonusIcon />}
+                >
+                    Add Bonus
+                </Button>
+                <Button
+                    onClick={handleSetShifts}
+                    variant="contained"
+                    color="success"
+                    disabled={selectedRowIds.length > 1 || selectedRowIds.length === 0}
+                    sx={{ marginRight: '1%', width: '200px' }}
+                    startIcon={<Icons.SetShiftIcon />}
+                >
+                    Set Shifts
+                </Button>
             </Grid>
 
             <Modal
@@ -434,28 +432,28 @@ export default function SideBarEmployees() {
                             <Grid container spacing={2}>
                                 <Grid item xs={12}>
                                     <TextField sx={{ marginTop: "25px" }}
-                                               label="Description"
-                                               name="description"
-                                               variant="outlined"
+                                        label="Description"
+                                        name="description"
+                                        variant="outlined"
 
-                                               onChange={event => setDescription(event.target.value)}
-                                               fullWidth
-                                               style={{ marginBottom: "10px" }}
+                                        onChange={event => setDescription(event.target.value)}
+                                        fullWidth
+                                        style={{ marginBottom: "10px" }}
                                     />
                                 </Grid>
                                 <Grid item xs={12}>
                                     <TextField
-                                               label="Bonus Amount $"
-                                               name="bonusAmount"
-                                               variant="outlined"
-                                               type={"number"}
-                                               onChange={event => setBonusAmount(parseInt(event.target.value))}
-                                               fullWidth
-                                               style={{ marginBottom: "10px" }}
+                                        label="Bonus Amount $"
+                                        name="bonusAmount"
+                                        variant="outlined"
+                                        type={"number"}
+                                        onChange={event => setBonusAmount(parseInt(event.target.value))}
+                                        fullWidth
+                                        style={{ marginBottom: "10px" }}
                                     />
                                 </Grid>
-                                <Grid sx={{ marginBottom: "50px"  }} item xs={12}>
-                                    <LocalizationProvider   dateAdapter={AdapterDayjs}>
+                                <Grid sx={{ marginBottom: "50px" }} item xs={12}>
+                                    <LocalizationProvider dateAdapter={AdapterDayjs}>
                                         <DatePicker
                                             label="Bonus Date"
                                             value={bonusDate ? dayjs(bonusDate) : null}

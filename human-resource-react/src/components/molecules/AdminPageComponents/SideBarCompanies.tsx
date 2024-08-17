@@ -6,12 +6,17 @@ import {
     GridPaginationModel,
     GridToolbar
 } from "@mui/x-data-grid";
+import CircularProgress from '@mui/material/CircularProgress';
 import {
     Button,
     Grid,
     TextField,
     Modal,
     Box,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
     Typography, Avatar,
 } from "@mui/material";
 import { HumanResources, useAppSelector } from "../../../store";
@@ -20,7 +25,7 @@ import { fetchGetCompanies, fetchGetCompanyCount, fetchUpdateCompany } from "../
 import { clearToken } from "../../../store/feature/authSlice";
 import Swal from "sweetalert2";
 import { ICompany } from "../../../models/ICompany";
-import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
+import {EditIcon} from "../../atoms/icons"
 
 const columns: GridColDef[] = [
     { field: "name", headerName: "Company Name", flex: 1, headerAlign: "center" },
@@ -60,18 +65,6 @@ const columns: GridColDef[] = [
         ),
     },
 ];
-
-const style = {
-    position: "absolute" as "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    width: 700,
-    bgcolor: "background.paper",
-    border: "2px solid #000",
-    boxShadow: 24,
-    p: 4,
-};
 
 export default function OfferList() {
     const [selectedRowIds, setSelectedRowIds] = useState<number[]>([]);
@@ -173,7 +166,7 @@ export default function OfferList() {
     };
 
     return (
-        <div style={{ height: "auto" }}>
+        <div style={{ height: 'auto', width: "inherit" }}>
             <TextField
                 label="Search By Name"
                 variant="outlined"
@@ -208,87 +201,87 @@ export default function OfferList() {
                     "& .MuiDataGrid-cell": {
                         textAlign: "center",
                     },
+                    height: '407px'
                 }}
             />
-            <Grid container spacing={1} style={{ marginTop: 16 }} direction="row">
-                <Grid item>
-                    <Button
-                        onClick={handleEditClick}
-                        variant="contained"
-                        color="secondary"
-                        startIcon={<DriveFileRenameOutlineIcon />}
-                        disabled={loading || selectedRowIds.length !== 1}
-                        sx={{ marginRight: '1%', width: '200px' }}
-                    >
-                        Edit
-                    </Button>
-                </Grid>
+            <Grid sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-start', alignItems: 'center', marginTop: '2%', marginBottom: '2%' }}>
+                <Button
+                    onClick={handleEditClick}
+                    variant="contained"
+                    color="secondary"
+                    startIcon={<EditIcon />}
+                    disabled={loading || selectedRowIds.length !== 1}
+                    sx={{ marginRight: '1%', width: '200px' }}
+                >
+                    Edit
+                </Button>
             </Grid>
 
-            <Modal
-                open={open}
-                onClose={handleClose}
-                aria-labelledby="modal-title"
-                aria-describedby="modal-description"
-            >
-                <Box sx={style}>
-                    <Typography id="modal-title" variant="h6" component="h2">
-                        Edit Company
-                    </Typography>
-                    {selectedCompany && (
-                        <form >
-                            <TextField sx={{ marginTop: "25px" }}
-                                label="Company Name"
-                                name="name"
-                                variant="outlined"
-                                value={selectedCompany.name}
-                                onChange={handleInputChange}
-                                fullWidth
-                                inputProps={{ maxLength: 64 }}
-                                style={{ marginBottom: "10px" }}
-                            />
-                            <TextField
-                                label="Logo"
-                                name="logo"
-                                variant="outlined"
-                                value={selectedCompany.logo}
-                                onChange={handleInputChange}
-                                fullWidth
-                                inputProps={{ maxLength: 64 }}
-                                style={{ marginBottom: "10px" }}
-                            />
-                            <TextField
-                                label="Description"
-                                name="description"
-                                variant="outlined"
-                                value={selectedCompany.description}
-                                onChange={handleInputChange}
-                                fullWidth
-                                inputProps={{ maxLength: 255 }}
-                                style={{ marginBottom: "10px" }}
-                            />
-                            <TextField
-                                label="Employee Count"
-                                name="numberOfEmployee"
-                                variant="outlined"
-                                value={selectedCompany.numberOfEmployee}
-                                onChange={handleInputChange}
-                                fullWidth
-                                style={{ marginBottom: "35px" }}
-                            />
-                            <Button
-                                onClick={handleUpdateCompany}
-                                variant="contained"
-                                color="primary"
-                                disabled={loading}
-                                fullWidth
-                            >
-                                {loading ? "Updating..." : "Update"}
-                            </Button>
-                        </form>
+            <Dialog open={open} onClose={handleClose} fullWidth maxWidth='sm'>
+                <DialogTitle>Edit Company</DialogTitle>
+                <DialogContent>
+                    <Box mt={2}>
+                        {selectedCompany && (
+                            <>
+                                <Grid item mt={2}>
+                                    <TextField sx={{ marginTop: "25px" }}
+                                        label="Company Name"
+                                        name="name"
+                                        variant="outlined"
+                                        value={selectedCompany.name}
+                                        onChange={handleInputChange}
+                                        fullWidth
+                                        inputProps={{ maxLength: 64 }}
+                                        style={{ marginBottom: "10px" }}
+                                    />
+                                    <TextField
+                                        label="Logo"
+                                        name="logo"
+                                        variant="outlined"
+                                        value={selectedCompany.logo}
+                                        onChange={handleInputChange}
+                                        fullWidth
+                                        inputProps={{ maxLength: 64 }}
+                                        style={{ marginBottom: "10px" }}
+                                    />
+                                    <TextField
+                                        label="Description"
+                                        name="description"
+                                        variant="outlined"
+                                        value={selectedCompany.description}
+                                        onChange={handleInputChange}
+                                        fullWidth
+                                        inputProps={{ maxLength: 255 }}
+                                        style={{ marginBottom: "10px" }}
+                                    />
+                                    <TextField
+                                        label="Employee Count"
+                                        name="numberOfEmployee"
+                                        variant="outlined"
+                                        value={selectedCompany.numberOfEmployee}
+                                        onChange={handleInputChange}
+                                        fullWidth
+                                        style={{ marginBottom: "35px" }}
+                                    />
+                                </Grid>
+                            </>
+                        )}
+                    </Box>
+                    {loading && (
+                        <Box display="flex" justifyContent="center" alignItems="center" mb={2}>
+                            <CircularProgress />
+                        </Box>
                     )}
-                </Box>
-            </Modal>
+                </DialogContent>
+                <DialogActions>
+                    <Button variant="contained" onClick={handleClose} color="error" sx={{ marginRight: '17px', width: '100px' }}>
+                        Cancel
+                    </Button>
+                    <Button variant="contained" onClick={handleUpdateCompany} color="primary" sx={{ marginRight: '17px', width: '100px' }}>
+                        Update
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </div>
     );
 }

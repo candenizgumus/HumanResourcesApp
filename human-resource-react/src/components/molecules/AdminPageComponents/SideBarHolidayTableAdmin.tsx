@@ -13,8 +13,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import DeleteIcon from '@mui/icons-material/Delete';
-import AddBoxIcon from '@mui/icons-material/AddBox';
+import {AddIcon, DeleteIcon} from '../../atoms/icons';
 // Define the columns
 const columns: GridColDef[] = [
     { field: 'holidayName', headerName: 'Holiday', flex: 2, headerAlign: "center" },
@@ -34,7 +33,7 @@ const columns: GridColDef[] = [
 ];
 
 export default function SideBarHolidayTableAdmin() {
-    const holidays: IHoliday[] = useAppSelector((state: RootState) => state.holiday.holidayList);
+    const holidays: IHoliday[] = useAppSelector((state: RootState) => state.holiday.holidayListAdmin);
     const dispatch = useDispatch<HumanResources>();
     const token = useAppSelector((state) => state.auth.token);
     const [selectedRowIds, setSelectedRowIds] = useState<number[]>([]);
@@ -126,7 +125,7 @@ export default function SideBarHolidayTableAdmin() {
     };
 
     return (
-        <div style={{ height: '407px', width: "inherit" }}>
+        <div style={{ height: 'auto', width: "inherit" }}>
             <DataGrid
                 rows={newHolidayList}
                 columns={columns}
@@ -152,10 +151,11 @@ export default function SideBarHolidayTableAdmin() {
                     "& .MuiDataGrid-cell": {
                         textAlign: "center",
                     },
-                    marginTop: '2%'
+                    marginTop: '2%',
+                    height:'407px'
                 }}
             />
-            <Grid sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-start', alignItems: 'center', marginTop: '2%', marginBottom: '1%' }}>
+            <Grid sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-start', alignItems: 'center', marginTop: '2%', marginBottom: '2%' }}>
                 <Button
                     onClick={handleConfirmDeletion}
                     variant="contained"
@@ -171,7 +171,7 @@ export default function SideBarHolidayTableAdmin() {
                     color="primary"
                     disabled={holidayStartDate === null || holidayEndDate === null || holidayName === '' || holidayType === ''}
                     onClick={handleSubmit}
-                    startIcon={<AddBoxIcon />}
+                    startIcon={<AddIcon />}
                     sx={{ marginRight: '1%', width: '200px' }}
                 >
                     Create

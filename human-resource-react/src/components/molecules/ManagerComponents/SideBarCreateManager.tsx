@@ -5,6 +5,7 @@ import { fetchCreateUserWithUserType } from '../../../store/feature/authSlice';
 import { HumanResources } from '../../../store';
 import Swal from "sweetalert2";
 import { IUserType } from '../../../models/IUserType';
+import { AddIcon} from '../../atoms/icons';
 
 const UserForm: React.FC = () => {
   const dispatch = useDispatch<HumanResources>();
@@ -60,6 +61,7 @@ const UserForm: React.FC = () => {
         maxWidth: 400,
         margin: 'auto',
         padding: 2,
+        marginTop: '2%'
       }}
     >
       <Box
@@ -103,7 +105,7 @@ const UserForm: React.FC = () => {
         }
         label="I understand the consequences of creating a manager account."
       />
-      <Button type="submit" variant="contained" color="primary" disabled={loading || !accepted}>
+      <Button type="submit" variant="contained" color="primary" disabled={loading || !accepted} startIcon={<AddIcon/>}>
         {loading ? "Processing..." : "Create"}
       </Button>
     </Box>

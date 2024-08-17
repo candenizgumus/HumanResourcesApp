@@ -9,12 +9,7 @@ import {
     Grid,
     Button,
 } from "@mui/material";
-import DeleteIcon from '@mui/icons-material/Delete';
-import AssistantPhotoIcon from '@mui/icons-material/AssistantPhoto';
-import InfoIcon from '@mui/icons-material/Info';
-import WarningIcon from '@mui/icons-material/Warning';
-import ErrorIcon from '@mui/icons-material/Error';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import * as Icons from '../atoms/icons';
 import { useDispatch } from "react-redux";
 import Swal from "sweetalert2";
 import { HumanResources, useAppSelector } from "../../store";
@@ -24,15 +19,15 @@ import { changePageState, clearToken } from "../../store/feature/authSlice";
 const renderNotificationType = (params: any) => {
     switch (params.value) {
         case 'INFORMATION':
-            return <InfoIcon style={{ color: '#2196F3' }} />;
+            return <Icons.InfoIcon style={{ color: '#2196F3' }} />;
         case 'WARNING':
-            return <WarningIcon style={{ color: '#FF9800' }} />;
+            return <Icons.WarningIcon style={{ color: '#FF9800' }} />;
         case 'ERROR':
-            return <ErrorIcon style={{ color: '#F44336' }} />;
+            return <Icons.ErrorIcon style={{ color: '#F44336' }} />;
         case 'SUCCESS':
-            return <CheckCircleIcon style={{ color: '#4CAF50' }} />;
+            return <Icons.ApproveIcon style={{ color: '#4CAF50' }} />;
         case 'ASSIST':
-            return <AssistantPhotoIcon style={{ color: '#673AB7' }} />;
+            return <Icons.AssistIcon style={{ color: '#673AB7' }} />;
         default:
             return null;
     }
@@ -180,7 +175,7 @@ export default function NotificationsPage() {
     };
     
     return (
-        <div style={{ height: '407px', width: "inherit" }}>
+        <div style={{ height: 'auto', width: "inherit" }}>
             <DataGrid
                 paginationMode="server"
                 rows={notificationAllList}
@@ -218,16 +213,17 @@ export default function NotificationsPage() {
                     "& .MuiToolbar-regular": {
                         display: "none"
                     },
-                    marginTop:'2%'
+                    marginTop:'2%',
+                    height:'407px'
                 }}
             />
-            <Grid sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-start', alignItems: 'center', marginTop: '1%' }}>
+            <Grid sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-start', alignItems: 'center', marginTop: '2%', marginBottom: '2%' }}>
                 <Button
                     onClick={handleDeleteClick}
                     variant="contained"
                     color="error"
                     disabled={selectedRowIds.length === 0}
-                    startIcon={<DeleteIcon />}
+                    startIcon={<Icons.DeleteIcon />}
                     sx={{ marginRight: '1%', width:'200px' }}
                 >
                     Delete
@@ -237,7 +233,7 @@ export default function NotificationsPage() {
                     variant="contained"
                     color="secondary"
                     disabled={selectedRowIds.length === 0 || allSelectedRead} // Disable if all selected are read
-                    startIcon={<CheckCircleIcon />}
+                    startIcon={<Icons.MarkAsReadIcon />}
                     sx={{ marginRight: '1%', width:'200px' }}
                 >
                     Mark as Read

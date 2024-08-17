@@ -31,19 +31,19 @@ const SideBarHolidayFormUser: React.FC = () => {
     const [holidayType, setHolidayType] = useState<string>('');
     const [holidayStartDate, setHolidayStartDate] = useState<Date | null>(null);
     const [holidayEndDate, setHolidayEndDate] = useState<Date | null>(null);
-    const [holidays, setHolidays] = useState<any[]>([]);
+    const [predefinedholidays, setPredefinedHolidays] = useState<any[]>([]);
     const [selectedHolidayId, setSelectedHolidayId] = useState<number | null>(null);
 
     useEffect(() => {
         dispatch(fetchHolidaysAdmin(token)).then((action: any) => {
-            setHolidays(action.payload);
+            setPredefinedHolidays(action.payload);
         });
     }, [dispatch, token]);
 
     const handleHolidaySelect = (event: SelectChangeEvent<number>) => {
         const selectedId = event.target.value as number;
         setSelectedHolidayId(selectedId);
-        const selectedHoliday = holidays.find(holiday => holiday.id === selectedId);
+        const selectedHoliday = predefinedholidays.find(holiday => holiday.id === selectedId);
         if (selectedHoliday) {
             setHolidayName(selectedHoliday.holidayName);
             setHolidayType(selectedHoliday.holidayType);
@@ -106,7 +106,7 @@ const SideBarHolidayFormUser: React.FC = () => {
                             value={selectedHolidayId || ''}
                             onChange={handleHolidaySelect}
                         >
-                            {holidays.map(holiday => (
+                            {predefinedholidays.map(holiday => (
                                 <MenuItem key={holiday.id} value={holiday.id}>
                                     {holiday.holidayName}
                                 </MenuItem>

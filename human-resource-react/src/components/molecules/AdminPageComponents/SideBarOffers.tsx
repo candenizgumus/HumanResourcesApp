@@ -12,8 +12,13 @@ import {
     Modal,
     Box,
     Typography,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
     Backdrop,
 } from "@mui/material";
+import CircularProgress from '@mui/material/CircularProgress';
 import { HumanResources, useAppSelector } from "../../../store";
 import { useDispatch } from "react-redux";
 import {
@@ -24,10 +29,7 @@ import {
 import { IOfferList } from "../../../models/IOfferList";
 import { clearToken } from "../../../store/feature/authSlice";
 import Swal from "sweetalert2";
-import Loader from "../../atoms/loader/Loader";
-import EmailIcon from '@mui/icons-material/Email';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
+import * as Icons from '../../atoms/icons';
 const columns: GridColDef[] = [
     { field: "name", headerName: "First name", flex: 1.6, headerAlign: "center" },
     { field: "surname", headerName: "Last name", flex: 1.6, headerAlign: "center" },
@@ -68,6 +70,7 @@ export default function SideBarOffers() {
         page: 0,
         pageSize: 5,
     });
+    const [open, setOpen] = useState(false);
     const [rowCount, setRowCount] = useState<number>(0);
     useEffect(() => {
         const fetchData = async () => {
@@ -210,7 +213,7 @@ export default function SideBarOffers() {
 
                     await Swal.fire({
                         title: "Success",
-                        text: "Offer has been approved",
+                        text: "Offer has been declined",
                         icon: "success",
                         confirmButtonText: "OK",
                         confirmButtonColor: '#1976D2',
@@ -274,21 +277,27 @@ export default function SideBarOffers() {
                 });
             }
         });
-
+        handleClose();
         setCurrentModalIndex((prevIndex) => (prevIndex !== null && prevIndex + 1 < selectedRowIds.length ? prevIndex + 1 : null));
         setIsSendTrue(false)
     };
 
-    const handleOpenEmailModals = () => {
-        setCurrentModalIndex(0); // Start from the first selected offer
-    };
 
     const handlePaginationModelChange = (model: GridPaginationModel) => {
         setPaginationModel(model);
     };
 
+    const handleOpen = () => {
+        setCurrentModalIndex(0);
+        setOpen(true);
+    };
+    const handleClose = () => {
+        setEmailText('');
+        setCurrentModalIndex(null)
+        setOpen(false);
+    };
     return (
-        <div style={{ height: "auto" }}>
+        <div style={{ height: 'auto', width: "inherit" }}>
             <TextField
                 label="Search By Email"
                 variant="outlined"
@@ -326,17 +335,18 @@ export default function SideBarOffers() {
                     "& .MuiDataGrid-cell": {
                         textAlign: "center",
                         fontsize: "8px",
-                    }
+                    },
+                    height: '407px'
                 }}
             />
-            <Grid sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-start', alignItems: 'center', marginTop: '1%' }}>
+            <Grid sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-start', alignItems: 'center', marginTop: '2%', marginBottom: '2%' }}>
                 <Button
                     onClick={handleConfirmSelection}
                     variant="contained"
                     color="primary"
                     disabled={loading || selectedRowIds.length === 0}
                     sx={{ marginRight: '1%', width: '200px' }}
-                    startIcon={<CheckCircleIcon />}
+                    startIcon={<Icons.ApproveIcon />}
                 >
                     Approve
                 </Button>
@@ -346,56 +356,58 @@ export default function SideBarOffers() {
                     onClick={handleDeclineOffers}
                     disabled={selectedRowIds.length === 0 || isSendFalse}
                     sx={{ marginRight: '1%', width: '200px' }}
-                    startIcon={<ThumbDownAltIcon />}
+                    startIcon={<Icons.DeclineIcon />}
                 >
                     Decline
                 </Button>
                 <Button
                     variant="contained"
                     color="secondary"
-                    onClick={handleOpenEmailModals}
+                    onClick={handleOpen}
                     disabled={selectedRowIds.length === 0 || selectedRowIds.length > 1}
                     sx={{ marginRight: '1%', width: '200px' }}
-                    startIcon={<EmailIcon />}
+                    startIcon={<Icons.EmailIcon />}
                 >
                     Contact
                 </Button>
             </Grid>
-            {currentModalIndex !== null && (
-                <Modal
-                    open={true}
-                    onClose={() => setCurrentModalIndex(null)}
-                >
-                    <Box sx={style}>
-                        <Typography variant="h6" component="h2">
-                            E-Mail Text for {offerList.find((offer) => offer.id === selectedRowIds[currentModalIndex])?.email}
-                        </Typography>
-                        <TextField
-                            label="Please type your offer"
-                            multiline
-                            rows={14}
-                            variant="outlined"
-                            fullWidth
-                            required
-                            value={emailText}
-                            onChange={(e) => setEmailText(e.target.value)}
-                            style={{ marginTop: "16px" }}
-                        />
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            disabled={isSendTrue || emailText === ''}
-                            onClick={() => handleSendEmail(selectedRowIds[currentModalIndex])}
-                            style={{ marginTop: "16px" }}
-                        >
-                            {isSendTrue ? "Processing..." : "Send"}
-                        </Button>
-                    </Box>
-                </Modal>
-            )}
-            <Backdrop open={loading}>
-                <Loader />
-            </Backdrop>
+            <Dialog open={open} onClose={handleClose} fullWidth maxWidth='sm'>
+                {currentModalIndex !== null && (
+                    <>
+                        <DialogTitle>Send Mail to {offerList.find((offer) => offer.id === selectedRowIds[currentModalIndex])?.email}</DialogTitle>
+                        <DialogContent>
+                            <Box mt={2}>
+                                <Grid item mt={2}>
+                                    <TextField
+                                        label="Please type your offer"
+                                        multiline
+                                        rows={14}
+                                        variant="outlined"
+                                        fullWidth
+                                        required
+                                        value={emailText}
+                                        onChange={(e) => setEmailText(e.target.value)}
+                                        style={{ marginTop: "16px" }}
+                                    />
+                                </Grid>
+                            </Box>
+                            {loading && (
+                                <Box display="flex" justifyContent="center" alignItems="center" mb={2}>
+                                    <CircularProgress />
+                                </Box>
+                            )}
+                        </DialogContent>
+                        <DialogActions>
+                            <Button variant="contained" disabled={isSendTrue} onClick={handleClose} color="error" sx={{ marginRight: '17px', width: '100px' }}>
+                                Cancel
+                            </Button>
+                            <Button variant="contained" disabled={!emailText || isSendTrue} onClick={() => handleSendEmail(selectedRowIds[currentModalIndex])} color="primary" sx={{ marginRight: '17px', width: '100px' }}>
+                                Send
+                            </Button>
+                        </DialogActions>
+                    </>
+                )}
+            </Dialog>
         </div>
     );
 }

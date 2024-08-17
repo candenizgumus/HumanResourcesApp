@@ -27,7 +27,7 @@ import { EDefinitionType } from '../../../models/IDefinitionType';
 import styled from "@emotion/styled";
 import {IUpdateUserProfile} from "../../../models/IUpdateUserProfile";
 import {IFile} from "../../../models/IFile";
-import {CloudUpload} from "@mui/icons-material";
+import {CloudUploadIcon} from "../../atoms/icons";
 import {uploadPlayerProfileImage} from "../../../store/feature/awsSlice";
 
 
@@ -253,7 +253,7 @@ const SideBarAddEmployee: React.FC = () => {
                                 }}
                                 component="span"
                             >
-                                <CloudUpload/>
+                                <CloudUploadIcon/>
                             </IconButton>
                         </Box>
                     </label>

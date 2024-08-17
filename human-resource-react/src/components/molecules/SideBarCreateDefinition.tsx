@@ -5,14 +5,8 @@ import { fetchDeleteDefinition, fetchGetDefinitions, fetchSaveDefinition } from 
 import { EDefinitionType } from '../../models/IDefinitionType';
 import Swal from "sweetalert2";
 import { HumanResources, useAppSelector } from '../../store';
-import { DataGrid, GridColDef, GridRowSelectionModel, GridToolbar  } from "@mui/x-data-grid";
-import DeleteIcon from '@mui/icons-material/Delete';
-import AddBoxIcon from '@mui/icons-material/AddBox';
-const columns: GridColDef[] = [
-  {field: "name", headerName: "Name", flex: 1, headerAlign: "center"},
-  {field: "definitionType", headerName: "Type", flex: 1, headerAlign: "center"},
-  {field: "companyId", headerName: "Predefined", flex: 1, headerAlign: "center", valueGetter: (params) => (params === null ? "True" : "False")},
-];
+import { DataGrid, GridColDef, GridRowSelectionModel, GridToolbar } from "@mui/x-data-grid";
+import {AddIcon, DeleteIcon} from '../atoms/icons';
 
 
 const UserForm: React.FC = () => {
@@ -24,6 +18,22 @@ const UserForm: React.FC = () => {
   const definitionList = useAppSelector((state) => state.definition.definitionList);
   const [selectedRowIds, setSelectedRowIds] = useState<number[]>([]);
   const token = useAppSelector((state) => state.auth.token);
+  const user = useAppSelector((state) => state.auth.user);
+
+  // Conditionally include the "Predefined" column
+  const columns: GridColDef[] = [
+    { field: "name", headerName: "Name", flex: 1, headerAlign: "center" },
+    { field: "definitionType", headerName: "Type", flex: 1, headerAlign: "center" },
+    ...(user?.userType === 'MANAGER' ? [
+      {
+        field: "companyId",
+        headerName: "Predefined",
+        flex: 1,
+        headerAlign: "center" as const,
+        valueGetter: (params: number) => (params === null ? "True" : "False")
+      }
+    ] : [])
+  ];
 
   const handleCreateClick = async () => {
     setLoading(true);
@@ -51,7 +61,7 @@ const UserForm: React.FC = () => {
         text: 'Definition Created.',
         confirmButtonColor: '#1976D2',
       });
-      dispatch(fetchGetDefinitions({token, definitionType}))
+      dispatch(fetchGetDefinitions({ token, definitionType }))
       setLoading(false);
     } catch (error) {
       console.error("Error creating definition:", error);
@@ -64,7 +74,7 @@ const UserForm: React.FC = () => {
       setIsSelected(false);
     }
 
-    dispatch(fetchGetDefinitions({token, definitionType}))
+    dispatch(fetchGetDefinitions({ token, definitionType }))
   }, [name, definitionType]);
 
   const handleDefinitionTypeChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -81,21 +91,21 @@ const UserForm: React.FC = () => {
       try {
         for (const id of selectedRowIds) {
           const result = await dispatch(fetchDeleteDefinition({
-              token: token,
-              id: id,
+            token: token,
+            id: id,
           }));
 
-          if(result.payload.message){
+          if (result.payload.message) {
             Swal.fire({
               icon: 'error',
               title: result.payload.message,
               timer: 1500
             })
-          }else {
-            dispatch(fetchGetDefinitions({token, definitionType}))
+          } else {
+            dispatch(fetchGetDefinitions({ token, definitionType }))
             Swal.fire("Success", "Definition deleted successfully", "success");
           }
-      }
+        }
       } catch (error) {
         console.error("Error deleting definitions:", error);
         Swal.fire("Error", "There was a problem deleting the definitions.", "error");
@@ -106,7 +116,7 @@ const UserForm: React.FC = () => {
   };
 
   return (
-    <div style={{ height: '407px', width: "inherit" }}>
+    <div style={{ height: 'auto', width: "inherit" }}>
       <DataGrid
         paginationMode="server"
         rows={definitionList}
@@ -142,30 +152,31 @@ const UserForm: React.FC = () => {
           "& .MuiToolbar-regular": {
             display: "none",
           },
-          marginTop:'2%'
+          marginTop: '2%',
+          height: '407px'
         }}
       />
-      <Grid sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-start', alignItems: 'center', marginTop: '2%', marginBottom: '1%' }}>
-          <Button
-            onClick={handleDeleteClick}
-            variant="contained"
-            color="error"
-            disabled={selectedRowIds.length === 0}
-            startIcon={<DeleteIcon />}
-            sx={{ marginRight: '1%', width:'200px' }}
-          >
-            Delete
-          </Button>
-          <Button 
-          onClick={handleCreateClick} 
-          variant="contained" 
-          color="primary" 
+      <Grid sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-start', alignItems: 'center', marginTop: '2%', marginBottom: '2%' }}>
+        <Button
+          onClick={handleDeleteClick}
+          variant="contained"
+          color="error"
+          disabled={selectedRowIds.length === 0}
+          startIcon={<DeleteIcon />}
+          sx={{ marginRight: '1%', width: '200px' }}
+        >
+          Delete
+        </Button>
+        <Button
+          onClick={handleCreateClick}
+          variant="contained"
+          color="primary"
           disabled={loading || name === ''}
-          startIcon={<AddBoxIcon />}
-          sx={{ marginRight: '1%', width:'200px' }}
-          >
-            Create
-          </Button>
+          startIcon={<AddIcon />}
+          sx={{ marginRight: '1%', width: '200px' }}
+        >
+          Create
+        </Button>
       </Grid>
       <Grid item xs={12}>
         <Grid container spacing={2}>
@@ -175,7 +186,6 @@ const UserForm: React.FC = () => {
               <Select
                 value={definitionType}
                 onChange={handleDefinitionTypeChange as any}
-                label="Position"
               >
                 {Object.values(EDefinitionType).map(type => (
                   <MenuItem key={type} value={type}>

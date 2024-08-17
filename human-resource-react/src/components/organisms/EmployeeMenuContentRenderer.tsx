@@ -10,6 +10,7 @@ import SideBarEmployeeHolidays from "../molecules/EmployeeComponents/SideBarEmpl
 import ChangePassword from "../molecules/ChangePassword";
 import SideBarEmployeeBonus from "../molecules/EmployeeComponents/SideBarEmployeeBonus";
 import {ManagerHomeContent} from "../molecules/ManagerComponents/ManagerHomeContent";
+import DeactivateAccount from "../molecules/DeactivateAccount";
 export const EmployeeMenuContentRenderer = () => {
     const page = useAppSelector((state) => state.auth.pageState);
 
@@ -26,6 +27,7 @@ export const EmployeeMenuContentRenderer = () => {
                 {page === 'Change Password' && <ChangePassword/>}
                 {page === 'Bonus' && <SideBarEmployeeBonus/>}
                 {page === 'Dashboard' && <ManagerHomeContent/>}
+                {page === 'Deactivate Account' && <DeactivateAccount/>}
             </Grid>
         </>
     );

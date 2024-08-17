@@ -87,11 +87,12 @@ const ChangePassword: React.FC = () => {
                                        alignItems: 'center',
                                    }}
                             >
-                                {error + ' '}
-                                <strong>Try Again!</strong>
+                                {error}
+
                             </Alert>
                         </Box>
                     </Collapse>
+
 
                     <TextField
                         sx={{ marginY: 5 }}

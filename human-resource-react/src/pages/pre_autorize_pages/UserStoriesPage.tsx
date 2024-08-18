@@ -44,7 +44,10 @@ export default function UserStoriesPage() {
     const dispatch: HumanResources = useDispatch();
     const userStories = useSelector((state: RootState) => state.userStory.storyList) as IUserStoryResponse[];
     const [loading, setLoading] = useState(true);
-
+    useEffect(() => {
+        // Scroll to the top of the page when the component mounts
+        window.scrollTo(0, 0);
+      }, []);
     useEffect(() => {
         const fetchData = async () => {
             try {

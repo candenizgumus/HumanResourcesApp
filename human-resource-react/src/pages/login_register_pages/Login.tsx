@@ -8,13 +8,12 @@ export default function Login() {
         <>
             <NavBar />
             <CssBaseline />
-            <Grid item xs={12} sm={10} md={8} lg={6}
+            <Grid item
                 sx={{
                     marginTop: '100px',
                     display: 'flex',
                     justifyContent: 'center',
                     alignItems: 'center',
-                    padding: 2,
                 }}>
                 <LoginCard />
             </Grid>

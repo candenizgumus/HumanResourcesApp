@@ -104,7 +104,7 @@ const PasswordResetRequestForm: React.FC = () => {
         <Box
             sx={{
                 my: 8,
-                mx: 4,
+                    mx: 4,
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',

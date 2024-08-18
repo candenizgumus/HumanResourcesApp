@@ -8,6 +8,7 @@ import { fetchCompanyItems, fetchDeleteCompanyItem } from "../../../store/featur
 import { ICompanyItem } from "../../../models/ICompanyItem";
 import { changePageState } from "../../../store/feature/authSlice";
 import { DeleteIcon, AddIcon } from '../../atoms/icons';
+import AddCompanyItemDialog from './AddCompanyItem';
 
 const columns: GridColDef[] = [
     { field: "id", headerName: "Id", flex: 1, headerAlign: "center" },
@@ -24,7 +25,23 @@ const SideBarCompanyItems: React.FC = () => {
     const [searchText, setSearchText] = useState('');
     const [companyItems, setCompanyItems] = useState<ICompanyItem[]>([]);    //const personalDocuments =  useAppSelector((state) => state.personalDocument.personalDocuments);
     const [loading, setLoading] = useState(false);
+    const [dialogOpen, setDialogOpen] = useState(false);
 
+    const handleDialogOpen = () => {
+        setDialogOpen(true);
+    };
+
+    const handleDialogClose = () => {
+        dispatch(fetchCompanyItems({
+            token: token,
+            page: 0,
+            searchText: searchText,
+            pageSize: 100,
+        })).then(data => {
+            setCompanyItems(data.payload);
+        })
+        setDialogOpen(false);
+    };
 
     useEffect(() => {
         dispatch(fetchCompanyItems({
@@ -44,7 +61,8 @@ const SideBarCompanyItems: React.FC = () => {
     };
 
     const handleOnClickAddCompanyItem = () => {
-        dispatch(changePageState("Add Item"))
+        //dispatch(changePageState("Add Item"))
+        handleDialogOpen();
     }
 
     const handleDelete = () => {
@@ -136,6 +154,7 @@ const SideBarCompanyItems: React.FC = () => {
                     Delete
                 </Button>
             </Grid>
+            <AddCompanyItemDialog open={dialogOpen} onClose={handleDialogClose} />
         </div>
     );
 };

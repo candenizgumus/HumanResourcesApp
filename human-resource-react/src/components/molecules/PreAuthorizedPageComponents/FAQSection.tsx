@@ -13,7 +13,7 @@ const faqs = [
     },
     {
         question: "How can I cancel my subscription?",
-        answer: "If you want to cancel your subscription, you can easily cancel by calling our customer service at 0212 951 06 61 or by sending an e-mail to destek@kolay.com.tr. The fee deducted from your credit card will be refunded."
+        answer: "If you want to cancel your subscription, you can easily cancel by calling our customer service at 0212 888 88 88 or by sending an e-mail to easysupport@example.com.tr. The fee deducted from your credit card will be refunded."
     },
     {
         question: "Do you store my credit card information?",

@@ -66,7 +66,9 @@ public class CompanyService
     }
 
     public List<VwGetCompanyLogos> getAll() {
-        return companyRepository.findAllCompanyLogos();
+        return companyRepository.findAllCompanyLogos().stream()
+                .filter(logo -> logo.getLogo() != null && !logo.getLogo().isEmpty())
+                .collect(Collectors.toList());
     }
 
     public void saveAll(List<Company> companyList) {

@@ -39,7 +39,7 @@ public class DefinitionService {
         String userEmail = UserInfoSecurityContext.getUserInfoFromSecurityContext();
         User user = userService.findByEmail(userEmail).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
 
-        Optional<Definition> optionalDefinition = definitionRepository.findByName(dto.name());
+        Optional<Definition> optionalDefinition = definitionRepository.findByNameAndDefinitionType(dto.name(), dto.definitionType());
         Definition definition;
 
         if(optionalDefinition.isPresent()){
@@ -51,7 +51,7 @@ public class DefinitionService {
                 return true;
             }else {
                 if(definition.getCompanyId() == null){
-                    throw new HumanResourcesAppException(ErrorType.INSUFFICIENT_PERMISSION);
+                    throw new HumanResourcesAppException(ErrorType.ALREADY_DEFINED);
                 }else {
                     if(!definition.getCompanyId().equals(user.getCompanyId())){
                         throw new HumanResourcesAppException(ErrorType.INSUFFICIENT_PERMISSION);

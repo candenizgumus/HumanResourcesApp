@@ -14,18 +14,18 @@ import { useDispatch } from "react-redux";
 import {
     changePageState,
     clearToken,
-     setSelectedEmployeeId
+    setSelectedEmployeeId
 } from "../../../store/feature/authSlice";
 import Swal from "sweetalert2";
-import {fetchDeletePayment, fetchGetPayments, fetchPaymentSave} from "../../../store/feature/paymentSlice";
-import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
-import {DatePicker} from "@mui/x-date-pickers/DatePicker";
+import { fetchDeletePayment, fetchGetPayments, fetchPaymentSave } from "../../../store/feature/paymentSlice";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
-import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
-
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DeleteIcon, AddIcon } from "../../atoms/icons";
 const columns: GridColDef[] = [
     {
-        field: "payment", headerName: "Payment $", flex :1, headerAlign: "center",
+        field: "payment", headerName: "Payment $", flex: 1, headerAlign: "center",
         renderCell: (params) => {
             const value = params.value;
             if (typeof value === 'number' && !isNaN(value)) {
@@ -39,9 +39,9 @@ const columns: GridColDef[] = [
             return '$0.00';
         },
     },
-    { field: "description", headerName: "Description", flex :4, headerAlign: "center" },
-    { field: "paymentDate", headerName: "Payment Date", headerAlign: "center", flex :2 },
-    { field: "status", headerName: "Status", headerAlign: "center", flex :1.5 },
+    { field: "description", headerName: "Description", flex: 4, headerAlign: "center" },
+    { field: "paymentDate", headerName: "Payment Date", headerAlign: "center", flex: 2 },
+    { field: "status", headerName: "Status", headerAlign: "center", flex: 1.5 },
 ];
 
 export default function SideBarPayments() {
@@ -155,7 +155,7 @@ export default function SideBarPayments() {
                 token: token,
                 description: description,
                 payment: payment,
-                paymentDate:paymentDate
+                paymentDate: paymentDate
             })).then(data => {
                 if (data.payload.message) {
                     Swal.fire({
@@ -192,11 +192,13 @@ export default function SideBarPayments() {
     return (
         <div style={{ height: "auto", width: "inherit" }}>
             <TextField
-                label="Description"
+                label="Search By Description"
                 variant="outlined"
                 onChange={(event) => setSearchText(event.target.value)}
                 value={searchText}
-                style={{ marginBottom: "10px" }}
+                style={{ marginBottom: "1%", marginTop: "1%" }}
+                fullWidth
+                inputProps={{ maxLength: 50 }}
             />
             <DataGrid
                 rows={paymentList}
@@ -221,30 +223,34 @@ export default function SideBarPayments() {
                     "& .MuiDataGrid-cell": {
                         textAlign: "center",
                     },
-
+                    height: '407px'
                 }}
             />
 
-            <Grid container spacing={1} style={{ marginTop: 16 }} direction="row">
-                <Grid item>
-                    <Button
-                        onClick={handleDelete}
-                        variant="contained"
-                        color="error"
-                        disabled={ selectedRowIds.length === 0 || loading}
-                    >
-                        {loading ? "Deleting..." : "Delete"}
-                    </Button>
-                </Grid>
+            <Grid sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-start', alignItems: 'center', marginTop: '2%', marginBottom: '2%' }}>
+                <Button
+                    onClick={handleDelete}
+                    variant="contained"
+                    color="error"
+                    disabled={selectedRowIds.length === 0 || loading}
+                    startIcon={<DeleteIcon />}
+                    sx={{ marginRight: '1%', width: '200px' }}
+                >
+                    Delete
+                </Button>
+                <Button
+                    onClick={handleSavePayment}
+                    variant="contained"
+                    color="primary"
+                    disabled={payment === 0 || description.length === 0 || paymentDate === null || isActivating}
+                    startIcon={<AddIcon />}
+                    sx={{ marginRight: '1%', width: '200px' }}
+                >
+                    Save Payment
+                </Button>
             </Grid>
 
             <Grid container spacing={2} style={{ marginTop: 16 }} direction="row">
-                <Grid item xs={12}>
-                    <Typography sx={{ fontWeight: "bold", marginBottom: "10px" }}>
-                        Add Payment
-                    </Typography>
-                </Grid>
-
                 <Grid item xs={4}>
                     <TextField
                         label="Description"
@@ -277,21 +283,10 @@ export default function SideBarPayments() {
                         <DatePicker
                             label="Payment Date"
                             value={paymentDate ? dayjs(paymentDate) : null}
-
                             onChange={(newValue) => setPaymentDate(newValue ? newValue.toDate() : null)}
-
+                            sx={{ width: '100%' }}
                         />
                     </LocalizationProvider>
-                </Grid>
-                <Grid item xs={4}>
-                    <Button
-                        onClick={handleSavePayment}
-                        variant="contained"
-                        color="primary"
-                        disabled={payment === 0 || description.length === 0 || paymentDate === null || isActivating}
-                    >
-                        {isActivating  ? "Saving..." : "Save Payment"}
-                    </Button>
                 </Grid>
             </Grid>
         </div>

@@ -1,9 +1,9 @@
-import React, {useState, FormEvent, useEffect} from 'react';
-import {TextField, Button, Box, Grid, InputLabel, Select, MenuItem, FormControl, Avatar} from '@mui/material';
-import {HumanResources, useAppSelector} from "../../../store";
-import {useDispatch} from "react-redux";
+import React, { useState, FormEvent, useEffect } from 'react';
+import { TextField, Button, Box, Grid, InputLabel, Select, MenuItem, FormControl, Avatar } from '@mui/material';
+import { HumanResources, useAppSelector } from "../../../store";
+import { useDispatch } from "react-redux";
 import Swal from "sweetalert2";
-import {fetchCompanyItemTypes, fetchSaveCompanyItem} from "../../../store/feature/companyItemSlice";
+import { fetchCompanyItemTypes, fetchSaveCompanyItem } from "../../../store/feature/companyItemSlice";
 
 
 const AddCompanyItem: React.FC = () => {
@@ -110,10 +110,10 @@ const AddCompanyItem: React.FC = () => {
                         value={serialNumber}
                         onChange={(e) => setSerialNumber(e.target.value)}
                     />
-                    <Grid item style={{marginBottom: 5}}></Grid>
+                    <Grid item style={{ marginBottom: 5 }}></Grid>
                     <Button
                         onClick={addCompanyItem}
-                        sx={{mt: 5}}
+                        sx={{ mt: 5 }}
                         type="button"
                         variant="contained"
                         color="primary"
@@ -134,13 +134,9 @@ const AddCompanyItem: React.FC = () => {
                         padding: 2,
                     }}
                 >
-
-
                 </Box>
             </Grid>
         </Grid>
-
-
     );
 };
 

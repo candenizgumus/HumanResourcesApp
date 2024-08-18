@@ -1,25 +1,20 @@
-import React, {useState, useEffect} from 'react';
-import {TextField, Grid, Button} from '@mui/material';
-import {HumanResources, useAppSelector} from "../../../store";
-import {useDispatch} from "react-redux";
-import {
-    fetchDeletePersonalDocument,
-    fetchPersonalDocuments,
-} from "../../../store/feature/personalDocumentSlice";
-import {DataGrid, GridColDef, GridRowSelectionModel} from "@mui/x-data-grid";
-import DownloadButtonFromS3 from "../../atoms/DownloadButtonFromS3";
+import React, { useState, useEffect } from 'react';
+import { TextField, Grid, Button } from '@mui/material';
+import { HumanResources, useAppSelector } from "../../../store";
+import { useDispatch } from "react-redux";
+import { DataGrid, GridColDef, GridRowSelectionModel } from "@mui/x-data-grid";
 import Swal from "sweetalert2";
-import {IPersonalDocument} from "../../../models/IPersonalDocument";
-import {fetchCompanyItems, fetchDeleteCompanyItem} from "../../../store/feature/companyItemSlice";
-import {ICompanyItem} from "../../../models/ICompanyItem";
-import {changePageState, setSelectedEmployeeId} from "../../../store/feature/authSlice";
+import { fetchCompanyItems, fetchDeleteCompanyItem } from "../../../store/feature/companyItemSlice";
+import { ICompanyItem } from "../../../models/ICompanyItem";
+import { changePageState } from "../../../store/feature/authSlice";
+import { DeleteIcon, AddIcon } from '../../atoms/icons';
 
 const columns: GridColDef[] = [
-    {field: "id", headerName: "Id", flex: 1, headerAlign: "center"},
-    {field: "name", headerName: "Name", flex: 1, headerAlign: "center"},
-    {field: "companyItemType", headerName: "Item Type", flex: 1, headerAlign: "center"},
-    {field: "serialNumber", headerName: "Serial Number", flex: 1, headerAlign: "center"},
-    {field: "status", headerName: "Status", flex: 1, headerAlign: "center"},
+    { field: "id", headerName: "Id", flex: 1, headerAlign: "center" },
+    { field: "name", headerName: "Name", flex: 1, headerAlign: "center" },
+    { field: "companyItemType", headerName: "Item Type", flex: 1, headerAlign: "center" },
+    { field: "serialNumber", headerName: "Serial Number", flex: 1, headerAlign: "center" },
+    { field: "status", headerName: "Status", flex: 1, headerAlign: "center" },
 ];
 
 const SideBarCompanyItems: React.FC = () => {
@@ -55,7 +50,7 @@ const SideBarCompanyItems: React.FC = () => {
     const handleDelete = () => {
         selectedRowIds.forEach((id) => {
             setLoading(true);
-            dispatch(fetchDeleteCompanyItem({token, id}))
+            dispatch(fetchDeleteCompanyItem({ token, id }))
                 .then(data => {
                     if (data.payload.message) {
                         Swal.fire({
@@ -84,64 +79,65 @@ const SideBarCompanyItems: React.FC = () => {
         });
     };
 
-        return (
-            <div style={{height: 400, width: "inherit"}}>
-                <TextField
-                    label="Serial Number"
-                    variant="outlined"
-                    onChange={(event) => setSearchText(event.target.value)}
-                    value={searchText}
-                    style={{marginBottom: "10px"}}
-                />
-                <DataGrid
-                    rows={companyItems}
-                    columns={columns}
-                    initialState={{
-                        pagination: {
-                            paginationModel: {page: 0, pageSize: 5},
-                        },
-                    }}
-                    pageSizeOptions={[5, 10]}
-                    checkboxSelection
-                    onRowSelectionModelChange={handleRowSelection}
-                    sx={{
-                        "& .MuiDataGrid-columnHeaders": {
-                            backgroundColor: "rgba(224, 224, 224, 1)",
-                        },
-                        "& .MuiDataGrid-columnHeaderTitle": {
-                            textAlign: "center",
-                            fontWeight: "bold",
-                        },
-                        "& .MuiDataGrid-cell": {
-                            textAlign: "center",
-                        },
-                    }}
-                />
-                <Grid container spacing={1} style={{marginTop: 16}} direction="row">
-                    <Grid item>
-                        <Button
-                            onClick={handleOnClickAddCompanyItem}
-                            variant="contained"
-                            color="primary"
-                        >
-                            Add Item
-                        </Button>
-                    </Grid>
-                    <Grid item>
-                        <Button
-                            onClick={handleDelete}
-                            variant="contained"
-                            color="error"
-                            disabled={loading || selectedRowIds.length === 0}
-                        >
-                            Delete Item
-                        </Button>
-                    </Grid>
-                </Grid>
-            </div>
+    return (
+        <div style={{ height: "auto", width: "inherit" }}>
+            <TextField
+                label="Search By Serial Number"
+                variant="outlined"
+                onChange={(event) => setSearchText(event.target.value)}
+                value={searchText}
+                style={{ marginBottom: "1%", marginTop: "1%" }}
+                fullWidth
+                inputProps={{ maxLength: 50 }}
+            />
+            <DataGrid
+                rows={companyItems}
+                columns={columns}
+                initialState={{
+                    pagination: {
+                        paginationModel: { page: 0, pageSize: 5 },
+                    },
+                }}
+                pageSizeOptions={[5, 10]}
+                checkboxSelection
+                onRowSelectionModelChange={handleRowSelection}
+                sx={{
+                    "& .MuiDataGrid-columnHeaders": {
+                        backgroundColor: "rgba(224, 224, 224, 1)",
+                    },
+                    "& .MuiDataGrid-columnHeaderTitle": {
+                        textAlign: "center",
+                        fontWeight: "bold",
+                    },
+                    "& .MuiDataGrid-cell": {
+                        textAlign: "center",
+                    },
+                    height: '407px'
+                }}
+            />
+            <Grid sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-start', alignItems: 'center', marginTop: '2%', marginBottom: '2%' }}>
+                <Button
+                    onClick={handleOnClickAddCompanyItem}
+                    variant="contained"
+                    color="primary"
+                    startIcon={<AddIcon />}
+                    sx={{ marginRight: '1%', width: '200px' }}
+                >
+                    Add
+                </Button>
+                <Button
+                    onClick={handleDelete}
+                    variant="contained"
+                    color="error"
+                    disabled={loading || selectedRowIds.length === 0}
+                    startIcon={<DeleteIcon />}
+                    sx={{ marginRight: '1%', width: '200px' }}
+                >
+                    Delete
+                </Button>
+            </Grid>
+        </div>
+    );
+};
 
-
-        );
-    };
-
-    export default SideBarCompanyItems;
+export default SideBarCompanyItems;

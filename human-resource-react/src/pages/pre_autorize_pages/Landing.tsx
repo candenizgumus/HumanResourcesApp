@@ -21,7 +21,7 @@ import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import LogoCard from "../../components/molecules/PreAuthorizedPageComponents/LogoCard";
 import CircularProgress from '@mui/material/CircularProgress';
-
+import BoxReveal from "../../components/atoms/BoxReveal";
 
 const Root = styled('div')(({ theme }) => ({
   display: 'flex',
@@ -128,14 +128,30 @@ function LandingPage() {
       <Header>
         <Container maxWidth="sm">
           <Box sx={{ textAlign: 'center' }}>
-            <Typography component="h1" variant="h3" align="center" color="white" gutterBottom>
-              Making your work easier one step at a time
-            </Typography>
             <Grid container spacing={4} justifyContent="center">
               <Grid item>
-                <Button variant="contained" sx={{ borderRadius: '20px', bgcolor: '#57B375', color: 'white' }}>
-                  Book Demo
-                </Button>
+                <BoxReveal boxColor="#FFFFFF" duration={0.55}>
+                  <Typography component="h1" variant="h3" align="center" color="white" >
+                    Making your work easier
+                  </Typography>
+
+                </BoxReveal>
+              </Grid>
+              <Grid item>
+                <BoxReveal boxColor="#FFFFFF" duration={0.75} >
+                  <Typography component="h1" variant="h3" align="center" color="white" >
+                    One step at a time
+                  </Typography>
+                </BoxReveal>
+              </Grid>
+            </Grid>
+            <Grid container spacing={4} justifyContent="center">
+              <Grid item sx={{marginTop:'5%'}}>
+                <BoxReveal boxColor="#FFFFFF" duration={1.5}>
+                  <Button variant="outlined" color="primary" sx={{marginBottom:'2%', color:'white', borderColor:'white'}} >
+                    Book Demo
+                  </Button>
+                </BoxReveal>
               </Grid>
             </Grid>
             <Box sx={{ mt: 4 }}>

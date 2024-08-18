@@ -1,11 +1,11 @@
-import React, {useState, FormEvent, useEffect} from 'react';
-import {TextField, Button, Box, Grid, InputLabel, Select, MenuItem, FormControl, Avatar} from '@mui/material';
-import {HumanResources, useAppSelector} from "../../../store";
+import React, { useState, FormEvent, useEffect } from 'react';
+import { TextField, Button, Box, Grid, InputLabel, Select, MenuItem, FormControl, Avatar } from '@mui/material';
+import { HumanResources, useAppSelector } from "../../../store";
 import {
-     fetchFindUserById,
+    fetchFindUserById,
     fetchGetPositions, fetchUpdateEmployeeByManager
 } from "../../../store/feature/authSlice";
-import {useDispatch} from "react-redux";
+import { useDispatch } from "react-redux";
 import { SelectChangeEvent } from '@mui/material/Select';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -17,46 +17,36 @@ import { fetchGetDefinitions, IDefinition } from '../../../store/feature/definit
 import { EDefinitionType } from '../../../models/IDefinitionType';
 import { setHours } from 'date-fns';
 
-
-
-
 const EditEmployee: React.FC = () => {
-
-
     const token = useAppSelector((state) => state.auth.token);
     const employeeId = useAppSelector((state) => state.auth.selectedEmployeeId);
     const dispatch = useDispatch<HumanResources>();
-    const [name, setName] = useState<string>( '');
-    const [surname, setSurname] = useState<string>( '');
-    const [email, setEmail] = useState<string>( '');
-    const [phone, setPhone] = useState<string>( '');
-    const [title, setTitle] = useState<string>( '');
+    const [name, setName] = useState<string>('');
+    const [surname, setSurname] = useState<string>('');
+    const [email, setEmail] = useState<string>('');
+    const [phone, setPhone] = useState<string>('');
+    const [title, setTitle] = useState<string>('');
     const [birthDate, setBirthDate] = useState<Date | null>(null);
     const [photo, setPhoto] = useState<string>('');
     const [hireDate, setHireDate] = useState<Date | null>(null);
-    const [location, setLocation] = useState<string>('') ;
+    const [location, setLocation] = useState<string>('');
     const [positions, setPositions] = useState<IDefinition[]>([]);
     const [employeeTypes, setEmployeeTypes] = useState<IDefinition[]>([]);
     const [selectedPosition, setSelectedPosition] = useState<string>('');
-
     const [selectedEmployeeType, setSelectedEmployeeType] = useState<string>("FULL_TIME"); //default to FULL_TIME
-
-
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         // Handle form submission
-        console.log('Form submitted:', );
+        console.log('Form submitted:',);
     };
 
     const setUserInfos = async () => {
         try {
             const employeeData = await dispatch(fetchFindUserById({
-                token:token,
-                id:employeeId
+                token: token,
+                id: employeeId
             }))
-
-
             setName(employeeData.payload.name);
             setSurname(employeeData.payload.surname);
             setEmail(employeeData.payload.email);
@@ -92,12 +82,6 @@ const EditEmployee: React.FC = () => {
                 .catch(error => {
                     console.error('Error fetching employeTypes:', error);  // Handle fetch errors
                 });
-
-
-
-
-
-
         } catch (error) {
             console.error('Error in handleLogin:', error);  // Handle other errors
         }
@@ -106,12 +90,12 @@ const EditEmployee: React.FC = () => {
     useEffect(() => {
         setUserInfos();
 
-    },[])
+    }, [])
 
 
     const updateEmployee = () => {
 
-        if (!name || !surname   || !phone || !title  || !birthDate  || !selectedEmployeeType || !location || !hireDate || !selectedPosition) {
+        if (!name || !surname || !phone || !title || !birthDate || !selectedEmployeeType || !location || !hireDate || !selectedPosition) {
             Swal.fire({
                 icon: 'error',
                 text: 'Please fill all the fields!',
@@ -142,7 +126,7 @@ const EditEmployee: React.FC = () => {
                     showConfirmButton: true
                 })
 
-            }else{
+            } else {
                 sweetalert2.fire({
                     icon: 'success',
                     title: 'Your profile has been updated successfully',
@@ -152,13 +136,9 @@ const EditEmployee: React.FC = () => {
             }
         })
     }
-
-
     return (
-
-
         <Grid container spacing={2}>
-            <Grid item xs ={12}>
+            <Grid item xs={12}>
                 <Box
                     component="form"
                     onSubmit={handleSubmit}
@@ -176,7 +156,6 @@ const EditEmployee: React.FC = () => {
                         sx={{ width: 150, height: 150 }}
                     />
                 </Box>
-
             </Grid>
             <Grid item xs={6}>
                 <Box
@@ -191,7 +170,6 @@ const EditEmployee: React.FC = () => {
                         padding: 2,
                     }}
                 >
-
                     <TextField
                         label='Name'
                         name="name"
@@ -228,7 +206,6 @@ const EditEmployee: React.FC = () => {
                         type={"tel"}
                         inputProps={{ maxLength: 50 }}
                     />
-
                     <TextField
                         label='Title'
                         name="title"
@@ -247,12 +224,7 @@ const EditEmployee: React.FC = () => {
                         required
                         inputProps={{ maxLength: 50 }}
                     />
-
-
-
-
-
-                    <Button onClick={updateEmployee} sx={{mt: 5}} type="button" variant="contained" color="primary">
+                    <Button onClick={updateEmployee} sx={{ mt: 5 }} type="button" variant="contained" color="primary">
                         Edit Employee
                     </Button>
                 </Box>
@@ -297,7 +269,7 @@ const EditEmployee: React.FC = () => {
                             ))}
                         </Select>
                     </FormControl>
-                    <LocalizationProvider  dateAdapter={AdapterDayjs}>
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DatePicker
                             label="Hire Date"
                             value={birthDate ? dayjs(hireDate) : null}
@@ -314,19 +286,9 @@ const EditEmployee: React.FC = () => {
 
                         />
                     </LocalizationProvider>
-
-
-
                 </Box>
             </Grid>
         </Grid>
-
-
-
-
-
-
-
     );
 };
 

@@ -14,11 +14,13 @@ import {
     CreateNewFolder,
     PlusOne,
     ThumbUp,
-    EditCalendar
+    EditCalendar,
+    Pin,
+    Dangerous,
  } from '@mui/icons-material';
 
 export const EditIcon = DriveFileRenameOutline;
-export const ApproveIcon = CheckCircle;
+export const ApproveIcon = ThumbUp;
 export const DeclineIcon = ThumbDownAlt;
 export const EmailIcon = Email;
 export const AddIcon = AddBox;
@@ -31,5 +33,7 @@ export const ErrorIcon = Error;
 export const MarkAsReadIcon = MarkEmailRead;
 export const AddDocumentIcon = CreateNewFolder;
 export const AddBonusIcon = PlusOne;
-export const ActivateIcon = ThumbUp;
+export const ActivateIcon = CheckCircle;
 export const SetShiftIcon = EditCalendar;
+export const PasswordIcon = Pin;
+export const DangerousIcon = Dangerous;

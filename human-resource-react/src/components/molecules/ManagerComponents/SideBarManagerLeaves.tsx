@@ -33,8 +33,8 @@ import {
     fetchGetLeaveById,
     fetchUpdateLeave,
 } from "../../../store/feature/leaveSlice";
-
-import {fetchGetDefinitions} from "../../../store/feature/definitionSlice";
+import { ApproveIcon, DeclineIcon, DangerousIcon, EditIcon, AddIcon } from "../../atoms/icons";
+import { fetchGetDefinitions } from "../../../store/feature/definitionSlice";
 import { clearToken, fetchGetAllUsersOfManager } from "../../../store/feature/authSlice";
 import { EDefinitionType } from "../../../models/IDefinitionType";
 import { idID } from "@mui/material/locale";
@@ -62,23 +62,23 @@ const SideBarManagerLeaves = () => {
     const selectedLeave = useAppSelector((state) => state.leave.selectedLeave);
     const [updateStartDate, setUpdateStartDate] = useState<Date>(selectedLeave.startDate);
     const [updateEndDate, setUpdateEndDate] = useState<Date>(selectedLeave.endDate);
-    
+
     const [files, setFiles] = useState<File[]>([]);
-   
+
 
     const columns: GridColDef[] = [
-        { field: "fullName", headerName: "Name", flex :1, headerAlign: "center" },
-        { field: "email", headerName: "Email", flex :1, headerAlign: "center" },
-        { field: "description", headerName: "Description", flex :2, headerAlign: "center" },
-    
-        { field: "startDate", headerName: "Start Date", flex :1, headerAlign: "center" },
-        { field: "endDate", headerName: "End Date", flex :1, headerAlign: "center" },
-        { field: "leaveType", headerName: "Leave Type", flex :1, headerAlign: "center" },
-        { field: "isLeaveApproved", headerName: "Approval Status", headerAlign: "center", flex :1 },
-        { field: "approveDate", headerName: "Approval Date", flex :1, headerAlign: "center" },
-        { field: "status", headerName: "Status", flex :1, headerAlign: "center" },
+        { field: "fullName", headerName: "Name", flex: 1, headerAlign: "center" },
+        { field: "email", headerName: "Email", flex: 1, headerAlign: "center" },
+        { field: "description", headerName: "Description", flex: 2, headerAlign: "center" },
+
+        { field: "startDate", headerName: "Start Date", flex: 1, headerAlign: "center" },
+        { field: "endDate", headerName: "End Date", flex: 1, headerAlign: "center" },
+        { field: "leaveType", headerName: "Leave Type", flex: 1, headerAlign: "center" },
+        { field: "isLeaveApproved", headerName: "Approval Status", headerAlign: "center", flex: 1 },
+        { field: "approveDate", headerName: "Approval Date", flex: 1, headerAlign: "center" },
+        { field: "status", headerName: "Status", flex: 1, headerAlign: "center" },
         {
-            field: "attachedFile", headerName: "Document", headerAlign: "center", flex :1,
+            field: "attachedFile", headerName: "Document", headerAlign: "center", flex: 1,
             renderCell: (params) => (
                 <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '100%' }}>
                     {params.value && <DownloadButtonFromS3 fileKey={params.value} />}
@@ -94,11 +94,11 @@ const SideBarManagerLeaves = () => {
                 page: 0,
                 pageSize: 100,
                 searchText: searchText,
-            })).then(()=> {
+            })).then(() => {
                 dispatch(fetchGetDefinitions({
-                    token : token,
+                    token: token,
                     definitionType: EDefinitionType.LEAVE_TYPE
-                })).then(()=> {
+                })).then(() => {
                     dispatch(fetchGetAllUsersOfManager({
                         token: token,
                         page: 0,
@@ -120,7 +120,7 @@ const SideBarManagerLeaves = () => {
         for (let id of selectedRowIds) {
             const selectedLeave = leaves.find((leave) => leave.id === id);
             if (!selectedLeave) continue;
-    
+
             if (selectedLeave.isLeaveApproved) {
                 await Swal.fire({
                     title: "Error",
@@ -131,7 +131,7 @@ const SideBarManagerLeaves = () => {
                 });
                 return;
             }
-    
+
             setLoading(true);
             try {
                 const result = await Swal.fire({
@@ -150,14 +150,14 @@ const SideBarManagerLeaves = () => {
                     cancelButtonColor: "#d33",
                     confirmButtonText: "Yes, approve it!"
                 });
-    
+
                 if (result.isConfirmed && result.value) {
                     const data = await dispatch(fetchApproveLeave({
                         token: token,
                         id: selectedLeave.id,
                         responseMessage: result.value
                     }));
-    
+
                     if (data.payload.message) {
                         await Swal.fire({
                             title: "Error",
@@ -171,7 +171,7 @@ const SideBarManagerLeaves = () => {
                             text: "The leave has been approved.",
                             icon: "success"
                         });
-    
+
                         await dispatch(fetchGetLeavesOfManager({
                             token: token,
                             page: 0,
@@ -193,7 +193,7 @@ const SideBarManagerLeaves = () => {
         for (let id of selectedRowIds) {
             const selectedLeave = leaves.find((leave) => leave.id === id);
             if (!selectedLeave) continue;
-    
+
             if (selectedLeave.isLeaveApproved) {
                 await Swal.fire({
                     title: "Error",
@@ -203,7 +203,7 @@ const SideBarManagerLeaves = () => {
                 });
                 continue;
             }
-    
+
             setIsActivating(true);
             try {
                 const result = await Swal.fire({
@@ -222,14 +222,14 @@ const SideBarManagerLeaves = () => {
                     cancelButtonColor: "#d33",
                     confirmButtonText: "Yes, reject it!"
                 });
-    
+
                 if (result.isConfirmed && result.value) {
                     const data = await dispatch(fetchDeleteLeave({
                         token: token,
                         id: selectedLeave.id,
                         responseMessage: result.value
                     }));
-    
+
                     if (data.payload.message) {
                         await Swal.fire({
                             title: "Error",
@@ -243,7 +243,7 @@ const SideBarManagerLeaves = () => {
                             text: "The leave has been rejected.",
                             icon: "success"
                         });
-    
+
                         await dispatch(fetchGetLeavesOfManager({
                             token: token,
                             page: 0,
@@ -260,12 +260,12 @@ const SideBarManagerLeaves = () => {
             }
         }
     };
-    
+
     const handleCancel = async () => {
         for (let id of selectedRowIds) {
             const selectedLeave = leaves.find((leave) => leave.id === id);
             if (!selectedLeave) continue;
-    
+
             if (!selectedLeave.isLeaveApproved) {
                 await Swal.fire({
                     title: "Error",
@@ -275,7 +275,7 @@ const SideBarManagerLeaves = () => {
                 });
                 continue;
             }
-    
+
             setLoading(true);
             try {
                 const result = await Swal.fire({
@@ -294,14 +294,14 @@ const SideBarManagerLeaves = () => {
                     cancelButtonColor: "#d33",
                     confirmButtonText: "Yes, cancel it!"
                 });
-    
+
                 if (result.isConfirmed && result.value) {
                     const data = await dispatch(fetchCancelLeave({
                         token: token,
                         id: selectedLeave.id,
                         responseMessage: result.value
                     }));
-    
+
                     if (data.payload.message) {
                         await Swal.fire({
                             title: "Error",
@@ -315,7 +315,7 @@ const SideBarManagerLeaves = () => {
                             text: "The leave has been cancelled.",
                             icon: "success"
                         });
-    
+
                         await dispatch(fetchGetLeavesOfManager({
                             token: token,
                             page: 0,
@@ -332,7 +332,7 @@ const SideBarManagerLeaves = () => {
             }
         }
     };
-    
+
 
     const handleUpdateAnnualLeaveDays = async () => {
         setOpenChangeAnnualLeaveDayModal(true);
@@ -620,319 +620,315 @@ const SideBarManagerLeaves = () => {
     }
 
     return (
-        <>
-            <div style={{ height: "auto", width: "inherit" }}>
-                <TextField
-                    label="Description"
-                    variant="outlined"
-                    onChange={(event) => setSearchText(event.target.value)}
-                    value={searchText}
-                    style={{ marginBottom: "10px" }}
-                />
-                <DataGrid
-                    rows={leaves}
-                    columns={columns}
-                    initialState={{
-                        pagination: {
-                            paginationModel: { page: 1, pageSize: 5 },
-                        },
-                    }}
-                    getRowClassName={(params) =>
-                        params.row.isLeaveApproved
-                            ? "approved-row"
-                            : "unapproved-row"
-                    }
-                    pageSizeOptions={[5, 10]}
-                    checkboxSelection
-                    onRowSelectionModelChange={handleRowSelection}
-                    sx={{
-                        "& .MuiDataGrid-columnHeaders": {
-                            backgroundColor: "rgba(224, 224, 224, 1)",
-                        },
-                        "& .MuiDataGrid-columnHeaderTitle": {
-                            textAlign: "center",
-                            fontWeight: "bold",
-                        },
-                        "& .MuiDataGrid-cell": {
-                            textAlign: "center",
-                        },
-                        "& .approved-row": {
-                            backgroundColor: "#e0f2e9",
-                        },
-                        "& .unapproved-row": {
-                            backgroundColor: "#ffe0e0",
-                        },
-                    }}
-                />
-                <Grid container spacing={1} style={{ marginTop: 16 }} direction="row">
-                    <Grid item>
-                        <Button
-                            onClick={handleApprove}
-                            variant="contained"
-                            color="primary"
-                            disabled={loading || selectedRowIds.length === 0}
-                        >
-                            Approve
-                        </Button>
-                    </Grid>
+        <div style={{ height: "auto", width: "inherit" }}>
+            <TextField
+                label="Search By Description"
+                variant="outlined"
+                onChange={(event) => setSearchText(event.target.value)}
+                value={searchText}
+                style={{ marginBottom: "1%", marginTop: "1%" }}
+                fullWidth
+                inputProps={{ maxLength: 50 }}
+            />
+            <DataGrid
+                rows={leaves}
+                columns={columns}
+                initialState={{
+                    pagination: {
+                        paginationModel: { page: 1, pageSize: 5 },
+                    },
+                }}
+                getRowClassName={(params) =>
+                    params.row.isLeaveApproved
+                        ? "approved-row"
+                        : "unapproved-row"
+                }
+                pageSizeOptions={[5, 10]}
+                checkboxSelection
+                onRowSelectionModelChange={handleRowSelection}
+                sx={{
+                    "& .MuiDataGrid-columnHeaders": {
+                        backgroundColor: "rgba(224, 224, 224, 1)",
+                    },
+                    "& .MuiDataGrid-columnHeaderTitle": {
+                        textAlign: "center",
+                        fontWeight: "bold",
+                    },
+                    "& .MuiDataGrid-cell": {
+                        textAlign: "center",
+                    },
+                    "& .approved-row": {
+                        backgroundColor: "#e0f2e9",
+                    },
+                    "& .unapproved-row": {
+                        backgroundColor: "#ffe0e0",
+                    },
+                    height: '407px'
+                }}
+            />
+            <Grid sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-start', alignItems: 'center', marginTop: '2%', marginBottom: '2%' }}>
+                <Button
+                    onClick={handleApprove}
+                    variant="contained"
+                    color="primary"
+                    disabled={loading || selectedRowIds.length === 0}
+                    startIcon={<ApproveIcon />}
+                    sx={{ marginRight: '1%', width: '200px' }}
+                >
+                    Approve
+                </Button>
+                <Button
+                    onClick={handleReject}
+                    variant="contained"
+                    color="error"
+                    disabled={loading || selectedRowIds.length === 0}
+                    startIcon={<DeclineIcon />}
+                    sx={{ marginRight: '1%', width: '200px' }}
+                >
+                    Reject
+                </Button>
+                <Button
+                    onClick={handleCancel}
+                    variant="contained"
+                    color="warning"
+                    disabled={loading || selectedRowIds.length === 0}
+                    startIcon={<DangerousIcon />}
+                    sx={{ marginRight: '1%', width: '200px' }}
+                >
+                    Cancel
+                </Button>
+                <Button
+                    onClick={handleEditLeave}
+                    variant="contained"
+                    color="secondary"
+                    disabled={loading || selectedRowIds.length === 0}
+                    startIcon={<EditIcon />}
+                    sx={{ marginRight: '1%', width: '200px' }}
+                >
+                    Edit
+                </Button>
+            </Grid>
+            <Grid sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-start', alignItems: 'center', marginTop: '2%', marginBottom: '2%' }}>
+                <Button
+                    variant="contained"
+                    color="secondary"
+                    onClick={handleUpdateAnnualLeaveDays}
+                    startIcon={<EditIcon />}
+                    sx={{ marginRight: '1%', width: '412.625px' }}
+                >
+                    Update Annual Leave Days
+                </Button>
+                <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={handleAssignLeave}
+                    startIcon={<AddIcon />}
+                    sx={{ marginRight: '1%', width: '200px' }}
+                >
+                    Assign Leave
+                </Button>
+            </Grid>
 
-                    <Grid item>
-                        <Button
-                            onClick={handleReject}
-                            variant="contained"
-                            color="secondary"
-                            disabled={loading || selectedRowIds.length === 0}
-                        >
-                            Reject
-                        </Button>
-                    </Grid>
-
-                    <Grid item>
-                        <Button
-                            onClick={handleCancel}
-                            variant="contained"
-                            color="error"
-                            disabled={loading || selectedRowIds.length === 0}
-                        >
-                            Cancel
-                        </Button>
-                    </Grid>
-
-                    <Grid item>
-                        <Button
-                            onClick={handleEditLeave}
-                            variant="contained"
-                            color="error"
-                            disabled={loading || selectedRowIds.length === 0}
-                        >
-                            Edit
-                        </Button>
-                    </Grid>
-                </Grid>
-
-                <Grid container spacing={1} style={{ marginTop: 16 }} direction="row">
-                    <Grid item>
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            onClick={handleUpdateAnnualLeaveDays}
-                            style={{ marginTop: "20px" }}
-                        >
-                            Update Annual Leave Days
-                        </Button>
-                    </Grid>
-                    <Grid item>
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            onClick={handleAssignLeave}
-                            style={{ marginTop: "20px" }}
-                        >
-                            Assign Leave
-                        </Button>
-                    </Grid>
-                </Grid>
-                <Dialog open={openChangeAnnualLeaveDayModal} onClose={handleCloseChangeAnnualLeaveDayModal} fullWidth maxWidth='sm'>
-                    <DialogTitle>Update Annual Leave Days</DialogTitle>
-                    <DialogContent>
-                        <Box mt={2}>
-                            <Autocomplete
-                                options={employees}
-                                getOptionLabel={(option) => option.name}
-                                onChange={handleEmployeeChange}
-                                renderInput={(params) => (
-                                    <TextField
-                                        {...params}
-                                        label="Select Employee"
-                                        variant="outlined"
-                                        fullWidth
-                                    />
-                                )}
-                            />
-                            {selectedEmployee && (
+            <Dialog open={openChangeAnnualLeaveDayModal} onClose={handleCloseChangeAnnualLeaveDayModal} fullWidth maxWidth='sm'>
+                <DialogTitle>Update Annual Leave Days</DialogTitle>
+                <DialogContent>
+                    <Box mt={2}>
+                        <Autocomplete
+                            options={employees}
+                            getOptionLabel={(option) => option.name}
+                            onChange={handleEmployeeChange}
+                            renderInput={(params) => (
                                 <TextField
-                                    label="New Annual Leave Days"
-                                    type="number"
-                                    value={newLeaveDays}
-                                    onChange={(e) => setNewLeaveDays(Number(e.target.value))}
+                                    {...params}
+                                    label="Select Employee"
+                                    variant="outlined"
                                     fullWidth
-                                    margin="normal"
                                 />
                             )}
-                        </Box>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={handleCloseChangeAnnualLeaveDayModal} color="secondary">
-                            Cancel
-                        </Button>
-                        <Button onClick={handleSaveLeaveDays} color="primary">
-                            Save
-                        </Button>
-                    </DialogActions>
-                </Dialog>
-                <Dialog open={openAssignLeaveModal} onClose={handleCloseAssignLeaveModal} fullWidth maxWidth='sm'>
-                    <DialogTitle>Assign Leave</DialogTitle>
-                    <DialogContent>
-                        <Box mt={2}>
-                            <Autocomplete
-                                options={employees}
-                                getOptionLabel={(option) => option.name}
-                                onChange={handleEmployeeChange}
-                                renderInput={(params) => (
+                        />
+                        {selectedEmployee && (
+                            <TextField
+                                label="New Annual Leave Days"
+                                type="number"
+                                value={newLeaveDays}
+                                onChange={(e) => setNewLeaveDays(Number(e.target.value))}
+                                fullWidth
+                                margin="normal"
+                            />
+                        )}
+                    </Box>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleCloseChangeAnnualLeaveDayModal} color="secondary">
+                        Cancel
+                    </Button>
+                    <Button onClick={handleSaveLeaveDays} color="primary">
+                        Save
+                    </Button>
+                </DialogActions>
+            </Dialog>
+            <Dialog open={openAssignLeaveModal} onClose={handleCloseAssignLeaveModal} fullWidth maxWidth='sm'>
+                <DialogTitle>Assign Leave</DialogTitle>
+                <DialogContent>
+                    <Box mt={2}>
+                        <Autocomplete
+                            options={employees}
+                            getOptionLabel={(option) => option.name}
+                            onChange={handleEmployeeChange}
+                            renderInput={(params) => (
+                                <TextField
+                                    {...params}
+                                    label="Select Employee"
+                                    variant="outlined"
+                                    fullWidth
+                                />
+                            )}
+                        />
+                        {selectedEmployee && (
+                            <>
+                                <Grid item mt={2}>
                                     <TextField
-                                        {...params}
-                                        label="Select Employee"
-                                        variant="outlined"
+                                        label="Description"
+                                        name="description"
+                                        value={description}
+                                        onChange={e => setDescription(e.target.value)}
+                                        required
                                         fullWidth
                                     />
-                                )}
-                            />
-                            {selectedEmployee && (
-                                <>
-                                    <Grid item mt={2}>
-                                        <TextField
-                                            label="Description"
-                                            name="description"
-                                            value={description}
-                                            onChange={e => setDescription(e.target.value)}
-                                            required
-                                            fullWidth
+                                </Grid>
+                                <Grid item xs={12} mt={2}>
+                                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                        <DatePicker
+                                            shouldDisableDate={(date) => date.isBefore(dayjs().subtract(1, 'day'))}
+                                            label="Leave Start Date"
+                                            value={startDate ? dayjs(startDate) : null}
+                                            onChange={(newValue) => setStartDate(newValue ? newValue.toDate() : null)}
+                                            sx={{ width: '100%' }}
                                         />
-                                    </Grid>
-                                    <Grid item xs={12} mt={2}>
-                                        <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                            <DatePicker
-                                                shouldDisableDate={(date) => date.isBefore(dayjs().subtract(1, 'day'))}
-                                                label="Leave Start Date"
-                                                value={startDate ? dayjs(startDate) : null}
-                                                onChange={(newValue) => setStartDate(newValue ? newValue.toDate() : null)}
-                                                sx={{ width: '100%' }}
-                                            />
-                                        </LocalizationProvider>
-                                    </Grid>
-                                    <Grid item xs={12} mt={2}>
-                                        <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                            <DatePicker
-                                                shouldDisableDate={startDate ? (date) => date.isBefore(startDate) : undefined}
-                                                label="Leave End Date"
-                                                value={endDate ? dayjs(endDate) : null}
-                                                onChange={(newValue) => setEndDate(newValue ? newValue.toDate() : null)}
-                                                sx={{ width: '100%' }}
-                                            />
-                                        </LocalizationProvider>
-                                    </Grid>
-                                    <Grid item mt={2}>
-                                        <TextField
-                                            select
-                                            label="Leave Type"
-                                            value={leaveType}
-                                            onChange={e => setLeaveType(e.target.value)}
-                                            required
-                                            fullWidth
-                                            SelectProps={{ native: true }}
-                                        >
-                                            {Object.values(leaveTypes).map(type => (
-                                                <option key={type.name} value={type.id}>{type.name}</option>
-                                            ))}
-                                        </TextField>
-                                    </Grid>
-                                    <Grid item mt={2}>
-                                        <MyDropzone
-                                            onFilesAdded={handleFilesAdded}
-                                            onFileRemoved={handleFileRemoved}
+                                    </LocalizationProvider>
+                                </Grid>
+                                <Grid item xs={12} mt={2}>
+                                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                        <DatePicker
+                                            shouldDisableDate={startDate ? (date) => date.isBefore(startDate) : undefined}
+                                            label="Leave End Date"
+                                            value={endDate ? dayjs(endDate) : null}
+                                            onChange={(newValue) => setEndDate(newValue ? newValue.toDate() : null)}
+                                            sx={{ width: '100%' }}
                                         />
-                                    </Grid>
-                                </>
-                            )}
-                        </Box>
-                        {loading && (
-                            <Box display="flex" justifyContent="center" alignItems="center" mb={2}>
-                                <CircularProgress />
-                            </Box>
+                                    </LocalizationProvider>
+                                </Grid>
+                                <Grid item mt={2}>
+                                    <TextField
+                                        select
+                                        label="Leave Type"
+                                        value={leaveType}
+                                        onChange={e => setLeaveType(e.target.value)}
+                                        required
+                                        fullWidth
+                                        SelectProps={{ native: true }}
+                                    >
+                                        {Object.values(leaveTypes).map(type => (
+                                            <option key={type.name} value={type.id}>{type.name}</option>
+                                        ))}
+                                    </TextField>
+                                </Grid>
+                                <Grid item mt={2}>
+                                    <MyDropzone
+                                        onFilesAdded={handleFilesAdded}
+                                        onFileRemoved={handleFileRemoved}
+                                    />
+                                </Grid>
+                            </>
                         )}
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={handleCloseAssignLeaveModal} color="secondary">
-                            Cancel
-                        </Button>
-                        <Button onClick={handleSaveLeave} color="primary">
-                            Save
-                        </Button>
-                    </DialogActions>
-                </Dialog>
-                <Dialog open={openEditLeaveModal} onClose={handleCloseEditLeaveModal} fullWidth maxWidth='sm'>
-                    <DialogTitle>Edit Leave</DialogTitle>
-                    <DialogContent>
-                        <Box mt={2}>
-                            {selectedRowIds.length === 1 && (
-                                <>
-                                    <Grid item mt={2}>
-                                        <TextField
-                                            label="Description"
-                                            name="description"
-                                            value={description}
-                                            onChange={e => setDescription(e.target.value)}
-                                            required
-                                            fullWidth
-                                        />
-                                    </Grid>
-                                    <Grid item xs={12} mt={2}>
-                                        <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                            <DatePicker
-                                                shouldDisableDate={(date) => date.isBefore(dayjs().subtract(1, 'day'))}
-                                                label="Leave Start Date"
-                                                value={dayjs(updateStartDate)}
-                                                onChange={(newValue) => setUpdateStartDate(newValue ? newValue.toDate() : selectedLeave.startDate)}
-                                                sx={{ width: '100%' }}
-                                            />
-                                        </LocalizationProvider>
-                                    </Grid>
-                                    <Grid item xs={12} mt={2}>
-                                        <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                            <DatePicker
-                                                shouldDisableDate={startDate ? (date) => date.isBefore(startDate) : undefined}
-                                                label="Leave End Date"
-                                                value={dayjs(updateEndDate)}
-                                                onChange={(newValue) => setUpdateEndDate(newValue ? newValue.toDate() : selectedLeave.startDate)}
-                                                sx={{ width: '100%' }}
-                                            />
-                                        </LocalizationProvider>
-                                    </Grid>
-                                    <Grid item mt={2}>
-                                        <TextField
-                                            select
-                                            label="Leave Type"
-                                            value={leaveType}
-                                            onChange={e => setLeaveType(e.target.value)}
-                                            required
-                                            fullWidth
-                                            SelectProps={{ native: true }}
-                                        >
-                                            {Object.values(leaveTypes).map(type => (
-                                                <option key={type.name} value={type.name}>{type.name}</option>
-                                            ))}
-                                        </TextField>
-                                    </Grid>
-                                </>
-                            )}
+                    </Box>
+                    {loading && (
+                        <Box display="flex" justifyContent="center" alignItems="center" mb={2}>
+                            <CircularProgress />
                         </Box>
-                        {loading && (
-                            <Box display="flex" justifyContent="center" alignItems="center" mb={2}>
-                                <CircularProgress />
-                            </Box>
+                    )}
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleCloseAssignLeaveModal} color="secondary">
+                        Cancel
+                    </Button>
+                    <Button onClick={handleSaveLeave} color="primary">
+                        Save
+                    </Button>
+                </DialogActions>
+            </Dialog>
+            <Dialog open={openEditLeaveModal} onClose={handleCloseEditLeaveModal} fullWidth maxWidth='sm'>
+                <DialogTitle>Edit Leave</DialogTitle>
+                <DialogContent>
+                    <Box mt={2}>
+                        {selectedRowIds.length === 1 && (
+                            <>
+                                <Grid item mt={2}>
+                                    <TextField
+                                        label="Description"
+                                        name="description"
+                                        value={description}
+                                        onChange={e => setDescription(e.target.value)}
+                                        required
+                                        fullWidth
+                                    />
+                                </Grid>
+                                <Grid item xs={12} mt={2}>
+                                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                        <DatePicker
+                                            shouldDisableDate={(date) => date.isBefore(dayjs().subtract(1, 'day'))}
+                                            label="Leave Start Date"
+                                            value={dayjs(updateStartDate)}
+                                            onChange={(newValue) => setUpdateStartDate(newValue ? newValue.toDate() : selectedLeave.startDate)}
+                                            sx={{ width: '100%' }}
+                                        />
+                                    </LocalizationProvider>
+                                </Grid>
+                                <Grid item xs={12} mt={2}>
+                                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                        <DatePicker
+                                            shouldDisableDate={startDate ? (date) => date.isBefore(startDate) : undefined}
+                                            label="Leave End Date"
+                                            value={dayjs(updateEndDate)}
+                                            onChange={(newValue) => setUpdateEndDate(newValue ? newValue.toDate() : selectedLeave.startDate)}
+                                            sx={{ width: '100%' }}
+                                        />
+                                    </LocalizationProvider>
+                                </Grid>
+                                <Grid item mt={2}>
+                                    <TextField
+                                        select
+                                        label="Leave Type"
+                                        value={leaveType}
+                                        onChange={e => setLeaveType(e.target.value)}
+                                        required
+                                        fullWidth
+                                        SelectProps={{ native: true }}
+                                    >
+                                        {Object.values(leaveTypes).map(type => (
+                                            <option key={type.name} value={type.name}>{type.name}</option>
+                                        ))}
+                                    </TextField>
+                                </Grid>
+                            </>
                         )}
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={handleCloseEditLeaveModal} color="secondary">
-                            Cancel
-                        </Button>
-                        <Button onClick={handleUpdateLeave} color="primary">
-                            Save
-                        </Button>
-                    </DialogActions>
-                </Dialog>
-            </div>
-        </>
+                    </Box>
+                    {loading && (
+                        <Box display="flex" justifyContent="center" alignItems="center" mb={2}>
+                            <CircularProgress />
+                        </Box>
+                    )}
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleCloseEditLeaveModal} color="secondary">
+                        Cancel
+                    </Button>
+                    <Button onClick={handleUpdateLeave} color="primary">
+                        Save
+                    </Button>
+                </DialogActions>
+            </Dialog>
+        </div>
     );
 };
 

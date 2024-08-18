@@ -1,20 +1,20 @@
-import React, {useState, useEffect} from 'react';
-import {TextField, Grid, Button} from '@mui/material';
-import {HumanResources, useAppSelector} from "../../../store";
-import {useDispatch} from "react-redux";
+import React, { useState, useEffect } from 'react';
+import { TextField, Grid, Button } from '@mui/material';
+import { HumanResources, useAppSelector } from "../../../store";
+import { useDispatch } from "react-redux";
 import {
     fetchDeletePersonalDocument,
     fetchPersonalDocuments,
 } from "../../../store/feature/personalDocumentSlice";
-import {DataGrid, GridColDef, GridRowSelectionModel} from "@mui/x-data-grid";
+import { DataGrid, GridColDef, GridRowSelectionModel } from "@mui/x-data-grid";
 import DownloadButtonFromS3 from "../../atoms/DownloadButtonFromS3";
 import Swal from "sweetalert2";
-import {IPersonalDocument} from "../../../models/IPersonalDocument";
-
+import { IPersonalDocument } from "../../../models/IPersonalDocument";
+import { DeleteIcon } from '../../atoms/icons';
 const columns: GridColDef[] = [
-    {field: "email", headerName: "Email", flex: 1, headerAlign: "center"},
-    {field: "description", headerName: "Description", flex: 3, headerAlign: "center"},
-    {field: "documentType", headerName: "Document Type", flex: 1, headerAlign: "center"},
+    { field: "email", headerName: "Email", flex: 1, headerAlign: "center" },
+    { field: "description", headerName: "Description", flex: 3, headerAlign: "center" },
+    { field: "documentType", headerName: "Document Type", flex: 1, headerAlign: "center" },
     {
         field: "attachedFile", headerName: "Document", headerAlign: "center", flex: 1,
         renderCell: (params) => (
@@ -25,7 +25,7 @@ const columns: GridColDef[] = [
                 width: '100%',
                 height: '100%'
             }}>
-                {params.value && <DownloadButtonFromS3 fileKey={params.value}/>}
+                {params.value && <DownloadButtonFromS3 fileKey={params.value} />}
             </div>
         )
     },
@@ -95,20 +95,22 @@ const SideBarPersonalDocumentList: React.FC = () => {
     };
 
     return (
-        <div style={{height: "auto", width: "inherit"}}>
+        <div style={{ height: "auto", width: "inherit" }}>
             <TextField
-                label="Email"
+                label="Search By Email"
                 variant="outlined"
                 onChange={(event) => setSearchText(event.target.value)}
                 value={searchText}
-                style={{marginBottom: "10px"}}
+                style={{ marginBottom: "1%", marginTop: "1%" }}
+                fullWidth
+                inputProps={{ maxLength: 50 }}
             />
             <DataGrid
                 rows={personalDocuments}
                 columns={columns}
                 initialState={{
                     pagination: {
-                        paginationModel: {page: 0, pageSize: 5},
+                        paginationModel: { page: 0, pageSize: 5 },
                     },
                 }}
                 pageSizeOptions={[5, 10]}
@@ -125,19 +127,20 @@ const SideBarPersonalDocumentList: React.FC = () => {
                     "& .MuiDataGrid-cell": {
                         textAlign: "center",
                     },
+                    height: '407px'
                 }}
             />
-            <Grid container spacing={1} style={{ marginTop: 16 }} direction="row">
-                <Grid item>
-                    <Button
-                        onClick={handleDelete}
-                        variant="contained"
-                        color="error"
-                        disabled={selectedRowIds.length === 0}
-                    >
-                        Delete Document
-                    </Button>
-                </Grid>
+            <Grid sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-start', alignItems: 'center', marginTop: '2%', marginBottom: '2%' }}>
+                <Button
+                    onClick={handleDelete}
+                    variant="contained"
+                    color="error"
+                    disabled={selectedRowIds.length === 0}
+                    startIcon={<DeleteIcon />}
+                    sx={{ marginRight: '1%', width: '200px' }}
+                >
+                    Delete
+                </Button>
             </Grid>
         </div>
 

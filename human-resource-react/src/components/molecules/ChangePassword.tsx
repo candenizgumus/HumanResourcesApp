@@ -6,7 +6,7 @@ import {useDispatch} from "react-redux";
 import {HumanResources, useAppSelector} from "../../store";
 import {fetchChangePassword} from "../../store/feature/authSlice";
 import sweetalert2 from "sweetalert2";
-import PinIcon from '@mui/icons-material/Pin';
+import { PasswordIcon} from '../atoms/icons';
 const ChangePassword: React.FC = () => {
     const dispatch = useDispatch<HumanResources>();
     const token = useAppSelector((state) => state.auth.token);
@@ -128,7 +128,7 @@ const ChangePassword: React.FC = () => {
                 color="primary"
                 onClick={handleChangePassword}
                 disabled={isPasswordValid || !password || !newPassword || !reNewPassword}
-                startIcon={<PinIcon />}
+                startIcon={<PasswordIcon />}
             >
                 Change Password
             </Button>

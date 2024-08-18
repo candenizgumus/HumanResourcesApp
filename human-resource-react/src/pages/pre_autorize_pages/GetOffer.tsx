@@ -1,4 +1,4 @@
-import React, {useRef} from 'react';
+import React, {useEffect, useRef} from 'react';
 import {Container, Typography, Box, Grid, CssBaseline} from '@mui/material';
 import HeroSection from '../../components/molecules/PreAuthorizedPageComponents/HeroSection'
 import OfferFormSection from "../../components/molecules/PreAuthorizedPageComponents/OfferFormSection";
@@ -15,6 +15,10 @@ const Footer = styled('footer')(({ theme }) => ({
 }));
 const GetOffer = () => {
     const featuresRef = useRef<HTMLDivElement>(null);
+    useEffect(() => {
+        // Scroll to the top of the page when the component mounts
+        window.scrollTo(0, 0);
+      }, []);
     return (
         <Root>
             <CssBaseline/>

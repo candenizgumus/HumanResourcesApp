@@ -65,7 +65,10 @@ function UserStoryDetailPage() {
         };
         fetchData();
     }, [dispatch]);
-
+    useEffect(() => {
+        // Scroll to the top of the page when the component mounts
+        window.scrollTo(0, 0);
+      }, []);
     // Split the long description into sentences
     const sentences = userStory.longDescription ? userStory.longDescription.split('. ') : [];
 

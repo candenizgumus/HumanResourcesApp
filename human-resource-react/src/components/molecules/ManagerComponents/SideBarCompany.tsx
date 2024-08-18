@@ -142,16 +142,26 @@ const SideBarCompany: React.FC = () => {
                     <label htmlFor="upload-photo">
                         <Box sx={{ position: 'relative', display: 'inline-block' }}>
                             <Avatar
-                                src={formState.photo ? URL.createObjectURL(formState.photo) : logo}
                                 sx={{
                                     width: 100,
                                     height: 100,
-                                    objectFit: 'cover',
-                                    objectPosition: 'top',
                                     border: '1px solid',
                                     cursor: 'pointer',
+                                    display: 'flex',
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
                                 }}
-                            />
+                            >
+                                <img
+                                    src={formState.photo ? URL.createObjectURL(formState.photo) : logo}
+                                    alt="Profile"
+                                    style={{
+                                        width: '100%',
+                                        height: '100%',
+                                        objectFit: 'contain',  // Resmin tamamını sığdırır
+                                    }}
+                                />
+                            </Avatar>
                             <IconButton
                                 sx={{
                                     position: 'absolute',

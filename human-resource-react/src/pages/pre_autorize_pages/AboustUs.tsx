@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import {
   Typography,
   Container,
@@ -37,7 +37,10 @@ const Footer = styled('footer')(({ theme }) => ({
 
 function AboutUsPage() {
   const featuresRef = useRef(null);
-
+  useEffect(() => {
+    // Scroll to the top of the page when the component mounts
+    window.scrollTo(0, 0);
+  }, []);
   // Define the handler function
   const handleCardClick = (url:string) => {
     window.open(url, '_blank');

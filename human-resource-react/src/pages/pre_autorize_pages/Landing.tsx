@@ -77,7 +77,10 @@ function LandingPage() {
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [loading, setLoading] = useState(true);
-
+  useEffect(() => {
+    // Scroll to the top of the page when the component mounts
+    window.scrollTo(0, 0);
+  }, []);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -130,7 +133,7 @@ function LandingPage() {
           <Box sx={{ textAlign: 'center' }}>
             <Grid container spacing={4} justifyContent="center">
               <Grid item>
-                <BoxReveal boxColor="#FFFFFF" duration={0.55}>
+                <BoxReveal boxColor="#FFFFFF" duration={0.50}>
                   <Typography component="h1" variant="h3" align="center" color="white" >
                     Making your work easier
                   </Typography>
@@ -138,7 +141,7 @@ function LandingPage() {
                 </BoxReveal>
               </Grid>
               <Grid item>
-                <BoxReveal boxColor="#FFFFFF" duration={0.75} >
+                <BoxReveal boxColor="#FFFFFF" duration={0.65} >
                   <Typography component="h1" variant="h3" align="center" color="white" >
                     One step at a time
                   </Typography>
@@ -147,7 +150,7 @@ function LandingPage() {
             </Grid>
             <Grid container spacing={4} justifyContent="center">
               <Grid item sx={{marginTop:'5%'}}>
-                <BoxReveal boxColor="#FFFFFF" duration={1.5}>
+                <BoxReveal boxColor="#FFFFFF" duration={0.75}>
                   <Button variant="outlined" color="primary" sx={{marginBottom:'2%', color:'white', borderColor:'white'}} >
                     Book Demo
                   </Button>

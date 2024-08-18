@@ -55,7 +55,6 @@ export default function NotificationCart(props: { notificationText: string, noti
                 alignItems: 'center', 
                 borderRadius: 2, 
                 boxShadow: 3, 
-                maxWidth: 250, 
                 marginBottom: '5px',
                 cursor: 'pointer', 
                 '&:hover': {

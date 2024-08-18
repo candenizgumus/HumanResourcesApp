@@ -18,7 +18,6 @@ import SideBarManagerBonus from "../molecules/ManagerComponents/SideBarManagerBo
 import SideBarCreateManager from "../molecules/ManagerComponents/SideBarCreateManager";
 import SideBarCreateDefinition from "../molecules/SideBarCreateDefinition";
 import {SetShifts} from "../molecules/ManagerComponents/SetShifts";
-import AddCompanyItem from "../molecules/ManagerComponents/AddCompanyItem";
 import SideBarCompanyItems from "../molecules/ManagerComponents/SideBarCompanyItems";
 import {EmployeeHomeContent} from "../molecules/EmployeeComponents/EmployeeHomeContent";
 import DeactivateAccount from "../molecules/DeactivateAccount";
@@ -46,7 +45,8 @@ export const ManagerMenuContentRenderer = () => {
                 {page === 'Bonus' && <SideBarManagerBonus/>}
                 {page === 'Create Manager' && <SideBarCreateManager/>}
                 {page === 'Shift' && <SetShifts/>}
-                {page === 'Add Item' && <AddCompanyItem/>}
+                {// page === 'Add Item' && <AddCompanyItem/>
+                }
                 {page === 'Company Items' && <SideBarCompanyItems/>}
                 {page === 'Create Definition' && <SideBarCreateDefinition/>}
                 {page === 'Dashboard' && <EmployeeHomeContent/>}

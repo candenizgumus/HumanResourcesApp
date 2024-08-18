@@ -1,4 +1,4 @@
-import React, {useState, FormEvent, useEffect} from 'react';
+import React, { useState, FormEvent, useEffect } from 'react';
 import {
     TextField,
     Button,
@@ -11,11 +11,11 @@ import {
     Avatar,
     OutlinedInput, InputAdornment, Typography, IconButton
 } from '@mui/material';
-import {HumanResources, useAppSelector} from "../../../store";
+import { HumanResources, useAppSelector } from "../../../store";
 import {
     fetchAddEmployeeToCompany, fetchFindUserByToken,
 } from "../../../store/feature/authSlice";
-import {useDispatch} from "react-redux";
+import { useDispatch } from "react-redux";
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -25,10 +25,10 @@ import Swal from "sweetalert2";
 import { fetchGetDefinitions, IDefinition } from '../../../store/feature/definitionSlice';
 import { EDefinitionType } from '../../../models/IDefinitionType';
 import styled from "@emotion/styled";
-import {IUpdateUserProfile} from "../../../models/IUpdateUserProfile";
-import {IFile} from "../../../models/IFile";
-import {CloudUploadIcon} from "../../atoms/icons";
-import {uploadPlayerProfileImage} from "../../../store/feature/awsSlice";
+import { IUpdateUserProfile } from "../../../models/IUpdateUserProfile";
+import { IFile } from "../../../models/IFile";
+import { CloudUploadIcon } from "../../atoms/icons";
+import { uploadPlayerProfileImage } from "../../../store/feature/awsSlice";
 
 
 
@@ -38,16 +38,16 @@ const SideBarAddEmployee: React.FC = () => {
 
     const token = useAppSelector((state) => state.auth.token);
     const dispatch = useDispatch<HumanResources>();
-    const [name, setName] = useState<string>( '');
-    const [surname, setSurname] = useState<string>( '');
-    const [email, setEmail] = useState<string>( '');
-    const [phone, setPhone] = useState<string>( '');
-    const [title, setTitle] = useState<string>( '');
+    const [name, setName] = useState<string>('');
+    const [surname, setSurname] = useState<string>('');
+    const [email, setEmail] = useState<string>('');
+    const [phone, setPhone] = useState<string>('');
+    const [title, setTitle] = useState<string>('');
     const [birthDate, setBirthDate] = useState<Date | null>(null);
     const [photo, setPhoto] = useState<string>('');
     const [hireDate, setHireDate] = useState<Date | null>(null);
-    const [location, setLocation] = useState<string>('') ;
-    const[salary,setSalary]=useState<number>(0)
+    const [location, setLocation] = useState<string>('');
+    const [salary, setSalary] = useState<number>(0)
     const [loading, setLoading] = useState(false);
     const [positions, setPositions] = useState<IDefinition[]>([]);
     const [employeeTypes, setEmployeeTypes] = useState<IDefinition[]>([]);
@@ -61,7 +61,7 @@ const SideBarAddEmployee: React.FC = () => {
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         // Handle form submission
-        console.log('Form submitted:', );
+        console.log('Form submitted:',);
     };
 
     const setUserInfos = async () => {
@@ -98,12 +98,12 @@ const SideBarAddEmployee: React.FC = () => {
 
     useEffect(() => {
         setUserInfos();
-    },[])
+    }, [])
 
     console.log(name, surname, phone, title, birthDate, selectedPosition, location);
     const addEmployee = async () => {
 
-        if (!salary || !name || !surname    || !surname  || !phone || !title  || !birthDate  || !selectedEmployeeType || !location || !hireDate || !selectedPosition) {
+        if (!salary || !name || !surname || !surname || !phone || !title || !birthDate || !selectedEmployeeType || !location || !hireDate || !selectedPosition) {
             Swal.fire({
                 icon: 'error',
                 text: 'Please fill all the fields!',
@@ -121,7 +121,7 @@ const SideBarAddEmployee: React.FC = () => {
             birthDate: birthDate,
             position: selectedPosition,
             location: location,
-            hireDate:hireDate,
+            hireDate: hireDate,
             employeeType: selectedEmployeeType,
             email: email,
             salary: salary,
@@ -134,7 +134,7 @@ const SideBarAddEmployee: React.FC = () => {
                 showConfirmButton: true
             })
             setLoading(false);
-        }else{
+        } else {
             sweetalert2.fire({
                 icon: 'success',
                 title: 'Added employee successfully',
@@ -217,7 +217,7 @@ const SideBarAddEmployee: React.FC = () => {
 
 
         <Grid container spacing={2}>
-            <Grid item xs ={12}>
+            <Grid item xs={12}>
                 <Box
                     component="form"
                     onSubmit={handleSubmit}
@@ -230,7 +230,7 @@ const SideBarAddEmployee: React.FC = () => {
                     }}
                 >
                     <label htmlFor="upload-photo">
-                        <Box sx={{position: 'relative', display: 'inline-block'}}>
+                        <Box sx={{ position: 'relative', display: 'inline-block' }}>
                             <Avatar
                                 src={formState.photo ? URL.createObjectURL(formState.photo) : photo}
                                 sx={{
@@ -253,7 +253,7 @@ const SideBarAddEmployee: React.FC = () => {
                                 }}
                                 component="span"
                             >
-                                <CloudUploadIcon/>
+                                <CloudUploadIcon />
                             </IconButton>
                         </Box>
                     </label>
@@ -265,7 +265,7 @@ const SideBarAddEmployee: React.FC = () => {
                 </Box>
 
             </Grid>
-            <Grid sx={{justifyContent: 'center', marginY: 3, marginLeft: 0.8}} container spacing={2}>
+            <Grid sx={{ justifyContent: 'center', marginY: 3, marginLeft: 0.8 }} container spacing={2}>
                 <Grid>
                     {error && (
                         <Typography color="error">{error}</Typography>
@@ -293,7 +293,7 @@ const SideBarAddEmployee: React.FC = () => {
                         onChange={event => setName(event.target.value)}
                         fullWidth
                         required
-                        inputProps={{maxLength: 50}}
+                        inputProps={{ maxLength: 50 }}
                     />
                     <TextField
                         label='Surname'
@@ -302,7 +302,7 @@ const SideBarAddEmployee: React.FC = () => {
                         onChange={event => setSurname(event.target.value)}
                         fullWidth
                         required
-                        inputProps={{maxLength: 50}}
+                        inputProps={{ maxLength: 50 }}
                     />
                     <TextField
                         label='E-mail'
@@ -311,7 +311,7 @@ const SideBarAddEmployee: React.FC = () => {
                         onChange={event => setEmail(event.target.value)}
                         fullWidth
                         required
-                        inputProps={{maxLength: 50}}
+                        inputProps={{ maxLength: 50 }}
                     />
                     <TextField
                         label='Phone'
@@ -342,12 +342,7 @@ const SideBarAddEmployee: React.FC = () => {
                         required
                         inputProps={{ maxLength: 50 }}
                     />
-
-
-
-
-
-                    <Button onClick={addEmployee} sx={{mt: 5}} type="button" variant="contained" color="primary" disabled={loading}>
+                    <Button onClick={addEmployee} sx={{ mt: 5 }} type="button" variant="contained" color="primary" disabled={loading}>
                         {loading ? "SAVING..." : "ADD EMPLOYEE"}
                     </Button>
                 </Box>
@@ -392,7 +387,7 @@ const SideBarAddEmployee: React.FC = () => {
                             ))}
                         </Select>
                     </FormControl>
-                    <LocalizationProvider  dateAdapter={AdapterDayjs}>
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DatePicker
                             label="Hire Date"
                             value={birthDate ? dayjs(hireDate) : null}

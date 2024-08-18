@@ -10,9 +10,9 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import LoginIcon from '@mui/icons-material/Login';
 import { useDispatch, useSelector } from "react-redux";
-import { fetchFindUserByToken, fetchLogin } from "../../store/feature/authSlice";
+import { changePageState, fetchFindUserByToken, fetchLogin } from "../../store/feature/authSlice";
 import { HumanResources, RootState } from "../../store";
-
+import Swal from "sweetalert2";
 import {useEffect, useState} from "react";
 import {Alert, Collapse} from "@mui/material";
 import getUserTypeFromToken from '../../util/getUserTypeFromToken';
@@ -28,23 +28,39 @@ export default function LoginCard() {
     const user = useSelector((state: RootState) => state.auth.user);
 
     const handleLogin = async () => {
-
-        let result = await dispatch(fetchLogin({ email, password })).unwrap();
-        // `result` içinde `code` özelliği olup olmadığını kontrol edin
-        if (result.code) {
-            setIsError(true);
-            setError(result.message);
-            return; // İşlemi sonlandırarak sonraki then bloklarına geçişi engeller.
+        let result;
+        try {
+            result = await dispatch(fetchLogin({ email, password })).unwrap();
+            
+            if (result.code) {
+                setIsError(true);
+                setError(result.message);
+                return; // İşlemi sonlandırarak sonraki then bloklarına geçişi engeller.
+            }
+        } catch {
+            Swal.fire({
+                icon: 'error',
+                text: 'Server not responding. Try again later.',
+                confirmButtonColor: '#1976D2',
+            });
+            return;
         }
+        
+        // `result` içinde `code` özelliği olup olmadığını kontrol edin
+        
 
         await dispatch(fetchFindUserByToken(result.token));
+        
 
         const userType = getUserTypeFromToken(result.token);
         if (userType === 'ADMIN') {
+            dispatch(changePageState("Dashboard"));
             navigate('/admin-home');
         } else if (userType === 'MANAGER') {
+            dispatch(changePageState("Dashboard"));
             navigate('/manager-home');
         } else if (userType === 'EMPLOYEE') {
+            dispatch(changePageState("Dashboard"));
             navigate('/employee-home');
         } else {
             navigate('/');

@@ -9,7 +9,6 @@ import {
 } from '../../../store/feature/holidaySlice';
 import { IHoliday } from '../../../models/IHoliday';
 import { IHolidayFormatted } from "../../../models/IHolidayFormatted";
-import SideBarHolidayFormUser from "./SideBarHolidayFormUser";
 import Swal from "sweetalert2";
 import {
     Box,
@@ -22,7 +21,7 @@ import {
     MenuItem,
     SelectChangeEvent, Typography, Divider
 } from '@mui/material';
-
+import { DeleteIcon, EditIcon, AddIcon } from '../../atoms/icons';
 import 'react-datepicker/dist/react-datepicker.css';
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
@@ -208,7 +207,7 @@ export default function SideBarHolidayTableUser() {
                         textAlign: "center",
                     },
                     marginTop: '2%',
-                    height:'407px'
+                    height: '407px'
                 }}
             />
             <Grid sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-start', alignItems: 'center', marginTop: '2%', marginBottom: '2%' }}>
@@ -217,7 +216,8 @@ export default function SideBarHolidayTableUser() {
                     variant="contained"
                     color="error"
                     sx={{ marginRight: '1%', width: '200px' }}
-                    startIcon={<></>}
+                    startIcon={<DeleteIcon />}
+                    disabled={selectedRowIds.length === 0}
                 >
                     Delete
                 </Button>
@@ -226,7 +226,8 @@ export default function SideBarHolidayTableUser() {
                     variant="contained"
                     color="warning"
                     sx={{ marginRight: '1%', width: '200px' }}
-                    startIcon={<></>}
+                    startIcon={<EditIcon />}
+                    disabled={selectedRowIds.length === 0}
                 >
                     Change Status
                 </Button>
@@ -236,7 +237,7 @@ export default function SideBarHolidayTableUser() {
                     disabled={holidayStartDate === null || holidayEndDate === null || holidayName === '' || holidayType === ''}
                     onClick={handleSubmit}
                     sx={{ marginRight: '1%', width: '200px' }}
-                    startIcon={<></>}
+                    startIcon={<AddIcon />}
                 >
                     Create/Add
                 </Button>

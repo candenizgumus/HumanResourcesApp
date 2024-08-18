@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import {
     DataGrid,
     GridColDef,
@@ -10,22 +10,24 @@ import {
     TextField
 
 } from "@mui/material";
-import {HumanResources, useAppSelector} from "../../../store";
-import {useDispatch} from "react-redux";
+import { HumanResources, useAppSelector } from "../../../store";
+import { useDispatch } from "react-redux";
 
 
 import {
     clearToken
 } from "../../../store/feature/authSlice";
 import Swal from "sweetalert2";
-import {fetchDeleteBonus, fetchGetBonusesOfManager} from "../../../store/feature/bonusSlice";
+import { fetchDeleteBonus, fetchGetBonusesOfManager } from "../../../store/feature/bonusSlice";
+import { DeleteIcon } from "../../atoms/icons";
 
 const columns: GridColDef[] = [
 
-    {field: "name", headerName: "Name", flex: 1, headerAlign: "center"},
-    {field: "surname", headerName: "Surname", flex: 1, headerAlign: "center"},
-    {field: "email", headerName: "Email", flex: 2, headerAlign: "center"},
-    {field: "bonusAmount", headerName: "Bonus $", flex: 1, headerAlign: "center",
+    { field: "name", headerName: "Name", flex: 1, headerAlign: "center" },
+    { field: "surname", headerName: "Surname", flex: 1, headerAlign: "center" },
+    { field: "email", headerName: "Email", flex: 2, headerAlign: "center" },
+    {
+        field: "bonusAmount", headerName: "Bonus $", flex: 1, headerAlign: "center",
         renderCell: (params) => {
             // Check if the value is valid
             const value = params.value;
@@ -42,15 +44,15 @@ const columns: GridColDef[] = [
         },
     },
 
-    {field: "description", headerName: "Description", flex: 1, headerAlign: "center"},
-    {field: "bonusDate", headerName: "Bonus Date", flex: 1, headerAlign: "center"},
-    {field: "status", headerName: "Status", headerAlign: "center", flex: 1},
+    { field: "description", headerName: "Description", flex: 1, headerAlign: "center" },
+    { field: "bonusDate", headerName: "Bonus Date", flex: 1, headerAlign: "center" },
+    { field: "status", headerName: "Status", headerAlign: "center", flex: 1 },
 
 
 ];
 
 
-const  SideBarManagerBonus = () => {
+const SideBarManagerBonus = () => {
     const [selectedRowIds, setSelectedRowIds] = useState<number[]>([]);
     const [searchText, setSearchText] = useState('');
 
@@ -101,7 +103,7 @@ const  SideBarManagerBonus = () => {
                     text: "You won't be able to revert this!",
                     icon: "warning",
                     showCancelButton: true,
-                        confirmButtonColor: '#1976D2',
+                    confirmButtonColor: '#1976D2',
                     cancelButtonColor: "#d33",
                     confirmButtonText: "Yes, delete it!"
                 });
@@ -146,20 +148,22 @@ const  SideBarManagerBonus = () => {
     };
 
     return (
-        <div style={{height: "auto", width: "inherit"}}>
+        <div style={{ height: "auto", width: "inherit" }}>
             <TextField
-                label="Description"
+                label="Search By Email"
                 variant="outlined"
                 onChange={(event) => setSearchText(event.target.value)}
                 value={searchText}
-                style={{marginBottom: "10px"}}
+                style={{ marginBottom: "1%", marginTop: "1%" }}
+                fullWidth
+                inputProps={{ maxLength: 50 }}
             />
             <DataGrid
                 rows={bonusList}
                 columns={columns}
                 initialState={{
                     pagination: {
-                        paginationModel: {page: 1, pageSize: 5},
+                        paginationModel: { page: 1, pageSize: 5 },
                     },
                 }}
                 pageSizeOptions={[5, 10]}
@@ -176,24 +180,21 @@ const  SideBarManagerBonus = () => {
                     "& .MuiDataGrid-cell": {
                         textAlign: "center",
                     },
-
+                    height: '407px'
                 }}
             />
-
-            <Grid container spacing={1} style={{marginTop: 16}} direction="row">
-                <Grid item>
-                    <Button
-                        onClick={handleDelete}
-                        variant="contained"
-                        color="error"
-                        disabled={isActivating || selectedRowIds.length === 0}
-                    >
-                        {loading ? "Deleting..." : "Delete"}
-                    </Button>
-                </Grid>
-
+            <Grid sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-start', alignItems: 'center', marginTop: '2%', marginBottom: '2%' }}>
+                <Button
+                    onClick={handleDelete}
+                    variant="contained"
+                    color="error"
+                    disabled={isActivating || selectedRowIds.length === 0}
+                    startIcon={<DeleteIcon />}
+                    sx={{ marginRight: '1%', width: '200px' }}
+                >
+                    Delete
+                </Button>
             </Grid>
-
         </div>
     );
 }

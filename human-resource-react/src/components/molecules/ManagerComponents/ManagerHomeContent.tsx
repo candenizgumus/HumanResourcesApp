@@ -1,19 +1,19 @@
-import {  Grid, Typography} from "@mui/material";
-import {DataGrid, GridColDef} from "@mui/x-data-grid";
-import React, {useEffect, useState} from "react";
-import {HumanResources, useAppSelector} from "../../../store";
-import {useDispatch} from "react-redux";
+import { Grid, Typography } from "@mui/material";
+import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import React, { useEffect, useState } from "react";
+import { HumanResources, useAppSelector } from "../../../store";
+import { useDispatch } from "react-redux";
 import {
     fetchFindEmployeesWithUpcomingBirthdays,
     fetchGetAllUsersOfManager,
     fetchGetMonthlyPaymentOfEmployees
 } from "../../../store/feature/authSlice";
-import {IMonthlyPaymentOfManager} from "../../../models/IMonthlyPaymentOfManager";
-import {fetchMonthlyPayments} from "../../../store/feature/paymentSlice";
-import {IPayment} from "../../../models/IPayment";
-import {fetchGetMonthlyHolidays} from "../../../store/feature/holidaySlice";
-import {IHoliday} from "../../../models/IHoliday";
-import {IHolidayFormatted} from "../../../models/IHolidayFormatted";
+import { IMonthlyPaymentOfManager } from "../../../models/IMonthlyPaymentOfManager";
+import { fetchMonthlyPayments } from "../../../store/feature/paymentSlice";
+import { IPayment } from "../../../models/IPayment";
+import { fetchGetMonthlyHolidays } from "../../../store/feature/holidaySlice";
+import { IHoliday } from "../../../models/IHoliday";
+import { IHolidayFormatted } from "../../../models/IHolidayFormatted";
 
 export const ManagerHomeContent = () => {
     const upcomingBirthdayUsers = useAppSelector(state => state.auth.upcomingBirthdayUsers);
@@ -58,7 +58,7 @@ export const ManagerHomeContent = () => {
 
         if (Array.isArray(monthlyPayments)) {
             // Calculate the total salary here
-            const sum = monthlyPayments.reduce((acc: number, employee:IPayment) => acc + (employee.payment || 0), 0);
+            const sum = monthlyPayments.reduce((acc: number, employee: IPayment) => acc + (employee.payment || 0), 0);
 
             // Set the states
 
@@ -164,9 +164,9 @@ export const ManagerHomeContent = () => {
     return (
         <>
             <Grid container spacing={2}>
-                <Grid sx={{ height:'300px' , marginBottom: '40px' }} item xs={6}>
+                <Grid sx={{ height: '300px', marginBottom: '40px' }} item xs={6}>
 
-                    <Typography  sx={{ textAlign: 'center' , fontWeight: 'bold'}} variant="h6" gutterBottom>
+                    <Typography sx={{ textAlign: 'center', fontWeight: 'bold' }} variant="h6" gutterBottom>
                         Monthly Employee Birthdays
                     </Typography>
 
@@ -204,9 +204,9 @@ export const ManagerHomeContent = () => {
                         }}
                     />
                 </Grid>
-                <Grid sx={{ height:'300px' , marginBottom: '40px' }} item xs={6}>
+                <Grid sx={{ height: '300px', marginBottom: '40px' }} item xs={6}>
 
-                    <Typography  sx={{ textAlign: 'center' , fontWeight: 'bold'}} variant="h6" gutterBottom>
+                    <Typography sx={{ textAlign: 'center', fontWeight: 'bold' }} variant="h6" gutterBottom>
                         Monthly Total Salary ($ {totalSalary.toFixed(2)} )
                     </Typography>
 
@@ -245,9 +245,9 @@ export const ManagerHomeContent = () => {
                     />
                 </Grid>
 
-                <Grid sx={{ height:'300px' }} item xs={6}>
+                <Grid sx={{ height: '300px' }} item xs={6}>
 
-                    <Typography  sx={{ textAlign: 'center' , fontWeight: 'bold'}} variant="h6" gutterBottom>
+                    <Typography sx={{ textAlign: 'center', fontWeight: 'bold' }} variant="h6" gutterBottom>
                         Current Month's Payments ($ {totalMonthlyPayment.toFixed(2)} )
                     </Typography>
 
@@ -286,9 +286,9 @@ export const ManagerHomeContent = () => {
                     />
                 </Grid>
 
-                <Grid sx={{ height:'300px' }} item xs={6}>
+                <Grid sx={{ height: '300px' }} item xs={6}>
 
-                    <Typography  sx={{ textAlign: 'center' , fontWeight: 'bold'}} variant="h6" gutterBottom>
+                    <Typography sx={{ textAlign: 'center', fontWeight: 'bold' }} variant="h6" gutterBottom>
                         Monthly Holidays
                     </Typography>
 

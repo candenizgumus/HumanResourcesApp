@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { HumanResources, useAppSelector } from '../../../store';
 import Swal from "sweetalert2";
 import { fetchGetUserStory, fetchUpdateUserStories, IUserStory } from '../../../store/feature/userStorySlice';
-
+import { AddIcon } from '../../atoms/icons';
 const UserForm: React.FC = () => {
   const dispatch = useDispatch<HumanResources>();
   const [longDescription, setLongDescription] = useState('');
@@ -17,10 +17,10 @@ const UserForm: React.FC = () => {
   const setUserInfos = async () => {
     try {
       const result = await dispatch(fetchGetUserStory(token)).unwrap();
-        if(result.payload){
+      if (result.payload) {
         setLongDescription(result.payload.longDescription ?? '');
         setShortDescription(result.payload.shortDescription ?? '');
-        }
+      }
     } catch (error) {
       console.error('Error in setUserInfos:', error);
     } finally {
@@ -51,9 +51,9 @@ const UserForm: React.FC = () => {
         shortDescription: shortDescription,
         token: token ?? '',
         setNewManager: setNewManager
-  
+
       })).unwrap();
-  
+
       if (result.code) {
         Swal.fire({
           icon: 'error',
@@ -63,13 +63,13 @@ const UserForm: React.FC = () => {
         setLoading(false);
         return; // Stop the process and prevent further then block executions
       }
-  
+
       Swal.fire({
         icon: 'success',
         title: 'Success!',
         text: 'Comment Created.',
       });
-  
+
       setLoading(false);
     } catch (error) {
       console.error("Error creating comment:", error);
@@ -121,7 +121,7 @@ const UserForm: React.FC = () => {
         }
         label="Set me as the creator"
       />
-      <Button type="submit" variant="contained" color="primary" disabled={loading}>
+      <Button type="submit" variant="contained" color="primary" disabled={loading} startIcon={<AddIcon />}>
         {loading ? "Processing..." : "Create"}
       </Button>
     </Box>

@@ -1,13 +1,13 @@
 import React, { useState, FormEvent, useEffect } from 'react';
-import {TextField, Button, Box, Grid, Avatar, IconButton} from '@mui/material';
+import { TextField, Button, Box, Grid, Avatar, IconButton } from '@mui/material';
 import { HumanResources, useAppSelector } from "../../../store";
 import { useDispatch } from "react-redux";
 import Swal from "sweetalert2";
 import { fetchGetCompanyDataOfManager, fetchUpdateCompanyByManager } from "../../../store/feature/companySlice";
 import sweetalert2 from "sweetalert2";
 import styled from "@emotion/styled";
-import {IFile} from "../../../models/IFile";
-import {CloudUpload} from "@mui/icons-material";
+import { IFile } from "../../../models/IFile";
+import { CloudUpload } from "@mui/icons-material";
 
 const SideBarCompany: React.FC = () => {
 
@@ -127,7 +127,7 @@ const SideBarCompany: React.FC = () => {
     return (
 
         <Grid container spacing={2}>
-            <Grid item xs ={12}>
+            <Grid item xs={12}>
                 <Box
                     component="form"
                     onSubmit={handleSubmit}
@@ -140,7 +140,7 @@ const SideBarCompany: React.FC = () => {
                     }}
                 >
                     <label htmlFor="upload-photo">
-                        <Box sx={{position: 'relative', display: 'inline-block'}}>
+                        <Box sx={{ position: 'relative', display: 'inline-block' }}>
                             <Avatar
                                 src={formState.photo ? URL.createObjectURL(formState.photo) : logo}
                                 sx={{
@@ -163,7 +163,7 @@ const SideBarCompany: React.FC = () => {
                                 }}
                                 component="span"
                             >
-                                <CloudUpload/>
+                                <CloudUpload />
                             </IconButton>
                         </Box>
                     </label>

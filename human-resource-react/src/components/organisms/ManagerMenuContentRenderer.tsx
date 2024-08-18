@@ -38,7 +38,8 @@ export const ManagerMenuContentRenderer = () => {
                 {page === 'Expenditure' && <SideBarManagerExpenditures/>}
                 {page === 'Change Password' && <ChangePassword/>}
                 {page === 'Edit Employee' && <EditEmployee/>}
-                {page === 'Add Document' && <AddDocument/>}
+                {// page === 'Add Document' && <AddDocument/>
+                }
                 {page === 'Leaves' && <SideBarManagerLeaves/>}
                 {page === 'Payments' && <SideBarPayments/>}
                 {page === 'Personal Documents' && <PersonalDocumetList/>}

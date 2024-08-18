@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import {
     DataGrid,
     GridColDef,
@@ -10,9 +10,9 @@ import {
     TextField
 
 } from "@mui/material";
-import {HumanResources, useAppSelector} from "../../../store";
-import {useDispatch} from "react-redux";
-
+import { HumanResources, useAppSelector } from "../../../store";
+import { useDispatch } from "react-redux";
+import { ApproveIcon, DeclineIcon, DangerousIcon } from "../../atoms/icons";
 
 import {
     clearToken
@@ -25,9 +25,10 @@ import {
 import DownloadButtonFromS3 from "../../atoms/DownloadButtonFromS3";
 
 const columns: GridColDef[] = [
-    {field: "employeeName", headerName: "Name", flex :1.5, headerAlign: "center"},
-    {field: "employeeSurname", headerName: "Surname", flex :1.5, headerAlign: "center"},
-    {field: "price", headerName: "Price $", flex :1, headerAlign: "center",
+    { field: "employeeName", headerName: "Name", flex: 1.5, headerAlign: "center" },
+    { field: "employeeSurname", headerName: "Surname", flex: 1.5, headerAlign: "center" },
+    {
+        field: "price", headerName: "Price $", flex: 1, headerAlign: "center",
         renderCell: (params) => {
             // Check if the value is valid
             const value = params.value;
@@ -44,15 +45,15 @@ const columns: GridColDef[] = [
         },
     },
 
-    {field: "description", headerName: "Description", flex :3, headerAlign: "center"},
-    {field: "isExpenditureApproved", headerName: "Approval Status", headerAlign: "center", flex :1},
-    {field: "approveDate", headerName: "Approval Date", headerAlign: "center", flex :1},
-    {field: "status", headerName: "Status", headerAlign: "center", flex :1},
+    { field: "description", headerName: "Description", flex: 3, headerAlign: "center" },
+    { field: "isExpenditureApproved", headerName: "Approval Status", headerAlign: "center", flex: 1 },
+    { field: "approveDate", headerName: "Approval Date", headerAlign: "center", flex: 1 },
+    { field: "status", headerName: "Status", headerAlign: "center", flex: 1 },
     {
-        field: "attachedFile", headerName: "Document", headerAlign: "center", flex :1,
+        field: "attachedFile", headerName: "Document", headerAlign: "center", flex: 1,
         renderCell: (params) => (
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '100%' }}>
-                {params.value && <DownloadButtonFromS3 fileKey={params.value}/> }
+                {params.value && <DownloadButtonFromS3 fileKey={params.value} />}
             </div>
         )
     },
@@ -60,7 +61,7 @@ const columns: GridColDef[] = [
 ];
 
 
-const  SideBarManagerExpenditures = () => {
+const SideBarManagerExpenditures = () => {
     const [selectedRowIds, setSelectedRowIds] = useState<number[]>([]);
     const [searchText, setSearchText] = useState('');
 
@@ -72,7 +73,7 @@ const  SideBarManagerExpenditures = () => {
     const [isActivating, setIsActivating] = useState(false);
 
     const [price, setPrice] = useState(0);
-    const[description, setDescription] = useState('');
+    const [description, setDescription] = useState('');
 
 
     useEffect(() => {
@@ -101,7 +102,7 @@ const  SideBarManagerExpenditures = () => {
             const selectedExpenditure = expenditures.find((selectedExpenditure) => selectedExpenditure.id === id);
             if (!selectedExpenditure) continue;
 
-            if (selectedExpenditure.isExpenditureApproved){
+            if (selectedExpenditure.isExpenditureApproved) {
                 Swal.fire({
                     title: "Error",
                     text: 'Expenditure already approved',
@@ -160,7 +161,7 @@ const  SideBarManagerExpenditures = () => {
                     }
                 }
             } catch
-                (error) {
+            (error) {
                 localStorage.removeItem("token");
                 dispatch(clearToken());
             }
@@ -319,20 +320,22 @@ const  SideBarManagerExpenditures = () => {
     };
 
     return (
-        <div style={{height: 400, width: "inherit"}}>
+        <div style={{ height: "auto", width: "inherit" }}>
             <TextField
-                label="Description"
+                label="Search By Description"
                 variant="outlined"
                 onChange={(event) => setSearchText(event.target.value)}
                 value={searchText}
-                style={{marginBottom: "10px"}}
+                style={{ marginBottom: "1%", marginTop: "1%" }}
+                fullWidth
+                inputProps={{ maxLength: 50 }}
             />
             <DataGrid
                 rows={expenditures}
                 columns={columns}
                 initialState={{
                     pagination: {
-                        paginationModel: {page: 1, pageSize: 5},
+                        paginationModel: { page: 1, pageSize: 5 },
                     },
                 }}
                 getRowClassName={(params) =>
@@ -360,45 +363,42 @@ const  SideBarManagerExpenditures = () => {
                     "& .unapproved-row": {
                         backgroundColor: "#ffe0e0", // Onaylanmayanlar için kırmızı arka plan
                     },
+                    height: '407px'
                 }}
             />
 
-            <Grid container spacing={1} style={{marginTop: 16}} direction="row">
-                <Grid item>
-                    <Button
-                        onClick={handleApprove}
-                        variant="contained"
-                        color="primary"
-                        disabled={loading || selectedRowIds.length === 0}
-                    >
-                        {loading ? "Approving..." : "Approve"}
-                    </Button>
-                </Grid>
-
-                <Grid item>
-                    <Button
-                        onClick={handleReject}
-                        variant="contained"
-                        color="error"
-                        disabled={isActivating || selectedRowIds.length === 0}
-                    >
-                        {isActivating ? "Rejecting..." : "Reject"}
-                    </Button>
-                </Grid>
-
-                <Grid item>
-                    <Button
-                        onClick={handleCancel}
-                        variant="contained"
-                        color="warning"
-                        disabled={isActivating || selectedRowIds.length === 0}
-                    >
-                        {loading ? "Cancelling..." : "Cancel"}
-                    </Button>
-                </Grid>
-
+            <Grid sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-start', alignItems: 'center', marginTop: '2%', marginBottom: '2%' }}>
+                <Button
+                    onClick={handleApprove}
+                    variant="contained"
+                    color="primary"
+                    disabled={loading || selectedRowIds.length === 0}
+                    startIcon={<ApproveIcon />}
+                    sx={{ marginRight: '1%', width: '200px' }}
+                >
+                    Approve
+                </Button>
+                <Button
+                    onClick={handleReject}
+                    variant="contained"
+                    color="error"
+                    disabled={isActivating || selectedRowIds.length === 0}
+                    startIcon={<DeclineIcon />}
+                    sx={{ marginRight: '1%', width: '200px' }}
+                >
+                    Reject
+                </Button>
+                <Button
+                    onClick={handleCancel}
+                    variant="contained"
+                    color="warning"
+                    disabled={isActivating || selectedRowIds.length === 0}
+                    startIcon={<DangerousIcon />}
+                    sx={{ marginRight: '1%', width: '200px' }}
+                >
+                    Cancel
+                </Button>
             </Grid>
-
         </div>
     );
 }

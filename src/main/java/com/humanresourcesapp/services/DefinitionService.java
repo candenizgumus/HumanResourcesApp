@@ -88,10 +88,10 @@ public class DefinitionService {
         User user = userService.findByEmail(userEmail).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
         List<Definition> definitions;
         if(user.getCompanyId() == null){
-            definitions = definitionRepository.findAllByDefinitionTypeAndStatusAndCompanyIdIsNull(definitionType, EStatus.ACTIVE);
+            definitions = definitionRepository.findAllByDefinitionTypeAndStatusAndCompanyIdIsNullOrderByNameAsc(definitionType, EStatus.ACTIVE);
         }else {
-            definitions = definitionRepository.findAllByDefinitionTypeAndStatusAndCompanyId(definitionType, EStatus.ACTIVE, user.getCompanyId());
-            definitions.addAll(definitionRepository.findAllByDefinitionTypeAndStatusAndCompanyIdIsNull(definitionType, EStatus.ACTIVE));
+            definitions = definitionRepository.findAllByDefinitionTypeAndStatusAndCompanyIdOrderByNameAsc(definitionType, EStatus.ACTIVE, user.getCompanyId());
+            definitions.addAll(definitionRepository.findAllByDefinitionTypeAndStatusAndCompanyIdIsNullOrderByNameAsc(definitionType, EStatus.ACTIVE));
         }
         return definitions;
     }

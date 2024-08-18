@@ -10,8 +10,10 @@ import com.humanresourcesapp.views.VwGetCompanyLogos;
 import com.humanresourcesapp.views.VwUpcomingMembershipExpiry;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
@@ -76,9 +78,13 @@ public class CompanyController
 
     @PutMapping(UPDATE_COMPANY_BY_MANAGER)
     @PreAuthorize("hasAnyAuthority('MANAGER')")
-    public ResponseEntity<Company> updateCompanyByManager(@RequestBody UpdateCompanyByManagerDto dto)
+    public ResponseEntity<Company> updateCompanyByManager(
+                                                          @RequestParam("name") String name,
+                                                          @RequestParam("description") String description,
+                                                          @RequestParam("country") String country,
+                                                          @Nullable @RequestParam("photo") MultipartFile photo)
     {
-        return ResponseEntity.ok(companyService.updateCompanyByManager(dto));
+        return ResponseEntity.ok(companyService.updateWithPhoto( name, country, description, photo));
     }
 
     @PostMapping("/get-upcoming-membership-expiries")

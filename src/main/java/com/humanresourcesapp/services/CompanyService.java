@@ -1,5 +1,6 @@
 package com.humanresourcesapp.services;
 
+import com.humanresourcesapp.configs.aws.S3Buckets;
 import com.humanresourcesapp.dto.requests.CompanySaveRequestDto;
 import com.humanresourcesapp.dto.requests.PageCountRequestDto;
 import com.humanresourcesapp.dto.requests.PageRequestDto;
@@ -22,14 +23,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.Year;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -38,6 +38,8 @@ public class CompanyService
 {
     private final CompanyRepository companyRepository;
     private UserService userService;
+    private final S3Service s3Service;
+    private final S3Buckets s3Buckets;
 
     //To break circular reference in UserService
     @Autowired
@@ -162,5 +164,58 @@ public class CompanyService
                     .build());
         });
         return vwUpcomingMembershipExpiries;
+    }
+
+    public Company updateWithPhoto(String name, String description, String country, MultipartFile photo)
+    {
+        String userEmail = UserInfoSecurityContext.getUserInfoFromSecurityContext();
+        User manager = userService.findByEmail(userEmail).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
+        Company company = companyRepository.findById(manager.getCompanyId()).orElseThrow(() -> new HumanResourcesAppException(ErrorType.COMPANY_NOT_FOUND));
+
+        if (country != null)
+        {
+            company.setCountry(country);
+        }
+        if (description != null)
+        {
+            company.setDescription(description);
+        }
+
+        if (name != null)
+        {
+            company.setName(name);
+        }
+
+
+        if (photo != null)
+        {
+            String companyImageId = UUID.randomUUID().toString();
+            String existingProfileImageId = company.getCompanyImageId(); // Store the old image ID
+
+            try {
+                // Delete the old file in the S3 bucket if it exists
+                if (existingProfileImageId != null && !existingProfileImageId.isEmpty()) {
+                    s3Service.deleteObject(s3Buckets.getCustomer(),
+                            "profile-images/%s/%s".formatted(company.getId(), existingProfileImageId));
+                }
+
+                // Upload the new file
+                s3Service.putObject(s3Buckets.getCustomer(),
+                        "profile-images/%s/%s".formatted(company.getId(), companyImageId),
+                        photo.getBytes()
+                );
+
+                String profileImageUrl = s3Service.createPresignedGetUrl(
+                        s3Buckets.getCustomer(), "profile-images/%s/%s".formatted(company.getId(), companyImageId));
+
+                company.setCompanyImageId(companyImageId);
+                company.setLogo(profileImageUrl);
+
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        return companyRepository.save(company);
     }
 }

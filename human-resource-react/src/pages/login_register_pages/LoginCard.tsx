@@ -13,8 +13,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchFindUserByToken, fetchLogin } from "../../store/feature/authSlice";
 import { HumanResources, RootState } from "../../store";
 
-import { useState } from "react";
-import { Alert } from "@mui/material";
+import {useEffect, useState} from "react";
+import {Alert, Collapse} from "@mui/material";
 import getUserTypeFromToken from '../../util/getUserTypeFromToken';
 
 export default function LoginCard() {
@@ -24,6 +24,7 @@ export default function LoginCard() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const [isError, setIsError] = useState(false);
     const user = useSelector((state: RootState) => state.auth.user);
 
     const handleLogin = async () => {
@@ -31,6 +32,7 @@ export default function LoginCard() {
         let result = await dispatch(fetchLogin({ email, password })).unwrap();
         // `result` içinde `code` özelliği olup olmadığını kontrol edin
         if (result.code) {
+            setIsError(true);
             setError(result.message);
             return; // İşlemi sonlandırarak sonraki then bloklarına geçişi engeller.
         }
@@ -49,7 +51,15 @@ export default function LoginCard() {
         }
 
     };
+    useEffect(() => {
+        if (isError) {
+            const timer = setTimeout(() => {
+                setIsError(false); // isError durumunu false yaparak hatayı gizle
+            }, 2000); // 3 saniye sonra hata kaybolacak
 
+            return () => clearTimeout(timer); // Temizlik yaparak zamanlayıcıyı temizle
+        }
+    }, [isError, setIsError]);
 
     return (
         <Paper elevation={6} square sx={{ width: '100%', maxWidth: 400 }}>
@@ -70,22 +80,21 @@ export default function LoginCard() {
                     Login
                 </Typography>
 
-                {error && (
+                <Collapse  sx={{ width: '100%' }} in={isError}>
                     <Box sx={{ width: '100%' }}>
                         <Alert severity="error"
-                            sx={{
-                                width: '100%',
-                                textAlign: 'center', // Metni ortala
-                                display: 'flex',
-                                flexDirection: 'column',
-                                alignItems: 'center',
-                            }}
+                               sx={{
+                                   width: '100%',
+                                   textAlign: 'center', // Metni ortala
+                                   display: 'flex',
+                                   flexDirection: 'column',
+                                   alignItems: 'center',
+                               }}
                         >
                             {error}
                         </Alert>
                     </Box>
-                )}
-
+                </Collapse>
                 <TextField
                     margin="normal"
                     required

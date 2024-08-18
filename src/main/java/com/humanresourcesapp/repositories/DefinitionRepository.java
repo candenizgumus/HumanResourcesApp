@@ -19,5 +19,5 @@ public interface DefinitionRepository extends JpaRepository<Definition, Long> {
 
     List<Definition> findAllByDefinitionTypeAndStatusAndCompanyIdOrderByNameAsc(EDefinitionType definitionType, EStatus status, Long companyId);
 
-    Optional<Definition> findByNameAndDefinitionType(String name, EDefinitionType eDefinitionType);
+    List<Definition> findAllByNameAndDefinitionType(String name, EDefinitionType eDefinitionType);
 }

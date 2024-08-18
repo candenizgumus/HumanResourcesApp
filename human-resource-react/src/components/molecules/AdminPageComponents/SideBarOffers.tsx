@@ -123,6 +123,7 @@ export default function SideBarOffers() {
                     showCancelButton: true,
                     confirmButtonText: "Confirm",
                     input: "radio",
+                    confirmButtonColor: '#1976D2',
                     inputOptions: {
                         "0": "Monthly",
                         "1": "Yearly",

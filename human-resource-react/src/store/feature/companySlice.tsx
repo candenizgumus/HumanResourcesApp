@@ -197,28 +197,32 @@ interface IUpdateCompanyByManager {
     name: string;
     description: string;
     country: string;
+    photo: File | null;
 }
 export const fetchUpdateCompanyByManager = createAsyncThunk(
     'company/fetchUpdateCompanyByManager',
     async (payload:IUpdateCompanyByManager, { dispatch }) => {
+        const formData = new FormData();
+
+
+        formData.append('name', payload.name);
+        formData.append('description', payload.description);
+        formData.append('country', payload.country);
+
+        if (payload.photo) {
+            formData.append('photo', payload.photo);
+        }
 
         const response = await fetch('http://localhost:9090/dev/v1/company/update-company-by-manager', {
             method: 'PUT',
             headers: {
-                'Content-Type': 'application/json',
+
                 'Authorization': `Bearer ` + payload.token
             },
-            body: JSON.stringify({
-                'country': payload.country,
-                'name': payload.name,
-                'description': payload.description
-            })
+            body: formData
         });
 
-        if (!response.ok) {
-            console.log(response)
-            dispatch(clearToken());
-        }
+
         return await response.json();
 
 

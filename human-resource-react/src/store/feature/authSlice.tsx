@@ -2,7 +2,6 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ILogin } from "../../models/ILogin";
 import { IUser } from "../../models/IUser";
 import { ICreateUser } from '../../models/ICreateUser';
-import {formatDate} from "date-fns";
 
 
 interface IAuthState {

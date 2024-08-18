@@ -24,8 +24,11 @@ public class Company extends BaseEntity
     Long id;
 
     String name;
+    @Column(length = 1000)
     String logo;
     String description;
     Integer numberOfEmployee;
     String country;
+    String companyImageId;
+
 }

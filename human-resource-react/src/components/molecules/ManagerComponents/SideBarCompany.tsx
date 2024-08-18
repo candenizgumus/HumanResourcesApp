@@ -1,10 +1,13 @@
 import React, { useState, FormEvent, useEffect } from 'react';
-import { TextField, Button, Box, Grid, Avatar } from '@mui/material';
+import {TextField, Button, Box, Grid, Avatar, IconButton} from '@mui/material';
 import { HumanResources, useAppSelector } from "../../../store";
 import { useDispatch } from "react-redux";
 import Swal from "sweetalert2";
 import { fetchGetCompanyDataOfManager, fetchUpdateCompanyByManager } from "../../../store/feature/companySlice";
 import sweetalert2 from "sweetalert2";
+import styled from "@emotion/styled";
+import {IFile} from "../../../models/IFile";
+import {CloudUpload} from "@mui/icons-material";
 
 const SideBarCompany: React.FC = () => {
 
@@ -17,7 +20,9 @@ const SideBarCompany: React.FC = () => {
     const [country, setCountry] = useState<string>('');
     const [numberOfEmployee, setNumberOfEmployee] = useState<string>('');
     const [logo, setLogo] = useState<string>('');
-
+    const [formState, setFormState] = useState<IFile>({
+        photo: null
+    });
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -48,6 +53,40 @@ const SideBarCompany: React.FC = () => {
     }, [])
 
 
+    const validImageTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/heic']
+    const maxImageSize = 103073272
+    const [error, setError] = useState('');
+    const [isSelected, setIsSelected] = useState(false);
+
+    const VisuallyHiddenInput = styled('input')({
+        clip: 'rect(0 0 0 0)',
+        clipPath: 'inset(50%)',
+        height: 1,
+        overflow: 'hidden',
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        whiteSpace: 'nowrap',
+        width: 1,
+    });
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files[0]) {
+
+            const file = e.target.files[0];
+            console.log(file);
+            if (!validImageTypes.find(fileType => fileType === file.type) || file.size > maxImageSize) {
+                setError('File must be in [jpg, png, heic] format. Max size 3.1 Mb!');
+                return;
+            }
+            console.log('not reachable')
+            setFormState({
+                ...formState,
+                photo: e.target.files[0]
+            });
+            setIsSelected(true)
+        }
+
+    };
     const updateCompany = () => {
 
         if (!name || !description || !country) {
@@ -64,6 +103,7 @@ const SideBarCompany: React.FC = () => {
             name: name,
             description: description,
             country: country,
+            photo: formState.photo
 
         })).then((data) => {
             if (data.payload.message) {
@@ -87,7 +127,7 @@ const SideBarCompany: React.FC = () => {
     return (
 
         <Grid container spacing={2}>
-            <Grid item xs={12}>
+            <Grid item xs ={12}>
                 <Box
                     component="form"
                     onSubmit={handleSubmit}
@@ -99,28 +139,41 @@ const SideBarCompany: React.FC = () => {
                         alignItems: 'center',
                     }}
                 >
-                    <Box
-                        sx={{
-                            width: 150,
-                            height: 150,
-                            display: 'flex',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                        }}
-                    >
-                        <Avatar
-                            alt="Company Logo"
-                            src={company.logo}
-                            sx={{
-                                width: '100%',
-                                height: '100%',
-                                '& img': {
-                                    objectFit: 'contain', // Ensures the image fits within the Avatar
-                                },
-                            }}
-                        />
-                    </Box>
+                    <label htmlFor="upload-photo">
+                        <Box sx={{position: 'relative', display: 'inline-block'}}>
+                            <Avatar
+                                src={formState.photo ? URL.createObjectURL(formState.photo) : logo}
+                                sx={{
+                                    width: 100,
+                                    height: 100,
+                                    objectFit: 'cover',
+                                    objectPosition: 'top',
+                                    border: '1px solid',
+                                    cursor: 'pointer',
+                                }}
+                            />
+                            <IconButton
+                                sx={{
+                                    position: 'absolute',
+                                    bottom: 0,
+                                    right: 0,
+                                    backgroundColor: 'white',
+                                    borderRadius: '50%',
+                                    padding: 0.5,
+                                }}
+                                component="span"
+                            >
+                                <CloudUpload/>
+                            </IconButton>
+                        </Box>
+                    </label>
+                    <VisuallyHiddenInput
+                        id="upload-photo"
+                        type="file"
+                        onChange={handleFileChange}
+                    />
                 </Box>
+
             </Grid>
             <Grid item xs={6}>
                 <Box

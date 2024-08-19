@@ -76,7 +76,7 @@ export const fetchCompanyItems = createAsyncThunk(
 export const fetchCompanyItemAssignments = createAsyncThunk(
     'companyItem/fetchCompanyItemsWithAssignments',
     async (token: string) => {
-        const response = await fetch('http://localhost:9090/dev/v1/company-item/get-all', {
+        const response = await fetch('http://localhost:9090/dev/v1/company-item-assignment/get-all', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -108,7 +108,7 @@ interface ICompanyItemAssignment {
 }
 export const fetchCreateCompanyItemAssignment = createAsyncThunk(
     'companyItem/fetchCreateCompanyItemAssignment',
-    async (payload: ICompanyItemAssignment, {rejectWithValue}) => {
+    async (payload: ICompanyItemAssignment) => {
         const response = await fetch('http://localhost:9090/dev/v1/company-item-assignment/save', {
             method: 'POST',
             headers: {
@@ -124,19 +124,6 @@ export const fetchCreateCompanyItemAssignment = createAsyncThunk(
     }
 );
 
-export const fetchGetAllCompanyItemAssignments = createAsyncThunk(
-    'companyItem/fetchGetAllCompanyItemAssignments',
-    async (token: string, {rejectWithValue}) => {
-        const response = await fetch('http://localhost:9090/dev/v1/company-item-assignment/get-all', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ` + token
-            }
-        });
-        return await response.json();
-    }
-);
 
 const companyItemSlice = createSlice({
     name: 'companyItem',
@@ -162,7 +149,7 @@ const companyItemSlice = createSlice({
         builder.addCase(fetchCreateCompanyItemAssignment.fulfilled, (state, action) => {
             state.companyItems = action.payload;
         });
-        builder.addCase(fetchGetAllCompanyItemAssignments.fulfilled, (state, action) => {
+        builder.addCase(fetchCompanyItemAssignments.fulfilled, (state, action) => {
             state.companyItems = action.payload;
         });
     }

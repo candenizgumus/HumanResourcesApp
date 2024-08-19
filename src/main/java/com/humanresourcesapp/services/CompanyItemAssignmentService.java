@@ -52,6 +52,7 @@ public class CompanyItemAssignmentService {
                     CompanyItemAssignmentResponseDto dto = (new CompanyItemAssignmentResponseDto(
                             companyItemAssignment.getId(),
                             companyItem.getName(),
+                            companyItem.getSerialNumber(),
                             userService.findById(companyItemAssignment.getEmployeeId()).getEmail(),
                             companyItemAssignment.getAssignDate(),
                             companyItemAssignment.getStatus(),

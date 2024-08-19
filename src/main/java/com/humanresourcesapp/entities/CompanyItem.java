@@ -22,6 +22,5 @@ public class CompanyItem extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private ECompanyItemType companyItemType;
     private String serialNumber;
-    @Builder.Default
-    private EStatus status = EStatus.AVAILABLE; //Base entity'nin statusunu default active olarak override eder. sadece manager companyitem ekleyebilir onaya gerek yok.
+    private EStatus status; //Base entity'nin statusunu default active olarak override eder. sadece manager companyitem ekleyebilir onaya gerek yok.
 }

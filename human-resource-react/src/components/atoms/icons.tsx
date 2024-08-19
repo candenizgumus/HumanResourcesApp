@@ -17,9 +17,10 @@ import {
     EditCalendar,
     Pin,
     Dangerous,
+    Laptop,
     Paid,
     Cancel
- } from '@mui/icons-material';
+} from '@mui/icons-material';
 
 export const EditIcon = DriveFileRenameOutline;
 export const ApproveIcon = ThumbUp;
@@ -39,5 +40,6 @@ export const ActivateIcon = CheckCircle;
 export const SetShiftIcon = EditCalendar;
 export const PasswordIcon = Pin;
 export const DangerousIcon = Dangerous;
+export const AssignItemIcon = Laptop;
 export const BonusIcon = Paid;
 export const CancelIcon = Cancel;

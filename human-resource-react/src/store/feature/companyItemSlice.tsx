@@ -56,7 +56,7 @@ export const fetchDeleteCompanyItem = createAsyncThunk(
 
 export const fetchCompanyItems = createAsyncThunk(
     'companyItem/fetchCompanyItems',
-    async (payload: { token: string, searchText: string, page: number, pageSize: number }, {rejectWithValue}) => {
+    async (payload: { token: string, searchText: string, page: number, pageSize: number }) => {
         const response = await fetch('http://localhost:9090/dev/v1/company-item/get-all', {
             method: 'POST',
             headers: {
@@ -73,10 +73,61 @@ export const fetchCompanyItems = createAsyncThunk(
     }
 );
 
+export const fetchCompanyItemAssignments = createAsyncThunk(
+    'companyItem/fetchCompanyItemsWithAssignments',
+    async (token: string) => {
+        const response = await fetch('http://localhost:9090/dev/v1/company-item/get-all', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ` + token
+            }
+        });
+        return await response.json();
+    }
+);
+
 export const fetchCompanyItemTypes = createAsyncThunk(
     'companyItem/fetchCompanyItemTypes',
     async (token: string) => {
         const response = await fetch('http://localhost:9090/dev/v1/company-item/get-types', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ` + token
+            }
+        });
+        return await response.json();
+    }
+);
+
+interface ICompanyItemAssignment {
+    companyItemId: number;
+    employeeId: number;
+    token: string;
+}
+export const fetchCreateCompanyItemAssignment = createAsyncThunk(
+    'companyItem/fetchCreateCompanyItemAssignment',
+    async (payload: ICompanyItemAssignment, {rejectWithValue}) => {
+        const response = await fetch('http://localhost:9090/dev/v1/company-item-assignment/save', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ` + payload.token
+            },
+            body: JSON.stringify({
+                'companyItemId': payload.companyItemId,
+                'employeeId': payload.employeeId
+            })
+        });
+        return await response.json();
+    }
+);
+
+export const fetchGetAllCompanyItemAssignments = createAsyncThunk(
+    'companyItem/fetchGetAllCompanyItemAssignments',
+    async (token: string, {rejectWithValue}) => {
+        const response = await fetch('http://localhost:9090/dev/v1/company-item-assignment/get-all', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -106,6 +157,12 @@ const companyItemSlice = createSlice({
             state.companyItems = state.companyItems.filter(item => item.id !== action.payload.id);
         });
         builder.addCase(fetchCompanyItemTypes.fulfilled, (state, action) => {
+            state.companyItems = action.payload;
+        });
+        builder.addCase(fetchCreateCompanyItemAssignment.fulfilled, (state, action) => {
+            state.companyItems = action.payload;
+        });
+        builder.addCase(fetchGetAllCompanyItemAssignments.fulfilled, (state, action) => {
             state.companyItems = action.payload;
         });
     }

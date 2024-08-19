@@ -1,5 +1,6 @@
 package com.humanresourcesapp.controllers;
 
+import com.humanresourcesapp.dto.requests.DefinitionGetRequestDto;
 import com.humanresourcesapp.dto.requests.DefinitionSaveRequestDto;
 import com.humanresourcesapp.entities.Definition;
 import com.humanresourcesapp.entities.enums.EDefinitionType;
@@ -38,5 +39,12 @@ public class DefinitionController {
     @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
     public ResponseEntity<Boolean> delete( Long id){
         return ResponseEntity.ok(definitionService.delete(id));
+    }
+
+    @PostMapping(GET_ALL_WITH_PAGE)
+    @CrossOrigin("*")
+    @PreAuthorize("hasAnyAuthority('MANAGER','ADMIN')")
+    public ResponseEntity<List<Definition>> getAllByDefinitionTypeWithPage(@RequestBody DefinitionGetRequestDto dto){
+        return ResponseEntity.ok(definitionService.getAllByDefinitionTypeWithPage(dto));
     }
 }

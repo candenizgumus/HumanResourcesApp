@@ -15,8 +15,7 @@ export interface IUpdateCompany {
     id: number,
     name: string,
     logo: string,
-    description: string,
-    numberOfEmployee: number
+    description: string
 }
 
 export interface IUpcomingExpiry {
@@ -140,8 +139,7 @@ export const fetchUpdateCompany = createAsyncThunk(
                     'id': payload.id,
                     'name': payload.name,
                     'logo': payload.logo,
-                    'description': payload.description,
-                    'numberOfEmployee': payload.numberOfEmployee,
+                    'description': payload.description
                 })
             });
 

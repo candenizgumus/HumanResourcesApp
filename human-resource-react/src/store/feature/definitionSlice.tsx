@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { EDefinitionType } from "../../models/IDefinitionType";
 import { IRequestWithIdAndToken } from "./leaveSlice";
 
@@ -30,8 +30,38 @@ export const fetchGetDefinitions = createAsyncThunk(
                 'Authorization': `Bearer ` + payload.token
             },
             body: JSON.stringify(
-               payload.definitionType,
+                payload.definitionType
             )
+        });
+
+        return await response.json();
+    }
+
+)
+
+export interface IFetchGetDefinitionsWithPage {
+    token: string;
+    definitionType: EDefinitionType ;
+    page: number;
+    pageSize: number;
+    searchText: string;
+}
+export const fetchGetDefinitionsWithPage = createAsyncThunk(
+    'leave/fetchGetDefinitionsWithPage',
+    async (payload: IFetchGetDefinitionsWithPage) => {
+
+        const response = await fetch('http://localhost:9090/dev/v1/definition/get-all-with-page', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ` + payload.token
+            },
+            body: JSON.stringify({
+                'definitionType': payload.definitionType,
+                'page': payload.page,
+                'pageSize': payload.pageSize,
+                'searchText': payload.searchText
+            })
         });
 
         return await response.json();
@@ -88,6 +118,9 @@ const definitionSlice = createSlice({
     reducers: {},
     extraReducers: (build) => {
         build.addCase(fetchGetDefinitions.fulfilled,(state,action) => {
+            state.definitionList = action.payload
+        })
+        build.addCase(fetchGetDefinitionsWithPage.fulfilled,(state,action: PayloadAction<IDefinition[]>) => {
             state.definitionList = action.payload
         })
     }

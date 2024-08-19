@@ -651,6 +651,24 @@ export const fetchDeactivateMyAccount = createAsyncThunk(
     }
 );
 
+export const fetchManagerAndCompanyNameOfEmployee = createAsyncThunk(
+    'auth/fetchManagerAndCompanyNameOfEmployee',
+    async (token: string, { dispatch }) => {
+
+        const response = await fetch('http://localhost:9090/dev/v1/user/find-manager-and-company-name-of-employee', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ` + token
+            }
+        });
+
+
+        return await response.json();
+
+    }
+);
+
 
 
 const authSlice = createSlice({

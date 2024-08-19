@@ -535,7 +535,7 @@ public class InsertDemoData
                     .subscriptionEndDate(authEmployee.getSubscriptionEndDate())
                     .location("England")
                     .birthDate(LocalDate.of(1999, currentDate.getMonthValue(), 1))
-                    .position("ADMINISTRATIVE_ASSISTANT")
+                    .position("ADMINISTRATIVE ASSISTANT")
                     .companyId(user.getCompanyId())
                     .remainingAnnualLeave(25)
                     .phone("5305443221")
@@ -545,6 +545,7 @@ public class InsertDemoData
                     .sector(ESectors.TECHNOLOGY)
                     .title("Turkey Operations Employee")
                     .salary(1950.00)
+                    .managerId(user.getId())
                     .hireDate(LocalDate.of(2021, 1, 1))
 
                     .build();
@@ -571,7 +572,7 @@ public class InsertDemoData
                     .subscriptionEndDate(authEmployee.getSubscriptionEndDate())
                     .location("Turkey")
                     .birthDate(LocalDate.of(1990, currentDate.getMonthValue() + 1, 15))
-                    .position("COMPUTER_PROGRAMMER")
+                    .position("COMPUTER PROGRAMMER")
                     .companyId(user.getCompanyId())
                     .remainingAnnualLeave(15)
                     .phone("5395558471")
@@ -581,6 +582,7 @@ public class InsertDemoData
                     .sector(ESectors.TECHNOLOGY)
                     .salary(2650.00)
                     .title("Dr.")
+                    .managerId(user.getId())
                     .hireDate(LocalDate.of(2023, 5, 5))
 
                     .build();

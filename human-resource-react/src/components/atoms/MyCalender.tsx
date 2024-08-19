@@ -13,6 +13,7 @@ import {
     DialogActions,
     Button,
 } from '@mui/material';
+import {CalendarMonth} from "@mui/icons-material";
 
 const localizer = momentLocalizer(moment);
 
@@ -98,8 +99,8 @@ const MyCalendar: React.FC<MyCalendarProps> = ({ events, onSaveEvent, onUpdateEv
         <>
                 <Box sx={{ p: 2, maxWidth: '100%', overflow: 'auto' }}>
                     <Paper elevation={3} sx={{ p: 2, borderRadius: 2 }}>
-                        <Typography variant="h6" gutterBottom>
-                            My Events
+                        <Typography variant="h6" align="center" sx={{ mb: 2 , fontWeight: "bold"}}>
+                            <CalendarMonth/> My Events
                         </Typography>
                         <Box sx={{ height: 600 }}>
                             <Calendar

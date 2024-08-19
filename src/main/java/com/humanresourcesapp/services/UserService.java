@@ -5,6 +5,7 @@ import com.humanresourcesapp.constants.ENotificationTextBase;
 import com.humanresourcesapp.dto.requests.*;
 import com.humanresourcesapp.dto.responses.CompanyNameResponseDto;
 import com.humanresourcesapp.dto.responses.CountUserByTypeAndStatusDto;
+import com.humanresourcesapp.dto.responses.ManagerAndCompanyNameOfEmployee;
 import com.humanresourcesapp.dto.responses.MonthlySalaryOfEmployeesDto;
 import com.humanresourcesapp.entities.*;
 import com.humanresourcesapp.entities.enums.ENotificationType;
@@ -305,6 +306,7 @@ public class UserService {
                 .subscriptionStartDate(manager.getSubscriptionStartDate())
                 .subscriptionEndDate(manager.getSubscriptionEndDate())
                 .salary(dto.salary())
+                .managerId(manager.getId())
                 .build());
 
         //Increasing number of employee in company
@@ -772,5 +774,21 @@ public class UserService {
 
     public Optional<User> findFirstUserByCompanyId(Long companyId) {
         return userRepository.findFirstUserByCompanyId(companyId);
+    }
+
+    public ManagerAndCompanyNameOfEmployee findManagerAndCompanyNameOfEmployee()
+    {
+        String userEmail = UserInfoSecurityContext.getUserInfoFromSecurityContext();
+        User user = userRepository.findByEmail(userEmail).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
+
+        Company company = companyService.findById(user.getCompanyId()).orElse(null);
+        User manager = userRepository.findById(user.getManagerId()).orElse(null);
+
+
+        assert company != null;
+        assert manager != null;
+
+        return new ManagerAndCompanyNameOfEmployee(manager.getName() + " " + manager.getSurname(),company.getName());
+
     }
 }

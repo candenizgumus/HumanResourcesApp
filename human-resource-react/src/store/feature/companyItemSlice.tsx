@@ -125,6 +125,22 @@ export const fetchCreateCompanyItemAssignment = createAsyncThunk(
 );
 
 
+export const fetchGetAssignedItemsOfEmployee = createAsyncThunk(
+    'companyItem/fetchGetAssignedItemsOfEmployee',
+    async (token: string, {rejectWithValue}) => {
+        const response = await fetch('http://localhost:9090/dev/v1/company-item-assignment/get-assinged-items-of-employee', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ` + token
+            }
+        });
+        return await response.json();
+    }
+);
+
+
+
 const companyItemSlice = createSlice({
     name: 'companyItem',
     initialState: initialCompanyItemState,

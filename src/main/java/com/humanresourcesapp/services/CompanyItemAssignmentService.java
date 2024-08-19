@@ -3,6 +3,7 @@ package com.humanresourcesapp.services;
 import com.humanresourcesapp.dto.requests.CompanyItemAssignmentRequestDto;
 import com.humanresourcesapp.dto.requests.PageRequestDto;
 import com.humanresourcesapp.dto.responses.CompanyItemAssignmentResponseDto;
+import com.humanresourcesapp.dto.responses.ItemAssignmentsOfEmployeeResponseDto;
 import com.humanresourcesapp.entities.CompanyItem;
 import com.humanresourcesapp.entities.CompanyItemAssignment;
 import com.humanresourcesapp.entities.User;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +27,7 @@ public class CompanyItemAssignmentService {
     private final CompanyItemAssignmentRepository companyItemAssignmentRepository;
     private final UserService userService;
     private final CompanyItemService companyItemService;
+
 
     public boolean save(CompanyItemAssignmentRequestDto dto) {
         User employee = userService.findById(dto.employeeId());
@@ -79,5 +82,27 @@ public class CompanyItemAssignmentService {
         return false;
     }
 
+
+    public List<ItemAssignmentsOfEmployeeResponseDto> getAssingedItemsOfEmployee() {
+        String managerEmail = UserInfoSecurityContext.getUserInfoFromSecurityContext();
+        User employee = userService.findByEmail(managerEmail).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
+
+        long id = 1L;
+        List<ItemAssignmentsOfEmployeeResponseDto> dtoList = new ArrayList<>();
+
+        List<CompanyItemAssignment> assignedItemList = companyItemAssignmentRepository.findByEmployeeIdAndStatus(employee.getId(), EStatus.APPROVED);
+
+
+        for (CompanyItemAssignment companyItemAssignment : assignedItemList) {
+            dtoList.add(new ItemAssignmentsOfEmployeeResponseDto(id,
+                    companyItemService.findById(companyItemAssignment.getCompanyItemId()).getName(),
+                    companyItemAssignment.getAssignDate()));
+
+            id++;
+        }
+
+
+        return dtoList;
+    }
 
 }

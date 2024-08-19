@@ -1,6 +1,7 @@
 package com.humanresourcesapp.repositories;
 
 import com.humanresourcesapp.entities.CompanyItemAssignment;
+import com.humanresourcesapp.entities.enums.EStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -13,4 +14,6 @@ public interface CompanyItemAssignmentRepository extends JpaRepository<CompanyIt
     List<CompanyItemAssignment> findByEmployeeId(Long employeeId);
 
     List<CompanyItemAssignment> findByCompanyId(Long companyId);
+
+    List<CompanyItemAssignment> findByEmployeeIdAndStatus(Long employeeId, EStatus status);
 }

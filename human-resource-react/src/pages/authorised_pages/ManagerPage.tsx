@@ -42,7 +42,7 @@ import { ManagerHomeContent } from "../../components/molecules/ManagerComponents
 import HikingIcon from '@mui/icons-material/Hiking';
 import { useState } from "react";
 import logo from '../../images/logo-nobg.png';
-import {AddDocumentIcon} from "../../components/atoms/icons";
+import { AddDocumentIcon } from "../../components/atoms/icons";
 
 const drawerWidth = 240;
 
@@ -146,7 +146,7 @@ export default function AdminPage() {
         <Box sx={{ display: 'flex' }}>
             <CssBaseline />
             <AppBar position="fixed" open={open}>
-                <Toolbar >
+                <Toolbar sx={{ position: 'relative' }}>
                     <IconButton
                         color="inherit"
                         aria-label="open drawer"
@@ -155,20 +155,27 @@ export default function AdminPage() {
                         sx={{ mr: 2, ...(open && { display: 'none' }) }}
                     >
                         <MenuIcon />
-
                     </IconButton>
 
                     <Typography variant="h6" sx={logoStyle}>
-                        <Button  onClick={navigateToHome} color="inherit">
+                        <Button onClick={navigateToHome} color="inherit">
                             <img src={logo} alt="logo" style={{ height: '52px' }} />
                         </Button>
                     </Typography>
-                    <Typography sx={{ marginLeft: '240px', fontSize: '20px' }} >
+
+                    <Typography
+                        sx={{
+                            position: 'absolute',
+                            left: '50%',
+                            transform: 'translateX(-50%)',
+                            fontSize: '20px',
+                        }}
+                    >
                         {page ? page : 'Dashboard'}
                     </Typography>
 
                     <Box sx={{ flexGrow: 1 }} />
-                    <Box >
+                    <Box>
                         <Typography variant="h5" component="div">
                             Merhaba, <strong>{user.name ? user.name : 'admin'}</strong>!
                         </Typography>
@@ -178,7 +185,6 @@ export default function AdminPage() {
                     </Box>
                     <NotificationIcon />
                     <NavbarProfile />
-
                 </Toolbar>
             </AppBar>
             <Drawer

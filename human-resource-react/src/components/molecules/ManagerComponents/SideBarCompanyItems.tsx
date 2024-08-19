@@ -4,7 +4,11 @@ import { HumanResources, useAppSelector } from "../../../store";
 import { useDispatch } from "react-redux";
 import { DataGrid, GridColDef, GridRowSelectionModel } from "@mui/x-data-grid";
 import Swal from "sweetalert2";
-import { fetchCompanyItems, fetchDeleteCompanyItem } from "../../../store/feature/companyItemSlice";
+import {
+    fetchCompanyItemAssignments,
+    fetchCompanyItems,
+    fetchDeleteCompanyItem
+} from "../../../store/feature/companyItemSlice";
 import { ICompanyItem } from "../../../models/ICompanyItem";
 import { changePageState } from "../../../store/feature/authSlice";
 import { DeleteIcon, AddIcon } from '../../atoms/icons';
@@ -13,13 +17,21 @@ import {ICompanyItemAssignment} from "../../../models/ICompanyItemAssignment";
 
 const itemColumns: GridColDef[] = [
     { field: "id", headerName: "Id", flex: 1, headerAlign: "center" },
-    { field: "companyItemName", headerName: "Description", flex: 1, headerAlign: "center" },
+    { field: "name", headerName: "Description", flex: 1, headerAlign: "center" },
     { field: "companyItemType", headerName: "Item Type", flex: 1, headerAlign: "center" },
+    { field: "serialNumber", headerName: "Serial Number", flex: 1, headerAlign: "center" },
+    { field: "status", headerName: "Status", flex: 1, headerAlign: "center" },
+];
+
+const assignmentColumns: GridColDef[] = [
+    { field: "id", headerName: "Id", flex: 1, headerAlign: "center" },
+    { field: "companyItemName", headerName: "Description", flex: 1, headerAlign: "center" },
     { field: "serialNumber", headerName: "Serial Number", flex: 1, headerAlign: "center" },
     { field: "employeeEmail", headerName: "Employee Email", flex: 1, headerAlign: "center" },
     { field: "assignDate", headerName: "Assign Date", flex: 1, headerAlign: "center" },
-    { field: "message", headerName: "Employee Message", flex: 1, headerAlign: "center" },
     { field: "status", headerName: "Status", flex: 1, headerAlign: "center" },
+    { field: "message", headerName: "Employee Message", flex: 1, headerAlign: "center" },
+
 ];
 
 const SideBarCompanyItems: React.FC = () => {
@@ -27,7 +39,7 @@ const SideBarCompanyItems: React.FC = () => {
     const token = useAppSelector((state) => state.auth.token);
     const dispatch = useDispatch<HumanResources>();
     const [searchText, setSearchText] = useState('');
-    const [companyItems, setCompanyItems] = useState<ICompanyItem[]>([]);    //const personalDocuments =  useAppSelector((state) => state.personalDocument.personalDocuments);
+    const [companyItems, setCompanyItems] = useState<ICompanyItem[]>([]);
     const [companyItemAssignments, setCompanyItemAssignments] = useState<ICompanyItemAssignment[]>([]);
     const [loading, setLoading] = useState(false);
     const [dialogOpen, setDialogOpen] = useState(false);
@@ -35,6 +47,14 @@ const SideBarCompanyItems: React.FC = () => {
     const handleDialogOpen = () => {
         setDialogOpen(true);
     };
+
+    useEffect(() => {
+        dispatch(fetchCompanyItemAssignments(token)).then(data => {
+            if (data.payload) {
+                setCompanyItemAssignments(data.payload);
+            }
+        });
+    }, [dispatch, token]);
 
     const handleDialogClose = () => {
         dispatch(fetchCompanyItems({
@@ -66,7 +86,6 @@ const SideBarCompanyItems: React.FC = () => {
     };
 
     const handleOnClickAddCompanyItem = () => {
-        //dispatch(changePageState("Add Item"))
         handleDialogOpen();
     }
 
@@ -114,7 +133,7 @@ const SideBarCompanyItems: React.FC = () => {
                 inputProps={{ maxLength: 50 }}
             />
             <DataGrid
-                rows={companyItemAssignments}
+                rows={companyItems}
                 columns={itemColumns}
                 initialState={{
                     pagination: {
@@ -160,6 +179,32 @@ const SideBarCompanyItems: React.FC = () => {
                 </Button>
             </Grid>
             <AddCompanyItemDialog open={dialogOpen} onClose={handleDialogClose} />
+
+            <DataGrid
+                rows={companyItemAssignments}
+                columns={assignmentColumns}
+                initialState={{
+                    pagination: {
+                        paginationModel: { page: 0, pageSize: 5 },
+                    },
+                }}
+                pageSizeOptions={[5, 10]}
+                checkboxSelection
+                onRowSelectionModelChange={handleRowSelection}
+                sx={{
+                    "& .MuiDataGrid-columnHeaders": {
+                        backgroundColor: "rgba(224, 224, 224, 1)",
+                    },
+                    "& .MuiDataGrid-columnHeaderTitle": {
+                        textAlign: "center",
+                        fontWeight: "bold",
+                    },
+                    "& .MuiDataGrid-cell": {
+                        textAlign: "center",
+                    },
+                    height: '407px'
+                }}
+            />
         </div>
     );
 };

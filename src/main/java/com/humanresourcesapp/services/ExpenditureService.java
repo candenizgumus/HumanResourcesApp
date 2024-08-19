@@ -234,6 +234,8 @@ public class ExpenditureService {
                         .build());
             }
             expenditure.setStatus(EStatus.CANCELED);
+            expenditure.setIsExpenditureApproved(false);
+            expenditure.setApproveDate(null);
             // if the expenditure is not approved, it can not be canceled, and it will be deleted or rejected
         } else {
             delete(id);

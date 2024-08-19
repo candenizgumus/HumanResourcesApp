@@ -2,7 +2,17 @@ import React, { useState } from 'react';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-import { Box, Typography, Paper, Dialog, DialogTitle, DialogContent, TextField, DialogActions, Button } from '@mui/material';
+import {
+    Box,
+    Typography,
+    Paper,
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    TextField,
+    DialogActions,
+    Button,
+} from '@mui/material';
 
 const localizer = momentLocalizer(moment);
 
@@ -86,82 +96,82 @@ const MyCalendar: React.FC<MyCalendarProps> = ({ events, onSaveEvent, onUpdateEv
 
     return (
         <>
-            <Box sx={{ p: 2, maxWidth: '100%', overflow: 'auto' }}>
-                <Paper elevation={3} sx={{ p: 2, borderRadius: 2 }}>
-                    <Typography variant="h6" gutterBottom>
-                        My Events
-                    </Typography>
-                    <Box sx={{ height: 600 }}>
-                        <Calendar
-                            localizer={localizer}
-                            events={events.map(event => ({
-                                ...event,
-                                start: new Date(event.start),  // Date objesi
-                                end: new Date(event.endTime),   // Date objesi
-                            }))}
-                            startAccessor={(event) => new Date(event.start.toString())}
-                            endAccessor={(event) => new Date(event.end.toString())}
-                            style={{ height: '100%' }}
-                            views={['month', 'week', 'day']}
-                            toolbar
-                            showMultiDayTimes
-                            selectable={isUserManager} // isUserManager true ise seçilebilir yap
-                            {...(isUserManager ? { onSelectEvent: handleSelectEvent, onSelectSlot: handleSelectSlot } : {})} // isUserManager true ise onSelectEvent ve onSelectSlot prop'larını ekle
-                        />
-                    </Box>
-                </Paper>
-            </Box>
+                <Box sx={{ p: 2, maxWidth: '100%', overflow: 'auto' }}>
+                    <Paper elevation={3} sx={{ p: 2, borderRadius: 2 }}>
+                        <Typography variant="h6" gutterBottom>
+                            My Events
+                        </Typography>
+                        <Box sx={{ height: 600 }}>
+                            <Calendar
+                                localizer={localizer}
+                                events={events.map(event => ({
+                                    ...event,
+                                    start: new Date(event.start),  // Date objesi
+                                    end: new Date(event.endTime),   // Date objesi
+                                }))}
+                                startAccessor={(event) => new Date(event.start.toString())}
+                                endAccessor={(event) => new Date(event.end.toString())}
+                                style={{ height: '100%' }}
+                                views={['month', 'week', 'day']}
+                                toolbar
+                                showMultiDayTimes
+                                selectable={isUserManager} // isUserManager true ise seçilebilir yap
+                                {...(isUserManager ? { onSelectEvent: handleSelectEvent, onSelectSlot: handleSelectSlot } : {})} // isUserManager true ise onSelectEvent ve onSelectSlot prop'larını ekle
+                            />
+                        </Box>
+                    </Paper>
+                </Box>
 
-            <Dialog open={isModalOpen} onClose={handleClose}>
-                <DialogTitle>Etkinliği Düzenle</DialogTitle>
-                <DialogContent>
-                    <TextField
-                        label="Başlık"
-                        fullWidth
-                        margin="dense"
-                        value={selectedEvent?.title || ''}
-                        onChange={(e) => handleChange('title', e.target.value)}
-                    />
-                    <TextField
-                        label="Açıklama"
-                        fullWidth
-                        margin="dense"
-                        value={selectedEvent?.description || ''}
-                        onChange={(e) => handleChange('description', e.target.value)}
-                    />
-                    <TextField
-                        label="Başlangıç Tarihi"
-                        type="datetime-local"
-                        fullWidth
-                        margin="dense"
-                        value={selectedEvent?.start ? moment(selectedEvent.start).format('YYYY-MM-DDTHH:mm') : ''}
-                        onChange={(e) => handleChange('start', new Date(e.target.value))}
-                    />
-                    <TextField
-                        label="Bitiş Tarihi"
-                        type="datetime-local"
-                        fullWidth
-                        margin="dense"
-                        value={selectedEvent?.endTime ? moment(selectedEvent.endTime).format('YYYY-MM-DDTHH:mm') : ''}
-                        onChange={(e) => handleChange('endTime', new Date(e.target.value))}
-                    />
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleClose} color="primary">
-                        Cancel
-                    </Button>
-                    <Button onClick={handleSave} color="primary">
-                        Save
-                    </Button>
-                    {selectedEvent?.id && (
-                        <Button onClick={handleDelete} color="secondary">
-                            Delete
+                <Dialog open={isModalOpen} onClose={handleClose}>
+                    <DialogTitle>Etkinliği Düzenle</DialogTitle>
+                    <DialogContent>
+                        <TextField
+                            label="Başlık"
+                            fullWidth
+                            margin="dense"
+                            value={selectedEvent?.title || ''}
+                            onChange={(e) => handleChange('title', e.target.value)}
+                        />
+                        <TextField
+                            label="Açıklama"
+                            fullWidth
+                            margin="dense"
+                            value={selectedEvent?.description || ''}
+                            onChange={(e) => handleChange('description', e.target.value)}
+                        />
+                        <TextField
+                            label="Başlangıç Tarihi"
+                            type="datetime-local"
+                            fullWidth
+                            margin="dense"
+                            value={selectedEvent?.start ? moment(selectedEvent.start).format('YYYY-MM-DDTHH:mm') : ''}
+                            onChange={(e) => handleChange('start', new Date(e.target.value))}
+                        />
+                        <TextField
+                            label="Bitiş Tarihi"
+                            type="datetime-local"
+                            fullWidth
+                            margin="dense"
+                            value={selectedEvent?.endTime ? moment(selectedEvent.endTime).format('YYYY-MM-DDTHH:mm') : ''}
+                            onChange={(e) => handleChange('endTime', new Date(e.target.value))}
+                        />
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={handleClose} color="primary">
+                            Cancel
                         </Button>
-                    )}
-                </DialogActions>
-            </Dialog>
+                        <Button onClick={handleSave} color="primary">
+                            Save
+                        </Button>
+                        {selectedEvent?.id && (
+                            <Button onClick={handleDelete} color="secondary">
+                                Delete
+                            </Button>
+                        )}
+                    </DialogActions>
+                </Dialog>
         </>
-    );
-};
+    )
+}
 
 export default MyCalendar;

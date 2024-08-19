@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     Typography,
     Container,
@@ -16,28 +16,11 @@ import { HumanResources, RootState } from '../../../store';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchGetFeatures } from '../../../store/feature/featureSlice';
 import CircularProgress from '@mui/material/CircularProgress';
+import HeaderElement from '../../../components/atoms/Header';
 
 const Root = styled('div')(({ theme }) => ({
     display: 'flex',
     flexDirection: 'column',
-    minHeight: '100vh',
-}));
-
-const HeaderContainer = styled('div')({
-    display: 'flex',
-    flexDirection: 'column',
-    height: '100vh',
-});
-
-const Header = styled('header')(({ theme }) => ({
-    flex: '1',
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: theme.palette.primary.main,
-    width: '100%',
-    padding: theme.spacing(3, 0),
 }));
 
 const Body = styled('main')(({ theme }) => ({
@@ -46,16 +29,15 @@ const Body = styled('main')(({ theme }) => ({
     marginTop: theme.spacing(1),
 }));
 
-const CardGrid = styled(Container)(({ theme }) => ({
-    paddingTop: theme.spacing(2),
-}));
-
 const Footer = styled('footer')(({ theme }) => ({
     padding: theme.spacing(0),
 }));
 
+const CardGrid = styled(Container)(({ theme }) => ({
+    paddingTop: theme.spacing(2),
+}));
+
 function PerformanceEvaluationPage() {
-    const featuresRef = useRef(null);
     const dispatch: HumanResources = useDispatch();
     const featureList = useSelector((state: RootState) => state.feature.featuresList);
     const [loading, setLoading] = useState(true);
@@ -75,34 +57,28 @@ function PerformanceEvaluationPage() {
         };
         fetchData();
     }, [dispatch]);
+
+    useEffect(() => {
+        // Scroll to the top of the page when the component mounts
+        window.scrollTo(0, 0);
+    }, []);
     return (
         <Root>
             <CssBaseline />
             <NavBar />
-            <Header>
+            <HeaderElement headline='Products' text='Pricing based on your number of employees, use as much as you want, pay as much as you use' />
+            <Body>
                 <Container maxWidth="lg">
                     <Box py={5}>
-                        <Typography variant="h2" align="center" sx={{ color: 'white' }} gutterBottom>
-                            Products
+                        <Typography component="h1" variant="h4" align="center" color="primary.main" gutterBottom sx={{ paddingBottom: 5 }}>
+                            Features
                         </Typography>
-                        <Typography variant="body1" align="center" sx={{ color: 'white' }} paragraph>
-                            Pricing based on your number of employees, use as much as you want, pay as much as you use
-                        </Typography>
-                    </Box>
-                </Container>
-            </Header>
-            <Body>
-                {loading ? (
-                    <Box sx={{ display: 'flex', justifyContent: 'center', marginBottom: '5%', marginTop: '5%' }}>
-                        <CircularProgress />
-                    </Box>
-                ) : (
-                    <Container maxWidth="lg">
-                        <Box py={2}>
-                            <CardGrid maxWidth="md" ref={featuresRef} sx={{ marginBottom: '5%' }}>
-                                <Typography component="h1" variant="h4" align="center" color="primary.main" gutterBottom sx={{ paddingBottom: 5 }}>
-                                    Features
-                                </Typography>
+                        <CardGrid maxWidth="md" sx={{ marginBottom: '5%' }}>
+                            {loading ? (
+                                <Box sx={{ display: 'flex', justifyContent: 'center', marginBottom: '5%', marginTop: '5%' }}>
+                                    <CircularProgress />
+                                </Box>
+                            ) : (
                                 <Grid container spacing={4}>
                                     {featureList.slice(0, 3).map((feature) => (
                                         <FeatureCard
@@ -114,13 +90,19 @@ function PerformanceEvaluationPage() {
                                         />
                                     ))}
                                 </Grid>
-                            </CardGrid>
-                        </Box>
-                        <Box py={2}>
-                            <CardGrid maxWidth="md" ref={featuresRef} sx={{ marginBottom: '5%' }}>
-                                <Typography component="h1" variant="h4" align="center" color="primary.main" gutterBottom sx={{ paddingBottom: 5 }}>
-                                    Additional Features
-                                </Typography>
+                            )}
+                        </CardGrid>
+                    </Box>
+                    <Box py={5}>
+                        <Typography component="h1" variant="h4" align="center" color="primary.main" gutterBottom sx={{ paddingBottom: 5 }}>
+                            Additional Features
+                        </Typography>
+                        <CardGrid maxWidth="md" sx={{ marginBottom: '5%' }}>
+                            {loading ? (
+                                <Box sx={{ display: 'flex', justifyContent: 'center', marginBottom: '5%', marginTop: '5%' }}>
+                                    <CircularProgress />
+                                </Box>
+                            ) : (
                                 <Grid container spacing={4}>
                                     {featureList.slice(3, featureList.length).map((feature) => (
                                         <FeatureCard
@@ -132,10 +114,10 @@ function PerformanceEvaluationPage() {
                                         />
                                     ))}
                                 </Grid>
-                            </CardGrid>
-                        </Box>
-                    </Container>
-                )}
+                            )}
+                        </CardGrid>
+                    </Box>
+                </Container>
             </Body>
             <Footer>
                 <CssBaseline />

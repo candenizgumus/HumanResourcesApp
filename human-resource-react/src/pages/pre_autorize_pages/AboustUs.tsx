@@ -12,37 +12,30 @@ import {
 import { styled } from '@mui/material/styles';
 import { NavBar } from '../../components/molecules/PreAuthorizedPageComponents/NavBar';
 import FooterElement from '../../components/molecules/PreAuthorizedPageComponents/FooterElement';
+import HeaderElement from '../../components/atoms/Header';
 
 const Root = styled('div')(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
-  minHeight: '100vh',
-}));
-
-const Header = styled('div')(({ theme }) => ({
-  marginBottom: theme.spacing(4),
-  backgroundColor: theme.palette.primary.main,
-  color: 'white',
-  padding: theme.spacing(3, 0),
 }));
 
 const Body = styled('main')(({ theme }) => ({
-  flex: '1 0 auto',
-  marginTop: theme.spacing(5),
+  flex: '1',
+  width: '100%',
+  marginTop: theme.spacing(1),
 }));
 
 const Footer = styled('footer')(({ theme }) => ({
-  flexShrink: 0,
+  padding: theme.spacing(0),
 }));
 
 function AboutUsPage() {
-  const featuresRef = useRef(null);
   useEffect(() => {
     // Scroll to the top of the page when the component mounts
     window.scrollTo(0, 0);
   }, []);
   // Define the handler function
-  const handleCardClick = (url:string) => {
+  const handleCardClick = (url: string) => {
     window.open(url, '_blank');
   };
 
@@ -50,29 +43,19 @@ function AboutUsPage() {
     <Root>
       <CssBaseline />
       <NavBar />
-      <Header>
-        <Container maxWidth="lg">
-          <Box py={5}>
-            <Typography variant="h2" align="center" gutterBottom>
-              About Us
-            </Typography>
-            <Typography variant="body1" align="center" paragraph>
-              We are a group of developers dedicated to building a platform similar to Kolay IK, providing
-              seamless solutions for businesses. Our team is committed to innovation, quality, and
-              customer satisfaction.
-            </Typography>
-          </Box>
-        </Container>
-      </Header>
+      <HeaderElement headline='About Us' text='We are a group of developers dedicated to building the best solutions for our customers.' />
       <Body>
         <Container maxWidth="lg">
           <Box py={5}>
+            <Typography component="h1" variant="h4" align="center" color="primary.main" gutterBottom sx={{ paddingBottom: 5 }}>
+              Our Team
+            </Typography>
             <Grid container spacing={4} justifyContent="center">
               {/* Team Member 1 */}
               <Grid item xs={12} sm={6} md={4} sx={{
                 transition: 'transform 0.2s ease-in-out',
                 '&:hover': {
-                    transform: 'scale(1.01)'
+                  transform: 'scale(1.01)'
                 }
               }}>
                 <ButtonBase onClick={() => handleCardClick('https://github.com/candenizgumus')}>
@@ -96,7 +79,7 @@ function AboutUsPage() {
               <Grid item xs={12} sm={6} md={4} sx={{
                 transition: 'transform 0.2s ease-in-out',
                 '&:hover': {
-                    transform: 'scale(1.01)'
+                  transform: 'scale(1.01)'
                 }
               }}>
                 <ButtonBase onClick={() => handleCardClick('https://github.com/hcaslan')}>
@@ -120,7 +103,7 @@ function AboutUsPage() {
               <Grid item xs={12} sm={6} md={4} sx={{
                 transition: 'transform 0.2s ease-in-out',
                 '&:hover': {
-                    transform: 'scale(1.01)'
+                  transform: 'scale(1.01)'
                 }
               }}>
                 <ButtonBase onClick={() => handleCardClick('https://github.com/Hicranarslan')}>
@@ -144,7 +127,7 @@ function AboutUsPage() {
               <Grid item xs={12} sm={6} md={4} sx={{
                 transition: 'transform 0.2s ease-in-out',
                 '&:hover': {
-                    transform: 'scale(1.01)'
+                  transform: 'scale(1.01)'
                 }
               }}>
                 <ButtonBase onClick={() => handleCardClick('https://github.com/keremoktener')}>
@@ -168,7 +151,7 @@ function AboutUsPage() {
               <Grid item xs={12} sm={6} md={4} sx={{
                 transition: 'transform 0.2s ease-in-out',
                 '&:hover': {
-                    transform: 'scale(1.01)'
+                  transform: 'scale(1.01)'
                 }
               }}>
                 <ButtonBase onClick={() => handleCardClick('https://github.com/EmirEsen')}>

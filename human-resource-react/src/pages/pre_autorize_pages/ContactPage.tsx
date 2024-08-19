@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Typography,
   Button,
@@ -14,27 +14,19 @@ import { NavBar } from '../../components/molecules/PreAuthorizedPageComponents/N
 import FooterElement from '../../components/molecules/PreAuthorizedPageComponents/FooterElement';
 import Swal from 'sweetalert2';
 import { fetchSaveContactUsNotification } from '../../store/feature/notificationSlice';
-import { HumanResources, useAppSelector } from '../../store';
+import { HumanResources } from '../../store';
 import { useDispatch } from 'react-redux';
+import HeaderElement from '../../components/atoms/Header';
 
 const Root = styled('div')(({ theme }) => ({
-  flexGrow: 1,
   display: 'flex',
   flexDirection: 'column',
-  minHeight: '100vh',
-}));
-
-const Header = styled('header')(({ theme }) => ({
-  marginBottom: theme.spacing(4),
-  backgroundColor: theme.palette.primary.main,
-  color: 'white',
-  paddingTop: '0.5%',
 }));
 
 const Body = styled('main')(({ theme }) => ({
-  marginBottom: theme.spacing(4),
-  width: '100%',
   flex: '1',
+  width: '100%',
+  marginTop: theme.spacing(1),
 }));
 
 const Footer = styled('footer')(({ theme }) => ({
@@ -49,7 +41,6 @@ const ContactForm = styled(Paper)(({ theme }) => ({
 }));
 
 function ContactUsPage() {
-  const featuresRef = useRef<HTMLDivElement>(null);
   const dispatch = useDispatch<HumanResources>();
   const [formData, setFormData] = useState({
     senderName: '',
@@ -97,26 +88,15 @@ function ContactUsPage() {
     <Root>
       <CssBaseline />
       <NavBar />
-      <Header>
-        <Container maxWidth="lg">
-          <Box py={5} textAlign="center">
-            <Typography variant="h2" align="center" gutterBottom>
-              Contact Us
-            </Typography>
-            <Typography variant="body1" align="center" paragraph>
-              We would love to hear from you! Please fill out the form below and
-              we will get in touch with you as soon as possible.
-            </Typography>
-          </Box>
-        </Container>
-      </Header>
+      <HeaderElement headline='Contact Us' text='We would love to hear from you! Please fill out the form below and
+              we will get in touch with you as soon as possible'/>
       <Body>
         <Container maxWidth="lg">
           <Box py={5}>
+            <Typography component="h1" variant="h4" align="center" color="primary.main" gutterBottom sx={{ paddingBottom: 5 }}>
+              Get in Touch
+            </Typography>
             <ContactForm elevation={3}>
-              <Typography component="h1" variant="h5" gutterBottom>
-                Get in Touch
-              </Typography>
               <form onSubmit={handleSubmit}>
                 <Grid container spacing={2}>
                   <Grid item xs={12}>

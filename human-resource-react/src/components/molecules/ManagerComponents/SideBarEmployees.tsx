@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import {
     DataGrid,
     GridColDef,
-    GridRowSelectionModel,
+    GridRowSelectionModel, GridToolbar,
 } from "@mui/x-data-grid";
 import {
     Avatar, Box,
@@ -346,6 +346,9 @@ export default function SideBarEmployees() {
                 inputProps={{ maxLength: 50 }}
             />
             <DataGrid
+                slots={{
+                    toolbar: GridToolbar,
+                }}
                 rows={userList}
                 columns={columns}
                 initialState={{

@@ -3,6 +3,7 @@ package com.humanresourcesapp.controllers;
 import com.humanresourcesapp.dto.requests.CompanyItemAssignmentRequestDto;
 import com.humanresourcesapp.dto.requests.PageRequestDto;
 import com.humanresourcesapp.dto.responses.CompanyItemAssignmentResponseDto;
+import com.humanresourcesapp.dto.responses.ItemAssignmentsOfEmployeeResponseDto;
 import com.humanresourcesapp.entities.CompanyItemAssignment;
 import com.humanresourcesapp.services.CompanyItemAssignmentService;
 import lombok.RequiredArgsConstructor;
@@ -40,5 +41,11 @@ public class CompanyItemAssignmentController {
         return ResponseEntity.ok(companyItemAssignmentService.approveAssignment(id, employeeId));
     }
 
+
+    @PostMapping(GET_ASSINGED_ITEMS_OF_EMPLOYEE)
+    @PreAuthorize("hasAnyAuthority('EMPLOYEE')")
+    public ResponseEntity<List<ItemAssignmentsOfEmployeeResponseDto>> getAssingedItemsOfEmployee() {
+        return ResponseEntity.ok(companyItemAssignmentService.getAssingedItemsOfEmployee());
+    }
 
 }

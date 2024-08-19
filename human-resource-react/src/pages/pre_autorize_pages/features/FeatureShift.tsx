@@ -13,11 +13,13 @@ import { NavBar } from '../../../components/molecules/PreAuthorizedPageComponent
 import FooterElement from '../../../components/molecules/PreAuthorizedPageComponents/FooterElement';
 import HeaderImage from '../../../images/plan_and_manage_your_working_time_in_the_most_efficient_way.png'
 import RetargetImg from "../../../images/retargeting.png";
+import ThemeElement from '../../../components/atoms/ThemeElement';
 
 const Root = styled('div')(({ theme }) => ({
     display: 'flex',
     flexDirection: 'column',
     minHeight: '100vh',
+    backgroundColor: theme.palette.myBackgroundColour.main,
 }));
 
 const Header = styled('div')(({ theme }) => ({
@@ -40,6 +42,7 @@ function SchedulingManagementPage() {
     const featuresRef = useRef(null);
 
     return (
+        <ThemeElement children={
         <Root>
             <CssBaseline />
             <NavBar />
@@ -125,6 +128,7 @@ function SchedulingManagementPage() {
                 <FooterElement />
             </Footer>
         </Root>
+        }/>
     );
 }
 

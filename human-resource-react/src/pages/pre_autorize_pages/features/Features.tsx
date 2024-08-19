@@ -5,8 +5,6 @@ import {
     CssBaseline,
     Box,
     Grid,
-    Paper,
-    Avatar,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { NavBar } from '../../../components/molecules/PreAuthorizedPageComponents/NavBar';
@@ -17,10 +15,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchGetFeatures } from '../../../store/feature/featureSlice';
 import CircularProgress from '@mui/material/CircularProgress';
 import HeaderElement from '../../../components/atoms/Header';
+import ThemeElement from '../../../components/atoms/ThemeElement';
 
 const Root = styled('div')(({ theme }) => ({
     display: 'flex',
     flexDirection: 'column',
+    backgroundColor: theme.palette.myBackgroundColour.main,
 }));
 
 const Body = styled('main')(({ theme }) => ({
@@ -63,67 +63,69 @@ function PerformanceEvaluationPage() {
         window.scrollTo(0, 0);
     }, []);
     return (
-        <Root>
-            <CssBaseline />
-            <NavBar />
-            <HeaderElement headline='Products' text='Pricing based on your number of employees, use as much as you want, pay as much as you use' />
-            <Body>
-                <Container maxWidth="lg">
-                    <Box py={5}>
-                        <Typography component="h1" variant="h4" align="center" color="primary.main" gutterBottom sx={{ paddingBottom: 5 }}>
-                            Features
-                        </Typography>
-                        <CardGrid maxWidth="md" sx={{ marginBottom: '5%' }}>
-                            {loading ? (
-                                <Box sx={{ display: 'flex', justifyContent: 'center', marginBottom: '5%', marginTop: '5%' }}>
-                                    <CircularProgress />
-                                </Box>
-                            ) : (
-                                <Grid container spacing={4}>
-                                    {featureList.slice(0, 3).map((feature) => (
-                                        <FeatureCard
-                                            key={feature.id}
-                                            name={feature.name}
-                                            shortDescription={feature.shortDescription}
-                                            iconPath={feature.iconPath}
-                                            isNavigatable={true}
-                                        />
-                                    ))}
-                                </Grid>
-                            )}
-                        </CardGrid>
-                    </Box>
-                    <Box py={5}>
-                        <Typography component="h1" variant="h4" align="center" color="primary.main" gutterBottom sx={{ paddingBottom: 5 }}>
-                            Additional Features
-                        </Typography>
-                        <CardGrid maxWidth="md" sx={{ marginBottom: '5%' }}>
-                            {loading ? (
-                                <Box sx={{ display: 'flex', justifyContent: 'center', marginBottom: '5%', marginTop: '5%' }}>
-                                    <CircularProgress />
-                                </Box>
-                            ) : (
-                                <Grid container spacing={4}>
-                                    {featureList.slice(3, featureList.length).map((feature) => (
-                                        <FeatureCard
-                                            key={feature.id}
-                                            name={feature.name}
-                                            shortDescription={feature.shortDescription}
-                                            iconPath={feature.iconPath}
-                                            isNavigatable={false}
-                                        />
-                                    ))}
-                                </Grid>
-                            )}
-                        </CardGrid>
-                    </Box>
-                </Container>
-            </Body>
-            <Footer>
+        <ThemeElement children={
+            <Root>
                 <CssBaseline />
-                <FooterElement />
-            </Footer>
-        </Root>
+                <NavBar />
+                <HeaderElement headline='Products' text='Pricing based on your number of employees, use as much as you want, pay as much as you use' />
+                <Body>
+                    <Container maxWidth="lg">
+                        <Box py={5}>
+                            <Typography component="h1" variant="h4" align="center" color="primary.main" gutterBottom sx={{ paddingBottom: 5 }}>
+                                Features
+                            </Typography>
+                            <CardGrid maxWidth="md" sx={{ marginBottom: '5%' }}>
+                                {loading ? (
+                                    <Box sx={{ display: 'flex', justifyContent: 'center', marginBottom: '5%', marginTop: '5%' }}>
+                                        <CircularProgress />
+                                    </Box>
+                                ) : (
+                                    <Grid container spacing={4}>
+                                        {featureList.slice(0, 3).map((feature) => (
+                                            <FeatureCard
+                                                key={feature.id}
+                                                name={feature.name}
+                                                shortDescription={feature.shortDescription}
+                                                iconPath={feature.iconPath}
+                                                isNavigatable={true}
+                                            />
+                                        ))}
+                                    </Grid>
+                                )}
+                            </CardGrid>
+                        </Box>
+                        <Box py={5}>
+                            <Typography component="h1" variant="h4" align="center" color="primary.main" gutterBottom sx={{ paddingBottom: 5 }}>
+                                Additional Features
+                            </Typography>
+                            <CardGrid maxWidth="md" sx={{ marginBottom: '5%' }}>
+                                {loading ? (
+                                    <Box sx={{ display: 'flex', justifyContent: 'center', marginBottom: '5%', marginTop: '5%' }}>
+                                        <CircularProgress />
+                                    </Box>
+                                ) : (
+                                    <Grid container spacing={4}>
+                                        {featureList.slice(3, featureList.length).map((feature) => (
+                                            <FeatureCard
+                                                key={feature.id}
+                                                name={feature.name}
+                                                shortDescription={feature.shortDescription}
+                                                iconPath={feature.iconPath}
+                                                isNavigatable={false}
+                                            />
+                                        ))}
+                                    </Grid>
+                                )}
+                            </CardGrid>
+                        </Box>
+                    </Container>
+                </Body>
+                <Footer>
+                    <CssBaseline />
+                    <FooterElement />
+                </Footer>
+            </Root>
+        } />
     );
 }
 

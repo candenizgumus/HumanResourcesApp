@@ -23,9 +23,9 @@ const faqs = [
 
 const FAQSection = () => {
     return (
-        <Box sx={{ py: 8, bgcolor: 'background.paper' }}>
+        <Box sx={{ py: 8, bgcolor: 'background.default' }}>
             <Container maxWidth="lg">
-                <Typography variant="h4" align="center" gutterBottom>
+                <Typography variant="h4" color={'primary.main'} align="center" gutterBottom>
                     F.A.Q
                 </Typography>
                 {faqs.map((faq, index) => (

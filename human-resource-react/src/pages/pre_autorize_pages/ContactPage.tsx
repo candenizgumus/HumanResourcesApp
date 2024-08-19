@@ -17,10 +17,12 @@ import { fetchSaveContactUsNotification } from '../../store/feature/notification
 import { HumanResources } from '../../store';
 import { useDispatch } from 'react-redux';
 import HeaderElement from '../../components/atoms/Header';
+import ThemeElement from '../../components/atoms/ThemeElement';
 
 const Root = styled('div')(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
+  backgroundColor: theme.palette.myBackgroundColour.main,
 }));
 
 const Body = styled('main')(({ theme }) => ({
@@ -39,6 +41,15 @@ const ContactForm = styled(Paper)(({ theme }) => ({
   maxWidth: 600,
   textAlign: 'center',
 }));
+
+const loginButtonStyle = {
+  backgroundColor:  'primary.main',
+  color: 'white',
+  mt: 3, mb: 2,
+  '&:hover': {
+    color: 'primary.main',
+        },
+};
 
 function ContactUsPage() {
   const dispatch = useDispatch<HumanResources>();
@@ -85,86 +96,88 @@ function ContactUsPage() {
   };
 
   return (
-    <Root>
-      <CssBaseline />
-      <NavBar />
-      <HeaderElement headline='Contact Us' text='We would love to hear from you! Please fill out the form below and
-              we will get in touch with you as soon as possible'/>
-      <Body>
-        <Container maxWidth="lg">
-          <Box py={5}>
-            <Typography component="h1" variant="h4" align="center" color="primary.main" gutterBottom sx={{ paddingBottom: 5 }}>
-              Get in Touch
-            </Typography>
-            <ContactForm elevation={3}>
-              <form onSubmit={handleSubmit}>
-                <Grid container spacing={2}>
-                  <Grid item xs={12}>
-                    <TextField
-                      fullWidth
-                      id="senderName"
-                      label="Name"
-                      variant="outlined"
-                      value={formData.senderName}
-                      onChange={handleChange}
-                      required
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <TextField
-                      fullWidth
-                      id="senderEmail"
-                      label="Email"
-                      variant="outlined"
-                      value={formData.senderEmail}
-                      onChange={handleChange}
-                      required
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <TextField
-                      fullWidth
-                      id="subject"
-                      label="Subject"
-                      variant="outlined"
-                      value={formData.subject}
-                      onChange={handleChange}
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <TextField
-                      fullWidth
-                      id="message"
-                      label="Message"
-                      multiline
-                      rows={4}
-                      variant="outlined"
-                      value={formData.message}
-                      onChange={handleChange}
-                      required
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <Button
-                      type="submit"
-                      variant="contained"
-                      color="primary"
-                      fullWidth
-                    >
-                      Send Message
-                    </Button>
-                  </Grid>
-                </Grid>
-              </form>
-            </ContactForm>
-          </Box>
-        </Container>
-      </Body>
-      <Footer>
+    <ThemeElement children={
+      <Root>
         <CssBaseline />
-        <FooterElement />
-      </Footer>
-    </Root>
+        <NavBar />
+        <HeaderElement headline='Contact Us' text='We would love to hear from you! Please fill out the form below and
+              we will get in touch with you as soon as possible'/>
+        <Body>
+          <Container maxWidth="lg">
+            <Box py={5}>
+              <Typography component="h1" variant="h4" align="center" color="primary.main" gutterBottom sx={{ paddingBottom: 5 }}>
+                Get in Touch
+              </Typography>
+              <ContactForm elevation={3}>
+                <form onSubmit={handleSubmit}>
+                  <Grid container spacing={2}>
+                    <Grid item xs={12}>
+                      <TextField
+                        fullWidth
+                        id="senderName"
+                        label="Name"
+                        variant="outlined"
+                        value={formData.senderName}
+                        onChange={handleChange}
+                        required
+                      />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <TextField
+                        fullWidth
+                        id="senderEmail"
+                        label="Email"
+                        variant="outlined"
+                        value={formData.senderEmail}
+                        onChange={handleChange}
+                        required
+                      />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <TextField
+                        fullWidth
+                        id="subject"
+                        label="Subject"
+                        variant="outlined"
+                        value={formData.subject}
+                        onChange={handleChange}
+                      />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <TextField
+                        fullWidth
+                        id="message"
+                        label="Message"
+                        multiline
+                        rows={4}
+                        variant="outlined"
+                        value={formData.message}
+                        onChange={handleChange}
+                        required
+                      />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Button
+                        type="submit"
+                        variant="contained"
+                        sx={loginButtonStyle}
+                        fullWidth
+                      >
+                        Send Message
+                      </Button>
+                    </Grid>
+                  </Grid>
+                </form>
+              </ContactForm>
+            </Box>
+          </Container>
+        </Body>
+        <Footer>
+          <CssBaseline />
+          <FooterElement />
+        </Footer>
+      </Root>
+    } />
   );
 }
 

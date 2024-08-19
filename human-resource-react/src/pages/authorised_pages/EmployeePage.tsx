@@ -25,7 +25,7 @@ import { NotificationIcon } from "../../components/atoms/NotificationIcon";
 import { useNavigate } from 'react-router-dom';
 import NavbarProfile from "../../components/atoms/NavbarProfile";
 import HikingIcon from '@mui/icons-material/Hiking';
-import logo from '../../images/logo-nobg.png';
+import logo from '../../images/logo-full-white.png';
 import {
     AccountBox, Dashboard,
     FeaturedPlayList, Paid, PointOfSale,

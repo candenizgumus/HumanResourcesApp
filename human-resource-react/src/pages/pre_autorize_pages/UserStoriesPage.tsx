@@ -8,13 +8,14 @@ import { Container, Grid, Typography, TextField, Box } from "@mui/material";
 import { HumanResources, RootState } from "../../store";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchGetUserStories, IUserStoryResponse } from "../../store/feature/userStorySlice";
-import { useNavigate } from "react-router-dom";
 import CircularProgress from '@mui/material/CircularProgress';
 import HeaderElement from "../../components/atoms/Header";
+import ThemeElement from "../../components/atoms/ThemeElement";
 
 const Root = styled('div')(({ theme }) => ({
     display: 'flex',
     flexDirection: 'column',
+    backgroundColor: theme.palette.myBackgroundColour.main,
 }));
 
 const Body = styled('main')(({ theme }) => ({
@@ -53,49 +54,51 @@ export default function UserStoriesPage() {
         fetchData();
     }, [dispatch]);
     return (
-        <Root>
-            <CssBaseline />
-            <NavBar />
-            <HeaderElement headline='User Stories' text='Together with 1000s of human resources professionals, we make HR easier' />
-            <Body >
-                <Container maxWidth="lg">
-                    <Box py={5}>
-                        <Typography component="h1" variant="h4" align="center" color="primary.main" gutterBottom sx={{ paddingBottom: 5 }}>
-                            Stories
-                        </Typography>
-                        {loading ? (
-                            <Box sx={{ display: 'flex', justifyContent: 'center', marginBottom: '5%', marginTop: '5%' }}>
-                                <CircularProgress />
-                            </Box>
-                        ) : (
-                            <Container maxWidth="lg">
-                                <Grid container spacing={4} sx={{ marginBottom: '10%' }}>
-                                    {userStories.map((userStory) => (
-                                        <UserStoryCard
-                                            key={userStory.id}
-                                            id={userStory.id}
-                                            managerName={userStory.managerName}
-                                            companyName={userStory.companyName}
-                                            title={userStory.title}
-                                            shortDescription={userStory.shortDescription}
-                                            longDescription={userStory.longDescription}
-                                            photo={userStory.photo}
-                                            sector={userStory.sector}
-                                            numberOfEmployees={userStory.numberOfEmployees}
-                                            logo={userStory.logo}
-                                            country={userStory.country}
-                                        />
-                                    ))}
-                                </Grid>
-                            </Container>
-                        )}
-                    </Box>
-                </Container>
-            </Body>
-            <Footer>
+        <ThemeElement children={
+            <Root>
                 <CssBaseline />
-                <FooterElement />
-            </Footer>
-        </Root>
+                <NavBar />
+                <HeaderElement headline='User Stories' text='Together with 1000s of human resources professionals, we make HR easier' />
+                <Body >
+                    <Container maxWidth="lg">
+                        <Box py={5}>
+                            <Typography component="h1" variant="h4" align="center" color="primary.main" gutterBottom sx={{ paddingBottom: 5 }}>
+                                Stories
+                            </Typography>
+                            {loading ? (
+                                <Box sx={{ display: 'flex', justifyContent: 'center', marginBottom: '5%', marginTop: '5%' }}>
+                                    <CircularProgress />
+                                </Box>
+                            ) : (
+                                <Container maxWidth="lg">
+                                    <Grid container spacing={4} sx={{ marginBottom: '10%' }}>
+                                        {userStories.map((userStory) => (
+                                            <UserStoryCard
+                                                key={userStory.id}
+                                                id={userStory.id}
+                                                managerName={userStory.managerName}
+                                                companyName={userStory.companyName}
+                                                title={userStory.title}
+                                                shortDescription={userStory.shortDescription}
+                                                longDescription={userStory.longDescription}
+                                                photo={userStory.photo}
+                                                sector={userStory.sector}
+                                                numberOfEmployees={userStory.numberOfEmployees}
+                                                logo={userStory.logo}
+                                                country={userStory.country}
+                                            />
+                                        ))}
+                                    </Grid>
+                                </Container>
+                            )}
+                        </Box>
+                    </Container>
+                </Body>
+                <Footer>
+                    <CssBaseline />
+                    <FooterElement />
+                </Footer>
+            </Root>
+        } />
     );
 };

@@ -117,11 +117,11 @@ const AddDocument: React.FC<{ open: boolean, onClose: () => void }> = ({ open, o
                 </Box>
             </DialogContent>
             <DialogActions>
-                <Button onClick={onClose} color="secondary">
+                <Button variant="contained" onClick={onClose} color="error" sx={{ marginRight: '17px', width: '100px' }}>
                     Cancel
                 </Button>
-                <Button onClick={handleSubmit} color="primary" disabled={loading}>
-                    {loading ? "Adding Document..." : "Add Document"}
+                <Button onClick={handleSubmit} color="primary" disabled={loading} variant="contained" sx={{ marginRight: '17px', width: '100px' }}>
+                    Add
                 </Button>
             </DialogActions>
         </Dialog>

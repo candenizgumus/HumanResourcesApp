@@ -33,7 +33,7 @@ import {
     fetchGetLeaveById,
     fetchUpdateLeave,
 } from "../../../store/feature/leaveSlice";
-import { ApproveIcon, DeclineIcon, DangerousIcon, EditIcon, AddIcon } from "../../atoms/icons";
+import { ApproveIcon, DeclineIcon, CancelIcon, EditIcon, AddIcon } from "../../atoms/icons";
 import { fetchGetDefinitions } from "../../../store/feature/definitionSlice";
 import { clearToken, fetchGetAllUsersOfManager } from "../../../store/feature/authSlice";
 import { EDefinitionType } from "../../../models/IDefinitionType";
@@ -692,7 +692,7 @@ const SideBarManagerLeaves = () => {
                     variant="contained"
                     color="warning"
                     disabled={loading || selectedRowIds.length === 0}
-                    startIcon={<DangerousIcon />}
+                    startIcon={<CancelIcon />}
                     sx={{ marginRight: '1%', width: '200px' }}
                 >
                     Cancel
@@ -759,10 +759,10 @@ const SideBarManagerLeaves = () => {
                     </Box>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleCloseChangeAnnualLeaveDayModal} color="secondary">
+                    <Button onClick={handleCloseChangeAnnualLeaveDayModal} color="error"  variant="contained" sx={{ marginRight: '17px', width: '100px' }}>
                         Cancel
                     </Button>
-                    <Button onClick={handleSaveLeaveDays} color="primary">
+                    <Button onClick={handleSaveLeaveDays} color="primary"  variant="contained" sx={{ marginRight: '17px', width: '100px' }}>
                         Save
                     </Button>
                 </DialogActions>
@@ -849,10 +849,10 @@ const SideBarManagerLeaves = () => {
                     )}
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleCloseAssignLeaveModal} color="secondary">
+                    <Button onClick={handleCloseAssignLeaveModal} color="error"  variant="contained" sx={{ marginRight: '17px', width: '100px' }}>
                         Cancel
                     </Button>
-                    <Button onClick={handleSaveLeave} color="primary">
+                    <Button onClick={handleSaveLeave} color="primary"  variant="contained" sx={{ marginRight: '17px', width: '100px' }}>
                         Save
                     </Button>
                 </DialogActions>
@@ -920,10 +920,10 @@ const SideBarManagerLeaves = () => {
                     )}
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleCloseEditLeaveModal} color="secondary">
+                    <Button onClick={handleCloseEditLeaveModal} color="error" variant="contained" sx={{ marginRight: '17px', width: '100px' }}>
                         Cancel
                     </Button>
-                    <Button onClick={handleUpdateLeave} color="primary">
+                    <Button onClick={handleUpdateLeave} color="primary" variant="contained" sx={{ marginRight: '17px', width: '100px' }}>
                         Save
                     </Button>
                 </DialogActions>

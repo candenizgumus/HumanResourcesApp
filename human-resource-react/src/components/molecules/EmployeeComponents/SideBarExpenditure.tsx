@@ -27,11 +27,12 @@ import {
 } from "../../../store/feature/expenditureSlice";
 import MyDropzone from "../../atoms/DropZone";
 import DownloadButtonFromS3 from "../../atoms/DownloadButtonFromS3";
+import { DeleteIcon, CancelIcon, AddIcon } from "../../atoms/icons";
 
 const columns: GridColDef[] = [
 
     {
-        field: "price", headerName: "Price $", flex :1, headerAlign: "center",
+        field: "price", headerName: "Price $", flex: 1, headerAlign: "center",
         renderCell: (params) => {
             const value = params.value;
             if (typeof value === 'number' && !isNaN(value)) {
@@ -45,15 +46,15 @@ const columns: GridColDef[] = [
             return '$0.00';
         },
     },
-    { field: "description", headerName: "Description", flex :3, headerAlign: "center" },
-    { field: "isExpenditureApproved", headerName: "Approval Status", headerAlign: "center", flex :1 },
-    { field: "approveDate", headerName: "Approval Date", headerAlign: "center", flex :1 },
-    { field: "status", headerName: "Status", headerAlign: "center", flex :1 },
+    { field: "description", headerName: "Description", flex: 3, headerAlign: "center" },
+    { field: "isExpenditureApproved", headerName: "Approval Status", headerAlign: "center", flex: 1 },
+    { field: "approveDate", headerName: "Approval Date", headerAlign: "center", flex: 1 },
+    { field: "status", headerName: "Status", headerAlign: "center", flex: 1 },
     {
-        field: "attachedFile", headerName: "Document", headerAlign: "center", flex :1,
+        field: "attachedFile", headerName: "Document", headerAlign: "center", flex: 1,
         renderCell: (params) => (
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '100%' }}>
-                {params.value && <DownloadButtonFromS3 fileKey={params.value}/> }
+                {params.value && <DownloadButtonFromS3 fileKey={params.value} />}
             </div>
         ),
     }
@@ -286,13 +287,15 @@ export default function SideBarExpenditure() {
         // Ekstra işlemler burada yapılabilir
     };
     return (
-        <div style={{ height: "auto", width: "inherit" }}>
+        <div style={{ height: 'auto', width: "inherit" }}>
             <TextField
-                label="Description"
+                label="Search By Description"
                 variant="outlined"
                 onChange={(event) => setSearchText(event.target.value)}
                 value={searchText}
-                style={{ marginBottom: "10px" }}
+                style={{ marginBottom: "1%", marginTop: "1%" }}
+                fullWidth
+                inputProps={{ maxLength: 50 }}
             />
             <DataGrid
                 rows={expenditureList}
@@ -327,82 +330,82 @@ export default function SideBarExpenditure() {
                     "& .unapproved-row": {
                         backgroundColor: "#ffe0e0",
                     },
+                    height: '407px'
                 }}
             />
+            <Grid sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-start', alignItems: 'center', marginTop: '2%', marginBottom: '2%' }}>
 
-            <Grid container spacing={1} style={{ marginTop: 16 }} direction="row">
-                <Grid item>
-                    <Button
-                        onClick={handleDelete}
-                        variant="contained"
-                        color="error"
-                        disabled={isActivating || selectedRowIds.length === 0}
-                    >
-                        {loading ? "Deleting..." : "Delete"}
-                    </Button>
-                </Grid>
-                <Grid item>
-                    <Button
-                        onClick={handleCancel}
-                        variant="contained"
-                        color="warning"
-                        disabled={isActivating || selectedRowIds.length === 0}
-                    >
-                        {loading ? "Cancelling..." : "Cancel"}
-                    </Button>
-                </Grid>
+                <Button
+                    onClick={handleDelete}
+                    variant="contained"
+                    color="error"
+                    disabled={isActivating || selectedRowIds.length === 0}
+                    startIcon={<DeleteIcon />}
+                    sx={{ marginRight: '1%', width: '200px' }}
+                >
+                    Delete
+                </Button>
+
+                <Button
+                    onClick={handleCancel}
+                    variant="contained"
+                    color="warning"
+                    disabled={isActivating || selectedRowIds.length === 0}
+                    startIcon={<CancelIcon />}
+                    sx={{ marginRight: '1%', width: '200px' }}
+                >
+                    Cancel
+                </Button>
+                <Button
+                    onClick={handleSaveExpense}
+                    variant="contained"
+                    color="primary"
+                    disabled={price === 0 || description.length === 0 || isActivating}
+                    startIcon={<AddIcon />}
+                    sx={{ marginRight: '1%', width: '200px' }}
+                >
+                    Add
+                </Button>
             </Grid>
-
-            <Grid container spacing={2} style={{ marginTop: 16 }} direction="row" alignItems="center">
+            <Grid container spacing={2} alignItems="center">
                 <Grid item xs={12}>
-                    <Typography sx={{ fontWeight: "bold"}}>
+                    <Typography variant="h6" sx={{ fontWeight: "bold" }}>
                         Add Expenditure
                     </Typography>
                 </Grid>
-
-                <Grid item>
-                    <TextField
-                        label="Description"
-                        name="description"
-                        value={description}
-                        onChange={e => setDescription(e.target.value)}
-                        fullWidth
-                        required
-                        inputProps={{ maxLength: 50 }}
-                        style={{ width: 399 }}
-                    />
-                </Grid>
-
-                <Grid item>
-                    <FormControl fullWidth style={{ width: 399 }}>
-                        <InputLabel htmlFor="outlined-adornment-amount">Expense</InputLabel>
-                        <OutlinedInput
-                            id="outlined-adornment-amount"
-                            startAdornment={<InputAdornment position="start">$</InputAdornment>}
-                            label="Expense"
-                            value={price}
-                            onChange={e => {
-                                const value = e.target.value;
-                                setPrice(value ? parseInt(value) : 0);
-                            }}
+                <Grid container item xs={12} spacing={2} alignItems="center">
+                    <Grid item xs={6}>
+                        <TextField
+                            label="Description"
+                            name="description"
+                            value={description}
+                            onChange={e => setDescription(e.target.value)}
+                            fullWidth
+                            required
+                            inputProps={{ maxLength: 50 }}
                         />
-                    </FormControl>
-                </Grid>
-                <Grid item style={{ width: 399, height:72  }}>
-                    <MyDropzone
-                        onFilesAdded={handleFilesAdded}
-                        onFileRemoved={handleFileRemoved}
-                    />
-                </Grid>
-                <Grid item>
-                    <Button
-                        onClick={handleSaveExpense}
-                        variant="contained"
-                        color="primary"
-                        disabled={price === 0 || description.length === 0 || isActivating}
-                    >
-                        {loading ? "Adding..." : "Add"}
-                    </Button>
+                    </Grid>
+                    <Grid item xs={6}>
+                        <FormControl fullWidth >
+                            <InputLabel htmlFor="outlined-adornment-amount">Expense</InputLabel>
+                            <OutlinedInput
+                                id="outlined-adornment-amount"
+                                startAdornment={<InputAdornment position="start">$</InputAdornment>}
+                                label="Expense"
+                                value={price}
+                                onChange={e => {
+                                    const value = e.target.value;
+                                    setPrice(value ? parseInt(value) : 0);
+                                }}
+                            />
+                        </FormControl>
+                    </Grid>
+                    <Grid item xs={12} style={{ width: 399, height: 72 }}>
+                        <MyDropzone
+                            onFilesAdded={handleFilesAdded}
+                            onFileRemoved={handleFileRemoved}
+                        />
+                    </Grid>
                 </Grid>
             </Grid>
         </div>

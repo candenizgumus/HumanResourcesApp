@@ -18,6 +18,7 @@ import {
     Pin,
     Dangerous,
     Paid,
+    Cancel
  } from '@mui/icons-material';
 
 export const EditIcon = DriveFileRenameOutline;
@@ -39,3 +40,4 @@ export const SetShiftIcon = EditCalendar;
 export const PasswordIcon = Pin;
 export const DangerousIcon = Dangerous;
 export const BonusIcon = Paid;
+export const CancelIcon = Cancel;

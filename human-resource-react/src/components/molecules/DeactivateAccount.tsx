@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import { HumanResources, useAppSelector } from "../../store";
 import { clearToken, fetchDeactivateMyAccount } from "../../store/feature/authSlice";
 import sweetalert2 from "sweetalert2";
-import { DangerousIcon } from '../atoms/icons';
+import { CancelIcon } from '../atoms/icons';
 const DeactivateAccount: React.FC = () => {
     const dispatch = useDispatch<HumanResources>();
     const token = useAppSelector((state) => state.auth.token);
@@ -104,7 +104,7 @@ const DeactivateAccount: React.FC = () => {
                 color="primary"
                 disabled={password.length === 0}
                 onClick={handleChangePassword}
-                startIcon={<DangerousIcon />}
+                startIcon={<CancelIcon />}
             >
                 Deactivate My Account
             </Button>

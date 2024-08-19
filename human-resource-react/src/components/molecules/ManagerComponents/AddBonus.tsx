@@ -86,11 +86,11 @@ export default function AddBonus({
         </Box>
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose} color="secondary">
+        <Button onClick={onClose} color="error" variant="contained" sx={{ marginRight: '17px', width: '100px' }}>
           Cancel
         </Button>
-        <Button onClick={handleAddBonus} color="primary" disabled={loading}>
-          {loading ? "Adding..." : "Add Bonus"}
+        <Button onClick={handleAddBonus} color="primary" disabled={loading} variant="contained" sx={{ marginRight: '17px', width: '100px' }}>
+          Add
         </Button>
       </DialogActions>
     </Dialog>

@@ -264,9 +264,11 @@ export default function SideBarHolidayTableUser() {
                             </Select>
                         </FormControl>
                     </Grid>
+                    {/*
                     <Grid item xs={12}>
                         <Divider sx={{ my: 2, backgroundColor: 'rgba(0, 0, 0, 0.87)' }} />
                     </Grid>
+                    */}
                     <Grid item xs={12}>
                         <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
                             Create Custom

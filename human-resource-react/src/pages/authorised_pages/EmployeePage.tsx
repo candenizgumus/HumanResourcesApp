@@ -104,6 +104,7 @@ export default function EmployeePage() {
     const pageState = useSelector((state: RootState) => state.auth.pageState);
     const [selectedIndex2, setSelectedIndex2] = useState(null);
     const page = useAppSelector((state) => state.auth.pageState);
+    const user = useAppSelector((state) => state.auth.user);
     const handleDrawerOpen = () => {
         setOpen(true);
     };
@@ -123,12 +124,17 @@ export default function EmployeePage() {
         setSelectedIndex2(index);
         // Perform your action here
     };
-
+    const today = new Date().toLocaleDateString('tr-TR', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+    });
     return (
         <Box sx={{ display: 'flex' }}>
             <CssBaseline />
             <AppBar position="fixed" open={open}>
-                <Toolbar>
+                <Toolbar >
                     <IconButton
                         color="inherit"
                         aria-label="open drawer"
@@ -137,16 +143,27 @@ export default function EmployeePage() {
                         sx={{ mr: 2, ...(open && { display: 'none' }) }}
                     >
                         <MenuIcon />
+
                     </IconButton>
+
                     <Typography variant="h6" sx={logoStyle}>
-                        <Button style={{ marginRight: '20px' }} onClick={navigateToHome} color="inherit">
+                        <Button  onClick={navigateToHome} color="inherit">
                             <img src={logo} alt="logo" style={{ height: '52px' }} />
                         </Button>
                     </Typography>
-                    <Typography sx={{ fontSize: '20px' }} >
+                    <Typography sx={{ marginLeft: '240px', fontSize: '20px' }} >
                         {page ? page : 'Dashboard'}
                     </Typography>
+
                     <Box sx={{ flexGrow: 1 }} />
+                    <Box >
+                        <Typography variant="h5" component="div">
+                            Merhaba, <strong>{user.name ? user.name : 'admin'}</strong>!
+                        </Typography>
+                        <Typography variant="subtitle1" color="textSecondary">
+                            Bugün <span style={{ fontStyle: 'italic', color: '#4caf50' }}>{today}</span>
+                        </Typography>
+                    </Box>
                     <NotificationIcon />
                     <NavbarProfile />
 
@@ -172,7 +189,7 @@ export default function EmployeePage() {
                 </DrawerHeader>
                 <Divider />
                 <List>
-                    {['Dashboard', 'Shifts & Breaks', 'Holidays', 'Profile', 'Company Items', 'Notifications', 'Expenditure', 'Leaves', 'Bonus'].map((text, index) => (
+                    {['Dashboard', 'Holidays', 'Profile', 'Company Items', 'Notifications', 'Expenditure', 'Leaves', 'Bonus'].map((text, index) => (
                         <ListItem key={text} disablePadding>
                             <ListItemButton
                                 selected={selectedIndex2 === index}
@@ -191,14 +208,13 @@ export default function EmployeePage() {
                             >
                                 <ListItemIcon>
                                     {index === 0 && <Dashboard />}
-                                    {index === 1 && <LocalOfferIcon />}
-                                    {index === 2 && <Weekend />}
-                                    {index === 3 && <AccountBox />}
-                                    {index === 4 && <FeaturedPlayList />}
-                                    {index === 5 && <NotificationsIcon />}
-                                    {index === 6 && <PointOfSale />}
-                                    {index === 7 && <HikingIcon />}
-                                    {index === 8 && <Paid />}
+                                    {index === 1 && <Weekend />}
+                                    {index === 2 && <AccountBox />}
+                                    {index === 3 && <FeaturedPlayList />}
+                                    {index === 4 && <NotificationsIcon />}
+                                    {index === 5 && <PointOfSale />}
+                                    {index === 6 && <HikingIcon />}
+                                    {index === 7 && <Paid />}
                                 </ListItemIcon>
                                 <ListItemText primary={text} />
                             </ListItemButton>

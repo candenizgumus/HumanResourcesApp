@@ -25,7 +25,6 @@ import Swal from "sweetalert2";
 import { fetchGetDefinitions, IDefinition } from '../../../store/feature/definitionSlice';
 import { EDefinitionType } from '../../../models/IDefinitionType';
 import styled from "@emotion/styled";
-import { IUpdateUserProfile } from "../../../models/IUpdateUserProfile";
 import { IFile } from "../../../models/IFile";
 import { CloudUploadIcon } from "../../atoms/icons";
 import { uploadPlayerProfileImage } from "../../../store/feature/awsSlice";

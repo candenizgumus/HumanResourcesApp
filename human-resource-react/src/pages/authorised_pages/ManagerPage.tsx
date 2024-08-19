@@ -42,6 +42,7 @@ import { ManagerHomeContent } from "../../components/molecules/ManagerComponents
 import HikingIcon from '@mui/icons-material/Hiking';
 import { useState } from "react";
 import logo from '../../images/logo-nobg.png';
+import {AddDocumentIcon} from "../../components/atoms/icons";
 
 const drawerWidth = 240;
 
@@ -112,6 +113,7 @@ export default function AdminPage() {
     const pageState = useSelector((state: RootState) => state.auth.pageState);
     const [selectedIndex2, setSelectedIndex2] = useState(null);
     const page = useAppSelector((state) => state.auth.pageState);
+    const user = useAppSelector((state) => state.auth.user);
     const handleDrawerOpen = () => {
         setOpen(true);
     };
@@ -134,11 +136,17 @@ export default function AdminPage() {
         // Perform your action here
     };
 
+    const today = new Date().toLocaleDateString('tr-TR', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+    });
     return (
         <Box sx={{ display: 'flex' }}>
             <CssBaseline />
             <AppBar position="fixed" open={open}>
-                <Toolbar>
+                <Toolbar >
                     <IconButton
                         color="inherit"
                         aria-label="open drawer"
@@ -147,16 +155,27 @@ export default function AdminPage() {
                         sx={{ mr: 2, ...(open && { display: 'none' }) }}
                     >
                         <MenuIcon />
+
                     </IconButton>
+
                     <Typography variant="h6" sx={logoStyle}>
-                        <Button style={{ marginRight: '20px' }} onClick={navigateToHome} color="inherit">
+                        <Button  onClick={navigateToHome} color="inherit">
                             <img src={logo} alt="logo" style={{ height: '52px' }} />
                         </Button>
                     </Typography>
-                    <Typography sx={{ fontSize: '20px' }} >
+                    <Typography sx={{ marginLeft: '240px', fontSize: '20px' }} >
                         {page ? page : 'Dashboard'}
                     </Typography>
+
                     <Box sx={{ flexGrow: 1 }} />
+                    <Box >
+                        <Typography variant="h5" component="div">
+                            Merhaba, <strong>{user.name ? user.name : 'admin'}</strong>!
+                        </Typography>
+                        <Typography variant="subtitle1" color="textSecondary">
+                            Bugün <span style={{ fontStyle: 'italic', color: '#4caf50' }}>{today}</span>
+                        </Typography>
+                    </Box>
                     <NotificationIcon />
                     <NavbarProfile />
 
@@ -214,7 +233,7 @@ export default function AdminPage() {
                                     {index === 10 && <PointOfSale />}
                                     {index === 11 && <HikingIcon />}
                                     {index === 12 && <Payments />}
-                                    {index === 13 && <DocumentScanner />}
+                                    {index === 13 && <AddDocumentIcon />}
                                     {index === 14 && <Paid />}
                                     {index === 15 && <Laptop />}
 

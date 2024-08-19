@@ -392,7 +392,7 @@ export default function SideBarEmployees() {
                     sx={{ marginRight: '1%', width: '200px' }}
                     startIcon={<Icons.EditIcon />}
                 >
-                    Edit
+                    Edit Employee
                 </Button>
                 <Button
                     onClick={handleOnClickAddDocument}
@@ -410,7 +410,7 @@ export default function SideBarEmployees() {
                     color="success"
                     disabled={selectedRowIds.length > 1 || selectedRowIds.length === 0}
                     sx={{ marginRight: '1%', width: '200px' }}
-                    startIcon={<Icons.AddBonusIcon />}
+                    startIcon={<Icons.BonusIcon />}
                 >
                     Add Bonus
                 </Button>

@@ -32,7 +32,7 @@ public enum ErrorType
     MAIL_SEND_FAIL(3003,"Failed to send email." , HttpStatus.INTERNAL_SERVER_ERROR),
     EMAIL_OR_PHONE_TAKEN(1021,"Email or Phone Number Is Taken" ,    HttpStatus.BAD_REQUEST),
     INVALID_ACCOUNT(1022,"Account is not active" ,   HttpStatus.BAD_REQUEST),
-    SUBSCRIPTION_EXPIRED(1023,"Subscription Expired" ,  HttpStatus.BAD_REQUEST),
+    SUBSCRIPTION_EXPIRED(1023,"Subscription Expired. Please contact support" ,  HttpStatus.BAD_REQUEST),
     TOKEN_EXPIRED(1024,"Token Expired" ,  HttpStatus.BAD_REQUEST),
     WRONG_PASSWORD(1025,"Wrong Password",   HttpStatus.BAD_REQUEST ),
     COMPANY_ALREADY_COMMENTED(1026,"Company Already Commented",   HttpStatus.BAD_REQUEST ),

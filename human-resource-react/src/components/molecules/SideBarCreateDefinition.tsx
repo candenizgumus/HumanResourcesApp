@@ -1,12 +1,12 @@
 import React, { useState, ChangeEvent, useEffect } from 'react';
 import { TextField, Button, Box, FormControl, InputLabel, Select, MenuItem, Grid } from '@mui/material';
 import { useDispatch } from 'react-redux';
-import { fetchDeleteDefinition, fetchGetDefinitions, fetchSaveDefinition } from '../../store/feature/definitionSlice';
+import { fetchDeleteDefinition, fetchGetDefinitionsWithPage, fetchSaveDefinition } from '../../store/feature/definitionSlice';
 import { EDefinitionType } from '../../models/IDefinitionType';
 import Swal from "sweetalert2";
 import { HumanResources, useAppSelector } from '../../store';
 import { DataGrid, GridColDef, GridRowSelectionModel, GridToolbar } from "@mui/x-data-grid";
-import {AddIcon, DeleteIcon} from '../atoms/icons';
+import { AddIcon, DeleteIcon } from '../atoms/icons';
 
 
 const UserForm: React.FC = () => {
@@ -19,6 +19,7 @@ const UserForm: React.FC = () => {
   const [selectedRowIds, setSelectedRowIds] = useState<number[]>([]);
   const token = useAppSelector((state) => state.auth.token);
   const user = useAppSelector((state) => state.auth.user);
+  const [searchText, setSearchText] = useState('');
 
   // Conditionally include the "Predefined" column
   const columns: GridColDef[] = [
@@ -61,7 +62,13 @@ const UserForm: React.FC = () => {
         text: 'Definition Created.',
         confirmButtonColor: '#1976D2',
       });
-      dispatch(fetchGetDefinitions({ token, definitionType }))
+      dispatch(fetchGetDefinitionsWithPage({
+        token,
+        definitionType,
+        page: 0,
+        pageSize: 100,
+        searchText
+      }))
       setLoading(false);
     } catch (error) {
       console.error("Error creating definition:", error);
@@ -74,8 +81,14 @@ const UserForm: React.FC = () => {
       setIsSelected(false);
     }
 
-    dispatch(fetchGetDefinitions({ token, definitionType }))
-  }, [name, definitionType]);
+    dispatch(fetchGetDefinitionsWithPage({
+      token,
+      definitionType,
+      page: 0,
+      pageSize: 100,
+      searchText
+    }))
+  }, [name, definitionType,searchText]);
 
   const handleDefinitionTypeChange = (e: ChangeEvent<HTMLInputElement>) => {
     const selectedValue = e.target.value;
@@ -102,7 +115,13 @@ const UserForm: React.FC = () => {
               timer: 1500
             })
           } else {
-            dispatch(fetchGetDefinitions({ token, definitionType }))
+            dispatch(fetchGetDefinitionsWithPage({
+              token,
+              definitionType,
+              page: 0,
+              pageSize: 100,
+              searchText
+            }))
             Swal.fire("Success", "Definition deleted successfully", "success");
           }
         }
@@ -117,6 +136,15 @@ const UserForm: React.FC = () => {
 
   return (
     <div style={{ height: 'auto', width: "inherit" }}>
+      <TextField
+        label="Search By Name"
+        variant="outlined"
+        onChange={(event) => setSearchText(event.target.value)}
+        value={searchText}
+        style={{ marginBottom: "1%", marginTop: "1%" }}
+        fullWidth
+        inputProps={{ maxLength: 50 }}
+      />
       <DataGrid
         paginationMode="server"
         rows={definitionList}
@@ -152,7 +180,6 @@ const UserForm: React.FC = () => {
           "& .MuiToolbar-regular": {
             display: "none",
           },
-          marginTop: '2%',
           height: '407px'
         }}
       />

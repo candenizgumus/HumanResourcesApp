@@ -1,5 +1,6 @@
 package com.humanresourcesapp.services;
 
+import com.humanresourcesapp.dto.requests.DefinitionGetRequestDto;
 import com.humanresourcesapp.dto.requests.DefinitionSaveRequestDto;
 import com.humanresourcesapp.entities.Definition;
 import com.humanresourcesapp.entities.User;
@@ -13,6 +14,7 @@ import com.humanresourcesapp.utility.UserInfoSecurityContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -225,5 +227,18 @@ public class DefinitionService {
         } else {
             throw new HumanResourcesAppException(ErrorType.PREDEFINED_DEFINITION_CANNOT_BE_DELETED);
         }
+    }
+
+    public List<Definition> getAllByDefinitionTypeWithPage(DefinitionGetRequestDto dto) {
+        String userEmail = UserInfoSecurityContext.getUserInfoFromSecurityContext();
+        User user = userService.findByEmail(userEmail).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
+        List<Definition> definitions;
+        if(user.getCompanyId() == null){
+            definitions = definitionRepository.findAllByDefinitionTypeAndStatusAndCompanyIdIsNullAndNameContainingIgnoreCaseOrderByNameAsc(dto.definitionType(), EStatus.ACTIVE, dto.searchText(), PageRequest.of(dto.page(), dto.pageSize()));
+        }else {
+            definitions = definitionRepository.findAllByDefinitionTypeAndStatusAndCompanyIdAndNameContainingIgnoreCaseOrderByNameAsc(dto.definitionType(), EStatus.ACTIVE, user.getCompanyId(),dto.searchText(),PageRequest.of(dto.page(), dto.pageSize()));
+            definitions.addAll(definitionRepository.findAllByDefinitionTypeAndStatusAndCompanyIdIsNullAndNameContainingIgnoreCaseOrderByNameAsc(dto.definitionType(), EStatus.ACTIVE,dto.searchText(),PageRequest.of(dto.page(), dto.pageSize())));
+        }
+        return definitions;
     }
 }

@@ -141,8 +141,7 @@ export default function OfferList() {
                     id: selectedCompany.id,
                     name: selectedCompany.name,
                     logo: selectedCompany.logo,
-                    description: selectedCompany.description,
-                    numberOfEmployee: selectedCompany.numberOfEmployee,
+                    description: selectedCompany.description
                 }));
                 Swal.fire("Success", "Company updated successfully", "success");
                 // Fetch updated companies
@@ -253,15 +252,6 @@ export default function OfferList() {
                                         fullWidth
                                         inputProps={{ maxLength: 255 }}
                                         style={{ marginBottom: "10px" }}
-                                    />
-                                    <TextField
-                                        label="Employee Count"
-                                        name="numberOfEmployee"
-                                        variant="outlined"
-                                        value={selectedCompany.numberOfEmployee}
-                                        onChange={handleInputChange}
-                                        fullWidth
-                                        style={{ marginBottom: "35px" }}
                                     />
                                 </Grid>
                             </>

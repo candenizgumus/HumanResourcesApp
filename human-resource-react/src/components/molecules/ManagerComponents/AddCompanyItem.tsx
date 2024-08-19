@@ -26,9 +26,6 @@ const AddCompanyItemDialog: React.FC<AddCompanyItemDialogProps> = ({ open, onClo
             });
     }, [dispatch]);
 
-    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-    };
 
     const addCompanyItem = () => {
         if (selectedCompanyItemType === '' || name === '' || serialNumber === '') {
@@ -75,57 +72,59 @@ const AddCompanyItemDialog: React.FC<AddCompanyItemDialogProps> = ({ open, onClo
     };
 
     return (
-        <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
+        <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
             <DialogTitle>Add Company Item</DialogTitle>
             <DialogContent>
-                <Box
-                    component="form"
-                    onSubmit={handleSubmit}
-                    sx={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: 2,
-                        padding: 2,
-                    }}
-                >
-                    <TextField
-                        required
-                        label="Name"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                    />
-                    <FormControl required variant="outlined">
-                        <InputLabel>Item Type</InputLabel>
-                        <Select
-                            value={selectedCompanyItemType}
-                            onChange={event => setSelectedCompanyItemType(event.target.value as string)}
-                            label="Item Type"
-                        >
-                            {companyItemType.map((itemType) => (
-                                <MenuItem key={itemType} value={itemType}>
-                                    {itemType}
-                                </MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
-                    <TextField
-                        required
-                        label="Serial Number"
-                        value={serialNumber}
-                        onChange={(e) => setSerialNumber(e.target.value)}
-                    />
+                <Box component="form">
+                    <Grid container spacing={2}>
+                        <Grid item xs={12}>
+                            <TextField
+                                required
+                                label="Name"
+                                value={name}
+                                fullWidth
+                                onChange={(e) => setName(e.target.value)}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <FormControl required variant="outlined" style={{ width: '100%' }}>
+                                <InputLabel>Item Type</InputLabel>
+                                <Select
+                                    value={selectedCompanyItemType}
+                                    onChange={event => setSelectedCompanyItemType(event.target.value as string)}
+                                    label="Item Type"
+                                >
+                                    {companyItemType.map((itemType) => (
+                                        <MenuItem key={itemType} value={itemType}>
+                                            {itemType}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                required
+                                fullWidth
+                                label="Serial Number"
+                                value={serialNumber}
+                                onChange={(e) => setSerialNumber(e.target.value)}
+                            />
+                        </Grid>
+                    </Grid>
                 </Box>
             </DialogContent>
             <DialogActions>
-                <Button onClick={onClose} color="secondary">
+                <Button onClick={onClose} color="secondary" variant="contained" sx={{ marginRight: '17px', width: '100px' }}>
                     Cancel
                 </Button>
                 <Button
                     onClick={addCompanyItem}
                     color="primary"
                     disabled={loading || !serialNumber || !name || !selectedCompanyItemType}
+                    variant="contained" sx={{ marginRight: '17px', width: '100px' }}
                 >
-                    {loading ? "Adding Item..." : "Add Item"}
+                    Add
                 </Button>
             </DialogActions>
         </Dialog>

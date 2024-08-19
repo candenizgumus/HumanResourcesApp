@@ -5,7 +5,7 @@ import {
     GridRowSelectionModel,
 } from "@mui/x-data-grid";
 import {
-    Button, FormControl,
+    Button, Divider, FormControl,
     Grid, InputAdornment, InputLabel, OutlinedInput,
     TextField, Typography
 } from "@mui/material";
@@ -27,7 +27,7 @@ import { clearToken, fetchFindUserByToken } from "../../../store/feature/authSli
 import MyDropzone from "../../atoms/DropZone";
 import DownloadButtonFromS3 from "../../atoms/DownloadButtonFromS3";
 import { EDefinitionType } from "../../../models/IDefinitionType";
-
+import { AddIcon, CancelIcon, DeleteIcon } from "../../atoms/icons";
 
 export default function SideBarEmployeeLeaves() {
     const [selectedRowIds, setSelectedRowIds] = useState<number[]>([]);
@@ -44,26 +44,26 @@ export default function SideBarEmployeeLeaves() {
     const [files, setFiles] = useState<File[]>([]);
     const leaveTypes = useAppSelector((state) => state.definition.definitionList);
     const leaveColumns: GridColDef[] = [
-        { field: "id", headerName: "ID",flex :1, headerAlign: "center" },
-        { field: "description", headerName: "Description", flex :2, headerAlign: "center" },
-    
-        { field: "startDate", headerName: "Start Date", flex :2, headerAlign: "center" },
-        { field: "endDate", headerName: "End Date", flex :2, headerAlign: "center" },
-        { field: "leaveType", headerName: "Leave Type", flex :2, headerAlign: "center" },
-        { field: "isLeaveApproved", headerName: "Approval Status", flex :2, headerAlign: "center" },
-        { field: "approveDate", headerName: "Approval Date", flex :2, headerAlign: "center" },
-        { field: "status", headerName: "Status", flex :1, headerAlign: "center" },
+        { field: "id", headerName: "ID", flex: 1, headerAlign: "center" },
+        { field: "description", headerName: "Description", flex: 2, headerAlign: "center" },
+
+        { field: "startDate", headerName: "Start Date", flex: 2, headerAlign: "center" },
+        { field: "endDate", headerName: "End Date", flex: 2, headerAlign: "center" },
+        { field: "leaveType", headerName: "Leave Type", flex: 2, headerAlign: "center" },
+        { field: "isLeaveApproved", headerName: "Approval Status", flex: 2, headerAlign: "center" },
+        { field: "approveDate", headerName: "Approval Date", flex: 2, headerAlign: "center" },
+        { field: "status", headerName: "Status", flex: 1, headerAlign: "center" },
         {
-            field: "attachedFile", headerName: "Document", flex :1, headerAlign: "center",
+            field: "attachedFile", headerName: "Document", flex: 1, headerAlign: "center",
             renderCell: (params) => (
                 <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '100%' }}>
-                    {params.value && <DownloadButtonFromS3 fileKey={params.value}/> }
+                    {params.value && <DownloadButtonFromS3 fileKey={params.value} />}
                 </div>
             )
         },
-        { field: "managerName", headerName: "Manager Name", flex :2, headerAlign: "center" },
-        { field: "responseMessage", headerName: "Response Message",flex :2, headerAlign: "center" },
-    
+        { field: "managerName", headerName: "Manager Name", flex: 2, headerAlign: "center" },
+        { field: "responseMessage", headerName: "Response Message", flex: 2, headerAlign: "center" },
+
     ];
 
     useEffect(() => {
@@ -74,11 +74,12 @@ export default function SideBarEmployeeLeaves() {
                 pageSize: 100,
                 searchText: searchText,
             })
-        ).then(()=> {
-            dispatch(fetchFindUserByToken(token)).then(()=> {
+        ).then(() => {
+            dispatch(fetchFindUserByToken(token)).then(() => {
                 dispatch(fetchGetDefinitions({
                     token: token,
-                    definitionType: EDefinitionType.LEAVE_TYPE}))
+                    definitionType: EDefinitionType.LEAVE_TYPE
+                }))
             })
         }).catch(() => {
             // handle error, e.g., clear token
@@ -201,7 +202,7 @@ export default function SideBarEmployeeLeaves() {
                 token,
                 description,
                 startDate: startDate,
-                endDate:endDate,
+                endDate: endDate,
                 leaveType,
                 files: files,
             })).unwrap();
@@ -240,37 +241,16 @@ export default function SideBarEmployeeLeaves() {
 
 
     return (
-        <div style={{ height: "auto", width: "inherit" }}>
-            <Grid container spacing={1} style={{ marginTop: 16 }} direction="row" alignItems="center">
-                <Grid item>
-                    <TextField
-                        label="Search by Description"
-                        variant="outlined"
-                        onChange={(event) => setSearchText(event.target.value)}
-                        value={searchText}
-                        style={{ marginBottom: "10px" }}
-                    />
-                </Grid>
-                <Grid item sx={{ marginLeft: '10px' }}>
-                    <Typography
-                        sx={{
-                            fontWeight: "bold",
-                            marginBottom: "10px",
-                            color: 'red',
-                            borderRadius: '5px',
-                            border: '1px solid',
-                            borderColor: 'red',
-                            padding: '10px',
-                            minHeight: '56px',
-                            display: 'flex',
-                            justifyContent: 'center',
-                            alignItems: 'center'
-                        }}
-                    >
-                        Remaining Annual Leave: {user.remainingAnnualLeave} day{user.remainingAnnualLeave > 0 ? 's' : ''}
-                    </Typography>
-                </Grid>
-            </Grid>
+        <div style={{ height: 'auto', width: "inherit" }}>
+            <TextField
+                label="Search By Description"
+                variant="outlined"
+                onChange={(event) => setSearchText(event.target.value)}
+                value={searchText}
+                style={{ marginBottom: "1%", marginTop: "1%" }}
+                fullWidth
+                inputProps={{ maxLength: 50 }}
+            />
             <DataGrid
                 rows={leaveList}
                 columns={leaveColumns}
@@ -304,74 +284,102 @@ export default function SideBarEmployeeLeaves() {
                     "& .unapproved-row": {
                         backgroundColor: "#ffe0e0",
                     },
+                    height: '407px'
                 }}
             />
 
-            <Grid container spacing={1} style={{ marginTop: 16 }} direction="row">
-                <Grid item>
-                    <Button
-                        onClick={handleDelete}
-                        variant="contained"
-                        color="error"
-                        disabled={loading || selectedRowIds.length === 0}
-                    >
-                        {loading ? "Deleting..." : "Delete"}
-                    </Button>
-                </Grid>
-                <Grid item>
-                    <Button
-                        onClick={handleCancel}
-                        variant="contained"
-                        color="warning"
-                        disabled={loading || selectedRowIds.length === 0}
-                    >
-                        {loading ? "Cancelling..." : "Cancel"}
-                    </Button>
-                </Grid>
+            <Grid sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-start', alignItems: 'center', marginTop: '2%', marginBottom: '2%' }}>
+                <Button
+                    onClick={handleDelete}
+                    variant="contained"
+                    color="error"
+                    disabled={loading || selectedRowIds.length === 0}
+                    startIcon={<DeleteIcon />}
+                    sx={{ marginRight: '1%', width: '200px' }}
+                >
+                    Delete
+                </Button>
+                <Button
+                    onClick={handleCancel}
+                    variant="contained"
+                    color="warning"
+                    disabled={loading || selectedRowIds.length === 0}
+                    startIcon={<CancelIcon />}
+                    sx={{ marginRight: '1%', width: '200px' }}
+                >
+                    Cancel
+                </Button>
+                <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={handleSaveLeave}
+                    disabled={loading || !description || !startDate || !endDate}
+                    startIcon={<AddIcon />}
+                    sx={{ marginRight: '1%', width: '200px' }}
+                >
+                    Add
+                </Button>
             </Grid>
 
-            <Grid container spacing={2} style={{ marginTop: 16 }} alignItems="center">
-                <Grid item xs={2}>
-                    <Typography sx={{ fontWeight: "bold", marginBottom: "10px" }}>
+            <Grid container spacing={2} alignItems="center">
+                <Grid item xs={12}>
+                    <Typography variant="h6" sx={{ fontWeight: "bold" }}>
                         Add Leave
                     </Typography>
                 </Grid>
-
+                <Grid item xs={12}>
+                    <Typography
+                        sx={{
+                            fontWeight: "bold",
+                            marginBottom: "10px",
+                            color: 'red',
+                            borderRadius: '5px',
+                            border: '1px solid',
+                            borderColor: 'red',
+                            padding: '10px',
+                            minHeight: '56px',
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center'
+                        }}
+                    >
+                        Remaining Annual Leave: {user.remainingAnnualLeave} day{user.remainingAnnualLeave > 0 ? 's' : ''}
+                    </Typography>
+                </Grid>
                 <Grid container item xs={12} spacing={2} alignItems="center">
-                    <Grid item>
+                    <Grid item xs={6}>
                         <TextField
                             label="Description"
                             name="description"
                             value={description}
                             onChange={e => setDescription(e.target.value)}
+                            fullWidth
                             required
-                            style={{ width: 259 }}
                         />
                     </Grid>
-
-                    <Grid item >
+                    <Grid item xs={6}>
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DatePicker
                                 shouldDisableDate={(date) => date.isBefore(dayjs().subtract(1, 'day'))}
                                 label="Leave Start Date"
                                 value={startDate ? dayjs(startDate) : null}
                                 onChange={(newValue) => setStartDate(newValue ? newValue.toDate() : null)}
+                                sx={{ width: '100%' }}
                             />
                         </LocalizationProvider>
                     </Grid>
-
-                    <Grid item >
+                    <Grid item xs={6}>
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DatePicker
                                 shouldDisableDate={startDate ? (date) => date.isBefore(startDate) : undefined}
                                 label="Leave End Date"
                                 value={endDate ? dayjs(endDate) : null}
                                 onChange={(newValue) => setEndDate(newValue ? newValue.toDate() : null)}
+                                sx={{ width: '100%' }}
                             />
                         </LocalizationProvider>
                     </Grid>
-
-                    <Grid item >
+                    <Grid item xs={6}>
                         <TextField
                             select
                             label="Leave Type"
@@ -379,32 +387,22 @@ export default function SideBarEmployeeLeaves() {
                             onChange={e => setLeaveType(e.target.value)}
                             required
                             SelectProps={{ native: true }}
-                            style={{ width: 259 }}
+                            fullWidth
                         >
                             {Object.values(leaveTypes).map(type => (
                                 <option key={type.name} value={type.id}>{type.name}</option>
                             ))}
                         </TextField>
                     </Grid>
-                    <Grid item style={{ width: 399, height: 72 }}>
+                    <Grid item xs={12}>
                         <MyDropzone
                             onFilesAdded={handleFilesAdded}
                             onFileRemoved={handleFileRemoved}
                         />
                     </Grid>
-                    <Grid item>
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            onClick={handleSaveLeave}
-                            disabled={loading}
-                        >
-                            {loading ? "Saving..." : "Save Leave"}
-                        </Button>
-                    </Grid>
                 </Grid>
             </Grid>
 
-        </div>
+        </div >
     );
 }

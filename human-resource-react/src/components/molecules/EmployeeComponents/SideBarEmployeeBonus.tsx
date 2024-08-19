@@ -79,13 +79,15 @@ const  SideBarEmloyeeBonus = () => {
 
 
     return (
-        <div style={{height: "auto", width: "inherit"}}>
+        <div style={{ height: "auto", width: "inherit" }}>
             <TextField
-                label="Description"
+                label="Search By Description"
                 variant="outlined"
                 onChange={(event) => setSearchText(event.target.value)}
                 value={searchText}
-                style={{marginBottom: "10px"}}
+                style={{ marginBottom: "1%", marginTop: "1%" }}
+                fullWidth
+                inputProps={{ maxLength: 50 }}
             />
             <DataGrid
                 rows={bonusList}
@@ -110,6 +112,7 @@ const  SideBarEmloyeeBonus = () => {
                     "& .MuiDataGrid-cell": {
                         textAlign: "center",
                     },
+                    height: "407px",
                 }}
             />
 

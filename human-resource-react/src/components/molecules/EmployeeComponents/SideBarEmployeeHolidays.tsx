@@ -13,18 +13,18 @@ import { IHolidayFormatted } from "../../../models/IHolidayFormatted";
 
 // Define the columns
 const columns: GridColDef[] = [
-    { field: 'holidayName', headerName: 'Holiday', flex :3 , headerAlign: "center"},
-    { field: 'holidayType', headerName: 'Type', flex :1 , headerAlign: "center"},
+    { field: 'holidayName', headerName: 'Holiday', flex: 3, headerAlign: "center" },
+    { field: 'holidayType', headerName: 'Type', flex: 1, headerAlign: "center" },
     {
         field: 'holidayStartDate',
         headerName: 'Start Date',
-        flex :1
+        flex: 1
         , headerAlign: "center"
     },
     {
         field: 'holidayEndDate',
         headerName: 'End Date',
-        flex :1
+        flex: 1
         , headerAlign: "center"
     },
 ];
@@ -69,37 +69,33 @@ export default function SideBarEmployeeHolidays() {
     };
 
     return (
-        <Box sx={{ flexGrow: 1, padding: 2 }}>
-            <Grid container spacing={2}>
-                <Grid item xs={12}>
-                    <div style={{ height: "auto", width: '100%' }}>
-                        <DataGrid
-                            rows={newHolidayList}
-                            columns={columns}
-                            initialState={{
-                                pagination: {
-                                    paginationModel: { page: 1, pageSize: 5 },
-                                },
-                            }}
-                            pageSizeOptions={[5, 10]}
-                            checkboxSelection
-                            onRowSelectionModelChange={handleRowSelection}
-                            sx={{
-                                "& .MuiDataGrid-columnHeaders": {
-                                    backgroundColor: "rgba(224, 224, 224, 1)",
-                                },
-                                "& .MuiDataGrid-columnHeaderTitle": {
-                                    textAlign: "center",
-                                    fontWeight: "bold",
-                                },
-                                "& .MuiDataGrid-cell": {
-                                    textAlign: "center",
-                                },
-                            }}
-                        />
-                    </div>
-                </Grid>
-            </Grid>
-        </Box>
+        <div style={{ height: "auto", width: "inherit" }}>
+            <DataGrid
+                rows={newHolidayList}
+                columns={columns}
+                initialState={{
+                    pagination: {
+                        paginationModel: { page: 1, pageSize: 5 },
+                    },
+                }}
+                pageSizeOptions={[5, 10]}
+                checkboxSelection
+                onRowSelectionModelChange={handleRowSelection}
+                sx={{
+                    "& .MuiDataGrid-columnHeaders": {
+                        backgroundColor: "rgba(224, 224, 224, 1)",
+                    },
+                    "& .MuiDataGrid-columnHeaderTitle": {
+                        textAlign: "center",
+                        fontWeight: "bold",
+                    },
+                    "& .MuiDataGrid-cell": {
+                        textAlign: "center",
+                    },
+                    marginTop:'2%',
+                    height:'407px'
+                }}
+            />
+        </div>
     );
 }

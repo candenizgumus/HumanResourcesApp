@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import { HumanResources, useAppSelector } from "../../../store";
 import { useDispatch } from "react-redux";
-import { ApproveIcon, DeclineIcon, DangerousIcon } from "../../atoms/icons";
+import { ApproveIcon, DeclineIcon, CancelIcon } from "../../atoms/icons";
 
 import {
     clearToken
@@ -393,7 +393,7 @@ const SideBarManagerExpenditures = () => {
                     variant="contained"
                     color="warning"
                     disabled={isActivating || selectedRowIds.length === 0}
-                    startIcon={<DangerousIcon />}
+                    startIcon={<CancelIcon />}
                     sx={{ marginRight: '1%', width: '200px' }}
                 >
                     Cancel

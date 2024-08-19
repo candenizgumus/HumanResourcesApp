@@ -246,11 +246,16 @@ export default function SideBarPayments() {
                     startIcon={<AddIcon />}
                     sx={{ marginRight: '1%', width: '200px' }}
                 >
-                    Save Payment
+                    Add
                 </Button>
             </Grid>
 
-            <Grid container spacing={2} style={{ marginTop: 16 }} direction="row">
+            <Grid container spacing={2}  direction="row">
+            <Grid item xs={12}>
+                    <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+                        Add Payment
+                    </Typography>
+                </Grid>
                 <Grid item xs={4}>
                     <TextField
                         label="Description"

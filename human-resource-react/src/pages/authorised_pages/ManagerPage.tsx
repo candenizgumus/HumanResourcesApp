@@ -41,7 +41,7 @@ import AddCommentIcon from '@mui/icons-material/AddComment';
 import { ManagerHomeContent } from "../../components/molecules/ManagerComponents/ManagerHomeContent";
 import HikingIcon from '@mui/icons-material/Hiking';
 import { useState } from "react";
-import logo from '../../images/logo-nobg.png';
+import logo from '../../images/logo-full-white.png';
 import { AddDocumentIcon } from "../../components/atoms/icons";
 
 const drawerWidth = 240;

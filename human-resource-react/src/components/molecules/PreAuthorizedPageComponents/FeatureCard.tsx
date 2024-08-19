@@ -1,13 +1,12 @@
 import { Card, CardContent, CardMedia, Grid, Typography } from "@mui/material";
 import React from "react";
 import { styled } from "@mui/material/styles";
-import { IFeature } from "../../../models/IFeature";
 import { useNavigate } from "react-router-dom";
 
-export default function FeatureCard(props: {name:string,shortDescription:string,iconPath:string, isNavigatable:boolean}) {
+export default function FeatureCard(props: { name: string, shortDescription: string, iconPath: string, isNavigatable: boolean }) {
     const navigate = useNavigate();
     const handleEditClick = () => {
-        if(props.isNavigatable === true)
+        if (props.isNavigatable === true)
             navigate(`/features/${encodeURIComponent(props.name)}`);
     };
 
@@ -15,6 +14,8 @@ export default function FeatureCard(props: {name:string,shortDescription:string,
         display: 'flex',
         flexDirection: 'column',
         height: '100%',
+        paddingTop: '20px',
+        //backgroundColor: theme.palette.background.default,
         cursor: props.isNavigatable ? 'pointer' : 'default',
         transition: 'transform 0.2s ease-in-out',
         '&:hover': {

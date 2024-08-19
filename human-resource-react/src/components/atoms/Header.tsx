@@ -7,6 +7,7 @@ import {
 } from '@mui/material';
 import WordPullUp from './WordPullUp';
 import BoxReveal from './BoxReveal';
+import ThemeElement from './ThemeElement';
 
 const Header = styled('header')(({ theme }) => ({
     flex: '1',
@@ -21,20 +22,21 @@ const Header = styled('header')(({ theme }) => ({
 
 function HeaderElement(props: { headline: string, text: string }) {
     return (
-        <Header>
-            <Container maxWidth="lg">
-                <Box py={5} sx={{ height: '200px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                    <Typography variant="h2" align="center" sx={{ color: 'white' }} gutterBottom>
-                        <WordPullUp words={props.headline} />
-                    </Typography>
-                    <Typography variant="body1" align="center" sx={{ color: 'white' }} paragraph>
-                        {props.text}
-                    </Typography>
-                    
-                </Box>
-            </Container>
-        </Header>
+        <ThemeElement children={
+            <Header>
+                <Container maxWidth="lg">
+                    <Box py={5} sx={{ height: '200px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                        <Typography variant="h2" align="center" sx={{ color: 'myBackgroundColour.main' }} gutterBottom>
+                            <WordPullUp words={props.headline} />
+                        </Typography>
+                        <Typography variant="body1" align="center" sx={{ color: 'myBackgroundColour.main' }} paragraph>
+                            {props.text}
+                        </Typography>
 
+                    </Box>
+                </Container>
+            </Header>
+        } />
     )
 }
 

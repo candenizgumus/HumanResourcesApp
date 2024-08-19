@@ -9,6 +9,15 @@ import Avatar from "@mui/material/Avatar";
 import { CodeRounded } from "@mui/icons-material";
 import { useLocation } from "react-router-dom";
 
+const loginButtonStyle = {
+    backgroundColor: 'primary.main',
+    color: 'white',
+    mt: 3, mb: 2,
+    '&:hover': {
+        color: 'primary.main',
+    },
+};
+
 const PasswordResetRequestForm: React.FC = () => {
     const dispatch = useDispatch<HumanResources>();
     const [email, setEmail] = useState<string>('');
@@ -74,25 +83,25 @@ const PasswordResetRequestForm: React.FC = () => {
         setCountdown(5); // 3 minutes in seconds
         let result = await dispatch(fetchGetPasswordResetCode({ email })).unwrap();
         if (result.code) {
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: result.message,
-              confirmButtonColor: '#1976D2',
-          });
-          dispatch(setIsCodeSend(false));
-                    setIsDisabled(false);
-          return; // Stop the process and prevent further then block executions
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: result.message,
+                confirmButtonColor: '#1976D2',
+            });
+            dispatch(setIsCodeSend(false));
+            setIsDisabled(false);
+            return; // Stop the process and prevent further then block executions
         }
 
         Swal.fire({
-          icon: 'success',
-          title: 'Success!',
-          text: 'Password reset code has been sent.',
+            icon: 'success',
+            title: 'Success!',
+            text: 'Password reset code has been sent.',
             confirmButtonColor: '#1976D2',
         });
         dispatch(setIsCodeSend(true));
-      };
+    };
 
     const formatTime = (seconds: number) => {
         const minutes = Math.floor(seconds / 60);
@@ -104,15 +113,15 @@ const PasswordResetRequestForm: React.FC = () => {
         <Box
             sx={{
                 my: 8,
-                    mx: 4,
+                mx: 4,
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
                 justifyContent: 'center',
             }}
         >
-            <Avatar sx={{ mt: 3, mb: 1, bgcolor: '#606c38' }}>
-                <CodeRounded />
+            <Avatar sx={{ mt: 3, mb: 1, bgcolor: 'myLightColour.main' }}>
+                <CodeRounded color="primary" />
             </Avatar>
             <Typography component="h1" variant="h5">
                 Get Password Reset Code
@@ -126,15 +135,15 @@ const PasswordResetRequestForm: React.FC = () => {
                 fullWidth
                 required
                 autoComplete="off"
-                // Optionally add a validation regex
-                // error={!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(email)}
-                // helperText="Please enter a valid email address"
+            // Optionally add a validation regex
+            // error={!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(email)}
+            // helperText="Please enter a valid email address"
             />
             <Button
                 type="button"
                 fullWidth
                 variant="contained"
-                sx={{ mt: 2, mb: 2 }}
+                sx={loginButtonStyle}
                 onClick={() => handleSubmit(email)}
                 disabled={isDisabled}
             >

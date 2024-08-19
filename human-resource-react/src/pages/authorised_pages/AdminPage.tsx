@@ -38,7 +38,7 @@ import {
 } from "@mui/icons-material";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import { useState } from "react";
-import logo from '../../images/logo-nobg.png';
+import logo from '../../images/logo-full-white.png';
 const drawerWidth = 240;
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{

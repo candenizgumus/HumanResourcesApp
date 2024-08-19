@@ -13,27 +13,54 @@ import LoginCard from "./LoginCard";
 import { useRef } from "react";
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
+import ThemeElement from '../../components/atoms/ThemeElement';
+import { styled } from '@mui/material/styles';
+import FooterElement from '../../components/molecules/PreAuthorizedPageComponents/FooterElement';
+
+const Root = styled('div')(({ theme }) => ({
+    display: 'flex',
+    flexDirection: 'column',
+    minHeight: '100vh',
+    backgroundColor: theme.palette.myBackgroundColour.main,
+}));
+
+const Body = styled('main')(({ theme }) => ({
+    flex: '1',
+    width: '100%',
+    marginTop: theme.spacing(12),
+}));
+
+const Footer = styled('footer')(({ theme }) => ({
+    padding: theme.spacing(0),
+}));
 
 export default function PasswordResetPage() {
     const featuresRef = useRef<HTMLDivElement>(null);
     const isResetCodeSend = useSelector((state: RootState) => state.passwordReset.isResetCodeSend);
 
     return (
-        <>
-            <NavBar />
-            <CssBaseline />
-            <Grid item sx={{
-                marginTop: '100px',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-            }}>
-                <Paper elevation={6} square sx={{ width: '100%', maxWidth: 400 }}>
-                    <PasswordResetRequestForm />
-                    {isResetCodeSend ? <PasswordResetForm /> : ''}
-                </Paper>
-            </Grid >
-        </>
+        <ThemeElement children={
+            <Root>
+                <NavBar />
+                <CssBaseline />
+                <Body>
+                    <Grid item sx={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                    }}>
+                        <Paper elevation={6} square sx={{ width: '100%', maxWidth: 400 }}>
+                            <PasswordResetRequestForm />
+                            {isResetCodeSend ? <PasswordResetForm /> : ''}
+                        </Paper>
+                    </Grid >
+                </Body>
+                <Footer>
+                    <CssBaseline />
+                    <FooterElement />
+                </Footer>
+            </Root>
+        } />
     );
 }
 

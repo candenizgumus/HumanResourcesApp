@@ -17,6 +17,14 @@ import {useEffect, useState} from "react";
 import {Alert, Collapse} from "@mui/material";
 import getUserTypeFromToken from '../../util/getUserTypeFromToken';
 
+const loginButtonStyle = {
+    backgroundColor:  'primary.main',
+    color: 'white',
+    mt: 3, mb: 2,
+    '&:hover': {
+      color: 'primary.main',
+          },
+  };
 export default function LoginCard() {
     const dispatch = useDispatch<HumanResources>();
     const navigate = useNavigate();
@@ -89,8 +97,8 @@ export default function LoginCard() {
                     justifyContent: 'center',
                 }}
             >
-                <Avatar sx={{ m: 1, bgcolor: '#606c38' }}>
-                    <LoginIcon />
+                <Avatar sx={{ m: 1, bgcolor: 'myLightColour.main' }}>
+                    <LoginIcon color='primary'/>
                 </Avatar>
                 <Typography component="h1" variant="h5">
                     Login
@@ -141,10 +149,10 @@ export default function LoginCard() {
                     type="button"
                     fullWidth
                     variant="contained"
-                    sx={{ mt: 3, mb: 2 }}
+                    sx={loginButtonStyle}
                     onClick={handleLogin}
                 >
-                    Log In
+                    LOGIN
                 </Button>
                 <Grid container>
                     <Grid item xs>

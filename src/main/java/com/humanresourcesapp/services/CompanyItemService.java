@@ -47,6 +47,7 @@ public class CompanyItemService {
                         .name(dto.name())
                         .serialNumber(dto.serialNumber())
                         .companyItemType(dto.companyItemType())
+                        .status(EStatus.ACTIVE)
                         .build()
         );
     }
@@ -73,5 +74,17 @@ public class CompanyItemService {
         CompanyItem companyItem = companyItemRepository.findById(id).orElseThrow(() -> new HumanResourcesAppException(ErrorType.ITEM_NOT_FOUND));
         companyItem.setStatus(EStatus.DELETED);
         return companyItemRepository.save(companyItem);
+    }
+
+    public CompanyItem findById(Long id) {
+        return companyItemRepository.findById(id).orElseThrow(() -> new HumanResourcesAppException(ErrorType.ITEM_NOT_FOUND));
+    }
+
+    public List<CompanyItem> findAll() {
+        return companyItemRepository.findAll();
+    }
+
+    public List<CompanyItem> findByCompanyId(Long companyId) {
+        return companyItemRepository.findByCompanyId(companyId);
     }
 }

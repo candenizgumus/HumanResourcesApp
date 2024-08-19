@@ -4,49 +4,30 @@ import { HumanResources, useAppSelector } from "../../../store";
 import { useDispatch } from "react-redux";
 import { DataGrid, GridColDef, GridRowSelectionModel } from "@mui/x-data-grid";
 import Swal from "sweetalert2";
-import { fetchCompanyItems, fetchDeleteCompanyItem } from "../../../store/feature/companyItemSlice";
+import {
+    fetchCompanyItems,
+    fetchCreateCompanyItemAssignment
+} from "../../../store/feature/companyItemSlice";
 import { ICompanyItem } from "../../../models/ICompanyItem";
-import { changePageState } from "../../../store/feature/authSlice";
-import { DeleteIcon, AddIcon } from '../../atoms/icons';
-import AddCompanyItemDialog from './AddCompanyItem';
-import {ICompanyItemAssignment} from "../../../models/ICompanyItemAssignment";
+import { AddIcon } from '../../atoms/icons';
 
-const itemColumns: GridColDef[] = [
+const columns: GridColDef[] = [
     { field: "id", headerName: "Id", flex: 1, headerAlign: "center" },
-    { field: "companyItemName", headerName: "Description", flex: 1, headerAlign: "center" },
+    { field: "name", headerName: "Name", flex: 1, headerAlign: "center" },
     { field: "companyItemType", headerName: "Item Type", flex: 1, headerAlign: "center" },
     { field: "serialNumber", headerName: "Serial Number", flex: 1, headerAlign: "center" },
-    { field: "employeeEmail", headerName: "Employee Email", flex: 1, headerAlign: "center" },
-    { field: "assignDate", headerName: "Assign Date", flex: 1, headerAlign: "center" },
-    { field: "message", headerName: "Employee Message", flex: 1, headerAlign: "center" },
     { field: "status", headerName: "Status", flex: 1, headerAlign: "center" },
 ];
 
-const SideBarCompanyItems: React.FC = () => {
+const AddCompanyItemAssignment: React.FC = () => {
     const [selectedRowIds, setSelectedRowIds] = useState<number[]>([]);
     const token = useAppSelector((state) => state.auth.token);
+    const employeeId = useAppSelector((state) => state.auth.selectedEmployeeId);
     const dispatch = useDispatch<HumanResources>();
     const [searchText, setSearchText] = useState('');
     const [companyItems, setCompanyItems] = useState<ICompanyItem[]>([]);    //const personalDocuments =  useAppSelector((state) => state.personalDocument.personalDocuments);
-    const [companyItemAssignments, setCompanyItemAssignments] = useState<ICompanyItemAssignment[]>([]);
     const [loading, setLoading] = useState(false);
-    const [dialogOpen, setDialogOpen] = useState(false);
 
-    const handleDialogOpen = () => {
-        setDialogOpen(true);
-    };
-
-    const handleDialogClose = () => {
-        dispatch(fetchCompanyItems({
-            token: token,
-            page: 0,
-            searchText: searchText,
-            pageSize: 100,
-        })).then(data => {
-            setCompanyItems(data.payload);
-        })
-        setDialogOpen(false);
-    };
 
     useEffect(() => {
         dispatch(fetchCompanyItems({
@@ -65,41 +46,41 @@ const SideBarCompanyItems: React.FC = () => {
         setSelectedRowIds(newSelectionModel as number[]);
     };
 
-    const handleOnClickAddCompanyItem = () => {
-        //dispatch(changePageState("Add Item"))
-        handleDialogOpen();
-    }
+    const handleAssignCompanyItem = () => {
+        if (selectedRowIds.length === 0) {
+            Swal.fire({
+                icon: 'error',
+                text: 'Please select at least one item!',
+                confirmButtonColor: '#1976D2',
+            });
+            return;
+        }
 
-    const handleDelete = () => {
-        selectedRowIds.forEach((id) => {
-            setLoading(true);
-            dispatch(fetchDeleteCompanyItem({ token, id }))
-                .then(data => {
-                    if (data.payload.message) {
-                        Swal.fire({
-                            icon: 'error',
-                            text: data.payload.message ?? 'Failed to delete the item',
-                            showConfirmButton: true
-                        })
-                    } else {
-                        Swal.fire({
-                            icon: 'success',
-                            text: 'Item has been deleted',
-                            showConfirmButton: false,
-                            timer: 1500
-                        })
-                    }
-                    setLoading(false);
-                    dispatch(fetchCompanyItems({
-                        token: token,
-                        page: 0,
-                        searchText: searchText,
-                        pageSize: 100,
-                    })).then(data => {
-                        setCompanyItems(data.payload);
-                    })
+        setLoading(true);
+        for (let id of selectedRowIds) {
+        dispatch(fetchCreateCompanyItemAssignment({
+            employeeId,
+            companyItemId: id,
+            token,
+        })).then((data) => {
+            if (data.payload.message) {
+                Swal.fire({
+                    icon: 'error',
+                    text: data.payload.message ?? 'Failed to assign item',
+                    showConfirmButton: true,
+                    confirmButtonColor: '#1976D2',
                 });
-        });
+            } else {
+                Swal.fire({
+                    icon: 'success',
+                    text: 'Item has been assigned',
+                    showConfirmButton: true,
+                    confirmButtonColor: '#1976D2',
+                });
+            }
+            });
+        setLoading(false);
+        }
     };
 
     return (
@@ -114,8 +95,8 @@ const SideBarCompanyItems: React.FC = () => {
                 inputProps={{ maxLength: 50 }}
             />
             <DataGrid
-                rows={companyItemAssignments}
-                columns={itemColumns}
+                rows={companyItems}
+                columns={columns}
                 initialState={{
                     pagination: {
                         paginationModel: { page: 0, pageSize: 5 },
@@ -140,28 +121,18 @@ const SideBarCompanyItems: React.FC = () => {
             />
             <Grid sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-start', alignItems: 'center', marginTop: '2%', marginBottom: '2%' }}>
                 <Button
-                    onClick={handleOnClickAddCompanyItem}
+                    onClick={handleAssignCompanyItem}
                     variant="contained"
                     color="primary"
                     startIcon={<AddIcon />}
                     sx={{ marginRight: '1%', width: '200px' }}
-                >
-                    Add
-                </Button>
-                <Button
-                    onClick={handleDelete}
-                    variant="contained"
-                    color="error"
                     disabled={loading || selectedRowIds.length === 0}
-                    startIcon={<DeleteIcon />}
-                    sx={{ marginRight: '1%', width: '200px' }}
                 >
-                    Delete
+                    Assign
                 </Button>
             </Grid>
-            <AddCompanyItemDialog open={dialogOpen} onClose={handleDialogClose} />
         </div>
     );
 };
 
-export default SideBarCompanyItems;
+export default AddCompanyItemAssignment;

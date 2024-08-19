@@ -34,6 +34,7 @@ import { EDefinitionType } from "../../../models/IDefinitionType";
 import AddDocument from "./AddDocument";
 import AddBonusDialog from "./AddBonus";
 import AddBonus from "./AddBonus";
+import {AssignItemIcon} from "../../atoms/icons";
 
 export default function SideBarEmployees() {
     const [selectedRowIds, setSelectedRowIds] = useState<number[]>([]);
@@ -80,6 +81,11 @@ export default function SideBarEmployees() {
             ),
         },
     ];
+
+    const handleAssignItem = () => {
+        dispatch(setSelectedEmployeeId(selectedRowIds[0]))
+        dispatch(changePageState("Assign Item"));
+    };
 
     const handleSetShifts = () => {
         for (let id of selectedRowIds) {
@@ -327,6 +333,7 @@ export default function SideBarEmployees() {
         setIsActivating(false);
     };
 
+
     return (
         <div style={{ height: "auto", width: "inherit" }}>
             <TextField
@@ -423,6 +430,16 @@ export default function SideBarEmployees() {
                     startIcon={<Icons.SetShiftIcon />}
                 >
                     Set Shifts
+                </Button>
+                <Button
+                    onClick={handleAssignItem}
+                    variant="contained"
+                    color="success"
+                    disabled={selectedRowIds.length > 1 || selectedRowIds.length === 0}
+                    sx={{ marginRight: '1%', width: '200px' }}
+                    startIcon={<Icons.AssignItemIcon />}
+                >
+                    Assign Item
                 </Button>
             </Grid>
             <AddDocument open={openAddDocument} onClose={handleCloseAddDocument} />

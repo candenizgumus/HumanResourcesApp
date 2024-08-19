@@ -10,5 +10,6 @@ public enum EStatus
     CANCELED,
     IN_PROGRESS,
     IN_USE,
-    AVAILABLE
+    AVAILABLE,
+    APPROVED
 }

@@ -39,6 +39,7 @@ import {
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import { useState } from "react";
 import logo from '../../images/logo-full-white.png';
+import ThemeElement from '../../components/atoms/ThemeElement';
 const drawerWidth = 240;
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
@@ -105,7 +106,7 @@ export default function AdminPage() {
   const [selectedIndex, setSelectedIndex] = React.useState<string>('Inbox');
   const dispatch = useDispatch<HumanResources>();
   const pageState = useSelector((state: RootState) => state.auth.pageState);
-  const [selectedIndex2, setSelectedIndex2] = useState(null);
+  const [selectedIndex2, setSelectedIndex2] = useState(0);
   const page = useAppSelector((state) => state.auth.pageState);
   const user = useAppSelector((state) => state.auth.user);
   const handleDrawerOpen = () => {
@@ -116,6 +117,7 @@ export default function AdminPage() {
     setOpen(false);
   };
   const navigateToHome = () => {
+    setSelectedIndex2(0);
     dispatch(changePageState('Dashboard'));
   };
 
@@ -125,6 +127,7 @@ export default function AdminPage() {
   };
 
   const handleListItemClick2 = (index: any) => {
+    console.log(index);
     setSelectedIndex2(index);
     // Perform your action here
   };
@@ -136,112 +139,117 @@ export default function AdminPage() {
     day: 'numeric',
   });
   return (
-    <Box sx={{ display: 'flex' }}>
-      <CssBaseline />
-      <AppBar position="fixed" open={open}>
-        <Toolbar sx={{ position: 'relative' }}>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            edge="start"
-            sx={{ mr: 2, ...(open && { display: 'none' }) }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" sx={logoStyle}>
-            <Button onClick={navigateToHome} color="inherit">
-              <img src={logo} alt="logo" style={{ height: '52px' }} />
-            </Button>
-          </Typography>
-          <Typography
-            sx={{
-              position: 'absolute',
-              left: '50%',
-              transform: 'translateX(-50%)',
-              fontSize: '20px',
-            }}
-          >
-            {page ? page : 'Dashboard'}
-          </Typography>
+    <ThemeElement children={
+      <Box sx={{ display: 'flex', bgcolor: 'myBackColour.main', minHeight: '100vh' }}>
+        <CssBaseline />
+        <AppBar position="fixed" open={open}>
+          <Toolbar sx={{ position: 'relative' }}>
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              onClick={handleDrawerOpen}
+              edge="start"
+              sx={{ mr: 2, ...(open && { display: 'none' }) }}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Typography variant="h6" sx={logoStyle}>
+              <Button onClick={navigateToHome} color="inherit">
+                <img src={logo} alt="logo" style={{ height: '52px' }} />
+              </Button>
+            </Typography>
+            <Typography
+              sx={{
+                position: 'absolute',
+                left: '50%',
+                transform: 'translateX(-50%)',
+                fontSize: '20px',
+              }}
+            >
+              {page ? page : 'Dashboard'}
+            </Typography>
 
-          <Box sx={{ flexGrow: 1 }} />
-          <Box>
-            <Typography variant="h5" component="div">
-              Merhaba, <strong>{user.name ? user.name : 'admin'}</strong>!
-            </Typography>
-            <Typography variant="subtitle1" color="textSecondary">
-              Bugün <span style={{ fontStyle: 'italic', color: '#4caf50' }}>{today}</span>
-            </Typography>
-          </Box>
-          <NotificationIcon />
-          <NavbarProfile />
-        </Toolbar>
-      </AppBar>
-      <Drawer
-        sx={{
-          width: drawerWidth,
-          flexShrink: 0,
-          '& .MuiDrawer-paper': {
+            <Box sx={{ flexGrow: 1 }} />
+            <Box>
+              <Typography variant="h5" component="div" color='myLightColour.main'>
+                Merhaba, <strong>{user.name ? user.name : 'admin'}</strong>!
+              </Typography>
+              <Typography variant="subtitle1" color="myBackgroundColour.main">
+                Bugün <span style={{ color: '#4caf50' }}>{today}</span>
+              </Typography>
+            </Box>
+            <NotificationIcon />
+            <NavbarProfile />
+          </Toolbar>
+        </AppBar>
+        <Drawer
+          sx={{
             width: drawerWidth,
-            boxSizing: 'border-box',
-          },
-        }}
-        variant="persistent"
-        anchor="left"
-        open={open}
-      >
-        <DrawerHeader>
-          <IconButton onClick={handleDrawerClose}>
-            {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-          </IconButton>
-        </DrawerHeader>
-        <Divider />
-        <List>
-          {['Dashboard', 'Offers', 'Users', 'Create Admin', 'Create Feature', 'Create Definition', 'Holidays', 'Profile', 'Companies', 'Notifications', 'Upcoming Expiries'].map((text, index) => (
-            <ListItem key={text} disablePadding>
-              <ListItemButton
-                selected={selectedIndex2 === index}
-                onClick={() => {
-                  handleListItemClick2(index);
-                  handleListItemClick(text);
-                }}
-                sx={{
-                  '&.Mui-selected': {
-                    backgroundColor: 'rgba(0, 123, 255, 0.1)', // Change background color when selected
-                    '&:hover': {
-                      backgroundColor: 'rgba(0, 123, 255, 0.2)', // Change background color on hover
+            flexShrink: 0,
+            '& .MuiDrawer-paper': {
+              width: drawerWidth,
+              boxSizing: 'border-box',
+            },
+          }}
+          variant="persistent"
+          anchor="left"
+          open={open}
+        >
+          <DrawerHeader sx={{ bgcolor: 'primary.main'}}>
+            <IconButton onClick={handleDrawerClose} sx={{ color: 'white' }}>
+              {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+            </IconButton>
+          </DrawerHeader>
+          <List sx={{ bgcolor: 'primary.main', minHeight: 'calc(100vh - 64px)', paddingTop:'0' }}>
+            {['Dashboard', 'Offers', 'Users', 'Create Admin', 'Create Feature', 'Create Definition', 'Holidays', 'Profile', 'Companies', 'Notifications', 'Upcoming Expiries'].map((text, index) => (
+              <ListItem key={text} disablePadding>
+                <ListItemButton
+                  selected={selectedIndex2 === index}
+                  onClick={() => {
+                    handleListItemClick2(index);
+                    handleListItemClick(text);
+                  }}
+                  sx={{
+                    color: 'white',
+                    backgroundColor: '#222831',
+                    '&.Mui-selected': {
+                      backgroundColor: '#00ADB5', // Change background color when selected
+                      '&:hover': {
+                        backgroundColor: '#393E46', // Change background color on hover
+                      },
                     },
-                  }
-                }}
-              >
-                <ListItemIcon>
-                  {index === 0 && <Dashboard />}
-                  {index === 1 && <LocalOfferIcon />}
-                  {index === 2 && <Person />}
-                  {index === 3 && <AdminPanelSettings />}
-                  {index === 4 && <FeaturedPlayList />}
-                  {index === 5 && <DesignServicesIcon />}
-                  {index === 6 && <Weekend />}
-                  {index === 7 && <AccountBox />}
-                  {index === 8 && <Apartment />}
-                  {index === 9 && <NotificationsIcon />}
-                  {index === 10 && <AlarmIcon />}
+                    '&:hover': {
+                      backgroundColor: '#393E46', // Change background color on hover
+                    },
+                  }}
+                >
+                  <ListItemIcon sx={{ color: 'white' }}>
+                    {index === 0 && <Dashboard />}
+                    {index === 1 && <LocalOfferIcon />}
+                    {index === 2 && <Person />}
+                    {index === 3 && <AdminPanelSettings />}
+                    {index === 4 && <FeaturedPlayList />}
+                    {index === 5 && <DesignServicesIcon />}
+                    {index === 6 && <Weekend />}
+                    {index === 7 && <AccountBox />}
+                    {index === 8 && <Apartment />}
+                    {index === 9 && <NotificationsIcon />}
+                    {index === 10 && <AlarmIcon />}
 
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
-        <Divider />
-      </Drawer>
-      <Main open={open}>
-        <DrawerHeader />
-        <Grid container spacing={2}>
-          {pageState === 'Dashboard' ? <AdminHomeContent /> : <AdminMenuContentRenderer />}
-        </Grid>
-      </Main>
-    </Box>
+                  </ListItemIcon>
+                  <ListItemText primary={text} />
+                </ListItemButton>
+              </ListItem>
+            ))}
+          </List>
+        </Drawer>
+        <Main open={open}>
+          <DrawerHeader />
+          <Grid container spacing={2}>
+            {pageState === 'Dashboard' ? <AdminHomeContent /> : <AdminMenuContentRenderer />}
+          </Grid>
+        </Main>
+      </Box>
+    } />
   );
 }

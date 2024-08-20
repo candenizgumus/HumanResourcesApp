@@ -1,22 +1,22 @@
-import React, { useState, useEffect } from 'react';
-import { TextField, Grid, Button } from '@mui/material';
-import { HumanResources, useAppSelector } from "../../../store";
-import { useDispatch } from "react-redux";
-import { DataGrid, GridColDef, GridRowSelectionModel } from "@mui/x-data-grid";
+import React, {useState, useEffect} from 'react';
+import {TextField, Grid, Button} from '@mui/material';
+import {HumanResources, useAppSelector} from "../../../store";
+import {useDispatch} from "react-redux";
+import {DataGrid, GridColDef, GridRowSelectionModel} from "@mui/x-data-grid";
 import Swal from "sweetalert2";
 import {
-    fetchCompanyItems,
+    fetchCompanyItemsForAssignment,
     fetchCreateCompanyItemAssignment
 } from "../../../store/feature/companyItemSlice";
-import { ICompanyItem } from "../../../models/ICompanyItem";
-import { AddIcon } from '../../atoms/icons';
+import {ICompanyItem} from "../../../models/ICompanyItem";
+import {AddIcon} from '../../atoms/icons';
 
 const columns: GridColDef[] = [
-    { field: "id", headerName: "Id", flex: 1, headerAlign: "center" },
-    { field: "name", headerName: "Name", flex: 1, headerAlign: "center" },
-    { field: "companyItemType", headerName: "Item Type", flex: 1, headerAlign: "center" },
-    { field: "serialNumber", headerName: "Serial Number", flex: 1, headerAlign: "center" },
-    { field: "status", headerName: "Status", flex: 1, headerAlign: "center" },
+    {field: "id", headerName: "Id", flex: 1, headerAlign: "center"},
+    {field: "name", headerName: "Name", flex: 1, headerAlign: "center"},
+    {field: "companyItemType", headerName: "Item Type", flex: 1, headerAlign: "center"},
+    {field: "serialNumber", headerName: "Serial Number", flex: 1, headerAlign: "center"},
+    {field: "status", headerName: "Status", flex: 1, headerAlign: "center"},
 ];
 
 const AddCompanyItemAssignment: React.FC = () => {
@@ -30,14 +30,14 @@ const AddCompanyItemAssignment: React.FC = () => {
 
 
     useEffect(() => {
-        dispatch(fetchCompanyItems({
+        dispatch(fetchCompanyItemsForAssignment({
             token: token,
             page: 0,
             searchText: searchText,
             pageSize: 100,
         })).then(data => {
             setCompanyItems(data.payload);
-        })
+        });
 
     }, [dispatch, token, searchText]);
 
@@ -58,48 +58,59 @@ const AddCompanyItemAssignment: React.FC = () => {
 
         setLoading(true);
         for (let id of selectedRowIds) {
-        dispatch(fetchCreateCompanyItemAssignment({
-            employeeId,
-            companyItemId: id,
-            token,
-        })).then((data) => {
-            if (data.payload.message) {
-                Swal.fire({
-                    icon: 'error',
-                    text: data.payload.message ?? 'Failed to assign item',
-                    showConfirmButton: true,
-                    confirmButtonColor: '#1976D2',
-                });
-            } else {
-                Swal.fire({
-                    icon: 'success',
-                    text: 'Item has been assigned',
-                    showConfirmButton: true,
-                    confirmButtonColor: '#1976D2',
-                });
-            }
+            dispatch(fetchCreateCompanyItemAssignment({
+                employeeId,
+                companyItemId: id,
+                token,
+            })).then((data) => {
+                if (data.payload.message) {
+                    Swal.fire({
+                        icon: 'error',
+                        text: data.payload.message ?? 'Failed to assign item',
+                        showConfirmButton: true,
+                        confirmButtonColor: '#1976D2',
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'success',
+                        text: 'Item has been assigned',
+                        showConfirmButton: true,
+                        confirmButtonColor: '#1976D2',
+                    })
+                        .then(() => {
+                            dispatch(fetchCompanyItemsForAssignment({
+                                token: token,
+                                page: 0,
+                                searchText: searchText,
+                                pageSize: 100,
+                            })).then(data => {
+                                setCompanyItems(data.payload);
+                            });
+
+                        });
+                }
             });
-        setLoading(false);
+            setLoading(false);
         }
     };
 
     return (
-        <div style={{ height: "auto", width: "inherit" }}>
+        <div style={{height: "auto", width: "inherit"}}>
             <TextField
                 label="Search By Serial Number"
                 variant="outlined"
                 onChange={(event) => setSearchText(event.target.value)}
                 value={searchText}
-                style={{ marginBottom: "1%", marginTop: "1%" }}
+                style={{marginBottom: "1%", marginTop: "1%"}}
                 fullWidth
-                inputProps={{ maxLength: 50 }}
+                inputProps={{maxLength: 50}}
             />
             <DataGrid
                 rows={companyItems}
                 columns={columns}
                 initialState={{
                     pagination: {
-                        paginationModel: { page: 0, pageSize: 5 },
+                        paginationModel: {page: 0, pageSize: 5},
                     },
                 }}
                 pageSizeOptions={[5, 10]}
@@ -119,13 +130,20 @@ const AddCompanyItemAssignment: React.FC = () => {
                     height: '407px'
                 }}
             />
-            <Grid sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-start', alignItems: 'center', marginTop: '2%', marginBottom: '2%' }}>
+            <Grid sx={{
+                flexGrow: 1,
+                display: 'flex',
+                justifyContent: 'flex-start',
+                alignItems: 'center',
+                marginTop: '2%',
+                marginBottom: '2%'
+            }}>
                 <Button
                     onClick={handleAssignCompanyItem}
                     variant="contained"
                     color="primary"
-                    startIcon={<AddIcon />}
-                    sx={{ marginRight: '1%', width: '200px' }}
+                    startIcon={<AddIcon/>}
+                    sx={{marginRight: '1%', width: '200px'}}
                     disabled={loading || selectedRowIds.length === 0}
                 >
                     Assign

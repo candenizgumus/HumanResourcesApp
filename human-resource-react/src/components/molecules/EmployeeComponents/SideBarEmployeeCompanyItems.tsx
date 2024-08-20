@@ -22,7 +22,8 @@ const employeeAssignmentColumns: GridColDef[] = [
 
 const SideBarEmployeeCompanyItems: React.FC = () => {
     const [selectedRowIds, setSelectedRowIds] = useState<number[]>([]);
-    const [selectedCompanyItemId, setSelectedCompanyItemId] = useState<number | null>(null); // Add state for selected item ID
+    const [selectedCompanyItemId, setSelectedCompanyItemId] = useState<number | null>(null);
+    const [hasApprovedRow, setHasApprovedRow] = useState(false);
     const token = useAppSelector((state) => state.auth.token);
     const dispatch = useDispatch<HumanResources>();
     const [searchText, setSearchText] = useState('');
@@ -35,12 +36,12 @@ const SideBarEmployeeCompanyItems: React.FC = () => {
         if (selectedRowIds.length === 0) {
             Swal.fire({
                 icon: 'error',
-                text: 'Please select an item to reject',
+                text: 'Please select an assignment to reject',
                 confirmButtonColor: '#1976D2',
             });
             return;
         }
-        setSelectedCompanyItemId(selectedRowIds[0]); // Set the selected item ID
+        setSelectedCompanyItemId(selectedRowIds[0]);
         setDialogOpen(true);
     };
 
@@ -59,6 +60,11 @@ const SideBarEmployeeCompanyItems: React.FC = () => {
 
     const handleRowSelection = (newSelectionModel: GridRowSelectionModel) => {
         setSelectedRowIds(newSelectionModel as number[]);
+        const hasApproved = newSelectionModel.some((id) => {
+            const row = employeeItemAssignments.find(item => item.id === id);
+            return row?.status === "APPROVED";
+        });
+        setHasApprovedRow(hasApproved);
     };
 
     const handleApproval = () => {
@@ -100,15 +106,6 @@ const SideBarEmployeeCompanyItems: React.FC = () => {
 
     return (
         <div style={{ height: "auto", width: "inherit" }}>
-            <TextField
-                label="Search By Serial Number"
-                variant="outlined"
-                onChange={(event) => setSearchText(event.target.value)}
-                value={searchText}
-                style={{ marginBottom: "1%", marginTop: "1%" }}
-                fullWidth
-                inputProps={{ maxLength: 50 }}
-            />
             <DataGrid
                 rows={employeeItemAssignments}
                 columns={employeeAssignmentColumns}
@@ -139,10 +136,10 @@ const SideBarEmployeeCompanyItems: React.FC = () => {
                         textAlign: "center",
                     },
                     "& .approved-row": {
-                        backgroundColor: "#e0f2e9", // Approved items green background
+                        backgroundColor: "#e0f2e9",
                     },
                     "& .rejected-row": {
-                        backgroundColor: "#ffe0e0", // Rejected items red background
+                        backgroundColor: "#ffe0e0",
                     },
                     height: '407px'
                 }}
@@ -161,6 +158,7 @@ const SideBarEmployeeCompanyItems: React.FC = () => {
                     variant="contained"
                     color="primary"
                     startIcon={<ApproveIcon />}
+                    disabled={loading || selectedRowIds.length === 0 || hasApprovedRow}
                     sx={{ marginRight: '1%', width: '200px' }}
                 >
                     Approve
@@ -169,7 +167,7 @@ const SideBarEmployeeCompanyItems: React.FC = () => {
                     onClick={handleDialogOpen}
                     variant="contained"
                     color="error"
-                    disabled={loading || selectedRowIds.length === 0}
+                    disabled={loading || selectedRowIds.length === 0 || hasApprovedRow}
                     startIcon={<CancelIcon />}
                     sx={{ marginRight: '1%', width: '200px' }}
                 >
@@ -179,7 +177,7 @@ const SideBarEmployeeCompanyItems: React.FC = () => {
             <RejectItemAssignmentDialog
                 open={dialogOpen}
                 onClose={handleDialogClose}
-                selectedCompanyItemId={selectedCompanyItemId} // Pass the selected item ID as a prop
+                selectedCompanyItemId={selectedCompanyItemId}
             />
         </div>
     );

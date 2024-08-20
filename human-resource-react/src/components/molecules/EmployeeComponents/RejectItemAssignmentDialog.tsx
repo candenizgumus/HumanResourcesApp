@@ -35,8 +35,10 @@ const RejectItemAssignmentDialog: React.FC<RejectItemAssignmentDialogProps> = ({
             Swal.fire({
                 icon: 'error',
                 text: 'Please specify a reason!',
-                confirmButtonColor: '#1976D2',
+                showConfirmButton: false,
+                timer: 1500
             });
+            onClose();
             return;
         }
 

@@ -55,7 +55,11 @@ public class CompanyItemAssignmentController {
         return ResponseEntity.ok(companyItemAssignmentService.rejectAssignment(dto));
     }
 
-    //@PutMapping(CANCEL_ASSIGNMENT_BY_MANAGER)
+    @PutMapping(CANCEL_ASSIGNMENT_BY_MANAGER + "/{id}")
+    @PreAuthorize("hasAnyAuthority('MANAGER')")
+    public ResponseEntity<Boolean> cancelAssignmentByManager(@PathVariable Long id) {
+        return ResponseEntity.ok(companyItemAssignmentService.cancelAssignmentByManager(id));
+    }
 
     @PostMapping(GET_ASSIGNED_ITEMS_OF_EMPLOYEE)
     @PreAuthorize("hasAnyAuthority('EMPLOYEE')")

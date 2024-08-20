@@ -974,6 +974,11 @@ public class InsertDemoData
         companyItemService.saveForDemoData(CompanyItemSaveRequestDto.builder().name("Laptop").serialNumber("12345").companyItemType(ECompanyItemType.LAPTOP).build());
         companyItemService.saveForDemoData(CompanyItemSaveRequestDto.builder().name("Phone").serialNumber("asd124").companyItemType(ECompanyItemType.SMARTPHONE).build());
         companyItemService.saveForDemoData(CompanyItemSaveRequestDto.builder().name("Mercedes").serialNumber("34AA4594").companyItemType(ECompanyItemType.VEHICLE).build());
+        companyItemService.saveForDemoData(CompanyItemSaveRequestDto.builder().name("Tablet").serialNumber("wenlşvweşlt").companyItemType(ECompanyItemType.TABLET).build());
+        companyItemService.saveForDemoData(CompanyItemSaveRequestDto.builder().name("Printer").serialNumber("bl24bvoh").companyItemType(ECompanyItemType.OTHER).build());
+        companyItemService.saveForDemoData(CompanyItemSaveRequestDto.builder().name("Scanner").serialNumber("ıoprn0v").companyItemType(ECompanyItemType.OTHER).build());
+        companyItemService.saveForDemoData(CompanyItemSaveRequestDto.builder().name("Projector").serialNumber("weuıbv97").companyItemType(ECompanyItemType.OTHER).build());
+        companyItemService.saveForDemoData(CompanyItemSaveRequestDto.builder().name("Camera").serialNumber("45kgş").companyItemType(ECompanyItemType.OTHER).build());
 
 
         companyItemAssignmentService.saveForDemoData( 1L,7L);

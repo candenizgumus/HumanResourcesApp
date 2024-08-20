@@ -62,6 +62,7 @@ public enum ErrorType
     SUPERADMIN_CANNOT_BE_DEACTIVATED(    1050, "Superadmin Cannot Be Deactivated", HttpStatus.BAD_REQUEST),
     ALREADY_DEFINED(1051,"Definition Predefined" , HttpStatus.BAD_REQUEST ),
     ASSIGNMENT_NOT_FOUND(1052,"Assignment Not Found" , HttpStatus.BAD_REQUEST ),
+    ASSIGNMENT_ALREADY_EXISTS(1053,"Item is already assigned to the employee" , HttpStatus.BAD_REQUEST ),
 
 
     ;

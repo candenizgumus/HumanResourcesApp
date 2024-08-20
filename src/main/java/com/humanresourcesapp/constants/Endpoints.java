@@ -121,6 +121,7 @@ public class Endpoints
     public static final String SEARCH_BY_LEAVE_ID = "/search-by-leave-id";
     public static final String GET_ALL_RELATED = "/get-all-related";
     public static final String DEACTIVATE_ACCOUNT = "/deactivate-account";
+    public static final String GET_ALL_FOR_ASSIGNMENT = "/get-all-for-assignment";
     public static final String APPROVE_ASSIGNMENT = "/approve-assignment";
     public static final String REJECT_ASSIGNMENT = "/reject-assignment";
     public static final String GET_ALL_WITH_PAGE = "/get-all-with-page";

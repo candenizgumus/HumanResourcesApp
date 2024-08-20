@@ -33,6 +33,14 @@ public class CompanyItemAssignmentService {
 
 
     public boolean save(CompanyItemAssignmentRequestDto dto) {
+        List<CompanyItemAssignment> companyItemAssignments = companyItemAssignmentRepository.findAll();
+        for (CompanyItemAssignment companyItemAssignment : companyItemAssignments) {
+            if ((companyItemAssignment.getStatus().equals(EStatus.APPROVED) || companyItemAssignment.getStatus().equals(EStatus.PENDING))
+                    && companyItemAssignment.getCompanyItemId().equals(dto.companyItemId())
+                    && companyItemAssignment.getEmployeeId().equals(dto.employeeId())) {
+                throw new HumanResourcesAppException(ErrorType.ASSIGNMENT_ALREADY_EXISTS);
+            }
+        }
         User employee = userService.findById(dto.employeeId());
         companyItemAssignmentRepository.save(CompanyItemAssignment.builder()
                 .companyId(employee.getCompanyId())
@@ -42,6 +50,8 @@ public class CompanyItemAssignmentService {
                 .status(EStatus.PENDING)
                 .build());
 
+        companyItemService.findById(dto.companyItemId()).setStatus(EStatus.PENDING);
+        companyItemService.saveForStatus(companyItemService.findById(dto.companyItemId()));
         return true;
     }
 
@@ -52,9 +62,12 @@ public class CompanyItemAssignmentService {
                 .companyItemId(companyItemId)
                 .employeeId(employeeId)
                 .assignDate(LocalDate.now())
-                .status(EStatus.PENDING)
+                .status(EStatus.APPROVED)
                 .build());
 
+        CompanyItem companyItem = companyItemService.findById(companyItemId);
+        companyItem.setStatus(EStatus.IN_USE);
+        companyItemService.saveForStatus(companyItem);
         return true;
     }
 
@@ -91,6 +104,7 @@ public class CompanyItemAssignmentService {
             companyItemAssignment.get().setMessage("Approved");
             companyItemAssignmentRepository.save(companyItemAssignment.get());
             companyItemService.findById(id).setStatus(EStatus.IN_USE);
+            companyItemService.saveForStatus(companyItemService.findById(id));
             return true;
         }
         throw new HumanResourcesAppException(ErrorType.ASSIGNMENT_NOT_FOUND);
@@ -117,7 +131,6 @@ public class CompanyItemAssignmentService {
 
         List<CompanyItemAssignment> assignedItemList = companyItemAssignmentRepository.findByEmployeeIdAndStatus(employee.getId(), EStatus.APPROVED);
 
-
         for (CompanyItemAssignment companyItemAssignment : assignedItemList) {
             dtoList.add(new ItemAssignmentsOfEmployeeResponseDto(id,
                     companyItemService.findById(companyItemAssignment.getCompanyItemId()).getName(),
@@ -125,8 +138,6 @@ public class CompanyItemAssignmentService {
 
             id++;
         }
-
-
         return dtoList;
     }
 
@@ -138,7 +149,7 @@ public class CompanyItemAssignmentService {
         List<CompanyItemAssignmentEmployeeResponseDto> dtoList = new ArrayList<>();
         for (CompanyItemAssignment companyItemAssignment : companyItemAssignments) {
             for (CompanyItem companyItem : companyItems) {
-                if (companyItemAssignment.getCompanyItemId().equals(companyItem.getId())) {
+                if (companyItemAssignment.getCompanyItemId().equals(companyItem.getId()) && (companyItemAssignment.getStatus().equals(EStatus.PENDING) || companyItemAssignment.getStatus().equals(EStatus.APPROVED))) {
                     CompanyItemAssignmentEmployeeResponseDto dto = (new CompanyItemAssignmentEmployeeResponseDto(
                             companyItemAssignment.getId(),
                             companyItem.getName(),
@@ -154,4 +165,16 @@ public class CompanyItemAssignmentService {
     }
 
 
+    public Boolean cancelAssignmentByManager(Long id) {
+        Optional<CompanyItemAssignment> companyItemAssignment = companyItemAssignmentRepository.findById(id);
+        if (companyItemAssignment.isPresent()) {
+            companyItemAssignment.get().setStatus(EStatus.CANCELED);
+            companyItemAssignment.get().setMessage("Canceled by Manager");
+            companyItemAssignmentRepository.save(companyItemAssignment.get());
+            companyItemService.findById(id).setStatus(EStatus.AVAILABLE);
+            companyItemService.saveForStatus(companyItemService.findById(id));
+            return true;
+        }
+        throw new HumanResourcesAppException(ErrorType.ASSIGNMENT_NOT_FOUND);
+    }
 }

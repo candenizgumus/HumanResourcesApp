@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, {  useState } from 'react';
 import { Avatar, Badge, IconButton, Menu, MenuItem, Tooltip } from '@mui/material';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+
 import { useDispatch } from "react-redux";
 import { HumanResources, useAppSelector } from "../../store";
 import {

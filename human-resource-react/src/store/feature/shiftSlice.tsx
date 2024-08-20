@@ -4,13 +4,17 @@ import {IShift} from "../../components/atoms/MyCalender";
 interface shiftState{
     shiftList:IShift[]
     employeeId:number,
-    companyId:number
+    companyId:number,
+    name:string,
+    surname:string
 }
 
 const initialShiftState:shiftState = {
     shiftList: [],
     employeeId:0,
-    companyId:0
+    companyId:0,
+    name:'',
+    surname:''
 }
 
 
@@ -135,6 +139,8 @@ const shiftSlice = createSlice({
 
             state.employeeId = action.payload.employeeId
             state.companyId = action.payload.companyId
+            state.name = action.payload.name
+            state.surname = action.payload.surname
         }
     },
     extraReducers: (build)=>{

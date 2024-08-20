@@ -9,6 +9,8 @@ import {DataGrid, GridColDef} from "@mui/x-data-grid";
 import {fetchGetAssignedItemsOfEmployee} from "../../../store/feature/companyItemSlice";
 import {IAssignedItemList} from "../../../models/IAssignedItemList";
 import {AddDocumentIcon} from "../../atoms/icons";
+import {useTheme} from "@mui/material/styles";
+import ThemeElement from "../../atoms/ThemeElement";
 
 export const EmployeeHomeContent: React.FC = () => {
     const [events, setEvents] = useState<IShift[]>([]);
@@ -30,6 +32,7 @@ export const EmployeeHomeContent: React.FC = () => {
     useEffect(() => {
         getShiftsOfEmployee();
     }, []);
+    const theme = useTheme();
 
     const columns: GridColDef[] = [
 
@@ -41,59 +44,64 @@ export const EmployeeHomeContent: React.FC = () => {
     ];
 
     return (
-        <Grid container spacing={2}>
-            <Grid item xs={6}>
-                <MyCalendar events={events} isUserManager={false} />
-            </Grid>
-            <Grid item xs={3}>
+        <ThemeElement children={
+            <Grid container spacing={2}>
+                <Grid item xs={6}>
+                    <MyCalendar events={events} isUserManager={false} />
+                </Grid>
+                <Grid item xs={3}>
 
-                <Box sx={{ p: 2, maxWidth: '100%' }}>
-                    <Paper elevation={3} sx={{p: 2, borderRadius: 2}}>
-                        <div style={{height: "auto", width: "inherit"}}>
-                            <Typography variant="h6" align="center" sx={{ mb: 2 , fontWeight: "bold"}}>
-                               <AddDocumentIcon/> My Items
-                            </Typography>
+                    <Box sx={{ p: 2, maxWidth: '100%' }}>
+                        <Paper elevation={3} sx={{p: 2, borderRadius: 2}}>
+                            <div style={{height: "auto", width: "inherit"}}>
+                                <Typography variant="h6" align="center" sx={{ mb: 2 , fontWeight: "bold", color: 'myLightColour.main'}}>
+                                    <AddDocumentIcon/> My Items
+                                </Typography>
                                 <DataGrid
 
                                     disableColumnMenu={true}
-                                rows={assignedItemList}
-                                columns={columns}
-                                initialState={{
-                                    pagination: {
-                                        paginationModel: {page: 1, pageSize: 5},
-                                    },
-                                }}
-                                pageSizeOptions={[5, 10]}
-                                rowSelection={false}
-                                hideFooter={true}
+                                    rows={assignedItemList}
+                                    columns={columns}
+                                    initialState={{
+                                        pagination: {
+                                            paginationModel: {page: 1, pageSize: 5},
+                                        },
+                                    }}
+                                    pageSizeOptions={[5, 10]}
+                                    rowSelection={false}
+                                    hideFooter={true}
 
 
-                                sx={{
-                                    "& .MuiDataGrid-columnHeaders": {
-                                        backgroundColor: "rgba(224, 224, 224, 1)",
-                                        
-                                    },
-                                    "& .MuiDataGrid-columnHeaderTitle": {
-                                        textAlign: "center",
-                                        fontWeight: "bold",
-                                    },
-                                    "& .MuiDataGrid-cell": {
-                                        textAlign: "center",
-                                    },
-                                    height: "407px",
-                                }}
-                            />
+                                    sx={{
+                                        "& .MuiDataGrid-columnHeaders": {
+                                            backgroundColor: "rgba(224, 224, 224, 1)",
+
+                                        },
+                                        "& .MuiDataGrid-columnHeaderTitle": {
+                                            textAlign: "center",
+                                            fontWeight: "bold",
+                                        },
+                                        "& .MuiDataGrid-cell": {
+                                            textAlign: "center",
+                                        },
+                                        height: "407px",
+                                    }}
+                                />
 
 
-                        </div>
+                            </div>
 
-                    </Paper>
-                </Box>
+                        </Paper>
+                    </Box>
 
+                </Grid>
+                <Grid item xs={3}>
+                    <MyCard/>
+                </Grid>
             </Grid>
-            <Grid item xs={3}>
-                <MyCard/>
-            </Grid>
-        </Grid>
+        }/>
+
+
+
     );
 }

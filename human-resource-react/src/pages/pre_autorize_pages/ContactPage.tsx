@@ -22,6 +22,7 @@ import ThemeElement from '../../components/atoms/ThemeElement';
 const Root = styled('div')(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
+  minHeight: '100vh',
   backgroundColor: theme.palette.myBackgroundColour.main,
 }));
 

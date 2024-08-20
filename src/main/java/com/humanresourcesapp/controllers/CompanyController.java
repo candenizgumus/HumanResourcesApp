@@ -84,7 +84,7 @@ public class CompanyController
                                                           @RequestParam("country") String country,
                                                           @Nullable @RequestParam("photo") MultipartFile photo)
     {
-        return ResponseEntity.ok(companyService.updateWithPhoto( name, country, description, photo));
+        return ResponseEntity.ok(companyService.updateWithPhoto( name, description,country, photo));
     }
 
     @PostMapping("/get-upcoming-membership-expiries")

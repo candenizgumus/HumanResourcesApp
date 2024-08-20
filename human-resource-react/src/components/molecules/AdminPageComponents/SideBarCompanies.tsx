@@ -31,6 +31,7 @@ const columns: GridColDef[] = [
     { field: "name", headerName: "Company Name", flex: 1, headerAlign: "center" },
     { field: "description", headerName: "Description", headerAlign: "center", flex: 3 },
     { field: "numberOfEmployee", headerName: "Employee Count", headerAlign: "center", flex: 1 },
+    { field: "country", headerName: "Country", headerAlign: "center", flex: 1 },
     { field: "status", headerName: "Status", headerAlign: "center", flex: 1 },
     {
         field: "logo",
@@ -146,6 +147,7 @@ export default function OfferList() {
                     id: selectedCompany.id,
                     name: selectedCompany.name,
                     logo: selectedCompany.logo,
+                    country: selectedCompany.country,
                     description: selectedCompany.description
                 }));
                 Swal.fire({
@@ -262,6 +264,16 @@ export default function OfferList() {
                                         onChange={handleInputChange}
                                         fullWidth
                                         inputProps={{ maxLength: 255 }}
+                                        style={{ marginBottom: "10px" }}
+                                    />
+                                    <TextField
+                                        label="Country"
+                                        name="country"
+                                        variant="outlined"
+                                        value={selectedCompany.country}
+                                        onChange={handleInputChange}
+                                        fullWidth
+                                        inputProps={{ maxLength: 64 }}
                                         style={{ marginBottom: "10px" }}
                                     />
                                 </Grid>

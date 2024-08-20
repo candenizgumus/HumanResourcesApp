@@ -8,6 +8,7 @@ import {
   IconButton,
   Box,
   createTheme,
+  useMediaQuery,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { useDispatch, useSelector } from 'react-redux';
@@ -34,25 +35,23 @@ const Root = styled('div')(({ theme }) => ({
   backgroundColor: theme.palette.myBackgroundColour.main,
 }));
 
-const Header = styled('header')(({ theme }) => ({
-  display: 'flex',
-  flexDirection: 'column',
-  height: 'calc(100vh - 64px)',
-  justifyContent: 'center',
-  alignItems: 'center',
-  backgroundColor: theme.palette.primary.main,
-  width: '100%',
-  padding: theme.spacing(4, 0),
-}));
-
 const Body = styled('main')(({ theme }) => ({
   flex: '1',
   width: '100%',
-  marginTop: theme.spacing(5),
+  marginTop: theme.spacing(1),
 }));
 
 const Footer = styled('footer')(({ theme }) => ({
   padding: theme.spacing(0),
+}))
+
+
+const Header = styled('div')(({ theme }) => ({
+  marginBottom: theme.spacing(4),
+  backgroundColor: theme.palette.primary.main,
+  color: theme.palette.myBackgroundColour.main,
+  padding: theme.spacing(3, 0),
+  height: 'calc(100vh - 64px)',
 }));
 
 const CardGrid = styled(Container)(({ theme }) => ({
@@ -78,19 +77,19 @@ const Logos = styled('div')(({ theme }) => ({
 
 const bookDemoButtonStyles = {
   border: '1px solid',
-  backgroundColor:  'primary.main',
+  backgroundColor: 'primary.main',
   color: 'myLightColour.main',
   borderColor: 'myLightColour.main',
   '&:hover': {
     color: 'primary.main',
-        },
+  },
 };
 
 function LandingPage() {
   const dispatch: HumanResources = useDispatch();
   const featureList = useSelector((state: RootState) => state.feature.featuresList);
   const logoList = useSelector((state: RootState) => state.company.logoList);
-
+  const isBigForScreen = useMediaQuery('(max-width:1200px)');
   const [currentIndex, setCurrentIndex] = useState(0);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
@@ -147,41 +146,73 @@ function LandingPage() {
         <NavBar />
         <Header>
           <Container maxWidth="sm">
-            <Box sx={{ textAlign: 'center' }}>
-              <Grid container spacing={4} justifyContent="center">
-                <Grid item>
-                  <BoxReveal boxColor="#00ADB5" duration={0.50}>
-                    <Typography component="h1" variant="h3" align="center" color="myLightColour.main" >
-                      Making your work easier
-                    </Typography>
 
-                  </BoxReveal>
+            {isBigForScreen ?
+              <Box sx={{ textAlign: 'center' }}>
+                <Grid container spacing={4} mt={4} justifyContent="center">
+                  <Grid item>
+                    <BoxReveal boxColor="#00ADB5" duration={0.50}>
+                      <Typography component="h1" variant="h3" align="center" color="myLightColour.main" >
+                        Making your work easier
+                      </Typography>
+
+                    </BoxReveal>
+                  </Grid>
+                  <Grid item>
+                    <BoxReveal boxColor="#00ADB5" duration={0.65} >
+                      <Typography component="h1" variant="h3" align="center" color="myLightColour.main" >
+                        One step at a time
+                      </Typography>
+                    </BoxReveal>
+                  </Grid>
                 </Grid>
-                <Grid item>
-                  <BoxReveal boxColor="#00ADB5" duration={0.65} >
-                    <Typography component="h1" variant="h3" align="center" color="myLightColour.main" >
-                      One step at a time
-                    </Typography>
-                  </BoxReveal>
+                <Grid container spacing={4} justifyContent="center">
+                  <Grid item sx={{ marginTop: '5%' }}>
+                    <BoxReveal boxColor="#00ADB5" duration={0.75}>
+                      <Button variant="contained" sx={bookDemoButtonStyles} >
+                        Book Demo
+                      </Button>
+                    </BoxReveal>
+                  </Grid>
                 </Grid>
-              </Grid>
-              <Grid container spacing={4} justifyContent="center">
-                <Grid item sx={{ marginTop: '5%' }}>
-                  <BoxReveal boxColor="#00ADB5" duration={0.75}>
-                    <Button variant="contained" sx={bookDemoButtonStyles} >
-                      Book Demo
-                    </Button>
-                  </BoxReveal>
-                </Grid>
-              </Grid>
-              <Box sx={{ mt: 4 }}>
-                <img
-                  src={Dashboard}
-                  style={{ width: '100%' }}
-                  alt="Description of the image"
-                />
               </Box>
-            </Box>
+              :
+              <Box sx={{ textAlign: 'center' }}>
+                <Grid container spacing={4} justifyContent="center">
+                  <Grid item>
+                    <BoxReveal boxColor="#00ADB5" duration={0.50}>
+                      <Typography component="h1" variant="h3" align="center" color="myLightColour.main" >
+                        Making your work easier
+                      </Typography>
+
+                    </BoxReveal>
+                  </Grid>
+                  <Grid item>
+                    <BoxReveal boxColor="#00ADB5" duration={0.65} >
+                      <Typography component="h1" variant="h3" align="center" color="myLightColour.main" >
+                        One step at a time
+                      </Typography>
+                    </BoxReveal>
+                  </Grid>
+                </Grid>
+                <Grid container spacing={4} justifyContent="center">
+                  <Grid item sx={{ marginTop: '5%' }}>
+                    <BoxReveal boxColor="#00ADB5" duration={0.75}>
+                      <Button variant="contained" sx={bookDemoButtonStyles} >
+                        Book Demo
+                      </Button>
+                    </BoxReveal>
+                  </Grid>
+                </Grid>
+                <Grid container mt="5%" justifyContent="center">
+                  <img
+                    src={Dashboard}
+                    style={{ width: '70vh', height: 'auto' }}
+                    alt="Description of the image"
+                  />
+                </Grid>
+              </Box>
+            }
           </Container>
         </Header>
         <Body>

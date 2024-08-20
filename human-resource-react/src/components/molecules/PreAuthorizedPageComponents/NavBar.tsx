@@ -1,15 +1,19 @@
 import { useState, useEffect } from 'react';
-import { AppBar, Button, Toolbar, Typography } from '@mui/material';
+import { AppBar, Button, Toolbar, Typography, IconButton, Drawer, List, ListItem, ListItemText } from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';
 import { useNavigate } from 'react-router-dom';
+import { useMediaQuery, useTheme } from '@mui/material';
 import logoDark from '../../../images/logo-full-dark.png';
 import logoLight from '../../../images/logo-full-light.png';
 import logo_hd from '../../../images/logo-full-light.png';
 
 import ThemeElement from '../../atoms/ThemeElement';
-// @ts-ignore
+
 export const NavBar = () => {
     const navigate = useNavigate();
+    const isBigForScreen = useMediaQuery('(max-width:1200px)');
     const [scrolled, setScrolled] = useState(false);
+    const [drawerOpen, setDrawerOpen] = useState(false);
 
     const handleScroll = () => {
         const offset = window.scrollY;
@@ -22,6 +26,10 @@ export const NavBar = () => {
             window.removeEventListener('scroll', handleScroll);
         };
     }, []);
+
+    const toggleDrawer = (open: boolean) => {
+        setDrawerOpen(open);
+    };
 
     const appBarStyle = {
         backgroundColor: scrolled ? 'myBackgroundColour.main' : 'primary.main',
@@ -79,15 +87,19 @@ export const NavBar = () => {
         transition: 'color 0.3s ease',
     };
 
-    /*
-    const scrollToFeatures = () => {
-        if (featuresRef.current === null) {
-            navigate('/features');
-        } else if (featuresRef.current) {
-            featuresRef.current.scrollIntoView({ behavior: 'smooth' });
-        }
+    const menuIconStyle = {
+        color: scrolled ? 'primary.main' : 'myBackgroundColour.main',
+        transition: 'color 0.3s ease',
     };
-    */
+
+    const menuItems = [
+        { label: 'Features', onClick: () => navigate('/features') },
+        { label: 'User Stories', onClick: () => navigate('/user-stories') },
+        { label: 'About Us', onClick: () => navigate('/about-us') },
+        { label: 'Contact', onClick: () => navigate('/contact') },
+        { label: 'Login', onClick: () => navigate('/login'), style: loginButtonStyle },
+        { label: 'Get Offer', onClick: () => navigate('/get-offer'), style: getOfferButtonStyle },
+    ];
 
     return (
         <ThemeElement children={
@@ -98,28 +110,47 @@ export const NavBar = () => {
                             {scrolled ? <img src={logoDark} alt="logo" style={{ height: '52px' }} /> : <img src={logoLight} alt="logo" style={{ height: '52px' }} />}
                         </Button>
                     </Typography>
-                    <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'nowrap' }}>
-                        <Button style={{ marginRight: '20px' }} sx={navigationsStyle} onClick={() => navigate('/features')} color="inherit">
-                            Features
-                        </Button>
-                        <Button style={{ marginRight: '20px' }} sx={navigationsStyle} onClick={() => navigate('/user-stories')} color="inherit">
-                            User Stories
-                        </Button>
-                        <Button style={{ marginRight: '20px' }} sx={navigationsStyle} onClick={() => navigate('/about-us')} color="inherit">
-                            About Us
-                        </Button>
-                        <Button style={{ marginRight: '20px' }} sx={navigationsStyle} onClick={() => navigate('/contact')} color="inherit">
-                            Contact
-                        </Button>
-                    </div>
-                    <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', flexWrap: 'nowrap' }}>
-                        <Button onClick={() => navigate('/login')} sx={loginButtonStyle}>
-                            Login
-                        </Button>
-                        <Button onClick={() => navigate('/get-offer')} sx={getOfferButtonStyle}>
-                            Get Offer
-                        </Button>
-                    </div>
+                    {isBigForScreen ? (
+                        <>
+                            <IconButton
+                                edge="start"
+                                color="inherit"
+                                aria-label="menu"
+                                onClick={() => toggleDrawer(true)}
+                            >
+                                <MenuIcon sx={{color: scrolled ? 'primary.main' : 'myLightColour.main'}}/>
+                            </IconButton>
+                            <Drawer anchor="right" open={drawerOpen} onClose={() => toggleDrawer(false)}>
+                                <List>
+                                    {menuItems.map((item, index) => (
+                                        <ListItem button key={index} onClick={item.onClick}>
+                                            <ListItemText primary={item.label} />
+                                        </ListItem>
+                                    ))}
+                                </List>
+                            </Drawer>
+                        </>
+                    ) : (
+                        <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'nowrap' }}>
+                            {menuItems.slice(0, 4).map((item, index) => (
+                                <Button
+                                    key={index}
+                                    style={{ marginRight: '20px' }}
+                                    sx={navigationsStyle}
+                                    onClick={item.onClick}
+                                    color="inherit"
+                                >
+                                    {item.label}
+                                </Button>
+                            ))}
+                            <Button sx={loginButtonStyle} onClick={menuItems[4].onClick}>
+                                {menuItems[4].label}
+                            </Button>
+                            <Button sx={getOfferButtonStyle} onClick={menuItems[5].onClick}>
+                                {menuItems[5].label}
+                            </Button>
+                        </div>
+                    )}
                 </Toolbar>
             </AppBar>
         } />

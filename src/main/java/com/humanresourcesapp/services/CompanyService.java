@@ -93,6 +93,9 @@ public class CompanyService
         if (dto.numberOfEmployee() != null){
             company.setNumberOfEmployee(dto.numberOfEmployee());
         }
+        if (!UtilMethods.isNullOrWhitespace(dto.country())){
+            company.setCountry(dto.country());
+        }
 
         return companyRepository.save(company);
     }

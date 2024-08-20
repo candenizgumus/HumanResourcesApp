@@ -486,6 +486,7 @@ const SideBarManagerLeaves = () => {
                 confirmButtonText: "OK",
                 confirmButtonColor: myLightColour,
             });
+            setLoading(false);
             return;
         }
 
@@ -500,6 +501,7 @@ const SideBarManagerLeaves = () => {
                 confirmButtonText: "OK",
                 confirmButtonColor: myLightColour,
             });
+            setLoading(false);
             return;
         }
 
@@ -564,6 +566,7 @@ const SideBarManagerLeaves = () => {
                 confirmButtonText: "OK",
                 confirmButtonColor: myLightColour,
             });
+            setLoading(false);
         }
         setLoading(false);
     }

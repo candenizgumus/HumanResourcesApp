@@ -24,10 +24,11 @@ export const EmployeeHomeContent: React.FC = () => {
     const [assignedItemList, setAssignedItemList] = useState<IAssignedItemList[]>([]);
     const [leaves, setLeave] = useState<ILeave[]>([]);
     const [expenditures, setExpenditures] = useState<IExpenditure[]>([]);
+    const user = useAppSelector((state) => state.auth.user);
 
 
     const getShiftsOfEmployee = () => {
-        dispatch(fetchFindShiftsOfEmployee({ employeeId: 7, token: token })).then(data => {
+        dispatch(fetchFindShiftsOfEmployee({ employeeId: user.id, token: token })).then(data => {
             setEvents(data.payload);
         });
 

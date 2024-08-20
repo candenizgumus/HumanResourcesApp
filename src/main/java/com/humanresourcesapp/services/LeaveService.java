@@ -140,6 +140,12 @@ public class LeaveService {
         return leaveRepository.searchByEmployeeId(dto.searchText(), employee.getId(), PageRequest.of(dto.page(), dto.pageSize()));
     }
 
+    public List<Leave> searchByEmployeeId(Long employeeId)
+    {
+        User employee = userService.findById(employeeId);
+        return leaveRepository.searchByEmployeeId(employeeId);
+    }
+
 
     public List<Leave> searchByCompanyId(PageRequestDto dto)
     {

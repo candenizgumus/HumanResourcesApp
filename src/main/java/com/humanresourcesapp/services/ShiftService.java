@@ -2,6 +2,7 @@ package com.humanresourcesapp.services;
 
 import com.humanresourcesapp.dto.requests.ShiftSaveRequestDto;
 import com.humanresourcesapp.dto.requests.ShiftUpdateRequestDto;
+import com.humanresourcesapp.entities.Leave;
 import com.humanresourcesapp.entities.Shift;
 import com.humanresourcesapp.entities.enums.EStatus;
 import com.humanresourcesapp.exception.ErrorType;
@@ -10,12 +11,14 @@ import com.humanresourcesapp.repositories.ShiftRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class ShiftService {
     private final ShiftRepository shiftRepository;
+    private final LeaveService leaveService;
    // private static final ZoneId SERVER_TIME_ZONE = ZoneId.of("Europe/Istanbul");
     public Shift save(ShiftSaveRequestDto dto) {
 
@@ -34,7 +37,12 @@ public class ShiftService {
 
     public List<Shift> getAll(Long employeeId)
     {
-        return shiftRepository.findAllByEmployeeId(employeeId);
+        System.out.println(employeeId);
+        List<Shift> shifts = shiftRepository.findAllByEmployeeId(employeeId);
+        leaveService.searchByEmployeeId(employeeId).forEach(leave -> {
+            shifts.add(Shift.builder().employeeId(employeeId).start(leave.getStartDate().atTime(8, 1)).endTime(leave.getEndDate().atTime(23,59)).title(leave.getLeaveType()).build());
+        });
+        return shifts;
     }
 
     public Shift update(ShiftUpdateRequestDto dto)

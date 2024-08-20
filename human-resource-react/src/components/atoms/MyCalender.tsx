@@ -114,6 +114,7 @@ const MyCalendar: React.FC<MyCalendarProps> = ({ events, onSaveEvent, onUpdateEv
                                     ...event,
                                     start: new Date(event.start),  // Date objesi
                                     end: new Date(event.endTime),   // Date objesi
+                                    isImportant: event.title === 'Leave',
                                 }))}
                                 startAccessor={(event) => new Date(event.start.toString())}
                                 endAccessor={(event) => new Date(event.end.toString())}
@@ -121,6 +122,10 @@ const MyCalendar: React.FC<MyCalendarProps> = ({ events, onSaveEvent, onUpdateEv
                                 views={['month', 'week', 'day']}
                                 toolbar
                                 showMultiDayTimes
+                                eventPropGetter={(event) => {
+                                    const backgroundColor = event.isImportant ? 'red' : 'green';  // Örneğin, önemli etkinlikler için kırmızı, diğerleri için yeşil
+                                    return { style: { backgroundColor } };
+                                }}
                                 selectable={isUserManager} // isUserManager true ise seçilebilir yap
                                 {...(isUserManager ? { onSelectEvent: handleSelectEvent, onSelectSlot: handleSelectSlot } : {})} // isUserManager true ise onSelectEvent ve onSelectSlot prop'larını ekle
                             />

@@ -107,4 +107,10 @@ public class LeaveController {
         return ResponseEntity.ok(leaveService.update(dto));
     }
 
+    @PostMapping(GET_ALL_CURRENT_LEAVES)
+    @PreAuthorize("hasAnyAuthority('EMPLOYEE')")
+    public ResponseEntity<List<Leave>> getAllCurrentLeaves() {
+        return ResponseEntity.ok(leaveService.getAllCurrentLeaves());
+    }
+
 }

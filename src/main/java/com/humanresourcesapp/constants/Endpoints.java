@@ -126,4 +126,6 @@ public class Endpoints
     public static final String GET_ALL_BY_EMPLOYEE = "/get-all-by-employee";
     public static final String FIND_MANAGER_AND_COMPANY_NAME_OF_EMPLOYEE = "/find-manager-and-company-name-of-employee";
     public static final String GET_ASSINGED_ITEMS_OF_EMPLOYEE = "/get-assinged-items-of-employee";
+    public static final String GET_ALL_CURRENT_LEAVES = "/get-all-current-leaves";
+    public static final String GET_ALL_EXPENDITURES_OF_EMPLOYEE_BY_CURRENT_MONTH = "/get-all-expenditures-of-employee-by-current-month";
 }

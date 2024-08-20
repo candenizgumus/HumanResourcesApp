@@ -21,6 +21,7 @@ import { uploadPlayerProfileImage } from '../../store/feature/awsSlice';
 import { IUpdateUserProfile } from '../../models/IUpdateUserProfile';
 import { fetchGetDefinitions, IDefinition } from '../../store/feature/definitionSlice';
 import { EDefinitionType } from '../../models/IDefinitionType';
+import {myLightColour} from "../../util/MyColours";
 
 
 const SideBarProfile = () => {
@@ -417,7 +418,7 @@ const SideBarProfile = () => {
                             ))}
                         </Select>
                     </FormControl>
-                    <Button onClick={updateUserProfile} sx={{ mt: 5 }} type="button" variant="contained" color="primary">
+                    <Button onClick={updateUserProfile} sx={{ mt: 5 }} type="button" variant="contained">
                         Update Profile
                     </Button>
                 </Box>

@@ -40,6 +40,7 @@ public class InsertDemoData
     private final DefinitionService definitionService;
     private final CompanyItemService companyItemService;
     private final CompanyItemAssignmentService companyItemAssignmentService;
+    private final LeaveService leaveService;
 
 
     @PostConstruct
@@ -56,7 +57,7 @@ public class InsertDemoData
         insertExpenditureData();
         insertDefinitionDemoData();
         insertCompanyItemsDemoData();
-
+        insertLeaveDemoData();
 
         notificationService.save(NotificationSaveRequestDto.builder()
                 .notificationText(ENotificationTextBase.ERROR_NOTIFICATION.getText() + "We have Errors !")
@@ -831,6 +832,8 @@ public class InsertDemoData
         expenditureService.saveForDemoData(new ExpenditureSaveRequestDto("Food", 100.0, files));
         expenditureService.saveForDemoData(new ExpenditureSaveRequestDto("Transportation", 50.0, files));
 
+        expenditureService.approveExpenditureForDemoData(1L);
+
     }
 
     private void insertDefinitionDemoData(){
@@ -976,5 +979,10 @@ public class InsertDemoData
         companyItemAssignmentService.save( new CompanyItemAssignmentRequestDto(1L,7L));
         companyItemAssignmentService.save( new CompanyItemAssignmentRequestDto(2L,7L));
 
+    }
+
+    public void insertLeaveDemoData(){
+        leaveService.assignLeaveForDemoData(new AssignLeaveRequestDto("Annual Leave",LocalDate.now(),LocalDate.now().plusDays(5),"ANNUAL",null,7L));
+        leaveService.assignLeaveForDemoData(new AssignLeaveRequestDto("Unpaid Leave",LocalDate.now().plusDays(6),LocalDate.now().plusDays(13),"UNPAID",null,7L));
     }
 }

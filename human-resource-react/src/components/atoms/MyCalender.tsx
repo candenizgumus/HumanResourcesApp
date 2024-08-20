@@ -104,7 +104,7 @@ const MyCalendar: React.FC<MyCalendarProps> = ({ events, onSaveEvent, onUpdateEv
                 <Box sx={{ p: 2, maxWidth: '100%', overflow: 'auto' }}>
                     <Paper elevation={3} sx={{ p: 2, borderRadius: 2 }}>
                         <Typography variant="h6" align="center" sx={{ mb: 2, fontWeight: "bold", color: myLightColour }}>
-                            <CalendarMonth/> {isUserManager ? name + " " + surname + 's Events' : 'My Events'}
+                            <CalendarMonth/> {isUserManager ? name + " " + surname +  '\'s Events' : 'My Events'}
                         </Typography>
 
                         <Box sx={{ height: 600 }}>

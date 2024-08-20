@@ -303,6 +303,23 @@ export const fetchUpdateLeave = createAsyncThunk(
 
 )
 
+export const fetchGetCurrentLeavesOfEmployeeForHomePage = createAsyncThunk(
+    'leave/fetchUpdateAnnualLeaveDays',
+    async (payload: string) => {
+
+        const response = await fetch('http://localhost:9090/dev/v1/leave/get-all-current-leaves', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ` + payload
+            }
+        });
+
+        return await response.json();
+    }
+
+)
+
 const leaveSlice = createSlice({
     name: 'leave',
     initialState: initialLeaveState,

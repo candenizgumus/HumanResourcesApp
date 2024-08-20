@@ -58,7 +58,7 @@ export default function SideBarHolidayTableUser() {
     const [holidayStartDate, setHolidayStartDate] = useState<Date | null>(null);
     const [holidayEndDate, setHolidayEndDate] = useState<Date | null>(null);
     const [predefinedholidays, setPredefinedHolidays] = useState<any[]>([]);
-    const [selectedHolidayId, setSelectedHolidayId] = useState<number | null>(null);
+    const [selectedHolidayId, setSelectedHolidayId] = useState<number>(0);
     const formatDate = (date: Date | string | undefined): string => {
         if (!date) return '';
 
@@ -163,7 +163,8 @@ export default function SideBarHolidayTableUser() {
             holidayType,
             startDate: holidayStartDate,
             endDate: holidayEndDate,
-            token
+            token,
+            holidayId:selectedHolidayId
         }))
             .then(data => {
                 if (data.payload.message) {
@@ -257,7 +258,7 @@ export default function SideBarHolidayTableUser() {
                         <FormControl fullWidth>
                             <InputLabel>Select Holiday</InputLabel>
                             <Select
-                                value={selectedHolidayId || ''}
+                                value={selectedHolidayId}
                                 onChange={handleHolidaySelect}
                             >
                                 {predefinedholidays.map(holiday => (

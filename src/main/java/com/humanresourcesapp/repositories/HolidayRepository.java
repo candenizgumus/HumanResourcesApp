@@ -14,7 +14,7 @@ import java.util.List;
 @Repository
 public interface HolidayRepository extends JpaRepository<Holiday, Long> {
     List<Holiday> findByCompanyId(Long companyId);
-    List<Holiday> findByCompanyIdAndStatus(Long companyId, EStatus status);
+    List<Holiday> findByCompanyIdAndStatusIn(Long companyId, List<EStatus> status);
 
     @Query("SELECT h FROM Holiday h WHERE h.companyId = ?1 AND h.companyId != null AND MONTH(h.startDate) = MONTH(CURRENT_DATE) AND h.status = 'ACTIVE' ")
     List<Holiday> findCurrentMonthsHolidays(Long companyId);

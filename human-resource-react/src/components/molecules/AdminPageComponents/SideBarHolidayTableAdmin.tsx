@@ -77,7 +77,8 @@ export default function SideBarHolidayTableAdmin() {
             holidayType,
             startDate: holidayStartDate,
             endDate: holidayEndDate,
-            token,
+            token
+
         }))
             .then(() => {
                 Swal.fire({

@@ -367,8 +367,8 @@ public class InsertDemoData
         holidayList.add(Holiday.builder()
                 .holidayName("1 MAYIS")
                 .holidayType(EHolidayType.NATIONAL)
-                .startDate(LocalDate.of(2024, 5, 1)) // Emek ve Dayanışma Günü
-                .endDate(LocalDate.of(2024, 5, 1))
+                .startDate(LocalDate.of(2024, 5, 30)) // Emek ve Dayanışma Günü
+                .endDate(LocalDate.of(2024, 5, 30))
                 .status(EStatus.INACTIVE)
                 .build());
 
@@ -983,6 +983,7 @@ public class InsertDemoData
 
         companyItemAssignmentService.saveForDemoData( 1L,7L);
         companyItemAssignmentService.saveForDemoData( 2L,7L);
+        
 
 
     }

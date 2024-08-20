@@ -16,7 +16,7 @@ export const SetShifts: React.FC = () => {
     const surname = useAppSelector((state) => state.shift.surname);
 
     const getShiftsOfEmployee = () => {
-        dispatch(fetchFindShiftsOfEmployee({ employeeId: 7, token: token })).then(data => {
+        dispatch(fetchFindShiftsOfEmployee({ employeeId: employeeId, token: token })).then(data => {
             setEvents(data.payload);
         });
     };

@@ -19,5 +19,7 @@ public interface LeaveRepository extends JpaRepository<Leave, Long> {
 
     List<Leave> findAllByEmployeeIdAndStatusAndStartDateIsAfterOrEndDateIsAfter(Long employeeId, EStatus status, LocalDate startDate,LocalDate endDate);
 
-
+    // Todo : isApproved
+    @Query("select e from Leave e  where e.employeeId = ?1 AND e.status != 'DELETED' ORDER BY e.id ASC")
+    List<Leave> searchByEmployeeId(Long employeeId);
 }

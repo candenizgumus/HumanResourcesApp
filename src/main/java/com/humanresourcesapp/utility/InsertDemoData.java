@@ -989,7 +989,7 @@ public class InsertDemoData
     }
 
     public void insertLeaveDemoData(){
-        leaveService.assignLeaveForDemoData(new AssignLeaveRequestDto("Annual Leave",LocalDate.now(),LocalDate.now().plusDays(5),"ANNUAL",null,7L));
-        leaveService.assignLeaveForDemoData(new AssignLeaveRequestDto("Unpaid Leave",LocalDate.now().plusDays(6),LocalDate.now().plusDays(13),"UNPAID",null,7L));
+        leaveService.assignLeaveForDemoData(new AssignLeaveRequestDto("Annual Leave",LocalDate.now().minusDays(10),LocalDate.now().minusDays(5),"ANNUAL",null,7L));
+        leaveService.assignLeaveForDemoData(new AssignLeaveRequestDto("Unpaid Leave",LocalDate.now().minusDays(15),LocalDate.now().minusDays(10),"UNPAID",null,7L));
     }
 }

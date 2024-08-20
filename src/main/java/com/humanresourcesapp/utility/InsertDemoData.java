@@ -976,8 +976,5 @@ public class InsertDemoData
         companyItemAssignmentService.save( new CompanyItemAssignmentRequestDto(1L,7L));
         companyItemAssignmentService.save( new CompanyItemAssignmentRequestDto(2L,7L));
 
-
-        companyItemAssignmentService.approveAssignment(1L,7L);
-        companyItemAssignmentService.approveAssignment(2L,7L);
     }
 }

@@ -139,6 +139,34 @@ export const fetchGetAssignedItemsOfEmployee = createAsyncThunk(
     }
 );
 
+export const fetchGetAssignedItemsOfEmployeeDetailed = createAsyncThunk(
+    'companyItem/fetchGetAssignedItemsOfEmployeeDetailed',
+    async (token: string) => {
+        const response = await fetch('http://localhost:9090/dev/v1/company-item-assignment/get-all-by-employee', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ` + token
+            }
+        });
+        return await response.json();
+    }
+);
+
+export const fetchApproveItemAssignmentByEmployee = createAsyncThunk(
+    'companyItem/fetchApproveItemAssignmentByEmployee',
+    async (payload: { id: number, token: string }) => {
+        const response = await fetch(`http://localhost:9090/dev/v1/company-item-assignment/approve-assignment/${payload.id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ` + payload.token
+            }
+        });
+        return await response.json();
+    }
+);
+
 
 
 const companyItemSlice = createSlice({
@@ -166,6 +194,12 @@ const companyItemSlice = createSlice({
             state.companyItems = action.payload;
         });
         builder.addCase(fetchCompanyItemAssignments.fulfilled, (state, action) => {
+            state.companyItems = action.payload;
+        });
+        builder.addCase(fetchGetAssignedItemsOfEmployeeDetailed.fulfilled, (state, action) => {
+            state.companyItems = action.payload;
+        });
+        builder.addCase(fetchApproveItemAssignmentByEmployee.fulfilled, (state, action) => {
             state.companyItems = action.payload;
         });
     }

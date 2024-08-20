@@ -33,7 +33,7 @@ public class CompanyItemController {
     }
 
     @PostMapping(GET_TYPES)
-    @PreAuthorize("hasAnyAuthority('MANAGER')")
+    @PreAuthorize("hasAnyAuthority('MANAGER', 'EMPLOYEE')")
     public List<String> getTypes() {
         return companyItemService.getCompanyItemTypes();
     }

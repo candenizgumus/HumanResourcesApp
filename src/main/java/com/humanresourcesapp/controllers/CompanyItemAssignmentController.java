@@ -2,6 +2,7 @@ package com.humanresourcesapp.controllers;
 
 import com.humanresourcesapp.dto.requests.CompanyItemAssignmentRequestDto;
 import com.humanresourcesapp.dto.requests.PageRequestDto;
+import com.humanresourcesapp.dto.responses.CompanyItemAssignmentEmployeeResponseDto;
 import com.humanresourcesapp.dto.responses.CompanyItemAssignmentResponseDto;
 import com.humanresourcesapp.dto.responses.ItemAssignmentsOfEmployeeResponseDto;
 import com.humanresourcesapp.entities.CompanyItemAssignment;
@@ -35,10 +36,16 @@ public class CompanyItemAssignmentController {
         return ResponseEntity.ok(companyItemAssignmentService.getAllAssignments());
     }
 
-    @PostMapping(APPROVE_ASSIGNMENT)
+    @PostMapping(GET_ALL_BY_EMPLOYEE)
     @PreAuthorize("hasAnyAuthority('EMPLOYEE')")
-    public ResponseEntity<Boolean> approveAssignment(Long id, Long employeeId) {
-        return ResponseEntity.ok(companyItemAssignmentService.approveAssignment(id, employeeId));
+    public ResponseEntity<List<CompanyItemAssignmentEmployeeResponseDto>> getAllAssignmentsByEmployee() {
+        return ResponseEntity.ok(companyItemAssignmentService.getAllAssignmentsByEmployee());
+    }
+
+    @PutMapping(APPROVE_ASSIGNMENT + "/{id}")
+    @PreAuthorize("hasAnyAuthority('EMPLOYEE')")
+    public ResponseEntity<Boolean> approveAssignment(@PathVariable Long id) {
+        return ResponseEntity.ok(companyItemAssignmentService.approveAssignment(id));
     }
 
 

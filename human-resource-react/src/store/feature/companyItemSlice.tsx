@@ -167,6 +167,24 @@ export const fetchApproveItemAssignmentByEmployee = createAsyncThunk(
     }
 );
 
+export const fetchRejectItemAssignmentByEmployee = createAsyncThunk(
+    'companyItem/fetchRejectItemAssignmentByEmployee',
+    async (payload: { id: number, token: string, message: string }) => {
+        const response = await fetch(`http://localhost:9090/dev/v1/company-item-assignment/reject-assignment`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ` + payload.token
+            },
+            body: JSON.stringify({
+                'id': payload.id,
+                'message': payload.message
+            })
+        });
+        return await response.json();
+    }
+);
+
 
 
 const companyItemSlice = createSlice({
@@ -200,6 +218,9 @@ const companyItemSlice = createSlice({
             state.companyItems = action.payload;
         });
         builder.addCase(fetchApproveItemAssignmentByEmployee.fulfilled, (state, action) => {
+            state.companyItems = action.payload;
+        });
+        builder.addCase(fetchRejectItemAssignmentByEmployee.fulfilled, (state, action) => {
             state.companyItems = action.payload;
         });
     }

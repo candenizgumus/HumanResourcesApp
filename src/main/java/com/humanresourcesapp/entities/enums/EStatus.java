@@ -11,5 +11,6 @@ public enum EStatus
     IN_PROGRESS,
     IN_USE,
     AVAILABLE,
-    APPROVED
+    APPROVED,
+    REJECTED
 }

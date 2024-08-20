@@ -1,6 +1,7 @@
 package com.humanresourcesapp.controllers;
 
 import com.humanresourcesapp.dto.requests.CompanyItemAssignmentRequestDto;
+import com.humanresourcesapp.dto.requests.EmployeeRejectAssignmentRequestDto;
 import com.humanresourcesapp.dto.requests.PageRequestDto;
 import com.humanresourcesapp.dto.responses.CompanyItemAssignmentEmployeeResponseDto;
 import com.humanresourcesapp.dto.responses.CompanyItemAssignmentResponseDto;
@@ -48,11 +49,18 @@ public class CompanyItemAssignmentController {
         return ResponseEntity.ok(companyItemAssignmentService.approveAssignment(id));
     }
 
-
-    @PostMapping(GET_ASSINGED_ITEMS_OF_EMPLOYEE)
+    @PutMapping(REJECT_ASSIGNMENT)
     @PreAuthorize("hasAnyAuthority('EMPLOYEE')")
-    public ResponseEntity<List<ItemAssignmentsOfEmployeeResponseDto>> getAssingedItemsOfEmployee() {
-        return ResponseEntity.ok(companyItemAssignmentService.getAssingedItemsOfEmployee());
+    public ResponseEntity<Boolean> rejectAssignment(@RequestBody EmployeeRejectAssignmentRequestDto dto) {
+        return ResponseEntity.ok(companyItemAssignmentService.rejectAssignment(dto));
+    }
+
+    //@PutMapping(CANCEL_ASSIGNMENT_BY_MANAGER)
+
+    @PostMapping(GET_ASSIGNED_ITEMS_OF_EMPLOYEE)
+    @PreAuthorize("hasAnyAuthority('EMPLOYEE')")
+    public ResponseEntity<List<ItemAssignmentsOfEmployeeResponseDto>> getAssignedItemsOfEmployee() {
+        return ResponseEntity.ok(companyItemAssignmentService.getAssignedItemsOfEmployee());
     }
 
 }

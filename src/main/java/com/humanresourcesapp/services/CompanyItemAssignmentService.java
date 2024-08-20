@@ -1,6 +1,7 @@
 package com.humanresourcesapp.services;
 
 import com.humanresourcesapp.dto.requests.CompanyItemAssignmentRequestDto;
+import com.humanresourcesapp.dto.requests.EmployeeRejectAssignmentRequestDto;
 import com.humanresourcesapp.dto.requests.PageRequestDto;
 import com.humanresourcesapp.dto.responses.CompanyItemAssignmentEmployeeResponseDto;
 import com.humanresourcesapp.dto.responses.CompanyItemAssignmentResponseDto;
@@ -37,6 +38,19 @@ public class CompanyItemAssignmentService {
                 .companyId(employee.getCompanyId())
                 .companyItemId(dto.companyItemId())
                 .employeeId(dto.employeeId())
+                .assignDate(LocalDate.now())
+                .status(EStatus.PENDING)
+                .build());
+
+        return true;
+    }
+
+    public boolean saveForDemoData(Long companyItemId, Long employeeId) {
+        User employee = userService.findById(employeeId);
+        companyItemAssignmentRepository.save(CompanyItemAssignment.builder()
+                .companyId(employee.getCompanyId())
+                .companyItemId(companyItemId)
+                .employeeId(employeeId)
                 .assignDate(LocalDate.now())
                 .status(EStatus.PENDING)
                 .build());
@@ -82,8 +96,19 @@ public class CompanyItemAssignmentService {
         throw new HumanResourcesAppException(ErrorType.ASSIGNMENT_NOT_FOUND);
     }
 
+    public Boolean rejectAssignment(EmployeeRejectAssignmentRequestDto dto) {
+        Optional<CompanyItemAssignment> companyItemAssignment = companyItemAssignmentRepository.findById(dto.id());
+        if (companyItemAssignment.isPresent()) {
+            companyItemAssignment.get().setStatus(EStatus.REJECTED);
+            companyItemAssignment.get().setMessage(dto.message());
+            companyItemAssignmentRepository.save(companyItemAssignment.get());
+            return true;
+        }
+        throw new HumanResourcesAppException(ErrorType.ASSIGNMENT_NOT_FOUND);
+    }
 
-    public List<ItemAssignmentsOfEmployeeResponseDto> getAssingedItemsOfEmployee() {
+
+    public List<ItemAssignmentsOfEmployeeResponseDto> getAssignedItemsOfEmployee() {
         String managerEmail = UserInfoSecurityContext.getUserInfoFromSecurityContext();
         User employee = userService.findByEmail(managerEmail).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
 
@@ -127,4 +152,6 @@ public class CompanyItemAssignmentService {
         }
         return dtoList;
     }
+
+
 }

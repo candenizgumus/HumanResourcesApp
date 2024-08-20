@@ -1,6 +1,7 @@
 import React from 'react';
 import { Container, Typography, Box, Accordion, AccordionSummary, AccordionDetails } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ThemeElement from '../../atoms/ThemeElement';
 
 const faqs = [
     {
@@ -23,9 +24,10 @@ const faqs = [
 
 const FAQSection = () => {
     return (
-        <Box sx={{ py: 8, bgcolor: 'background.default' }}>
+        <ThemeElement children={
+        <Box sx={{ py: 8, bgcolor: 'myBackgroundColour.main' }}>
             <Container maxWidth="lg">
-                <Typography variant="h4" color={'primary.main'} align="center" gutterBottom>
+                <Typography variant="h4" color="primary.main" align="center" gutterBottom>
                     F.A.Q
                 </Typography>
                 {faqs.map((faq, index) => (
@@ -40,6 +42,7 @@ const FAQSection = () => {
                 ))}
             </Container>
         </Box>
+        }/>
     );
 };
 

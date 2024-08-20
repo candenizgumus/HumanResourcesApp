@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     Container,
     Typography,
@@ -16,8 +16,10 @@ import { HumanResources } from "../../../store";
 import { fetchCreateOffer } from "../../../store/feature/offerSlice";
 import Swal from "sweetalert2";
 import {
-     fetchGetSectors
+    fetchGetSectors
 } from "../../../store/feature/authSlice";
+import { myErrorColour, myLightColour } from '../../../util/MyColours';
+import ThemeElement from '../../atoms/ThemeElement';
 
 const OfferFormSection = () => {
     const dispatch = useDispatch<HumanResources>();
@@ -38,7 +40,8 @@ const OfferFormSection = () => {
             Swal.fire({
                 icon: 'error',
                 text: 'Please fill all the fields!',
-                confirmButtonColor: '#1976D2',
+                confirmButtonColor: myLightColour,
+                cancelButtonColor: myErrorColour,
             });
             return;
         }
@@ -48,7 +51,8 @@ const OfferFormSection = () => {
                 icon: 'warning',
                 title: 'Warning',
                 text: 'You must agree to the terms before submitting.',
-                confirmButtonColor: '#1976D2',
+                confirmButtonColor: myLightColour,
+                cancelButtonColor: myErrorColour,
             });
             return;
         }
@@ -68,9 +72,10 @@ const OfferFormSection = () => {
                 if (data.payload.code) {
                     Swal.fire({
                         icon: 'error',
-                        title: 'Error',
+                        title: 'Error!',
                         text: data.payload.message,
-                        confirmButtonColor: '#1976D2',
+                        confirmButtonColor: myLightColour,
+                        cancelButtonColor: myErrorColour,
                     });
                     return;
                 }
@@ -78,7 +83,8 @@ const OfferFormSection = () => {
                     icon: 'success',
                     title: 'Success!',
                     text: 'Your offer has been submitted successfully.',
-                    confirmButtonColor: '#1976D2',
+                    confirmButtonColor: myLightColour,
+                    cancelButtonColor: myErrorColour,
                 });
             })
 
@@ -92,129 +98,131 @@ const OfferFormSection = () => {
     }, []);
 
     return (
-        <Box sx={{ py: 8, bgcolor: 'background.default' }}>
-            <Container maxWidth="md">
-                <Paper elevation={3} sx={{ p: 4 }}>
-                    <Typography variant="h4" align="center" gutterBottom>
-                        Get Offer
-                    </Typography>
-                    <Grid container spacing={2}>
-                        <Grid item xs={12} sm={6}>
-                            <TextField
-                                onChange={(e) => setName(e.target.value)}
-                                fullWidth
-                                label="Name"
-                                variant="outlined"
-                                value={name}
-                                inputProps={{ maxLength: 50 }}
-                            />
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <TextField
-                                onChange={(e) => setSurname(e.target.value)}
-                                fullWidth
-                                label="Surname"
-                                variant="outlined"
-                                value={surname}
-                                inputProps={{ maxLength: 50 }}
-                            />
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <TextField
-                                onChange={(e) => setEmail(e.target.value)}
-                                fullWidth
-                                label="E-mail"
-                                variant="outlined"
-                                type={"email"}
-                                value={email}
-                                inputProps={{ maxLength: 50 }}
-                            />
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <TextField
-                                onChange={(e) => setPhone(e.target.value)}
-                                fullWidth
-                                label="Phone"
-                                variant="outlined"
-                                value={phone}
-                                type={"number"}
-                                inputProps={{ maxLength: 50 }}
-                            />
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <TextField
-                                onChange={(e) => setTitle(e.target.value)}
-                                fullWidth
-                                label="Title"
-                                variant="outlined"
-                                value={title}
-                                inputProps={{ maxLength: 50 }}
-                            />
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <TextField
-                                onChange={(e) => setNumberOfEmployees(e.target.value)}
-                                fullWidth
-                                label="Employee Count"
-                                variant="outlined"
-                                value={numberOfEmployees}
-                                type={"number"}
-                                inputProps={{ maxLength: 50 }}
-                            />
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <TextField
-                                onChange={(e) => setCompanyName(e.target.value)}
-                                fullWidth
-                                label="Company Name"
-                                variant="outlined"
-                                value={companyName}
-                                inputProps={{ maxLength: 50 }}
-                            />
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <FormControl fullWidth variant="outlined">
-                                <InputLabel>{'Please Select Your Sector'}</InputLabel>
-                                <Select
-                                    value={selectedSector}
-                                    onChange={event => setSelectedSector(event.target.value as string)}
-                                    label="Position"
+        <ThemeElement children={
+            <Box sx={{ py: 8, bgcolor: 'myBackgroundColour.main' }}>
+                <Container maxWidth="md">
+                    <Paper elevation={3} sx={{ p: 4 }}>
+                        <Typography variant="h4" align="center" gutterBottom>
+                            Get Offer
+                        </Typography>
+                        <Grid container spacing={2}>
+                            <Grid item xs={12} sm={6}>
+                                <TextField
+                                    onChange={(e) => setName(e.target.value)}
+                                    fullWidth
+                                    label="Name"
+                                    variant="outlined"
+                                    value={name}
+                                    inputProps={{ maxLength: 50 }}
+                                />
+                            </Grid>
+                            <Grid item xs={12} sm={6}>
+                                <TextField
+                                    onChange={(e) => setSurname(e.target.value)}
+                                    fullWidth
+                                    label="Surname"
+                                    variant="outlined"
+                                    value={surname}
+                                    inputProps={{ maxLength: 50 }}
+                                />
+                            </Grid>
+                            <Grid item xs={12} sm={6}>
+                                <TextField
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    fullWidth
+                                    label="E-mail"
+                                    variant="outlined"
+                                    type={"email"}
+                                    value={email}
+                                    inputProps={{ maxLength: 50 }}
+                                />
+                            </Grid>
+                            <Grid item xs={12} sm={6}>
+                                <TextField
+                                    onChange={(e) => setPhone(e.target.value)}
+                                    fullWidth
+                                    label="Phone"
+                                    variant="outlined"
+                                    value={phone}
+                                    type={"number"}
+                                    inputProps={{ maxLength: 50 }}
+                                />
+                            </Grid>
+                            <Grid item xs={12} sm={6}>
+                                <TextField
+                                    onChange={(e) => setTitle(e.target.value)}
+                                    fullWidth
+                                    label="Title"
+                                    variant="outlined"
+                                    value={title}
+                                    inputProps={{ maxLength: 50 }}
+                                />
+                            </Grid>
+                            <Grid item xs={12} sm={6}>
+                                <TextField
+                                    onChange={(e) => setNumberOfEmployees(e.target.value)}
+                                    fullWidth
+                                    label="Employee Count"
+                                    variant="outlined"
+                                    value={numberOfEmployees}
+                                    type={"number"}
+                                    inputProps={{ maxLength: 50 }}
+                                />
+                            </Grid>
+                            <Grid item xs={12} sm={6}>
+                                <TextField
+                                    onChange={(e) => setCompanyName(e.target.value)}
+                                    fullWidth
+                                    label="Company Name"
+                                    variant="outlined"
+                                    value={companyName}
+                                    inputProps={{ maxLength: 50 }}
+                                />
+                            </Grid>
+                            <Grid item xs={12} sm={6}>
+                                <FormControl fullWidth variant="outlined">
+                                    <InputLabel>{'Please Select Your Sector'}</InputLabel>
+                                    <Select
+                                        value={selectedSector}
+                                        onChange={event => setSelectedSector(event.target.value as string)}
+                                        label="Position"
+                                    >
+                                        {sector.map((sector) => (
+                                            <MenuItem key={sector} value={sector}>
+                                                {sector}
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                </FormControl>
+                            </Grid>
+                            <Grid item xs={12}>
+                                <FormControlLabel
+                                    control={
+                                        <Checkbox
+                                            checked={agreedToTerms}
+                                            onChange={(e) => setAgreedToTerms(e.target.checked)}
+                                            color="success"
+                                        />
+                                    }
+                                    label="I agree to the legal terms"
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <Button
+                                    onClick={handleSubmit}
+                                    fullWidth
+                                    variant="contained"
+                                    color="success"
+                                    size="large"
                                 >
-                                    {sector.map((sector) => (
-                                        <MenuItem key={sector} value={sector}>
-                                            {sector}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
+                                    GET YOUR OFFER
+                                </Button>
+                            </Grid>
                         </Grid>
-                        <Grid item xs={12}>
-                            <FormControlLabel
-                                control={
-                                    <Checkbox
-                                        checked={agreedToTerms}
-                                        onChange={(e) => setAgreedToTerms(e.target.checked)}
-                                        color="primary"
-                                    />
-                                }
-                                label="I agree to the legal terms"
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <Button
-                                onClick={handleSubmit}
-                                fullWidth
-                                variant="contained"
-                                color="primary"
-                                size="large"
-                            >
-                                GET YOUR OFFER
-                            </Button>
-                        </Grid>
-                    </Grid>
-                </Paper>
-            </Container>
-        </Box>
+                    </Paper>
+                </Container>
+            </Box>
+        } />
     );
 };
 

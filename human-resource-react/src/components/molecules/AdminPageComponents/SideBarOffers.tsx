@@ -30,6 +30,8 @@ import { IOfferList } from "../../../models/IOfferList";
 import { clearToken } from "../../../store/feature/authSlice";
 import Swal from "sweetalert2";
 import * as Icons from '../../atoms/icons';
+import {myErrorColour, myLightColour} from "../../../util/MyColours";
+
 const columns: GridColDef[] = [
     { field: "name", headerName: "First name", flex: 1.6, headerAlign: "center" },
     { field: "surname", headerName: "Last name", flex: 1.6, headerAlign: "center" },
@@ -41,7 +43,6 @@ const columns: GridColDef[] = [
     { field: "sector", headerName: "Sector", type: "string", flex: 2.5, headerAlign: "center" },
     { field: "status", headerName: "Status", type: "string", flex: 1.5, headerAlign: "center" },
 ];
-
 
 const style = {
     position: "absolute" as "absolute",
@@ -123,7 +124,8 @@ export default function SideBarOffers() {
                     showCancelButton: true,
                     confirmButtonText: "Confirm",
                     input: "radio",
-                    confirmButtonColor: '#1976D2',
+                    confirmButtonColor: myLightColour,
+                    cancelButtonColor: myErrorColour,
                     inputOptions: {
                         "0": "Monthly",
                         "1": "Yearly",
@@ -150,7 +152,8 @@ export default function SideBarOffers() {
                         text: "Offer has been approved",
                         icon: "success",
                         confirmButtonText: "OK",
-                        confirmButtonColor: '#1976D2',
+                        confirmButtonColor: myLightColour,
+                        cancelButtonColor: myErrorColour,
                     });
 
                     await dispatch(
@@ -202,7 +205,8 @@ export default function SideBarOffers() {
                     showCancelButton: true,
                     confirmButtonText: "Confirm",
                     input: "radio",
-                    confirmButtonColor: '#1976D2',
+                    confirmButtonColor: myLightColour,
+                    cancelButtonColor: myErrorColour,
                 });
 
                 if (result.isConfirmed) {
@@ -217,7 +221,8 @@ export default function SideBarOffers() {
                         text: "Offer has been declined",
                         icon: "success",
                         confirmButtonText: "OK",
-                        confirmButtonColor: '#1976D2',
+                        confirmButtonColor: myLightColour,
+                        cancelButtonColor: myErrorColour,
                     });
                     await dispatch(
                         fetchGetOffers({
@@ -259,6 +264,7 @@ export default function SideBarOffers() {
                     title: "Success",
                     text: "Email has been sent",
                     icon: "success",
+                    showConfirmButton: false,
                     timer: 1500
                 }).then(() => {
                     dispatch(fetchGetOffers({
@@ -274,7 +280,8 @@ export default function SideBarOffers() {
                     text: "Email has not been sent",
                     icon: "error",
                     confirmButtonText: "OK",
-                    confirmButtonColor: '#1976D2',
+                    confirmButtonColor: myLightColour,
+                    cancelButtonColor: myErrorColour,
                 });
             }
         });
@@ -344,7 +351,7 @@ export default function SideBarOffers() {
                 <Button
                     onClick={handleConfirmSelection}
                     variant="contained"
-                    color="primary"
+                    color="success"
                     disabled={loading || selectedRowIds.length === 0}
                     sx={{ marginRight: '1%', width: '200px' }}
                     startIcon={<Icons.ApproveIcon />}
@@ -402,7 +409,7 @@ export default function SideBarOffers() {
                             <Button variant="contained" disabled={isSendTrue} onClick={handleClose} color="error" sx={{ marginRight: '17px', width: '100px' }}>
                                 Cancel
                             </Button>
-                            <Button variant="contained" disabled={!emailText || isSendTrue} onClick={() => handleSendEmail(selectedRowIds[currentModalIndex])} color="primary" sx={{ marginRight: '17px', width: '100px' }}>
+                            <Button variant="contained" disabled={!emailText || isSendTrue} onClick={() => handleSendEmail(selectedRowIds[currentModalIndex])} color="success" sx={{ marginRight: '17px', width: '100px' }}>
                                 Send
                             </Button>
                         </DialogActions>

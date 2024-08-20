@@ -38,6 +38,7 @@ import { fetchGetDefinitions } from "../../../store/feature/definitionSlice";
 import { clearToken, fetchGetAllUsersOfManager } from "../../../store/feature/authSlice";
 import { EDefinitionType } from "../../../models/IDefinitionType";
 import { idID } from "@mui/material/locale";
+import { myErrorColour, myLightColour } from "../../../util/MyColours";
 
 const SideBarManagerLeaves = () => {
     const [selectedRowIds, setSelectedRowIds] = useState<number[]>([]);
@@ -123,11 +124,12 @@ const SideBarManagerLeaves = () => {
 
             if (selectedLeave.isLeaveApproved) {
                 await Swal.fire({
-                    title: "Error",
+                    title: "Error!",
                     text: 'Leave already approved',
                     icon: "error",
                     confirmButtonText: "OK",
-                    confirmButtonColor: '#1976D2',
+                    confirmButtonColor: myLightColour,
+                    cancelButtonColor: myErrorColour,
                 });
                 return;
             }
@@ -146,8 +148,8 @@ const SideBarManagerLeaves = () => {
                         }
                     },
                     showCancelButton: true,
-                    confirmButtonColor: '#1976D2',
-                    cancelButtonColor: "#d33",
+                    confirmButtonColor: myLightColour,
+                    cancelButtonColor: myErrorColour,
                     confirmButtonText: "Yes, approve it!"
                 });
 
@@ -160,16 +162,19 @@ const SideBarManagerLeaves = () => {
 
                     if (data.payload.message) {
                         await Swal.fire({
-                            title: "Error",
+                            title: "Error!",
                             text: data.payload.message,
                             icon: "error",
                             confirmButtonText: "OK",
+                            confirmButtonColor: myLightColour
                         });
                     } else {
                         await Swal.fire({
                             title: "Approved!",
                             text: "The leave has been approved.",
-                            icon: "success"
+                            icon: "success",
+                            showConfirmButton: false,
+                            timer: 1500
                         });
 
                         await dispatch(fetchGetLeavesOfManager({
@@ -200,6 +205,7 @@ const SideBarManagerLeaves = () => {
                     text: 'Leave already approved',
                     icon: "error",
                     confirmButtonText: "OK",
+                    confirmButtonColor: myLightColour,
                 });
                 continue;
             }
@@ -218,8 +224,8 @@ const SideBarManagerLeaves = () => {
                         }
                     },
                     showCancelButton: true,
-                    confirmButtonColor: '#1976D2',
-                    cancelButtonColor: "#d33",
+                    confirmButtonColor: myLightColour,
+                    cancelButtonColor: myErrorColour,
                     confirmButtonText: "Yes, reject it!"
                 });
 
@@ -232,16 +238,19 @@ const SideBarManagerLeaves = () => {
 
                     if (data.payload.message) {
                         await Swal.fire({
-                            title: "Error",
+                            title: "Error!",
                             text: data.payload.message,
                             icon: "error",
                             confirmButtonText: "OK",
+                            confirmButtonColor: myLightColour
                         });
                     } else {
                         await Swal.fire({
                             title: "Rejected!",
                             text: "The leave has been rejected.",
-                            icon: "success"
+                            icon: "success",
+                            showConfirmButton: false,
+                            timer: 1500
                         });
 
                         await dispatch(fetchGetLeavesOfManager({
@@ -268,10 +277,11 @@ const SideBarManagerLeaves = () => {
 
             if (!selectedLeave.isLeaveApproved) {
                 await Swal.fire({
-                    title: "Error",
+                    title: "Error!",
                     text: 'Leave not yet approved, cannot cancel.',
                     icon: "error",
                     confirmButtonText: "OK",
+                    confirmButtonColor: myLightColour,
                 });
                 continue;
             }
@@ -290,8 +300,8 @@ const SideBarManagerLeaves = () => {
                         }
                     },
                     showCancelButton: true,
-                    confirmButtonColor: '#1976D2',
-                    cancelButtonColor: "#d33",
+                    confirmButtonColor: myLightColour,
+                    cancelButtonColor: myErrorColour,
                     confirmButtonText: "Yes, cancel it!"
                 });
 
@@ -308,12 +318,15 @@ const SideBarManagerLeaves = () => {
                             text: data.payload.message,
                             icon: "error",
                             confirmButtonText: "OK",
+                            confirmButtonColor: myLightColour
                         });
                     } else {
                         await Swal.fire({
                             title: "Cancelled!",
                             text: "The leave has been cancelled.",
-                            icon: "success"
+                            icon: "success",
+                            showConfirmButton: false,
+                            timer: 1500
                         });
 
                         await dispatch(fetchGetLeavesOfManager({
@@ -353,6 +366,7 @@ const SideBarManagerLeaves = () => {
                     text: data.payload.message,
                     icon: "error",
                     confirmButtonText: "OK",
+                    confirmButtonColor: myLightColour
                 });
                 return;
             }
@@ -402,6 +416,7 @@ const SideBarManagerLeaves = () => {
                 text: "Please select an employee and enter valid leave days.",
                 icon: "error",
                 confirmButtonText: "OK",
+                confirmButtonColor: myLightColour,
             });
             return;
         }
@@ -419,17 +434,19 @@ const SideBarManagerLeaves = () => {
 
             if (result.payload.message) {
                 Swal.fire({
-                    title: "Error",
+                    title: "Error!",
                     text: result.payload.message,
                     icon: "error",
                     confirmButtonText: "OK",
+                    confirmButtonColor: myLightColour,
                 });
             } else {
                 Swal.fire({
-                    title: "Success",
+                    title: "Success!",
                     text: "Annual leave days updated successfully.",
                     icon: "success",
                     confirmButtonText: "OK",
+                    confirmButtonColor: myLightColour,
                 });
 
                 dispatch(
@@ -448,10 +465,11 @@ const SideBarManagerLeaves = () => {
             }
         } catch (error) {
             Swal.fire({
-                title: "Error",
+                title: "Error!",
                 text: "An error occurred while updating leave days.",
                 icon: "error",
                 confirmButtonText: "OK",
+                confirmButtonColor: myLightColour,
             });
         }
 
@@ -462,10 +480,11 @@ const SideBarManagerLeaves = () => {
         if (!selectedEmployee) {
             handleCloseAssignLeaveModal();
             Swal.fire({
-                title: "Error",
+                title: "Error!",
                 text: "Please select an employee.",
                 icon: "error",
                 confirmButtonText: "OK",
+                confirmButtonColor: myLightColour,
             });
             return;
         }
@@ -475,10 +494,11 @@ const SideBarManagerLeaves = () => {
         if (!description || !startDate || !endDate || !leaveType) {
             handleCloseAssignLeaveModal();
             Swal.fire({
-                title: "Error",
+                title: "Error!",
                 text: "Please fill in all required fields.",
                 icon: "error",
                 confirmButtonText: "OK",
+                confirmButtonColor: myLightColour,
             });
             return;
         }
@@ -498,17 +518,19 @@ const SideBarManagerLeaves = () => {
 
             if (result.payload.message) {
                 Swal.fire({
-                    title: "Error",
+                    title: "Error!",
                     text: result.payload.message,
                     icon: "error",
                     confirmButtonText: "OK",
+                    confirmButtonColor: myLightColour,
                 });
             } else {
                 Swal.fire({
-                    title: "Success",
+                    title: "Success!",
                     text: "Leave assigned successfully.",
                     icon: "success",
                     confirmButtonText: "OK",
+                    confirmButtonColor: myLightColour,
                 });
 
                 dispatch(
@@ -536,10 +558,11 @@ const SideBarManagerLeaves = () => {
         } catch (error) {
             handleCloseAssignLeaveModal();
             Swal.fire({
-                title: "Error",
+                title: "Error!",
                 text: "An error occurred while assigning leave.",
                 icon: "error",
                 confirmButtonText: "OK",
+                confirmButtonColor: myLightColour,
             });
         }
         setLoading(false);
@@ -571,18 +594,20 @@ const SideBarManagerLeaves = () => {
             if (result.payload.message) {
                 handleCloseEditLeaveModal();
                 Swal.fire({
-                    title: "Error",
+                    title: "Error!",
                     text: result.payload.message,
                     icon: "error",
                     confirmButtonText: "OK",
+                    confirmButtonColor: myLightColour,
                 });
             } else {
                 handleCloseEditLeaveModal();
                 Swal.fire({
-                    title: "Success",
+                    title: "Success!",
                     text: "Leave edited successfully.",
                     icon: "success",
                     confirmButtonText: "OK",
+                    confirmButtonColor: myLightColour,
                 });
 
                 dispatch(
@@ -610,10 +635,11 @@ const SideBarManagerLeaves = () => {
         } catch (error) {
             handleCloseEditLeaveModal();
             Swal.fire({
-                title: "Error",
+                title: "Error!",
                 text: "An error occurred while editing leave.",
                 icon: "error",
                 confirmButtonText: "OK",
+                confirmButtonColor: myLightColour,
             });
         }
         setLoading(false);
@@ -670,7 +696,7 @@ const SideBarManagerLeaves = () => {
                 <Button
                     onClick={handleApprove}
                     variant="contained"
-                    color="primary"
+                    color="success"
                     disabled={loading || selectedRowIds.length === 0}
                     startIcon={<ApproveIcon />}
                     sx={{ marginRight: '1%', width: '200px' }}
@@ -720,7 +746,7 @@ const SideBarManagerLeaves = () => {
                 </Button>
                 <Button
                     variant="contained"
-                    color="primary"
+                    color="success"
                     onClick={handleAssignLeave}
                     startIcon={<AddIcon />}
                     sx={{ marginRight: '1%', width: '200px' }}
@@ -762,7 +788,7 @@ const SideBarManagerLeaves = () => {
                     <Button onClick={handleCloseChangeAnnualLeaveDayModal} color="error"  variant="contained" sx={{ marginRight: '17px', width: '100px' }}>
                         Cancel
                     </Button>
-                    <Button onClick={handleSaveLeaveDays} color="primary"  variant="contained" sx={{ marginRight: '17px', width: '100px' }}>
+                    <Button onClick={handleSaveLeaveDays} color="success"  variant="contained" sx={{ marginRight: '17px', width: '100px' }}>
                         Save
                     </Button>
                 </DialogActions>
@@ -852,7 +878,7 @@ const SideBarManagerLeaves = () => {
                     <Button onClick={handleCloseAssignLeaveModal} color="error"  variant="contained" sx={{ marginRight: '17px', width: '100px' }}>
                         Cancel
                     </Button>
-                    <Button onClick={handleSaveLeave} color="primary"  variant="contained" sx={{ marginRight: '17px', width: '100px' }}>
+                    <Button onClick={handleSaveLeave} color="success"  variant="contained" sx={{ marginRight: '17px', width: '100px' }}>
                         Save
                     </Button>
                 </DialogActions>
@@ -923,7 +949,7 @@ const SideBarManagerLeaves = () => {
                     <Button onClick={handleCloseEditLeaveModal} color="error" variant="contained" sx={{ marginRight: '17px', width: '100px' }}>
                         Cancel
                     </Button>
-                    <Button onClick={handleUpdateLeave} color="primary" variant="contained" sx={{ marginRight: '17px', width: '100px' }}>
+                    <Button onClick={handleUpdateLeave} color="success" variant="contained" sx={{ marginRight: '17px', width: '100px' }}>
                         Save
                     </Button>
                 </DialogActions>

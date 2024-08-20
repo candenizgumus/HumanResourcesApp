@@ -59,6 +59,8 @@ const UserForm: React.FC = () => {
           icon: 'error',
           title: 'Error',
           text: result.message,
+          showConfirmButton: false,
+          timer: 1500
         });
         setLoading(false);
         return; // Stop the process and prevent further then block executions
@@ -68,12 +70,20 @@ const UserForm: React.FC = () => {
         icon: 'success',
         title: 'Success!',
         text: 'Comment Created.',
+        showConfirmButton: false,
+        timer: 1500
       });
 
       setLoading(false);
     } catch (error) {
       console.error("Error creating comment:", error);
-      Swal.fire("Error", "There was a problem creating comment.", "error");
+      Swal.fire({
+        icon: 'error',
+        title: 'Error!',
+        text: 'There was a problem creating comment.',
+        showConfirmButton: false,
+        timer: 1500
+      });
     }
   };
 
@@ -121,7 +131,7 @@ const UserForm: React.FC = () => {
         }
         label="Set me as the creator"
       />
-      <Button type="submit" variant="contained" color="primary" disabled={loading} startIcon={<AddIcon />}>
+      <Button type="submit" variant="contained" color="success" disabled={loading} startIcon={<AddIcon />}>
         {loading ? "Processing..." : "Create"}
       </Button>
     </Box>

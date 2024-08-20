@@ -44,6 +44,7 @@ import { useState } from "react";
 import logo from '../../images/logo-full-white.png';
 import { AddDocumentIcon } from "../../components/atoms/icons";
 import {myLightColour} from "../../util/MyColours";
+import ThemeElement from '../../components/atoms/ThemeElement';
 
 const drawerWidth = 240;
 
@@ -112,7 +113,7 @@ export default function AdminPage() {
     const [selectedIndex, setSelectedIndex] = React.useState<string>('Inbox');
     const dispatch = useDispatch<HumanResources>();
     const pageState = useSelector((state: RootState) => state.auth.pageState);
-    const [selectedIndex2, setSelectedIndex2] = useState(null);
+    const [selectedIndex2, setSelectedIndex2] = useState(0);
     const page = useAppSelector((state) => state.auth.pageState);
     const user = useAppSelector((state) => state.auth.user);
     const handleDrawerOpen = () => {
@@ -123,6 +124,7 @@ export default function AdminPage() {
         setOpen(false);
     };
     const navigateToHome = () => {
+        setSelectedIndex2(0);
         dispatch(changePageState('Dashboard'));
     };
 
@@ -144,36 +146,37 @@ export default function AdminPage() {
         day: 'numeric',
     });
     return (
-        <Box sx={{ display: 'flex' }}>
-            <CssBaseline />
-            <AppBar position="fixed" open={open}>
-                <Toolbar sx={{ position: 'relative' }}>
-                    <IconButton
-                        color="inherit"
-                        aria-label="open drawer"
-                        onClick={handleDrawerOpen}
-                        edge="start"
-                        sx={{ mr: 2, ...(open && { display: 'none' }) }}
-                    >
-                        <MenuIcon />
-                    </IconButton>
+        <ThemeElement children={
+            <Box sx={{ display: 'flex' }}>
+                <CssBaseline />
+                <AppBar position="fixed" open={open}>
+                    <Toolbar sx={{ position: 'relative' }}>
+                        <IconButton
+                            color="inherit"
+                            aria-label="open drawer"
+                            onClick={handleDrawerOpen}
+                            edge="start"
+                            sx={{ mr: 2, ...(open && { display: 'none' }) }}
+                        >
+                            <MenuIcon />
+                        </IconButton>
 
-                    <Typography variant="h6" sx={logoStyle}>
-                        <Button onClick={navigateToHome} color="inherit">
-                            <img src={logo} alt="logo" style={{ height: '52px' }} />
-                        </Button>
-                    </Typography>
+                        <Typography variant="h6" sx={logoStyle}>
+                            <Button onClick={navigateToHome} color="inherit">
+                                <img src={logo} alt="logo" style={{ height: '52px' }} />
+                            </Button>
+                        </Typography>
 
-                    <Typography
-                        sx={{
-                            position: 'absolute',
-                            left: '50%',
-                            transform: 'translateX(-50%)',
-                            fontSize: '20px',
-                        }}
-                    >
-                        {page ? page : 'Dashboard'}
-                    </Typography>
+                        <Typography
+                            sx={{
+                                position: 'absolute',
+                                left: '50%',
+                                transform: 'translateX(-50%)',
+                                fontSize: '20px',
+                            }}
+                        >
+                            {page ? page : 'Dashboard'}
+                        </Typography>
 
                     <Box sx={{ flexGrow: 1 }} />
                     <Box>
@@ -201,13 +204,12 @@ export default function AdminPage() {
                 anchor="left"
                 open={open}
             >
-                <DrawerHeader>
-                    <IconButton onClick={handleDrawerClose}>
+                <DrawerHeader sx={{ bgcolor: 'primary.main'}}>
+                    <IconButton onClick={handleDrawerClose} sx={{ color: 'white' }}>
                         {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
                     </IconButton>
                 </DrawerHeader>
-                <Divider />
-                <List>
+                <List sx={{ bgcolor: 'primary.main', minHeight: 'calc(100vh - 65px)', paddingTop:'0' }}>
                     {['Dashboard', 'Employees', 'Add Employee', 'Create Manager', 'Create Definition', 'Profile', 'Company', 'Add Comment', 'Holidays', 'Notifications', 'Expenditure', 'Leaves', 'Payments', 'Personal Documents', 'Bonus', 'Company Items'].map((text, index) => (
                         <ListItem key={text} disablePadding>
                             <ListItemButton
@@ -217,47 +219,52 @@ export default function AdminPage() {
                                     handleListItemClick(text);
                                 }}
                                 sx={{
+                                    color: 'white',
+                                    backgroundColor: 'primary.main',
                                     '&.Mui-selected': {
-                                        backgroundColor: 'rgba(0, 123, 255, 0.1)', // Change background color when selected
-                                        '&:hover': {
-                                            backgroundColor: 'rgba(0, 123, 255, 0.2)', // Change background color on hover
-                                        },
-                                    }
-                                }}
+                                      backgroundColor: 'myLightColour.main', // Change background color when selected
+                                      '&:hover': {
+                                        backgroundColor: 'myLightColour.main', // Change background color on hover
+                                      },
+                                    },
+                                    '&:hover': {
+                                      backgroundColor: 'mySecondaryColor.main', // Change background color on hover
+                                    },
+                                  }}
                             >
 
-                                <ListItemIcon>
-                                    {index === 0 && <Dashboard />}
-                                    {index === 1 && <Person />}
-                                    {index === 2 && <PersonAdd />}
-                                    {index === 3 && <AdminPanelSettings />}
-                                    {index === 4 && <DesignServicesIcon />}
-                                    {index === 5 && <AccountBox />}
-                                    {index === 6 && <Apartment />}
-                                    {index === 7 && <AddCommentIcon />}
-                                    {index === 8 && <Weekend />}
-                                    {index === 9 && <NotificationsIcon />}
-                                    {index === 10 && <PointOfSale />}
-                                    {index === 11 && <HikingIcon />}
-                                    {index === 12 && <Payments />}
-                                    {index === 13 && <AddDocumentIcon />}
-                                    {index === 14 && <Paid />}
-                                    {index === 15 && <Laptop />}
+                                    <ListItemIcon sx={{ color: 'white' }}>
+                                        {index === 0 && <Dashboard />}
+                                        {index === 1 && <Person />}
+                                        {index === 2 && <PersonAdd />}
+                                        {index === 3 && <AdminPanelSettings />}
+                                        {index === 4 && <DesignServicesIcon />}
+                                        {index === 5 && <AccountBox />}
+                                        {index === 6 && <Apartment />}
+                                        {index === 7 && <AddCommentIcon />}
+                                        {index === 8 && <Weekend />}
+                                        {index === 9 && <NotificationsIcon />}
+                                        {index === 10 && <PointOfSale />}
+                                        {index === 11 && <HikingIcon />}
+                                        {index === 12 && <Payments />}
+                                        {index === 13 && <AddDocumentIcon />}
+                                        {index === 14 && <Paid />}
+                                        {index === 15 && <Laptop />}
 
-                                </ListItemIcon>
-                                <ListItemText primary={text} />
-                            </ListItemButton>
-                        </ListItem>
-                    ))}
-                </List>
-                <Divider />
-            </Drawer>
-            <Main open={open}>
-                <DrawerHeader />
-                <Grid container spacing={2}>
-                    {pageState === 'Dashboard' ? <ManagerHomeContent /> : <ManagerMenuContentRenderer />}
-                </Grid>
-            </Main>
-        </Box>
+                                    </ListItemIcon>
+                                    <ListItemText primary={text} />
+                                </ListItemButton>
+                            </ListItem>
+                        ))}
+                    </List>
+                </Drawer>
+                <Main open={open}>
+                    <DrawerHeader />
+                    <Grid container spacing={2}>
+                        {pageState === 'Dashboard' ? <ManagerHomeContent /> : <ManagerMenuContentRenderer />}
+                    </Grid>
+                </Main>
+            </Box>
+        } />
     );
 }

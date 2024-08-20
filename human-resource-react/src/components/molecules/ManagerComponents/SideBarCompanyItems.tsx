@@ -14,7 +14,8 @@ import { ICompanyItem } from "../../../models/ICompanyItem";
 import { changePageState } from "../../../store/feature/authSlice";
 import { DeleteIcon, AddIcon } from '../../atoms/icons';
 import AddCompanyItemDialog from './AddCompanyItem';
-import { ICompanyItemAssignment } from "../../../models/ICompanyItemAssignment";
+import {ICompanyItemAssignment} from "../../../models/ICompanyItemAssignment";
+import { myLightColour } from '../../../util/MyColours';
 
 const itemColumns: GridColDef[] = [
     { field: "name", headerName: "Description", flex: 1, headerAlign: "center" },
@@ -102,7 +103,8 @@ const SideBarCompanyItems: React.FC = () => {
                         Swal.fire({
                             icon: 'error',
                             text: data.payload.message ?? 'Failed to delete the item',
-                            showConfirmButton: true
+                            showConfirmButton: true,
+                            confirmButtonColor: myLightColour,
                         })
                     } else {
                         Swal.fire({
@@ -201,7 +203,7 @@ const SideBarCompanyItems: React.FC = () => {
                 <Button
                     onClick={handleOnClickAddCompanyItem}
                     variant="contained"
-                    color="primary"
+                    color="success"
                     startIcon={<AddIcon />}
                     sx={{ marginRight: '1%', width: '200px' }}
                 >

@@ -23,6 +23,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DeleteIcon, AddIcon } from "../../atoms/icons";
+import { myErrorColour, myLightColour } from "../../../util/MyColours";
 const columns: GridColDef[] = [
     {
         field: "payment", headerName: "Payment $", flex: 1, headerAlign: "center",
@@ -92,8 +93,8 @@ export default function SideBarPayments() {
                     text: "You won't be able to revert this!",
                     icon: "warning",
                     showCancelButton: true,
-                    confirmButtonColor: '#1976D2',
-                    cancelButtonColor: "#d33",
+                    confirmButtonColor: myLightColour,
+                    cancelButtonColor: myErrorColour,
                     confirmButtonText: "Yes, delete it!"
                 });
 
@@ -105,11 +106,12 @@ export default function SideBarPayments() {
 
                     if (data.payload.message) {
                         await Swal.fire({
-                            title: "Error",
+                            title: "Error!",
                             text: data.payload.message,
                             icon: "error",
                             confirmButtonText: "OK",
-                            confirmButtonColor: '#1976D2',
+                            confirmButtonColor: myLightColour,
+                            cancelButtonColor: myErrorColour,
                         });
                         return;
                     } else {
@@ -117,7 +119,8 @@ export default function SideBarPayments() {
                             title: "Deleted!",
                             text: "Your Payment has been deleted.",
                             icon: "success",
-                            confirmButtonColor: '#1976D2',
+                            confirmButtonColor: myLightColour,
+                            cancelButtonColor: myErrorColour,
                         });
 
                         await dispatch(fetchGetPayments({
@@ -141,11 +144,12 @@ export default function SideBarPayments() {
 
             if (description === "" || payment === 0 || paymentDate === null) {
                 Swal.fire({
-                    title: "Error",
+                    title: "Error!",
                     text: "Please fill out all required fields",
                     icon: "error",
                     confirmButtonText: "OK",
-                    confirmButtonColor: '#1976D2',
+                    confirmButtonColor: myLightColour,
+                    cancelButtonColor: myErrorColour,
                 });
                 return;
             }
@@ -159,19 +163,21 @@ export default function SideBarPayments() {
             })).then(data => {
                 if (data.payload.message) {
                     Swal.fire({
-                        title: "Error",
+                        title: "Error!",
                         text: data.payload.message,
                         icon: "error",
                         confirmButtonText: "OK",
-                        confirmButtonColor: '#1976D2',
+                        confirmButtonColor: myLightColour,
+                        cancelButtonColor: myErrorColour,
                     });
                     return;
                 }
                 Swal.fire({
-                    title: "Success",
+                    title: "Success!",
                     text: "Payment has been added",
                     icon: "success",
                     confirmButtonText: "OK",
+                    confirmButtonColor: myLightColour,
                 });
 
                 fetchGetPayments({
@@ -241,7 +247,7 @@ export default function SideBarPayments() {
                 <Button
                     onClick={handleSavePayment}
                     variant="contained"
-                    color="primary"
+                    color="success"
                     disabled={payment === 0 || description.length === 0 || paymentDate === null || isActivating}
                     startIcon={<AddIcon />}
                     sx={{ marginRight: '1%', width: '200px' }}

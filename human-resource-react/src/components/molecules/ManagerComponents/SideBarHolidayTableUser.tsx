@@ -27,6 +27,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { myErrorColour, myLightColour } from '../../../util/MyColours';
 // Define the columns
 const columns: GridColDef[] = [
     { field: 'holidayName', headerName: 'Holiday', flex: 2.5, headerAlign: "center" },
@@ -101,7 +102,8 @@ export default function SideBarHolidayTableUser() {
                             icon: 'error',
                             text: data.payload.message ?? 'Failed to delete holiday',
                             showConfirmButton: true,
-                            confirmButtonColor: '#1976D2',
+                            confirmButtonColor: myLightColour,
+                            cancelButtonColor: myErrorColour,
                         })
                     } else {
                         Swal.fire({
@@ -148,7 +150,8 @@ export default function SideBarHolidayTableUser() {
             Swal.fire({
                 icon: 'error',
                 text: 'Please fill all the fields!',
-                confirmButtonColor: '#1976D2',
+                confirmButtonColor: myLightColour,
+                cancelButtonColor: myErrorColour,
             });
             return;
         }
@@ -168,7 +171,8 @@ export default function SideBarHolidayTableUser() {
                         icon: 'error',
                         text: data.payload.message ?? 'Failed to add holiday',
                         showConfirmButton: true,
-                        confirmButtonColor: '#1976D2',
+                        confirmButtonColor: myLightColour,
+                        cancelButtonColor: myErrorColour,
                     })
                 } else {
                     Swal.fire({
@@ -233,7 +237,7 @@ export default function SideBarHolidayTableUser() {
                 </Button>
                 <Button
                     variant="contained"
-                    color="primary"
+                    color="success"
                     disabled={holidayStartDate === null || holidayEndDate === null || holidayName === '' || holidayType === ''}
                     onClick={handleSubmit}
                     sx={{ marginRight: '1%', width: '200px' }}

@@ -28,6 +28,7 @@ import styled from "@emotion/styled";
 import { IFile } from "../../../models/IFile";
 import { CloudUploadIcon } from "../../atoms/icons";
 import { uploadPlayerProfileImage } from "../../../store/feature/awsSlice";
+import { myErrorColour, myLightColour } from '../../../util/MyColours';
 
 
 
@@ -106,7 +107,8 @@ const SideBarAddEmployee: React.FC = () => {
             Swal.fire({
                 icon: 'error',
                 text: 'Please fill all the fields!',
-                confirmButtonColor: '#1976D2',
+                confirmButtonColor: myLightColour,
+                cancelButtonColor: myErrorColour,
             });
             return;
         }
@@ -130,7 +132,8 @@ const SideBarAddEmployee: React.FC = () => {
             sweetalert2.fire({
                 icon: 'error',
                 text: result.payload.message ?? 'Failed to add employee',
-                showConfirmButton: true
+                showConfirmButton: false,
+                timer: 1500
             })
             setLoading(false);
         } else {
@@ -209,6 +212,7 @@ const SideBarAddEmployee: React.FC = () => {
                 title: 'Failed to upload your profile image',
                 text: errorMessage,
                 showConfirmButton: true,
+                confirmButtonColor: myLightColour
             });
         };
     };
@@ -341,7 +345,7 @@ const SideBarAddEmployee: React.FC = () => {
                         required
                         inputProps={{ maxLength: 50 }}
                     />
-                    <Button onClick={addEmployee} sx={{ mt: 5 }} type="button" variant="contained" color="primary" disabled={loading}>
+                    <Button onClick={addEmployee} sx={{ mt: 5 }} type="button" variant="contained" color="success" disabled={loading}>
                         {loading ? "SAVING..." : "ADD EMPLOYEE"}
                     </Button>
                 </Box>

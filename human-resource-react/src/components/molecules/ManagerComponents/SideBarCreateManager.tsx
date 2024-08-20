@@ -6,6 +6,7 @@ import { HumanResources } from '../../../store';
 import Swal from "sweetalert2";
 import { IUserType } from '../../../models/IUserType';
 import { AddIcon } from '../../atoms/icons';
+import { myErrorColour, myLightColour } from '../../../util/MyColours';
 
 const UserForm: React.FC = () => {
   const dispatch = useDispatch<HumanResources>();
@@ -30,7 +31,8 @@ const UserForm: React.FC = () => {
           icon: 'error',
           title: 'Error',
           text: result.message,
-          confirmButtonColor: '#1976D2',
+          confirmButtonColor: myLightColour,
+          cancelButtonColor: myErrorColour,
         });
         setLoading(false);
         return; // Stop the process and prevent further then block executions
@@ -40,13 +42,20 @@ const UserForm: React.FC = () => {
         icon: 'success',
         title: 'Success!',
         text: 'Manager Account Created.',
-        confirmButtonColor: '#1976D2',
+        confirmButtonColor: myLightColour,
+        cancelButtonColor: myErrorColour,
       });
 
       setLoading(false);
     } catch (error) {
       console.error("Error creating manager:", error);
-      Swal.fire("Error", "There was a problem creating manager.", "error");
+      Swal.fire({
+        icon: 'error',
+        title: 'Error!',
+        text: 'There was a problem creating manager.',
+        showConfirmButton: false,
+        timer: 1500
+      });
     }
   };
 
@@ -105,7 +114,7 @@ const UserForm: React.FC = () => {
         }
         label="I understand the consequences of creating a manager account."
       />
-      <Button type="submit" variant="contained" color="primary" disabled={loading || !accepted} startIcon={<AddIcon />}>
+      <Button type="submit" variant="contained" color="success" disabled={loading || !accepted} startIcon={<AddIcon />}>
         {loading ? "Processing..." : "Create"}
       </Button>
     </Box>

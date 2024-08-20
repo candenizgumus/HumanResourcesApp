@@ -16,6 +16,7 @@ import Swal from "sweetalert2";
 import { fetchGetDefinitions, IDefinition } from '../../../store/feature/definitionSlice';
 import { EDefinitionType } from '../../../models/IDefinitionType';
 import { setHours } from 'date-fns';
+import { myErrorColour, myLightColour } from '../../../util/MyColours';
 
 const EditEmployee: React.FC = () => {
     const token = useAppSelector((state) => state.auth.token);
@@ -99,7 +100,8 @@ const EditEmployee: React.FC = () => {
             Swal.fire({
                 icon: 'error',
                 text: 'Please fill all the fields!',
-                confirmButtonColor: '#1976D2',
+                confirmButtonColor: myLightColour,
+                cancelButtonColor: myErrorColour,
             });
             return;
         }
@@ -123,7 +125,8 @@ const EditEmployee: React.FC = () => {
                 sweetalert2.fire({
                     icon: 'error',
                     text: data.payload.message ?? 'Failed to add employee',
-                    showConfirmButton: true
+                    showConfirmButton: false,
+                    timer: 1500
                 })
 
             } else {
@@ -224,7 +227,7 @@ const EditEmployee: React.FC = () => {
                         required
                         inputProps={{ maxLength: 50 }}
                     />
-                    <Button onClick={updateEmployee} sx={{ mt: 5 }} type="button" variant="contained" color="primary">
+                    <Button onClick={updateEmployee} sx={{ mt: 5 }} type="button" variant="contained" color="success">
                         Edit Employee
                     </Button>
                 </Box>

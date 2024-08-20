@@ -28,6 +28,7 @@ import { HumanResources, useAppSelector } from "../../../store";
 import { changePageState, clearToken } from "../../../store/feature/authSlice";
 import { fetchGetUpcomingMembershipExpiries } from "../../../store/feature/companySlice";
 import { fetchSendEmail } from "../../../store/feature/emailSlice";
+import { myErrorColour, myLightColour } from "../../../util/MyColours";
 
 const columns: GridColDef[] = [
     { field: "name", headerName: "Company Name", flex: 1, headerAlign: "center" },
@@ -127,6 +128,7 @@ export default function NotificationsPage() {
                     title: "Success",
                     text: "Email has been sent",
                     icon: "success",
+                    showConfirmButton: false,
                     timer: 1500
                 }).then(() => {
                     dispatch(fetchGetUpcomingMembershipExpiries(token));
@@ -137,7 +139,8 @@ export default function NotificationsPage() {
                     text: "Email has not been sent",
                     icon: "error",
                     confirmButtonText: "OK",
-                    confirmButtonColor: '#1976D2',
+                    confirmButtonColor: myLightColour,
+                    cancelButtonColor: myErrorColour,
                 });
             }
         });
@@ -235,7 +238,7 @@ export default function NotificationsPage() {
                     <Button variant="contained" disabled={isSendTrue} onClick={handleClose} color="error" sx={{ marginRight: '17px', width: '100px' }}>
                         Cancel
                     </Button>
-                    <Button variant="contained" disabled={!emailText || isSendTrue} onClick={handleSendEmail} color="primary" sx={{ marginRight: '17px', width: '100px' }}>
+                    <Button variant="contained" disabled={!emailText || isSendTrue} onClick={handleSendEmail} color="success" sx={{ marginRight: '17px', width: '100px' }}>
                         Send
                     </Button>
                 </DialogActions>

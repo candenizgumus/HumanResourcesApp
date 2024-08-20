@@ -12,15 +12,7 @@ import { useState } from "react";
 import { useLocation } from 'react-router-dom';
 import { fetchResetPassword } from "../../../store/feature/passwordResetSlice";
 import Swal from "sweetalert2";
-
-const loginButtonStyle = {
-    backgroundColor: 'primary.main',
-    color: 'white',
-    mt: 3, mb: 2,
-    '&:hover': {
-        color: 'primary.main',
-    },
-};
+import { myErrorColour, myLightColour } from '../../../util/MyColours';
 
 const PasswordResetForm: React.FC = () => {
     const dispatch = useDispatch<HumanResources>();
@@ -50,9 +42,10 @@ const PasswordResetForm: React.FC = () => {
         if (result.code) {
             Swal.fire({
                 icon: 'error',
-                title: 'Error',
+                title: 'Error!',
                 text: result.message,
-                confirmButtonColor: '#1976D2',
+                confirmButtonColor: myLightColour,
+                cancelButtonColor: myErrorColour,
             });
         }
 
@@ -60,7 +53,8 @@ const PasswordResetForm: React.FC = () => {
             icon: 'success',
             title: 'Success!',
             text: 'Password Reset Successfull.',
-            confirmButtonColor: '#1976D2',
+            confirmButtonColor: myLightColour,
+            cancelButtonColor: myErrorColour,
         }).then(() => {
             navigate("/login")
         })
@@ -69,7 +63,7 @@ const PasswordResetForm: React.FC = () => {
     return (
         <Box
             sx={{
-                my: 8,
+                my: 4,
                 mx: 4,
                 display: 'flex',
                 flexDirection: 'column',
@@ -118,7 +112,8 @@ const PasswordResetForm: React.FC = () => {
                 type="button"
                 fullWidth
                 variant="contained"
-                sx={loginButtonStyle}
+                color='success'
+                sx={{ mt: 3, mb: 2 }}
                 onClick={handleSubmit}
             >
                 Reset Password

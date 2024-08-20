@@ -212,15 +212,15 @@ export default function AdminPage() {
                   }}
                   sx={{
                     color: 'white',
-                    backgroundColor: '#222831',
+                    backgroundColor: 'primary.main',
                     '&.Mui-selected': {
-                      backgroundColor: '#00ADB5', // Change background color when selected
+                      backgroundColor: 'myLightColour.main', // Change background color when selected
                       '&:hover': {
-                        backgroundColor: '#393E46', // Change background color on hover
+                        backgroundColor: 'myLightColour.main', // Change background color on hover
                       },
                     },
                     '&:hover': {
-                      backgroundColor: '#393E46', // Change background color on hover
+                      backgroundColor: 'mySecondaryColor.main', // Change background color on hover
                     },
                   }}
                 >
@@ -244,7 +244,7 @@ export default function AdminPage() {
             ))}
           </List>
         </Drawer>
-        <Main open={open}>
+        <Main open={open} >
           <DrawerHeader />
           <Grid container spacing={2}>
             {pageState === 'Dashboard' ? <AdminHomeContent /> : <AdminMenuContentRenderer />}

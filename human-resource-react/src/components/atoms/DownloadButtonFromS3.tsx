@@ -38,7 +38,7 @@ const DownloadButtonFromS3: React.FC<{ fileKey: string }> = ({ fileKey }) => {
     };
 
     return (
-        <IconButton color="primary" onClick={handleDownload}>
+        <IconButton color="success" onClick={handleDownload}>
             <FileDownload />
         </IconButton>
     );

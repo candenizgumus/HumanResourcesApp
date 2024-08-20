@@ -27,7 +27,8 @@ const Root = styled('div')(({ theme }) => ({
 const Body = styled('main')(({ theme }) => ({
     flex: '1',
     width: '100%',
-    marginTop: theme.spacing(12),
+    marginTop: theme.spacing(6),
+    marginBottom: theme.spacing(6),
 }));
 
 const Footer = styled('footer')(({ theme }) => ({
@@ -49,7 +50,7 @@ export default function PasswordResetPage() {
                         justifyContent: 'center',
                         alignItems: 'center',
                     }}>
-                        <Paper elevation={6} square sx={{ width: '100%', maxWidth: 400 }}>
+                        <Paper elevation={6} square sx={{ width: '100%', maxWidth: 400}}>
                             <PasswordResetRequestForm />
                             {isResetCodeSend ? <PasswordResetForm /> : ''}
                         </Paper>

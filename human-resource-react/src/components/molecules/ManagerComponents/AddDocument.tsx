@@ -12,6 +12,7 @@ import {
 } from "../../../store/feature/personalDocumentSlice";
 import MyDropzone from "../../atoms/DropZone";
 import Swal from "sweetalert2";
+import { myErrorColour, myLightColour } from '../../../util/MyColours';
 
 const AddDocument: React.FC<{ open: boolean, onClose: () => void }> = ({ open, onClose }) => {
     const token = useAppSelector((state) => state.auth.token);
@@ -43,7 +44,8 @@ const AddDocument: React.FC<{ open: boolean, onClose: () => void }> = ({ open, o
             Swal.fire({
                 icon: 'error',
                 text: 'Please fill all the fields!',
-                confirmButtonColor: '#1976D2',
+                confirmButtonColor: myLightColour,
+                cancelButtonColor: myErrorColour,
             });
             return;
         }
@@ -60,7 +62,8 @@ const AddDocument: React.FC<{ open: boolean, onClose: () => void }> = ({ open, o
                 Swal.fire({
                     icon: 'error',
                     text: data.payload.message ?? 'Failed to add document',
-                    confirmButtonColor: '#1976D2',
+                    confirmButtonColor: myLightColour,
+                    cancelButtonColor: myErrorColour,
                 });
             } else {
                 Swal.fire({
@@ -120,7 +123,7 @@ const AddDocument: React.FC<{ open: boolean, onClose: () => void }> = ({ open, o
                 <Button variant="contained" onClick={onClose} color="error" sx={{ marginRight: '17px', width: '100px' }}>
                     Cancel
                 </Button>
-                <Button onClick={handleSubmit} color="primary" disabled={loading} variant="contained" sx={{ marginRight: '17px', width: '100px' }}>
+                <Button onClick={handleSubmit} color="success" disabled={loading} variant="contained" sx={{ marginRight: '17px', width: '100px' }}>
                     Add
                 </Button>
             </DialogActions>

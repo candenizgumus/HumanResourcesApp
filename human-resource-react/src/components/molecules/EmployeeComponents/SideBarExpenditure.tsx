@@ -28,6 +28,7 @@ import {
 import MyDropzone from "../../atoms/DropZone";
 import DownloadButtonFromS3 from "../../atoms/DownloadButtonFromS3";
 import { DeleteIcon, CancelIcon, AddIcon } from "../../atoms/icons";
+import { myErrorColour, myLightColour } from "../../../util/MyColours";
 
 const columns: GridColDef[] = [
 
@@ -99,11 +100,12 @@ export default function SideBarExpenditure() {
 
             if (selectedExpenditure.isExpenditureApproved) {
                 await Swal.fire({
-                    title: "Error",
+                    title: "Error!",
                     text: 'Expenditure already approved',
                     icon: "error",
                     confirmButtonText: "OK",
-                    confirmButtonColor: '#1976D2',
+                    confirmButtonColor: myLightColour,
+                    cancelButtonColor: myErrorColour,
                 });
                 continue;
             }
@@ -114,8 +116,8 @@ export default function SideBarExpenditure() {
                     text: "You won't be able to revert this!",
                     icon: "warning",
                     showCancelButton: true,
-                    confirmButtonColor: '#1976D2',
-                    cancelButtonColor: "#d33",
+                    confirmButtonColor: myLightColour,
+                    cancelButtonColor: myErrorColour,
                     confirmButtonText: "Yes, delete it!"
                 });
 
@@ -127,11 +129,12 @@ export default function SideBarExpenditure() {
 
                     if (data.payload.message) {
                         await Swal.fire({
-                            title: "Error",
+                            title: "Error!",
                             text: data.payload.message,
                             icon: "error",
                             confirmButtonText: "OK",
-                            confirmButtonColor: '#1976D2',
+                            confirmButtonColor: myLightColour,
+                            cancelButtonColor: myErrorColour,
                         });
                         return;
                     } else {
@@ -139,7 +142,8 @@ export default function SideBarExpenditure() {
                             title: "Deleted!",
                             text: "Your expenditure has been deleted.",
                             icon: "success",
-                            confirmButtonColor: '#1976D2',
+                            confirmButtonColor: myLightColour,
+                            cancelButtonColor: myErrorColour,
                         });
 
                         await dispatch(fetchGetExpendituresOfEmployee({
@@ -167,11 +171,12 @@ export default function SideBarExpenditure() {
 
             if (!selectedExpenditure.isExpenditureApproved) {
                 await Swal.fire({
-                    title: "Error",
+                    title: "Error!",
                     text: 'Expenditure not yet approved, cannot cancel.',
                     icon: "error",
                     confirmButtonText: "OK",
-                    confirmButtonColor: '#1976D2',
+                    confirmButtonColor: myLightColour,
+                    cancelButtonColor: myErrorColour,
                 });
                 continue;
             }
@@ -182,8 +187,8 @@ export default function SideBarExpenditure() {
                     text: "You won't be able to revert this!",
                     icon: "warning",
                     showCancelButton: true,
-                    confirmButtonColor: '#1976D2',
-                    cancelButtonColor: "#d33",
+                    confirmButtonColor: myLightColour,
+                    cancelButtonColor: myErrorColour,
                     confirmButtonText: "Yes, cancel it!"
                 });
 
@@ -195,11 +200,12 @@ export default function SideBarExpenditure() {
 
                     if (data.payload.message) {
                         await Swal.fire({
-                            title: "Error",
+                            title: "Error!",
                             text: data.payload.message,
                             icon: "error",
                             confirmButtonText: "OK",
-                            confirmButtonColor: '#1976D2',
+                            confirmButtonColor: myLightColour,
+                            cancelButtonColor: myErrorColour,
                         });
                         return;
                     } else {
@@ -207,7 +213,8 @@ export default function SideBarExpenditure() {
                             title: "Cancelled!",
                             text: "Your expenditure has been cancelled.",
                             icon: "success",
-                            confirmButtonColor: '#1976D2',
+                            confirmButtonColor: myLightColour,
+                            cancelButtonColor: myErrorColour,
                         });
 
                         await dispatch(fetchGetExpendituresOfEmployee({
@@ -247,20 +254,22 @@ export default function SideBarExpenditure() {
             })).then(data => {
                 if (data.payload.message) {
                     Swal.fire({
-                        title: "Error",
+                        title: "Error!",
                         text: data.payload.message,
                         icon: "error",
                         confirmButtonText: "OK",
-                        confirmButtonColor: '#1976D2',
+                        confirmButtonColor: myLightColour,
+                        cancelButtonColor: myErrorColour,
                     });
                     return;
                 }
                 Swal.fire({
-                    title: "Success",
+                    title: "Success!",
                     text: "Expense has been added",
                     icon: "success",
                     confirmButtonText: "OK",
-                    confirmButtonColor: '#1976D2',
+                    confirmButtonColor: myLightColour,
+                    cancelButtonColor: myErrorColour,
                 });
 
                 fetchGetAllUsersOfManager({
@@ -359,7 +368,7 @@ export default function SideBarExpenditure() {
                 <Button
                     onClick={handleSaveExpense}
                     variant="contained"
-                    color="primary"
+                    color="success"
                     disabled={price === 0 || description.length === 0 || isActivating}
                     startIcon={<AddIcon />}
                     sx={{ marginRight: '1%', width: '200px' }}

@@ -16,7 +16,6 @@ import AddCompanyItemDialog from './AddCompanyItem';
 import {ICompanyItemAssignment} from "../../../models/ICompanyItemAssignment";
 
 const itemColumns: GridColDef[] = [
-    { field: "id", headerName: "Id", flex: 1, headerAlign: "center" },
     { field: "name", headerName: "Description", flex: 1, headerAlign: "center" },
     { field: "companyItemType", headerName: "Item Type", flex: 1, headerAlign: "center" },
     { field: "serialNumber", headerName: "Serial Number", flex: 1, headerAlign: "center" },
@@ -24,7 +23,6 @@ const itemColumns: GridColDef[] = [
 ];
 
 const assignmentColumns: GridColDef[] = [
-    { field: "id", headerName: "Id", flex: 1, headerAlign: "center" },
     { field: "companyItemName", headerName: "Description", flex: 1, headerAlign: "center" },
     { field: "serialNumber", headerName: "Serial Number", flex: 1, headerAlign: "center" },
     { field: "employeeEmail", headerName: "Employee Email", flex: 1, headerAlign: "center" },

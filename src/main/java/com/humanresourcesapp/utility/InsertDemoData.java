@@ -976,8 +976,9 @@ public class InsertDemoData
         companyItemService.saveForDemoData(CompanyItemSaveRequestDto.builder().name("Mercedes").serialNumber("34AA4594").companyItemType(ECompanyItemType.VEHICLE).build());
 
 
-        companyItemAssignmentService.save( new CompanyItemAssignmentRequestDto(1L,7L));
-        companyItemAssignmentService.save( new CompanyItemAssignmentRequestDto(2L,7L));
+        companyItemAssignmentService.saveForDemoData( 1L,7L);
+        companyItemAssignmentService.saveForDemoData( 2L,7L);
+
 
     }
 

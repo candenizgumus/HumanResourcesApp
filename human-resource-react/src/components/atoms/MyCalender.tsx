@@ -135,7 +135,7 @@ const MyCalendar: React.FC<MyCalendarProps> = ({ events, onSaveEvent, onUpdateEv
         }}
         selectable={isUserManager}
         onSelectEvent={(event) => {
-            if (!event.isImportant) {
+            if (!event.isImportant && isUserManager) {
                 handleSelectEvent(event);
             }
         }}

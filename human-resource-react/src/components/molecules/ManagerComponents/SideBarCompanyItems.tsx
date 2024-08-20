@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import { DataGrid, GridColDef, GridRowSelectionModel } from "@mui/x-data-grid";
 import Swal from "sweetalert2";
 import {
+    fetchCancelItemAssignmentByManager,
     fetchCompanyItemAssignments,
     fetchCompanyItems,
     fetchDeleteCompanyItem
@@ -30,11 +31,11 @@ const assignmentColumns: GridColDef[] = [
     { field: "assignDate", headerName: "Assign Date", flex: 1, headerAlign: "center" },
     { field: "status", headerName: "Status", flex: 1, headerAlign: "center" },
     { field: "message", headerName: "Employee Message", flex: 1, headerAlign: "center" },
-
 ];
 
 const SideBarCompanyItems: React.FC = () => {
     const [selectedRowIds, setSelectedRowIds] = useState<number[]>([]);
+    const [hasCanceledRow, setHasCanceledRow] = useState(false);
     const token = useAppSelector((state) => state.auth.token);
     const dispatch = useDispatch<HumanResources>();
     const [searchText, setSearchText] = useState('');
@@ -42,6 +43,7 @@ const SideBarCompanyItems: React.FC = () => {
     const [companyItemAssignments, setCompanyItemAssignments] = useState<ICompanyItemAssignment[]>([]);
     const [loading, setLoading] = useState(false);
     const [dialogOpen, setDialogOpen] = useState(false);
+    const [buttonDisabled, setButtonDisabled] = useState(true);
 
     const handleDialogOpen = () => {
         setDialogOpen(true);
@@ -79,9 +81,13 @@ const SideBarCompanyItems: React.FC = () => {
 
     }, [dispatch, token, searchText]);
 
-
     const handleRowSelection = (newSelectionModel: GridRowSelectionModel) => {
         setSelectedRowIds(newSelectionModel as number[]);
+        const hasCanceled = newSelectionModel.some((id) => {
+            const row = companyItemAssignments.find(item => item.id === id);
+            return row?.status === "CANCELED";
+        });
+        setHasCanceledRow(hasCanceled);
     };
 
     const handleOnClickAddCompanyItem = () => {
@@ -117,6 +123,35 @@ const SideBarCompanyItems: React.FC = () => {
                     })).then(data => {
                         setCompanyItems(data.payload);
                     })
+                });
+        });
+    };
+
+    const handleCancellation = () => {
+        selectedRowIds.forEach((id) => {
+            setLoading(true);
+            dispatch(fetchCancelItemAssignmentByManager({ token, id }))
+                .then(data => {
+                    if (data.payload.message) {
+                        Swal.fire({
+                            icon: 'error',
+                            text: data.payload.message ?? 'Failed to cancel the assignment',
+                            showConfirmButton: true
+                        })
+                    } else {
+                        Swal.fire({
+                            icon: 'success',
+                            text: 'Assignment has been canceled',
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
+                    }
+                    setLoading(false);
+                    dispatch(fetchCompanyItemAssignments(token)).then(data => {
+                        if (data.payload) {
+                            setCompanyItemAssignments(data.payload);
+                        }
+                    });
                 });
         });
     };
@@ -157,7 +192,14 @@ const SideBarCompanyItems: React.FC = () => {
                     height: '407px'
                 }}
             />
-            <Grid sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-start', alignItems: 'center', marginTop: '2%', marginBottom: '2%' }}>
+            <Grid sx={{
+                flexGrow: 1,
+                display: 'flex',
+                justifyContent: 'flex-start',
+                alignItems: 'center',
+                marginTop: '2%',
+                marginBottom: '2%'
+            }}>
                 <Button
                     onClick={handleOnClickAddCompanyItem}
                     variant="contained"
@@ -191,6 +233,11 @@ const SideBarCompanyItems: React.FC = () => {
                 pageSizeOptions={[5, 10]}
                 checkboxSelection
                 onRowSelectionModelChange={handleRowSelection}
+                getRowClassName={(params) =>
+                    params.row.status === "CANCELED"
+                        ? "canceled-row"
+                        : ""
+                }
                 sx={{
                     "& .MuiDataGrid-columnHeaders": {
                         backgroundColor: "rgba(224, 224, 224, 1)",
@@ -205,6 +252,25 @@ const SideBarCompanyItems: React.FC = () => {
                     height: '407px'
                 }}
             />
+            <Grid sx={{
+                flexGrow: 1,
+                display: 'flex',
+                justifyContent: 'flex-start',
+                alignItems: 'center',
+                marginTop: '2%',
+                marginBottom: '2%'
+            }}>
+                <Button
+                    onClick={handleCancellation}
+                    variant="contained"
+                    color="error"
+                    disabled={loading || selectedRowIds.length === 0 || hasCanceledRow}
+                    startIcon={<DeleteIcon />}
+                    sx={{ marginRight: '1%', width: '200px' }}
+                >
+                    Cancel Item Assignment
+                </Button>
+            </Grid>
         </div>
     );
 };

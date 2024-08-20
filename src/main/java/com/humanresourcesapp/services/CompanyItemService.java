@@ -47,9 +47,14 @@ public class CompanyItemService {
                         .name(dto.name())
                         .serialNumber(dto.serialNumber())
                         .companyItemType(dto.companyItemType())
-                        .status(EStatus.ACTIVE)
+                        .status(EStatus.AVAILABLE)
                         .build()
         );
+    }
+
+    public void saveForStatus(CompanyItem companyItem) {
+        //Only for status update
+        companyItemRepository.save(companyItem);
     }
 
     public CompanyItem saveForDemoData(CompanyItemSaveRequestDto dto) {
@@ -66,7 +71,7 @@ public class CompanyItemService {
                         .name(dto.name())
                         .serialNumber(dto.serialNumber())
                         .companyItemType(dto.companyItemType())
-                        .status(EStatus.ACTIVE)
+                        .status(EStatus.AVAILABLE)
                         .build()
         );
     }
@@ -79,6 +84,20 @@ public class CompanyItemService {
         companyItems.removeIf(companyItem -> companyItem.getStatus().equals(EStatus.DELETED));
 
         return companyItems;
+    }
+
+    public List<CompanyItem> findAllForAssignment(PageRequestDto dto) {
+        String managerEmail = UserInfoSecurityContext.getUserInfoFromSecurityContext();
+        User manager = userService.findByEmail(managerEmail).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
+
+        List<CompanyItem> companyItems = companyItemRepository.findBySerialNumberContainingAndCompanyId(dto.searchText(), manager.getCompanyId(), PageRequest.of(dto.page(), dto.pageSize()));
+        List<CompanyItem> availableItems = new ArrayList<>();
+        for (CompanyItem companyItem : companyItems) {
+            if (companyItem.getStatus().equals(EStatus.AVAILABLE)) {
+                availableItems.add(companyItem);
+            }
+        }
+        return availableItems;
     }
 
     public List<String> getCompanyItemTypes() {
@@ -106,4 +125,6 @@ public class CompanyItemService {
     public List<CompanyItem> findByCompanyId(Long companyId) {
         return companyItemRepository.findByCompanyId(companyId);
     }
+
+
 }

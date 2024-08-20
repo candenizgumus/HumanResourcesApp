@@ -73,6 +73,25 @@ export const fetchCompanyItems = createAsyncThunk(
     }
 );
 
+export const fetchCompanyItemsForAssignment = createAsyncThunk(
+    'companyItem/fetchCompanyItems',
+    async (payload: { token: string, searchText: string, page: number, pageSize: number }) => {
+        const response = await fetch('http://localhost:9090/dev/v1/company-item/get-all-for-assignment', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ` + payload.token
+            },
+            body: JSON.stringify({
+                'searchText': payload.searchText,
+                'pageSize': payload.pageSize,
+                'page': payload.page
+            })
+        });
+        return await response.json();
+    }
+);
+
 export const fetchCompanyItemAssignments = createAsyncThunk(
     'companyItem/fetchCompanyItemsWithAssignments',
     async (token: string) => {
@@ -185,6 +204,20 @@ export const fetchRejectItemAssignmentByEmployee = createAsyncThunk(
     }
 );
 
+export const fetchCancelItemAssignmentByManager = createAsyncThunk(
+    'companyItem/fetchCancelItemAssignmentByManager',
+    async (payload: { id: number, token: string }) => {
+        const response = await fetch(`http://localhost:9090/dev/v1/company-item-assignment/cancel-assignment-by-manager/${payload.id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ` + payload.token
+            }
+        });
+        return await response.json();
+    }
+);
+
 
 
 const companyItemSlice = createSlice({
@@ -200,6 +233,9 @@ const companyItemSlice = createSlice({
             state.companyItems.push(action.payload);
         });
         builder.addCase(fetchCompanyItems.fulfilled, (state, action) => {
+            state.companyItems = action.payload;
+        });
+        builder.addCase(fetchCompanyItemsForAssignment.fulfilled, (state, action) => {
             state.companyItems = action.payload;
         });
         builder.addCase(fetchDeleteCompanyItem.fulfilled, (state, action) => {
@@ -221,6 +257,9 @@ const companyItemSlice = createSlice({
             state.companyItems = action.payload;
         });
         builder.addCase(fetchRejectItemAssignmentByEmployee.fulfilled, (state, action) => {
+            state.companyItems = action.payload;
+        });
+        builder.addCase(fetchCancelItemAssignmentByManager.fulfilled, (state, action) => {
             state.companyItems = action.payload;
         });
     }

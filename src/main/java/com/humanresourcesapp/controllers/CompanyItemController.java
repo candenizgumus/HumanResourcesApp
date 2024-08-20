@@ -32,6 +32,13 @@ public class CompanyItemController {
         return companyItemService.findAllBySerialNumber(dto);
     }
 
+    @PostMapping(GET_ALL_FOR_ASSIGNMENT)
+    @PreAuthorize("hasAnyAuthority('MANAGER')")
+    public ResponseEntity<List<CompanyItem>> findAllForAssignment(@RequestBody PageRequestDto dto) {
+        return ResponseEntity.ok(companyItemService.findAllForAssignment(dto));
+    }
+
+
     @PostMapping(GET_TYPES)
     @PreAuthorize("hasAnyAuthority('MANAGER', 'EMPLOYEE')")
     public List<String> getTypes() {

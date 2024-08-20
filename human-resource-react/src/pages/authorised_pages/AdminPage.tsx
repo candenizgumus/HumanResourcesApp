@@ -40,6 +40,7 @@ import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import { useState } from "react";
 import logo from '../../images/logo-full-white.png';
 import ThemeElement from '../../components/atoms/ThemeElement';
+import {myLightColour} from "../../util/MyColours";
 const drawerWidth = 240;
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
@@ -132,7 +133,7 @@ export default function AdminPage() {
     // Perform your action here
   };
 
-  const today = new Date().toLocaleDateString('tr-TR', {
+  const today = new Date().toLocaleDateString('en-US', {
     weekday: 'long',
     year: 'numeric',
     month: 'long',
@@ -171,11 +172,11 @@ export default function AdminPage() {
 
             <Box sx={{ flexGrow: 1 }} />
             <Box>
-              <Typography variant="h5" component="div" color='myLightColour.main'>
-                Merhaba, <strong>{user.name ? user.name : 'admin'}</strong>!
+              <Typography variant="h5" component="div" >
+                Hello, <strong>{user.name ? user.name : 'admin'}</strong>!
               </Typography>
-              <Typography variant="subtitle1" color="myBackgroundColour.main">
-                Bugün <span style={{ color: '#4caf50' }}>{today}</span>
+              <Typography variant="subtitle1"  sx={{ marginRight: 1 }} >
+                <span style={{ fontStyle: 'italic', color: myLightColour }}>{today}  </span>
               </Typography>
             </Box>
             <NotificationIcon />
@@ -200,7 +201,7 @@ export default function AdminPage() {
               {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
             </IconButton>
           </DrawerHeader>
-          <List sx={{ bgcolor: 'primary.main', minHeight: 'calc(100vh - 64px)', paddingTop:'0' }}>
+          <List sx={{ bgcolor: 'primary.main', minHeight: 'calc(100vh - 65px)', paddingTop:'0' }}>
             {['Dashboard', 'Offers', 'Users', 'Create Admin', 'Create Feature', 'Create Definition', 'Holidays', 'Profile', 'Companies', 'Notifications', 'Upcoming Expiries'].map((text, index) => (
               <ListItem key={text} disablePadding>
                 <ListItemButton

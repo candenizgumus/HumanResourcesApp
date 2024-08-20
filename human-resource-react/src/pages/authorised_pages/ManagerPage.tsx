@@ -43,6 +43,7 @@ import HikingIcon from '@mui/icons-material/Hiking';
 import { useState } from "react";
 import logo from '../../images/logo-full-white.png';
 import { AddDocumentIcon } from "../../components/atoms/icons";
+import {myLightColour} from "../../util/MyColours";
 
 const drawerWidth = 240;
 
@@ -136,7 +137,7 @@ export default function AdminPage() {
         // Perform your action here
     };
 
-    const today = new Date().toLocaleDateString('tr-TR', {
+    const today = new Date().toLocaleDateString('en-US', {
         weekday: 'long',
         year: 'numeric',
         month: 'long',
@@ -176,11 +177,11 @@ export default function AdminPage() {
 
                     <Box sx={{ flexGrow: 1 }} />
                     <Box>
-                        <Typography variant="h5" component="div">
-                            Merhaba, <strong>{user.name ? user.name : 'admin'}</strong>!
+                        <Typography variant="h5" component="div" >
+                            Hello, <strong>{user.name ? user.name : 'admin'}</strong>!
                         </Typography>
-                        <Typography variant="subtitle1" color="textSecondary">
-                            Bugün <span style={{ fontStyle: 'italic', color: '#4caf50' }}>{today}</span>
+                        <Typography variant="subtitle1"  sx={{ marginRight: 1 }} >
+                            <span style={{ fontStyle: 'italic', color: myLightColour }}>{today}  </span>
                         </Typography>
                     </Box>
                     <NotificationIcon />

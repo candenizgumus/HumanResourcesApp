@@ -2,6 +2,7 @@ package com.humanresourcesapp.services;
 
 import com.humanresourcesapp.dto.requests.CompanyItemAssignmentRequestDto;
 import com.humanresourcesapp.dto.requests.PageRequestDto;
+import com.humanresourcesapp.dto.responses.CompanyItemAssignmentEmployeeResponseDto;
 import com.humanresourcesapp.dto.responses.CompanyItemAssignmentResponseDto;
 import com.humanresourcesapp.dto.responses.ItemAssignmentsOfEmployeeResponseDto;
 import com.humanresourcesapp.entities.CompanyItem;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
@@ -48,7 +50,7 @@ public class CompanyItemAssignmentService {
 
         List<CompanyItemAssignment> companyItemAssignments = companyItemAssignmentRepository.findByCompanyId(manager.getCompanyId());
         List<CompanyItem> companyItems = companyItemService.findByCompanyId(manager.getCompanyId());
-        List <CompanyItemAssignmentResponseDto> dtoList = new ArrayList<>();
+        List<CompanyItemAssignmentResponseDto> dtoList = new ArrayList<>();
         for (CompanyItemAssignment companyItemAssignment : companyItemAssignments) {
             for (CompanyItem companyItem : companyItems) {
                 if (companyItemAssignment.getCompanyItemId().equals(companyItem.getId())) {
@@ -68,18 +70,16 @@ public class CompanyItemAssignmentService {
         return dtoList;
     }
 
-    public Boolean approveAssignment(Long id, Long employeeId) {
-        List<CompanyItemAssignment> companyItemAssignments = companyItemAssignmentRepository.findByEmployeeId(employeeId);
-        for (CompanyItemAssignment companyItemAssignment : companyItemAssignments) {
-            if (companyItemAssignment.getId().equals(id)) {
-                companyItemAssignment.setStatus(EStatus.APPROVED);
-                companyItemAssignment.setMessage("Approved");
-                companyItemAssignmentRepository.save(companyItemAssignment);
-                return true;
-            }
+    public Boolean approveAssignment(Long id) {
+        Optional<CompanyItemAssignment> companyItemAssignment = companyItemAssignmentRepository.findById(id);
+        if (companyItemAssignment.isPresent()) {
+            companyItemAssignment.get().setStatus(EStatus.APPROVED);
+            companyItemAssignment.get().setMessage("Approved");
+            companyItemAssignmentRepository.save(companyItemAssignment.get());
+            companyItemService.findById(id).setStatus(EStatus.IN_USE);
+            return true;
         }
-        companyItemService.findById(id).setStatus(EStatus.IN_USE);
-        return false;
+        throw new HumanResourcesAppException(ErrorType.ASSIGNMENT_NOT_FOUND);
     }
 
 
@@ -105,4 +105,26 @@ public class CompanyItemAssignmentService {
         return dtoList;
     }
 
+    public List<CompanyItemAssignmentEmployeeResponseDto> getAllAssignmentsByEmployee() {
+        String managerEmail = UserInfoSecurityContext.getUserInfoFromSecurityContext();
+        User employee = userService.findByEmail(managerEmail).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
+        List<CompanyItemAssignment> companyItemAssignments = companyItemAssignmentRepository.findByEmployeeId(employee.getId());
+        List<CompanyItem> companyItems = companyItemService.findByCompanyId(userService.findById(employee.getId()).getCompanyId());
+        List<CompanyItemAssignmentEmployeeResponseDto> dtoList = new ArrayList<>();
+        for (CompanyItemAssignment companyItemAssignment : companyItemAssignments) {
+            for (CompanyItem companyItem : companyItems) {
+                if (companyItemAssignment.getCompanyItemId().equals(companyItem.getId())) {
+                    CompanyItemAssignmentEmployeeResponseDto dto = (new CompanyItemAssignmentEmployeeResponseDto(
+                            companyItemAssignment.getId(),
+                            companyItem.getName(),
+                            companyItem.getSerialNumber(),
+                            companyItemAssignment.getAssignDate(),
+                            companyItemAssignment.getStatus()
+                    ));
+                    dtoList.add(dto);
+                }
+            }
+        }
+        return dtoList;
+    }
 }

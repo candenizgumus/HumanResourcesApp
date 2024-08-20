@@ -60,7 +60,8 @@ public enum ErrorType
     ITEM_NOT_FOUND(1048, "Item Not Found", HttpStatus.BAD_REQUEST),
     PREDEFINED_DEFINITION_CANNOT_BE_DELETED(1049, "Predefined Definition Cannot Be Deleted", HttpStatus.BAD_REQUEST),
     SUPERADMIN_CANNOT_BE_DEACTIVATED(    1050, "Superadmin Cannot Be Deactivated", HttpStatus.BAD_REQUEST),
-    ALREADY_DEFINED(1051,"Definition Predefined" , HttpStatus.BAD_REQUEST );
+    ALREADY_DEFINED(1051,"Definition Predefined" , HttpStatus.BAD_REQUEST ),
+    ASSIGNMENT_NOT_FOUND(1052,"Assignment Not Found" , HttpStatus.BAD_REQUEST ),
 
 
     ;

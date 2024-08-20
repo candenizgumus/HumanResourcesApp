@@ -123,6 +123,7 @@ public class Endpoints
     public static final String DEACTIVATE_ACCOUNT = "/deactivate-account";
     public static final String APPROVE_ASSIGNMENT = "/approve-assignment";
     public static final String GET_ALL_WITH_PAGE = "/get-all-with-page";
+    public static final String GET_ALL_BY_EMPLOYEE = "/get-all-by-employee";
     public static final String FIND_MANAGER_AND_COMPANY_NAME_OF_EMPLOYEE = "/find-manager-and-company-name-of-employee";
     public static final String GET_ASSINGED_ITEMS_OF_EMPLOYEE = "/get-assinged-items-of-employee";
 }

@@ -78,9 +78,17 @@ export const fetchCreateHolidayAdmin = createAsyncThunk(
     }
 );
 
+export interface ICreateHoliday2 {
+    holidayName: string;
+    holidayType: string;
+    startDate: Date;
+    endDate: Date;
+    token: string;
+    holidayId:number
+}
 export const fetchCreateHolidayManager = createAsyncThunk(
     'holiday/createHolidayManager',
-    async (payload: ICreateHoliday) => {
+    async (payload: ICreateHoliday2) => {
 
         const response = await fetch('http://localhost:9090/dev/v1/holiday/save-holiday-manager', {
                 method: 'POST',
@@ -94,6 +102,7 @@ export const fetchCreateHolidayManager = createAsyncThunk(
                         'holidayType': payload.holidayType,
                         'startDate': payload.startDate,
                         'endDate': payload.endDate,
+                        'holidayId':payload.holidayId
                     }
                 ),
             });

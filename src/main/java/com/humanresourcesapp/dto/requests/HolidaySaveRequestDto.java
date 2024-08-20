@@ -9,6 +9,9 @@ public record HolidaySaveRequestDto(String holidayName,
                                     EHolidayType holidayType,
                                     LocalDate startDate,
                                     LocalDate endDate,
-                                    EStatus status)
+                                    EStatus status,
+                                    Long holidayId
+
+)
 {
 }

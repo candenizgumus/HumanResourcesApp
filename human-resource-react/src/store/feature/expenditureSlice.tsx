@@ -202,6 +202,23 @@ export const fetchCancelExpenditure = createAsyncThunk(
 
 )
 
+export const fetchGetAllExpendituresOfEmployeeByCurrentMonth = createAsyncThunk(
+    'expenditure/fetchCancelExpenditure',
+    async (payload: string) => {
+
+        const response = await fetch(`http://localhost:9090/dev/v1/expenditure/get-all-expenditures-of-employee-by-current-month`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ` + payload
+            }
+        });
+
+        return await response.json();
+    }
+
+)
+
 
 
 const expenditureSlice = createSlice({

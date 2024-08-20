@@ -65,4 +65,10 @@ public class ExpenditureController
     public ResponseEntity<Boolean> cancel(Long id){
         return ResponseEntity.ok(expenditureService.cancel(id));
     }
+
+    @PostMapping(GET_ALL_EXPENDITURES_OF_EMPLOYEE_BY_CURRENT_MONTH)
+    @PreAuthorize("hasAnyAuthority('EMPLOYEE','MANAGER')")
+    public ResponseEntity<List<Expenditure>> getAllExpendituresOfEmployeeByCurrentMonth(){
+        return ResponseEntity.ok(expenditureService.getAllExpendituresOfEmployeeByCurrentMonth());
+    }
 }

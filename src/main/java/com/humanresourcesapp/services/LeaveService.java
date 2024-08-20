@@ -291,6 +291,61 @@ public class LeaveService {
                 .approveDate(LocalDate.now())
                 .isLeaveApproved(true)
                 .status(EStatus.ACTIVE)
+                        .managerName(manager.getName() + " " + manager.getSurname())
+                .attachedFile(fileName)
+                .fullName(employee.getName() + " " + employee.getSurname())
+                .email(employee.getEmail())
+                .build());
+
+        notificationService.save(NotificationSaveRequestDto.builder()
+                .notificationText(ENotificationTextBase.LEAVE_APPROVE_NOTIFICATION.getText() + dto.description())
+                .userType(null)
+                .userId(employee.getId())
+                .isRead(false)
+                .status(EStatus.ACTIVE)
+                .notificationType(ENotificationType.INFORMATION)
+                .url(LEAVES)
+                .build());
+        return true;
+    }
+
+    public Boolean assignLeaveForDemoData(AssignLeaveRequestDto dto) {
+
+
+        User employee = userService.findById(dto.employeeId());
+        if(!employee.getCompanyId().equals(1L)){
+            throw new HumanResourcesAppException(ErrorType.INSUFFICIENT_PERMISSION);
+        }
+
+        String fileName = "";
+        if (dto.files() != null && !dto.files().isEmpty()) {
+            for (MultipartFile file : dto.files()) {
+                fileName = employee.getEmail()+"/"+file.getOriginalFilename();
+                byte[] fileContent;
+                try {
+                    fileContent = file.getBytes();
+                } catch (IOException e) {
+                    throw new RuntimeException("Failed to read file content", e);
+                }
+                s3Service.putObject(s3Buckets.getCustomer(),
+                        "personelDocuments/%s".formatted( fileName),
+                        fileContent);
+            }
+        }
+
+        leaveRepository.save(Leave.builder()
+                .description(dto.description())
+                .employeeId(employee.getId())
+                .employeeName(employee.getName())
+                .employeeSurname(employee.getSurname())
+                        .managerName("Snovid Sibiga")
+                .companyId(employee.getCompanyId())
+                .leaveType(dto.leaveType())
+                .startDate(dto.startDate().plusDays(1))
+                .endDate(dto.endDate().plusDays(1))
+                .approveDate(LocalDate.now())
+                .isLeaveApproved(true)
+                .status(EStatus.ACTIVE)
                 .attachedFile(fileName)
                 .fullName(employee.getName() + " " + employee.getSurname())
                 .email(employee.getEmail())
@@ -327,6 +382,13 @@ public class LeaveService {
         leave.setLeaveType(dto.leaveType());
         leaveRepository.save(leave);
         return true;
+    }
+
+    public List<Leave> getAllCurrentLeaves()
+    {
+        String managerEmail = UserInfoSecurityContext.getUserInfoFromSecurityContext();
+        User employee = userService.findByEmail(managerEmail).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
+        return leaveRepository.findAllByEmployeeIdAndStatusAndStartDateIsAfterOrEndDateIsAfter(employee.getId(),EStatus.ACTIVE,LocalDate.now(),LocalDate.now());
     }
 }
 

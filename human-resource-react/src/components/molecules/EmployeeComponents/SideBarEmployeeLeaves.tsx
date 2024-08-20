@@ -5,8 +5,8 @@ import {
     GridRowSelectionModel,
 } from "@mui/x-data-grid";
 import {
-    Button, Divider, FormControl,
-    Grid, InputAdornment, InputLabel, OutlinedInput,
+    Button,
+    Grid,
     TextField, Typography
 } from "@mui/material";
 import { useDispatch } from "react-redux";
@@ -44,13 +44,12 @@ export default function SideBarEmployeeLeaves() {
     const [files, setFiles] = useState<File[]>([]);
     const leaveTypes = useAppSelector((state) => state.definition.definitionList);
     const leaveColumns: GridColDef[] = [
-        { field: "id", headerName: "ID", flex: 1, headerAlign: "center" },
         { field: "description", headerName: "Description", flex: 2, headerAlign: "center" },
 
         { field: "startDate", headerName: "Start Date", flex: 2, headerAlign: "center" },
         { field: "endDate", headerName: "End Date", flex: 2, headerAlign: "center" },
         { field: "leaveType", headerName: "Leave Type", flex: 2, headerAlign: "center" },
-        { field: "isLeaveApproved", headerName: "Approval Status", flex: 2, headerAlign: "center" },
+        { field: "isLeaveApproved", headerName: "Approval Status", flex: 1.5, headerAlign: "center" },
         { field: "approveDate", headerName: "Approval Date", flex: 2, headerAlign: "center" },
         { field: "status", headerName: "Status", flex: 1, headerAlign: "center" },
         {

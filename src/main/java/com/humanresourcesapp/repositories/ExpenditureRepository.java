@@ -2,6 +2,7 @@ package com.humanresourcesapp.repositories;
 
 import com.humanresourcesapp.entities.Expenditure;
 import com.humanresourcesapp.entities.User;
+import com.humanresourcesapp.entities.enums.EStatus;
 import com.humanresourcesapp.entities.enums.EUserType;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -9,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -24,4 +26,5 @@ public interface ExpenditureRepository extends JpaRepository<Expenditure, Long> 
             " AND MONTH(e.approveDate) = MONTH(CURRENT_DATE) AND e.status = 'ACTIVE' AND e.isExpenditureApproved=true")
     List<Expenditure> findExpendituresByCompanyIdAndCurrentMonth(Long companyId);
 
+    List<Expenditure> findAllByEmployeeIdAndStatusAndApproveDateIsBetween(Long employeeId, EStatus status, LocalDate start, LocalDate end);
 }

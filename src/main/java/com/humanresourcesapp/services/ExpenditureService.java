@@ -164,6 +164,34 @@ public class ExpenditureService {
         return false;
     }
 
+    public Boolean approveExpenditureForDemoData(Long id) {
+
+
+        Expenditure expenditure = expenditureRepository.findById(id).orElseThrow(() -> new HumanResourcesAppException(ErrorType.EXPENDITURE_NOT_FOUND));
+        if (!expenditure.getCompanyId().equals(1L)) {
+            throw new HumanResourcesAppException(ErrorType.INVALID_ACCOUNT);
+        }
+
+        if (!expenditure.getIsExpenditureApproved()) {
+            expenditure.setIsExpenditureApproved(true);
+            expenditure.setApproveDate(LocalDate.now());
+            expenditure.setStatus(EStatus.ACTIVE);
+            expenditureRepository.save(expenditure);
+
+            notificationService.save(NotificationSaveRequestDto.builder()
+                    .notificationText(ENotificationTextBase.EXPENDITURE_APPROVE_NOTIFICATION.getText() + expenditure.getDescription())
+                    .userType(null)
+                    .userId(expenditure.getEmployeeId())
+                    .isRead(false)
+                    .status(EStatus.ACTIVE)
+                    .notificationType(ENotificationType.SUCCESS)
+                    .url(EXPENDITURE)
+                    .build());
+            return true;
+        }
+        return false;
+    }
+
     public Boolean delete(Long id) {
         String userEmail = UserInfoSecurityContext.getUserInfoFromSecurityContext();
         User user = userService.findByEmail(userEmail).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
@@ -251,4 +279,12 @@ public class ExpenditureService {
     }
 
 
+    public List<Expenditure> getAllExpendituresOfEmployeeByCurrentMonth()
+    {
+        String userEmail = UserInfoSecurityContext.getUserInfoFromSecurityContext();
+        User employee = userService.findByEmail(userEmail).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
+        int dayOfMonth = LocalDate.now().getDayOfMonth();
+        return expenditureRepository.findAllByEmployeeIdAndStatusAndApproveDateIsBetween(employee.getId(), EStatus.ACTIVE, LocalDate.now().withDayOfMonth(1), LocalDate.now().withDayOfMonth(dayOfMonth));
+
+    }
 }

@@ -125,7 +125,7 @@ export default function EmployeePage() {
         setSelectedIndex2(index);
         // Perform your action here
     };
-    const today = new Date().toLocaleDateString('tr-TR', {
+    const today = new Date().toLocaleDateString('en-US', {
         weekday: 'long',
         year: 'numeric',
         month: 'long',
@@ -166,10 +166,10 @@ export default function EmployeePage() {
                     <Box sx={{ flexGrow: 1 }} />
                     <Box>
                         <Typography variant="h5" component="div" >
-                            Merhaba, <strong>{user.name ? user.name : 'admin'}</strong>!
+                            Hello, <strong>{user.name ? user.name : 'admin'}</strong>!
                         </Typography>
-                        <Typography variant="subtitle1"  >
-                            Bugün <span style={{ fontStyle: 'italic', color: myLightColour }}>{today}</span>
+                        <Typography variant="subtitle1"  sx={{ marginRight: 1 }} >
+                           <span style={{ fontStyle: 'italic', color: myLightColour }}>{today}  </span>
                         </Typography>
                     </Box>
                     <NotificationIcon />
@@ -189,13 +189,13 @@ export default function EmployeePage() {
                 anchor="left"
                 open={open}
             >
-                <DrawerHeader>
-                    <IconButton onClick={handleDrawerClose}>
+                <DrawerHeader sx={{ bgcolor: primaryMain }}>
+                    <IconButton onClick={handleDrawerClose} sx={{ color: 'white' }}>
                         {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
                     </IconButton>
                 </DrawerHeader>
-                <Divider />
-                <List>
+
+                <List sx={{ bgcolor: primaryMain , minHeight: 'calc(100vh - 65px)', paddingTop:'0'}}>
                     {['Dashboard', 'Holidays', 'Profile', 'Company Items', 'Notifications', 'Expenditure', 'Leaves', 'Bonus'].map((text, index) => (
                         <ListItem key={text} disablePadding>
                             <ListItemButton
@@ -205,15 +205,20 @@ export default function EmployeePage() {
                                     handleListItemClick(text);
                                 }}
                                 sx={{
+                                    color: 'white',
+                                    backgroundColor: primaryMain,
                                     '&.Mui-selected': {
-                                        backgroundColor: 'rgba(0, 123, 255, 0.1)', // Change background color when selected
+                                        backgroundColor: myLightColour, // Change background color when selected
                                         '&:hover': {
-                                            backgroundColor: 'rgba(0, 123, 255, 0.2)', // Change background color on hover
+                                            backgroundColor: myLightColour, // Change background color on hover
                                         },
-                                    }
+                                    },
+                                    '&:hover': {
+                                        backgroundColor: myLightColour, // Change background color on hover
+                                    },
                                 }}
                             >
-                                <ListItemIcon>
+                                <ListItemIcon sx={{ color: 'white' }}>
                                     {index === 0 && <Dashboard />}
                                     {index === 1 && <Weekend />}
                                     {index === 2 && <AccountBox />}

@@ -35,6 +35,7 @@ const assignmentColumns: GridColDef[] = [
 
 const SideBarCompanyItems: React.FC = () => {
     const [selectedRowIds, setSelectedRowIds] = useState<number[]>([]);
+    const [selectedRowIdsAssignment, setSelectedRowIdsAssignment] = useState<number[]>([]);
     const [hasCanceledRow, setHasCanceledRow] = useState(false);
     const token = useAppSelector((state) => state.auth.token);
     const dispatch = useDispatch<HumanResources>();
@@ -81,13 +82,17 @@ const SideBarCompanyItems: React.FC = () => {
 
     }, [dispatch, token, searchText]);
 
-    const handleRowSelection = (newSelectionModel: GridRowSelectionModel) => {
-        setSelectedRowIds(newSelectionModel as number[]);
+    const handleRowSelectionAssignments = (newSelectionModel: GridRowSelectionModel) => {
+        setSelectedRowIdsAssignment(newSelectionModel as number[]);
         const hasCanceled = newSelectionModel.some((id) => {
             const row = companyItemAssignments.find(item => item.id === id);
             return row?.status === "CANCELED";
         });
         setHasCanceledRow(hasCanceled);
+    };
+
+    const handleRowSelection = (newSelectionModel: GridRowSelectionModel) => {
+        setSelectedRowIds(newSelectionModel as number[]);
     };
 
     const handleOnClickAddCompanyItem = () => {
@@ -128,7 +133,7 @@ const SideBarCompanyItems: React.FC = () => {
     };
 
     const handleCancellation = () => {
-        selectedRowIds.forEach((id) => {
+        selectedRowIdsAssignment.forEach((id) => {
             setLoading(true);
             dispatch(fetchCancelItemAssignmentByManager({ token, id }))
                 .then(data => {
@@ -232,7 +237,7 @@ const SideBarCompanyItems: React.FC = () => {
                 }}
                 pageSizeOptions={[5, 10]}
                 checkboxSelection
-                onRowSelectionModelChange={handleRowSelection}
+                onRowSelectionModelChange={handleRowSelectionAssignments}
                 getRowClassName={(params) =>
                     params.row.status === "CANCELED"
                         ? "canceled-row"
@@ -264,7 +269,7 @@ const SideBarCompanyItems: React.FC = () => {
                     onClick={handleCancellation}
                     variant="contained"
                     color="error"
-                    disabled={loading || selectedRowIds.length === 0 || hasCanceledRow}
+                    disabled={loading || selectedRowIdsAssignment.length === 0 || hasCanceledRow}
                     startIcon={<DeleteIcon />}
                     sx={{ marginRight: '1%', width: '200px' }}
                 >

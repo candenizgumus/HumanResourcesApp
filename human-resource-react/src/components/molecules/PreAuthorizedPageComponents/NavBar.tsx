@@ -3,6 +3,8 @@ import { AppBar, Button, Toolbar, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import logoDark from '../../../images/logo-full-dark.png';
 import logoLight from '../../../images/logo-full-light.png';
+import logo_hd from '../../../images/logo-full-light.png';
+
 import ThemeElement from '../../atoms/ThemeElement';
 // @ts-ignore
 export const NavBar = () => {

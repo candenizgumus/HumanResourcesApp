@@ -31,10 +31,11 @@ import {
     FeaturedPlayList, Paid, PointOfSale,
     Weekend
 } from "@mui/icons-material";
-import LocalOfferIcon from "@mui/icons-material/LocalOffer";
+
 import { EmployeeHomeContent } from "../../components/molecules/EmployeeComponents/EmployeeHomeContent";
 import { EmployeeMenuContentRenderer } from "../../components/organisms/EmployeeMenuContentRenderer";
 import { useState } from "react";
+import { myLightColour, primaryMain} from "../../util/MyColours";
 
 const drawerWidth = 240;
 
@@ -133,7 +134,7 @@ export default function EmployeePage() {
     return (
         <Box sx={{ display: 'flex' }}>
             <CssBaseline />
-            <AppBar position="fixed" open={open}>
+            <AppBar sx={{ background: primaryMain }} position="fixed" open={open}>
                 <Toolbar sx={{ position: 'relative' }}>
                     <IconButton
                         color="inherit"
@@ -164,11 +165,11 @@ export default function EmployeePage() {
 
                     <Box sx={{ flexGrow: 1 }} />
                     <Box>
-                        <Typography variant="h5" component="div">
+                        <Typography variant="h5" component="div" >
                             Merhaba, <strong>{user.name ? user.name : 'admin'}</strong>!
                         </Typography>
-                        <Typography variant="subtitle1" color="textSecondary">
-                            Bugün <span style={{ fontStyle: 'italic', color: '#4caf50' }}>{today}</span>
+                        <Typography variant="subtitle1"  >
+                            Bugün <span style={{ fontStyle: 'italic', color: myLightColour }}>{today}</span>
                         </Typography>
                     </Box>
                     <NotificationIcon />

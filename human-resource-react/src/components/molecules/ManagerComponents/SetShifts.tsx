@@ -3,7 +3,6 @@ import MyCalendar, { IShift } from "../../atoms/MyCalender";
 import { useDispatch } from "react-redux";
 import { HumanResources, useAppSelector } from "../../../store";
 import { fetchFindShiftsOfEmployee, fetchSaveShift, fetchUpdateShift, fetchDeleteShift } from "../../../store/feature/shiftSlice";
-import sweetalert2 from "sweetalert2";
 import Swal from "sweetalert2";
 
 export const SetShifts: React.FC = () => {
@@ -12,6 +11,8 @@ export const SetShifts: React.FC = () => {
     const token = useAppSelector((state) => state.auth.token);
     const employeeId = useAppSelector((state) => state.shift.employeeId);
     const companyId = useAppSelector((state) => state.shift.companyId);
+    const name = useAppSelector((state) => state.shift.name);
+    const surname = useAppSelector((state) => state.shift.surname);
 
     const getShiftsOfEmployee = () => {
         dispatch(fetchFindShiftsOfEmployee({ employeeId: 7, token: token })).then(data => {
@@ -85,5 +86,5 @@ export const SetShifts: React.FC = () => {
         });
     };
 
-    return <MyCalendar events={events} isUserManager={true} onDeleteEvent={handleDeleteEvent} onSaveEvent={handleSaveEvent} onUpdateEvent={handleUpdateEvent} companyId={companyId} employeeId={employeeId} />;
+    return <MyCalendar events={events} isUserManager={true} onDeleteEvent={handleDeleteEvent} onSaveEvent={handleSaveEvent} onUpdateEvent={handleUpdateEvent} companyId={companyId} employeeId={employeeId} name={ name} surname={surname}/>;
 };

@@ -38,6 +38,8 @@ public class InsertDemoData
     private final PaymentService paymentService;
     private final ExpenditureService expenditureService;
     private final DefinitionService definitionService;
+    private final CompanyItemService companyItemService;
+    private final CompanyItemAssignmentService companyItemAssignmentService;
 
 
     @PostConstruct
@@ -53,6 +55,7 @@ public class InsertDemoData
         insertPaymentData();
         insertExpenditureData();
         insertDefinitionDemoData();
+        insertCompanyItemsDemoData();
 
 
         notificationService.save(NotificationSaveRequestDto.builder()
@@ -962,5 +965,19 @@ public class InsertDemoData
         definitionService.save(Definition.builder().status(EStatus.ACTIVE).definitionType(EDefinitionType.POSITION).name("TECHNICAL WRITER").build());
         definitionService.save(Definition.builder().status(EStatus.ACTIVE).definitionType(EDefinitionType.POSITION).name("VETERINARIAN").build());
         definitionService.save(Definition.builder().status(EStatus.ACTIVE).definitionType(EDefinitionType.POSITION).name("WEB DEVELOPER").build());
+    }
+
+    public void insertCompanyItemsDemoData(){
+        companyItemService.saveForDemoData(CompanyItemSaveRequestDto.builder().name("Laptop").serialNumber("12345").companyItemType(ECompanyItemType.LAPTOP).build());
+        companyItemService.saveForDemoData(CompanyItemSaveRequestDto.builder().name("Phone").serialNumber("asd124").companyItemType(ECompanyItemType.SMARTPHONE).build());
+        companyItemService.saveForDemoData(CompanyItemSaveRequestDto.builder().name("Mercedes").serialNumber("34AA4594").companyItemType(ECompanyItemType.VEHICLE).build());
+
+
+        companyItemAssignmentService.save( new CompanyItemAssignmentRequestDto(1L,7L));
+        companyItemAssignmentService.save( new CompanyItemAssignmentRequestDto(2L,7L));
+
+
+        companyItemAssignmentService.approveAssignment(1L,7L);
+        companyItemAssignmentService.approveAssignment(2L,7L);
     }
 }

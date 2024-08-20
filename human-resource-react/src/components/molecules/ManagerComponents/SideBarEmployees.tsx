@@ -91,7 +91,7 @@ export default function SideBarEmployees() {
         for (let id of selectedRowIds) {
             const selectedEmployee = userList.find((selectedEmployee) => selectedEmployee.id === id);
             if (!selectedEmployee) continue;
-            dispatch(setEmployeeIdAndCompanyId({ employeeId: selectedEmployee.id, companyId: selectedEmployee.companyId }));
+            dispatch(setEmployeeIdAndCompanyId({ employeeId: selectedEmployee.id, companyId: selectedEmployee.companyId , name: selectedEmployee.name, surname: selectedEmployee.surname}));
             dispatch(changePageState("Shift"));
 
         }

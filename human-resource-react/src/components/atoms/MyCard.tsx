@@ -6,6 +6,8 @@ import {useEffect} from "react";
 import {
     fetchManagerAndCompanyNameOfEmployee
 } from "../../store/feature/authSlice";
+import {AddDocumentIcon} from "./icons";
+import {AccountBox, Person} from "@mui/icons-material";
 
 export default function MyCard() {
     const user = useAppSelector((state) => state.auth.user);
@@ -24,9 +26,12 @@ export default function MyCard() {
     return (
         <Box sx={{ p: 2, maxWidth: '100%' }}>
             <Paper elevation={3} sx={{ p: 2, borderRadius: 2 }}>
-
+                <Typography variant="h6" align="center" sx={{ mb: 2 , fontWeight: "bold", color: 'myLightColour.main'}}>
+                    <AccountBox/> My Profile
+                </Typography>
                 {/* İlk Satır: Kullanıcı Bilgileri ve Fotoğraf */}
                 <Grid container spacing={2}>
+
                     <Grid item xs={6}>
                         <Typography sx={{ mb: 1.5, fontWeight: "bold" }} variant="h5">
                             {user.name + " " + user.surname}

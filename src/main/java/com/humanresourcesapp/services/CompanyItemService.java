@@ -52,6 +52,25 @@ public class CompanyItemService {
         );
     }
 
+    public CompanyItem saveForDemoData(CompanyItemSaveRequestDto dto) {
+
+        List<CompanyItem> allCompanyItems = companyItemRepository.findAll();
+        for (CompanyItem companyItem : allCompanyItems) {
+            if (companyItem.getSerialNumber().equals(dto.serialNumber())) {
+                throw new HumanResourcesAppException(ErrorType.ITEM_ALREADY_EXISTS);
+            }
+        }
+        return companyItemRepository.save(
+                CompanyItem.builder()
+                        .companyId(1L)
+                        .name(dto.name())
+                        .serialNumber(dto.serialNumber())
+                        .companyItemType(dto.companyItemType())
+                        .status(EStatus.ACTIVE)
+                        .build()
+        );
+    }
+
     public List<CompanyItem> findAllBySerialNumber(PageRequestDto dto) {
         String managerEmail = UserInfoSecurityContext.getUserInfoFromSecurityContext();
         User manager = userService.findByEmail(managerEmail).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));

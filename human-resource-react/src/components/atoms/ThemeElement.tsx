@@ -8,11 +8,13 @@ declare module '@mui/material/styles' {
     myLightColour: Palette['primary'];
     myBackgroundColour: Palette['primary'];
     mySecondaryColor: Palette['primary'];
+    primaryButtonOnly: Palette['primary'];
   }
   interface PaletteOptions {
     myLightColour?: PaletteOptions['primary'];
     myBackgroundColour?: PaletteOptions['primary'];
     mySecondaryColor?: PaletteOptions['primary'];
+    primaryButtonOnly?: PaletteOptions['primary'];
   }
 }
 
@@ -30,7 +32,23 @@ const theme = createTheme({
       },
       mySecondaryColor: {
         main: '#393E46'
-      }
+      },
+      success: {
+        main: '#00ADB5',
+        contrastText: '#fff',
+      },
+      secondary: {
+        main: '#5C4DFF',
+        contrastText: '#fff',
+      },
+      error: {
+        main: '#D32F2F',
+        contrastText: '#fff',
+      },
+      warning: {
+        main: '#FFA726',
+        contrastText: '#fff',
+      },
     },
   });
 

@@ -35,6 +35,7 @@ import AddDocument from "./AddDocument";
 import AddBonusDialog from "./AddBonus";
 import AddBonus from "./AddBonus";
 import {AssignItemIcon} from "../../atoms/icons";
+import { myErrorColour, myLightColour } from "../../../util/MyColours";
 
 export default function SideBarEmployees() {
     const [selectedRowIds, setSelectedRowIds] = useState<number[]>([]);
@@ -104,7 +105,12 @@ export default function SideBarEmployees() {
             setSelectedUser(userToEdit || null);
             handleOpen();
         } else {
-            Swal.fire("Please select exactly one company to edit.");
+            Swal.fire({
+                icon: 'success',
+                text: 'Please select exactly one company to edit.',
+                showConfirmButton: false,
+                timer: 1500
+              });
         }
     };
 
@@ -112,11 +118,12 @@ export default function SideBarEmployees() {
         if (bonusDate === null || bonusAmount === 0 || description === '') {
             handleClose();
             Swal.fire({
-                title: "Error",
+                title: "Error!",
                 text: "Please fill all the fields",
                 icon: "error",
                 confirmButtonText: "OK",
-                confirmButtonColor: '#1976D2',
+                confirmButtonColor: myLightColour,
+                cancelButtonColor: myErrorColour,
             });
             setIsActivating(false);
             return;
@@ -125,22 +132,24 @@ export default function SideBarEmployees() {
         dispatch(fetchSaveBonus({ token: token, description: description, bonusDate: bonusDate, bonusAmount: bonusAmount, employeeId: selectedRowIds[0] })).then(data => {
             if (data.payload.message) {
                 Swal.fire({
-                    title: "Error",
+                    title: "Error!",
                     text: data.payload.message,
                     icon: "error",
                     confirmButtonText: "OK",
-                    confirmButtonColor: '#1976D2',
+                    confirmButtonColor: myLightColour,
+                    cancelButtonColor: myErrorColour,
 
                 });
                 return
             }
             handleClose();
             Swal.fire({
-                title: "Success",
+                title: "Success!",
                 text: "Bonus added successfully",
                 icon: "success",
                 confirmButtonText: "OK",
-                confirmButtonColor: '#1976D2',
+                confirmButtonColor: myLightColour,
+                cancelButtonColor: myErrorColour,
             });
 
         })
@@ -188,11 +197,12 @@ export default function SideBarEmployees() {
 
             if (selectedEmployee.status === "DELETED") {
                 Swal.fire({
-                    title: "Error",
+                    title: "Error!",
                     text: "Employee already deleted",
                     icon: "error",
                     confirmButtonText: "OK",
-                    confirmButtonColor: '#1976D2',
+                    confirmButtonColor: myLightColour,
+                    cancelButtonColor: myErrorColour,
                 });
                 setIsDeleting(false);
                 return;
@@ -206,7 +216,8 @@ export default function SideBarEmployees() {
                     showCancelButton: true,
                     confirmButtonText: "Confirm",
                     input: "radio",
-                    confirmButtonColor: '#1976D2',
+                    confirmButtonColor: myLightColour,
+                    cancelButtonColor: myErrorColour,
 
                 });
 
@@ -225,7 +236,8 @@ export default function SideBarEmployees() {
                                 text: data.payload.message,
                                 icon: "error",
                                 confirmButtonText: "OK",
-                                confirmButtonColor: '#1976D2',
+                                confirmButtonColor: myLightColour,
+                                cancelButtonColor: myErrorColour,
 
                             });
                             return
@@ -235,7 +247,8 @@ export default function SideBarEmployees() {
                             text: "Deletion completed",
                             icon: "success",
                             confirmButtonText: "OK",
-                            confirmButtonColor: '#1976D2',
+                            confirmButtonColor: myLightColour,
+                            cancelButtonColor: myErrorColour,
                         });
 
                         fetchGetAllUsersOfManager({
@@ -269,7 +282,8 @@ export default function SideBarEmployees() {
                     text: "Employee already active",
                     icon: "error",
                     confirmButtonText: "OK",
-                    confirmButtonColor: '#1976D2',
+                    confirmButtonColor: myLightColour,
+                    cancelButtonColor: myErrorColour,
                 });
                 setIsActivating(false);
                 return;
@@ -283,7 +297,8 @@ export default function SideBarEmployees() {
                     showCancelButton: true,
                     confirmButtonText: "Confirm",
                     input: "radio",
-                    confirmButtonColor: '#1976D2',
+                    confirmButtonColor: myLightColour,
+                    cancelButtonColor: myErrorColour,
 
                 });
 
@@ -302,7 +317,8 @@ export default function SideBarEmployees() {
                                 text: data.payload.message,
                                 icon: "error",
                                 confirmButtonText: "OK",
-                                confirmButtonColor: '#1976D2',
+                                confirmButtonColor: myLightColour,
+                                cancelButtonColor: myErrorColour,
 
                             });
                             return
@@ -312,7 +328,8 @@ export default function SideBarEmployees() {
                             text: "Activation has been competed",
                             icon: "success",
                             confirmButtonText: "OK",
-                            confirmButtonColor: '#1976D2',
+                            confirmButtonColor: myLightColour,
+                            cancelButtonColor: myErrorColour,
                         });
 
                         fetchGetAllUsersOfManager({
@@ -377,7 +394,7 @@ export default function SideBarEmployees() {
                 <Button
                     onClick={handleActivateEmployee}
                     variant="contained"
-                    color="primary"
+                    color="success"
                     disabled={isActivating || selectedRowIds.length === 0}
                     sx={{ marginRight: '1%', width: '200px' }}
                     startIcon={<Icons.ActivateIcon />}

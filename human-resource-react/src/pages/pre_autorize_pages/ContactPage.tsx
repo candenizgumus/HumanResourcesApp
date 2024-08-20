@@ -42,15 +42,6 @@ const ContactForm = styled(Paper)(({ theme }) => ({
   textAlign: 'center',
 }));
 
-const loginButtonStyle = {
-  backgroundColor:  'primary.main',
-  color: 'white',
-  mt: 3, mb: 2,
-  '&:hover': {
-    color: 'primary.main',
-        },
-};
-
 function ContactUsPage() {
   const dispatch = useDispatch<HumanResources>();
   const [formData, setFormData] = useState({
@@ -88,10 +79,22 @@ function ContactUsPage() {
           message: '',
         });
       })
-      Swal.fire("Success", "Your message has been sent successfully.", "success");
+      Swal.fire({
+        title: "Success!",
+        text: "Your message has been sent successfully.",
+        icon: "success",
+        showConfirmButton: false,
+        timer: 1500,
+      });
     } catch (error) {
       console.error("Error sending message:", error);
-      Swal.fire("Error", "There was a problem sending the message.", "error");
+      Swal.fire({
+        title: "Error!",
+        text: "There was a problem sending the message.",
+        icon: "error",
+        showConfirmButton: false,
+        timer: 1500,
+      });
     }
   };
 
@@ -160,7 +163,7 @@ function ContactUsPage() {
                       <Button
                         type="submit"
                         variant="contained"
-                        sx={loginButtonStyle}
+                        color="success"
                         fullWidth
                       >
                         Send Message

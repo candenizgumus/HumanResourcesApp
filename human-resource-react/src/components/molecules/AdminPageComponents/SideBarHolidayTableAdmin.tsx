@@ -14,6 +14,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import {AddIcon, DeleteIcon} from '../../atoms/icons';
+import { myErrorColour, myLightColour } from '../../../util/MyColours';
 // Define the columns
 const columns: GridColDef[] = [
     { field: 'holidayName', headerName: 'Holiday', flex: 2, headerAlign: "center" },
@@ -65,7 +66,8 @@ export default function SideBarHolidayTableAdmin() {
             Swal.fire({
                 icon: 'error',
                 text: 'Please fill all the fields!',
-                confirmButtonColor: '#1976D2',
+                confirmButtonColor: myLightColour,
+                cancelButtonColor: myErrorColour,
             });
             return;
         }
@@ -82,7 +84,8 @@ export default function SideBarHolidayTableAdmin() {
                     icon: 'success',
                     title: 'Success!',
                     text: 'Holiday has been submitted successfully.',
-                    confirmButtonColor: '#1976D2',
+                    confirmButtonColor: myLightColour,
+                    cancelButtonColor: myErrorColour,
                 });
                 dispatch(fetchHolidaysAdmin(token));
             })
@@ -91,7 +94,8 @@ export default function SideBarHolidayTableAdmin() {
                     icon: 'error',
                     title: 'Error',
                     text: 'There was an error. Please try again later.',
-                    confirmButtonColor: '#1976D2',
+                    confirmButtonColor: myLightColour,
+                    cancelButtonColor: myErrorColour,
                 });
             });
     };
@@ -168,7 +172,7 @@ export default function SideBarHolidayTableAdmin() {
                 </Button>
                 <Button
                     variant="contained"
-                    color="primary"
+                    color="success"
                     disabled={holidayStartDate === null || holidayEndDate === null || holidayName === '' || holidayType === ''}
                     onClick={handleSubmit}
                     startIcon={<AddIcon />}

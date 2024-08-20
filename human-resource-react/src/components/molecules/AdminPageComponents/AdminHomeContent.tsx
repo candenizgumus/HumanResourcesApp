@@ -5,6 +5,7 @@ import { HumanResources } from '../../../store';
 import { fetchCountOfUsersForAdminMenu, fetchGetCustomerByMonth } from '../../../store/feature/authSlice';
 import { BarChart, Gauge, PieChart } from "@mui/x-charts";
 import { AttachMoney, Engineering, Person } from "@mui/icons-material";
+import { myLightColour } from '../../../util/MyColours';
 
 const Dashboard = () => {
   const [totalManager, setTotalManager] = React.useState(0);
@@ -48,21 +49,21 @@ const Dashboard = () => {
             <CardContent>
               <Grid container direction="row" justifyContent="space-between" alignItems="center">
                 <Grid item xs={4} textAlign="center">
-                  <Person sx={{ fontSize: 80, color: '#1976D2' }} />
+                  <Person sx={{ fontSize: 80, color: myLightColour }} />
                 </Grid>
                 <Grid item xs={4} textAlign="center">
-                  <Typography sx={{ fontWeight: 'bold', color: '#1976D2', marginBottom: 1 }} variant="h6">
+                  <Typography sx={{ fontWeight: 'bold', color: myLightColour, marginBottom: 1 }} variant="h6">
                     Total <br /> Manager
                   </Typography>
-                  <Typography sx={{ fontWeight: 'medium', fontSize: '1rem', color: '#1976D2' }} variant="h6">
+                  <Typography sx={{ fontWeight: 'medium', fontSize: '1rem', color: myLightColour }} variant="h6">
                     {totalManager}
                   </Typography>
                 </Grid>
                 <Grid item xs={4} textAlign="center">
-                  <Typography sx={{ fontWeight: 'bold', color: '#1976D2', marginBottom: 1 }} variant="h6">
+                  <Typography sx={{ fontWeight: 'bold', color: myLightColour, marginBottom: 1 }} variant="h6">
                     Active <br /> Manager
                   </Typography>
-                  <Typography sx={{ fontWeight: 'medium', fontSize: '1rem', color: '#1976D2' }} variant="h6">
+                  <Typography sx={{ fontWeight: 'medium', fontSize: '1rem', color: myLightColour }} variant="h6">
                     {activeManager}
                   </Typography>
                 </Grid>

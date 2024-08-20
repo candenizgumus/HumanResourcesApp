@@ -35,7 +35,8 @@ import {
 import { EmployeeHomeContent } from "../../components/molecules/EmployeeComponents/EmployeeHomeContent";
 import { EmployeeMenuContentRenderer } from "../../components/organisms/EmployeeMenuContentRenderer";
 import { useState } from "react";
-import { myLightColour, primaryMain} from "../../util/MyColours";
+import { myLightColour, primaryMain } from "../../util/MyColours";
+import ThemeElement from '../../components/atoms/ThemeElement';
 
 const drawerWidth = 240;
 
@@ -103,7 +104,7 @@ export default function EmployeePage() {
     const [selectedIndex, setSelectedIndex] = React.useState<string>('Inbox');
     const dispatch = useDispatch<HumanResources>();
     const pageState = useSelector((state: RootState) => state.auth.pageState);
-    const [selectedIndex2, setSelectedIndex2] = useState(null);
+    const [selectedIndex2, setSelectedIndex2] = useState(0);
     const page = useAppSelector((state) => state.auth.pageState);
     const user = useAppSelector((state) => state.auth.user);
     const handleDrawerOpen = () => {
@@ -114,6 +115,7 @@ export default function EmployeePage() {
         setOpen(false);
     };
     const navigateToHome = () => {
+        setSelectedIndex2(0);
         dispatch(changePageState('Dashboard'));
     };
 
@@ -132,115 +134,117 @@ export default function EmployeePage() {
         day: 'numeric',
     });
     return (
-        <Box sx={{ display: 'flex' }}>
-            <CssBaseline />
-            <AppBar sx={{ background: primaryMain }} position="fixed" open={open}>
-                <Toolbar sx={{ position: 'relative' }}>
-                    <IconButton
-                        color="inherit"
-                        aria-label="open drawer"
-                        onClick={handleDrawerOpen}
-                        edge="start"
-                        sx={{ mr: 2, ...(open && { display: 'none' }) }}
-                    >
-                        <MenuIcon />
-                    </IconButton>
+        <ThemeElement children={
+            <Box sx={{ display: 'flex' }}>
+                <CssBaseline />
+                <AppBar sx={{ background: primaryMain }} position="fixed" open={open}>
+                    <Toolbar sx={{ position: 'relative' }}>
+                        <IconButton
+                            color="inherit"
+                            aria-label="open drawer"
+                            onClick={handleDrawerOpen}
+                            edge="start"
+                            sx={{ mr: 2, ...(open && { display: 'none' }) }}
+                        >
+                            <MenuIcon />
+                        </IconButton>
 
-                    <Typography variant="h6" sx={logoStyle}>
-                        <Button onClick={navigateToHome} color="inherit">
-                            <img src={logo} alt="logo" style={{ height: '52px' }} />
-                        </Button>
-                    </Typography>
-
-                    <Typography
-                        sx={{
-                            position: 'absolute',
-                            left: '50%',
-                            transform: 'translateX(-50%)',
-                            fontSize: '20px',
-                        }}
-                    >
-                        {page ? page : 'Dashboard'}
-                    </Typography>
-
-                    <Box sx={{ flexGrow: 1 }} />
-                    <Box>
-                        <Typography variant="h5" component="div" >
-                            Hello, <strong>{user.name ? user.name : 'admin'}</strong>!
+                        <Typography variant="h6" sx={logoStyle}>
+                            <Button onClick={navigateToHome} color="inherit">
+                                <img src={logo} alt="logo" style={{ height: '52px' }} />
+                            </Button>
                         </Typography>
-                        <Typography variant="subtitle1"  sx={{ marginRight: 1 }} >
-                           <span style={{ fontStyle: 'italic', color: myLightColour }}>{today}  </span>
+
+                        <Typography
+                            sx={{
+                                position: 'absolute',
+                                left: '50%',
+                                transform: 'translateX(-50%)',
+                                fontSize: '20px',
+                            }}
+                        >
+                            {page ? page : 'Dashboard'}
                         </Typography>
-                    </Box>
-                    <NotificationIcon />
-                    <NavbarProfile />
-                </Toolbar>
-            </AppBar>
-            <Drawer
-                sx={{
-                    width: drawerWidth,
-                    flexShrink: 0,
-                    '& .MuiDrawer-paper': {
+
+                        <Box sx={{ flexGrow: 1 }} />
+                        <Box>
+                            <Typography variant="h5" component="div" >
+                                Hello, <strong>{user.name ? user.name : 'admin'}</strong>!
+                            </Typography>
+                            <Typography variant="subtitle1"  sx={{ marginRight: 1 }} >
+                                <span style={{ fontStyle: 'italic', color: myLightColour }}>{today}  </span>
+                            </Typography>
+                        </Box>
+                        <NotificationIcon />
+                        <NavbarProfile />
+                    </Toolbar>
+                </AppBar>
+                <Drawer
+                    sx={{
                         width: drawerWidth,
-                        boxSizing: 'border-box',
-                    },
-                }}
-                variant="persistent"
-                anchor="left"
-                open={open}
-            >
-                <DrawerHeader sx={{ bgcolor: primaryMain }}>
-                    <IconButton onClick={handleDrawerClose} sx={{ color: 'white' }}>
-                        {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-                    </IconButton>
-                </DrawerHeader>
+                        flexShrink: 0,
+                        '& .MuiDrawer-paper': {
+                            width: drawerWidth,
+                            boxSizing: 'border-box',
+                        },
+                    }}
+                    variant="persistent"
+                    anchor="left"
+                    open={open}
+                >
+                    <DrawerHeader sx={{ bgcolor: primaryMain }}>
+                        <IconButton onClick={handleDrawerClose} sx={{ color: 'white' }}>
+                            {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+                        </IconButton>
+                    </DrawerHeader>
 
-                <List sx={{ bgcolor: primaryMain , minHeight: 'calc(100vh - 65px)', paddingTop:'0'}}>
-                    {['Dashboard', 'Holidays', 'Profile', 'Company Items', 'Notifications', 'Expenditure', 'Leaves', 'Bonus'].map((text, index) => (
-                        <ListItem key={text} disablePadding>
-                            <ListItemButton
-                                selected={selectedIndex2 === index}
-                                onClick={() => {
-                                    handleListItemClick2(index);
-                                    handleListItemClick(text);
-                                }}
-                                sx={{
-                                    color: 'white',
-                                    backgroundColor: primaryMain,
-                                    '&.Mui-selected': {
-                                        backgroundColor: myLightColour, // Change background color when selected
+                    <List sx={{ bgcolor: primaryMain , minHeight: 'calc(100vh - 65px)', paddingTop:'0'}}>
+                        {['Dashboard', 'Holidays', 'Profile', 'Company Items', 'Notifications', 'Expenditure', 'Leaves', 'Bonus'].map((text, index) => (
+                            <ListItem key={text} disablePadding>
+                                <ListItemButton
+                                    selected={selectedIndex2 === index}
+                                    onClick={() => {
+                                        handleListItemClick2(index);
+                                        handleListItemClick(text);
+                                    }}
+                                    sx={{
+                                        color: 'white',
+                                        backgroundColor: primaryMain,
+                                        '&.Mui-selected': {
+                                            backgroundColor: myLightColour, // Change background color when selected
+                                            '&:hover': {
+                                                backgroundColor: myLightColour, // Change background color on hover
+                                            },
+                                        },
                                         '&:hover': {
                                             backgroundColor: myLightColour, // Change background color on hover
                                         },
-                                    },
-                                    '&:hover': {
-                                        backgroundColor: myLightColour, // Change background color on hover
-                                    },
-                                }}
-                            >
-                                <ListItemIcon sx={{ color: 'white' }}>
-                                    {index === 0 && <Dashboard />}
-                                    {index === 1 && <Weekend />}
-                                    {index === 2 && <AccountBox />}
-                                    {index === 3 && <FeaturedPlayList />}
-                                    {index === 4 && <NotificationsIcon />}
-                                    {index === 5 && <PointOfSale />}
-                                    {index === 6 && <HikingIcon />}
-                                    {index === 7 && <Paid />}
-                                </ListItemIcon>
-                                <ListItemText primary={text} />
-                            </ListItemButton>
-                        </ListItem>
-                    ))}
-                </List>
-                <Divider />
-            </Drawer>
-            <Main open={open}>
-                <DrawerHeader />
-                <Grid container spacing={2}>
-                    {pageState === 'Dashboard' ? <EmployeeHomeContent /> : <EmployeeMenuContentRenderer />}
-                </Grid>
-            </Main>
-        </Box>
+                                    }}
+                                >
+                                    <ListItemIcon sx={{ color: 'white' }}>
+                                        {index === 0 && <Dashboard />}
+                                        {index === 1 && <Weekend />}
+                                        {index === 2 && <AccountBox />}
+                                        {index === 3 && <FeaturedPlayList />}
+                                        {index === 4 && <NotificationsIcon />}
+                                        {index === 5 && <PointOfSale />}
+                                        {index === 6 && <HikingIcon />}
+                                        {index === 7 && <Paid />}
+                                    </ListItemIcon>
+                                    <ListItemText primary={text} />
+                                </ListItemButton>
+                            </ListItem>
+                        ))}
+                    </List>
+                    <Divider />
+                </Drawer>
+                <Main open={open}>
+                    <DrawerHeader />
+                    <Grid container spacing={2}>
+                        {pageState === 'Dashboard' ? <EmployeeHomeContent /> : <EmployeeMenuContentRenderer />}
+                    </Grid>
+                </Main>
+            </Box>
+        } />
     );
 }

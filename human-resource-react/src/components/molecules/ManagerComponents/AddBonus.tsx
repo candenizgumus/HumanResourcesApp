@@ -89,7 +89,7 @@ export default function AddBonus({
         <Button onClick={onClose} color="error" variant="contained" sx={{ marginRight: '17px', width: '100px' }}>
           Cancel
         </Button>
-        <Button onClick={handleAddBonus} color="primary" disabled={loading} variant="contained" sx={{ marginRight: '17px', width: '100px' }}>
+        <Button onClick={handleAddBonus} color="success" disabled={loading} variant="contained" sx={{ marginRight: '17px', width: '100px' }}>
           Add
         </Button>
       </DialogActions>

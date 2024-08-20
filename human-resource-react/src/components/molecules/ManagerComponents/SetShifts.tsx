@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { HumanResources, useAppSelector } from "../../../store";
 import { fetchFindShiftsOfEmployee, fetchSaveShift, fetchUpdateShift, fetchDeleteShift } from "../../../store/feature/shiftSlice";
 import Swal from "sweetalert2";
+import { myErrorColour, myLightColour } from '../../../util/MyColours';
 
 export const SetShifts: React.FC = () => {
     const [events, setEvents] = useState<IShift[]>([]);
@@ -27,11 +28,12 @@ export const SetShifts: React.FC = () => {
     const handleSaveEvent = (newEvent: IShift) => {
         if (newEvent.description === '' || newEvent.title === '' || newEvent.start === null || newEvent.endTime === null) {
             Swal.fire({
-                title: "Error",
+                title: "Error!",
                 text: "Please fill all the fields",
                 icon: "error",
                 confirmButtonText: "OK",
-                confirmButtonColor: '#1976D2',
+                confirmButtonColor: myLightColour,
+                cancelButtonColor: myErrorColour,
             });
             return;
         }

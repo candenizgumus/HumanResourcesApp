@@ -16,7 +16,7 @@ const Root = styled('div')(({ theme }) => ({
 const Body = styled('main')(({ theme }) => ({
     flex: '1',
     width: '100%',
-    marginTop: theme.spacing(12),
+    marginTop: theme.spacing(6),
 }));
 
 const Footer = styled('footer')(({ theme }) => ({

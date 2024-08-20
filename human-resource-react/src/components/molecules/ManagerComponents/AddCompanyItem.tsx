@@ -4,6 +4,7 @@ import { HumanResources, useAppSelector } from "../../../store";
 import { useDispatch } from "react-redux";
 import Swal from "sweetalert2";
 import { fetchCompanyItemTypes, fetchSaveCompanyItem } from "../../../store/feature/companyItemSlice";
+import { myErrorColour, myLightColour } from '../../../util/MyColours';
 
 interface AddCompanyItemDialogProps {
     open: boolean;
@@ -32,7 +33,8 @@ const AddCompanyItemDialog: React.FC<AddCompanyItemDialogProps> = ({ open, onClo
             Swal.fire({
                 icon: 'error',
                 text: 'Please fill all the fields!',
-                confirmButtonColor: '#1976D2',
+                confirmButtonColor: myLightColour,
+                cancelButtonColor: myErrorColour,
             });
             return;
         }
@@ -51,7 +53,8 @@ const AddCompanyItemDialog: React.FC<AddCompanyItemDialogProps> = ({ open, onClo
                         icon: 'error',
                         text: data.payload.message ?? 'Failed to add item',
                         showConfirmButton: true,
-                        confirmButtonColor: '#1976D2',
+                        confirmButtonColor: myLightColour,
+                        cancelButtonColor: myErrorColour,
                     });
                 } else {
                     Swal.fire({
@@ -115,12 +118,12 @@ const AddCompanyItemDialog: React.FC<AddCompanyItemDialogProps> = ({ open, onClo
                 </Box>
             </DialogContent>
             <DialogActions>
-                <Button onClick={onClose} color="secondary" variant="contained" sx={{ marginRight: '17px', width: '100px' }}>
+                <Button onClick={onClose} color="error" variant="contained" sx={{ marginRight: '17px', width: '100px' }}>
                     Cancel
                 </Button>
                 <Button
                     onClick={addCompanyItem}
-                    color="primary"
+                    color="success"
                     disabled={loading || !serialNumber || !name || !selectedCompanyItemType}
                     variant="contained" sx={{ marginRight: '17px', width: '100px' }}
                 >

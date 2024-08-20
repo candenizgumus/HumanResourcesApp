@@ -28,6 +28,7 @@ import MyDropzone from "../../atoms/DropZone";
 import DownloadButtonFromS3 from "../../atoms/DownloadButtonFromS3";
 import { EDefinitionType } from "../../../models/IDefinitionType";
 import { AddIcon, CancelIcon, DeleteIcon } from "../../atoms/icons";
+import { myErrorColour, myLightColour } from "../../../util/MyColours";
 
 export default function SideBarEmployeeLeaves() {
     const [selectedRowIds, setSelectedRowIds] = useState<number[]>([]);
@@ -102,7 +103,8 @@ export default function SideBarEmployeeLeaves() {
                     text: 'Leave already approved',
                     icon: "error",
                     confirmButtonText: "OK",
-                    confirmButtonColor: '#1976D2',
+                    confirmButtonColor: myLightColour,
+                    cancelButtonColor: myErrorColour,
                 });
                 continue;
             }
@@ -114,8 +116,8 @@ export default function SideBarEmployeeLeaves() {
                     text: "You won't be able to revert this!",
                     icon: "warning",
                     showCancelButton: true,
-                    confirmButtonColor: '#1976D2',
-                    cancelButtonColor: "#d33",
+                    confirmButtonColor: myLightColour,
+                    cancelButtonColor: myErrorColour,
                     confirmButtonText: "Yes, delete it!"
                 });
 
@@ -125,7 +127,8 @@ export default function SideBarEmployeeLeaves() {
                         title: "Deleted!",
                         text: "Your leave has been deleted.",
                         icon: "success",
-                        confirmButtonColor: '#1976D2',
+                        confirmButtonColor: myLightColour,
+                        cancelButtonColor: myErrorColour,
                     });
                     dispatch(fetchGetLeavesOfEmployee({ token, page: 0, pageSize: 100, searchText }));
                 }
@@ -146,10 +149,11 @@ export default function SideBarEmployeeLeaves() {
 
             if (!selectedLeave.isLeaveApproved) {
                 await Swal.fire({
-                    title: "Error",
+                    title: "Error!",
                     text: 'Leave not yet approved, cannot cancel.',
                     icon: "error",
-                    confirmButtonText: "OK",
+                    showConfirmButton: false,
+                    timer: 1500
                 });
                 continue;
             }
@@ -161,8 +165,8 @@ export default function SideBarEmployeeLeaves() {
                     text: "You won't be able to revert this!",
                     icon: "warning",
                     showCancelButton: true,
-                    confirmButtonColor: '#1976D2',
-                    cancelButtonColor: "#d33",
+                    confirmButtonColor: myLightColour,
+                    cancelButtonColor: myErrorColour,
                     confirmButtonText: "Yes, cancel it!"
                 });
 
@@ -171,7 +175,9 @@ export default function SideBarEmployeeLeaves() {
                     await Swal.fire({
                         title: "Cancelled!",
                         text: "Your leave has been cancelled.",
-                        icon: "success"
+                        icon: "success",
+                        showConfirmButton: false,
+                        timer: 1500
                     });
                     dispatch(fetchGetLeavesOfEmployee({ token, page: 0, pageSize: 100, searchText }));
                 }
@@ -190,7 +196,8 @@ export default function SideBarEmployeeLeaves() {
                 title: "Error",
                 text: "Please fill in all required fields.",
                 icon: "error",
-                confirmButtonText: "OK",
+                showConfirmButton: false,
+                timer: 1500
             });
             return;
         }
@@ -208,17 +215,19 @@ export default function SideBarEmployeeLeaves() {
 
             if (!result.code) {
                 Swal.fire({
-                    title: "Success",
+                    title: "Success!",
                     text: "Leave has been added",
                     icon: "success",
-                    confirmButtonText: "OK",
+                    showConfirmButton: false,
+                    timer: 1500
                 });
             } else {
                 Swal.fire({
-                    title: "Error",
+                    title: "Error!",
                     text: "Something went wrong.",
                     icon: "error",
-                    confirmButtonText: "OK",
+                    showConfirmButton: false,
+                    timer: 1500
                 });
             }
 
@@ -310,7 +319,7 @@ export default function SideBarEmployeeLeaves() {
                 </Button>
                 <Button
                     variant="contained"
-                    color="primary"
+                    color="success"
                     onClick={handleSaveLeave}
                     disabled={loading || !description || !startDate || !endDate}
                     startIcon={<AddIcon />}
@@ -389,7 +398,7 @@ export default function SideBarEmployeeLeaves() {
                             fullWidth
                         >
                             {Object.values(leaveTypes).map(type => (
-                                <option key={type.name} value={type.id}>{type.name}</option>
+                                <option key={type.name} value={type.name}>{type.name}</option>
                             ))}
                         </TextField>
                     </Grid>

@@ -119,7 +119,12 @@ export default function OfferList() {
             setSelectedCompany(companyToEdit || null);
             handleOpen();
         } else {
-            Swal.fire("Please select exactly one company to edit.");
+            Swal.fire({
+                icon: 'error',
+                text: 'Please select exactly one company to edit.',
+                showConfirmButton: false,
+                timer: 1500
+              });
         }
     };
 
@@ -143,7 +148,13 @@ export default function OfferList() {
                     logo: selectedCompany.logo,
                     description: selectedCompany.description
                 }));
-                Swal.fire("Success", "Company updated successfully", "success");
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success!',
+                    text: 'Company updated successfully.',
+                    showConfirmButton: false,
+                    timer: 1500
+                  });
                 // Fetch updated companies
                 await dispatch(fetchGetCompanies({
                     token: token,
@@ -267,7 +278,7 @@ export default function OfferList() {
                     <Button variant="contained" onClick={handleClose} color="error" sx={{ marginRight: '17px', width: '100px' }}>
                         Cancel
                     </Button>
-                    <Button variant="contained" onClick={handleUpdateCompany} color="primary" sx={{ marginRight: '17px', width: '100px' }}>
+                    <Button variant="contained" onClick={handleUpdateCompany} color="success" sx={{ marginRight: '17px', width: '100px' }}>
                         Update
                     </Button>
                 </DialogActions>

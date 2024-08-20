@@ -8,15 +8,7 @@ import Typography from "@mui/material/Typography";
 import Avatar from "@mui/material/Avatar";
 import { CodeRounded } from "@mui/icons-material";
 import { useLocation } from "react-router-dom";
-
-const loginButtonStyle = {
-    backgroundColor: 'primary.main',
-    color: 'white',
-    mt: 3, mb: 2,
-    '&:hover': {
-        color: 'primary.main',
-    },
-};
+import { myErrorColour, myLightColour } from "../../../util/MyColours";
 
 const PasswordResetRequestForm: React.FC = () => {
     const dispatch = useDispatch<HumanResources>();
@@ -85,9 +77,10 @@ const PasswordResetRequestForm: React.FC = () => {
         if (result.code) {
             Swal.fire({
                 icon: 'error',
-                title: 'Error',
+                title: 'Error!',
                 text: result.message,
-                confirmButtonColor: '#1976D2',
+                confirmButtonColor: myLightColour,
+                cancelButtonColor: myErrorColour,
             });
             dispatch(setIsCodeSend(false));
             setIsDisabled(false);
@@ -98,7 +91,8 @@ const PasswordResetRequestForm: React.FC = () => {
             icon: 'success',
             title: 'Success!',
             text: 'Password reset code has been sent.',
-            confirmButtonColor: '#1976D2',
+            confirmButtonColor: myLightColour,
+            cancelButtonColor: myErrorColour,
         });
         dispatch(setIsCodeSend(true));
     };
@@ -112,7 +106,7 @@ const PasswordResetRequestForm: React.FC = () => {
     return (
         <Box
             sx={{
-                my: 8,
+                my: 4,
                 mx: 4,
                 display: 'flex',
                 flexDirection: 'column',
@@ -120,7 +114,7 @@ const PasswordResetRequestForm: React.FC = () => {
                 justifyContent: 'center',
             }}
         >
-            <Avatar sx={{ mt: 3, mb: 1, bgcolor: 'myLightColour.main' }}>
+            <Avatar sx={{ mt: 1, mb: 1, bgcolor: 'myLightColour.main' }}>
                 <CodeRounded color="primary" />
             </Avatar>
             <Typography component="h1" variant="h5">
@@ -143,7 +137,8 @@ const PasswordResetRequestForm: React.FC = () => {
                 type="button"
                 fullWidth
                 variant="contained"
-                sx={loginButtonStyle}
+                color='success'
+                sx={{ mt: 3, mb: 2 }}
                 onClick={() => handleSubmit(email)}
                 disabled={isDisabled}
             >

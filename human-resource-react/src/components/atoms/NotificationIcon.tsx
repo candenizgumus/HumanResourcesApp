@@ -44,7 +44,7 @@ export const NotificationIcon = () => {
     return (
         <>  <Tooltip title="Notifications">
                 <IconButton color="inherit" onClick={handleNotificationClick}>
-                    <Badge badgeContent={notificationList.length} color="secondary">
+                    <Badge badgeContent={notificationList.length} color="success">
                         <NotificationsActiveIcon fontSize='large'/> 
                     </Badge>
                 </IconButton>

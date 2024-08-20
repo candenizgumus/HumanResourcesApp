@@ -6,6 +6,7 @@ import { HumanResources } from '../../../store';
 import Swal from "sweetalert2";
 import { IUserType } from '../../../models/IUserType';
 import {AddIcon} from '../../atoms/icons';
+import { myErrorColour, myLightColour } from '../../../util/MyColours';
 
 const UserForm: React.FC = () => {
   const dispatch = useDispatch<HumanResources>();
@@ -30,7 +31,8 @@ const UserForm: React.FC = () => {
           icon: 'error',
           title: 'Error',
           text: result.message,
-          confirmButtonColor: '#1976D2',
+          confirmButtonColor: myLightColour,
+          cancelButtonColor: myErrorColour,
         });
         setLoading(false);
         return; // Stop the process and prevent further then block executions
@@ -40,14 +42,21 @@ const UserForm: React.FC = () => {
         icon: 'success',
         title: 'Success!',
         text: 'Admin Account Created.',
-        confirmButtonColor: '#1976D2',
+        confirmButtonColor: myLightColour,
+        cancelButtonColor: myErrorColour,
       });
       setEmail('');
       setPassword('');
       setLoading(false);
     } catch (error) {
       console.error("Error creating admin:", error);
-      Swal.fire("Error", "There was a problem creating admin.", "error");
+      Swal.fire({
+        icon: 'error',
+        title: 'Error!',
+        text: 'There was a problem creating admin.',
+        showConfirmButton: false,
+        timer: 1500
+      });
     }
   };
 
@@ -108,7 +117,7 @@ const UserForm: React.FC = () => {
       <Button
         type="submit"
         variant="contained"
-        color="primary"
+        color="success"
         disabled={loading || !accepted || !password || !email}
         startIcon={<AddIcon />}
       >

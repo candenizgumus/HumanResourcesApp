@@ -20,6 +20,7 @@ import {
 import Swal from "sweetalert2";
 import { fetchDeleteBonus, fetchGetBonusesOfManager } from "../../../store/feature/bonusSlice";
 import { DeleteIcon } from "../../atoms/icons";
+import { myErrorColour, myLightColour } from "../../../util/MyColours";
 
 const columns: GridColDef[] = [
 
@@ -103,8 +104,8 @@ const SideBarManagerBonus = () => {
                     text: "You won't be able to revert this!",
                     icon: "warning",
                     showCancelButton: true,
-                    confirmButtonColor: '#1976D2',
-                    cancelButtonColor: "#d33",
+                    confirmButtonColor: myLightColour,
+                    cancelButtonColor: myErrorColour,
                     confirmButtonText: "Yes, delete it!"
                 });
 
@@ -120,7 +121,8 @@ const SideBarManagerBonus = () => {
                             text: data.payload.message,
                             icon: "error",
                             confirmButtonText: "OK",
-                            confirmButtonColor: '#1976D2',
+                            confirmButtonColor: myLightColour,
+                            cancelButtonColor: myErrorColour,
                         });
                         return;
                     } else {
@@ -128,7 +130,8 @@ const SideBarManagerBonus = () => {
                             title: "Deleted!",
                             text: "Your bonus has been cancelled.",
                             icon: "success",
-                            confirmButtonColor: '#1976D2',
+                            confirmButtonColor: myLightColour,
+                            cancelButtonColor: myErrorColour,
                         });
 
                         await dispatch(fetchGetBonusesOfManager({

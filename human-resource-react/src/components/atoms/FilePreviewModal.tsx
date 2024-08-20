@@ -26,7 +26,7 @@ const FilePreviewModal: React.FC<FilePreviewModalProps> = ({ open, onClose, file
                 <div style={{ textAlign: 'center' }}>
                     <Typography variant="h6">{fileName}</Typography>
                     <iframe src={fileUrl} style={{ width: '100%', height: '500px' }} title="File Preview" />
-                    <Button variant="contained" color="primary" onClick={handleDownload} style={{ marginTop: '16px' }}>
+                    <Button variant="contained" color="success" onClick={handleDownload} style={{ marginTop: '16px' }}>
                         <FileDownload /> Download
                     </Button>
                 </div>

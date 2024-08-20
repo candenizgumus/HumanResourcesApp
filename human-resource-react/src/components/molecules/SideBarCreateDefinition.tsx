@@ -7,6 +7,7 @@ import Swal from "sweetalert2";
 import { HumanResources, useAppSelector } from '../../store';
 import { DataGrid, GridColDef, GridRowSelectionModel, GridToolbar } from "@mui/x-data-grid";
 import { AddIcon, DeleteIcon } from '../atoms/icons';
+import { myErrorColour, myLightColour } from '../../util/MyColours';
 
 
 const UserForm: React.FC = () => {
@@ -50,7 +51,8 @@ const UserForm: React.FC = () => {
           icon: 'error',
           title: 'Error',
           text: result.message,
-          confirmButtonColor: '#1976D2',
+          confirmButtonColor: myLightColour,
+          cancelButtonColor: myErrorColour,
         });
         setLoading(false);
         return;
@@ -60,7 +62,8 @@ const UserForm: React.FC = () => {
         icon: 'success',
         title: 'Success!',
         text: 'Definition Created.',
-        confirmButtonColor: '#1976D2',
+        confirmButtonColor: myLightColour,
+        cancelButtonColor: myErrorColour,
       });
       dispatch(fetchGetDefinitionsWithPage({
         token,
@@ -72,7 +75,13 @@ const UserForm: React.FC = () => {
       setLoading(false);
     } catch (error) {
       console.error("Error creating definition:", error);
-      Swal.fire("Error", "There was a problem creating the definition.", "error");
+      Swal.fire({
+        icon: 'error',
+        title: 'Error!',
+        text: 'There was a problem creating the definition.',
+        showConfirmButton: false,
+        timer: 1500
+      });
     }
   };
 
@@ -122,15 +131,32 @@ const UserForm: React.FC = () => {
               pageSize: 100,
               searchText
             }))
-            Swal.fire("Success", "Definition deleted successfully", "success");
+            Swal.fire({
+              icon: 'success',
+              title: 'Success!',
+              text: 'Definition deleted successfully.',
+              showConfirmButton: false,
+              timer: 1500
+            });
           }
         }
       } catch (error) {
         console.error("Error deleting definitions:", error);
-        Swal.fire("Error", "There was a problem deleting the definitions.", "error");
+        Swal.fire({
+          icon: 'error',
+          title: 'Error!',
+          text: 'There was a problem deleting the definitions.',
+          showConfirmButton: false,
+          timer: 1500
+        });
       }
     } else {
-      Swal.fire("Please select at least one definition to delete.");
+      Swal.fire({
+        icon: 'error',
+        text: 'Please select at least one definition to delete.',
+        showConfirmButton: false,
+        timer: 1500
+      });
     }
   };
 
@@ -197,7 +223,7 @@ const UserForm: React.FC = () => {
         <Button
           onClick={handleCreateClick}
           variant="contained"
-          color="primary"
+          color="success"
           disabled={loading || name === ''}
           startIcon={<AddIcon />}
           sx={{ marginRight: '1%', width: '200px' }}

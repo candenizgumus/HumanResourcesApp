@@ -10,6 +10,7 @@ import {
 } from "../../../store/feature/companyItemSlice";
 import { ICompanyItem } from "../../../models/ICompanyItem";
 import { AddIcon } from '../../atoms/icons';
+import { myErrorColour, myLightColour } from '../../../util/MyColours';
 
 const columns: GridColDef[] = [
     { field: "id", headerName: "Id", flex: 1, headerAlign: "center" },
@@ -51,7 +52,8 @@ const AddCompanyItemAssignment: React.FC = () => {
             Swal.fire({
                 icon: 'error',
                 text: 'Please select at least one item!',
-                confirmButtonColor: '#1976D2',
+                confirmButtonColor: myLightColour,
+                cancelButtonColor: myErrorColour,
             });
             return;
         }
@@ -68,14 +70,16 @@ const AddCompanyItemAssignment: React.FC = () => {
                     icon: 'error',
                     text: data.payload.message ?? 'Failed to assign item',
                     showConfirmButton: true,
-                    confirmButtonColor: '#1976D2',
+                    confirmButtonColor: myLightColour,
+                    cancelButtonColor: myErrorColour,
                 });
             } else {
                 Swal.fire({
                     icon: 'success',
                     text: 'Item has been assigned',
                     showConfirmButton: true,
-                    confirmButtonColor: '#1976D2',
+                    confirmButtonColor: myLightColour,
+                    cancelButtonColor: myErrorColour,
                 });
             }
             });
@@ -123,7 +127,7 @@ const AddCompanyItemAssignment: React.FC = () => {
                 <Button
                     onClick={handleAssignCompanyItem}
                     variant="contained"
-                    color="primary"
+                    color="success"
                     startIcon={<AddIcon />}
                     sx={{ marginRight: '1%', width: '200px' }}
                     disabled={loading || selectedRowIds.length === 0}

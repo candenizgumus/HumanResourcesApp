@@ -101,7 +101,7 @@ const DeactivateAccount: React.FC = () => {
             />
             <Button
                 variant="contained"
-                color="primary"
+                color="success"
                 disabled={password.length === 0}
                 onClick={handleChangePassword}
                 startIcon={<CancelIcon />}

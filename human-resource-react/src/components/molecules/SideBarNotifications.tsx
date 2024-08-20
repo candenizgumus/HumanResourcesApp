@@ -114,7 +114,13 @@ export default function NotificationsPage() {
                         id: id,
                     }));
                 }
-                Swal.fire("Success", "Notifications deleted successfully", "success");
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success!',
+                    text: 'Notifications deleted successfully.',
+                    showConfirmButton: false,
+                    timer: 1500
+                  });
                 dispatch(fetchGetUnreadNotifications(token));
 
                 await dispatch(fetchGetNotifications({
@@ -125,10 +131,21 @@ export default function NotificationsPage() {
                 }));
             } catch (error) {
                 console.error("Error deleting notifications:", error);
-                Swal.fire("Error", "There was a problem deleting the notifications.", "error");
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error!',
+                    text: 'There was a problem deleting the notifications.',
+                    showConfirmButton: false,
+                    timer: 1500
+                  });
             }
         } else {
-            Swal.fire("Please select at least one notification to delete.");
+            Swal.fire({
+                icon: 'error',
+                text: 'Please select at least one notification to delete.',
+                showConfirmButton: false,
+                timer: 1500
+              });
         }
     };
 
@@ -150,13 +167,14 @@ export default function NotificationsPage() {
                         }
                     }
                 }
-    
-                Swal.fire(
-                    "Success",
-                    `${successfulUpdates} notification${successfulUpdates !== 1 ? 's' : ''} marked as read.`,
-                    "success"
-                );
-    
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error!',
+                    text: `${successfulUpdates} notification${successfulUpdates !== 1 ? 's' : ''} marked as read.`,
+                    showConfirmButton: false,
+                    timer: 1500
+                  });
+                  
                 // Refresh notifications
                 await dispatch(fetchGetUnreadNotifications(token));
                 await dispatch(fetchGetNotifications({
@@ -167,10 +185,21 @@ export default function NotificationsPage() {
                 }));
             } catch (error) {
                 console.error("Error marking notifications as read:", error);
-                Swal.fire("Error", "There was a problem marking the notifications as read.", "error");
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error!',
+                    text: 'There was a problem marking the notifications as read.',
+                    showConfirmButton: false,
+                    timer: 1500
+                  });
             }
         } else {
-            Swal.fire("Please select at least one notification to mark as read.");
+            Swal.fire({
+                icon: 'error',
+                text: 'Please select at least one notification to mark as read.',
+                showConfirmButton: false,
+                timer: 1500
+              });
         }
     };
     

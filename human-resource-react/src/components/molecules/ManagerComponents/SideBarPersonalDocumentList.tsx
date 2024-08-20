@@ -11,6 +11,7 @@ import DownloadButtonFromS3 from "../../atoms/DownloadButtonFromS3";
 import Swal from "sweetalert2";
 import { IPersonalDocument } from "../../../models/IPersonalDocument";
 import { DeleteIcon } from '../../atoms/icons';
+import { myErrorColour, myLightColour } from '../../../util/MyColours';
 const columns: GridColDef[] = [
     { field: "email", headerName: "Email", flex: 1, headerAlign: "center" },
     { field: "description", headerName: "Description", flex: 3, headerAlign: "center" },
@@ -77,7 +78,8 @@ const SideBarPersonalDocumentList: React.FC = () => {
                                     icon: 'error',
                                     text: data.payload.message ?? 'Failed to delete document',
                                     showConfirmButton: true,
-                                    confirmButtonColor: '#1976D2',
+                                    confirmButtonColor: myLightColour,
+                                    cancelButtonColor: myErrorColour,
                                 });
                             } else {
                                 Swal.fire({

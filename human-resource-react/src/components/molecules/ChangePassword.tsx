@@ -125,7 +125,7 @@ const ChangePassword: React.FC = () => {
             />
             <Button
                 variant="contained"
-                color="primary"
+                color="success"
                 onClick={handleChangePassword}
                 disabled={isPasswordValid || !password || !newPassword || !reNewPassword}
                 startIcon={<PasswordIcon />}

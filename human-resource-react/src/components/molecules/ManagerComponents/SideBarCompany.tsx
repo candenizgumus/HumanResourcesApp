@@ -8,6 +8,7 @@ import sweetalert2 from "sweetalert2";
 import styled from "@emotion/styled";
 import { IFile } from "../../../models/IFile";
 import { CloudUpload } from "@mui/icons-material";
+import { myErrorColour, myLightColour } from '../../../util/MyColours';
 
 const SideBarCompany: React.FC = () => {
 
@@ -93,7 +94,8 @@ const SideBarCompany: React.FC = () => {
             Swal.fire({
                 icon: 'error',
                 text: 'Please fill all the fields!',
-                confirmButtonColor: '#1976D2',
+                confirmButtonColor: myLightColour,
+                cancelButtonColor: myErrorColour,
             });
             return;
         }
@@ -110,7 +112,8 @@ const SideBarCompany: React.FC = () => {
                 sweetalert2.fire({
                     icon: 'error',
                     text: data.payload.message ?? 'Failed to update company',
-                    showConfirmButton: true
+                    showConfirmButton: true,
+                    confirmButtonColor: myLightColour,
                 })
 
             } else {
@@ -227,7 +230,7 @@ const SideBarCompany: React.FC = () => {
                         required
                         inputProps={{ maxLength: 50 }}
                     />
-                    <Button onClick={updateCompany} sx={{ mt: 5 }} type="button" variant="contained" color="primary">
+                    <Button onClick={updateCompany} sx={{ mt: 5 }} type="button" variant="contained" color="success">
                         Update Company
                     </Button>
                 </Box>

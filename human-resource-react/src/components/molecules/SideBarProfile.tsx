@@ -21,7 +21,7 @@ import { uploadPlayerProfileImage } from '../../store/feature/awsSlice';
 import { IUpdateUserProfile } from '../../models/IUpdateUserProfile';
 import { fetchGetDefinitions, IDefinition } from '../../store/feature/definitionSlice';
 import { EDefinitionType } from '../../models/IDefinitionType';
-import {myLightColour} from "../../util/MyColours";
+import { myErrorColour, myLightColour } from '../../util/MyColours';
 
 
 const SideBarProfile = () => {
@@ -146,7 +146,8 @@ const SideBarProfile = () => {
             Swal.fire({
                 icon: 'error',
                 text: 'Please fill all the fields!',
-                confirmButtonColor: '#1976D2'
+                confirmButtonColor: myLightColour,
+                cancelButtonColor: myErrorColour,
             });
             return;
         }
@@ -186,6 +187,7 @@ const SideBarProfile = () => {
                     title: 'Failed to update your profile',
                     text: error.message || 'An unknown error occurred',
                     showConfirmButton: true,
+                    confirmButtonColor: myLightColour
                 });
             });
 
@@ -221,6 +223,7 @@ const SideBarProfile = () => {
                 title: 'Failed to upload your profile image',
                 text: errorMessage,
                 showConfirmButton: true,
+                confirmButtonColor: myLightColour
             });
         };
     };
@@ -418,7 +421,7 @@ const SideBarProfile = () => {
                             ))}
                         </Select>
                     </FormControl>
-                    <Button onClick={updateUserProfile} sx={{ mt: 5 }} type="button" variant="contained">
+                    <Button onClick={updateUserProfile} sx={{ mt: 5 }} type="button" variant="contained" color="success">
                         Update Profile
                     </Button>
                 </Box>

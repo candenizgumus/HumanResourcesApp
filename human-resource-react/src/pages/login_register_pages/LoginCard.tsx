@@ -16,15 +16,8 @@ import Swal from "sweetalert2";
 import {useEffect, useState} from "react";
 import {Alert, Collapse} from "@mui/material";
 import getUserTypeFromToken from '../../util/getUserTypeFromToken';
+import { myErrorColour, myLightColour } from '../../util/MyColours';
 
-const loginButtonStyle = {
-    backgroundColor:  'primary.main',
-    color: 'white',
-    mt: 3, mb: 2,
-    '&:hover': {
-      color: 'primary.main',
-          },
-  };
 export default function LoginCard() {
     const dispatch = useDispatch<HumanResources>();
     const navigate = useNavigate();
@@ -49,7 +42,8 @@ export default function LoginCard() {
             Swal.fire({
                 icon: 'error',
                 text: 'Server not responding. Try again later.',
-                confirmButtonColor: '#1976D2',
+                confirmButtonColor: myLightColour,
+                cancelButtonColor: myErrorColour,
             });
             return;
         }
@@ -89,7 +83,7 @@ export default function LoginCard() {
         <Paper elevation={6} square sx={{ width: '100%', maxWidth: 400 }}>
             <Box
                 sx={{
-                    my: 8,
+                    my: 4,
                     mx: 4,
                     display: 'flex',
                     flexDirection: 'column',
@@ -149,7 +143,8 @@ export default function LoginCard() {
                     type="button"
                     fullWidth
                     variant="contained"
-                    sx={loginButtonStyle}
+                    color='success'
+                    sx={{ mt: 3, mb: 2 }}
                     onClick={handleLogin}
                 >
                     LOGIN

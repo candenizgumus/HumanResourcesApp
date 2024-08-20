@@ -8,6 +8,7 @@ import FeatureCard from "./FeatureCard";
 import { HumanResources, RootState } from "../../../store";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchGetFeatures } from "../../../store/feature/featureSlice";
+import ThemeElement from '../../atoms/ThemeElement';
 
 const features = [
     { icon: <SecurityIcon fontSize="large" />, title: 'High Data Security', description: 'With Easy HR, all data communication between users is protected with SSL certificates in accordance with international security standards.' },
@@ -26,24 +27,26 @@ const FeaturesSection = () => {
         dispatch(fetchGetFeatures());
     }, [dispatch]);
     return (
-        <Box sx={{ py: 8, bgcolor: 'background.paper' }}>
-            <Container maxWidth="lg">
-                <Typography component="h1" variant="h4" align="center" color="primary.main" gutterBottom sx={{ paddingBottom: 5 }}>
-                    Features
-                </Typography>
-                <Grid container spacing={4}>
-                    {featureList.slice(0, 3).map((feature) => (
-                        <FeatureCard
-                            key={feature.id}
-                            name={feature.name}
-                            shortDescription={feature.shortDescription}
-                            iconPath={feature.iconPath}
-                            isNavigatable={true}
-                        />
-                    ))}
-                </Grid>
-            </Container>
-        </Box>
+        <ThemeElement children={
+            <Box sx={{ py: 8, bgcolor: 'myBackgroundColour.main' }}>
+                <Container maxWidth="lg">
+                    <Typography component="h1" variant="h4" align="center" color="primary.main" gutterBottom sx={{ paddingBottom: 5 }}>
+                        Features
+                    </Typography>
+                    <Grid container spacing={4}>
+                        {featureList.slice(0, 3).map((feature) => (
+                            <FeatureCard
+                                key={feature.id}
+                                name={feature.name}
+                                shortDescription={feature.shortDescription}
+                                iconPath={feature.iconPath}
+                                isNavigatable={true}
+                            />
+                        ))}
+                    </Grid>
+                </Container>
+            </Box>
+        } />
     );
 };
 

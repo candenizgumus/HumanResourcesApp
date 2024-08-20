@@ -97,7 +97,12 @@ export default function SideBarUsers() {
             setSelectedUser(userToEdit || null);
             handleOpen();
         } else {
-            Swal.fire("Please select exactly one company to edit.");
+            Swal.fire({
+                icon: 'error',
+                text: 'Please select exactly one company to edit.',
+                showConfirmButton: false,
+                timer: 1500
+              });
         }
     };
 
@@ -114,7 +119,13 @@ export default function SideBarUsers() {
                     phone: selectedUser.phone
 
                 }));
-                Swal.fire("Success", "User updated successfully", "success");
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success!',
+                    text: 'User updated successfully.',
+                    showConfirmButton: false,
+                    timer: 1500
+                  });
                 // Fetch updated companies
                 await dispatch(fetchGetAllUsers({
                     token: token,
@@ -286,7 +297,7 @@ export default function SideBarUsers() {
                     <Button variant="contained" onClick={handleClose} color="error" sx={{ marginRight: '17px', width: '100px' }}>
                         Cancel
                     </Button>
-                    <Button variant="contained" disabled={loading} onClick={handleUpdateUserByAdmin} color="primary" sx={{ marginRight: '17px', width: '100px' }}>
+                    <Button variant="contained" disabled={loading} onClick={handleUpdateUserByAdmin} color="success" sx={{ marginRight: '17px', width: '100px' }}>
                         Update
                     </Button>
                 </DialogActions>

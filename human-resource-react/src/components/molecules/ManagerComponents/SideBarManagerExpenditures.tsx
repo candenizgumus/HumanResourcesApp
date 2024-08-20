@@ -23,6 +23,7 @@ import {
     fetchGetExpendituresOfManager
 } from "../../../store/feature/expenditureSlice";
 import DownloadButtonFromS3 from "../../atoms/DownloadButtonFromS3";
+import { myErrorColour, myLightColour } from "../../../util/MyColours";
 
 const columns: GridColDef[] = [
     { field: "employeeName", headerName: "Name", flex: 1.5, headerAlign: "center" },
@@ -104,11 +105,12 @@ const SideBarManagerExpenditures = () => {
 
             if (selectedExpenditure.isExpenditureApproved) {
                 Swal.fire({
-                    title: "Error",
+                    title: "Error!",
                     text: 'Expenditure already approved',
                     icon: "error",
                     confirmButtonText: "OK",
-                    confirmButtonColor: '#1976D2',
+                    confirmButtonColor: myLightColour,
+                    cancelButtonColor: myErrorColour,
 
                 });
                 return
@@ -122,8 +124,8 @@ const SideBarManagerExpenditures = () => {
                     text: "You won't be able to revert this!",
                     icon: "warning",
                     showCancelButton: true,
-                    confirmButtonColor: '#1976D2',
-                    cancelButtonColor: "#d33",
+                    confirmButtonColor: myLightColour,
+                    cancelButtonColor: myErrorColour,
                     confirmButtonText: "Yes, approve it!"
                 });
 
@@ -136,11 +138,12 @@ const SideBarManagerExpenditures = () => {
 
                     if (data.payload.message) {
                         await Swal.fire({
-                            title: "Error",
+                            title: "Error!",
                             text: data.payload.message,
                             icon: "error",
                             confirmButtonText: "OK",
-                            confirmButtonColor: '#1976D2',
+                            confirmButtonColor: myLightColour,
+                            cancelButtonColor: myErrorColour,
                         });
                         return;
                     } else {
@@ -148,7 +151,8 @@ const SideBarManagerExpenditures = () => {
                             title: "Approved!",
                             text: "Your expenditure has been approved.",
                             icon: "success",
-                            confirmButtonColor: '#1976D2',
+                            confirmButtonColor: myLightColour,
+                            cancelButtonColor: myErrorColour,
                         });
 
                         // Silme işlemi sonrasında listeyi hemen güncelleyin
@@ -179,22 +183,24 @@ const SideBarManagerExpenditures = () => {
 
             if (selectedExpenditure.isExpenditureApproved) {
                 await Swal.fire({
-                    title: "Error",
+                    title: "Error!",
                     text: 'Expenditure already approved',
                     icon: "error",
                     confirmButtonText: "OK",
-                    confirmButtonColor: '#1976D2',
+                    confirmButtonColor: myLightColour,
+                    cancelButtonColor: myErrorColour,
                 });
                 continue; // Diğer id'lere geçmek için continue kullanın
             }
 
             if (selectedExpenditure.status === "DECLINED") {
                 await Swal.fire({
-                    title: "Error",
+                    title: "Error!",
                     text: 'Expenditure already declined',
                     icon: "error",
                     confirmButtonText: "OK",
-                    confirmButtonColor: '#1976D2',
+                    confirmButtonColor: myLightColour,
+                    cancelButtonColor: myErrorColour,
                 });
                 continue; // Diğer id'lere geçmek için continue kullanın
             }
@@ -205,8 +211,8 @@ const SideBarManagerExpenditures = () => {
                     text: "You won't be able to revert this!",
                     icon: "warning",
                     showCancelButton: true,
-                    confirmButtonColor: '#1976D2',
-                    cancelButtonColor: "#d33",
+                    confirmButtonColor: myLightColour,
+                    cancelButtonColor: myErrorColour,
                     confirmButtonText: "Yes, reject it!"
                 });
 
@@ -218,11 +224,12 @@ const SideBarManagerExpenditures = () => {
 
                     if (data.payload.message) {
                         await Swal.fire({
-                            title: "Error",
+                            title: "Error!",
                             text: data.payload.message,
                             icon: "error",
                             confirmButtonText: "OK",
-                            confirmButtonColor: '#1976D2',
+                            confirmButtonColor: myLightColour,
+                            cancelButtonColor: myErrorColour,
                         });
                         return;
                     } else {
@@ -230,7 +237,8 @@ const SideBarManagerExpenditures = () => {
                             title: "Rejected!",
                             text: "Your expenditure has been rejected.",
                             icon: "success",
-                            confirmButtonColor: '#1976D2',
+                            confirmButtonColor: myLightColour,
+                            cancelButtonColor: myErrorColour,
                         });
 
                         // Silme işlemi sonrasında listeyi hemen güncelleyin
@@ -260,11 +268,12 @@ const SideBarManagerExpenditures = () => {
 
             if (!selectedExpenditure.isExpenditureApproved) {
                 await Swal.fire({
-                    title: "Error",
+                    title: "Error!",
                     text: 'Expenditure not yet approved, cannot cancel.',
                     icon: "error",
                     confirmButtonText: "OK",
-                    confirmButtonColor: '#1976D2',
+                    confirmButtonColor: myLightColour,
+                    cancelButtonColor: myErrorColour,
                 });
                 continue;
             }
@@ -275,8 +284,8 @@ const SideBarManagerExpenditures = () => {
                     text: "You won't be able to revert this!",
                     icon: "warning",
                     showCancelButton: true,
-                    confirmButtonColor: '#1976D2',
-                    cancelButtonColor: "#d33",
+                    confirmButtonColor: myLightColour,
+                    cancelButtonColor: myErrorColour,
                     confirmButtonText: "Yes, cancel it!"
                 });
 
@@ -288,11 +297,12 @@ const SideBarManagerExpenditures = () => {
 
                     if (data.payload.message) {
                         await Swal.fire({
-                            title: "Error",
+                            title: "Error!",
                             text: data.payload.message,
                             icon: "error",
                             confirmButtonText: "OK",
-                            confirmButtonColor: '#1976D2',
+                            confirmButtonColor: myLightColour,
+                            cancelButtonColor: myErrorColour,
                         });
                         return;
                     } else {
@@ -300,7 +310,8 @@ const SideBarManagerExpenditures = () => {
                             title: "Cancelled!",
                             text: "Your expenditure has been cancelled.",
                             icon: "success",
-                            confirmButtonColor: '#1976D2',
+                            confirmButtonColor: myLightColour,
+                            cancelButtonColor: myErrorColour,
                         });
 
                         await dispatch(fetchGetExpendituresOfManager({
@@ -371,7 +382,7 @@ const SideBarManagerExpenditures = () => {
                 <Button
                     onClick={handleApprove}
                     variant="contained"
-                    color="primary"
+                    color="success"
                     disabled={loading || selectedRowIds.length === 0}
                     startIcon={<ApproveIcon />}
                     sx={{ marginRight: '1%', width: '200px' }}

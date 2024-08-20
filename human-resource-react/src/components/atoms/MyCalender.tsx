@@ -128,7 +128,7 @@ const MyCalendar: React.FC<MyCalendarProps> = ({ events, onSaveEvent, onUpdateEv
                     </Paper>
                 </Box>
 
-                <Dialog open={isModalOpen} onClose={handleClose}>
+                <Dialog open={isModalOpen} onClose={handleClose} fullWidth maxWidth="sm">
                     <DialogTitle>Etkinliği Düzenle</DialogTitle>
                     <DialogContent>
                         <TextField
@@ -163,14 +163,14 @@ const MyCalendar: React.FC<MyCalendarProps> = ({ events, onSaveEvent, onUpdateEv
                         />
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={handleClose} color="primary">
+                        <Button onClick={handleClose} variant='contained' color="warning" sx={{ marginRight: '17px', width: '100px' }}>
                             Cancel
                         </Button>
-                        <Button onClick={handleSave} color="primary">
+                        <Button onClick={handleSave} variant='contained' color="success" sx={{ marginRight: '17px', width: '100px' }}>
                             Save
                         </Button>
                         {selectedEvent?.id && (
-                            <Button onClick={handleDelete} color="secondary">
+                            <Button onClick={handleDelete} variant='contained' color="error" sx={{ marginRight: '17px', width: '100px' }}>
                                 Delete
                             </Button>
                         )}

@@ -3,19 +3,19 @@ import MyCalendar, { IShift } from "../../atoms/MyCalender";
 import { useDispatch } from "react-redux";
 import { HumanResources, useAppSelector } from "../../../store";
 import { fetchFindShiftsOfEmployee } from "../../../store/feature/shiftSlice";
-import {Grid, Typography, Box, Paper} from "@mui/material";
+import { Grid, Typography, Box, Paper } from "@mui/material";
 import MyCard from "../../atoms/MyCard";
-import {DataGrid, GridColDef} from "@mui/x-data-grid";
-import {fetchGetAssignedItemsOfEmployee} from "../../../store/feature/companyItemSlice";
-import {IAssignedItemList} from "../../../models/IAssignedItemList";
-import {AddDocumentIcon} from "../../atoms/icons";
+import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { fetchGetAssignedItemsOfEmployee } from "../../../store/feature/companyItemSlice";
+import { IAssignedItemList } from "../../../models/IAssignedItemList";
+import { AddDocumentIcon } from "../../atoms/icons";
 
 import ThemeElement from "../../atoms/ThemeElement";
-import {fetchGetCurrentLeavesOfEmployeeForHomePage, ILeave} from "../../../store/feature/leaveSlice";
+import { fetchGetCurrentLeavesOfEmployeeForHomePage, ILeave } from "../../../store/feature/leaveSlice";
 import HikingIcon from "@mui/icons-material/Hiking";
-import {CalendarMonth, PersonAdd, PointOfSale} from "@mui/icons-material";
-import {IExpenditure} from "../../../models/IExpenditure";
-import {fetchGetAllExpendituresOfEmployeeByCurrentMonth} from "../../../store/feature/expenditureSlice";
+import { CalendarMonth, PersonAdd, PointOfSale } from "@mui/icons-material";
+import { IExpenditure } from "../../../models/IExpenditure";
+import { fetchGetAllExpendituresOfEmployeeByCurrentMonth } from "../../../store/feature/expenditureSlice";
 
 export const EmployeeHomeContent: React.FC = () => {
     const [events, setEvents] = useState<IShift[]>([]);
@@ -53,8 +53,8 @@ export const EmployeeHomeContent: React.FC = () => {
     const columns: GridColDef[] = [
 
 
-        {field: "name", headerName: "Item Name", flex: 1, headerAlign: "center" ,groupable: false , sortable: false },
-        {field: "assignDate", headerName: "Assignment Date", flex: 1, headerAlign: "center" ,groupable: false , sortable: false}
+        { field: "name", headerName: "Item Name", flex: 1, headerAlign: "center", groupable: false, sortable: false },
+        { field: "assignDate", headerName: "Assignment Date", flex: 1, headerAlign: "center", groupable: false, sortable: false }
 
 
     ];
@@ -62,9 +62,9 @@ export const EmployeeHomeContent: React.FC = () => {
     const columnsLeaves: GridColDef[] = [
 
 
-        {field: "description", headerName: "Description", flex: 1.5, headerAlign: "center" ,groupable: false , sortable: false },
-        {field: "startDate", headerName: "Start Date", flex: 1, headerAlign: "center" ,groupable: false , sortable: false},
-        {field: "endDate", headerName: "End Date", flex: 1, headerAlign: "center" ,groupable: false , sortable: false}
+        { field: "description", headerName: "Description", flex: 1.5, headerAlign: "center", groupable: false, sortable: false },
+        { field: "startDate", headerName: "Start Date", flex: 1, headerAlign: "center", groupable: false, sortable: false },
+        { field: "endDate", headerName: "End Date", flex: 1, headerAlign: "center", groupable: false, sortable: false }
 
 
     ];
@@ -95,174 +95,139 @@ export const EmployeeHomeContent: React.FC = () => {
 
     return (
         <ThemeElement children={
-            <Grid container spacing={2} >
-                <Grid item xs={6} >
-                    <Paper elevation={3} sx={{p: 2, borderRadius: 2}}>
-                        <div style={{height: "auto", width: "inherit"}}>
-                            <Typography variant="h6" align="center" sx={{ mb: 2 , fontWeight: "bold", color: 'myLightColour.main'}}>
-                                <CalendarMonth/>  My Events
+            <Grid container spacing={2}>
+                <Grid item xs={6}>
+                    <Paper elevation={3} sx={{ p: 2, borderRadius: 2 }}>
+                        <div style={{ height: "auto", width: "inherit" }}>
+                            <Typography variant="h6" align="center" sx={{ mb: 2, fontWeight: "bold", color: 'myLightColour.main' }}>
+                                <CalendarMonth />  My Events
                             </Typography>
-                    <MyCalendar events={events} isUserManager={false} />
+                            <MyCalendar events={events} isUserManager={false} />
                         </div>
                     </Paper>
                 </Grid>
                 <Grid item xs={3} >
-                    <Grid container  spacing={2} >
-
+                    <Grid container spacing={2}>
                         <Grid item xs={12}>
+                            <Paper elevation={3} sx={{ p: 2, borderRadius: 2 }}>
+                                <div style={{ height: "auto", width: "inherit" }}>
+                                    <Typography variant="h6" align="center" sx={{ mb: 2, fontWeight: "bold", color: 'myLightColour.main' }}>
+                                        <AddDocumentIcon /> My Items
+                                    </Typography>
+                                    <DataGrid
+                                        disableColumnMenu={true}
+                                        rows={assignedItemList}
+                                        columns={columns}
+                                        initialState={{
+                                            pagination: {
+                                                paginationModel: { page: 1, pageSize: 5 },
+                                            },
+                                        }}
+                                        pageSizeOptions={[5, 10]}
+                                        rowSelection={false}
+                                        hideFooter={true}
+                                        sx={{
+                                            "& .MuiDataGrid-columnHeaders": {
+                                                backgroundColor: "rgba(224, 224, 224, 1)",
 
-
-                                <Paper elevation={3} sx={{p: 2, borderRadius: 2 }}>
-                                    <div style={{height: "auto", width: "inherit"}}>
-                                        <Typography variant="h6" align="center" sx={{ mb: 2 , fontWeight: "bold", color: 'myLightColour.main'}}>
-                                            <AddDocumentIcon/> My Items
-                                        </Typography>
-                                        <DataGrid
-                                            disableColumnMenu={true}
-                                            rows={assignedItemList}
-                                            columns={columns}
-                                            initialState={{
-                                                pagination: {
-                                                    paginationModel: {page: 1, pageSize: 5},
-                                                },
-                                            }}
-                                            pageSizeOptions={[5, 10]}
-                                            rowSelection={false}
-                                            hideFooter={true}
-
-
-                                            sx={{
-                                                "& .MuiDataGrid-columnHeaders": {
-                                                    backgroundColor: "rgba(224, 224, 224, 1)",
-
-                                                },
-                                                "& .MuiDataGrid-columnHeaderTitle": {
-                                                    textAlign: "center",
-                                                    fontWeight: "bold",
-                                                },
-                                                "& .MuiDataGrid-cell": {
-                                                    textAlign: "center",
-                                                },
-                                                height: "214px",
-                                            }}
-                                        />
-
-
-                                    </div>
-
-                                </Paper>
-
-
+                                            },
+                                            "& .MuiDataGrid-columnHeaderTitle": {
+                                                textAlign: "center",
+                                                fontWeight: "bold",
+                                            },
+                                            "& .MuiDataGrid-cell": {
+                                                textAlign: "center",
+                                            },
+                                            height: "214px",
+                                        }}
+                                    />
+                                </div>
+                            </Paper>
                         </Grid>
-
                         <Grid item xs={12}>
+                            <Paper elevation={3} sx={{ p: 2, borderRadius: 2 }}>
+                                <div style={{ height: "auto", width: "inherit" }}>
+                                    <Typography variant="h6" align="center" sx={{ mb: 2, fontWeight: "bold", color: 'myLightColour.main' }}>
+                                        <HikingIcon /> My Leaves
+                                    </Typography>
+                                    <DataGrid
+                                        disableColumnMenu={true}
+                                        rows={leaves}
+                                        columns={columnsLeaves}
+                                        initialState={{
+                                            pagination: {
+                                                paginationModel: { page: 1, pageSize: 5 },
+                                            },
+                                        }}
+                                        pageSizeOptions={[5, 10]}
+                                        rowSelection={false}
+                                        hideFooter={true}
+                                        sx={{
+                                            "& .MuiDataGrid-columnHeaders": {
+                                                backgroundColor: "rgba(224, 224, 224, 1)",
 
-
-                                <Paper elevation={3} sx={{p: 2, borderRadius: 2}}>
-                                    <div style={{height: "auto", width: "inherit"}}>
-                                        <Typography variant="h6" align="center" sx={{ mb: 2 , fontWeight: "bold", color: 'myLightColour.main'}}>
-                                            <HikingIcon/> My Leaves
-                                        </Typography>
-                                        <DataGrid
-
-                                            disableColumnMenu={true}
-                                            rows={leaves}
-                                            columns={columnsLeaves}
-                                            initialState={{
-                                                pagination: {
-                                                    paginationModel: {page: 1, pageSize: 5},
-                                                },
-                                            }}
-                                            pageSizeOptions={[5, 10]}
-                                            rowSelection={false}
-                                            hideFooter={true}
-
-
-                                            sx={{
-                                                "& .MuiDataGrid-columnHeaders": {
-                                                    backgroundColor: "rgba(224, 224, 224, 1)",
-
-                                                },
-                                                "& .MuiDataGrid-columnHeaderTitle": {
-                                                    textAlign: "center",
-                                                    fontWeight: "bold",
-                                                },
-                                                "& .MuiDataGrid-cell": {
-                                                    textAlign: "center",
-                                                    fontSize: "12px",
-                                                },
-                                                height: "214px",
-                                            }}
-                                        />
-
-
-                                    </div>
-
-                                </Paper>
-
-
+                                            },
+                                            "& .MuiDataGrid-columnHeaderTitle": {
+                                                textAlign: "center",
+                                                fontWeight: "bold",
+                                            },
+                                            "& .MuiDataGrid-cell": {
+                                                textAlign: "center",
+                                                fontSize: "12px",
+                                            },
+                                            height: "214px",
+                                        }}
+                                    />
+                                </div>
+                            </Paper>
                         </Grid>
-
                     </Grid>
                 </Grid>
                 <Grid item xs={3} >
-                    <Grid container  spacing={2} >
+                    <Grid container spacing={2} >
                         <Grid item xs={12}>
-                            <MyCard/>
+                            <MyCard />
                         </Grid>
                         <Grid item xs={12}>
+                            <Paper elevation={3} sx={{ p: 2, borderRadius: 2 }}>
+                                <div style={{ height: "auto", width: "inherit" }}>
+                                    <Typography variant="h6" align="center" sx={{ mb: 2, fontWeight: "bold", color: 'myLightColour.main' }}>
+                                        <PointOfSale /> My Expenditures
+                                    </Typography>
+                                    <DataGrid
+                                        disableColumnMenu={true}
+                                        rows={expenditures}
+                                        columns={columnsExpenditures}
+                                        initialState={{
+                                            pagination: {
+                                                paginationModel: { page: 1, pageSize: 5 },
+                                            },
+                                        }}
+                                        pageSizeOptions={[5, 10]}
+                                        rowSelection={false}
+                                        hideFooter={true}
+                                        sx={{
+                                            "& .MuiDataGrid-columnHeaders": {
+                                                backgroundColor: "rgba(224, 224, 224, 1)",
 
-
-                                <Paper elevation={3} sx={{p: 2, borderRadius: 2}}>
-                                    <div style={{height: "auto", width: "inherit"}}>
-                                        <Typography variant="h6" align="center" sx={{ mb: 2 , fontWeight: "bold", color: 'myLightColour.main'}}>
-                                            <PointOfSale/> My Expenditures
-                                        </Typography>
-                                        <DataGrid
-
-                                            disableColumnMenu={true}
-                                            rows={expenditures}
-                                            columns={columnsExpenditures}
-                                            initialState={{
-                                                pagination: {
-                                                    paginationModel: {page: 1, pageSize: 5},
-                                                },
-                                            }}
-                                            pageSizeOptions={[5, 10]}
-                                            rowSelection={false}
-                                            hideFooter={true}
-
-
-                                            sx={{
-                                                "& .MuiDataGrid-columnHeaders": {
-                                                    backgroundColor: "rgba(224, 224, 224, 1)",
-
-                                                },
-                                                "& .MuiDataGrid-columnHeaderTitle": {
-                                                    textAlign: "center",
-                                                    fontWeight: "bold",
-                                                },
-                                                "& .MuiDataGrid-cell": {
-                                                    textAlign: "center",
-                                                    fontSize: "12px",
-                                                },
-                                                height: "214px",
-                                            }}
-                                        />
-
-
-                                    </div>
-
-                                </Paper>
-                           
-
+                                            },
+                                            "& .MuiDataGrid-columnHeaderTitle": {
+                                                textAlign: "center",
+                                                fontWeight: "bold",
+                                            },
+                                            "& .MuiDataGrid-cell": {
+                                                textAlign: "center",
+                                                fontSize: "12px",
+                                            },
+                                            height: "214px",
+                                        }}
+                                    />
+                                </div>
+                            </Paper>
                         </Grid>
                     </Grid>
                 </Grid>
             </Grid>
-        }/>
-
-
-
+        } />
     );
 }

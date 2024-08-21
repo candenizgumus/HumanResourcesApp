@@ -56,4 +56,6 @@ public interface UserRepository extends JpaRepository<User,Long>
 
     @Query("SELECT u FROM User u WHERE u.companyId = :companyId ORDER BY u.createdAt ASC")
     Optional<User> findFirstUserByCompanyId(@Param("companyId") Long companyId);
+
+    List<User> findAllByUserTypeAndStatusAndCompanyId(EUserType userType, EStatus status, Long companyId);
 }

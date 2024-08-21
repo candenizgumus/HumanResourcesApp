@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import RestApis from "../../config/RestApis";
 
 export interface IResponseFeature {
     id: number,
@@ -21,7 +22,7 @@ const initialFeatureState: IInitialFeature = {
 export const fetchGetFeatures = createAsyncThunk(
     'get/fetchGetFeatures',
     async()=>{
-        const result = await fetch('http://localhost:9090/dev/v1/feature/get-all')
+        const result = await fetch(RestApis.featureService+'/get-all')
             .then(data=>data.json());
         console.log(result)
         return result;
@@ -38,7 +39,7 @@ export const fetchCreateFeature = createAsyncThunk(
     'post/fetchCreateFeature',
     async (payload: ICreateFeature) => {
 
-            const response = await fetch(`http://localhost:9090/dev/v1/feature/save`, {
+            const response = await fetch(RestApis.featureService+`/save`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

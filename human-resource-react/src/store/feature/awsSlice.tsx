@@ -1,9 +1,10 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk } from "@reduxjs/toolkit";
+import RestApis from "../../config/RestApis";
 
 export const uploadPlayerProfileImage = createAsyncThunk<string, FormData, { rejectValue: string }>(
     'user/uploadImage',
     async (formData, { rejectWithValue }) => {
-        const response = await fetch('http://localhost:9090/dev/v1/user/profile-image', {
+        const response = await fetch(RestApis.userService+'/profile-image', {
             method: 'POST',
             headers: {
                 "Authorization": `Bearer ${localStorage.getItem('token')}`

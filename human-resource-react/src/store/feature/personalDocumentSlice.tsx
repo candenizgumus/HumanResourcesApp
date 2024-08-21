@@ -1,5 +1,6 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import {IPersonalDocument} from "../../models/IPersonalDocument";
+import RestApis from "../../config/RestApis";
 
 
 export interface IPersonalDocumentState {
@@ -30,7 +31,7 @@ export const fetchSavePersonalDocument = createAsyncThunk(
         formData.append('documentType', payload.documentType);
         formData.append('documentFile', payload.documentFile[0]); // İlk dosyayı ekliyoruz
         formData.append('description', payload.description);
-        const response = await fetch('http://localhost:9090/dev/v1/personal-document/save', {
+        const response = await fetch(RestApis.personelDocumentService+'/save', {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ` + payload.token
@@ -44,7 +45,7 @@ export const fetchSavePersonalDocument = createAsyncThunk(
 export const fetchDeletePersonalDocument = createAsyncThunk(
     'personalDocument/fetchDeletePersonalDocumentAndFile',
     async (payload: { id: number, attachedFile: string, token: string }, { rejectWithValue }) => {
-            const response = await fetch(`http://localhost:9090/dev/v1/personal-document/delete`, {
+            const response = await fetch(RestApis.personelDocumentService+`/delete`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
@@ -71,7 +72,7 @@ interface IFetchGetPersonalDocument {
 export const fetchPersonalDocuments = createAsyncThunk(
     'personalDocument/fetchPersonalDocuments',
     async (payload: IFetchGetPersonalDocument, {rejectWithValue}) => {
-        const response = await fetch('http://localhost:9090/dev/v1/personal-document/get-all', {
+        const response = await fetch(RestApis.personelDocumentService+'/get-all', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -95,7 +96,7 @@ interface IFetchPersonalDocument {
 export const fetchPersonalDocumentsOfEmployee = createAsyncThunk(
     'personalDocument/fetchPersonalDocumentsOfEmployee',
     async (payload: IFetchPersonalDocument, {rejectWithValue}) => {
-        const response = await fetch('http://localhost:9090/dev/v1/personal-document/get-by-employee-id', {
+        const response = await fetch(RestApis.personelDocumentService+'/get-by-employee-id', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -114,7 +115,7 @@ export const fetchPersonalDocumentsOfEmployee = createAsyncThunk(
 export const fetchPersonalDocumentTypes = createAsyncThunk(
     'personalDocument/fetchPersonalDocumentsTypes',
     async (token: string, {rejectWithValue}) => {
-        const response = await fetch('http://localhost:9090/dev/v1/personal-document/get-all-personal-document-types', {
+        const response = await fetch(RestApis.personelDocumentService+'/get-all-personal-document-types', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

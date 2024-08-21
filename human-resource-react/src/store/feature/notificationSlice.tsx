@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import RestApis from "../../config/RestApis";
 
 export interface INotification {
     id: number,
@@ -36,7 +37,7 @@ const initialNotificationState: IInitialNotification = {
 export const fetchGetUnreadNotifications = createAsyncThunk(
     'notification/fetchGetUnreadNotifications',
     async (token: string) => {
-        const response = await fetch('http://localhost:9090/dev/v1/notification/get-all-unread', {
+        const response = await fetch(RestApis.notificationService+'/get-all-unread', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -58,7 +59,7 @@ interface IFetchGetNotifications {
 export const fetchGetNotifications = createAsyncThunk(
     'notification/fetchGetNotifications',
     async (payload: IFetchGetNotifications) => {
-        const response = await fetch('http://localhost:9090/dev/v1/notification/get-all', {
+        const response = await fetch(RestApis.notificationService+'/get-all', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -78,7 +79,7 @@ export const fetchGetNotifications = createAsyncThunk(
 export const fetchUpdateIsRead = createAsyncThunk(
     'notification/fetchUpdateIsRead',
     async (payload:IUpdateIsRead) => {
-        const response = await fetch('http://localhost:9090/dev/v1/notification/update-is-read', {
+        const response = await fetch(RestApis.notificationService+'/update-is-read', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -100,7 +101,7 @@ export const fetchUpdateIsRead = createAsyncThunk(
 export const fetchDeleteNotification = createAsyncThunk(
     'notification/fetchDeleteNotification',
     async (payload:IDeleteNotification) => {
-        const response = await fetch('http://localhost:9090/dev/v1/notification/delete?id='+payload.id, {
+        const response = await fetch(RestApis.notificationService+'/delete?id='+payload.id, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
@@ -121,7 +122,7 @@ export interface IContactUsNotificationPayload {
 export const fetchSaveContactUsNotification = createAsyncThunk(
     'notification/fetchSaveContactUsNotification',
     async (payload:IContactUsNotificationPayload) => {
-        const response = await fetch('http://localhost:9090/dev/v1/notification/save-contact-us-notification', {
+        const response = await fetch(RestApis.notificationService+'/save-contact-us-notification', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

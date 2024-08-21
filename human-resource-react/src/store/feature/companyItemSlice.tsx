@@ -1,6 +1,7 @@
 import {IPersonalDocument} from "../../models/IPersonalDocument";
 import {ICompanyItem} from "../../models/ICompanyItem";
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
+import RestApis from "../../config/RestApis";
 
 export interface ICompanyItemState {
     companyItem: ICompanyItem
@@ -24,7 +25,7 @@ interface ISaveCompanyItem {
 export const fetchSaveCompanyItem = createAsyncThunk(
     'companyItem/fetchSaveCompanyItem',
     async (payload: ISaveCompanyItem, {rejectWithValue}) => {
-        const response = await fetch('http://localhost:9090/dev/v1/company-item/save', {
+        const response = await fetch(RestApis.companyItemService+'/save', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -43,7 +44,7 @@ export const fetchSaveCompanyItem = createAsyncThunk(
 export const fetchDeleteCompanyItem = createAsyncThunk(
     'companyItem/fetchDeleteCompanyItem',
     async (payload: { id: number, token: string }, { rejectWithValue }) => {
-            const response = await fetch(`http://localhost:9090/dev/v1/company-item/delete/${payload.id}`, {
+            const response = await fetch(RestApis.companyItemService+`/delete/${payload.id}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
@@ -57,7 +58,7 @@ export const fetchDeleteCompanyItem = createAsyncThunk(
 export const fetchCompanyItems = createAsyncThunk(
     'companyItem/fetchCompanyItems',
     async (payload: { token: string, searchText: string, page: number, pageSize: number }) => {
-        const response = await fetch('http://localhost:9090/dev/v1/company-item/get-all', {
+        const response = await fetch(RestApis.companyItemService+'/get-all', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -76,7 +77,7 @@ export const fetchCompanyItems = createAsyncThunk(
 export const fetchCompanyItemsForAssignment = createAsyncThunk(
     'companyItem/fetchCompanyItems',
     async (payload: { token: string, searchText: string, page: number, pageSize: number }) => {
-        const response = await fetch('http://localhost:9090/dev/v1/company-item/get-all-for-assignment', {
+        const response = await fetch(RestApis.companyItemService+'/get-all-for-assignment', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -95,7 +96,7 @@ export const fetchCompanyItemsForAssignment = createAsyncThunk(
 export const fetchCompanyItemAssignments = createAsyncThunk(
     'companyItem/fetchCompanyItemsWithAssignments',
     async (token: string) => {
-        const response = await fetch('http://localhost:9090/dev/v1/company-item-assignment/get-all', {
+        const response = await fetch(RestApis.companyItemService+'-assignment/get-all', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -109,7 +110,7 @@ export const fetchCompanyItemAssignments = createAsyncThunk(
 export const fetchCompanyItemTypes = createAsyncThunk(
     'companyItem/fetchCompanyItemTypes',
     async (token: string) => {
-        const response = await fetch('http://localhost:9090/dev/v1/company-item/get-types', {
+        const response = await fetch(RestApis.companyItemService+'/get-types', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -128,7 +129,7 @@ interface ICompanyItemAssignment {
 export const fetchCreateCompanyItemAssignment = createAsyncThunk(
     'companyItem/fetchCreateCompanyItemAssignment',
     async (payload: ICompanyItemAssignment) => {
-        const response = await fetch('http://localhost:9090/dev/v1/company-item-assignment/save', {
+        const response = await fetch(RestApis.companyItemService+'-assignment/save', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -147,7 +148,7 @@ export const fetchCreateCompanyItemAssignment = createAsyncThunk(
 export const fetchGetAssignedItemsOfEmployee = createAsyncThunk(
     'companyItem/fetchGetAssignedItemsOfEmployee',
     async (token: string, {rejectWithValue}) => {
-        const response = await fetch('http://localhost:9090/dev/v1/company-item-assignment/get-assinged-items-of-employee', {
+        const response = await fetch(RestApis.companyItemService+'-assignment/get-assinged-items-of-employee', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -161,7 +162,7 @@ export const fetchGetAssignedItemsOfEmployee = createAsyncThunk(
 export const fetchGetAssignedItemsOfEmployeeDetailed = createAsyncThunk(
     'companyItem/fetchGetAssignedItemsOfEmployeeDetailed',
     async (token: string) => {
-        const response = await fetch('http://localhost:9090/dev/v1/company-item-assignment/get-all-by-employee', {
+        const response = await fetch(RestApis.companyItemService+'-assignment/get-all-by-employee', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -175,7 +176,7 @@ export const fetchGetAssignedItemsOfEmployeeDetailed = createAsyncThunk(
 export const fetchApproveItemAssignmentByEmployee = createAsyncThunk(
     'companyItem/fetchApproveItemAssignmentByEmployee',
     async (payload: { id: number, token: string }) => {
-        const response = await fetch(`http://localhost:9090/dev/v1/company-item-assignment/approve-assignment/${payload.id}`, {
+        const response = await fetch(RestApis.companyItemService+`-assignment/approve-assignment/${payload.id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -189,7 +190,7 @@ export const fetchApproveItemAssignmentByEmployee = createAsyncThunk(
 export const fetchRejectItemAssignmentByEmployee = createAsyncThunk(
     'companyItem/fetchRejectItemAssignmentByEmployee',
     async (payload: { id: number, token: string, message: string }) => {
-        const response = await fetch(`http://localhost:9090/dev/v1/company-item-assignment/reject-assignment`, {
+        const response = await fetch(RestApis.companyItemService+`-assignment/reject-assignment`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -207,7 +208,7 @@ export const fetchRejectItemAssignmentByEmployee = createAsyncThunk(
 export const fetchCancelItemAssignmentByManager = createAsyncThunk(
     'companyItem/fetchCancelItemAssignmentByManager',
     async (payload: { id: number, token: string }) => {
-        const response = await fetch(`http://localhost:9090/dev/v1/company-item-assignment/cancel-assignment-by-manager/${payload.id}`, {
+        const response = await fetch(RestApis.companyItemService+`-assignment/cancel-assignment-by-manager/${payload.id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',

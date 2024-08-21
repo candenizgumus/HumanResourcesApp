@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import {IShift} from "../../components/atoms/MyCalender";
+import RestApis from "../../config/RestApis";
 
 interface shiftState{
     shiftList:IShift[]
@@ -33,7 +34,7 @@ export const fetchSaveShift = createAsyncThunk(
     'shift/fetchSaveShift',
     async (payload: IfetchSaveShift) => {
 
-            const response = await fetch(`http://localhost:9090/dev/v1/shift/save`, {
+            const response = await fetch(RestApis.shiftService+`/save`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -69,7 +70,7 @@ export const fetchUpdateShift = createAsyncThunk(
     'shift/fetchUpdateShift',
     async (payload: IfetchUpdateShift) => {
 
-        const response = await fetch(`http://localhost:9090/dev/v1/shift/update`, {
+        const response = await fetch(RestApis.shiftService+`/update`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -97,7 +98,7 @@ export const fetchFindShiftsOfEmployee = createAsyncThunk(
     'shift/fetchFindShiftsOfEmployee',
     async (payload: IfetchFindShiftsOfEmployee) => {
 
-        const response = await fetch(`http://localhost:9090/dev/v1/shift/get-all?employeeId=` + payload.employeeId, {
+        const response = await fetch(RestApis.shiftService+`/get-all?employeeId=` + payload.employeeId, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -118,7 +119,7 @@ export const fetchDeleteShift = createAsyncThunk(
     'shift/fetchFindShiftsOfEmployee',
     async (payload: IfetchDeleteShift) => {
 
-        const response = await fetch(`http://localhost:9090/dev/v1/shift/delete?id=` + payload.shiftId, {
+        const response = await fetch(RestApis.shiftService+`/delete?id=` + payload.shiftId, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
@@ -132,7 +133,7 @@ export const fetchDeleteShift = createAsyncThunk(
 )
 
 const shiftSlice = createSlice({
-    name: 'bonus',
+    name: 'shift',
     initialState: initialShiftState,
     reducers: {
         setEmployeeIdAndCompanyId:(state,action)=>{

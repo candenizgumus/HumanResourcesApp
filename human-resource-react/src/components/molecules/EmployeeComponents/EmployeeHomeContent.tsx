@@ -96,7 +96,7 @@ export const EmployeeHomeContent: React.FC = () => {
     return (
         <ThemeElement children={
             <Grid container spacing={2} >
-                <Grid item xs={6} sx={{ p: 2 }}>
+                <Grid item xs={6} >
                     <Paper elevation={3} sx={{p: 2, borderRadius: 2}}>
                         <div style={{height: "auto", width: "inherit"}}>
                             <Typography variant="h6" align="center" sx={{ mb: 2 , fontWeight: "bold", color: 'myLightColour.main'}}>

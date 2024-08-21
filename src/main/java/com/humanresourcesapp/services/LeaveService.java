@@ -394,7 +394,7 @@ public class LeaveService {
     {
         String managerEmail = UserInfoSecurityContext.getUserInfoFromSecurityContext();
         User employee = userService.findByEmail(managerEmail).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
-        return leaveRepository.findAllByEmployeeIdAndStatusAndStartDateIsAfterOrEndDateIsAfter(employee.getId(),EStatus.ACTIVE,LocalDate.now(),LocalDate.now());
+        return leaveRepository.findAllByEmployeeIdAndStatusAndStartDateOrEndDateIsAfter(employee.getId(),EStatus.ACTIVE,LocalDate.now(),LocalDate.now());
     }
 }
 

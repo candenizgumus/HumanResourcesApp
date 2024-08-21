@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import RestApis from "../../config/RestApis";
 
 interface IInitialEmail{
 }
@@ -16,7 +17,7 @@ export const fetchSendEmail = createAsyncThunk(
     'email/fetchSendEmail',
     async (payload: fetchSendEmailPayload, ) => {
 
-        const response = await fetch('http://localhost:9090/dev/v1/email/send-email', {
+        const response = await fetch(RestApis.emailService+'/send-email', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

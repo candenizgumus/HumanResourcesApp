@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import {IPayment} from "../../models/IPayment";
+import RestApis from "../../config/RestApis";
 
 
 
@@ -26,7 +27,7 @@ export const fetchPaymentSave = createAsyncThunk(
     'payment/fetchPaymentSave',
     async (payload: IfetchPaymentSave) => {
 
-            const response = await fetch(`http://localhost:9090/dev/v1/payment/save`, {
+            const response = await fetch(RestApis.paymentService+`/save`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -54,7 +55,7 @@ export const fetchGetPayments = createAsyncThunk(
     'payment/fetchGetPayments',
     async (payload: IfetchGetPayments) => {
 
-        const response = await fetch(`http://localhost:9090/dev/v1/payment/get-all`, {
+        const response = await fetch(RestApis.paymentService+`/get-all`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -80,7 +81,7 @@ export const fetchDeletePayment = createAsyncThunk(
     'payment/IfetchDeletePayment',
     async (payload: IfetchDeletePayment) => {
 
-        const response = await fetch(`http://localhost:9090/dev/v1/payment/delete?id=`+ payload.id , {
+        const response = await fetch(RestApis.paymentService+`/delete?id=`+ payload.id , {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
@@ -97,7 +98,7 @@ export const fetchMonthlyPayments = createAsyncThunk(
     'payment/IfetchDeletePayment',
     async (token: string) => {
 
-        const response = await fetch(`http://localhost:9090/dev/v1/payment/get-monthly-payments` , {
+        const response = await fetch(RestApis.paymentService+`/get-monthly-payments` , {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

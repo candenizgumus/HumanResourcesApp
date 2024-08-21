@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { DataGrid, GridColDef, GridRowSelectionModel } from '@mui/x-data-grid';
+import {DataGrid, GridColDef, GridRowSelectionModel, GridToolbar} from '@mui/x-data-grid';
 import { HumanResources, RootState, useAppSelector } from '../../../store';
 import {
     fetchChangeHolidayStatus,
@@ -59,6 +59,8 @@ export default function SideBarHolidayTableUser() {
     const [holidayEndDate, setHolidayEndDate] = useState<Date | null>(null);
     const [predefinedholidays, setPredefinedHolidays] = useState<any[]>([]);
     const [selectedHolidayId, setSelectedHolidayId] = useState<number>(0);
+    const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
+
     const formatDate = (date: Date | string | undefined): string => {
         if (!date) return '';
 
@@ -116,6 +118,8 @@ export default function SideBarHolidayTableUser() {
                     dispatch(fetchHolidaysEmployee(token));
                 })
         });
+        setSelectedRowIds([]);
+
     };
 
     const handleConfirmChangeStatus = () => {
@@ -132,6 +136,7 @@ export default function SideBarHolidayTableUser() {
                 })
                 })
         });
+        setSelectedRowIds([]);
     }
 
     useEffect(() => {
@@ -197,6 +202,9 @@ export default function SideBarHolidayTableUser() {
     return (
         <div style={{ height: "auto", width: "inherit" }}>
             <DataGrid
+                slots={{
+                    toolbar: GridToolbar,
+                }}
                 rows={newHolidayList}
                 columns={columns}
                 initialState={{
@@ -221,6 +229,7 @@ export default function SideBarHolidayTableUser() {
                     marginTop: '2%',
                     height: '407px'
                 }}
+                rowSelectionModel={selectedRowIds}
             />
             <Grid sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-start', alignItems: 'center', marginTop: '2%', marginBottom: '2%' }}>
                 <Button

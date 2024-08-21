@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { TextField, Grid, Button } from '@mui/material';
+import {TextField, Grid, Button, Typography, Paper} from '@mui/material';
 import { HumanResources, useAppSelector } from "../../../store";
 import { useDispatch } from "react-redux";
-import { DataGrid, GridColDef, GridRowSelectionModel } from "@mui/x-data-grid";
+import {DataGrid, GridColDef, GridRowSelectionModel, GridToolbar} from "@mui/x-data-grid";
 import Swal from "sweetalert2";
 import {
     fetchCancelItemAssignmentByManager,
@@ -15,6 +15,8 @@ import { DeleteIcon, AddIcon } from '../../atoms/icons';
 import AddCompanyItemDialog from './AddCompanyItem';
 import {ICompanyItemAssignment} from "../../../models/ICompanyItemAssignment";
 import { myLightColour } from '../../../util/MyColours';
+import {Line} from "recharts";
+import Divider from "@mui/material/Divider";
 
 const itemColumns: GridColDef[] = [
     { field: "name", headerName: "Description", flex: 1, headerAlign: "center" },
@@ -43,6 +45,7 @@ const SideBarCompanyItems: React.FC = () => {
     const [companyItemAssignments, setCompanyItemAssignments] = useState<ICompanyItemAssignment[]>([]);
     const [loading, setLoading] = useState(false);
     const [dialogOpen, setDialogOpen] = useState(false);
+    const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
 
 
     const handleDialogOpen = () => {
@@ -150,12 +153,15 @@ const SideBarCompanyItems: React.FC = () => {
                             timer: 1500
                         })
                     }
-                    setLoading(false);
+                })
+                .finally(() => {
                     dispatch(fetchCompanyItemAssignments(token)).then(data => {
                         if (data.payload) {
                             setCompanyItemAssignments(data.payload);
                         }
                     });
+                    setLoading(false);
+                    setSelectedRowIdsAssignment([]);
                 });
         });
     };
@@ -172,6 +178,9 @@ const SideBarCompanyItems: React.FC = () => {
                 inputProps={{ maxLength: 50 }}
             />
             <DataGrid
+                slots={{
+                    toolbar: GridToolbar,
+                }}
                 rows={companyItems}
                 columns={itemColumns}
                 initialState={{
@@ -225,8 +234,16 @@ const SideBarCompanyItems: React.FC = () => {
                 </Button>
             </Grid>
             <AddCompanyItemDialog open={dialogOpen} onClose={handleDialogClose} />
-
+            <Divider sx={{ my: 2, backgroundColor: 'rgba(0, 0, 0, 0.87)' }} />
+            <Grid item xs={12}>
+                <Typography variant="h6" sx={{ fontWeight: 'bold', marginBottom: 1 }}>
+                    Assigned Items
+                </Typography>
+            </Grid>
             <DataGrid
+                slots={{
+                    toolbar: GridToolbar,
+                }}
                 rows={companyItemAssignments}
                 columns={assignmentColumns}
                 initialState={{
@@ -255,6 +272,7 @@ const SideBarCompanyItems: React.FC = () => {
                     },
                     height: '407px'
                 }}
+                rowSelectionModel={selectedRowIdsAssignment}
             />
             <Grid sx={{
                 flexGrow: 1,

@@ -21,7 +21,7 @@ public class GlobalExceptionHandler
     @ExceptionHandler(RuntimeException.class)// RuntimeException Hata yakalayıcı bir metod olduğunu belirtmek için.
     public ResponseEntity<String> handleException(RuntimeException ex)
     {
-        System.err.println(ex.getMessage());
+
         return ResponseEntity.badRequest()
                 .body("Uygulamada RunTime Exception oluştu................" + ex.getMessage());
     }
@@ -76,7 +76,7 @@ public class GlobalExceptionHandler
     public final ResponseEntity<ErrorMessage> handleMethodArgumentNotValidException(
             MethodArgumentNotValidException exception)
     {
-        System.out.println("Validation error occurred!");
+
         ErrorType errorType = ErrorType.BAD_REQUEST_ERROR;
         List<String> fields = new ArrayList<>();
         exception

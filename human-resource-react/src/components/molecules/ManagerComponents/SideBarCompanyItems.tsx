@@ -11,7 +11,6 @@ import {
     fetchDeleteCompanyItem
 } from "../../../store/feature/companyItemSlice";
 import { ICompanyItem } from "../../../models/ICompanyItem";
-import { changePageState } from "../../../store/feature/authSlice";
 import { DeleteIcon, AddIcon } from '../../atoms/icons';
 import AddCompanyItemDialog from './AddCompanyItem';
 import {ICompanyItemAssignment} from "../../../models/ICompanyItemAssignment";
@@ -26,11 +25,11 @@ const itemColumns: GridColDef[] = [
 
 const assignmentColumns: GridColDef[] = [
     { field: "companyItemName", headerName: "Description", flex: 1, headerAlign: "center" },
-    { field: "serialNumber", headerName: "Serial Number", flex: 1, headerAlign: "center" },
+    { field: "serialNumber", headerName: "Serial Number", flex: 0.7, headerAlign: "center" },
     { field: "employeeEmail", headerName: "Employee Email", flex: 1, headerAlign: "center" },
-    { field: "assignDate", headerName: "Assign Date", flex: 1, headerAlign: "center" },
-    { field: "status", headerName: "Status", flex: 1, headerAlign: "center" },
-    { field: "message", headerName: "Employee Message", flex: 1, headerAlign: "center" },
+    { field: "assignDate", headerName: "Assign Date", flex: 0.6, headerAlign: "center" },
+    { field: "status", headerName: "Status", flex: 0.6, headerAlign: "center" },
+    { field: "message", headerName: "Reject Message", flex: 1.5, headerAlign: "center" },
 ];
 
 const SideBarCompanyItems: React.FC = () => {
@@ -44,7 +43,7 @@ const SideBarCompanyItems: React.FC = () => {
     const [companyItemAssignments, setCompanyItemAssignments] = useState<ICompanyItemAssignment[]>([]);
     const [loading, setLoading] = useState(false);
     const [dialogOpen, setDialogOpen] = useState(false);
-    const [buttonDisabled, setButtonDisabled] = useState(true);
+
 
     const handleDialogOpen = () => {
         setDialogOpen(true);

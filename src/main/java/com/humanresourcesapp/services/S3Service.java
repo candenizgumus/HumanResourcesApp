@@ -56,9 +56,9 @@ public class S3Service {
                     .build();
 
             s3Client.deleteObject(deleteObjectRequest);
-            System.out.println("Deleted object: " + key + " from bucket: " + bucketName);
+
         } catch (Exception e) {
-            System.err.println("Failed to delete object: " + key + " from bucket: " + bucketName);
+
         }
     }
 

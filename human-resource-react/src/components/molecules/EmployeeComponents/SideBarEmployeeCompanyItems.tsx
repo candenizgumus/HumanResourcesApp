@@ -12,6 +12,7 @@ import {
 import { CancelIcon, ApproveIcon } from '../../atoms/icons';
 import { IEmployeeItemAssignments } from "../../../models/IEmployeeItemAssignments";
 import RejectItemAssignmentDialog from "./RejectItemAssignmentDialog";
+import {myErrorColour, myLightColour} from "../../../util/MyColours";
 
 const employeeAssignmentColumns: GridColDef[] = [
     { field: "companyItemName", headerName: "Description", flex: 1, headerAlign: "center" },
@@ -67,7 +68,7 @@ const SideBarEmployeeCompanyItems: React.FC = () => {
         setHasApprovedRow(hasApproved);
     };
 
-    const handleApproval = () => {
+    const handleApproval = async () => {
         if (selectedRowIds.length === 0) {
             Swal.fire({
                 icon: 'error',
@@ -76,6 +77,19 @@ const SideBarEmployeeCompanyItems: React.FC = () => {
             });
             return;
         }
+
+        const result = await Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: myLightColour,
+            cancelButtonColor: myErrorColour,
+            confirmButtonText: "Yes, approve it!"
+        });
+
+
+        if (result.isConfirmed) {
         setLoading(true);
         dispatch(fetchApproveItemAssignmentByEmployee({ token: token, id: selectedRowIds[0] }))
             .then((data) => {
@@ -102,6 +116,8 @@ const SideBarEmployeeCompanyItems: React.FC = () => {
                 setLoading(false);
                 setSelectedRowIds([]);
             });
+
+        }
     };
 
     return (
@@ -156,7 +172,7 @@ const SideBarEmployeeCompanyItems: React.FC = () => {
                 <Button
                     onClick={handleApproval}
                     variant="contained"
-                    color="primary"
+                    color="success"
                     startIcon={<ApproveIcon />}
                     disabled={loading || selectedRowIds.length === 0 || hasApprovedRow}
                     sx={{ marginRight: '1%', width: '200px' }}

@@ -4,6 +4,7 @@ import {HumanResources, useAppSelector} from "../../../store";
 import {useDispatch} from "react-redux";
 import Swal from "sweetalert2";
 import {fetchRejectItemAssignmentByEmployee} from "../../../store/feature/companyItemSlice";
+import {ApproveIcon} from "../../atoms/icons";
 
 interface RejectItemAssignmentDialogProps {
     open: boolean;
@@ -79,7 +80,7 @@ const RejectItemAssignmentDialog: React.FC<RejectItemAssignmentDialogProps> = ({
             <DialogContent>
                 <Box component="form">
                     <Grid container spacing={2}>
-                        <Grid item xs={12}>
+                        <Grid item xs={12} sx={{ mt: 2 }}>
                             <TextField
                                 required
                                 fullWidth
@@ -92,10 +93,15 @@ const RejectItemAssignmentDialog: React.FC<RejectItemAssignmentDialogProps> = ({
                 </Box>
             </DialogContent>
             <DialogActions>
-                <Button onClick={onClose} color="primary">
+                <Button variant="contained"
+                        color="error"
+                        startIcon={<ApproveIcon />} onClick={onClose}
+                >
                     Cancel
                 </Button>
-                <Button onClick={rejectCompanyItem} color="primary" disabled={loading}>
+                <Button variant="contained"
+                        color="success"
+                        startIcon={<ApproveIcon />} onClick={rejectCompanyItem}  disabled={loading}>
                     Reject
                 </Button>
             </DialogActions>

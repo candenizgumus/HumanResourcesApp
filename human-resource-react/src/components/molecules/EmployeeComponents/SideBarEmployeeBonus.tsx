@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import {
     DataGrid,
     GridColDef,
-    GridRowSelectionModel,
+    GridRowSelectionModel, GridToolbar,
 } from "@mui/x-data-grid";
 import {
     TextField
@@ -48,8 +48,7 @@ const columns: GridColDef[] = [
 const  SideBarEmloyeeBonus = () => {
     const [selectedRowIds, setSelectedRowIds] = useState<number[]>([]);
     const [searchText, setSearchText] = useState('');
-
-
+    const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
     const dispatch = useDispatch<HumanResources>();
     const token = useAppSelector((state) => state.auth.token);
     const bonusList = useAppSelector((state) => state.bonus.bonusList);
@@ -90,6 +89,9 @@ const  SideBarEmloyeeBonus = () => {
                 inputProps={{ maxLength: 50 }}
             />
             <DataGrid
+                slots={{
+                    toolbar: GridToolbar,
+                }}
                 rows={bonusList}
                 columns={columns}
                 initialState={{
@@ -114,6 +116,7 @@ const  SideBarEmloyeeBonus = () => {
                     },
                     height: "407px",
                 }}
+                rowSelectionModel={selectedRowIds}
             />
 
 

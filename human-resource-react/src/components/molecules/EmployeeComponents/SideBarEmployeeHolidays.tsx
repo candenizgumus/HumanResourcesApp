@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { DataGrid, GridColDef, GridRowSelectionModel } from '@mui/x-data-grid';
+import {DataGrid, GridColDef, GridRowSelectionModel, GridToolbar} from '@mui/x-data-grid';
 import { HumanResources, RootState, useAppSelector } from '../../../store';
 import { fetchHolidaysEmployee } from '../../../store/feature/holidaySlice';
 import { IHoliday } from '../../../models/IHoliday';
@@ -71,6 +71,9 @@ export default function SideBarEmployeeHolidays() {
     return (
         <div style={{ height: "auto", width: "inherit" }}>
             <DataGrid
+                slots={{
+                    toolbar: GridToolbar,
+                }}
                 rows={newHolidayList}
                 columns={columns}
                 initialState={{

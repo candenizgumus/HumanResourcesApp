@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { TextField, Grid, Button } from '@mui/material';
 import { HumanResources, useAppSelector } from "../../../store";
 import { useDispatch } from "react-redux";
-import { DataGrid, GridColDef, GridRowSelectionModel } from "@mui/x-data-grid";
+import {DataGrid, GridColDef, GridRowSelectionModel, GridToolbar} from "@mui/x-data-grid";
 import Swal from "sweetalert2";
 import {
     fetchApproveItemAssignmentByEmployee,
@@ -123,6 +123,9 @@ const SideBarEmployeeCompanyItems: React.FC = () => {
     return (
         <div style={{ height: "auto", width: "inherit" }}>
             <DataGrid
+                slots={{
+                    toolbar: GridToolbar,
+                }}
                 rows={employeeItemAssignments}
                 columns={employeeAssignmentColumns}
                 initialState={{

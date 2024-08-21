@@ -24,7 +24,7 @@ export default function MyCard() {
     }, []);
 
     return (
-        <Box sx={{ p: 2, maxWidth: '100%' }}>
+
             <Paper elevation={3} sx={{ p: 2, borderRadius: 2 }}>
                 <Typography variant="h6" align="center" sx={{ mb: 2 , fontWeight: "bold", color: 'myLightColour.main'}}>
                     <AccountBox/> My Profile
@@ -114,6 +114,6 @@ export default function MyCard() {
                 </Grid>
 
             </Paper>
-        </Box>
+
     );
 }

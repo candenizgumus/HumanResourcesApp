@@ -39,7 +39,7 @@ public class ShiftService {
     {
 
         List<Shift> shifts = shiftRepository.findAllByEmployeeId(employeeId);
-        leaveService.searchByEmployeeId(employeeId).forEach(leave -> {
+        leaveService.searchByEmployeeId(employeeId).stream().filter(leave -> leave.getStatus().equals(EStatus.ACTIVE)).forEach(leave -> {
             shifts.add(Shift.builder().employeeId(employeeId).start(leave.getStartDate().atTime(8, 1)).endTime(leave.getEndDate().atTime(23,59)).title(leave.getLeaveType()).build());
         });
         return shifts;

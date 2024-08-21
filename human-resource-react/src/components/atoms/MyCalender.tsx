@@ -4,8 +4,6 @@ import moment from 'moment';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import {
     Box,
-    Typography,
-    Paper,
     Dialog,
     DialogTitle,
     DialogContent,

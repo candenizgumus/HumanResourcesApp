@@ -3,17 +3,17 @@ import MyCalendar, { IShift } from "../../atoms/MyCalender";
 import { useDispatch } from "react-redux";
 import { HumanResources, useAppSelector } from "../../../store";
 import { fetchFindShiftsOfEmployee } from "../../../store/feature/shiftSlice";
-import {Grid, Typography, Box, TextField, Paper} from "@mui/material";
+import {Grid, Typography, Box, Paper} from "@mui/material";
 import MyCard from "../../atoms/MyCard";
 import {DataGrid, GridColDef} from "@mui/x-data-grid";
 import {fetchGetAssignedItemsOfEmployee} from "../../../store/feature/companyItemSlice";
 import {IAssignedItemList} from "../../../models/IAssignedItemList";
 import {AddDocumentIcon} from "../../atoms/icons";
-import {useTheme} from "@mui/material/styles";
+
 import ThemeElement from "../../atoms/ThemeElement";
 import {fetchGetCurrentLeavesOfEmployeeForHomePage, ILeave} from "../../../store/feature/leaveSlice";
 import HikingIcon from "@mui/icons-material/Hiking";
-import {AccountBalance, AccountBox, PointOfSale} from "@mui/icons-material";
+import {CalendarMonth, PersonAdd, PointOfSale} from "@mui/icons-material";
 import {IExpenditure} from "../../../models/IExpenditure";
 import {fetchGetAllExpendituresOfEmployeeByCurrentMonth} from "../../../store/feature/expenditureSlice";
 
@@ -96,15 +96,22 @@ export const EmployeeHomeContent: React.FC = () => {
     return (
         <ThemeElement children={
             <Grid container spacing={2} >
-                <Grid item xs={6}>
+                <Grid item xs={6} sx={{ p: 2 }}>
+                    <Paper elevation={3} sx={{p: 2, borderRadius: 2}}>
+                        <div style={{height: "auto", width: "inherit"}}>
+                            <Typography variant="h6" align="center" sx={{ mb: 2 , fontWeight: "bold", color: 'myLightColour.main'}}>
+                                <CalendarMonth/>  My Events
+                            </Typography>
                     <MyCalendar events={events} isUserManager={false} />
+                        </div>
+                    </Paper>
                 </Grid>
                 <Grid item xs={3} >
                     <Grid container  spacing={2} >
 
                         <Grid item xs={12}>
 
-                            <Box sx={{ p: 2, maxWidth: '100%' }}>
+
                                 <Paper elevation={3} sx={{p: 2, borderRadius: 2 }}>
                                     <div style={{height: "auto", width: "inherit"}}>
                                         <Typography variant="h6" align="center" sx={{ mb: 2 , fontWeight: "bold", color: 'myLightColour.main'}}>
@@ -144,13 +151,13 @@ export const EmployeeHomeContent: React.FC = () => {
                                     </div>
 
                                 </Paper>
-                            </Box>
+
 
                         </Grid>
 
                         <Grid item xs={12}>
 
-                            <Box sx={{ p: 2, maxWidth: '100%' }}>
+
                                 <Paper elevation={3} sx={{p: 2, borderRadius: 2}}>
                                     <div style={{height: "auto", width: "inherit"}}>
                                         <Typography variant="h6" align="center" sx={{ mb: 2 , fontWeight: "bold", color: 'myLightColour.main'}}>
@@ -192,7 +199,7 @@ export const EmployeeHomeContent: React.FC = () => {
                                     </div>
 
                                 </Paper>
-                            </Box>
+
 
                         </Grid>
 
@@ -205,7 +212,7 @@ export const EmployeeHomeContent: React.FC = () => {
                         </Grid>
                         <Grid item xs={12}>
 
-                            <Box sx={{ p: 2, maxWidth: '100%' }}>
+
                                 <Paper elevation={3} sx={{p: 2, borderRadius: 2}}>
                                     <div style={{height: "auto", width: "inherit"}}>
                                         <Typography variant="h6" align="center" sx={{ mb: 2 , fontWeight: "bold", color: 'myLightColour.main'}}>
@@ -247,7 +254,7 @@ export const EmployeeHomeContent: React.FC = () => {
                                     </div>
 
                                 </Paper>
-                            </Box>
+                           
 
                         </Grid>
                     </Grid>

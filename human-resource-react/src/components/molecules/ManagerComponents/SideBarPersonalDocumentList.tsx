@@ -6,7 +6,7 @@ import {
     fetchDeletePersonalDocument,
     fetchPersonalDocuments,
 } from "../../../store/feature/personalDocumentSlice";
-import { DataGrid, GridColDef, GridRowSelectionModel } from "@mui/x-data-grid";
+import {DataGrid, GridColDef, GridRowSelectionModel, GridToolbar} from "@mui/x-data-grid";
 import DownloadButtonFromS3 from "../../atoms/DownloadButtonFromS3";
 import Swal from "sweetalert2";
 import { IPersonalDocument } from "../../../models/IPersonalDocument";
@@ -40,6 +40,7 @@ const SideBarPersonalDocumentList: React.FC = () => {
     const [personalDocuments, setPersonelDocuments] = useState<IPersonalDocument[]>([]);    //const personalDocuments =  useAppSelector((state) => state.personalDocument.personalDocuments);
     const [searchText, setSearchText] = useState('');
     const [loading, setLoading] = useState(false);
+    const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
 
 
     useEffect(() => {
@@ -94,6 +95,7 @@ const SideBarPersonalDocumentList: React.FC = () => {
                     });
             }
         });
+        setSelectedRowIds([]);
     };
 
     return (
@@ -108,6 +110,9 @@ const SideBarPersonalDocumentList: React.FC = () => {
                 inputProps={{ maxLength: 50 }}
             />
             <DataGrid
+                slots={{
+                    toolbar: GridToolbar,
+                }}
                 rows={personalDocuments}
                 columns={columns}
                 initialState={{
@@ -131,6 +136,7 @@ const SideBarPersonalDocumentList: React.FC = () => {
                     },
                     height: '407px'
                 }}
+                rowSelectionModel={selectedRowIds}
             />
             <Grid sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-start', alignItems: 'center', marginTop: '2%', marginBottom: '2%' }}>
                 <Button

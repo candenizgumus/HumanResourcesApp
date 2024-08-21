@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {TextField, Grid, Button} from '@mui/material';
 import {HumanResources, useAppSelector} from "../../../store";
 import {useDispatch} from "react-redux";
-import {DataGrid, GridColDef, GridRowSelectionModel} from "@mui/x-data-grid";
+import {DataGrid, GridColDef, GridRowSelectionModel, GridToolbar} from "@mui/x-data-grid";
 import Swal from "sweetalert2";
 import {
     fetchCompanyItemsForAssignment,
@@ -111,6 +111,9 @@ const AddCompanyItemAssignment: React.FC = () => {
                 inputProps={{maxLength: 50}}
             />
             <DataGrid
+                slots={{
+                    toolbar: GridToolbar,
+                }}
                 rows={companyItems}
                 columns={columns}
                 initialState={{

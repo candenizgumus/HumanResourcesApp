@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import {
     DataGrid,
     GridColDef,
-    GridRowSelectionModel,
+    GridRowSelectionModel, GridToolbar,
 } from "@mui/x-data-grid";
 import {
     Button,
@@ -75,6 +75,7 @@ const SideBarManagerExpenditures = () => {
 
     const [price, setPrice] = useState(0);
     const [description, setDescription] = useState('');
+    const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
 
 
     useEffect(() => {
@@ -171,6 +172,7 @@ const SideBarManagerExpenditures = () => {
             }
 
         }
+        setSelectedRowIds([]);
         setLoading(false);
     };
 
@@ -255,7 +257,7 @@ const SideBarManagerExpenditures = () => {
                 dispatch(clearToken());
             }
         }
-
+        setSelectedRowIds([]);
         setIsActivating(false);
     };
 
@@ -327,6 +329,7 @@ const SideBarManagerExpenditures = () => {
                 dispatch(clearToken());
             }
         }
+        setSelectedRowIds([]);
         setLoading(false);
     };
 
@@ -342,6 +345,9 @@ const SideBarManagerExpenditures = () => {
                 inputProps={{ maxLength: 50 }}
             />
             <DataGrid
+                slots={{
+                    toolbar: GridToolbar,
+                }}
                 rows={expenditures}
                 columns={columns}
                 initialState={{
@@ -376,6 +382,7 @@ const SideBarManagerExpenditures = () => {
                     },
                     height: '407px'
                 }}
+                rowSelectionModel={selectedRowIds}
             />
 
             <Grid sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-start', alignItems: 'center', marginTop: '2%', marginBottom: '2%' }}>

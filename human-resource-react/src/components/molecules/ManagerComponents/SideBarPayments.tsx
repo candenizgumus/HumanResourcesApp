@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import {
     DataGrid,
     GridColDef,
-    GridRowSelectionModel,
+    GridRowSelectionModel, GridToolbar,
 } from "@mui/x-data-grid";
 import {
     Button, FormControl,
@@ -56,6 +56,7 @@ export default function SideBarPayments() {
     const [payment, setPayment] = useState(0);
     const [description, setDescription] = useState('');
     const [paymentDate, setPaymentDate] = useState<Date | null>(null);
+    const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
 
     useEffect(() => {
         dispatch(
@@ -136,6 +137,7 @@ export default function SideBarPayments() {
                 dispatch(clearToken());
             }
         }
+        setSelectedRowIds([]);
         setLoading(false);
     };
 
@@ -207,6 +209,9 @@ export default function SideBarPayments() {
                 inputProps={{ maxLength: 50 }}
             />
             <DataGrid
+                slots={{
+                    toolbar: GridToolbar,
+                }}
                 rows={paymentList}
                 columns={columns}
                 initialState={{
@@ -231,6 +236,7 @@ export default function SideBarPayments() {
                     },
                     height: '407px'
                 }}
+                rowSelectionModel={selectedRowIds}
             />
 
             <Grid sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-start', alignItems: 'center', marginTop: '2%', marginBottom: '2%' }}>

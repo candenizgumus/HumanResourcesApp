@@ -55,6 +55,7 @@ export default function NotificationsPage() {
     const notificationAllList = useAppSelector((state) => state.notification.notificationAllList);
     const [selectedRowIds, setSelectedRowIds] = useState<number[]>([]);
     const [allSelectedRead, setAllSelectedRead] = useState<boolean>(true); // State to track if all selected notifications are read
+    const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -147,6 +148,7 @@ export default function NotificationsPage() {
                 timer: 1500
               });
         }
+        setSelectedRowIds([]);
     };
 
     const handleMarkAsReadClick = async () => {
@@ -201,6 +203,7 @@ export default function NotificationsPage() {
                 timer: 1500
               });
         }
+        setSelectedRowIds([]);
     };
     
     return (
@@ -245,6 +248,7 @@ export default function NotificationsPage() {
                     marginTop:'2%',
                     height:'407px'
                 }}
+                rowSelectionModel={selectedRowIds}
             />
             <Grid sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-start', alignItems: 'center', marginTop: '2%', marginBottom: '2%' }}>
                 <Button

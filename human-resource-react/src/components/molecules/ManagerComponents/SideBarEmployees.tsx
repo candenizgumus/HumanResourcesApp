@@ -36,6 +36,7 @@ import AddBonusDialog from "./AddBonus";
 import AddBonus from "./AddBonus";
 import {AssignItemIcon} from "../../atoms/icons";
 import { myErrorColour, myLightColour } from "../../../util/MyColours";
+import {fetchCompanyItemAssignments} from "../../../store/feature/companyItemSlice";
 
 export default function SideBarEmployees() {
     const [selectedRowIds, setSelectedRowIds] = useState<number[]>([]);
@@ -53,6 +54,7 @@ export default function SideBarEmployees() {
     const [bonusAmount, setBonusAmount] = useState(0);
     const [bonusDate, setBonusDate] = useState<Date | null>(null);
     const [isDeleting, setIsDeleting] = useState(false);
+    const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
 
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
@@ -110,7 +112,7 @@ export default function SideBarEmployees() {
                 text: 'Please select exactly one company to edit.',
                 showConfirmButton: false,
                 timer: 1500
-              });
+            });
         }
     };
 
@@ -153,13 +155,16 @@ export default function SideBarEmployees() {
             });
 
         })
+            .finally(() => {
+                setSelectedRowIds([]);
+            });
     }
 
     useEffect(() => {
         dispatch(fetchGetDefinitions({
-            token: token,
-            definitionType: EDefinitionType.EMPLOYEE_TYPE
-        })
+                token: token,
+                definitionType: EDefinitionType.EMPLOYEE_TYPE
+            })
         ).then(() => {
             dispatch(fetchGetAllUsersOfManager({
                 token: token,
@@ -181,6 +186,7 @@ export default function SideBarEmployees() {
         dispatch(setSelectedEmployeeId(selectedRowIds[0]))
         //dispatch(changePageState("Add Document"))
         handleOpenAddDocument();
+        setSelectedRowIds([]);
     }
 
     const handleOnClickEditEmployee = () => {
@@ -258,6 +264,9 @@ export default function SideBarEmployees() {
                             searchText: searchText,
                         })
                     })
+                        .finally(() => {
+                            setSelectedRowIds([]);
+                        });
 
                 }
             } catch (error) {
@@ -319,7 +328,6 @@ export default function SideBarEmployees() {
                                 confirmButtonText: "OK",
                                 confirmButtonColor: myLightColour,
                                 cancelButtonColor: myErrorColour,
-
                             });
                             return
                         }
@@ -331,7 +339,6 @@ export default function SideBarEmployees() {
                             confirmButtonColor: myLightColour,
                             cancelButtonColor: myErrorColour,
                         });
-
                         fetchGetAllUsersOfManager({
                             token: token,
                             page: 0,
@@ -339,14 +346,16 @@ export default function SideBarEmployees() {
                             searchText: searchText,
                         })
                     })
-
+                        .finally(() => {
+                            setSelectedRowIds([]);
+                        });
                 }
             } catch (error) {
                 localStorage.removeItem("token");
                 dispatch(clearToken());
+                setSelectedRowIds([]);
             }
         }
-
         setIsActivating(false);
     };
 
@@ -389,6 +398,7 @@ export default function SideBarEmployees() {
                     },
                     height: '407px'
                 }}
+                rowSelectionModel={selectedRowIds}
             />
             <Grid sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-start', alignItems: 'center', marginTop: '2%', marginBottom: '2%' }}>
                 <Button

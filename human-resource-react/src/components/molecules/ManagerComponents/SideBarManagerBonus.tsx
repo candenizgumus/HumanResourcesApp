@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import {
     DataGrid,
     GridColDef,
-    GridRowSelectionModel,
+    GridRowSelectionModel, GridToolbar,
 } from "@mui/x-data-grid";
 import {
     Button,
@@ -162,6 +162,9 @@ const SideBarManagerBonus = () => {
                 inputProps={{ maxLength: 50 }}
             />
             <DataGrid
+                slots={{
+                    toolbar: GridToolbar,
+                }}
                 rows={bonusList}
                 columns={columns}
                 initialState={{

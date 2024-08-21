@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import {
     DataGrid,
     GridColDef,
-    GridRowSelectionModel,
+    GridRowSelectionModel, GridToolbar,
 } from "@mui/x-data-grid";
 import {
     Button,
@@ -44,6 +44,8 @@ export default function SideBarEmployeeLeaves() {
     const [endDate, setEndDate] = useState<Date | null>(null);
     const [files, setFiles] = useState<File[]>([]);
     const leaveTypes = useAppSelector((state) => state.definition.definitionList);
+    const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
+
     const leaveColumns: GridColDef[] = [
         { field: "description", headerName: "Description", flex: 2, headerAlign: "center" },
 
@@ -187,6 +189,7 @@ export default function SideBarEmployeeLeaves() {
                 setLoading(false);
             }
         }
+        setSelectedRowIds([]);
     };
 
     const handleSaveLeave = async () => {
@@ -260,6 +263,9 @@ export default function SideBarEmployeeLeaves() {
                 inputProps={{ maxLength: 50 }}
             />
             <DataGrid
+                slots={{
+                    toolbar: GridToolbar,
+                }}
                 rows={leaveList}
                 columns={leaveColumns}
                 initialState={{
@@ -294,6 +300,8 @@ export default function SideBarEmployeeLeaves() {
                     },
                     height: '407px'
                 }}
+                rowSelectionModel={selectedRowIds}
+
             />
 
             <Grid sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-start', alignItems: 'center', marginTop: '2%', marginBottom: '2%' }}>

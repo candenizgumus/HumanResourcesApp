@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import {
     DataGrid,
     GridColDef,
-    GridRowSelectionModel,
+    GridRowSelectionModel, GridToolbar,
 } from "@mui/x-data-grid";
 import {
 
@@ -73,6 +73,7 @@ export default function SideBarExpenditure() {
     const [price, setPrice] = useState(0);
     const [description, setDescription] = useState('');
     const [files, setFiles] = useState<File[]>([]);
+    const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
 
     useEffect(() => {
         dispatch(
@@ -230,6 +231,7 @@ export default function SideBarExpenditure() {
                 dispatch(clearToken());
             }
         }
+        setSelectedRowIds([]);
         setLoading(false);
     };
 
@@ -307,6 +309,9 @@ export default function SideBarExpenditure() {
                 inputProps={{ maxLength: 50 }}
             />
             <DataGrid
+                slots={{
+                    toolbar: GridToolbar,
+                }}
                 rows={expenditureList}
                 columns={columns}
                 initialState={{
@@ -341,6 +346,7 @@ export default function SideBarExpenditure() {
                     },
                     height: '407px'
                 }}
+                rowSelectionModel={selectedRowIds}
             />
             <Grid sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-start', alignItems: 'center', marginTop: '2%', marginBottom: '2%' }}>
 

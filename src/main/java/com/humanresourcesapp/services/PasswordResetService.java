@@ -40,7 +40,7 @@ public class PasswordResetService {
             throw new HumanResourcesAppException(ErrorType.USER_NOT_FOUND);
         }
         PasswordReset passwordReset = createPasswordResetToken(email);
-        String resetLink = "http://localhost:3000/password-reset?token=" + passwordReset.getToken();
+        String resetLink = "http://easyhr.store/password-reset?token=" + passwordReset.getToken();
         MailModel mailModel = MailModel.builder()
                 .to(passwordReset.getEmail())
                 .subject("Password reset")

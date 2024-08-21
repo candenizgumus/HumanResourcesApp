@@ -16,6 +16,7 @@ import HikingIcon from "@mui/icons-material/Hiking";
 import { CalendarMonth, PersonAdd, PointOfSale } from "@mui/icons-material";
 import { IExpenditure } from "../../../models/IExpenditure";
 import { fetchGetAllExpendituresOfEmployeeByCurrentMonth } from "../../../store/feature/expenditureSlice";
+import {fetchFindUserByToken} from "../../../store/feature/authSlice";
 
 export const EmployeeHomeContent: React.FC = () => {
     const [events, setEvents] = useState<IShift[]>([]);
@@ -24,12 +25,15 @@ export const EmployeeHomeContent: React.FC = () => {
     const [assignedItemList, setAssignedItemList] = useState<IAssignedItemList[]>([]);
     const [leaves, setLeave] = useState<ILeave[]>([]);
     const [expenditures, setExpenditures] = useState<IExpenditure[]>([]);
-    const user = useAppSelector((state) => state.auth.user);
 
 
-    const getShiftsOfEmployee = () => {
-        dispatch(fetchFindShiftsOfEmployee({ employeeId: user.id, token: token })).then(data => {
-            setEvents(data.payload);
+
+    const getShiftsOfEmployee = async () => {
+
+        await dispatch(fetchFindUserByToken(token)).then((data) => {
+            dispatch(fetchFindShiftsOfEmployee({ employeeId: data.payload.id, token: token })).then(data => {
+                setEvents(data.payload);
+            });
         });
 
         dispatch(fetchGetAssignedItemsOfEmployee(token)).then(data => {

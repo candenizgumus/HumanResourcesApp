@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
@@ -107,7 +108,7 @@ public class LeaveService {
                 if(employee.getRemainingAnnualLeave() < ChronoUnit.DAYS.between(leave.getStartDate(), leave.getEndDate())){
                     throw new HumanResourcesAppException(ErrorType.ANNUAL_LEAVE_EXCEEDED);
                 }else {
-                    employee.setRemainingAnnualLeave(employee.getRemainingAnnualLeave() -(int) ChronoUnit.DAYS.between(leave.getStartDate(), leave.getEndDate()));
+                    employee.setRemainingAnnualLeave(employee.getRemainingAnnualLeave() -((int) ChronoUnit.DAYS.between(leave.getStartDate(), leave.getEndDate())+1));
                     userService.save(employee);
                 }
             }
@@ -260,14 +261,39 @@ public class LeaveService {
         return true;
     }
 
+    private int countWeekdays(LocalDate startDate, LocalDate endDate) {
+        int count = 0;
+        LocalDate currentDate = startDate;
+
+        while (!currentDate.isAfter(endDate)) {
+            if (currentDate.getDayOfWeek() != DayOfWeek.SUNDAY && currentDate.getDayOfWeek() != DayOfWeek.SATURDAY) {
+                count++;
+            }
+            currentDate = currentDate.plusDays(1);
+        }
+
+        return count;
+    }
     public Boolean assignLeave(AssignLeaveRequestDto dto) {
         String managerEmail = UserInfoSecurityContext.getUserInfoFromSecurityContext();
         User manager = userService.findByEmail(managerEmail).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
 
         User employee = userService.findById(dto.employeeId());
-        if(!employee.getCompanyId().equals(manager.getCompanyId())){
+        if (!employee.getCompanyId().equals(manager.getCompanyId())) {
             throw new HumanResourcesAppException(ErrorType.INSUFFICIENT_PERMISSION);
         }
+
+        if (dto.leaveType().equals("ANNUAL")) {
+            int leaveDays = countWeekdays(dto.startDate(), dto.endDate());
+            if (employee.getRemainingAnnualLeave() < leaveDays) {
+                throw new HumanResourcesAppException(ErrorType.ANNUAL_LEAVE_EXCEEDED);
+            } else {
+                employee.setRemainingAnnualLeave(employee.getRemainingAnnualLeave() - leaveDays);
+                userService.save(employee);
+            }
+        }
+
+
 
         String fileName = "";
         if (dto.files() != null && !dto.files().isEmpty()) {
@@ -322,6 +348,7 @@ public class LeaveService {
         if(!employee.getCompanyId().equals(1L)){
             throw new HumanResourcesAppException(ErrorType.INSUFFICIENT_PERMISSION);
         }
+
 
         String fileName = "";
         if (dto.files() != null && !dto.files().isEmpty()) {
@@ -394,7 +421,7 @@ public class LeaveService {
     {
         String managerEmail = UserInfoSecurityContext.getUserInfoFromSecurityContext();
         User employee = userService.findByEmail(managerEmail).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
-        return leaveRepository.findAllByEmployeeIdAndStatusAndStartDateOrEndDateIsAfter(employee.getId(),EStatus.ACTIVE,LocalDate.now(),LocalDate.now());
+        return leaveRepository.findAllByEmployeeIdAndStatusAndEndDateIsAfter(employee.getId(),EStatus.ACTIVE,LocalDate.now());
     }
 }
 

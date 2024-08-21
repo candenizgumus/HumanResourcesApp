@@ -34,11 +34,6 @@ public class PersonalDocumentController {
         return ResponseEntity.ok(personalDocumentService.save(employeeId, documentType, documentFile, description));
     }
 
-//    @PostMapping(UPDATE)
-//    public ResponseEntity<PersonalDocument> update(Long personalDocumentId, PersonalDocumentSaveRequestDto personalDocumentSaveRequestDto) {
-//        return ResponseEntity.ok(personalDocumentService.update(personalDocumentId, personalDocumentSaveRequestDto));
-//    }
-
     @PostMapping(GET_BY_EMPLOYEE_ID)
     @PreAuthorize("hasAnyAuthority('MANAGER')")
     public ResponseEntity<List<PersonalDocument>> getByEmployeeId(Long employeeId) {

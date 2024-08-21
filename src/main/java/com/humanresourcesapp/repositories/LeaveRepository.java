@@ -17,7 +17,7 @@ public interface LeaveRepository extends JpaRepository<Leave, Long> {
     @Query("select e from Leave e  where  e.description like %?1% AND e.companyId = ?2 AND e.status != 'DELETED' ORDER BY e.id ASC")
     List<Leave> searchByCompanyId(String description ,Long companyId, PageRequest pageRequest);
 
-    List<Leave> findAllByEmployeeIdAndStatusAndStartDateOrEndDateIsAfter(Long employeeId, EStatus status, LocalDate startDate,LocalDate endDate);
+    List<Leave> findAllByEmployeeIdAndStatusAndEndDateIsAfter(Long employeeId, EStatus status,LocalDate endDate);
 
     // Todo : isApproved
     @Query("select e from Leave e  where e.employeeId = ?1 AND e.status != 'DELETED' ORDER BY e.id ASC")

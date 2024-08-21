@@ -92,7 +92,7 @@ export const fetchGetSectors = createAsyncThunk(
     'user/fetchGetSectors',
     async (_, { rejectWithValue }) => {
         try {
-            const response = await fetch(RestApis.userService+'/user/get-sectors');
+            const response = await fetch(RestApis.userService+'/get-sectors');
             const data = await response.json();
             if (!response.ok) {
                 throw new Error(data.message || 'Fetching sectors failed');

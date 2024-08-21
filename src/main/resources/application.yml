@@ -2,18 +2,6 @@ server:
   port: 9090
 
 spring:
-#  servlet:
-#    multipart:
-#      enabled: true
-#      file-size-threshold: 2KB
-#      max-file-size: 2000MB
-#      max-request-size: 2150MB
-#    cloud:
-#      gcp:
-#        config:
-#          project-id: hip-field-428707-f0
-#  main:
-#    allow-circular-references: true
   servlet:
     multipart:
       max-file-size: 10MB
@@ -24,14 +12,12 @@ spring:
       password: 1234
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/HumanResourcesDB
+    url: jdbc:postgresql://${POSTGRE_URL}
     username: postgres
     password: 1234
   jpa:
     hibernate:
       ddl-auto: create-drop
-#    properties:
-#      hibernate.jdbc.time-zone: UTC
   mail:
     host: smtp.gmail.com
     port: 587

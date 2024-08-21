@@ -15,9 +15,20 @@ This project is a web application developed based on the [Kolay IK](https://kola
 - **Frontend:** React, TypeScript
 
 ## Getting Started
-You can login as a superadmin. Demo images are shown below.
+ Demo images are shown below. For demo datas, the accounts given below can be used.
+Superadmin 
 
 - **Email:** admin
+- **Password:** 123
+
+- Manager 
+
+- **Email:** manager
+- **Password:** 123
+
+- Employee 
+
+- **Email:** employee@gmail.com
 - **Password:** 123
   
 Admin View;

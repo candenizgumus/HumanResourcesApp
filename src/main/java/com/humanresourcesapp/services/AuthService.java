@@ -27,6 +27,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -120,28 +121,29 @@ public class AuthService implements UserDetailsService
 
         if (!passwordEncoder.bCryptPasswordEncoder().matches(dto.password(), auth.getPassword()))
         {
-
             throw new HumanResourcesAppException(ErrorType.WRONG_PASSWORD);
         }
-
+        User user = userService.findByAuthId(auth.getId());
         //Superadmin check
         if (auth.getEmail().equals("admin") )
         {
             throw new HumanResourcesAppException(ErrorType.SUPERADMIN_CANNOT_BE_DEACTIVATED);
         }
-
-        auth.setStatus(EStatus.INACTIVE);
-        authRepository.save(auth);
-
-        User user = userService.findByAuthId(auth.getId());
-        user.setStatus(EStatus.INACTIVE);
-        userService.save(user);
+        List<User> managerList = userService.findAllByUserTypeAndStatusAndCompanyId(EUserType.MANAGER,EStatus.ACTIVE,user.getCompanyId());
 
         //if usertype is manager all of is realted accounts will be deactivated
-        if (user.getUserType().equals(EUserType.MANAGER))
+        if (managerList.size() == 1 && user.getUserType().equals(EUserType.MANAGER))
         {
             inactivateAllRelatedAccounts(user.getAuthId());
         }
+        if(user.getUserType().equals(EUserType.MANAGER) && dto.deactivateAll() ){
+            inactivateAllRelatedAccounts(user.getAuthId());
+        }
+        auth.setStatus(EStatus.INACTIVE);
+        authRepository.save(auth);
+
+        user.setStatus(EStatus.INACTIVE);
+        userService.save(user);
         return true;
     }
 }

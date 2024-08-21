@@ -19,7 +19,8 @@ import {
     changePageState,
     clearToken, fetchActivateUserByManager,
     fetchDeleteEmployeeByAdmin,
-    fetchGetAllUsersOfManager, setSelectedEmployeeId
+    fetchGetAllUsersOfManager, setSelectedEmployeeId,
+    setUserList
 } from "../../../store/feature/authSlice";
 import Swal from "sweetalert2";
 import { IUser } from "../../../models/IUser";
@@ -34,8 +35,9 @@ import { EDefinitionType } from "../../../models/IDefinitionType";
 import AddDocument from "./AddDocument";
 import AddBonusDialog from "./AddBonus";
 import AddBonus from "./AddBonus";
-import {AssignItemIcon} from "../../atoms/icons";
+import { AssignItemIcon } from "../../atoms/icons";
 import { myErrorColour, myLightColour } from "../../../util/MyColours";
+import { set } from "date-fns";
 import {fetchCompanyItemAssignments} from "../../../store/feature/companyItemSlice";
 
 export default function SideBarEmployees() {
@@ -94,7 +96,7 @@ export default function SideBarEmployees() {
         for (let id of selectedRowIds) {
             const selectedEmployee = userList.find((selectedEmployee) => selectedEmployee.id === id);
             if (!selectedEmployee) continue;
-            dispatch(setEmployeeIdAndCompanyId({ employeeId: selectedEmployee.id, companyId: selectedEmployee.companyId , name: selectedEmployee.name, surname: selectedEmployee.surname}));
+            dispatch(setEmployeeIdAndCompanyId({ employeeId: selectedEmployee.id, companyId: selectedEmployee.companyId, name: selectedEmployee.name, surname: selectedEmployee.surname }));
             dispatch(changePageState("Shift"));
 
         }
@@ -255,13 +257,13 @@ export default function SideBarEmployees() {
                             confirmButtonText: "OK",
                             confirmButtonColor: myLightColour,
                             cancelButtonColor: myErrorColour,
-                        });
-
-                        fetchGetAllUsersOfManager({
-                            token: token,
-                            page: 0,
-                            pageSize: 100,
-                            searchText: searchText,
+                        }).then(() => {
+                            dispatch(fetchGetAllUsersOfManager({
+                                token: token,
+                                page: 0,
+                                pageSize: 100,
+                                searchText: searchText,
+                            }))
                         })
                     })
                         .finally(() => {

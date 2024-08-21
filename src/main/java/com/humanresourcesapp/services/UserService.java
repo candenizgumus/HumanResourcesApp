@@ -780,16 +780,18 @@ public class UserService {
     {
         String userEmail = UserInfoSecurityContext.getUserInfoFromSecurityContext();
         User user = userRepository.findByEmail(userEmail).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
-
         Company company = companyService.findById(user.getCompanyId()).orElse(null);
-        User manager = userRepository.findById(user.getManagerId()).orElse(null);
 
-
+        ManagerAndCompanyNameOfEmployee managerAndCompanyNameOfEmployee;
         assert company != null;
-        assert manager != null;
-
-        return new ManagerAndCompanyNameOfEmployee(manager.getName() + " " + manager.getSurname(),company.getName());
-
+        if(user.getUserType().equals(EUserType.MANAGER)) {
+            managerAndCompanyNameOfEmployee = new ManagerAndCompanyNameOfEmployee(null, company.getName());
+        } else {
+            User manager = userRepository.findById(user.getManagerId()).orElse(null);
+            assert manager != null;
+            managerAndCompanyNameOfEmployee = new ManagerAndCompanyNameOfEmployee(manager.getName() + " " + manager.getSurname(), company.getName());
+        }
+        return managerAndCompanyNameOfEmployee;
     }
 
     public List<User> findAllByUserTypeAndStatusAndCompanyId(EUserType userType, EStatus status, Long companyId) {

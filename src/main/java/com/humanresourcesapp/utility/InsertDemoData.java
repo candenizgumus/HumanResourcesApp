@@ -414,6 +414,7 @@ public class InsertDemoData
                     .userType(EUserType.MANAGER)
                     .sector(ESectors.TECHNOLOGY)
                     .title("Turkey Operations Manager")
+                    .hireDate(LocalDate.of(2021, 1, 1))
                     .build();
             userService.save(user);
 

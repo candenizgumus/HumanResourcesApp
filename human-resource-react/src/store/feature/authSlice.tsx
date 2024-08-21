@@ -694,6 +694,9 @@ const authSlice = createSlice({
         },
         setSelectedEmployeeId(state, action: PayloadAction<number>) {
             state.selectedEmployeeId = action.payload;
+        },
+        setUserList(state, action: PayloadAction<IUser[]>) {
+            state.userList = action.payload;
         }
     },
     extraReducers: (builder) => {
@@ -734,5 +737,5 @@ const authSlice = createSlice({
     },
 });
 
-export const { changePageState, setToken, clearToken, setUserType, setSelectedEmployeeId } = authSlice.actions;
+export const { changePageState, setToken, clearToken, setUserType, setSelectedEmployeeId, setUserList } = authSlice.actions;
 export default authSlice.reducer;

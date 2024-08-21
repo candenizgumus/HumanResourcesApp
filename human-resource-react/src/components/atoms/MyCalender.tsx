@@ -148,8 +148,6 @@ const MyCalendar: React.FC<MyCalendarProps> = ({ events, onSaveEvent, onUpdateEv
         }}
     />
 </Box>
-
-
             <Dialog open={isModalOpen} onClose={handleClose} fullWidth maxWidth="sm">
                 <DialogTitle>Etkinliği Düzenle</DialogTitle>
                 <DialogContent>

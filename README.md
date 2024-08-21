@@ -1,6 +1,6 @@
-# EasyHR Project
+# [EasyHR](http://www.easyhr.store)
 
-This project is a web application developed based on the [Kolay IK](https://kolayik.com/) website. It utilizes Java for the backend, and React with TypeScript for the frontend.
+The EasyHR Website is a comprehensive platform designed to streamline and simplify human resources management for organizations of all sizes. This web application provides a centralized hub for managing employee data, tracking attendance, processing payroll, and automating various HR tasks. It utilizes Java for the backend, and React with TypeScript for the frontend.
 
 ## Table of Contents
 - [Technologies Used](#technologies-used)

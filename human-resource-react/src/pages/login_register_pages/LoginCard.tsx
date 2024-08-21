@@ -13,8 +13,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { changePageState, fetchFindUserByToken, fetchLogin } from "../../store/feature/authSlice";
 import { HumanResources, RootState } from "../../store";
 import Swal from "sweetalert2";
-import {useEffect, useState} from "react";
-import {Alert, Collapse} from "@mui/material";
+import { useEffect, useState } from "react";
+import { Alert, Collapse } from "@mui/material";
 import getUserTypeFromToken from '../../util/getUserTypeFromToken';
 import { myErrorColour, myLightColour } from '../../util/MyColours';
 
@@ -32,7 +32,7 @@ export default function LoginCard() {
         let result;
         try {
             result = await dispatch(fetchLogin({ email, password })).unwrap();
-            
+
             if (result.code) {
                 setIsError(true);
                 setError(result.message);
@@ -47,12 +47,12 @@ export default function LoginCard() {
             });
             return;
         }
-        
+
         // `result` içinde `code` özelliği olup olmadığını kontrol edin
-        
+
 
         await dispatch(fetchFindUserByToken(result.token));
-        
+
 
         const userType = getUserTypeFromToken(result.token);
         if (userType === 'ADMIN') {
@@ -80,7 +80,7 @@ export default function LoginCard() {
     }, [isError, setIsError]);
 
     return (
-        <Paper elevation={6} square sx={{ width: '100%', maxWidth: 400 }}>
+        <Paper elevation={6} square sx={{ width: '100%', maxWidth: 400, borderRadius: '16px' }}>
             <Box
                 sx={{
                     my: 4,
@@ -92,22 +92,22 @@ export default function LoginCard() {
                 }}
             >
                 <Avatar sx={{ m: 1, bgcolor: 'myLightColour.main' }}>
-                    <LoginIcon color='primary'/>
+                    <LoginIcon color='primary' />
                 </Avatar>
                 <Typography component="h1" variant="h5">
                     Login
                 </Typography>
 
-                <Collapse  sx={{ width: '100%' }} in={isError}>
+                <Collapse sx={{ width: '100%' }} in={isError}>
                     <Box sx={{ width: '100%' }}>
                         <Alert severity="error"
-                               sx={{
-                                   width: '100%',
-                                   textAlign: 'center', // Metni ortala
-                                   display: 'flex',
-                                   flexDirection: 'column',
-                                   alignItems: 'center',
-                               }}
+                            sx={{
+                                width: '100%',
+                                textAlign: 'center', // Metni ortala
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'center',
+                            }}
                         >
                             {error}
                         </Alert>

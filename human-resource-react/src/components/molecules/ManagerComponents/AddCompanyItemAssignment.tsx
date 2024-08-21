@@ -14,7 +14,7 @@ import { AddIcon } from '../../atoms/icons';
 import { myErrorColour, myLightColour } from '../../../util/MyColours';
 
 const columns: GridColDef[] = [
-    {field: "id", headerName: "Id", flex: 1, headerAlign: "center"},
+
     {field: "name", headerName: "Name", flex: 1, headerAlign: "center"},
     {field: "companyItemType", headerName: "Item Type", flex: 1, headerAlign: "center"},
     {field: "serialNumber", headerName: "Serial Number", flex: 1, headerAlign: "center"},

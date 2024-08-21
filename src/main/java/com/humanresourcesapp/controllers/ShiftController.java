@@ -20,22 +20,22 @@ import static com.humanresourcesapp.constants.Endpoints.*;
 public class ShiftController {
     private final ShiftService shiftService;
     @PostMapping(SAVE)
-    @PreAuthorize("hasAnyAuthority('MANAGER','EMPLOYEE')")
+    @PreAuthorize("hasAnyAuthority('MANAGER')")
     //TODO DAHA SONRA EMPLOYEE SİLCEZ
     public ResponseEntity<Shift> save(@RequestBody ShiftSaveRequestDto dto) {
         return ResponseEntity.ok(shiftService.save(dto));
     }
 
     @PostMapping(UPDATE)
-    @PreAuthorize("hasAnyAuthority('MANAGER','EMPLOYEE')")
-    //TODO DAHA SONRA EMPLOYEE SİLCEZ
+    @PreAuthorize("hasAnyAuthority('MANAGER')")
+
     public ResponseEntity<Shift> update(@RequestBody ShiftUpdateRequestDto dto) {
         return ResponseEntity.ok(shiftService.update(dto));
     }
 
     @DeleteMapping(DELETE)
-    @PreAuthorize("hasAnyAuthority('MANAGER','EMPLOYEE')")
-    //TODO DAHA SONRA EMPLOYEE SİLCEZ
+    @PreAuthorize("hasAnyAuthority('MANAGER')")
+
     public ResponseEntity<Void> delete(Long id) {
         shiftService.delete(id);
         return ResponseEntity.ok().build();

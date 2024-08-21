@@ -37,7 +37,7 @@ public class ShiftService {
 
     public List<Shift> getAll(Long employeeId)
     {
-        System.out.println(employeeId);
+
         List<Shift> shifts = shiftRepository.findAllByEmployeeId(employeeId);
         leaveService.searchByEmployeeId(employeeId).forEach(leave -> {
             shifts.add(Shift.builder().employeeId(employeeId).start(leave.getStartDate().atTime(8, 1)).endTime(leave.getEndDate().atTime(23,59)).title(leave.getLeaveType()).build());

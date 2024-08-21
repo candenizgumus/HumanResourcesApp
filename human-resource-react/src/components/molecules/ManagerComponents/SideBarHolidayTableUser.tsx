@@ -109,8 +109,8 @@ export default function SideBarHolidayTableUser() {
                         Swal.fire({
                             icon: 'success',
                             text: 'Holiday has been deleted',
-                            showConfirmButton: false,
-                            timer: 1500
+                            confirmButtonColor: myLightColour,
+                            cancelButtonColor: myErrorColour,
                         })
                     }
                     dispatch(fetchHolidaysEmployee(token));
@@ -123,7 +123,14 @@ export default function SideBarHolidayTableUser() {
             dispatch(fetchChangeHolidayStatus({ token, id }))
                 .then(() => {
                     dispatch(fetchHolidaysEmployee(token));
-                });
+                }).then(() => {
+                Swal.fire({
+                    icon: 'success',
+                    text: 'Status has been changed',
+                    confirmButtonColor: myLightColour,
+                    cancelButtonColor: myErrorColour,
+                })
+                })
         });
     }
 
@@ -179,8 +186,8 @@ export default function SideBarHolidayTableUser() {
                     Swal.fire({
                         icon: 'success',
                         text: 'Holiday has been added',
-                        showConfirmButton: false,
-                        timer: 1500
+                        confirmButtonColor: myLightColour,
+                        cancelButtonColor: myErrorColour,
                     })
                 }
                 dispatch(fetchHolidaysEmployee(token));

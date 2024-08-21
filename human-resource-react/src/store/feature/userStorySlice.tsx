@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import RestApis from "../../config/RestApis";
 
 export interface IUserStoryResponse {
     id: number,
@@ -37,7 +38,7 @@ const initialUserStory = {
 export const fetchGetUserStories = createAsyncThunk(
     'userStory/fetchUserStories',
     async (_, { rejectWithValue }) => {
-            const response = await fetch('http://localhost:9090/dev/v1/comment/get-all')
+            const response = await fetch(RestApis.commentService+'/get-all')
             .then(data => data.json());
             return response;
     }
@@ -49,7 +50,7 @@ export const fetchGetUserStory = createAsyncThunk(
     'userStory/fetchGetUserStory',
 
     async (token: string) => {
-        const response = await fetch(`http://localhost:9090/dev/v1/comment/get-company-comment`, {
+        const response = await fetch(RestApis.commentService+`/get-company-comment`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -71,7 +72,7 @@ export const fetchCreateUserStories = createAsyncThunk(
     'userStory/fetchCreateUserStories',
     async (payload: ICreateUserStory) => {
 
-            const response = await fetch(`http://localhost:9090/dev/v1/comment/save`, {
+            const response = await fetch(RestApis.commentService+`/save`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -99,7 +100,7 @@ export const fetchUpdateUserStories = createAsyncThunk(
     'userStory/fetchUpdateUserStories',
     async (payload: IUpdateUserStory) => {
 
-            const response = await fetch(`http://localhost:9090/dev/v1/comment/update`, {
+            const response = await fetch(RestApis.commentService+`/update`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

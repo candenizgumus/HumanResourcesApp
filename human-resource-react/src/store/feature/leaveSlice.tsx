@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import RestApis from "../../config/RestApis";
 
 export interface ILeave {
     createdAt:Date 
@@ -58,7 +59,7 @@ export const fetchSaveLeave = createAsyncThunk(
             formData.append('files', file);
         });
 
-        const response = await fetch('http://localhost:9090/dev/v1/leave/save', {
+        const response = await fetch(RestApis.leaveService+'/save', {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ` + payload.token
@@ -97,7 +98,7 @@ export const fetchAssignLeave = createAsyncThunk(
             formData.append('files', file);
         });
 
-        const response = await fetch('http://localhost:9090/dev/v1/leave/assign-leave', {
+        const response = await fetch(RestApis.leaveService+'/assign-leave', {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ` + payload.token
@@ -123,7 +124,7 @@ export const fetchGetLeavesOfEmployee = createAsyncThunk(
     'leave/fetchGetLeavesOfEmployee',
     async (payload: IfetchGetAllLeaves) => {
 
-        const response = await fetch(`http://localhost:9090/dev/v1/leave/search-by-employee-id`, {
+        const response = await fetch(RestApis.leaveService+`/search-by-employee-id`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -145,7 +146,7 @@ export const fetchGetLeaveById = createAsyncThunk(
     'leave/fetchGetLeaveById',
     async (payload: IRequestWithIdAndToken) => {
 
-        const response = await fetch(`http://localhost:9090/dev/v1/leave/search-by-leave-id?id=`+payload.id, {
+        const response = await fetch(RestApis.leaveService+`/search-by-leave-id?id=`+payload.id, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -162,7 +163,7 @@ export const fetchGetLeavesOfManager = createAsyncThunk(
     'leave/fetchGetLeavesOfManager',
     async (payload: IfetchGetAllLeaves) => {
 
-        const response = await fetch(`http://localhost:9090/dev/v1/leave/search-by-company-id`, {
+        const response = await fetch(RestApis.leaveService+`/search-by-company-id`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -189,7 +190,7 @@ export const fetchApproveLeave = createAsyncThunk(
     'leave/fetchApproveLeave',
     async (payload: IRequestWithIdAndTokenAndResponse) => {
 
-        const response = await fetch(`http://localhost:9090/dev/v1/leave/approve-leave`, {
+        const response = await fetch(RestApis.leaveService+`/approve-leave`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -210,7 +211,7 @@ export const fetchDeleteLeave = createAsyncThunk(
     'leave/fetchDeleteLeave',
     async (payload: IRequestWithIdAndTokenAndResponse) => {
 
-        const response = await fetch(`http://localhost:9090/dev/v1/leave/delete`, {
+        const response = await fetch(RestApis.leaveService+`/delete`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
@@ -231,7 +232,7 @@ export const fetchCancelLeave = createAsyncThunk(
     'leave/fetchCancelLeave',
     async (payload: IRequestWithIdAndTokenAndResponse) => {
 
-        const response = await fetch(`http://localhost:9090/dev/v1/leave/cancel`, {
+        const response = await fetch(RestApis.leaveService+`/cancel`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -257,7 +258,7 @@ export const fetchUpdateAnnualLeaveDays = createAsyncThunk(
     'leave/fetchUpdateAnnualLeaveDays',
     async (payload: IFetchChangeLeaveDay) => {
 
-        const response = await fetch('http://localhost:9090/dev/v1/leave/change-leave-day?id='+payload.id+'&leaveDay='+payload.leaveDays, {
+        const response = await fetch(RestApis.leaveService+'/change-leave-day?id='+payload.id+'&leaveDay='+payload.leaveDays, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -283,7 +284,7 @@ export const fetchUpdateLeave = createAsyncThunk(
     'leave/fetchUpdateLeave',
     async (payload: IFetchUpdateLeave) => {
 
-        const response = await fetch(`http://localhost:9090/dev/v1/leave/update`, {
+        const response = await fetch(RestApis.leaveService+`/update`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -307,7 +308,7 @@ export const fetchGetCurrentLeavesOfEmployeeForHomePage = createAsyncThunk(
     'leave/fetchUpdateAnnualLeaveDays',
     async (payload: string) => {
 
-        const response = await fetch('http://localhost:9090/dev/v1/leave/get-all-current-leaves', {
+        const response = await fetch(RestApis.leaveService+'/get-all-current-leaves', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { IGetOffer } from '../../models/IGetOffer';
 import { IOfferList } from "../../models/IOfferList";
 import { clearToken } from "./authSlice";
+import RestApis from "../../config/RestApis";
 
 // Initial state for the offer slice
 const initialOfferState = {
@@ -21,7 +22,7 @@ export const fetchCreateOffer = createAsyncThunk(
     'offer/fetchCreateOffer',
     async (payload: IGetOffer, { rejectWithValue }) => {
 
-            const response = await fetch('http://localhost:9090/dev/v1/offer/save', {
+            const response = await fetch(RestApis.offerService+'/save', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -56,7 +57,7 @@ interface fetchGetOffersPayload {
 export const fetchGetOffers = createAsyncThunk(
     'offer/fetchGetOffers',
     async (payload: fetchGetOffersPayload, { dispatch }) => {
-            const response = await fetch('http://localhost:9090/dev/v1/offer/get-all', {
+            const response = await fetch(RestApis.offerService+'/get-all', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -87,7 +88,7 @@ interface fetchGetOfferCountPayload {
 export const fetchGetOfferCount = createAsyncThunk(
     'offer/fetchGetOfferCount',
     async (payload: fetchGetOfferCountPayload, { dispatch }) => {
-            const response = await fetch('http://localhost:9090/dev/v1/offer/get-count', {
+            const response = await fetch(RestApis.offerService+'/get-count', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -117,7 +118,7 @@ export const fetchSendOfferEmail = createAsyncThunk(
     'email/fetchSendOfferEmail',
     async (payload: fetchSendOfferEmailPayload, { dispatch }) => {
 
-        const response = await fetch('http://localhost:9090/dev/v1/email/save', {
+        const response = await fetch(RestApis.emailService+'/save', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -150,7 +151,7 @@ export const fetchApproveOffers = createAsyncThunk(
     'offer/fetchApproveOffers',
     async (payload: fetchApproveOffersPayload, { dispatch }) => {
 
-            const response = await fetch(`http://localhost:9090/dev/v1/offer/approve-offer-and-register-auth-and-user`, {
+            const response = await fetch(RestApis.offerService+`/approve-offer-and-register-auth-and-user`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -178,7 +179,7 @@ export const fetchDeclineOffers = createAsyncThunk(
     'offer/fetchApproveOffers',
     async (payload: IfetchDeclineOffers, { dispatch }) => {
 
-        const response = await fetch(`http://localhost:9090/dev/v1/offer/decline-offer?offerId=${payload.offerId}`, {
+        const response = await fetch(RestApis.offerService+`/decline-offer?offerId=${payload.offerId}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',

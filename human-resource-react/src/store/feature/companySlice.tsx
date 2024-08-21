@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { clearToken } from "./authSlice";
 import {ICompany} from "../../models/ICompany";
+import RestApis from "../../config/RestApis";
 
 export interface ICompanyLogo {
 
@@ -57,7 +58,7 @@ const initialCompanyState: IInitialCompany = {
 export const fetchGetCompanyLogos = createAsyncThunk(
     'get/fetchGetCompanyLogos',
     async()=>{
-        const result = await fetch('http://localhost:9090/dev/v1/company/get-all-company-logos')
+        const result = await fetch(RestApis.companyService+'/get-all-company-logos')
             .then(data=>data.json());
         return result;
     }
@@ -73,7 +74,7 @@ export const fetchGetCompanies = createAsyncThunk(
     'offer/fetchGetCompanies',
     async (payload: fetchGetCompaniesPayload, { dispatch }) => {
 
-            const response = await fetch('http://localhost:9090/dev/v1/company/get-all', {
+            const response = await fetch(RestApis.companyService+'/get-all', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -105,7 +106,7 @@ export const fetchGetCompanyCount = createAsyncThunk(
     'offer/fetchGetCompanyCount',
     async (payload: fetchGetCompanyCountPayload, { dispatch }) => {
 
-            const response = await fetch('http://localhost:9090/dev/v1/company/get-count', {
+            const response = await fetch(RestApis.companyService+'/get-count', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -130,7 +131,7 @@ export const fetchUpdateCompany = createAsyncThunk(
     'offer/fetchUpdateCompany',
     async (payload: IUpdateCompany, { dispatch }) => {
 
-            const response = await fetch('http://localhost:9090/dev/v1/company/update', {
+            const response = await fetch(RestApis.companyService+'/update', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -159,7 +160,7 @@ export const fetchCompanyCountByMonth = createAsyncThunk(
     'companyCount/fetchCompanyCountByMonth',
     async (token: string, { dispatch }) => {
 
-        const response = await fetch('http://localhost:9090/dev/v1/company/getCompanyCountByMonth',{
+        const response = await fetch(RestApis.companyService+'/getCompanyCountByMonth',{
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -179,7 +180,7 @@ export const fetchGetCompanyDataOfManager = createAsyncThunk(
     'company/fetchGetCompanyDataOfManager',
     async (token:string, { dispatch }) => {
 
-        const response = await fetch('http://localhost:9090/dev/v1/company/get-company-of-manager', {
+        const response = await fetch(RestApis.companyService+'/get-company-of-manager', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -213,7 +214,7 @@ export const fetchUpdateCompanyByManager = createAsyncThunk(
             formData.append('photo', payload.photo);
         }
 
-        const response = await fetch('http://localhost:9090/dev/v1/company/update-company-by-manager', {
+        const response = await fetch(RestApis.companyService+'/update-company-by-manager', {
             method: 'PUT',
             headers: {
 
@@ -234,7 +235,7 @@ export const fetchGetUpcomingMembershipExpiries = createAsyncThunk(
     'company/fetchGetUpcomingMembershipExpiries',
     async (token:string) => {
 
-        const response = await fetch('http://localhost:9090/dev/v1/company/get-upcoming-membership-expiries', {
+        const response = await fetch(RestApis.companyService+'/get-upcoming-membership-expiries', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

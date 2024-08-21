@@ -1,4 +1,5 @@
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
+import RestApis from "../../config/RestApis";
 
 interface IPasswordReset {
     isResetCodeSend: boolean
@@ -11,7 +12,7 @@ const initalPasswordResetState: IPasswordReset = {
 export const fetchGetPasswordResetCode = createAsyncThunk(
     'getPasswordResetCode/fetchPasswordReset',
     async (payload: { email: string }) => {
-        const response = await fetch('http://localhost:9090/dev/v1/password-reset/send-password-reset-email?email=' + payload.email, {
+        const response = await fetch(RestApis.passwordResetService+'/send-password-reset-email?email=' + payload.email, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -27,7 +28,7 @@ export const fetchGetPasswordResetCode = createAsyncThunk(
 export const fetchResetPassword = createAsyncThunk(
     'passwordReset/fetchResetPassword',
     async (payload: { token: string, newPassword: string }, {rejectWithValue}) => {
-        const response = await fetch('http://localhost:9090/dev/v1/password-reset/reset-password', {
+        const response = await fetch(RestApis.passwordResetService+'/reset-password', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

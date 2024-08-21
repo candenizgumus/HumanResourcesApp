@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import {IBonus} from "../../models/IBonus";
+import RestApis from "../../config/RestApis";
 
 interface IBonusState{
     bonusList:IBonus[]
@@ -23,7 +24,7 @@ export const fetchSaveBonus = createAsyncThunk(
     'bonus/fetchSaveBonus',
     async (payload: IfetchSaveBonus) => {
 
-            const response = await fetch(`http://localhost:9090/dev/v1/bonus/save`, {
+            const response = await fetch(RestApis.bonusService+`/save`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -52,7 +53,7 @@ export const fetchGetBonusesOfManager = createAsyncThunk(
     'bonus/fetchGetBonusesOfManager',
     async (payload: IfetchGetPayments) => {
 
-        const response = await fetch(`http://localhost:9090/dev/v1/bonus/get-all`, {
+        const response = await fetch(RestApis.bonusService+`/get-all`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -74,7 +75,7 @@ export const fetchGetBonusesOfEmployee = createAsyncThunk(
     'bonus/fetchGetBonusesOfEmployee',
     async (payload: IfetchGetPayments) => {
 
-        const response = await fetch(`http://localhost:9090/dev/v1/bonus/get-all-bonuses-of-employee`, {
+        const response = await fetch(RestApis.bonusService+`/get-all-bonuses-of-employee`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -99,7 +100,7 @@ export const fetchDeleteBonus = createAsyncThunk(
     'bonus/fetchGetBonusesOfManager',
     async (payload: IfetchDeleteBonus) => {
 
-        const response = await fetch(`http://localhost:9090/dev/v1/bonus/delete?id=` + payload.id, {
+        const response = await fetch(RestApis.bonusService+`/delete?id=` + payload.id, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',

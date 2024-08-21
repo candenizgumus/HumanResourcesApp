@@ -2,6 +2,7 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 import {IHoliday} from '../../models/IHoliday';
 import {ICreateHoliday} from "../../models/ICreateHoliday";
+import RestApis from '../../config/RestApis';
 
 
 const initialHolidayState = {
@@ -15,7 +16,7 @@ const initialHolidayState = {
 export const fetchHolidaysUser = createAsyncThunk(
     'holiday/fetchHolidaysUser',
     async (payload: string) => {
-            const response = await fetch(`http://localhost:9090/dev/v1/holiday/get-holiday-by-user`,{
+            const response = await fetch(RestApis.holidayService+`/get-holiday-by-user`,{
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -29,7 +30,7 @@ export const fetchHolidaysUser = createAsyncThunk(
 export const fetchHolidaysEmployee = createAsyncThunk(
     'holiday/fetchHolidaysEmployee',
     async (token: string) => {
-            const response = await fetch(`http://localhost:9090/dev/v1/holiday/get-holidays-of-company`,{
+            const response = await fetch(RestApis.holidayService+`/get-holidays-of-company`,{
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -43,7 +44,7 @@ export const fetchHolidaysEmployee = createAsyncThunk(
 export const fetchHolidaysAdmin = createAsyncThunk(
     'holiday/fetchHolidaysAdmin',
     async (payload: string) => {
-        const response = await fetch(`http://localhost:9090/dev/v1/holiday/get-holiday-by-admin`,{
+        const response = await fetch(RestApis.holidayService+`/get-holiday-by-admin`,{
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -58,7 +59,7 @@ export const fetchCreateHolidayAdmin = createAsyncThunk(
     'holiday/createHolidayAdmin',
     async (payload: ICreateHoliday) => {
 
-        const response = await fetch('http://localhost:9090/dev/v1/holiday/save-holiday-admin', {
+        const response = await fetch(RestApis.holidayService+'/save-holiday-admin', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -90,7 +91,7 @@ export const fetchCreateHolidayManager = createAsyncThunk(
     'holiday/createHolidayManager',
     async (payload: ICreateHoliday2) => {
 
-        const response = await fetch('http://localhost:9090/dev/v1/holiday/save-holiday-manager', {
+        const response = await fetch(RestApis.holidayService+'/save-holiday-manager', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -119,7 +120,7 @@ export interface IProcessHoliday{
 export const fetchDeleteHoliday = createAsyncThunk(
     'holiday/deleteHoliday',
     async (payload: IProcessHoliday, {rejectWithValue}) => {
-            const response = await fetch(`http://localhost:9090/dev/v1/holiday/delete/${payload.id}`, {
+            const response = await fetch(RestApis.holidayService+`/delete/${payload.id}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
@@ -133,7 +134,7 @@ export const fetchDeleteHoliday = createAsyncThunk(
 export const fetchChangeHolidayStatus = createAsyncThunk(
     'holiday/changeHolidayStatus',
     async (payload: IProcessHoliday, {rejectWithValue}) => {
-            const response = await fetch(`http://localhost:9090/dev/v1/holiday/change-status/${payload.id}`, {
+            const response = await fetch(RestApis.holidayService+`/change-status/${payload.id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -147,7 +148,7 @@ export const fetchChangeHolidayStatus = createAsyncThunk(
 export const fetchGetMonthlyHolidays = createAsyncThunk(
     'holiday/changeHolidayStatus',
     async (token: string, {rejectWithValue}) => {
-        const response = await fetch(`http://localhost:9090/dev/v1/holiday/get-current-months-holidays`, {
+        const response = await fetch(RestApis.holidayService+`/get-current-months-holidays`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

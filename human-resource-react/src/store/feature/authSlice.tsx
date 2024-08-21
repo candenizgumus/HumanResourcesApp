@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ILogin } from "../../models/ILogin";
 import { IUser } from "../../models/IUser";
 import { ICreateUser } from '../../models/ICreateUser';
+import RestApis from "../../config/RestApis";
 
 
 interface IAuthState {
@@ -30,7 +31,7 @@ export const fetchLogin = createAsyncThunk(
     'auth/fetchLogin',
     async (payload: ILogin) => {
 
-        const response = await fetch('http://localhost:9090/dev/v1/auth/login', {
+        const response = await fetch(RestApis.authService+'/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -49,7 +50,7 @@ export const fetchFindUserByToken = createAsyncThunk(
     'user/fetchFindUserByToken',
     async (token: string, { rejectWithValue }) => {
         try {
-            const response = await fetch(`http://localhost:9090/dev/v1/user/find-by-token?token=${token}`);
+            const response = await fetch(RestApis.userService+`/find-by-token?token=${token}`);
             const data = await response.json();
             if (!response.ok) {
                 throw new Error(data.message || 'Fetching user by token failed');
@@ -70,7 +71,7 @@ export const fetchGetPositions = createAsyncThunk(
     'user/fetchGetPositions',
     async (_, { rejectWithValue }) => {
         try {
-            const response = await fetch('http://localhost:9090/dev/v1/user/get-positions');
+            const response = await fetch(RestApis.userService+'/get-positions');
             const data = await response.json();
             if (!response.ok) {
                 throw new Error(data.message || 'Fetching positions failed');
@@ -91,7 +92,7 @@ export const fetchGetSectors = createAsyncThunk(
     'user/fetchGetSectors',
     async (_, { rejectWithValue }) => {
         try {
-            const response = await fetch('http://localhost:9090/dev/v1/user/get-sectors');
+            const response = await fetch(RestApis.userService+'/user/get-sectors');
             const data = await response.json();
             if (!response.ok) {
                 throw new Error(data.message || 'Fetching sectors failed');
@@ -112,7 +113,7 @@ export const fetchGetStatus = createAsyncThunk(
     'user/fetchGetStatus',
     async (_, { rejectWithValue }) => {
         try {
-            const response = await fetch('http://localhost:9090/dev/v1/user/get-status');
+            const response = await fetch(RestApis.userService+'/get-status');
             const data = await response.json();
             if (!response.ok) {
                 throw new Error(data.message || 'Fetching sectors failed');
@@ -133,7 +134,7 @@ export const fetchFindCompanyNameAndManagerNameOfUser = createAsyncThunk(
     'user/fetchFindCompanyNameAndManagerNameOfUser',
     async (token: string, { rejectWithValue }) => {
         try {
-            const response = await fetch('http://localhost:9090/dev/v1/user/find-company-name-of-user', {
+            const response = await fetch(RestApis.userService+'/find-company-name-of-user', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -160,7 +161,7 @@ export const fetchCreateUserWithUserType = createAsyncThunk(
     'user/fetchCreateUserWithUserType',
     async (payload: ICreateUser) => {
 
-        const response = await fetch(`http://localhost:9090/dev/v1/user/create-user-with-usertype`, {
+        const response = await fetch(RestApis.userService+`/create-user-with-usertype`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -192,7 +193,7 @@ export const fetchUpdateUser = createAsyncThunk(
     'user/fetchUpdateUser',
     async (payload: UpdateProfile, { dispatch }) => {
 
-        const response = await fetch('http://localhost:9090/dev/v1/user/update', {
+        const response = await fetch(RestApis.userService+'/update', {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -237,7 +238,7 @@ export const fetchUpdateEmployeeByManager = createAsyncThunk(
     'user/fetchUpdateEmployeeByManager',
     async (payload: IfetchUpdateEmployeeByManager, { dispatch }) => {
 
-        const response = await fetch('http://localhost:9090/dev/v1/user/update-employee-by-manager', {
+        const response = await fetch(RestApis.userService+'/update-employee-by-manager', {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -273,7 +274,7 @@ interface IfetchGetAllUsers {
 export const fetchGetAllUsers = createAsyncThunk(
     'user/fetchGetAllUsers',
     async (payload: IfetchGetAllUsers, { dispatch }) => {
-        const response = await fetch('http://localhost:9090/dev/v1/user/get-all', {
+        const response = await fetch(RestApis.userService+'/get-all', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -304,7 +305,7 @@ interface IfetchGetAllUsersOfManager {
 export const fetchGetAllUsersOfManager = createAsyncThunk(
     'user/fetchGetAllUsersOfManager',
     async (payload: IfetchGetAllUsersOfManager, { dispatch }) => {
-        const response = await fetch('http://localhost:9090/dev/v1/user/get-all-users-of-manager-by-company-id', {
+        const response = await fetch(RestApis.userService+'/get-all-users-of-manager-by-company-id', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -363,7 +364,7 @@ export const fetchAddEmployeeToCompany = createAsyncThunk(
         if (payload.photo) {
             formData.append('photo', payload.photo);
         }
-        const response = await fetch('http://localhost:9090/dev/v1/user/add-employee-to-company', {
+        const response = await fetch(RestApis.userService+'/add-employee-to-company', {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ` + payload.token
@@ -386,7 +387,7 @@ export const fetchGetUserCount = createAsyncThunk(
     'offer/fetchGetUserCount',
     async (payload: fetchGetUserCountPayload, { dispatch }) => {
 
-        const response = await fetch('http://localhost:9090/dev/v1/user/get-count', {
+        const response = await fetch(RestApis.userService+'/get-count', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -411,7 +412,7 @@ export const fetchGetCustomerByMonth = createAsyncThunk(
     'offer/fetchGetUserCount',
     async (payload: string, { dispatch }) => {
 
-        const response = await fetch('http://localhost:9090/dev/v1/user/count-by-month', {
+        const response = await fetch(RestApis.userService+'/count-by-month', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -437,7 +438,7 @@ export const fetchUpdateUserByAdmin = createAsyncThunk(
     'user/fetchUpdateUserByAdmin',
     async (payload: IfetchUpdateUserByAdmin, { dispatch }) => {
 
-        const response = await fetch('http://localhost:9090/dev/v1/user/update-user-by-admin', {
+        const response = await fetch(RestApis.userService+'/update-user-by-admin', {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -472,7 +473,7 @@ export const fetchDeleteEmployeeByAdmin = createAsyncThunk(
     'user/fetchDeleteEmployeeByAdmin',
     async (payload: IfetchDeleteEmployeeByAdmin, { dispatch }) => {
 
-        const response = await fetch('http://localhost:9090/dev/v1/user/delete?id=' + payload.id, {
+        const response = await fetch(RestApis.userService+'/delete?id=' + payload.id, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
@@ -503,7 +504,7 @@ export const fetchFindUserById = createAsyncThunk(
     'user/fetchFindUserById',
     async (payload: IfetchFindUserById, { dispatch }) => {
 
-        const response = await fetch('http://localhost:9090/dev/v1/user/find-by-id?id=' + payload.id, {
+        const response = await fetch(RestApis.userService+'/find-by-id?id=' + payload.id, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -530,7 +531,7 @@ export const fetchActivateUserByManager = createAsyncThunk(
     'user/fetchActivateUserByManager',
     async (payload: IfetchActivateUserByManager, { dispatch }) => {
 
-        const response = await fetch('http://localhost:9090/dev/v1/user/activate-employee?id=' + payload.id, {
+        const response = await fetch(RestApis.userService+'/activate-employee?id=' + payload.id, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -554,7 +555,7 @@ export const fetchChangePassword = createAsyncThunk(
     'auth/fetchChangePassword',
     async (payload: IfetchChangePassword, { dispatch }) => {
 
-        const response = await fetch('http://localhost:9090/dev/v1/auth/change-password', {
+        const response = await fetch(RestApis.authService+'/change-password', {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -577,7 +578,7 @@ export const fetchCountOfUsersForAdminMenu = createAsyncThunk(
     'auth/fetchChangePassword',
     async (payload: string, { dispatch }) => {
 
-        const response = await fetch('http://localhost:9090/dev/v1/user/count-of-customers-for-graph', {
+        const response = await fetch(RestApis.userService+'/count-of-customers-for-graph', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -594,7 +595,7 @@ export const fetchFindEmployeesWithUpcomingBirthdays = createAsyncThunk(
     'auth/fetchChangePassword',
     async (payload: string, { dispatch }) => {
 
-        const response = await fetch('http://localhost:9090/dev/v1/user/find-employees-with-upcoming-birthdays', {
+        const response = await fetch(RestApis.userService+'/find-employees-with-upcoming-birthdays', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -611,7 +612,7 @@ export const fetchGetMonthlyPaymentOfEmployees = createAsyncThunk(
     'user/fetchGetMonthlyPaymentOfEmployees',
     async (payload: string) => {
 
-        const response = await fetch(`http://localhost:9090/dev/v1/user/find-monthly-salary-of-employees`, {
+        const response = await fetch(RestApis.userService+'/find-monthly-salary-of-employees', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -633,7 +634,7 @@ export const fetchDeactivateMyAccount = createAsyncThunk(
     'auth/fetchDeactivateMyAccount',
     async (payload: IfetchDeactivateMyAccount, { dispatch }) => {
 
-        const response = await fetch('http://localhost:9090/dev/v1/auth/deactivate-account', {
+        const response = await fetch(RestApis.authService+'/deactivate-account', {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -655,7 +656,7 @@ export const fetchManagerAndCompanyNameOfEmployee = createAsyncThunk(
     'auth/fetchManagerAndCompanyNameOfEmployee',
     async (token: string, { dispatch }) => {
 
-        const response = await fetch('http://localhost:9090/dev/v1/user/find-manager-and-company-name-of-employee', {
+        const response = await fetch(RestApis.userService+'/find-manager-and-company-name-of-employee', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

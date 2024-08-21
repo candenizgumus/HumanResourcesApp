@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { EDefinitionType } from "../../models/IDefinitionType";
 import { IRequestWithIdAndToken } from "./leaveSlice";
+import RestApis from "../../config/RestApis";
 
 interface IInitialLeave {
     definitionList: IDefinition[]
@@ -23,7 +24,7 @@ export const fetchGetDefinitions = createAsyncThunk(
     'leave/fetchGetDefinitions',
     async (payload: IFetchGetDefinitions) => {
 
-        const response = await fetch('http://localhost:9090/dev/v1/definition/get-all', {
+        const response = await fetch(RestApis.definitionService+'/get-all', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -50,7 +51,7 @@ export const fetchGetDefinitionsWithPage = createAsyncThunk(
     'leave/fetchGetDefinitionsWithPage',
     async (payload: IFetchGetDefinitionsWithPage) => {
 
-        const response = await fetch('http://localhost:9090/dev/v1/definition/get-all-with-page', {
+        const response = await fetch(RestApis.definitionService+'/get-all-with-page', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -78,7 +79,7 @@ export const fetchSaveDefinition = createAsyncThunk(
     'leave/fetchSaveDefinition',
     async (payload: IFetchSaveDefinition) => {
 
-        const response = await fetch('http://localhost:9090/dev/v1/definition/save', {
+        const response = await fetch(RestApis.definitionService+'/save', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -99,7 +100,7 @@ export const fetchDeleteDefinition = createAsyncThunk(
     'leave/fetchDeleteDefinition',
     async (payload: IRequestWithIdAndToken) => {
 
-        const response = await fetch('http://localhost:9090/dev/v1/definition/delete?id='+payload.id, {
+        const response = await fetch(RestApis.definitionService+'/delete?id='+payload.id, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

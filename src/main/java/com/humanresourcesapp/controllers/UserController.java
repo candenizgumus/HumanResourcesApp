@@ -228,7 +228,7 @@ public class UserController
 
     @PostMapping(FIND_MANAGER_AND_COMPANY_NAME_OF_EMPLOYEE)
     @CrossOrigin("*")
-    @PreAuthorize("hasAnyAuthority('EMPLOYEE')")
+    @PreAuthorize("hasAnyAuthority('EMPLOYEE','MANAGER')")
     public ResponseEntity<ManagerAndCompanyNameOfEmployee> findManagerAndCompanyNameOfEmployee()
     {
         return ResponseEntity.ok(userService.findManagerAndCompanyNameOfEmployee());

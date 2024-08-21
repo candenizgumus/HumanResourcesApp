@@ -9,13 +9,14 @@ import {
   Box,
   createTheme,
   useMediaQuery,
+  Paper,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { useDispatch, useSelector } from 'react-redux';
 import { HumanResources, RootState } from '../../store';
 import FeatureCard from '../../components/molecules/PreAuthorizedPageComponents/FeatureCard';
 import { fetchGetFeatures } from '../../store/feature/featureSlice';
-import Dashboard from '../../images/default_dashboard.webp';
+import Dashboard from '../../images/easy-hr.png';
 import { NavBar } from '../../components/molecules/PreAuthorizedPageComponents/NavBar';
 import FooterElement from '../../components/molecules/PreAuthorizedPageComponents/FooterElement';
 import { fetchGetCompanyLogos } from "../../store/feature/companySlice";
@@ -27,6 +28,7 @@ import BoxReveal from "../../components/atoms/BoxReveal";
 import ThemeElement from '../../components/atoms/ThemeElement';
 import { color } from 'framer-motion';
 import { BorderColor } from '@mui/icons-material';
+import { myLightColour } from '../../util/MyColours';
 
 const Root = styled('div')(({ theme }) => ({
   display: 'flex',
@@ -205,11 +207,12 @@ function LandingPage() {
                   </Grid>
                 </Grid>
                 <Grid container mt="5%" justifyContent="center">
-                  <img
-                    src={Dashboard}
-                    style={{ width: '70vh', height: 'auto' }}
-                    alt="Description of the image"
-                  />
+                    <Box justifyContent="center"
+                      component="img"
+                      src={Dashboard}
+                      alt="Header Image"
+                      sx={{ width: '100vh', height: 'auto', borderRadius: '20px', border: '2px solid', borderColor: myLightColour }}
+                    />
                 </Grid>
               </Box>
             }

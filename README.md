@@ -16,17 +16,18 @@ This project is a web application developed based on the [Kolay IK](https://kola
 
 ## Getting Started
  Demo images are shown below. For demo datas, the accounts given below can be used.
+ 
 Superadmin 
 
 - **Email:** admin
 - **Password:** 123
 
-- Manager 
+Manager 
 
 - **Email:** manager
 - **Password:** 123
 
-- Employee 
+Employee 
 
 - **Email:** employee@gmail.com
 - **Password:** 123

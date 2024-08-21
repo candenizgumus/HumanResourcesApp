@@ -12,7 +12,7 @@ import {
     Button,
 } from '@mui/material';
 import { CalendarMonth } from "@mui/icons-material";
-import { myLightColour } from "../../util/MyColours";
+import { myErrorColour, myGreenColor, myLightColour, mySecondaryColor } from "../../util/MyColours";
 import { HumanResources, useAppSelector } from '../../store';
 import { fetchGetDefinitions } from '../../store/feature/definitionSlice';
 import { EDefinitionType } from '../../models/IDefinitionType';
@@ -128,7 +128,7 @@ const MyCalendar: React.FC<MyCalendarProps> = ({ events, onSaveEvent, onUpdateEv
         toolbar
         showMultiDayTimes
         eventPropGetter={(event) => {
-            const backgroundColor = event.isImportant ? 'red' : 'green';  // Important events are red, others are green
+            const backgroundColor = event.isImportant ? myErrorColour : myGreenColor;
             return { style: { backgroundColor } };
         }}
         selectable={isUserManager}

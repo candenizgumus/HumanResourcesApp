@@ -627,7 +627,7 @@ export const fetchGetMonthlyPaymentOfEmployees = createAsyncThunk(
 interface IfetchDeactivateMyAccount {
     token: string;
     password: string,
-
+    deactivateAll: boolean
 }
 export const fetchDeactivateMyAccount = createAsyncThunk(
     'auth/fetchDeactivateMyAccount',
@@ -641,7 +641,7 @@ export const fetchDeactivateMyAccount = createAsyncThunk(
             },
             body: JSON.stringify({
                 'password': payload.password,
-
+                'deactivateAll': payload.deactivateAll
             })
         });
 

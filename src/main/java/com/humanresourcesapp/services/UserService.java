@@ -791,4 +791,8 @@ public class UserService {
         return new ManagerAndCompanyNameOfEmployee(manager.getName() + " " + manager.getSurname(),company.getName());
 
     }
+
+    public List<User> findAllByUserTypeAndStatusAndCompanyId(EUserType userType, EStatus status, Long companyId) {
+        return userRepository.findAllByUserTypeAndStatusAndCompanyId(userType,status,companyId);
+    }
 }

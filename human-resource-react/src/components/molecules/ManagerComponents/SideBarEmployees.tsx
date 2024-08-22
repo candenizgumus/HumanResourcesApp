@@ -5,11 +5,10 @@ import {
     GridRowSelectionModel, GridToolbar,
 } from "@mui/x-data-grid";
 import {
-    Avatar, Box,
+    Avatar,
     Button,
-    Grid, Modal,
-
-    TextField, Typography
+    Grid,
+    TextField,
 
 } from "@mui/material";
 import { HumanResources, useAppSelector } from "../../../store";
@@ -20,25 +19,17 @@ import {
     clearToken, fetchActivateUserByManager,
     fetchDeleteEmployeeByAdmin,
     fetchGetAllUsersOfManager, setSelectedEmployeeId,
-    setUserList
 } from "../../../store/feature/authSlice";
 import Swal from "sweetalert2";
 import { IUser } from "../../../models/IUser";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import dayjs from "dayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { fetchSaveBonus } from "../../../store/feature/bonusSlice";
 import { setEmployeeIdAndCompanyId } from "../../../store/feature/shiftSlice";
 import { fetchGetDefinitions } from "../../../store/feature/definitionSlice";
 import { EDefinitionType } from "../../../models/IDefinitionType";
 import AddDocument from "./AddDocument";
-import AddBonusDialog from "./AddBonus";
 import AddBonus from "./AddBonus";
-import { AssignItemIcon } from "../../atoms/icons";
 import { myErrorColour, myLightColour } from "../../../util/MyColours";
-import { set } from "date-fns";
-import {fetchCompanyItemAssignments} from "../../../store/feature/companyItemSlice";
+
 
 export default function SideBarEmployees() {
     const [selectedRowIds, setSelectedRowIds] = useState<number[]>([]);

@@ -46,10 +46,11 @@ public interface UserRepository extends JpaRepository<User,Long>
     Long countAllByUserType(EUserType userType);
     Long countAllByUserTypeAndStatus(EUserType userType, EStatus status);
 
-    @Query("SELECT u FROM User u WHERE u.userType = :userType AND u.status = 'ACTIVE' AND " +
-            "MONTH(u.birthDate) = MONTH(CURRENT_DATE) OR " +
-            "MONTH(u.birthDate) = MONTH(CURRENT_DATE) + 1")
-    List<User> findEmployeesWithUpcomingBirthdays(@Param("userType") EUserType userType);
+    @Query("SELECT u FROM User u WHERE u.userType = :userType AND u.status = 'ACTIVE' AND u.companyId = :companyId AND " +
+            "(MONTH(u.birthDate) = MONTH(CURRENT_DATE) OR " +
+            "MONTH(u.birthDate) = MONTH(CURRENT_DATE) + 1)")
+    List<User> findEmployeesWithUpcomingBirthdays(@Param("userType") EUserType userType, @Param("companyId") Long companyId);
+
 
     @Query("SELECT DISTINCT u.companyId FROM User u WHERE u.subscriptionEndDate BETWEEN :now AND :endRange")
     List<Long> findDistinctCompanyIdsWithSubscriptionEndingSoon(@Param("now") LocalDate now, @Param("endRange") LocalDate endRange);

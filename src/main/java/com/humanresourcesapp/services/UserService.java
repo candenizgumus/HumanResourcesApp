@@ -661,8 +661,9 @@ public class UserService {
 
     public List<User> findEmployeesWithUpcomingBirthdays()
     {
-
-        return userRepository.findEmployeesWithUpcomingBirthdays(EUserType.EMPLOYEE);
+        String userEmail = UserInfoSecurityContext.getUserInfoFromSecurityContext();
+        User manager = userRepository.findByEmail(userEmail).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
+        return userRepository.findEmployeesWithUpcomingBirthdays(EUserType.EMPLOYEE, manager.getCompanyId());
 
     }
 

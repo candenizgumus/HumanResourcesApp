@@ -11,7 +11,7 @@ import {
     fetchDeleteCompanyItem
 } from "../../../store/feature/companyItemSlice";
 import { ICompanyItem } from "../../../models/ICompanyItem";
-import { DeleteIcon, AddIcon } from '../../atoms/icons';
+import { DeleteIcon, AddIcon, CancelIcon } from '../../atoms/icons';
 import AddCompanyItemDialog from './AddCompanyItem';
 import {ICompanyItemAssignment} from "../../../models/ICompanyItemAssignment";
 import { myLightColour } from '../../../util/MyColours';
@@ -299,10 +299,10 @@ const SideBarCompanyItems: React.FC = () => {
                 <Button
                     onClick={handleCancellation}
                     variant="contained"
-                    color="error"
+                    color="warning"
                     disabled={loading || selectedRowIdsAssignment.length === 0 || hasCanceledRow}
-                    startIcon={<DeleteIcon />}
-                    sx={{ marginRight: '1%', width: '200px' }}
+                    startIcon={<CancelIcon />}
+                    sx={{ marginRight: '1%', width: 'calc(200px * 2 + 1%)' }}
                 >
                     Cancel Item Assignment
                 </Button>

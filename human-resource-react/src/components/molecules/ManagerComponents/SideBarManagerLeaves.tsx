@@ -772,7 +772,7 @@ const SideBarManagerLeaves = () => {
                     color="secondary"
                     onClick={handleUpdateAnnualLeaveDays}
                     startIcon={<EditIcon/>}
-                    sx={{marginRight: '1%', width: '412.625px'}}
+                    sx={{ marginRight: '1%', width: 'calc(200px * 2 + 1%)' }}
                 >
                     Update Annual Leave Days
                 </Button>

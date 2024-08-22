@@ -170,8 +170,8 @@ export default function NotificationsPage() {
                     }
                 }
                 Swal.fire({
-                    icon: 'error',
-                    title: 'Error!',
+                    icon: 'success',
+                    title: 'Success!',
                     text: `${successfulUpdates} notification${successfulUpdates !== 1 ? 's' : ''} marked as read.`,
                     showConfirmButton: false,
                     timer: 1500

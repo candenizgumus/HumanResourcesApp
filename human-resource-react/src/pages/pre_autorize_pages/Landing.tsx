@@ -84,6 +84,7 @@ const bookDemoButtonStyles = {
   borderColor: 'myLightColour.main',
   '&:hover': {
     color: 'primary.main',
+    backgroundColor: 'myLightColour.main',
   },
 };
 

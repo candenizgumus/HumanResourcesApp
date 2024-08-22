@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Repository
@@ -13,7 +14,10 @@ public interface CompanyItemAssignmentRepository extends JpaRepository<CompanyIt
 
     List<CompanyItemAssignment> findByEmployeeId(Long employeeId);
 
-    List<CompanyItemAssignment> findByCompanyId(Long companyId);
+    List<CompanyItemAssignment> findByCompanyIdAndStatusNot(Long companyId, EStatus status);
 
     List<CompanyItemAssignment> findByEmployeeIdAndStatus(Long employeeId, EStatus status);
+
+    Optional<CompanyItemAssignment> findByCompanyItemId(Long id);
+
 }

@@ -47,7 +47,9 @@ const AddDocument: React.FC<{ open: boolean, onClose: () => void }> = ({ open, o
                 confirmButtonColor: myLightColour,
                 cancelButtonColor: myErrorColour,
             });
+            onClose();
             return;
+
         }
 
         setLoading(true);

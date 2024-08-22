@@ -123,6 +123,12 @@ export default function LoginCard() {
                     autoComplete="email"
                     autoFocus
                     onChange={event => setEmail(event.target.value)}
+                    onKeyDown={(event) => {
+                        if (event.key === 'Enter') {
+                            event.preventDefault(); // Prevent default behavior if needed
+                            handleLogin();
+                        }
+                    }}
                 />
                 <TextField
                     margin="normal"
@@ -134,6 +140,12 @@ export default function LoginCard() {
                     id="password"
                     autoComplete="current-password"
                     onChange={event => setPassword(event.target.value)}
+                    onKeyDown={(event) => {
+                        if (event.key === 'Enter') {
+                            event.preventDefault(); // Prevent default behavior if needed
+                            handleLogin();
+                        }
+                    }}
                 />
                 <FormControlLabel
                     control={<Checkbox value="remember" color="primary" />}
@@ -146,6 +158,7 @@ export default function LoginCard() {
                     color='success'
                     sx={{ mt: 3, mb: 2 }}
                     onClick={handleLogin}
+
                 >
                     LOGIN
                 </Button>

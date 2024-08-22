@@ -129,6 +129,11 @@ const SideBarCompanyItems: React.FC = () => {
                         pageSize: 100,
                     })).then(data => {
                         setCompanyItems(data.payload);
+                    }).then(() => {
+                        dispatch(fetchCompanyItemAssignments(
+                            token)).then(data => {
+                            setCompanyItemAssignments(data.payload)
+                        })
                     })
                 });
         });
@@ -151,6 +156,15 @@ const SideBarCompanyItems: React.FC = () => {
                             text: 'Assignment has been canceled',
                             showConfirmButton: false,
                             timer: 1500
+                        })
+
+                        dispatch(fetchCompanyItems({
+                            token: token,
+                            page: 0,
+                            searchText: searchText,
+                            pageSize: 100,
+                        })).then(data => {
+                            setCompanyItems(data.payload);
                         })
                     }
                 })

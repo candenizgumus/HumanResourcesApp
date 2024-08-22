@@ -4,6 +4,7 @@ package com.humanresourcesapp.services;
 import com.humanresourcesapp.dto.requests.CompanyItemSaveRequestDto;
 import com.humanresourcesapp.dto.requests.PageRequestDto;
 import com.humanresourcesapp.entities.CompanyItem;
+import com.humanresourcesapp.entities.CompanyItemAssignment;
 import com.humanresourcesapp.entities.User;
 import com.humanresourcesapp.entities.enums.ECompanyItemType;
 import com.humanresourcesapp.entities.enums.EStatus;
@@ -13,7 +14,9 @@ import com.humanresourcesapp.repositories.CompanyItemRepository;
 import com.humanresourcesapp.utility.JwtTokenManager;
 import com.humanresourcesapp.utility.UserInfoSecurityContext;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -31,6 +34,12 @@ public class CompanyItemService {
 
     private final CompanyItemRepository companyItemRepository;
     private final UserService userService;
+    private CompanyItemAssignmentService companyItemAssignmentService;
+
+    @Autowired
+    public void setCompanyItemAssignmentService(@Lazy CompanyItemAssignmentService companyItemAssignmentService) {
+        this.companyItemAssignmentService = companyItemAssignmentService;
+    }
 
     public CompanyItem save(CompanyItemSaveRequestDto dto) {
         String managerEmail = UserInfoSecurityContext.getUserInfoFromSecurityContext();
@@ -111,6 +120,9 @@ public class CompanyItemService {
     public CompanyItem delete(Long id) {
         CompanyItem companyItem = companyItemRepository.findById(id).orElseThrow(() -> new HumanResourcesAppException(ErrorType.ITEM_NOT_FOUND));
         companyItem.setStatus(EStatus.DELETED);
+        CompanyItemAssignment companyItemAssignment = companyItemAssignmentService.findByCompanyItemId(companyItem.getId());
+        companyItemAssignment.setStatus(EStatus.DELETED);
+        companyItemAssignmentService.update(companyItemAssignment);
         return companyItemRepository.save(companyItem);
     }
 

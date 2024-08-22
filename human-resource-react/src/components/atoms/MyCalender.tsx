@@ -9,14 +9,15 @@ import {
     DialogContent,
     TextField,
     DialogActions,
-    Button,
+    Button, Typography,
 } from '@mui/material';
-import { CalendarMonth } from "@mui/icons-material";
-import { myErrorColour, myGreenColor, myLightColour, mySecondaryColor } from "../../util/MyColours";
+
+import { myErrorColour, myGreenColor } from "../../util/MyColours";
 import { HumanResources, useAppSelector } from '../../store';
 import { fetchGetDefinitions } from '../../store/feature/definitionSlice';
 import { EDefinitionType } from '../../models/IDefinitionType';
 import { useDispatch } from 'react-redux';
+import {CalendarMonth} from "@mui/icons-material";
 
 
 const localizer = momentLocalizer(moment);
@@ -49,6 +50,7 @@ const MyCalendar: React.FC<MyCalendarProps> = ({ events, onSaveEvent, onUpdateEv
     const leaveTypes = useAppSelector((state) => state.definition.definitionList);
     const dispatch = useDispatch<HumanResources>();
     const token = useAppSelector((state) => state.auth.token);
+    const user = useAppSelector((state) => state.auth.user);
     const handleSelectEvent = (event: IShift) => {
         setSelectedEvent(event);
         setIsModalOpen(true);
@@ -112,7 +114,14 @@ const MyCalendar: React.FC<MyCalendarProps> = ({ events, onSaveEvent, onUpdateEv
 
     return (
         <>
-            <Box sx={{ height: 600 }}>
+
+            <Box sx={{ height: 600 } }>
+                {
+                    user.userType == 'MANAGER' &&
+                    <Typography variant="h6" align="center" sx={{ mb: 2, fontWeight: "bold", color: 'myLightColour.main' }}>
+                        <CalendarMonth /> {name + " " + surname + '\'s Shifts'}
+                    </Typography>
+                }
     <Calendar
         localizer={localizer}
         events={events.map(event => ({
@@ -148,8 +157,9 @@ const MyCalendar: React.FC<MyCalendarProps> = ({ events, onSaveEvent, onUpdateEv
         }}
     />
 </Box>
+
             <Dialog open={isModalOpen} onClose={handleClose} fullWidth maxWidth="sm">
-                <DialogTitle>Etkinliği Düzenle</DialogTitle>
+                <DialogTitle>Edit Shift</DialogTitle>
                 <DialogContent>
                     <TextField
                         label="Başlık"

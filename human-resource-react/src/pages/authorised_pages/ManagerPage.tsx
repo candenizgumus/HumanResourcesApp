@@ -17,7 +17,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import { Button, Grid } from '@mui/material';
+import { Button, Grid, useMediaQuery } from '@mui/material';
 import { HumanResources, RootState, useAppSelector } from '../../store';
 import { useDispatch, useSelector } from 'react-redux';
 import { changePageState } from '../../store/feature/authSlice';
@@ -43,7 +43,7 @@ import HikingIcon from '@mui/icons-material/Hiking';
 import { useState } from "react";
 import logo from '../../images/logo-full-white.png';
 import { AddDocumentIcon } from "../../components/atoms/icons";
-import {myLightColour} from "../../util/MyColours";
+import { myLightColour } from "../../util/MyColours";
 import ThemeElement from '../../components/atoms/ThemeElement';
 
 const drawerWidth = 240;
@@ -116,6 +116,7 @@ export default function AdminPage() {
     const [selectedIndex2, setSelectedIndex2] = useState(0);
     const page = useAppSelector((state) => state.auth.pageState);
     const user = useAppSelector((state) => state.auth.user);
+    const isBigForScreen = useMediaQuery('(max-width:1200px)');
     const handleDrawerOpen = () => {
         setOpen(true);
     };
@@ -150,7 +151,7 @@ export default function AdminPage() {
             <Box sx={{ display: 'flex' }}>
                 <CssBaseline />
                 <AppBar position="fixed" open={open}>
-                    <Toolbar sx={{ position: 'relative' }}>
+                    <Toolbar >
                         <IconButton
                             color="inherit"
                             aria-label="open drawer"
@@ -160,79 +161,82 @@ export default function AdminPage() {
                         >
                             <MenuIcon />
                         </IconButton>
-
-                        <Typography variant="h6" sx={logoStyle}>
-                            <Button onClick={navigateToHome} color="inherit">
-                                <img src={logo} alt="logo" style={{ height: '52px' }} />
-                            </Button>
-                        </Typography>
-
-                        <Typography
-                            sx={{
-                                position: 'absolute',
-                                left: '50%',
-                                transform: 'translateX(-50%)',
-                                fontSize: '20px',
-                            }}
-                        >
-                            {page ? page : 'Dashboard'}
-                        </Typography>
-
-                    <Box sx={{ flexGrow: 1 }} />
-                    <Box>
-                        <Typography variant="h5" component="div" >
-                            Hello, <strong>{user.name ? user.name : 'admin'}</strong>!
-                        </Typography>
-                        <Typography variant="subtitle1"  sx={{ marginRight: 1 }} >
-                            <span style={{ fontStyle: 'italic', color: myLightColour }}>{today}  </span>
-                        </Typography>
-                    </Box>
-                    <NotificationIcon />
-                    <NavbarProfile />
-                </Toolbar>
-            </AppBar>
-            <Drawer
-                sx={{
-                    width: drawerWidth,
-                    flexShrink: 0,
-                    '& .MuiDrawer-paper': {
-                        width: drawerWidth,
-                        boxSizing: 'border-box',
-                    },
-                }}
-                variant="persistent"
-                anchor="left"
-                open={open}
-            >
-                <DrawerHeader sx={{ bgcolor: 'primary.main'}}>
-                    <IconButton onClick={handleDrawerClose} sx={{ color: 'white' }}>
-                        {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-                    </IconButton>
-                </DrawerHeader>
-                <List sx={{ bgcolor: 'primary.main', minHeight: 'calc(100vh - 65px)', paddingTop:'0' }}>
-                    {['Dashboard', 'Employees', 'Add Employee', 'Create Manager', 'Create Definition', 'Profile', 'Company', 'Add Comment', 'Holidays', 'Notifications', 'Expenditure', 'Leaves', 'Payments', 'Personal Documents', 'Bonus', 'Company Items'].map((text, index) => (
-                        <ListItem key={text} disablePadding>
-                            <ListItemButton
-                                selected={selectedIndex2 === index}
-                                onClick={() => {
-                                    handleListItemClick2(index);
-                                    handleListItemClick(text);
-                                }}
+                        {(open && isBigForScreen) ? null : (
+                            <Typography variant="h6" sx={logoStyle}>
+                                <Button onClick={navigateToHome} color="inherit">
+                                    <img src={logo} alt="logo" style={{ height: '52px' }} />
+                                </Button>
+                            </Typography>
+                        )}
+                        {(open && isBigForScreen) ? null : (
+                            <Typography
                                 sx={{
-                                    color: 'white',
-                                    backgroundColor: 'primary.main',
-                                    '&.Mui-selected': {
-                                      backgroundColor: 'myLightColour.main', // Change background color when selected
-                                      '&:hover': {
-                                        backgroundColor: 'myLightColour.main', // Change background color on hover
-                                      },
-                                    },
-                                    '&:hover': {
-                                      backgroundColor: 'mySecondaryColor.main', // Change background color on hover
-                                    },
-                                  }}
+                                    position: 'absolute',
+                                    left: '50%',
+                                    transform: 'translateX(-50%)',
+                                    fontSize: '20px',
+                                }}
                             >
-
+                                {page ? page : 'Dashboard'}
+                            </Typography>
+                        )}
+                        {!isBigForScreen && (
+                            <Box>
+                                <Typography variant="h5" component="div" >
+                                    Hello, <strong>{user.name ? user.name : 'admin'}</strong>!
+                                </Typography>
+                                <Typography variant="subtitle1" sx={{ marginRight: 1 }} >
+                                    <span style={{ fontStyle: 'italic', color: myLightColour }}>{today}  </span>
+                                </Typography>
+                            </Box>
+                        )}
+                        {(open && isBigForScreen) ? null : (
+                            <NotificationIcon />
+                        )}
+                        <NavbarProfile />
+                    </Toolbar>
+                </AppBar>
+                <Drawer
+                    sx={{
+                        width: drawerWidth,
+                        flexShrink: 0,
+                        '& .MuiDrawer-paper': {
+                            width: drawerWidth,
+                            boxSizing: 'border-box',
+                        },
+                    }}
+                    variant="persistent"
+                    anchor="left"
+                    open={open}
+                >
+                    <DrawerHeader sx={{ bgcolor: 'primary.main' }}>
+                        <IconButton onClick={handleDrawerClose} sx={{ color: 'white' }}>
+                            {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+                        </IconButton>
+                    </DrawerHeader>
+                    <List sx={{ bgcolor: 'primary.main', minHeight: 'calc(100vh - 65px)', paddingTop: '0' }}>
+                        {['Dashboard', 'Employees', 'Add Employee', 'Create Manager', 'Create Definition', 'Profile', 'Company', 'Add Comment', 'Holidays', 'Notifications', 'Expenditure', 'Leaves', 'Payments', 'Personal Documents', 'Bonus', 'Company Items'].map((text, index) => (
+                            <ListItem key={text} disablePadding>
+                                <ListItemButton
+                                    selected={selectedIndex2 === index}
+                                    onClick={() => {
+                                        handleListItemClick2(index);
+                                        handleListItemClick(text);
+                                    }}
+                                    sx={{
+                                        color: 'white',
+                                        backgroundColor: 'primary.main',
+                                        '&.Mui-selected': {
+                                            backgroundColor: 'myLightColour.main', // Change background color when selected
+                                            '&:hover': {
+                                                backgroundColor: 'myLightColour.main', // Change background color on hover
+                                            },
+                                        },
+                                        '&:hover': {
+                                            backgroundColor: 'mySecondaryColor.main', // Change background color on hover
+                                        },
+                                    }}
+                                >
                                     <ListItemIcon sx={{ color: 'white' }}>
                                         {index === 0 && <Dashboard />}
                                         {index === 1 && <Person />}
@@ -250,7 +254,6 @@ export default function AdminPage() {
                                         {index === 13 && <AddDocumentIcon />}
                                         {index === 14 && <Paid />}
                                         {index === 15 && <Laptop />}
-
                                     </ListItemIcon>
                                     <ListItemText primary={text} />
                                 </ListItemButton>
@@ -261,7 +264,7 @@ export default function AdminPage() {
                 <Main open={open}>
                     <DrawerHeader />
                     <Grid container spacing={2}>
-                        {pageState === 'Dashboard' ? <ManagerHomeContent /> : <ManagerMenuContentRenderer />}
+                        {pageState === 'Dashboard' ? <ManagerHomeContent open={open} /> : <ManagerMenuContentRenderer />}
                     </Grid>
                 </Main>
             </Box>

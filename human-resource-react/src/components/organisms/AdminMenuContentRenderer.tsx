@@ -41,7 +41,7 @@ export const AdminMenuContentRenderer = () => {
                 {page === 'Notifications' && <SideBarNotifications/>}
                 {page === 'Edit Company' && <SideBarCompany/>}
                 {page === 'Create Definition' && <SideBarCreateDefinition/>}
-                {page === 'Dashboard' && <AdminHomeContent/>}
+                {page === 'Dashboard' && <AdminHomeContent open={false}/>}
                 {page === 'Deactivate Account' && <DeactivateAccount/>}
                 {page === 'Upcoming Expiries' && <SideBarUpcomingMembershipExpiries/>}
             </Grid>

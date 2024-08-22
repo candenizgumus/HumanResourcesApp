@@ -165,7 +165,7 @@ export default function LoginCard() {
                 <Grid container>
 
                     <Grid item xs={12}>
-                            <Button fullWidth type="button" variant="contained" color="info" onClick={() => navigate('/password-reset')}>
+                            <Button fullWidth type="button" variant="contained" color="primary" onClick={() => navigate('/password-reset')}>
                                 Forgot Password
                             </Button>
                     </Grid>

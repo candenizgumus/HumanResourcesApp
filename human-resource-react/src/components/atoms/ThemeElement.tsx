@@ -22,7 +22,6 @@ const theme = createTheme({
     palette: {
       primary: {
         main: '#222831',
-        dark: '#00ADB5',
       },
       myLightColour: {
         main: '#00ADB5',

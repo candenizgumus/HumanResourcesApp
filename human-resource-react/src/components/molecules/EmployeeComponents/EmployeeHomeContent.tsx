@@ -3,7 +3,7 @@ import MyCalendar, { IShift } from "../../atoms/MyCalender";
 import { useDispatch } from "react-redux";
 import { HumanResources, useAppSelector } from "../../../store";
 import { fetchFindShiftsOfEmployee } from "../../../store/feature/shiftSlice";
-import { Grid, Typography, Box, Paper } from "@mui/material";
+import { Grid, Typography, Box, Paper, useMediaQuery } from "@mui/material";
 import MyCard from "../../atoms/MyCard";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { fetchGetAssignedItemsOfEmployee } from "../../../store/feature/companyItemSlice";
@@ -18,14 +18,14 @@ import { IExpenditure } from "../../../models/IExpenditure";
 import { fetchGetAllExpendituresOfEmployeeByCurrentMonth } from "../../../store/feature/expenditureSlice";
 import {fetchFindUserByToken} from "../../../store/feature/authSlice";
 
-export const EmployeeHomeContent: React.FC = () => {
+export const EmployeeHomeContent = (props:{open:boolean}) => {
     const [events, setEvents] = useState<IShift[]>([]);
     const dispatch = useDispatch<HumanResources>();
     const token = useAppSelector((state) => state.auth.token);
     const [assignedItemList, setAssignedItemList] = useState<IAssignedItemList[]>([]);
     const [leaves, setLeave] = useState<ILeave[]>([]);
     const [expenditures, setExpenditures] = useState<IExpenditure[]>([]);
-
+    const isBigForScreen = useMediaQuery('(max-width:1200px)');
 
 
     const getShiftsOfEmployee = async () => {
@@ -99,8 +99,9 @@ export const EmployeeHomeContent: React.FC = () => {
 
     return (
         <ThemeElement children={
+            (props.open && isBigForScreen) ? null : (
             <Grid container spacing={2}>
-                <Grid item xs={6}>
+                <Grid item xs={isBigForScreen ? 12 : 6}>
                     <Paper elevation={3} sx={{ p: 2, borderRadius: 2 }}>
                         <div style={{ height: "auto", width: "inherit" }}>
                             <Typography variant="h6" align="center" sx={{ mb: 2, fontWeight: "bold", color: 'myLightColour.main' }}>
@@ -110,7 +111,7 @@ export const EmployeeHomeContent: React.FC = () => {
                         </div>
                     </Paper>
                 </Grid>
-                <Grid item xs={3} >
+                <Grid item xs={isBigForScreen ? 12 : 3} >
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
                             <Paper elevation={3} sx={{ p: 2, borderRadius: 2 }}>
@@ -187,7 +188,7 @@ export const EmployeeHomeContent: React.FC = () => {
                         </Grid>
                     </Grid>
                 </Grid>
-                <Grid item xs={3} >
+                <Grid item xs={isBigForScreen ? 12 : 3} >
                     <Grid container spacing={2} >
                         <Grid item xs={12}>
                             <MyCard />
@@ -232,6 +233,7 @@ export const EmployeeHomeContent: React.FC = () => {
                     </Grid>
                 </Grid>
             </Grid>
+            )
         } />
     );
 }

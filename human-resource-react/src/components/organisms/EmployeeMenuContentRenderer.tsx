@@ -26,7 +26,7 @@ export const EmployeeMenuContentRenderer = () => {
                 {page === 'Expenditure' && <SideBarExpenditure/>}
                 {page === 'Change Password' && <ChangePassword/>}
                 {page === 'Bonus' && <SideBarEmployeeBonus/>}
-                {page === 'Dashboard' && <ManagerHomeContent/>}
+                {page === 'Dashboard' && <ManagerHomeContent open={false}/>}
                 {page === 'Deactivate Account' && <DeactivateAccount/>}
             </Grid>
         </>

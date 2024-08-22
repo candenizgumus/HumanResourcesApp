@@ -1,4 +1,4 @@
-# [EasyHR](https://www.easyhr.store)
+# [EasyHR](https://easyhr.store)
 
 The EasyHR Website is a comprehensive platform designed to streamline and simplify human resources management for organizations of all sizes. This web application provides a centralized hub for managing employee data, tracking attendance, processing payroll, and automating various HR tasks. It utilizes Java for the backend, and React with TypeScript for the frontend.
 

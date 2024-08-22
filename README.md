@@ -1,4 +1,4 @@
-# [EasyHR](http://www.easyhr.store)
+# [EasyHR](https://www.easyhr.store)
 
 The EasyHR Website is a comprehensive platform designed to streamline and simplify human resources management for organizations of all sizes. This web application provides a centralized hub for managing employee data, tracking attendance, processing payroll, and automating various HR tasks. It utilizes Java for the backend, and React with TypeScript for the frontend.
 
@@ -11,7 +11,7 @@ The EasyHR Website is a comprehensive platform designed to streamline and simpli
 - [License](#license)
 
 ## Technologies Used
-- **Backend:** Java , SpringBoot, SpringSecurity, SpringWeb, SpringData JPA, SpringEmail, JWT, Amazon S3, Kubernetes, Docker
+- **Backend:** Java , SpringBoot, SpringSecurity, SpringWeb, SpringData JPA, SpringEmail, SpringCloud Gateway, JWT, Amazon S3, Kubernetes, Docker
 - **Frontend:** React, TypeScript
 
 ## Getting Started

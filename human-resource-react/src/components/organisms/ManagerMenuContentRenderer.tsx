@@ -50,7 +50,7 @@ export const ManagerMenuContentRenderer = () => {
                 }
                 {page === 'Company Items' && <SideBarCompanyItems/>}
                 {page === 'Create Definition' && <SideBarCreateDefinition/>}
-                {page === 'Dashboard' && <EmployeeHomeContent/>}
+                {page === 'Dashboard' && <EmployeeHomeContent open={false}/>}
                 {page === 'Deactivate Account' && <DeactivateAccount/>}
                 {page === 'Assign Item' && <AddCompanyItemAssignment/>}
             </Grid>

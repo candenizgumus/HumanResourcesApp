@@ -17,7 +17,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import { Button, Grid } from '@mui/material';
+import { Button, Grid, useMediaQuery } from '@mui/material';
 import { HumanResources, RootState, useAppSelector } from '../../store';
 import { useDispatch, useSelector } from 'react-redux';
 import { changePageState } from '../../store/feature/authSlice';
@@ -65,6 +65,7 @@ const logoStyle = {
     color: 'white',
     transition: 'color 0.3s ease',
 };
+
 interface AppBarProps extends MuiAppBarProps {
     open?: boolean;
 }
@@ -107,6 +108,7 @@ export default function EmployeePage() {
     const [selectedIndex2, setSelectedIndex2] = useState(0);
     const page = useAppSelector((state) => state.auth.pageState);
     const user = useAppSelector((state) => state.auth.user);
+    const isBigForScreen = useMediaQuery('(max-width:1200px)');
     const handleDrawerOpen = () => {
         setOpen(true);
     };
@@ -137,8 +139,8 @@ export default function EmployeePage() {
         <ThemeElement children={
             <Box sx={{ display: 'flex' }}>
                 <CssBaseline />
-                <AppBar sx={{ background: primaryMain }} position="fixed" open={open}>
-                    <Toolbar sx={{ position: 'relative' }}>
+                <AppBar position="fixed" open={open}>
+                    <Toolbar >
                         <IconButton
                             color="inherit"
                             aria-label="open drawer"
@@ -148,34 +150,38 @@ export default function EmployeePage() {
                         >
                             <MenuIcon />
                         </IconButton>
-
-                        <Typography variant="h6" sx={logoStyle}>
-                            <Button onClick={navigateToHome} color="inherit">
-                                <img src={logo} alt="logo" style={{ height: '52px' }} />
-                            </Button>
-                        </Typography>
-
-                        <Typography
-                            sx={{
-                                position: 'absolute',
-                                left: '50%',
-                                transform: 'translateX(-50%)',
-                                fontSize: '20px',
-                            }}
-                        >
-                            {page ? page : 'Dashboard'}
-                        </Typography>
-
-                        <Box sx={{ flexGrow: 1 }} />
-                        <Box>
-                            <Typography variant="h5" component="div" >
-                                Hello, <strong>{user.name ? user.name : 'admin'}</strong>!
+                        {(open && isBigForScreen) ? null : (
+                            <Typography variant="h6" sx={logoStyle}>
+                                <Button onClick={navigateToHome} color="inherit">
+                                    <img src={logo} alt="logo" style={{ height: '52px' }} />
+                                </Button>
                             </Typography>
-                            <Typography variant="subtitle1"  sx={{ marginRight: 1 }} >
-                                <span style={{ fontStyle: 'italic', color: myLightColour }}>{today}  </span>
+                        )}
+                        {(open && isBigForScreen) ? null : (
+                            <Typography
+                                sx={{
+                                    position: 'absolute',
+                                    left: '50%',
+                                    transform: 'translateX(-50%)',
+                                    fontSize: '20px',
+                                }}
+                            >
+                                {page ? page : 'Dashboard'}
                             </Typography>
-                        </Box>
-                        <NotificationIcon />
+                        )}
+                        {!isBigForScreen && (
+                            <Box>
+                                <Typography variant="h5" component="div" >
+                                    Hello, <strong>{user.name ? user.name : 'admin'}</strong>!
+                                </Typography>
+                                <Typography variant="subtitle1" sx={{ marginRight: 1 }} >
+                                    <span style={{ fontStyle: 'italic', color: myLightColour }}>{today}  </span>
+                                </Typography>
+                            </Box>
+                        )}
+                        {(open && isBigForScreen) ? null : (
+                            <NotificationIcon />
+                        )}
                         <NavbarProfile />
                     </Toolbar>
                 </AppBar>
@@ -198,7 +204,7 @@ export default function EmployeePage() {
                         </IconButton>
                     </DrawerHeader>
 
-                    <List sx={{ bgcolor: primaryMain , minHeight: 'calc(100vh - 65px)', paddingTop:'0'}}>
+                    <List sx={{ bgcolor: primaryMain, minHeight: 'calc(100vh - 65px)', paddingTop: '0' }}>
                         {['Dashboard', 'Holidays', 'Profile', 'Company Items', 'Notifications', 'Expenditure', 'Leaves', 'Bonus'].map((text, index) => (
                             <ListItem key={text} disablePadding>
                                 <ListItemButton
@@ -241,7 +247,7 @@ export default function EmployeePage() {
                 <Main open={open}>
                     <DrawerHeader />
                     <Grid container spacing={2}>
-                        {pageState === 'Dashboard' ? <EmployeeHomeContent /> : <EmployeeMenuContentRenderer />}
+                        {pageState === 'Dashboard' ? <EmployeeHomeContent open={open} /> : <EmployeeMenuContentRenderer />}
                     </Grid>
                 </Main>
             </Box>

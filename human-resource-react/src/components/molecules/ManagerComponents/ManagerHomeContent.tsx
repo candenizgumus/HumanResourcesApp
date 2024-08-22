@@ -1,4 +1,4 @@
-import { Box, Grid, Paper, Typography } from "@mui/material";
+import { Box, Grid, Paper, Typography, useMediaQuery } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import React, { useEffect, useState } from "react";
 import { HumanResources, useAppSelector } from "../../../store";
@@ -20,7 +20,7 @@ import { myBackgroundColour, myLightColour, mySecondaryColor } from "../../../ut
 import MyCard from "../../atoms/MyCard";
 import EmployeePositionPieChart from "./EmployeePositionPieChart";
 
-export const ManagerHomeContent = () => {
+export const ManagerHomeContent = (props:{open:boolean}) => {
     const upcomingBirthdayUsers = useAppSelector(state => state.auth.upcomingBirthdayUsers);
     const token = useAppSelector(state => state.auth.token);
     const dispatch = useDispatch<HumanResources>();
@@ -30,6 +30,7 @@ export const ManagerHomeContent = () => {
     const [monthlyEmployeeSalaries, setMonthlyEmployeeSalaries] = useState<IMonthlyPaymentOfManager[]>([]);
     const [monthlyHolidays, setMonthlyHolidays] = useState<IHolidayFormatted[]>([]);
     const [monthlyHolidaysUnformatted, setmonthlyHolidaysUnformatted] = useState<IHoliday[]>([]);
+    const isBigForScreen = useMediaQuery('(max-width:1200px)');
     const userList = useAppSelector((state) => state.auth.userList);
     const formatDate = (date: Date | string | undefined): string => {
         if (!date) return '';
@@ -165,74 +166,28 @@ export const ManagerHomeContent = () => {
 
     return (
         <>
-            <Grid container spacing={0}>
-                <Grid item xs={6}>
-                    <Grid container spacing={2}>
-                        <Grid item xs={6}>
-                            <Grid container spacing={2}>
+            {(props.open && isBigForScreen) ? null : (
+                <Grid container spacing={0}>
+                    <Grid item xs={isBigForScreen ? 12 : 6}>
+                        <Grid container spacing={2}>
+                            <Grid item xs={isBigForScreen ? 12 : 6}>
+                                <Grid container spacing={2}>
+                                    <Grid item xs={12}>
+                                        <Box sx={{ p: 2, pt: 0, maxWidth: '100%' }}>
+                                            <MyCard />
+                                        </Box>
+                                    </Grid>
+                                </Grid>
                                 <Grid item xs={12}>
                                     <Box sx={{ p: 2, pt: 0, maxWidth: '100%' }}>
-                                        <MyCard />
-                                    </Box>
-                                </Grid>
-                            </Grid>
-                            <Grid item xs={12}>
-                                <Box sx={{ p: 2, pt: 0, maxWidth: '100%' }}>
-                                    <Paper elevation={3} sx={{ p: 2, borderRadius: 2 }}>
-                                        <div style={{ height: "auto", width: "inherit" }}>
-                                            <Typography variant="h6" align="center" sx={{ mb: 2, fontWeight: "bold", color: 'myLightColour.main' }}>
-                                                <Payments />  Monthly Payments ($ {totalMonthlyPayment.toFixed(2)} )
-                                            </Typography>
-                                            <DataGrid
-                                                rows={monthlyPayments}
-                                                columns={columnMonthlyPayments}
-                                                disableRowSelectionOnClick={true} // Satır seçimini kapatır
-                                                hideFooter // Alt barda yer alan seçenekleri gizler
-                                                isRowSelectable={() => false}
-                                                initialState={{
-                                                    pagination: {
-                                                        paginationModel: { page: 0, pageSize: 5 },
-                                                    },
-                                                }}
-                                                pageSizeOptions={[5, 10]}
-                                                sx={{
-                                                    backgroundColor: myBackgroundColour, // Açık tonlarda arka plan rengi
-                                                    "& .MuiDataGrid-columnHeaders": {
-                                                        backgroundColor: myLightColour, // Header için açık yeşil tonlarda bir arka plan rengi
-                                                    },
-                                                    "& .MuiDataGrid-columnHeader": {
-                                                        backgroundColor: myLightColour, // Header arka plan rengi
-                                                    },
-                                                    "& .MuiDataGrid-columnHeaderTitle": {
-                                                        textAlign: "center",
-                                                        fontWeight: "bold",
-                                                        fontSize: "11px",
-
-                                                    },
-                                                    "& .MuiDataGrid-cell": {
-                                                        textAlign: "center",
-                                                        fontSize: "11px",
-                                                    },
-                                                    height: "214px",
-                                                }}
-                                            />
-                                        </div>
-                                    </Paper>
-                                </Box>
-                            </Grid>
-                        </Grid>
-                        <Grid item xs={6}>
-                            <Grid container spacing={2}>
-                                <Grid item xs={12}>
-                                    <Box sx={{ p: 2, pt: 0, pl: 0, maxWidth: '100%' }}>
                                         <Paper elevation={3} sx={{ p: 2, borderRadius: 2 }}>
                                             <div style={{ height: "auto", width: "inherit" }}>
                                                 <Typography variant="h6" align="center" sx={{ mb: 2, fontWeight: "bold", color: 'myLightColour.main' }}>
-                                                    <Cake />  Monthly Employee Birthdays
+                                                    <Payments />  Monthly Payments ($ {totalMonthlyPayment.toFixed(2)} )
                                                 </Typography>
                                                 <DataGrid
-                                                    rows={upcomingBirthdayUsers}
-                                                    columns={columns}
+                                                    rows={monthlyPayments}
+                                                    columns={columnMonthlyPayments}
                                                     disableRowSelectionOnClick={true} // Satır seçimini kapatır
                                                     hideFooter // Alt barda yer alan seçenekleri gizler
                                                     isRowSelectable={() => false}
@@ -253,10 +208,12 @@ export const ManagerHomeContent = () => {
                                                         "& .MuiDataGrid-columnHeaderTitle": {
                                                             textAlign: "center",
                                                             fontWeight: "bold",
+                                                            fontSize: "11px",
 
                                                         },
                                                         "& .MuiDataGrid-cell": {
                                                             textAlign: "center",
+                                                            fontSize: "11px",
                                                         },
                                                         height: "214px",
                                                     }}
@@ -265,85 +222,80 @@ export const ManagerHomeContent = () => {
                                         </Paper>
                                     </Box>
                                 </Grid>
-                                <Grid item xs={12}>
-                                    <Box sx={{ p: 2, pt: 0, pl: 0, maxWidth: '100%' }}>
-                                        <Paper elevation={3} sx={{ p: 2, borderRadius: 2 }}>
-                                            <div style={{ height: "auto", width: "inherit" }}>
-                                                <Typography variant="h6" align="center" sx={{ mb: 2, fontWeight: "bold", color: 'myLightColour.main' }}>
-                                                    <PieChart />   Employee Distribution by Position
-                                                </Typography>
-                                                <EmployeePositionPieChart employeeList={userList} />
-                                            </div>
-                                        </Paper>
-                                    </Box>
+                            </Grid>
+                            <Grid item xs={isBigForScreen ? 12 : 6}>
+                                <Grid container spacing={2}>
+                                    <Grid item xs={12}>
+                                        <Box sx={{ p: 2, pt: 0, pl: 0, maxWidth: '100%' }}>
+                                            <Paper elevation={3} sx={{ p: 2, borderRadius: 2 }}>
+                                                <div style={{ height: "auto", width: "inherit" }}>
+                                                    <Typography variant="h6" align="center" sx={{ mb: 2, fontWeight: "bold", color: 'myLightColour.main' }}>
+                                                        <Cake />  Monthly Employee Birthdays
+                                                    </Typography>
+                                                    <DataGrid
+                                                        rows={upcomingBirthdayUsers}
+                                                        columns={columns}
+                                                        disableRowSelectionOnClick={true} // Satır seçimini kapatır
+                                                        hideFooter // Alt barda yer alan seçenekleri gizler
+                                                        isRowSelectable={() => false}
+                                                        initialState={{
+                                                            pagination: {
+                                                                paginationModel: { page: 0, pageSize: 5 },
+                                                            },
+                                                        }}
+                                                        pageSizeOptions={[5, 10]}
+                                                        sx={{
+                                                            backgroundColor: myBackgroundColour, // Açık tonlarda arka plan rengi
+                                                            "& .MuiDataGrid-columnHeaders": {
+                                                                backgroundColor: myLightColour, // Header için açık yeşil tonlarda bir arka plan rengi
+                                                            },
+                                                            "& .MuiDataGrid-columnHeader": {
+                                                                backgroundColor: myLightColour, // Header arka plan rengi
+                                                            },
+                                                            "& .MuiDataGrid-columnHeaderTitle": {
+                                                                textAlign: "center",
+                                                                fontWeight: "bold",
+
+                                                            },
+                                                            "& .MuiDataGrid-cell": {
+                                                                textAlign: "center",
+                                                            },
+                                                            height: "214px",
+                                                        }}
+                                                    />
+                                                </div>
+                                            </Paper>
+                                        </Box>
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <Box sx={{ p: 2, pt: 0, pl: 0, maxWidth: '100%' }}>
+                                            <Paper elevation={3} sx={{ p: 2, borderRadius: 2 }}>
+                                                <div style={{ height: "auto", width: "inherit" }}>
+                                                    <Typography variant="h6" align="center" sx={{ mb: 2, fontWeight: "bold", color: 'myLightColour.main' }}>
+                                                        <PieChart />   Employee Distribution by Position
+                                                    </Typography>
+                                                    <EmployeePositionPieChart employeeList={userList} />
+                                                </div>
+                                            </Paper>
+                                        </Box>
+                                    </Grid>
                                 </Grid>
                             </Grid>
                         </Grid>
-
-
-
                     </Grid>
-                </Grid>
-                <Grid item xs={6}>
-                    <Grid item xs={12}>
-                        <Box sx={{ p: 2, pt: 0, maxWidth: '100%' }}>
-                            <Paper elevation={3} sx={{ p: 2, borderRadius: 2 }}>
-                                <div style={{ height: "auto", width: "inherit" }}>
-                                    <Typography variant="h6" align="center" sx={{ mb: 2, fontWeight: "bold", color: 'myLightColour.main' }}>
-                                        <Paid /> Monthly Total Salary ($ {totalSalary.toFixed(2)} )
-                                    </Typography>
-
-                                    <DataGrid
-
-                                        rows={monthlyEmployeeSalaries}
-                                        columns={columnSalary}
-                                        disableRowSelectionOnClick={true} // Satır seçimini kapatır
-                                        hideFooter // Alt barda yer alan seçenekleri gizler
-                                        isRowSelectable={() => false}
-                                        initialState={{
-                                            pagination: {
-                                                paginationModel: { page: 0, pageSize: 5 },
-                                            },
-                                        }}
-                                        pageSizeOptions={[5, 10]}
-
-
-                                        sx={{
-                                            backgroundColor: myBackgroundColour, // Açık tonlarda arka plan rengi
-                                            "& .MuiDataGrid-columnHeaders": {
-                                                backgroundColor: myLightColour, // Header için açık yeşil tonlarda bir arka plan rengi
-                                            },
-                                            "& .MuiDataGrid-columnHeader": {
-                                                backgroundColor: myLightColour, // Header arka plan rengi
-                                            },
-                                            "& .MuiDataGrid-columnHeaderTitle": {
-                                                textAlign: "center",
-                                                fontWeight: "bold",
-
-                                            },
-                                            "& .MuiDataGrid-cell": {
-                                                textAlign: "center",
-                                            },
-                                            height: "428px",
-                                        }}
-                                    />
-                                </div>
-                            </Paper>
-                        </Box>
-                    </Grid>
-                    <Grid container spacing={2}>
+                    <Grid item xs={isBigForScreen ? 12 : 6}>
                         <Grid item xs={12}>
                             <Box sx={{ p: 2, pt: 0, maxWidth: '100%' }}>
                                 <Paper elevation={3} sx={{ p: 2, borderRadius: 2 }}>
                                     <div style={{ height: "auto", width: "inherit" }}>
                                         <Typography variant="h6" align="center" sx={{ mb: 2, fontWeight: "bold", color: 'myLightColour.main' }}>
-                                            <Weekend /> Monthly Holidays
+                                            <Paid /> Monthly Total Salary ($ {totalSalary.toFixed(2)} )
                                         </Typography>
 
                                         <DataGrid
 
-                                            rows={monthlyHolidays}
-                                            columns={columHolidays}
+                                            rows={monthlyEmployeeSalaries}
+                                            columns={columnSalary}
                                             disableRowSelectionOnClick={true} // Satır seçimini kapatır
                                             hideFooter // Alt barda yer alan seçenekleri gizler
                                             isRowSelectable={() => false}
@@ -371,16 +323,64 @@ export const ManagerHomeContent = () => {
                                                 "& .MuiDataGrid-cell": {
                                                     textAlign: "center",
                                                 },
-                                                height: "214px",
+                                                height: "428px",
                                             }}
                                         />
                                     </div>
                                 </Paper>
                             </Box>
                         </Grid>
+                        <Grid container spacing={2}>
+                            <Grid item xs={12}>
+                                <Box sx={{ p: 2, pt: 0, maxWidth: '100%' }}>
+                                    <Paper elevation={3} sx={{ p: 2, borderRadius: 2 }}>
+                                        <div style={{ height: "auto", width: "inherit" }}>
+                                            <Typography variant="h6" align="center" sx={{ mb: 2, fontWeight: "bold", color: 'myLightColour.main' }}>
+                                                <Weekend /> Monthly Holidays
+                                            </Typography>
+
+                                            <DataGrid
+
+                                                rows={monthlyHolidays}
+                                                columns={columHolidays}
+                                                disableRowSelectionOnClick={true} // Satır seçimini kapatır
+                                                hideFooter // Alt barda yer alan seçenekleri gizler
+                                                isRowSelectable={() => false}
+                                                initialState={{
+                                                    pagination: {
+                                                        paginationModel: { page: 0, pageSize: 5 },
+                                                    },
+                                                }}
+                                                pageSizeOptions={[5, 10]}
+
+
+                                                sx={{
+                                                    backgroundColor: myBackgroundColour,
+                                                    "& .MuiDataGrid-columnHeaders": {
+                                                        backgroundColor: myLightColour,
+                                                    },
+                                                    "& .MuiDataGrid-columnHeader": {
+                                                        backgroundColor: myLightColour, // Header arka plan rengi
+                                                    },
+                                                    "& .MuiDataGrid-columnHeaderTitle": {
+                                                        textAlign: "center",
+                                                        fontWeight: "bold",
+
+                                                    },
+                                                    "& .MuiDataGrid-cell": {
+                                                        textAlign: "center",
+                                                    },
+                                                    height: "214px",
+                                                }}
+                                            />
+                                        </div>
+                                    </Paper>
+                                </Box>
+                            </Grid>
+                        </Grid>
                     </Grid>
                 </Grid>
-            </Grid>
+            )}
         </>
     );
 };

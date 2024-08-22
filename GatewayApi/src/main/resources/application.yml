@@ -1,0 +1,17 @@
+server:
+  port: 80
+
+spring:
+  main:
+    web-application-type: reactive
+  cloud:
+    gateway:
+      routes:
+        - id: humanresourceapp
+          uri: http://34.118.236.86:9090/
+          predicates:
+            - Path=/dev/v1/**
+        - id: humanresourceappreact
+          uri: http://34.118.237.159:80 #hedef adres
+          predicates:
+            - Path=/**

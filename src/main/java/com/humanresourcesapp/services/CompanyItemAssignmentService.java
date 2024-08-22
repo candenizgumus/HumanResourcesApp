@@ -55,6 +55,10 @@ public class CompanyItemAssignmentService {
         return true;
     }
 
+    public void update (CompanyItemAssignment companyItemAssignment) {
+        companyItemAssignmentRepository.save(companyItemAssignment);
+    }
+
     public boolean saveForDemoData(Long companyItemId, Long employeeId) {
         User employee = userService.findById(employeeId);
         companyItemAssignmentRepository.save(CompanyItemAssignment.builder()
@@ -75,7 +79,7 @@ public class CompanyItemAssignmentService {
         String managerEmail = UserInfoSecurityContext.getUserInfoFromSecurityContext();
         User manager = userService.findByEmail(managerEmail).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
 
-        List<CompanyItemAssignment> companyItemAssignments = companyItemAssignmentRepository.findByCompanyId(manager.getCompanyId());
+        List<CompanyItemAssignment> companyItemAssignments = companyItemAssignmentRepository.findByCompanyIdAndStatusNot(manager.getCompanyId(), EStatus.DELETED);
         List<CompanyItem> companyItems = companyItemService.findByCompanyId(manager.getCompanyId());
         List<CompanyItemAssignmentResponseDto> dtoList = new ArrayList<>();
         for (CompanyItemAssignment companyItemAssignment : companyItemAssignments) {
@@ -174,6 +178,14 @@ public class CompanyItemAssignmentService {
             companyItemService.findById(id).setStatus(EStatus.AVAILABLE);
             companyItemService.saveForStatus(companyItemService.findById(id));
             return true;
+        }
+        throw new HumanResourcesAppException(ErrorType.ASSIGNMENT_NOT_FOUND);
+    }
+
+    public CompanyItemAssignment findByCompanyItemId(Long id) {
+        Optional<CompanyItemAssignment> companyItemAssignment = companyItemAssignmentRepository.findByCompanyItemId(id);
+        if (companyItemAssignment.isPresent()) {
+            return companyItemAssignment.get();
         }
         throw new HumanResourcesAppException(ErrorType.ASSIGNMENT_NOT_FOUND);
     }

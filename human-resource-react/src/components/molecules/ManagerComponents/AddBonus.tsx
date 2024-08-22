@@ -44,12 +44,13 @@ export default function AddBonus({
 }: AddBonusProps) {
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
-      <DialogTitle>Add Bonus to {selectedUser && selectedUser.name + " " + selectedUser.surname}</DialogTitle>
+      <DialogTitle>Add Bonus to <span style={{ fontWeight: "bold" }}>{selectedUser && selectedUser.name + " " + selectedUser.surname}</span></DialogTitle>
       <DialogContent>
         <Box component="form">
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField
+                  sx={{ marginTop: "16px" }}
                 label="Description"
                 name="description"
                 variant="outlined"

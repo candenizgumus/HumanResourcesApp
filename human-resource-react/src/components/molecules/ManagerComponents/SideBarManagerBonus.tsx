@@ -126,20 +126,24 @@ const SideBarManagerBonus = () => {
                         });
                         return;
                     } else {
-                        await Swal.fire({
+                        Swal.fire({
                             title: "Deleted!",
-                            text: "Your bonus has been cancelled.",
+                            text: "Your bonus has been deleted.",
                             icon: "success",
                             confirmButtonColor: myLightColour,
                             cancelButtonColor: myErrorColour,
-                        });
+                        }).then(() => {
+                            dispatch(
+                                fetchGetBonusesOfManager({
+                                    token: token,
+                                    page: 0,
+                                    pageSize: 100,
+                                    searchText: searchText,
+                                })
+                            );
 
-                        await dispatch(fetchGetBonusesOfManager({
-                            token: token,
-                            page: 0,
-                            pageSize: 100,
-                            searchText: searchText,
-                        }));
+                        })
+
                     }
                 }
             } catch (error) {

@@ -12,7 +12,7 @@ The EasyHR Website is a comprehensive platform designed to streamline and simpli
 
 ## Technologies Used
 - **Backend:** Java , SpringBoot, SpringSecurity, SpringWeb, SpringData JPA, SpringEmail, SpringCloud Gateway, JWT, Amazon S3, Kubernetes, Docker
-- **Frontend:** React, TypeScript
+- **Frontend:** React, TypeScript , MUI
 
 ## Getting Started
  Demo images are shown below. For demo datas, the accounts given below can be used.

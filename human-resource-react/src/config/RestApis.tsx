@@ -1,7 +1,7 @@
 const server_loadbalancer = 'https://easyhr.store';
-const server_local = 'http://localhost';
+const server_local = 'http://localhost:9090';
 
-const server = server_loadbalancer;
+const server = server_local;
 const apis = {
     authService: server+'/dev/v1/auth',
     bonusService: server+'/dev/v1/bonus',

@@ -111,4 +111,13 @@ public class PersonalDocumentService {
     }
 
 
+    public List<PersonalDocument> findAll()
+    {
+        return personalDocumentRepository.findAll();
+    }
+
+    public void update(PersonalDocument personalDocument)
+    {
+        personalDocumentRepository.save(personalDocument);
+    }
 }

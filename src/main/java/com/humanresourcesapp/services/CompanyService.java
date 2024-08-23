@@ -201,17 +201,17 @@ public class CompanyService
                 // Delete the old file in the S3 bucket if it exists
                 if (existingProfileImageId != null && !existingProfileImageId.isEmpty()) {
                     s3Service.deleteObject(s3Buckets.getCustomer(),
-                            "profile-images/%s/%s".formatted(company.getId(), existingProfileImageId));
+                            "company-images/%s/%s".formatted(company.getName()+"-"+company.getId(), companyImageId));
                 }
 
                 // Upload the new file
                 s3Service.putObject(s3Buckets.getCustomer(),
-                        "profile-images/%s/%s".formatted(company.getId(), companyImageId),
+                        "company-images/%s/%s".formatted(company.getName()+"-"+company.getId(), companyImageId),
                         photo.getBytes()
                 );
 
                 String profileImageUrl = s3Service.createPresignedGetUrl(
-                        s3Buckets.getCustomer(), "profile-images/%s/%s".formatted(company.getId(), companyImageId));
+                        s3Buckets.getCustomer(), "company-images/%s/%s".formatted(company.getName()+"-"+company.getId(), companyImageId));
 
                 company.setCompanyImageId(companyImageId);
                 company.setLogo(profileImageUrl);
@@ -222,5 +222,9 @@ public class CompanyService
         }
 
         return companyRepository.save(company);
+    }
+
+    public List<Company> findAll(){
+        return companyRepository.findAll();
     }
 }

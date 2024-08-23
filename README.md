@@ -36,7 +36,7 @@ Admin View;
 ![Ekran görüntüsü 2024-08-21 100250](https://github.com/user-attachments/assets/f2b80bf3-188d-48e5-ab9d-7309e2b3569f)
 
 Manager View;
-![Ekran görüntüsü 2024-08-21 100213](https://github.com/user-attachments/assets/941e96fc-7c28-4c2a-bd7f-b802a6ec6543)
+![image](https://github.com/user-attachments/assets/c88341cb-ce2c-4286-8bcb-d279dedbd6ed)
 
 ![Ekran görüntüsü 2024-08-21 100328](https://github.com/user-attachments/assets/c4120f4a-7ac2-459f-a82c-597c1600458c)
 

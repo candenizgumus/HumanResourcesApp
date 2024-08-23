@@ -131,4 +131,5 @@ public class Endpoints
     public static final String GET_ALL_CURRENT_LEAVES = "/get-all-current-leaves";
     public static final String GET_ALL_EXPENDITURES_OF_EMPLOYEE_BY_CURRENT_MONTH = "/get-all-expenditures-of-employee-by-current-month";
     public static final String CANCEL_ASSIGNMENT_BY_MANAGER = "/cancel-assignment-by-manager";
+    public static final String UPDATE_PHOTO = "/update-photo";
 }

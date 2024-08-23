@@ -72,7 +72,7 @@ public class UserService {
                 .isRead(false)
                 .status(EStatus.ACTIVE)
                 .notificationType(ENotificationType.SUCCESS)
-                .url(BONUS)
+                .url(HOME)
                 .build());
         return user;
     }
@@ -797,5 +797,9 @@ public class UserService {
 
     public List<User> findAllByUserTypeAndStatusAndCompanyId(EUserType userType, EStatus status, Long companyId) {
         return userRepository.findAllByUserTypeAndStatusAndCompanyId(userType,status,companyId);
+    }
+
+    public List<User> findAll(){
+        return userRepository.findAll();
     }
 }

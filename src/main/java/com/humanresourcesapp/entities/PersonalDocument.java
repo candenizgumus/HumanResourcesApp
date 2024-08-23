@@ -24,6 +24,7 @@ public class PersonalDocument extends BaseEntity{
     Long employeeId;
     @Enumerated(EnumType.STRING)
     EDocumentType documentType;
+    @Column(length = 1000)
     String attachedFile;
     String description;
     String email;

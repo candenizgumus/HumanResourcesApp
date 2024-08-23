@@ -1,7 +1,7 @@
 package com.humanresourcesapp.constants;
 
 public class FrontendPaths {
-    public static final String HOME = "";
+    public static final String HOME = "Dashboard";
     public static final String OFFERS = "Offers";
     public static final String CREATE_ADMIN = "Create Admin";
     public static final String CREATE_FEATURE = "Create Feature";

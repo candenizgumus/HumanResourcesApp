@@ -4,7 +4,14 @@ package com.humanresourcesapp.services;
 import com.humanresourcesapp.configs.aws.S3Buckets;
 import com.humanresourcesapp.dto.requests.UploadFileRequestDto;
 import com.humanresourcesapp.dto.responses.UrlResponseDto;
+import com.humanresourcesapp.entities.User;
+import com.humanresourcesapp.entities.enums.EUserType;
+import com.humanresourcesapp.exception.ErrorType;
+import com.humanresourcesapp.exception.HumanResourcesAppException;
+import com.humanresourcesapp.utility.UserInfoSecurityContext;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import software.amazon.awssdk.core.ResponseInputStream;
 import software.amazon.awssdk.core.sync.RequestBody;
@@ -26,6 +33,15 @@ public class S3Service {
 
     private final S3Client s3Client;
     private final S3Buckets s3Buckets;
+    private UserService userService;
+    private CompanyService companyService;
+
+    @Autowired
+    public void setUserService(@Lazy UserService userService , @Lazy CompanyService companyService)
+    {
+        this.userService = userService;
+        this.companyService = companyService;
+    }
 
     public void putObject(String bucketName, String key, byte[] file){
         PutObjectRequest objectRequest = PutObjectRequest.builder()
@@ -71,7 +87,7 @@ public class S3Service {
                     .build();
 
             GetObjectPresignRequest presignRequest = GetObjectPresignRequest.builder()
-                    .signatureDuration(Duration.ofMinutes(5))  // The URL will expire in 10 minutes.
+                    .signatureDuration(Duration.ofDays(7))  // The URL will expire in 1 day .
                     .getObjectRequest(objectRequest)
                     .build();
 
@@ -85,6 +101,8 @@ public class S3Service {
         String presignedGetUrl = createPresignedGetUrl(s3Buckets.getCustomer(), key);
         return new UrlResponseDto(presignedGetUrl);
     }
+
+
 
 
 }

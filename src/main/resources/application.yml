@@ -17,7 +17,7 @@ spring:
     password: 1234
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
   mail:
     host: smtp.gmail.com
     port: 587

@@ -43,10 +43,9 @@ public class CommentService {
     }
 
     public List<CommentResponseDto> getAll() {
-        List<Comment> commentList = commentRepository.findAll();
+        List<Comment> commentList = commentRepository.findAllByLongDescriptionIsNotNullAndShortDescriptionIsNotNull();
         List<CommentResponseDto> commentDtoList = new ArrayList<>();
         for (Comment comment : commentList) {
-            if(comment.getLongDescription().isEmpty()) continue;
             User manager = userService.findById(comment.getManagerId());
             Company company = companyService.findById(comment.getCompanyId()).orElseThrow(() -> new RuntimeException("Company not found"));
             commentDtoList.add(CommentResponseDto.builder()

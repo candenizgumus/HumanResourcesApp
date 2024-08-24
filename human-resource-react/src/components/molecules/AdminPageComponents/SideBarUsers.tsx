@@ -28,33 +28,10 @@ import {
 import Swal from "sweetalert2";
 import { IUser } from "../../../models/IUser";
 import CircularProgress from '@mui/material/CircularProgress';
+import {ICompany} from "../../../models/ICompany";
+import {fetchGetCompanies} from "../../../store/feature/companySlice";
 
-const columns: GridColDef[] = [
-    { field: "companyId", headerName: "Company Id", flex: 1, headerAlign: "center" },
-    { field: "name", headerName: "First name", flex: 1, headerAlign: "center" },
-    { field: "surname", headerName: "Last name", flex: 1, headerAlign: "center" },
-    { field: "email", headerName: "Email", headerAlign: "center", flex: 2 },
-    { field: "phone", headerName: "Phone", sortable: false, headerAlign: "center", flex: 1 },
-    { field: "sector", headerName: "Sector", type: "string", flex: 2, headerAlign: "center" },
-    { field: "userType", headerName: "User Type", flex: 1, headerAlign: "center" },
-    { field: "subscriptionType", headerName: "Sub. Type", flex: 1, headerAlign: "center" },
-    { field: "subscriptionStartDate", headerName: "Sub. Start Date", type: "string", flex: 1, headerAlign: "center" },
-    { field: "subscriptionEndDate", headerName: "Sub. End Date", type: "string", flex: 1, headerAlign: "center" },
-    { field: "status", headerName: "Status", type: "string", flex: 1, headerAlign: "center" },
-    {
-        field: "photo",
-        headerName: "Photo",
-        flex: 1,
-        headerAlign: "center",
-        sortable: false,
-        renderCell: (params) => (
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '100%' }}>
-                <Avatar alt={params.row.name} src={params.value} />
-            </div>
-        ),
-    },
 
-];
 
 const style = {
     position: "absolute" as "absolute",
@@ -84,7 +61,7 @@ export default function SideBarUsers() {
     const users: IUser[] = useAppSelector((state) => state.auth.userList);
     const [selectedUser, setSelectedUser] = useState<IUser | null>(null);
     const [loading, setLoading] = useState(false);
-
+    const [companyList, setCompanyList] = useState<ICompany[]>([]);
     const [statusList, setStatusList] = useState<string[]>([]);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
@@ -150,6 +127,7 @@ export default function SideBarUsers() {
                     pageSize: paginationModel.pageSize,
                     searchText: searchText,
                 }));
+                await dispatch(fetchGetCompanies({token : token , page : 0, pageSize : 100000, searchText : ''})).then(data => setCompanyList(data.payload))
 
                 const count = await dispatch(fetchGetUserCount({
                     token: token,
@@ -168,6 +146,40 @@ export default function SideBarUsers() {
     }, [dispatch, searchText, token, paginationModel]);
 
 
+    const columns: GridColDef[] = [
+        { field: "companyId", headerName: "Company Name", flex: 1, headerAlign: "center",
+
+            renderCell: (params) => (
+                <>
+                    {companyList.find((company) => company.id === params.value)?.name}
+                </>
+
+            ),
+        },
+        { field: "name", headerName: "First name", flex: 1, headerAlign: "center" },
+        { field: "surname", headerName: "Last name", flex: 1, headerAlign: "center" },
+        { field: "email", headerName: "Email", headerAlign: "center", flex: 2 },
+        { field: "phone", headerName: "Phone", sortable: false, headerAlign: "center", flex: 1 },
+        { field: "sector", headerName: "Sector", type: "string", flex: 2, headerAlign: "center" },
+        { field: "userType", headerName: "User Type", flex: 1, headerAlign: "center" },
+        { field: "subscriptionType", headerName: "Sub. Type", flex: 1, headerAlign: "center" },
+        { field: "subscriptionStartDate", headerName: "Sub. Start Date", type: "string", flex: 1, headerAlign: "center" },
+        { field: "subscriptionEndDate", headerName: "Sub. End Date", type: "string", flex: 1, headerAlign: "center" },
+        { field: "status", headerName: "Status", type: "string", flex: 1, headerAlign: "center" },
+        {
+            field: "photo",
+            headerName: "Photo",
+            flex: 1,
+            headerAlign: "center",
+            sortable: false,
+            renderCell: (params) => (
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '100%' }}>
+                    <Avatar alt={params.row.name} src={params.value} />
+                </div>
+            ),
+        },
+
+    ];
     const handleRowSelection = (newSelectionModel: GridRowSelectionModel) => {
         setSelectedRowIds(newSelectionModel as number[]);
     };

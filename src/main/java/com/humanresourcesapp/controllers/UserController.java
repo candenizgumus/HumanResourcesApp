@@ -10,7 +10,6 @@ import com.humanresourcesapp.entities.User;
 import com.humanresourcesapp.entities.enums.*;
 import com.humanresourcesapp.services.UserService;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Email;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -69,13 +68,6 @@ public class UserController
         userService.uploadPlayerProfileImage(file, authentication);
     }
 
-//    @GetMapping(GET_POSITIONS)
-//    @CrossOrigin("*")
-//    public ResponseEntity<EPosition[]> getPositions()
-//    {
-//        return ResponseEntity.ok(EPosition.values());
-//    }
-
     @GetMapping(GET_SECTORS)
     @CrossOrigin("*")
     public ResponseEntity<ESectors[]> getSectors()
@@ -97,8 +89,6 @@ public class UserController
     {
         return ResponseEntity.ok(userService.getAll(dto));
     }
-
-    
 
     @PostMapping(GET_ALL_USERS_OF_MANAGER_BY_COMPANY_ID)
     @PreAuthorize("hasAnyAuthority('MANAGER')")
@@ -233,4 +223,5 @@ public class UserController
     {
         return ResponseEntity.ok(userService.findManagerAndCompanyNameOfEmployee());
     }
+
 }

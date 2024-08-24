@@ -86,6 +86,16 @@ const OfferFormSection = () => {
                     confirmButtonColor: myLightColour,
                     cancelButtonColor: myErrorColour,
                 });
+
+                setName('');
+                setSurname('');
+                setEmail('');
+                setPhone('');
+                setTitle('');
+                setNumberOfEmployees('');
+                setCompanyName('');
+                setSelectedSector('');
+                setAgreedToTerms(false);
             })
 
     };

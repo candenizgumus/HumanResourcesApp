@@ -129,6 +129,7 @@ public class OfferService
                 .subscriptionType(dto.ESubscriptionType())
                 .subscriptionStartDate(auth.getSubscriptionStartDate())
                 .subscriptionEndDate(auth.getSubscriptionEndDate())
+                .title(offer.getTitle())
                 .build();
         userService.save(user);
 

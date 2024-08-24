@@ -14,6 +14,11 @@ import { NavBar } from '../../components/molecules/PreAuthorizedPageComponents/N
 import FooterElement from '../../components/molecules/PreAuthorizedPageComponents/FooterElement';
 import HeaderElement from '../../components/atoms/Header';
 import ThemeElement from '../../components/atoms/ThemeElement';
+import aslan from '../../images/aslan.jpg';
+import emir from '../../images/emir.jpg';
+import deniz from '../../images/deniz.png';
+import kerem from '../../images/kerem.jpeg';
+import hicran from '../../images/hicran.jpeg';
 
 const Root = styled('div')(({ theme }) => ({
   display: 'flex',
@@ -66,7 +71,7 @@ function AboutUsPage() {
                     <Paper elevation={3} sx={{ p: 2, textAlign: 'center' }}>
                       <Avatar
                         alt="Can Deniz Gümüş"
-                        src="/path/to/avatar1.jpg"
+                        src={deniz}
                         sx={{ width: 80, height: 80, mx: 'auto', mb: 2 }}
                       />
                       <Typography variant="h6">Can Deniz Gümüş</Typography>
@@ -90,7 +95,8 @@ function AboutUsPage() {
                     <Paper elevation={3} sx={{ p: 2, textAlign: 'center' }}>
                       <Avatar
                         alt="Heval Can Aslan Özen"
-                        src="/path/to/avatar2.jpg"
+                        src={aslan}
+
                         sx={{ width: 80, height: 80, mx: 'auto', mb: 2 }}
                       />
                       <Typography variant="h6">Heval Can Aslan Özen</Typography>
@@ -114,7 +120,7 @@ function AboutUsPage() {
                     <Paper elevation={3} sx={{ p: 2, textAlign: 'center' }}>
                       <Avatar
                         alt="Hicran Arslan"
-                        src="/path/to/avatar3.jpg"
+                        src={hicran}
                         sx={{ width: 80, height: 80, mx: 'auto', mb: 2 }}
                       />
                       <Typography variant="h6">Hicran Arslan</Typography>
@@ -138,7 +144,7 @@ function AboutUsPage() {
                     <Paper elevation={3} sx={{ p: 2, textAlign: 'center' }}>
                       <Avatar
                         alt="Kenan Kerem Öktener"
-                        src="/path/to/avatar4.jpg"
+                        src={kerem}
                         sx={{ width: 80, height: 80, mx: 'auto', mb: 2 }}
                       />
                       <Typography variant="h6">Kenan Kerem Öktener</Typography>
@@ -162,7 +168,7 @@ function AboutUsPage() {
                     <Paper elevation={3} sx={{ p: 2, textAlign: 'center' }}>
                       <Avatar
                         alt="Sami Emir Esen"
-                        src="/path/to/avatar5.jpg"
+                        src={emir}
                         sx={{ width: 80, height: 80, mx: 'auto', mb: 2 }}
                       />
                       <Typography variant="h6">Sami Emir Esen</Typography>

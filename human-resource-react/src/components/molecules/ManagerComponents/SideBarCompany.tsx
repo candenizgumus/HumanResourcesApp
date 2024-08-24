@@ -1,5 +1,16 @@
 import React, { useState, FormEvent, useEffect } from 'react';
-import { TextField, Button, Box, Grid, Avatar, IconButton } from '@mui/material';
+import {
+    TextField,
+    Button,
+    Box,
+    Grid,
+    Avatar,
+    IconButton,
+    InputLabel,
+    Select,
+    MenuItem,
+    FormControl
+} from '@mui/material';
 import { HumanResources, useAppSelector } from "../../../store";
 import { useDispatch } from "react-redux";
 import Swal from "sweetalert2";
@@ -9,6 +20,7 @@ import styled from "@emotion/styled";
 import { IFile } from "../../../models/IFile";
 import { CloudUpload } from "@mui/icons-material";
 import { myErrorColour, myLightColour } from '../../../util/MyColours';
+import {ICountries} from "../../../models/ICountries";
 
 const SideBarCompany: React.FC = () => {
 
@@ -221,15 +233,21 @@ const SideBarCompany: React.FC = () => {
                         inputProps={{ maxLength: 50 }}
                     />
 
-                    <TextField
-                        label='Country'
-                        name="country"
-                        value={country}
-                        onChange={event => setCountry(event.target.value)}
-                        fullWidth
-                        required
-                        inputProps={{ maxLength: 50 }}
-                    />
+                    <FormControl variant="outlined">
+                        <InputLabel>{'Please Select Your Country'}</InputLabel>
+                        <Select
+                            required
+                            value={country}
+                            onChange={event => setCountry(event.target.value as string)}
+                            label="Country"
+                        >
+                            {Object.values(ICountries).map(country => (
+                                <MenuItem key={country.valueOf()} value={country.valueOf()}>
+                                    {country.valueOf()}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
                     <Button onClick={updateCompany} sx={{ mt: 5 }} type="button" variant="contained" color="success">
                         Update Company
                     </Button>

@@ -1,3 +1,4 @@
+
 export interface ITask {
     id: number;
     employeeId: number;
@@ -8,6 +9,5 @@ export interface ITask {
     numberOfCompletedSubtasks: number;
     taskName: string;
     isCompleted: boolean;
-    subtasks: [];
     status: string;
 }

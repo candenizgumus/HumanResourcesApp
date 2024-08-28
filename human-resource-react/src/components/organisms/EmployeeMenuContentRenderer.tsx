@@ -11,6 +11,8 @@ import SideBarEmployeeBonus from "../molecules/EmployeeComponents/SideBarEmploye
 import {ManagerHomeContent} from "../molecules/ManagerComponents/ManagerHomeContent";
 import DeactivateAccount from "../molecules/DeactivateAccount";
 import SideBarEmployeeCompanyItems from "../molecules/EmployeeComponents/SideBarEmployeeCompanyItems";
+import React from "react";
+import SideBarEmployeeTask from "../molecules/EmployeeComponents/SideBarEmployeeTask";
 export const EmployeeMenuContentRenderer = () => {
     const page = useAppSelector((state) => state.auth.pageState);
 
@@ -28,6 +30,7 @@ export const EmployeeMenuContentRenderer = () => {
                 {page === 'Bonus' && <SideBarEmployeeBonus/>}
                 {page === 'Dashboard' && <ManagerHomeContent open={false}/>}
                 {page === 'Deactivate Account' && <DeactivateAccount/>}
+                {page === 'Task' && <SideBarEmployeeTask/>}
             </Grid>
         </>
     );

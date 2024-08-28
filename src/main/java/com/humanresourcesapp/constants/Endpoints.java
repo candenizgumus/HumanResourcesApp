@@ -137,4 +137,10 @@ public class Endpoints
     public static final String ASSIGN_TASK_TO_EMPLOYEE = "/assign-task-to-employee";
     public static final String GET_ALL_SUBTASKS_OF_SELECTED_TASK = "/get-all-subtasks-of-selected-task";
     public static final String SAVE_SUBTASK = "/save-subtask";
+    public static final String DELETE_SUBTASK = "/delete-subtask";
+    public static final String GET_TASKS_OF_EMPLOYEE = "/get-tasks-of-employee";
+    public static final String FINISH_SUBTASK = "/finish-subtask";
+    public static final String CANCEL_SUBTASK = "/cancel-subtask";
+    public static final String COMPLETE_SUBTASK = "/complete-subtask";
+    public static final String COMPLETE_TASK = "/complete-task";
 }

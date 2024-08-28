@@ -4,6 +4,7 @@ import com.humanresourcesapp.dto.requests.AssignTaskToEmployeeRequestDto;
 import com.humanresourcesapp.dto.requests.PageRequestDto;
 import com.humanresourcesapp.dto.requests.SubTasksSaveRequestDto;
 import com.humanresourcesapp.dto.requests.TasksSaveRequestDto;
+import com.humanresourcesapp.dto.responses.TaskResponseDto;
 import com.humanresourcesapp.entities.SubTasks;
 import com.humanresourcesapp.entities.Tasks;
 import com.humanresourcesapp.services.TasksService;
@@ -32,7 +33,7 @@ public class TasksController
 
     @PostMapping(GET_ALL)
     @PreAuthorize("hasAnyAuthority('MANAGER')")
-    public ResponseEntity<List<Tasks>> getAll(@RequestBody PageRequestDto dto){
+    public ResponseEntity<List<TaskResponseDto>> getAll(@RequestBody PageRequestDto dto){
         return ResponseEntity.ok(tasksService.getAll(dto));
     }
 
@@ -48,9 +49,46 @@ public class TasksController
         return ResponseEntity.ok(tasksService.saveSubtask(dto));
     }
 
+    @DeleteMapping(DELETE_SUBTASK)
+    @PreAuthorize("hasAnyAuthority('MANAGER')")
+    public ResponseEntity<Boolean> deleteSubtask(Long id){
+        return ResponseEntity.ok(tasksService.deleteSubtask(id));
+    }
+
     @PostMapping(GET_ALL_SUBTASKS_OF_SELECTED_TASK)
     @PreAuthorize("hasAnyAuthority('MANAGER','EMPLOYEE')")
     public ResponseEntity<List<SubTasks>> getAllSubtasksOfSelectedTask(Long taskId){
         return ResponseEntity.ok(tasksService.getAllSubtasksOfSelectedTask(taskId));
     }
+
+    @PostMapping(GET_TASKS_OF_EMPLOYEE)
+    @PreAuthorize("hasAnyAuthority('EMPLOYEE')")
+    public ResponseEntity<List<TaskResponseDto>> getTasksOfEmployee(){
+        return ResponseEntity.ok(tasksService.getTasksOfEmployee());
+    }
+
+    @DeleteMapping(FINISH_SUBTASK)
+    @PreAuthorize("hasAnyAuthority('EMPLOYEE')")
+    public ResponseEntity<Boolean> finishSubtask(Long id){
+        return ResponseEntity.ok(tasksService.finishSubtask(id));
+    }
+
+    @DeleteMapping(CANCEL_SUBTASK)
+    @PreAuthorize("hasAnyAuthority('EMPLOYEE')")
+    public ResponseEntity<Boolean> cancelSubTask(Long id){
+        return ResponseEntity.ok(tasksService.cancelSubTask(id));
+    }
+
+    @PostMapping(COMPLETE_TASK)
+    @PreAuthorize("hasAnyAuthority('EMPLOYEE')")
+    public ResponseEntity<Boolean> completeTask(Long id){
+        return ResponseEntity.ok(tasksService.completeTask(id));
+    }
+
+    @DeleteMapping(DELETE)
+    @PreAuthorize("hasAnyAuthority('MANAGER')")
+    public ResponseEntity<Boolean> delete(Long id){
+        return ResponseEntity.ok(tasksService.delete(id));
+    }
+
 }

@@ -28,7 +28,7 @@ import HikingIcon from '@mui/icons-material/Hiking';
 import logo from '../../images/logo-full-white.png';
 import {
     AccountBox, Dashboard,
-    FeaturedPlayList, Paid, PointOfSale,
+    FeaturedPlayList, Paid, PointOfSale, Task,
     Weekend
 } from "@mui/icons-material";
 
@@ -205,7 +205,7 @@ export default function EmployeePage() {
                     </DrawerHeader>
 
                     <List sx={{ bgcolor: primaryMain, minHeight: 'calc(100vh - 65px)', paddingTop: '0' }}>
-                        {['Dashboard', 'Holidays', 'Profile', 'Company Items', 'Notifications', 'Expenditure', 'Leaves', 'Bonus'].map((text, index) => (
+                        {['Dashboard', 'Holidays', 'Profile', 'Company Items', 'Notifications', 'Expenditure', 'Leaves', 'Bonus','Task'].map((text, index) => (
                             <ListItem key={text} disablePadding>
                                 <ListItemButton
                                     selected={selectedIndex2 === index}
@@ -236,6 +236,7 @@ export default function EmployeePage() {
                                         {index === 5 && <PointOfSale />}
                                         {index === 6 && <HikingIcon />}
                                         {index === 7 && <Paid />}
+                                        {index === 8 && <Task />}
                                     </ListItemIcon>
                                     <ListItemText primary={text} />
                                 </ListItemButton>

@@ -7,15 +7,15 @@ import {
 import {
     Autocomplete,
     Box,
-    Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl,
-    Grid, IconButton, InputAdornment, InputLabel, LinearProgress, OutlinedInput,
+    Button, Dialog, DialogActions, DialogContent, DialogTitle,
+    Grid, IconButton, LinearProgress,
     TextField, Typography
 
 } from "@mui/material";
 import { HumanResources, useAppSelector } from "../../../store";
 import { useDispatch } from "react-redux";
 
-
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import {
     clearToken
 } from "../../../store/feature/authSlice";
@@ -24,12 +24,19 @@ import Swal from "sweetalert2";
 import {AddIcon, DeleteIcon} from "../../atoms/icons";
 import { myErrorColour, myLightColour } from "../../../util/MyColours";
 import {
-    fetchAssignTaskToEmployee, fetchDeleteSubTask, fetchDeleteTask,
+    fetchAssignTaskToEmployee,
+    fetchCancelSubTask,
+    fetchCompleteTask,
+    fetchDeleteSubTask,
+    fetchFinishSubTask,
+    fetchGetEmployeeTasks,
     fetchGetSubTasksOfSelectedTask,
-    fetchGetTasks, fetchSaveSubtask,
+    fetchGetTasks,
+    fetchSaveSubtask,
     fetchSaveTask
 } from "../../../store/feature/TaskSlice";
 import CircularProgress from "@mui/material/CircularProgress";
+import {Clear} from "@mui/icons-material";
 
 
 
@@ -60,12 +67,7 @@ const SideBarTask = () => {
 
     useEffect(() => {
         dispatch(
-            fetchGetTasks({
-                token: token,
-                page: 0,
-                pageSize: 100,
-                searchText: searchText,
-            })
+            fetchGetEmployeeTasks( token )
         )
             .catch(() => {
                 dispatch(clearToken());
@@ -76,8 +78,11 @@ const SideBarTask = () => {
         setSelectedRowIds(newSelectionModel as number[]);
     };
 
-    const handleAssignToEmployee = async () => {
-        setOpenAssignToEmployeeModal(true)
+    const handleCompleteTask = async () => {
+        await dispatch(fetchCompleteTask({token : token , taskId : selectedRowIds[0]})).unwrap();
+        await dispatch(
+            fetchGetEmployeeTasks( token )
+        )
     }
 
     const handleCloseAssignLeaveModal = () => {
@@ -87,12 +92,9 @@ const SideBarTask = () => {
 
     const closeSubTaskModal = () => {
         setOpenSubTaskModal(false);
-       dispatch(fetchGetTasks({
-           token: token,
-           page: 0,
-           pageSize: 100,
-           searchText: searchText,
-       }))
+        dispatch(
+            fetchGetEmployeeTasks( token )
+        )
 
     };
     const handleOpenSubTaskModal = () => {
@@ -110,13 +112,22 @@ const SideBarTask = () => {
         }
     };
 
-    const handleDeleteClick = (id: number) => {
+    const handleCancelSubTaskClick = (id: number) => {
 
-        dispatch(fetchDeleteSubTask({token : token , id : id})).then(() => {
+        dispatch(fetchCancelSubTask({token : token , subTaskId : id})).then(() => {
             dispatch (fetchGetSubTasksOfSelectedTask({token : token , taskId : selectedRowIds[0]}))
         })
 
     };
+
+    const handleFinishClick = (id: number) => {
+
+        dispatch(fetchFinishSubTask({token : token , subTaskId : id})).then(() => {
+            dispatch (fetchGetSubTasksOfSelectedTask({token : token , taskId : selectedRowIds[0]}))
+        })
+
+    };
+
 
     const handleAssignEmployee = async () => {
         dispatch(fetchAssignTaskToEmployee({token : token , taskId : selectedRowIds[0] , employeeId : selectedEmployee.id})).unwrap();
@@ -161,16 +172,6 @@ const SideBarTask = () => {
 
         })
             .then(() => setTaskName(''))
-    }
-
-    const handleDeleteTask = async () => {
-        await dispatch(fetchDeleteTask({token : token , taskId : selectedRowIds[0]})).unwrap();
-        dispatch(fetchGetTasks({
-            token: token,
-            page: 0,
-            pageSize: 100,
-            searchText: searchText,
-        }))
     }
 
     const handleSaveSubTask = async () => {
@@ -231,24 +232,33 @@ const SideBarTask = () => {
         },
     ];
 
-
     const columnSubTasks: GridColDef[] = [
-        { field: 'name', headerName: 'Task Name', flex: 1 , headerAlign: "center" },
-        { field: 'isCompleted', headerName: 'Completion', flex: 1 , headerAlign: "center" },
-        { field: 'delete', headerName: 'Edit', flex: 0.3 , headerAlign: "center",
+        { field: 'name', headerName: 'Task Name', flex: 1, headerAlign: "center" },
+        { field: 'isCompleted', headerName: 'Completion', flex: 1, headerAlign: "center" },
+        {
+            field: 'delete',
+            headerName: 'Edit',
+            flex: 0.3,
+            headerAlign: "center",
             renderCell: (params) => {
+                const { isCompleted } = params.row;
                 return (
                     <Box width="100%" display="flex" justifyContent="center">
-                        <IconButton
-                            onClick={() => handleDeleteClick(params.id as number)}
-                        >
-                            <DeleteIcon />
-                        </IconButton>
+                        {isCompleted ? (
+                            <IconButton onClick={() => handleCancelSubTaskClick(params.id as number)}>
+                                <Clear />
+                            </IconButton>
+                        ) : (
+                            <IconButton onClick={() => handleFinishClick(params.id as number)}>
+                                <CheckBoxIcon />
+                            </IconButton>
+                        )}
                     </Box>
                 );
             },
         },
     ];
+
 
     return (
         <div style={{ height: "auto", width: "inherit" }}>
@@ -291,14 +301,14 @@ const SideBarTask = () => {
             />
             <Grid sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-start', alignItems: 'center', marginTop: '2%', marginBottom: '2%' }}>
                <Button
-                    onClick={handleAssignToEmployee}
+                    onClick={handleCompleteTask}
                     variant="contained"
                     color="success"
-                    disabled={selectedRowIds.length === 0 || selectedRowIds.length > 1 || taskList.find(task => task.id === selectedRowIds[0])?.assignedEmployeeName !== null }
+                    disabled={selectedRowIds.length === 0 || selectedRowIds.length > 1 }
                     startIcon={<AddIcon />}
                     sx={{ marginRight: '1%'}}
                 >
-                    Assign To Employee
+                    Complete
                 </Button>
                 <Button
                     onClick={handleOpenSubTaskModal}
@@ -308,18 +318,7 @@ const SideBarTask = () => {
                     startIcon={<AddIcon />}
                     sx={{ marginRight: '1%' }}
                 >
-                    Add/Check SubTasks
-                </Button>
-
-                <Button
-                    onClick={handleDeleteTask}
-                    variant="contained"
-                    color="error"
-                    disabled={selectedRowIds.length === 0 || selectedRowIds.length > 1}
-                    startIcon={<DeleteIcon />}
-                    sx={{ marginRight: '1%' }}
-                >
-                    Delete
+                    Check SubTasks
                 </Button>
             </Grid>
 
@@ -424,25 +423,6 @@ const SideBarTask = () => {
 
                     </Box>
                 </DialogContent>
-                <DialogActions>
-
-                        <TextField
-                            label="SubTask"
-                            name="subTask"
-                            value={subTaskName}
-                            onChange={e => setSubTaskName(e.target.value)}
-                            fullWidth
-                            required
-
-                            inputProps={{ maxLength: 100 }}
-                        />
-
-                    <Button disabled={subTaskName.length === 0 || taskList.find(task => task.id === selectedRowIds[0])?.completionDate !== null } onClick={handleSaveSubTask} color="success" variant="contained"
-                            sx={{marginRight: '17px', width: '100px'}}>
-
-                        Add SubTask
-                    </Button>
-                </DialogActions>
             </Dialog>
 
 

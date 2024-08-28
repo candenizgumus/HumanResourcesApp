@@ -1,5 +1,6 @@
 package com.humanresourcesapp.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -20,5 +21,6 @@ public class SubTasks extends BaseEntity
     Boolean isCompleted;
     @ManyToOne
     @JoinColumn(name = "task_id")
+    @JsonIgnore
     Tasks task;
 }

@@ -35,7 +35,7 @@ import {
     PersonAdd,
     PointOfSale,
     AdminPanelSettings,
-    Weekend, Laptop, Dashboard, DuoTwoTone
+    Weekend, Laptop, Dashboard, DuoTwoTone, Task
 } from "@mui/icons-material";
 import AddCommentIcon from '@mui/icons-material/AddComment';
 import { ManagerHomeContent } from "../../components/molecules/ManagerComponents/ManagerHomeContent";
@@ -254,7 +254,7 @@ export default function AdminPage() {
                                         {index === 13 && <AddDocumentIcon />}
                                         {index === 14 && <Paid />}
                                         {index === 15 && <Laptop />}
-                                        {index === 16 && <DuoTwoTone />}
+                                        {index === 16 && <Task />}
                                     </ListItemIcon>
                                     <ListItemText primary={text} />
                                 </ListItemButton>

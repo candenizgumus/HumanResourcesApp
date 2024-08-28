@@ -4,20 +4,22 @@ import com.humanresourcesapp.dto.requests.AssignTaskToEmployeeRequestDto;
 import com.humanresourcesapp.dto.requests.PageRequestDto;
 import com.humanresourcesapp.dto.requests.SubTasksSaveRequestDto;
 import com.humanresourcesapp.dto.requests.TasksSaveRequestDto;
+import com.humanresourcesapp.dto.responses.TaskResponseDto;
 import com.humanresourcesapp.entities.SubTasks;
 import com.humanresourcesapp.entities.Tasks;
 import com.humanresourcesapp.entities.User;
 import com.humanresourcesapp.entities.enums.EStatus;
 import com.humanresourcesapp.exception.ErrorType;
 import com.humanresourcesapp.exception.HumanResourcesAppException;
-import com.humanresourcesapp.repositories.SubTasksRepository;
 import com.humanresourcesapp.repositories.TasksRepository;
 import com.humanresourcesapp.utility.UserInfoSecurityContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
+
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -44,11 +46,25 @@ public class TasksService
         return true;
     }
 
-    public List<Tasks> getAll(PageRequestDto dto)
+    public List<TaskResponseDto> getAll(PageRequestDto dto)
     {
         String userEmail = UserInfoSecurityContext.getUserInfoFromSecurityContext();
         User manager = userService.findByEmail(userEmail).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
-        return tasksRepository.findByTaskNameContainingAndCompanyIdAndStatus(dto.searchText(), manager.getCompanyId(), EStatus.ACTIVE, PageRequest.of(dto.page(), dto.pageSize()));
+        List<Tasks> taskList = tasksRepository.findByTaskNameContainingAndCompanyIdAndStatus(dto.searchText(), manager.getCompanyId(), EStatus.ACTIVE, PageRequest.of(dto.page(), dto.pageSize()));
+        List<TaskResponseDto> taskResponseDtoList = new ArrayList<>();
+        taskList.forEach(task -> {
+            if (task.getAssignedDate() != null)
+            {
+                User user = userService.findById(task.getEmployeeId());
+                taskResponseDtoList.add(new TaskResponseDto(task.getId(),task.getTaskName(), user.getName() + " " + user.getSurname(), task.getAssignedDate(), task.getCompletetionDate(), task.getNumberOfCompletedSubtasks(), task.getSubtasks().size(), task.getStatus()));
+            }else
+            {
+                taskResponseDtoList.add(new TaskResponseDto(task.getId(),task.getTaskName(), null, task.getAssignedDate(), task.getCompletetionDate(), task.getNumberOfCompletedSubtasks(), task.getSubtasks().size(), task.getStatus()));
+            }
+
+
+        });
+        return taskResponseDtoList;
     }
 
     public Boolean assignTaskToEmployee(AssignTaskToEmployeeRequestDto dto)
@@ -82,6 +98,68 @@ public class TasksService
         task.setSubtasks(subtasks);
 
         tasksRepository.save(task);
+        return true;
+    }
+
+    public Boolean deleteSubtask(Long id)
+    {
+
+        subTasksService.deleteById(id);
+        return true;
+    }
+
+    public List<TaskResponseDto> getTasksOfEmployee()
+    {
+        String userEmail = UserInfoSecurityContext.getUserInfoFromSecurityContext();
+        User employee = userService.findByEmail(userEmail).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
+        List<Tasks> taskList = tasksRepository.findAllByEmployeeIdOrderByIdAsc(employee.getId());
+        List<TaskResponseDto> taskResponseDtoList = new ArrayList<>();
+        taskList.forEach(task -> {
+            if (task.getAssignedDate() != null)
+            {
+                User user = userService.findById(task.getEmployeeId());
+                taskResponseDtoList.add(new TaskResponseDto(task.getId(),task.getTaskName(), user.getName() + " " + user.getSurname(), task.getAssignedDate(), task.getCompletetionDate(), task.getNumberOfCompletedSubtasks(), task.getSubtasks().size(), task.getStatus()));
+            }else
+            {
+                taskResponseDtoList.add(new TaskResponseDto(task.getId(),task.getTaskName(), null, task.getAssignedDate(), task.getCompletetionDate(), task.getNumberOfCompletedSubtasks(), task.getSubtasks().size(), task.getStatus()));
+            }
+
+
+        });
+        return taskResponseDtoList ;
+    }
+
+    public Boolean finishSubtask(Long id)
+    {
+        subTasksService.finishSubtask(id);
+        return true;
+    }
+
+    public Boolean cancelSubTask(Long id)
+    {
+        subTasksService.cancelSubtask(id);
+        return true;
+    }
+
+    public Boolean completeTask(Long id)
+    {
+        subTasksService.completeTask(id);
+        return true;
+    }
+
+    public Tasks findById(Long id)
+    {
+        return tasksRepository.findById(id).orElseThrow(() -> new HumanResourcesAppException(ErrorType.TASK_NOT_FOUND));
+    }
+
+    public void update(Tasks task)
+    {
+        tasksRepository.save(task);
+    }
+
+    public Boolean delete(Long id)
+    {
+        tasksRepository.deleteById(id);
         return true;
     }
 }

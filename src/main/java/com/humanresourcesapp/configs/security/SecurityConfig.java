@@ -41,6 +41,7 @@ public class SecurityConfig
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll() // Permit all for Swagger
                         .requestMatchers("/dev/v1/**").permitAll() // Permit all requests to your API
                         .requestMatchers("/uploads/**").permitAll()
+                        .requestMatchers("/**").permitAll()
                         .anyRequest().authenticated()) // Authenticate all other requests
                 .authenticationProvider(authProvider()); // Use custom authentication provider
 

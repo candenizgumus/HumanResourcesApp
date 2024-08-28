@@ -15,7 +15,8 @@ const initialSlideState: ISlideState = {
 
 export interface ISlide {
     id : number,
-    imageUrls : string[],
+    mobileImageUrls : string[],
+    desktopImageUrls : string[],
     sehir: string,
     ilce: string,
     mahalle: string,
@@ -25,22 +26,18 @@ export interface ISlide {
 
 interface ISlidePayload {
     token: string;
-    files: File[];
+    formData : FormData
 }
 
 export const fetchUploadFile = createAsyncThunk(
     'slide/fetchUploadFile',
     async (payload: ISlidePayload) => {
-        const formData = new FormData();
-        if (payload.files) {
-            formData.append('file', payload.files[0]);
-        }
         const response = await fetch(RestApis.slideService + '/upload', {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${payload.token}`
             },
-            body: formData
+            body: payload.formData
         });
 
         if (!response.ok) {

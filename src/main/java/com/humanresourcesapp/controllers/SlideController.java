@@ -9,7 +9,9 @@ import lombok.RequiredArgsConstructor;
 import org.apache.poi.xslf.usermodel.XMLSlideShow;
 import org.apache.poi.xslf.usermodel.XSLFPictureData;
 import org.apache.poi.xslf.usermodel.XSLFSlide;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,6 +27,7 @@ import java.nio.file.StandardCopyOption;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.UUID;
 import java.io.File;
 import java.nio.file.*;
@@ -40,82 +43,31 @@ import java.util.zip.ZipInputStream;
 @RestController
 @CrossOrigin("*")
 public class SlideController {
-    private static final String UPLOAD_DIR = "uploads/";
+
     private final SlideService slideService;
 
     @PostMapping("/upload")
     @PreAuthorize("hasAnyAuthority('MANAGER','ADMIN','EMPLOYEE')")
-    @CrossOrigin("*")
-    public ResponseEntity<Slide> uploadZipFile(@RequestParam("file") MultipartFile file) {
-        if (file.isEmpty()) {
-            throw new HumanResourcesAppException(ErrorType.NO_IMAGES_FOUND);
-        }
-
-        // Save the uploaded zip file
-        String zipFileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
-        Path zipFilePath = Paths.get(UPLOAD_DIR, zipFileName);
-        List<File> images;
-        List<String> imageUrls = new ArrayList<>();
+    @CrossOrigin(origins = "http://yourdomain.com") // Replace with your actual domain
+    public ResponseEntity<?> uploadZipFile(@RequestParam(value = "fileMobile", required = false) MultipartFile fileMobile,
+                                           @RequestParam(value = "fileDesktop", required = false) MultipartFile fileDesktop) {
         try {
-            // Debugging: Log the zip file path
-            System.out.println("Saving zip file to: " + zipFilePath.toString());
+            System.out.println("Uploading zip file...");
 
-            Files.createDirectories(zipFilePath.getParent());
-            Files.write(zipFilePath, file.getBytes());
+            // Check if files are not null and process them
+            List<String> mobileImages = fileMobile != null ? slideService.getImages(fileMobile) : Collections.emptyList();
+            List<String> desktopImages = fileDesktop != null ? slideService.getImages(fileDesktop) : Collections.emptyList();
 
-            // Debugging: Check if the file was written correctly
-            if (!Files.exists(zipFilePath) || Files.size(zipFilePath) == 0) {
-                System.out.println("Failed to write the zip file or file is empty.");
-                throw new HumanResourcesAppException(ErrorType.FILE_UPLOAD_FAILED);
-            }
-            UUID fileName = UUID.randomUUID();
-            images = extractImagesFromZip(zipFilePath.toString(),fileName);
-            if (images.isEmpty()) {
-                throw new HumanResourcesAppException(ErrorType.NO_IMAGES_FOUND);
-            }
-
-            // Convert file paths to URLs
-            for (File image : images) {
-                String imageUrl = "/uploads/"+ fileName + '/' + image.getName(); // Adjust the URL path according to your server configuration
-                imageUrls.add(imageUrl);
-            }
-
-        } catch (IOException e) {
+            // Save images and return response
+            Slide slide = slideService.save(mobileImages, desktopImages);
+            return ResponseEntity.ok(slide);
+        } catch (Exception e) {
+            // Handle exceptions and return appropriate response
             e.printStackTrace();
-            throw new HumanResourcesAppException(ErrorType.FILE_UPLOAD_FAILED);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error processing files");
         }
-
-        // Return the list of image URLs
-        return ResponseEntity.ok(slideService.save(imageUrls));
     }
 
-
-
-    public List<File> extractImagesFromZip(String zipFilePath, UUID fileName) throws IOException {
-        System.out.println("Extracting images from zip file: " + zipFilePath + " ...");
-        File dir = new File(UPLOAD_DIR + fileName);
-        if (!dir.exists() && !dir.mkdirs()) {
-            throw new IOException("Failed to create directory: " + dir.getAbsolutePath());
-        }
-        System.out.println("Extracting images to: " + dir.getAbsolutePath());
-        List<File> imageFiles = new ArrayList<>();
-
-        try (ZipInputStream zis = new ZipInputStream(Files.newInputStream(Paths.get(zipFilePath)))) {
-            System.out.println("Available bytes: " +zis.available());
-            ZipEntry entry;
-            while ((entry = zis.getNextEntry()) != null) {
-                System.out.println("Extracting: " + entry.getName());
-                if (!entry.isDirectory() && (entry.getName().endsWith(".png") || entry.getName().endsWith(".jpg"))) {
-                    File newFile = new File(dir, entry.getName());
-                    // Use NIO Files API to copy the file
-                    Files.copy(zis, newFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-                    System.out.println("File saved: " + newFile.getAbsolutePath());
-                    imageFiles.add(newFile);
-                }
-            }
-        }
-        return imageFiles;
-    }
 
     @PostMapping(GET_ALL)
     @PreAuthorize("hasAnyAuthority('MANAGER','ADMIN','EMPLOYEE')")

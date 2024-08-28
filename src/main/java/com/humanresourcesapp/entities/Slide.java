@@ -22,7 +22,9 @@ public class Slide {
     private Long id;
 
     @ElementCollection
-    private List<String> imageUrls;
+    private List<String> mobileImageUrls;
+    @ElementCollection
+    private List<String> desktopImageUrls;
     private String sehir;
     private String ilce;
     private String mahalle;

@@ -1,8 +1,6 @@
 import React, { useEffect } from 'react';
 import { HumanResources, useAppSelector } from "../../../store";
-import Carousel from 'react-material-ui-carousel';
-import RestApis from "../../../config/RestApis";
-import { Container, Grid, Typography, TextField, Box } from "@mui/material";
+import { Container, Grid } from "@mui/material";
 import SlideCard from './SlideCard';
 import { useDispatch } from 'react-redux';
 import { fetchGetAllSlides } from '../../../store/feature/slideSlice';
@@ -34,7 +32,8 @@ const SlideComponent = () => {
                     <SlideCard
                         key={slide.id}
                         id={slide.id}
-                        imageUrls={slide.imageUrls}
+                        mobileImageUrls={slide.mobileImageUrls}
+                        desktopImageUrls={slide.desktopImageUrls}
                         sehir={slide.sehir}
                         ilce={slide.ilce}
                         mahalle={slide.mahalle}

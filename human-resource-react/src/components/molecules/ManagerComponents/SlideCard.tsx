@@ -39,7 +39,13 @@ const CustomTypography = styled(Typography)(({ theme }) => ({
 const SlideCard = (props:ISlide) => {
     const navigate = useNavigate();
     const handleClick = () => {
-        
+        navigate(`/slides/${encodeURIComponent(props.id)}`, {
+            state: {
+                id:props.id,
+                mobileImages:props.mobileImageUrls,
+                desktopImages:props.desktopImageUrls
+            }
+        });
     };
 
     return (
@@ -51,7 +57,7 @@ const SlideCard = (props:ISlide) => {
         }
         }}>
             <CustomCard>
-                <img src={RestApis.staticUploads+props.imageUrls[0]} />
+                <img src={RestApis.staticUploads+props.mobileImageUrls[0]} />
             </CustomCard>
         </Grid>
     );

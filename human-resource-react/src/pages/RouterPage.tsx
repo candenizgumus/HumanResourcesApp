@@ -17,7 +17,7 @@ import FeaturePerformance from "./pre_autorize_pages/features/FeaturePerformance
 import FeatureShift from "./pre_autorize_pages/features/FeatureShift"
 import EmployeePage from "./authorised_pages/EmployeePage";
 import UserStoryDetailPage from "../pages/pre_autorize_pages/UserStoryDetailPage"
-
+import SlideDetail from "../components/molecules/ManagerComponents/SlideDetail"
 const AdminPage = lazy(() => import('./authorised_pages/AdminPage'));
 const ManagerPage = lazy(() => import('./authorised_pages/ManagerPage'));
 
@@ -52,6 +52,7 @@ const RouterPage = () => {
                     <Route path='/employee-home' element={isAuth ? <EmployeePage /> : <LandingPage />} />
                     <Route path={'/password-reset'} element={<PasswordResetPage />} />
                     <Route path="/user-stories/:companyName" element={<UserStoryDetailPage />} />
+                    <Route path="/slides/:slideId" element={<SlideDetail />} />
                 </Routes>
             </Suspense>
         </Router>

@@ -36,12 +36,27 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security:3.3.2'
     implementation 'com.auth0:java-jwt:4.4.0'
     implementation 'org.springframework.boot:spring-boot-starter-mail'
-//    implementation platform("com.google.cloud:spring-cloud-gcp-dependencies:5.5.0")
-//    implementation("com.google.cloud:spring-cloud-gcp-starter-storage")
 
+    // Uncomment these if needed for Google Cloud Storage
+    // implementation platform("com.google.cloud:spring-cloud-gcp-dependencies:5.5.0")
+    // implementation("com.google.cloud:spring-cloud-gcp-starter-storage")
 
+    // https://mvnrepository.com/artifact/commons-io/commons-io
+    implementation 'commons-io:commons-io:2.16.1'
 
+    // https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml
+    implementation 'org.apache.poi:poi-ooxml:5.3.0' // For OOXML files
 
+    // https://mvnrepository.com/artifact/org.apache.poi/poi
+    implementation 'org.apache.poi:poi:5.3.0' // Base POI library
+
+    // https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml-schemas
+    implementation 'org.apache.poi:poi-ooxml-schemas:4.1.2'// Schemas for OOXML
+
+    // https://mvnrepository.com/artifact/org.apache.xmlbeans/xmlbeans
+    implementation 'org.apache.xmlbeans:xmlbeans:5.2.1'
+
+    // amazon s3 implementations
     implementation 'software.amazon.awssdk:s3:2.21.1'
     implementation 'software.amazon.awssdk:auth:2.21.1'
 }

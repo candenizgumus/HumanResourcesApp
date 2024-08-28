@@ -119,6 +119,17 @@ const SideBarTask = () => {
     };
 
     const handleAssignEmployee = async () => {
+        if (selectedEmployee === null) {
+            Swal.fire({
+                title: "Error!",
+                text: "Please select an employee.",
+                icon: "error",
+                confirmButtonColor: myLightColour,
+                cancelButtonColor: myErrorColour,
+            })
+            setOpenAssignToEmployeeModal(false);
+            return
+        }
         dispatch(fetchAssignTaskToEmployee({token : token , taskId : selectedRowIds[0] , employeeId : selectedEmployee.id})).unwrap();
         Swal.fire({
             title: "Saved!",

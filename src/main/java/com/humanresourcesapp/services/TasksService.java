@@ -51,7 +51,7 @@ public class TasksService
     {
         String userEmail = UserInfoSecurityContext.getUserInfoFromSecurityContext();
         User manager = userService.findByEmail(userEmail).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
-        List<Tasks> taskList = tasksRepository.findByTaskNameContainingAndCompanyIdAndStatus(dto.searchText(), manager.getCompanyId(), EStatus.ACTIVE, PageRequest.of(dto.page(), dto.pageSize()));
+        List<Tasks> taskList = tasksRepository.findByTaskNameContainingAndCompanyIdAndStatusOrderByIdDesc(dto.searchText(), manager.getCompanyId(), EStatus.ACTIVE, PageRequest.of(dto.page(), dto.pageSize()));
         List<TaskResponseDto> taskResponseDtoList = new ArrayList<>();
         taskList.forEach(task -> {
             if (task.getAssignedDate() != null)
@@ -113,7 +113,7 @@ public class TasksService
     {
         String userEmail = UserInfoSecurityContext.getUserInfoFromSecurityContext();
         User employee = userService.findByEmail(userEmail).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
-        List<Tasks> taskList = tasksRepository.findAllByTaskNameContainingAndEmployeeIdOrderByIdAsc(dto.searchText(),(employee.getId()), PageRequest.of(dto.page(), dto.pageSize()));
+        List<Tasks> taskList = tasksRepository.findAllByTaskNameContainingAndEmployeeIdOrderByIdDesc(dto.searchText(),(employee.getId()), PageRequest.of(dto.page(), dto.pageSize()));
         List<TaskResponseDto> taskResponseDtoList = new ArrayList<>();
         taskList.forEach(task -> {
             if (task.getAssignedDate() != null)

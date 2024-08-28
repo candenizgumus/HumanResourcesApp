@@ -29,7 +29,7 @@ public class SubTasksService
 
     public List<SubTasks> findAllByTaskId(Long taskId)
     {
-        return subTasksRepository.findAllByTaskIdOrderByIdAsc(taskId);
+        return subTasksRepository.findAllByTaskIdOrderByIdDesc(taskId);
     }
 
     public void deleteById(Long id)
@@ -59,7 +59,7 @@ public class SubTasksService
     public void completeTask(Long id)
     {
         Tasks task = tasksService.findById(id);
-        List<SubTasks> subTasksList = subTasksRepository.findAllByTaskIdOrderByIdAsc(task.getId());
+        List<SubTasks> subTasksList = subTasksRepository.findAllByTaskIdOrderByIdDesc(task.getId());
 
         if (!subTasksList.isEmpty())
         {

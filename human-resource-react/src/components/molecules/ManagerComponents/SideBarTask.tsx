@@ -55,7 +55,7 @@ const SideBarTask = () => {
     const [selectedEmployee, setSelectedEmployee] = useState<any>(null);
 
     const subTasks = useAppSelector((state) => state.task.subTaskList);
-
+    const [isAddSubtaskTrue, setIsAddSubtaskTrue] = useState(false);
 
 
     useEffect(() => {
@@ -119,6 +119,17 @@ const SideBarTask = () => {
     };
 
     const handleAssignEmployee = async () => {
+        if (selectedEmployee === null) {
+            Swal.fire({
+                title: "Error!",
+                text: "Please select an employee.",
+                icon: "error",
+                confirmButtonColor: myLightColour,
+                cancelButtonColor: myErrorColour,
+            })
+            setOpenAssignToEmployeeModal(false);
+            return
+        }
         dispatch(fetchAssignTaskToEmployee({token : token , taskId : selectedRowIds[0] , employeeId : selectedEmployee.id})).unwrap();
         Swal.fire({
             title: "Saved!",
@@ -187,9 +198,10 @@ const SideBarTask = () => {
     }
 
     const handleSaveSubTask = async () => {
-
+        setIsAddSubtaskTrue(true)
         await dispatch(fetchSaveSubtask({token : token , subTaskName : subTaskName , taskId : selectedRowIds[0]}))
         await dispatch(fetchGetSubTasksOfSelectedTask({token : token , taskId : selectedRowIds[0]})).unwrap();
+        setIsAddSubtaskTrue(false)
         setSubTaskName('')
 
     }
@@ -450,7 +462,7 @@ const SideBarTask = () => {
                             inputProps={{ maxLength: 100 }}
                         />
 
-                    <Button disabled={subTaskName.length === 0 || taskList.find(task => task.id === selectedRowIds[0])?.completionDate !== null } onClick={handleSaveSubTask} color="success" variant="contained"
+                    <Button disabled={subTaskName.length === 0 || taskList.find(task => task.id === selectedRowIds[0])?.completionDate !== null || isAddSubtaskTrue} onClick={handleSaveSubTask} color="success" variant="contained"
                             sx={{marginRight: '17px', width: '100px'}}>
 
                         Add SubTask

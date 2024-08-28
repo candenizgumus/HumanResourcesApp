@@ -14,9 +14,8 @@ import { IPayment } from "../../../models/IPayment";
 import { fetchGetMonthlyHolidays } from "../../../store/feature/holidaySlice";
 import { IHoliday } from "../../../models/IHoliday";
 import { IHolidayFormatted } from "../../../models/IHolidayFormatted";
-import HikingIcon from "@mui/icons-material/Hiking";
 import { Cake, Paid, Payments, PieChart, Weekend } from "@mui/icons-material";
-import { myBackgroundColour, myLightColour, mySecondaryColor } from "../../../util/MyColours";
+import { myBackgroundColour, myLightColour } from "../../../util/MyColours";
 import MyCard from "../../atoms/MyCard";
 import EmployeePositionPieChart from "./EmployeePositionPieChart";
 

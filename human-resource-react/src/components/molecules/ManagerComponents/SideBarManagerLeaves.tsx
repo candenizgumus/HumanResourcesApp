@@ -782,6 +782,7 @@ const SideBarManagerLeaves = () => {
                     onClick={handleAssignLeave}
                     startIcon={<AddIcon/>}
                     sx={{marginRight: '1%', width: '200px'}}
+                    disabled={selectedRowIds.length === 0 || selectedRowIds.length > 1}
                 >
                     Assign Leave
                 </Button>

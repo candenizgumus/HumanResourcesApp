@@ -11,7 +11,6 @@ import SideBarManagerExpenditures from "../molecules/ManagerComponents/SideBarMa
 import SideBarManagerLeaves from "../molecules/ManagerComponents/SideBarManagerLeaves";
 import ChangePassword from "../molecules/ChangePassword";
 import EditEmployee from "../molecules/ManagerComponents/EditEmployee";
-import AddDocument from "../molecules/ManagerComponents/AddDocument";
 import SideBarPayments from "../molecules/ManagerComponents/SideBarPayments";
 import PersonalDocumetList from "../molecules/ManagerComponents/SideBarPersonalDocumentList";
 import SideBarManagerBonus from "../molecules/ManagerComponents/SideBarManagerBonus";
@@ -22,6 +21,7 @@ import SideBarCompanyItems from "../molecules/ManagerComponents/SideBarCompanyIt
 import {EmployeeHomeContent} from "../molecules/EmployeeComponents/EmployeeHomeContent";
 import DeactivateAccount from "../molecules/DeactivateAccount";
 import AddCompanyItemAssignment from "../molecules/ManagerComponents/AddCompanyItemAssignment";
+import SideBarTask from "../molecules/ManagerComponents/SideBarTask";
 export const ManagerMenuContentRenderer = () => {
     const page = useAppSelector((state) => state.auth.pageState);
 
@@ -53,6 +53,7 @@ export const ManagerMenuContentRenderer = () => {
                 {page === 'Dashboard' && <EmployeeHomeContent open={false}/>}
                 {page === 'Deactivate Account' && <DeactivateAccount/>}
                 {page === 'Assign Item' && <AddCompanyItemAssignment/>}
+                {page === 'Task' && <SideBarTask/>}
             </Grid>
         </>
     );

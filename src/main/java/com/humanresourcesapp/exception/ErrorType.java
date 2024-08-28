@@ -65,7 +65,7 @@ public enum ErrorType
     ASSIGNMENT_ALREADY_EXISTS(1053,"Item is already assigned to the employee" , HttpStatus.BAD_REQUEST ),
 
 
-    ;
+    TASK_NOT_FOUND(    1054, "Task Not Found", HttpStatus.BAD_REQUEST  );
     private final Integer code;
     private final String message;
     private final HttpStatus httpStatus;

@@ -45,6 +45,8 @@ public class Endpoints
     public static final String MEDIA = "/media";
     public static final String PAYMENT = "/payment";
     public static final String S3 ="/s3";
+    public static final String TASKS ="/tasks";
+    public static final String SUBTASKS ="/subtasks";
 
     //methods
     public static final String SAVE = "/save";
@@ -132,4 +134,7 @@ public class Endpoints
     public static final String GET_ALL_EXPENDITURES_OF_EMPLOYEE_BY_CURRENT_MONTH = "/get-all-expenditures-of-employee-by-current-month";
     public static final String CANCEL_ASSIGNMENT_BY_MANAGER = "/cancel-assignment-by-manager";
     public static final String UPDATE_PHOTO = "/update-photo";
+    public static final String ASSIGN_TASK_TO_EMPLOYEE = "/assign-task-to-employee";
+    public static final String GET_ALL_SUBTASKS_OF_SELECTED_TASK = "/get-all-subtasks-of-selected-task";
+    public static final String SAVE_SUBTASK = "/save-subtask";
 }

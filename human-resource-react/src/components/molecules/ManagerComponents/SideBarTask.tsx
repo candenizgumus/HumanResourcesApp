@@ -164,13 +164,26 @@ const SideBarTask = () => {
     }
 
     const handleDeleteTask = async () => {
-        await dispatch(fetchDeleteTask({token : token , taskId : selectedRowIds[0]})).unwrap();
-        dispatch(fetchGetTasks({
-            token: token,
-            page: 0,
-            pageSize: 100,
-            searchText: searchText,
-        }))
+
+        const result = await Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: myLightColour,
+            cancelButtonColor: myErrorColour,
+            confirmButtonText: "Yes, delete it!"
+        });
+        if (result.isConfirmed) {
+            await dispatch(fetchDeleteTask({token : token , taskId : selectedRowIds[0]})).unwrap();
+            dispatch(fetchGetTasks({
+                token: token,
+                page: 0,
+                pageSize: 100,
+                searchText: searchText,
+            }))
+        }
+
     }
 
     const handleSaveSubTask = async () => {

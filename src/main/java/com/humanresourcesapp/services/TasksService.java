@@ -14,6 +14,7 @@ import com.humanresourcesapp.exception.HumanResourcesAppException;
 import com.humanresourcesapp.repositories.TasksRepository;
 import com.humanresourcesapp.utility.UserInfoSecurityContext;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
 import org.springframework.stereotype.Service;
@@ -108,11 +109,11 @@ public class TasksService
         return true;
     }
 
-    public List<TaskResponseDto> getTasksOfEmployee()
+    public List<TaskResponseDto> getTasksOfEmployee(PageRequestDto dto)
     {
         String userEmail = UserInfoSecurityContext.getUserInfoFromSecurityContext();
         User employee = userService.findByEmail(userEmail).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
-        List<Tasks> taskList = tasksRepository.findAllByEmployeeIdOrderByIdAsc(employee.getId());
+        List<Tasks> taskList = tasksRepository.findAllByTaskNameContainingAndEmployeeIdOrderByIdAsc(dto.searchText(),(employee.getId()), PageRequest.of(dto.page(), dto.pageSize()));
         List<TaskResponseDto> taskResponseDtoList = new ArrayList<>();
         taskList.forEach(task -> {
             if (task.getAssignedDate() != null)

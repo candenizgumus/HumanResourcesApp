@@ -11,5 +11,5 @@ import java.util.List;
 public interface SubTasksRepository extends JpaRepository<SubTasks,Long> {
 
 
-    List<SubTasks> findAllByTaskIdOrderByIdAsc(Long taskId);
+    List<SubTasks> findAllByTaskIdOrderByIdDesc(Long taskId);
 }

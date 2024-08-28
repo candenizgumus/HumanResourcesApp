@@ -25,6 +25,8 @@ const apis = {
     shiftService: server+'/dev/v1/shift',
     userService: server+'/dev/v1/user',
     tasksService: server+'/dev/v1/tasks',
+    slideService: server+'/dev/v1/slides',
+    staticUploads: server
 
 }
 

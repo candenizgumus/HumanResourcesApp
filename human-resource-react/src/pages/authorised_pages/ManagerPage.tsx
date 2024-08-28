@@ -215,7 +215,7 @@ export default function AdminPage() {
                         </IconButton>
                     </DrawerHeader>
                     <List sx={{ bgcolor: 'primary.main', minHeight: 'calc(100vh - 65px)', paddingTop: '0' }}>
-                        {['Dashboard', 'Employees', 'Add Employee', 'Create Manager', 'Create Definition', 'Profile', 'Company', 'Add Comment', 'Holidays', 'Notifications', 'Expenditure', 'Leaves', 'Payments', 'Personal Documents', 'Bonus', 'Company Items', 'Task'].map((text, index) => (
+                        {['Dashboard', 'Employees', 'Add Employee', 'Create Manager', 'Create Definition', 'Profile', 'Company', 'Add Comment', 'Holidays', 'Notifications', 'Expenditure', 'Leaves', 'Payments', 'Personal Documents', 'Bonus', 'Company Items', 'Task', 'Create Slide', 'Slide'].map((text, index) => (
                             <ListItem key={text} disablePadding>
                                 <ListItemButton
                                     selected={selectedIndex2 === index}
@@ -255,6 +255,8 @@ export default function AdminPage() {
                                         {index === 14 && <Paid />}
                                         {index === 15 && <Laptop />}
                                         {index === 16 && <Task />}
+                                        {index === 17 && <Laptop />}
+                                        {index === 18 && <Laptop />}
                                     </ListItemIcon>
                                     <ListItemText primary={text} />
                                 </ListItemButton>

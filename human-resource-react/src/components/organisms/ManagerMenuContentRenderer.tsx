@@ -22,6 +22,8 @@ import {EmployeeHomeContent} from "../molecules/EmployeeComponents/EmployeeHomeC
 import DeactivateAccount from "../molecules/DeactivateAccount";
 import AddCompanyItemAssignment from "../molecules/ManagerComponents/AddCompanyItemAssignment";
 import SideBarTask from "../molecules/ManagerComponents/SideBarTask";
+import  UploadFile  from "../molecules/ManagerComponents/UploadFile"
+import SlideComponent from "../molecules/ManagerComponents/SlideComponent";
 export const ManagerMenuContentRenderer = () => {
     const page = useAppSelector((state) => state.auth.pageState);
 
@@ -54,6 +56,8 @@ export const ManagerMenuContentRenderer = () => {
                 {page === 'Deactivate Account' && <DeactivateAccount/>}
                 {page === 'Assign Item' && <AddCompanyItemAssignment/>}
                 {page === 'Task' && <SideBarTask/>}
+                {page === 'Create Slide' && <UploadFile/>}
+                {page === 'Slide' && <SlideComponent/>}
             </Grid>
         </>
     );

@@ -14,6 +14,7 @@ import bonusSlice from "./bonusSlice";
 import shiftSlice from "./shiftSlice";
 import definitionSlice from "./definitionSlice";
 import emailSlice from "./emailSlice";
+import taskSlice from "./TaskSlice";
 
 
 
@@ -34,5 +35,6 @@ export{
     bonusSlice,
     shiftSlice,
     definitionSlice,
-    emailSlice
+    emailSlice,
+    taskSlice
 }

@@ -1,7 +1,7 @@
 const server_loadbalancer = 'https://easyhr.store';
 const server_local = 'http://localhost:9090';
 
-const server = server_loadbalancer;
+const server = server_local;
 const apis = {
     authService: server+'/dev/v1/auth',
     bonusService: server+'/dev/v1/bonus',
@@ -24,6 +24,7 @@ const apis = {
     s3Service : server+'/dev/v1/s3',
     shiftService: server+'/dev/v1/shift',
     userService: server+'/dev/v1/user',
+    tasksService: server+'/dev/v1/tasks',
 
 }
 

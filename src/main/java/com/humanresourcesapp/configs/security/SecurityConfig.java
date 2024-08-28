@@ -36,6 +36,7 @@ public class SecurityConfig
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/swagger-ui/**","/v3/api-docs/**").permitAll()
                         .requestMatchers("dev/v1/**").permitAll()
+                        //.requestMatchers("/**").permitAll()  // Bu satır tüm isteklere izin verir
                         .anyRequest().authenticated())
                 .authenticationProvider(authProvider());
                 //.formLogin(Customizer.withDefaults());

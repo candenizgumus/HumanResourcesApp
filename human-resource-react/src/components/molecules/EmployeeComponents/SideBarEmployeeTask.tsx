@@ -32,8 +32,7 @@ import {
     fetchGetEmployeeTasks,
     fetchGetSubTasksOfSelectedTask,
     fetchGetTasks,
-    fetchSaveSubtask,
-    fetchSaveTask
+
 } from "../../../store/feature/TaskSlice";
 import CircularProgress from "@mui/material/CircularProgress";
 import {Clear} from "@mui/icons-material";
@@ -52,9 +51,6 @@ const SideBarTask = () => {
     const token = useAppSelector((state) => state.auth.token);
     const taskList = useAppSelector((state) => state.task.taskList);
     const [loading, setLoading] = useState(false);
-    const [isActivating, setIsActivating] = useState(false);
-    const [taskName, setTaskName] = useState('');
-    const [subTaskName, setSubTaskName] = useState('');
 
     const [openAssignToEmployeeModal, setOpenAssignToEmployeeModal] = useState(false);
     const [openSubTaskModal, setOpenSubTaskModal] = useState(false);
@@ -67,7 +63,7 @@ const SideBarTask = () => {
 
     useEffect(() => {
         dispatch(
-            fetchGetEmployeeTasks( token )
+            fetchGetEmployeeTasks( {token: token, page: 0, pageSize: 100, searchText: searchText} )
         )
             .catch(() => {
                 dispatch(clearToken());
@@ -79,10 +75,22 @@ const SideBarTask = () => {
     };
 
     const handleCompleteTask = async () => {
-        await dispatch(fetchCompleteTask({token : token , taskId : selectedRowIds[0]})).unwrap();
-        await dispatch(
-            fetchGetEmployeeTasks( token )
-        )
+
+        const result = await Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: myLightColour,
+            cancelButtonColor: myErrorColour,
+            confirmButtonText: "Yes, complete it!"
+        });
+        if (result.isConfirmed) {
+            await dispatch(fetchCompleteTask({token: token, taskId: selectedRowIds[0]})).unwrap();
+            await dispatch(
+                fetchGetEmployeeTasks( {token: token, page: 0, pageSize: 100, searchText: searchText} )
+            )
+        }
     }
 
     const handleCloseAssignLeaveModal = () => {
@@ -93,7 +101,7 @@ const SideBarTask = () => {
     const closeSubTaskModal = () => {
         setOpenSubTaskModal(false);
         dispatch(
-            fetchGetEmployeeTasks( token )
+            fetchGetEmployeeTasks( {token: token, page: 0, pageSize: 100, searchText: searchText} )
         )
 
     };
@@ -152,35 +160,9 @@ const SideBarTask = () => {
         setOpenAssignToEmployeeModal(false)
 
     }
-    const handleSaveTask = async () => {
-        await dispatch(fetchSaveTask({token : token , taskName : taskName})).unwrap();
-        Swal.fire({
-            title: "Saved!",
-            text: "Your task has been saved.",
-            icon: "success",
-            confirmButtonColor: myLightColour,
-            cancelButtonColor: myErrorColour,
-        }).then(() => {
-            dispatch(
-                fetchGetTasks({
-                    token: token,
-                    page: 0,
-                    pageSize: 100,
-                    searchText: searchText,
-                })
-            );
 
-        })
-            .then(() => setTaskName(''))
-    }
 
-    const handleSaveSubTask = async () => {
 
-        await dispatch(fetchSaveSubtask({token : token , subTaskName : subTaskName , taskId : selectedRowIds[0]}))
-        await dispatch(fetchGetSubTasksOfSelectedTask({token : token , taskId : selectedRowIds[0]})).unwrap();
-        setSubTaskName('')
-
-    }
 
     const columns: GridColDef[] = [
         { field: 'taskName', headerName: 'Task Name', flex: 1, headerAlign: "center" },
@@ -304,7 +286,7 @@ const SideBarTask = () => {
                     onClick={handleCompleteTask}
                     variant="contained"
                     color="success"
-                    disabled={selectedRowIds.length === 0 || selectedRowIds.length > 1 }
+                    disabled={selectedRowIds.length === 0 || selectedRowIds.length > 1  || taskList.find(task => task.id === selectedRowIds[0])?.completionDate !== null}
                     startIcon={<AddIcon />}
                     sx={{ marginRight: '1%'}}
                 >
@@ -321,41 +303,6 @@ const SideBarTask = () => {
                     Check SubTasks
                 </Button>
             </Grid>
-
-            <Grid container spacing={2}  direction="row">
-                <Grid item xs={12}>
-                    <Typography variant="h6" sx={{ fontWeight: "bold" }}>
-                        Add Task
-                    </Typography>
-                </Grid>
-                <Grid item xs={4}>
-                    <TextField
-                        label="Task Name"
-                        name="taskName"
-                        value={taskName}
-                        onChange={e => setTaskName(e.target.value)}
-                        fullWidth
-                        required
-                        inputProps={{ maxLength: 100 }}
-                    />
-                </Grid>
-                <Grid item xs={2}>
-                    <Button
-                        onClick={handleSaveTask}
-                        variant="contained"
-                        color="success"
-                        disabled={taskName.length === 0 }
-                        startIcon={<AddIcon />}
-                        sx={{ marginRight: '1%', width: '200px' }}
-                    >
-                        Add
-                    </Button>
-                </Grid>
-            </Grid>
-
-
-
-
             <Dialog open={openAssignToEmployeeModal} onClose={handleCloseAssignLeaveModal} fullWidth maxWidth='sm'>
                 <DialogTitle>Assign Leave</DialogTitle>
                 <DialogContent>

@@ -63,8 +63,8 @@ public class TasksController
 
     @PostMapping(GET_TASKS_OF_EMPLOYEE)
     @PreAuthorize("hasAnyAuthority('EMPLOYEE')")
-    public ResponseEntity<List<TaskResponseDto>> getTasksOfEmployee(){
-        return ResponseEntity.ok(tasksService.getTasksOfEmployee());
+    public ResponseEntity<List<TaskResponseDto>> getTasksOfEmployee(@RequestBody PageRequestDto dto){
+        return ResponseEntity.ok(tasksService.getTasksOfEmployee(dto));
     }
 
     @DeleteMapping(FINISH_SUBTASK)

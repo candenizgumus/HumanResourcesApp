@@ -94,17 +94,27 @@ export const fetchGetTasks = createAsyncThunk(
 
 )
 
-
+interface IfetchGetEmployeeTasks{
+    token:string,
+    page:number,
+    pageSize:number,
+    searchText:string
+}
 export const fetchGetEmployeeTasks = createAsyncThunk(
     'task/fetchGetEmployeeTasks',
-    async (token: string) => {
+    async (payload: IfetchGetEmployeeTasks) => {
 
         const response = await fetch(RestApis.tasksService+`/get-tasks-of-employee`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ` + token
-            }
+                'Authorization': `Bearer ` + payload.token
+            },
+            body: JSON.stringify({
+                'page': payload.page,
+                'pageSize': payload.pageSize,
+                'searchText': payload.searchText
+            })
         });
 
         return await response.json();

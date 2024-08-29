@@ -1,23 +1,22 @@
 package com.humanresourcesapp.controllers;
 
+import com.humanresourcesapp.dto.requests.TimeDataSaveRequestDto;
 import com.humanresourcesapp.entities.PersonalDocument;
 import com.humanresourcesapp.entities.Slide;
 import com.humanresourcesapp.exception.ErrorType;
 import com.humanresourcesapp.exception.HumanResourcesAppException;
 import com.humanresourcesapp.services.SlideService;
+import com.humanresourcesapp.services.TimeDataService;
 import lombok.RequiredArgsConstructor;
-import org.apache.poi.xslf.usermodel.XMLSlideShow;
-import org.apache.poi.xslf.usermodel.XSLFPictureData;
-import org.apache.poi.xslf.usermodel.XSLFSlide;
+import jakarta.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.Map;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import static com.humanresourcesapp.constants.Endpoints.GET_ALL;
-import static com.humanresourcesapp.constants.Endpoints.ROOT;
 
 import java.io.FileOutputStream;
 import java.nio.file.Files;
@@ -35,7 +34,7 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-
+import static com.humanresourcesapp.constants.Endpoints.*;
 
 
 @RequiredArgsConstructor
@@ -45,6 +44,7 @@ import java.util.zip.ZipInputStream;
 public class SlideController {
 
     private final SlideService slideService;
+    private final TimeDataService timeDataService;
 
     @PostMapping("/upload")
     @PreAuthorize("hasAnyAuthority('MANAGER','ADMIN','EMPLOYEE')")
@@ -75,4 +75,50 @@ public class SlideController {
     public ResponseEntity<List<Slide>> getAll() {
         return ResponseEntity.ok(slideService.getAll());
     }
+
+    @PostMapping(GET_BY_ID)
+    @CrossOrigin("*")
+    public ResponseEntity<Slide> getById(Long id) {
+        return ResponseEntity.ok(slideService.getById(id));
+    }
+
+    @GetMapping("/get-ip")
+    @CrossOrigin("*")
+    public ResponseEntity<Map<String, String> >getUserIP(HttpServletRequest request) {
+        String ipAddress = request.getHeader("X-Forwarded-For");
+        if (ipAddress == null || ipAddress.isEmpty()) {
+            ipAddress = request.getRemoteAddr();
+        }
+
+        Map<String, String> response = new HashMap<>();
+        response.put("ip", ipAddress);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/store-time-data")
+    @CrossOrigin("*")
+    public ResponseEntity<String> storeTimeData(@RequestBody Map<String, Object> payload) {
+        // Cast imageTimes to the correct type
+        Map<String, Double> imageTimes = (Map<String, Double>) payload.get("imageTimes");
+        System.out.println(imageTimes);
+
+        String userName = payload.get("userName").toString();
+        System.out.println(userName);
+        String slideId =  payload.get("slideId").toString();
+        System.out.println(slideId);
+        String userIp = payload.get("userIp").toString();
+        System.out.println(userIp);
+
+
+        // Store the image times in the database
+        timeDataService.save(TimeDataSaveRequestDto.builder()
+                .userName(userName)
+                .imageTimes(imageTimes)
+                .slideId(Long.parseLong(slideId))
+                .userIp(userIp).build());
+        return ResponseEntity.ok("Data stored successfully");
+    }
+
+
 }

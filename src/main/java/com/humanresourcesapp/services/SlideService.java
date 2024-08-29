@@ -103,4 +103,8 @@ public class SlideService {
         }
         return imageFiles;
     }
+
+    public Slide getById( Long id) {
+        return slideRepository.findById(id).orElseThrow(() -> new HumanResourcesAppException(ErrorType.SLIDE_NOT_FOUND));
+    }
 }

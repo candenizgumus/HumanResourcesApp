@@ -8,21 +8,15 @@ import { fetchGetIp, fetchGetSlideById, fetchStoreTimeData, ISlide } from '../..
 import { HumanResources, useAppSelector } from '../../../store';
 import { useDispatch } from 'react-redux';
 
-function UserStoryDetailPage() {
+function ShowSlide() {
     const [isMobile, setIsMobile] = useState(window.matchMedia('(max-width: 768px)').matches);
-    const [userIP, setUserIP] = useState('');
     const [imageTimes, setImageTimes] = useState<Record<number, number>>({});
     const [currentImage, setCurrentImage] = useState<number | null>(null);
     const [startTime, setStartTime] = useState(Date.now());
     const [loading, setLoading] = useState(true);
     const dispatch: HumanResources = useDispatch();
-    const { slideId, userName: userNameParam } = useParams();
-    const userName = userNameParam || ''; // Default value to avoid undefined
+    const { slideId } = useParams();
     const [slide, setSlide] = useState<ISlide | null>(null);
-
-    useEffect(() => {
-        dispatch(fetchGetIp()).unwrap().then((ip) => setUserIP(ip));
-    }, [dispatch]);
 
     useEffect(() => {
         const handleResize = () => {
@@ -34,40 +28,6 @@ function UserStoryDetailPage() {
             window.removeEventListener('resize', handleResize);
         };
     }, []);
-
-    useEffect(() => {
-        window.scrollTo(0, 0);
-    }, []);
-
-    const handleImageChange = (now?: number, previous?: number) => {
-        const endTime = Date.now();
-        const timeSpent = (endTime - startTime) / 1000; // in seconds
-
-        if (currentImage !== null && previous !== undefined) {
-            setImageTimes((prevTimes) => ({
-                ...prevTimes,
-                [previous]: (prevTimes[previous] || 0) + timeSpent,
-            }));
-        }
-        setCurrentImage(now !== undefined ? now : null);
-        setStartTime(Date.now());
-    };
-
-    useEffect(() => {
-        const sendTimeData = async () => {
-            try {
-                await dispatch(fetchStoreTimeData({ imageTimes, userIP, userName })).unwrap();
-            } catch (error) {
-                console.error('Error sending time data:', error);
-            }
-        };
-
-        window.addEventListener('beforeunload', sendTimeData);
-
-        return () => {
-            window.removeEventListener('beforeunload', sendTimeData);
-        };
-    }, [imageTimes, userIP, dispatch, userName]);
 
     useEffect(() => {
         dispatch(fetchGetSlideById(Number(slideId))).unwrap().then((slide) => {
@@ -113,7 +73,7 @@ function UserStoryDetailPage() {
                     {isMobile ? (
                         <Box sx={{ width: 'auto', minWidth: '545px', margin: 'auto' }}>
                             {slide.mobileImageUrls.length > 0 ? (
-                                <Carousel onChange={handleImageChange} autoPlay={false}>
+                                <Carousel autoPlay={false}>
                                     {slide.mobileImageUrls.map((image: string, index: number) => (
                                         <img
                                             key={index}
@@ -130,7 +90,7 @@ function UserStoryDetailPage() {
                     ) : (
                         <Box sx={{ width: 'auto', margin: 'auto' }}>
                             {slide.desktopImageUrls.length > 0 ? (
-                                <Carousel onChange={handleImageChange} autoPlay={false}>
+                                <Carousel autoPlay={false}>
                                     {slide.desktopImageUrls.map((image: string, index: number) => (
                                         <img
                                             key={index}
@@ -151,4 +111,4 @@ function UserStoryDetailPage() {
     );
 }
 
-export default UserStoryDetailPage;
+export default ShowSlide;

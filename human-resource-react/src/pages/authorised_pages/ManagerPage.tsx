@@ -13,6 +13,8 @@ import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import CreateNewFolderIcon from '@mui/icons-material/CreateNewFolder';
+import FolderCopyIcon from '@mui/icons-material/FolderCopy';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
@@ -215,7 +217,7 @@ export default function AdminPage() {
                         </IconButton>
                     </DrawerHeader>
                     <List sx={{ bgcolor: 'primary.main', minHeight: 'calc(100vh - 65px)', paddingTop: '0' }}>
-                        {['Dashboard', 'Employees', 'Add Employee', 'Create Manager', 'Create Definition', 'Profile', 'Company', 'Add Comment', 'Holidays', 'Notifications', 'Expenditure', 'Leaves', 'Payments', 'Personal Documents', 'Bonus', 'Company Items', 'Task', 'Create Slide', 'Slide'].map((text, index) => (
+                        {['Dashboard', 'Employees', 'Add Employee', 'Create Manager', 'Create Definition', 'Profile', 'Company', 'Add Comment', 'Holidays', 'Notifications', 'Expenditure', 'Leaves', 'Payments', 'Personal Documents', 'Bonus', 'Company Items', 'Task', 'Create Slide', 'Slides'].map((text, index) => (
                             <ListItem key={text} disablePadding>
                                 <ListItemButton
                                     selected={selectedIndex2 === index}
@@ -255,8 +257,8 @@ export default function AdminPage() {
                                         {index === 14 && <Paid />}
                                         {index === 15 && <Laptop />}
                                         {index === 16 && <Task />}
-                                        {index === 17 && <Laptop />}
-                                        {index === 18 && <Laptop />}
+                                        {index === 17 && <CreateNewFolderIcon />}
+                                        {index === 18 && <FolderCopyIcon />}
                                     </ListItemIcon>
                                     <ListItemText primary={text} />
                                 </ListItemButton>

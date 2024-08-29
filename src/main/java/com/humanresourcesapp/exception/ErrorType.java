@@ -67,7 +67,7 @@ public enum ErrorType
     SUBTASK_NOT_FOUND(  1055, "Subtask Not Found",      HttpStatus.BAD_REQUEST),
     FILE_UPLOAD_FAILED(1056,"File Upload Failed", HttpStatus.INTERNAL_SERVER_ERROR),
     NO_IMAGES_FOUND(1057,"No Images Found" , HttpStatus.BAD_REQUEST ),
-    ;
+    SLIDE_NOT_FOUND(1058,"Slide Not Found" ,HttpStatus.BAD_REQUEST );
     private final Integer code;
     private final String message;
     private final HttpStatus httpStatus;

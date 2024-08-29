@@ -16,8 +16,9 @@ function UserStoryDetailPage() {
     const [startTime, setStartTime] = useState(Date.now());
     const [loading, setLoading] = useState(true);
     const dispatch: HumanResources = useDispatch();
-    const { slideId, userName: userNameParam } = useParams();
+    const { slideId: slideIdParam, userName: userNameParam } = useParams();
     const userName = userNameParam || ''; // Default value to avoid undefined
+    const slideId = Number(slideIdParam) || 0;
     const [slide, setSlide] = useState<ISlide | null>(null);
 
     useEffect(() => {
@@ -56,7 +57,7 @@ function UserStoryDetailPage() {
     useEffect(() => {
         const sendTimeData = async () => {
             try {
-                await dispatch(fetchStoreTimeData({ imageTimes, userIP, userName })).unwrap();
+                await dispatch(fetchStoreTimeData({ imageTimes, userIP, userName, slideId })).unwrap();
             } catch (error) {
                 console.error('Error sending time data:', error);
             }

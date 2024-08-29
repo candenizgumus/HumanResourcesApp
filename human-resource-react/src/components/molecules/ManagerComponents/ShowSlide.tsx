@@ -1,22 +1,26 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { Container, CssBaseline, Box, CircularProgress } from '@mui/material';
-import Carousel from 'react-material-ui-carousel';
+import Slider from 'react-slick';
 import ThemeElement from '../../atoms/ThemeElement';
 import RestApis from '../../../config/RestApis';
 import { fetchGetIp, fetchGetSlideById, fetchStoreTimeData, ISlide } from '../../../store/feature/slideSlice';
-import { HumanResources, useAppSelector } from '../../../store';
+import { HumanResources } from '../../../store';
 import { useDispatch } from 'react-redux';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 
-function ShowSlide() {
+function UserStoryDetailPage() {
     const [isMobile, setIsMobile] = useState(window.matchMedia('(max-width: 768px)').matches);
     const [imageTimes, setImageTimes] = useState<Record<number, number>>({});
-    const [currentImage, setCurrentImage] = useState<number | null>(null);
+    const [currentImage, setCurrentImage] = useState<number | undefined>(undefined);
     const [startTime, setStartTime] = useState(Date.now());
     const [loading, setLoading] = useState(true);
     const dispatch: HumanResources = useDispatch();
-    const { slideId } = useParams();
+    const { slideId: slideIdParam, userName: userNameParam } = useParams();
+    const slideId = Number(slideIdParam) || 0;
     const [slide, setSlide] = useState<ISlide | null>(null);
+
 
     useEffect(() => {
         const handleResize = () => {
@@ -38,6 +42,14 @@ function ShowSlide() {
             setLoading(false);
         });
     }, [dispatch, slideId]);
+
+    const sliderSettings = {
+        dots: true,
+        infinite: true,
+        speed: 500,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+    };
 
     if (loading) {
         return (
@@ -71,35 +83,33 @@ function ShowSlide() {
                 <CssBaseline />
                 <Box>
                     {isMobile ? (
-                        <Box sx={{ width: 'auto', minWidth: '545px', margin: 'auto' }}>
+                        <Box>
                             {slide.mobileImageUrls.length > 0 ? (
-                                <Carousel autoPlay={false}>
+                                <Slider {...sliderSettings}>
                                     {slide.mobileImageUrls.map((image: string, index: number) => (
                                         <img
                                             key={index}
                                             src={RestApis.staticUploads + image}
                                             alt={`Slide ${index + 1}`}
-                                            style={{ width: '100%', height: 'auto' }}
                                         />
                                     ))}
-                                </Carousel>
+                                </Slider>
                             ) : (
                                 <div>No images uploaded</div>
                             )}
                         </Box>
                     ) : (
-                        <Box sx={{ width: 'auto', margin: 'auto' }}>
+                        <Box>
                             {slide.desktopImageUrls.length > 0 ? (
-                                <Carousel autoPlay={false}>
+                                <Slider {...sliderSettings}>
                                     {slide.desktopImageUrls.map((image: string, index: number) => (
                                         <img
                                             key={index}
                                             src={RestApis.staticUploads + image}
                                             alt={`Slide ${index + 1}`}
-                                            style={{ width: '100%', height: 'auto' }}
                                         />
                                     ))}
-                                </Carousel>
+                                </Slider>
                             ) : (
                                 <div>No images uploaded</div>
                             )}
@@ -111,4 +121,4 @@ function ShowSlide() {
     );
 }
 
-export default ShowSlide;
+export default UserStoryDetailPage;

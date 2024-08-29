@@ -21,7 +21,10 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -51,8 +54,9 @@ public class TasksService
     {
         String userEmail = UserInfoSecurityContext.getUserInfoFromSecurityContext();
         User manager = userService.findByEmail(userEmail).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
-        List<Tasks> taskList = tasksRepository.findByTaskNameContainingAndCompanyIdAndStatusOrderByIdDesc(dto.searchText(), manager.getCompanyId(), EStatus.ACTIVE, PageRequest.of(dto.page(), dto.pageSize()));
+        List<Tasks> taskList = tasksRepository.findByTaskNameContainingAndCompanyIdAndStatusOrderByTaskNameDesc(dto.searchText(), manager.getCompanyId(), EStatus.ACTIVE, PageRequest.of(dto.page(), dto.pageSize()));
         List<TaskResponseDto> taskResponseDtoList = new ArrayList<>();
+
         taskList.forEach(task -> {
             if (task.getAssignedDate() != null)
             {
@@ -65,6 +69,44 @@ public class TasksService
 
 
         });
+
+        AtomicLong uniqueIdCounter = new AtomicLong(-1L);
+        List<String> taskNamesUsed = new ArrayList<>();
+
+        taskList.forEach(task -> {
+
+
+            if (taskList.size()>1)
+            {
+                List<Tasks> taskListByTaskName = tasksRepository.findAllByTaskName(task.getTaskName());
+                if (!taskList.isEmpty()  && taskListByTaskName.size() > 1 && !taskNamesUsed.contains(task.getTaskName()))
+                {
+
+                    int totalNumberOfSubtasks = 0;
+
+                    int totalNumberOfCompletedTasks = 0;
+
+                    for (Tasks tasks : taskListByTaskName)
+                    {
+                        totalNumberOfSubtasks += tasks.getSubtasks().size();
+                    }
+
+                    for (Tasks tasks2 : taskListByTaskName)
+                    {
+                        totalNumberOfCompletedTasks += tasks2.getNumberOfCompletedSubtasks();
+                    }
+
+
+                    taskNamesUsed.add(task.getTaskName());
+                    taskResponseDtoList.add(new TaskResponseDto(uniqueIdCounter.longValue(),task.getTaskName()+ " Total", null, null, null, totalNumberOfCompletedTasks, totalNumberOfSubtasks, task.getStatus()));
+                    uniqueIdCounter.getAndDecrement();
+                }
+            }
+
+
+
+        });
+        taskResponseDtoList.sort(Comparator.comparing(TaskResponseDto::taskName).reversed());
         return taskResponseDtoList;
     }
 

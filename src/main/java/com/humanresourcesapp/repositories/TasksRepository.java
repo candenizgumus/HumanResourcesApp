@@ -13,8 +13,10 @@ import java.util.List;
 public interface TasksRepository extends JpaRepository<Tasks,Long> {
 
 
-    List<Tasks> findByTaskNameContainingAndCompanyIdAndStatusOrderByIdDesc(String s, Long companyId, EStatus eStatus, PageRequest of);
+    List<Tasks> findByTaskNameContainingAndCompanyIdAndStatusOrderByTaskNameDesc(String s, Long companyId, EStatus eStatus, PageRequest of);
 
 
     List<Tasks> findAllByTaskNameContainingAndEmployeeIdOrderByIdDesc(String taskName , Long id, PageRequest pageRequest);
+
+    List<Tasks> findAllByTaskName(String s);
 }

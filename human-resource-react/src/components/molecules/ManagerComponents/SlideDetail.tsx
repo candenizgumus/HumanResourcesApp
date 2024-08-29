@@ -16,8 +16,9 @@ function UserStoryDetailPage() {
     const [startTime, setStartTime] = useState(Date.now());
     const [loading, setLoading] = useState(true);
     const dispatch: HumanResources = useDispatch();
-    const { slideId, userName: userNameParam } = useParams();
+    const { slideId: slideIdParam, userName: userNameParam } = useParams();
     const userName = userNameParam || ''; // Default value to avoid undefined
+    const slideId = Number(slideIdParam) || 0;
     const [slide, setSlide] = useState<ISlide | null>(null);
 
     useEffect(() => {
@@ -56,7 +57,7 @@ function UserStoryDetailPage() {
     useEffect(() => {
         const sendTimeData = async () => {
             try {
-                await dispatch(fetchStoreTimeData({ imageTimes, userIP, userName })).unwrap();
+                await dispatch(fetchStoreTimeData({ imageTimes, userIP, userName, slideId })).unwrap();
             } catch (error) {
                 console.error('Error sending time data:', error);
             }
@@ -111,9 +112,9 @@ function UserStoryDetailPage() {
                 <CssBaseline />
                 <Box>
                     {isMobile ? (
-                        <Box sx={{ width: 'auto', minWidth: '545px', margin: 'auto' }}>
+                        <Box sx={{ width: 'auto', margin: 'auto' }}>
                             {slide.mobileImageUrls.length > 0 ? (
-                                <Carousel onChange={handleImageChange} autoPlay={false}>
+                                <Carousel onChange={handleImageChange} sx={{ height: 'auto' }}  autoPlay={false}>
                                     {slide.mobileImageUrls.map((image: string, index: number) => (
                                         <img
                                             key={index}
@@ -130,7 +131,7 @@ function UserStoryDetailPage() {
                     ) : (
                         <Box sx={{ width: 'auto', margin: 'auto' }}>
                             {slide.desktopImageUrls.length > 0 ? (
-                                <Carousel onChange={handleImageChange} autoPlay={false}>
+                                <Carousel onChange={handleImageChange} sx={{ height: 'auto' }} autoPlay={false}>
                                     {slide.desktopImageUrls.map((image: string, index: number) => (
                                         <img
                                             key={index}

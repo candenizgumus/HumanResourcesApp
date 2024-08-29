@@ -87,7 +87,8 @@ export const fetchGetIp = createAsyncThunk(
 export interface IStoreTimeData {
     userIP: string,
     imageTimes: {},
-    userName: string
+    userName: string,
+    slideId: number
 }
 export const fetchStoreTimeData = createAsyncThunk(
     'slide/fetchStoreTimeData',
@@ -100,7 +101,7 @@ export const fetchStoreTimeData = createAsyncThunk(
             body: JSON.stringify({
                 userIp: payload.userIP,
                 imageTimes: payload.imageTimes,
-                slideId: 0,
+                slideId: payload.slideId,
                 userName: payload.userName
             })
         });

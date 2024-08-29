@@ -112,9 +112,9 @@ function UserStoryDetailPage() {
                 <CssBaseline />
                 <Box>
                     {isMobile ? (
-                        <Box sx={{ width: 'auto', minWidth: '545px', margin: 'auto' }}>
+                        <Box sx={{ width: 'auto', margin: 'auto' }}>
                             {slide.mobileImageUrls.length > 0 ? (
-                                <Carousel onChange={handleImageChange} autoPlay={false}>
+                                <Carousel onChange={handleImageChange} sx={{ height: 'auto' }}  autoPlay={false}>
                                     {slide.mobileImageUrls.map((image: string, index: number) => (
                                         <img
                                             key={index}
@@ -131,7 +131,7 @@ function UserStoryDetailPage() {
                     ) : (
                         <Box sx={{ width: 'auto', margin: 'auto' }}>
                             {slide.desktopImageUrls.length > 0 ? (
-                                <Carousel onChange={handleImageChange} autoPlay={false}>
+                                <Carousel onChange={handleImageChange} sx={{ height: 'auto' }} autoPlay={false}>
                                     {slide.desktopImageUrls.map((image: string, index: number) => (
                                         <img
                                             key={index}

@@ -67,6 +67,70 @@ export const fetchGetAllSlides = createAsyncThunk(
     }
 );
 
+export const fetchGetIp = createAsyncThunk(
+    'slide/fetchGetIp',
+    async () => {
+        const response = await fetch(RestApis.slideService + '/get-ip', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error('File upload failed');
+        }
+
+        return await response.json();
+    }
+);
+export interface IStoreTimeData {
+    userIP: string,
+    imageTimes: {},
+    userName: string
+}
+export const fetchStoreTimeData = createAsyncThunk(
+    'slide/fetchStoreTimeData',
+    async (payload:IStoreTimeData) => {
+        const response = await fetch(RestApis.slideService + '/store-time-data', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                userIp: payload.userIP,
+                imageTimes: payload.imageTimes,
+                slideId: 0,
+                userName: payload.userName
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error('File upload failed');
+        }
+
+        return await response.json();
+    }
+);
+
+
+export const fetchGetSlideById = createAsyncThunk(
+    'slide/fetchGetSlideById',
+    async (slideId: number) => {
+        const response = await fetch(RestApis.slideService + '/get-by-id?id=' + slideId, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error('File upload failed');
+        }
+
+        return await response.json();
+    }
+);
 
 const slideSlice = createSlice({
     name: 'slide',

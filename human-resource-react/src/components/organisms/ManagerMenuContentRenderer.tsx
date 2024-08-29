@@ -57,7 +57,7 @@ export const ManagerMenuContentRenderer = () => {
                 {page === 'Assign Item' && <AddCompanyItemAssignment/>}
                 {page === 'Task' && <SideBarTask/>}
                 {page === 'Create Slide' && <UploadFile/>}
-                {page === 'Slide' && <SlideComponent/>}
+                {page === 'Slides' && <SlideComponent/>}
             </Grid>
         </>
     );

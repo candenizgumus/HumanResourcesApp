@@ -319,7 +319,7 @@ const SideBarTask = () => {
                     onClick={handleAssignToEmployee}
                     variant="contained"
                     color="success"
-                    disabled={selectedRowIds.length === 0 || selectedRowIds.length > 1 || taskList.find(task => task.id === selectedRowIds[0])?.assignedEmployeeName !== null }
+                    disabled={selectedRowIds.length === 0 || selectedRowIds[0] <0 || selectedRowIds.length > 1 || taskList.find(task => task.id === selectedRowIds[0])?.assignedEmployeeName !== null }
                     startIcon={<AddIcon />}
                     sx={{ marginRight: '1%'}}
                 >
@@ -329,7 +329,7 @@ const SideBarTask = () => {
                     onClick={handleOpenSubTaskModal}
                     variant="contained"
                     color="secondary"
-                    disabled={selectedRowIds.length === 0 || selectedRowIds.length > 1}
+                    disabled={selectedRowIds.length === 0 || selectedRowIds[0] <0 || selectedRowIds.length > 1}
                     startIcon={<AddIcon />}
                     sx={{ marginRight: '1%' }}
                 >
@@ -340,7 +340,7 @@ const SideBarTask = () => {
                     onClick={handleDeleteTask}
                     variant="contained"
                     color="error"
-                    disabled={selectedRowIds.length === 0 || selectedRowIds.length > 1}
+                    disabled={selectedRowIds.length === 0 || selectedRowIds[0] <0 || selectedRowIds.length > 1}
                     startIcon={<DeleteIcon />}
                     sx={{ marginRight: '1%' }}
                 >

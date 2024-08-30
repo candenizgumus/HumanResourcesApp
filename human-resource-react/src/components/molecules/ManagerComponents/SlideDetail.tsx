@@ -18,8 +18,9 @@ function UserStoryDetailPage() {
     const [startTime, setStartTime] = useState(Date.now());
     const [loading, setLoading] = useState(true);
     const dispatch: HumanResources = useDispatch();
-    const { slideId: slideIdParam, userName: userNameParam } = useParams();
+    const { slideId: slideIdParam, userName: userNameParam, companyId: companyIdParam } = useParams();
     const userName = userNameParam || ''; // Default value to avoid undefined
+    const companyId = Number(companyIdParam) || 0; // Default value to avoid undefined
     const slideId = Number(slideIdParam) || 0;
     const [slide, setSlide] = useState<ISlide | null>(null);
 
@@ -73,7 +74,7 @@ function UserStoryDetailPage() {
 
                 try {
                     console.log('Sending time data:', { imageTimes, userIP, userName, slideId });
-                    const response = await dispatch(fetchStoreTimeData({ imageTimes, userIP, userName, slideId })).unwrap();
+                    const response = await dispatch(fetchStoreTimeData({ imageTimes, userIP, userName, slideId,companyId })).unwrap();
                     console.log('Time data sent successfully:', response);
                 } catch (error) {
                     console.error('Error sending time data:', error);
@@ -123,6 +124,7 @@ function UserStoryDetailPage() {
                     background: 'rgba(0, 0, 0, 0.5)', // Yarı transparan yeşil arka plan
                     right: '10px',
                     zIndex: 1,
+                    borderRadius: '25%',
                 }}
                 onClick={onClick}
             />
@@ -140,6 +142,7 @@ function UserStoryDetailPage() {
                     background: 'rgba(0, 0, 0, 0.5)', // Yarı transparan yeşil arka plan
                     left: '10px',
                     zIndex: 1,
+                    borderRadius: '25%',
                 }}
                 onClick={onClick}
             />
@@ -153,8 +156,8 @@ function UserStoryDetailPage() {
         slidesToShow: 1,
         slidesToScroll: 1,
         afterChange: (current: number) => handleImageChange(current),
-        nextArrow: <NextArrow />,
-        prevArrow: <PrevArrow />,
+        /*nextArrow: <NextArrow />,
+        prevArrow: <PrevArrow />,*/
     };
 
     if (loading) {

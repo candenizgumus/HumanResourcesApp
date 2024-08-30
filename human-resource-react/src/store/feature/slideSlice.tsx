@@ -90,7 +90,8 @@ export interface IStoreTimeData {
     userIP: string,
     imageTimes: {},
     userName: string,
-    slideId: number
+    slideId: number,
+    companyId:number
 }
 export const fetchStoreTimeData = createAsyncThunk(
     'slide/fetchStoreTimeData',
@@ -104,7 +105,8 @@ export const fetchStoreTimeData = createAsyncThunk(
                 userIp: payload.userIP,
                 imageTimes: payload.imageTimes,
                 slideId: payload.slideId,
-                userName: payload.userName
+                userName: payload.userName,
+                companyId: payload.companyId
             })
         });
 
@@ -131,6 +133,24 @@ export const fetchGetSlideById = createAsyncThunk(
             throw new Error('File upload failed');
         }
 
+        return await response.json();
+    }
+);
+
+export interface IfetchDeleteSlide {
+    token: string,
+    slideId: number,
+}
+export const fetchDeleteSlide = createAsyncThunk(
+    'slide/fetchDeleteSlide',
+    async (payload: IfetchDeleteSlide) => {
+        const response = await fetch(RestApis.slideService + '/delete?id=' + payload.slideId, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ` + payload.token
+            }
+        });
         return await response.json();
     }
 );

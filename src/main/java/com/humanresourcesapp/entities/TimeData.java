@@ -23,4 +23,5 @@ public class TimeData extends BaseEntity {
     @ElementCollection
     Map<String, Double> imageTimes;
     String userIp;
+    Long companyId;
 }

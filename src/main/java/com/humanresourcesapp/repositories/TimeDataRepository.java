@@ -15,7 +15,8 @@ public interface TimeDataRepository extends JpaRepository<TimeData, Long> {
     @Query("SELECT DISTINCT t.slideId FROM TimeData t WHERE t.userName = :username")
     List<Long> findAllUsernamesSlides(String username);
 
-    List<TimeData> findAllByUserNameAndSlideId(String username,Long slideId);
+    List<TimeData> findAllByUserNameAndSlideIdAndCompanyId(String username,Long slideId,Long companyId);
 
 
+    void deleteAllBySlideId(Long id);
 }

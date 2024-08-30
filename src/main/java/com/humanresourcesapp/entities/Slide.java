@@ -25,6 +25,9 @@ public class Slide {
     private List<String> mobileImageUrls;
     @ElementCollection
     private List<String> desktopImageUrls;
+
+    String mobileImagesPath;
+    String desktopImagesPath;
     private String sehir;
     private String ilce;
     private String mahalle;

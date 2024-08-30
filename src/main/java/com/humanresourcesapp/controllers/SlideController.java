@@ -48,24 +48,29 @@ public class SlideController {
 
     @PostMapping("/upload")
     @PreAuthorize("hasAnyAuthority('MANAGER','ADMIN','EMPLOYEE')")
-    @CrossOrigin(origins = "http://yourdomain.com") // Replace with your actual domain
     public ResponseEntity<?> uploadZipFile(@RequestParam(value = "fileMobile", required = false) MultipartFile fileMobile,
                                            @RequestParam(value = "fileDesktop", required = false) MultipartFile fileDesktop) {
         try {
-
 
             // Check if files are not null and process them
             List<String> mobileImages = fileMobile != null ? slideService.getImages(fileMobile) : Collections.emptyList();
             List<String> desktopImages = fileDesktop != null ? slideService.getImages(fileDesktop) : Collections.emptyList();
 
+            String mobileImagesPath =  mobileImages.getFirst().split("/")[1];
+            String desktopImagesPath = desktopImages.getFirst().split("/")[1];
             // Save images and return response
-            Slide slide = slideService.save(mobileImages, desktopImages);
+            Slide slide = slideService.save(mobileImages, desktopImages, mobileImagesPath, desktopImagesPath);
             return ResponseEntity.ok(slide);
         } catch (Exception e) {
             // Handle exceptions and return appropriate response
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error processing files");
         }
+    }
+
+    @DeleteMapping("/delete-directory")
+    public ResponseEntity<String> deleteDirectory(@RequestParam String directoryPath) {
+        return slideService.deleteDirectory(directoryPath);
     }
 
 

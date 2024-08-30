@@ -5,6 +5,7 @@ import com.humanresourcesapp.exception.ErrorType;
 import com.humanresourcesapp.exception.HumanResourcesAppException;
 import com.humanresourcesapp.repositories.SlideRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,8 +28,12 @@ import java.util.zip.ZipInputStream;
 public class SlideService {
     private final SlideRepository slideRepository;
     private static final String UPLOAD_DIR = "uploads/";
-    public Slide save(List<String> mobileImages, List<String> desktopImages) {
-        return slideRepository.save(Slide.builder().mobileImageUrls(mobileImages).desktopImageUrls(desktopImages).build());
+    public Slide save(List<String> mobileImages, List<String> desktopImages, String mobileImagesPath, String desktopImagesPath) {
+        return slideRepository.save(Slide.builder()
+                .mobileImageUrls(mobileImages)
+                .desktopImageUrls(desktopImages)
+                .desktopImagesPath("uploads/"+desktopImagesPath)
+                .mobileImagesPath("uploads/"+mobileImagesPath).build());
     }
 
     public List<Slide> getAll() {
@@ -71,10 +76,12 @@ public class SlideService {
 
         } catch (IOException e) {
             e.printStackTrace();
+            deleteDirectory(zipFilePath.toString());
             throw new HumanResourcesAppException(ErrorType.FILE_UPLOAD_FAILED);
         }
 
         // Return the list of image URLs
+        deleteDirectory(zipFilePath.toString());
         return imageUrls;
     }
 
@@ -106,5 +113,30 @@ public class SlideService {
 
     public Slide getById( Long id) {
         return slideRepository.findById(id).orElseThrow(() -> new HumanResourcesAppException(ErrorType.SLIDE_NOT_FOUND));
+    }
+
+    public ResponseEntity<String> deleteDirectory(String directoryPath) {
+        File directory = new File(directoryPath);
+
+        if (directory.exists()) {
+            boolean result = deleteDirectoryRecursively(directory);
+            if (result) {
+                return new ResponseEntity<>("Klasör başarıyla silindi.", HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>("Klasör silinemedi.", HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        } else {
+            return new ResponseEntity<>("Belirtilen klasör bulunamadı.", HttpStatus.NOT_FOUND);
+        }
+    }
+
+    private boolean deleteDirectoryRecursively(File directoryToBeDeleted) {
+        File[] allContents = directoryToBeDeleted.listFiles();
+        if (allContents != null) {
+            for (File file : allContents) {
+                deleteDirectoryRecursively(file);
+            }
+        }
+        return directoryToBeDeleted.delete();
     }
 }

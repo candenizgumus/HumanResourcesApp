@@ -316,55 +316,55 @@ const SideBarTask = () => {
                 }}
             />
             <Grid container spacing={2} sx={{ flexGrow: 1, justifyContent: 'flex-start', alignItems: 'stretch', marginTop: '2%', marginBottom: '2%' }}>
-    <Grid item xs={12} sm={6} md={3}>
-        <Button
-            onClick={handleAssignToEmployee}
-            variant="contained"
-            color="success"
-            disabled={selectedRowIds.length === 0 || selectedRowIds[0] < 0 || selectedRowIds.length > 1 || taskList.find(task => task.id === selectedRowIds[0])?.assignedEmployeeName !== null}
-            startIcon={<AddIcon />}
-            sx={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-        >
-            Assign To Employee
-        </Button>
-    </Grid>
-    <Grid item xs={12} sm={6} md={3}>
-        <Button
-            onClick={handleOpenSubTaskModal}
-            variant="contained"
-            color="secondary"
-            disabled={selectedRowIds.length === 0 || selectedRowIds[0] < 0 || selectedRowIds.length > 1}
-            startIcon={<AddIcon />}
-            sx={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-        >
-            Add/Check SubTasks
-        </Button>
-    </Grid>
-    <Grid item xs={12} sm={6} md={3}>
-        <Button
-            onClick={handleDeleteTask}
-            variant="contained"
-            color="error"
-            disabled={selectedRowIds.length === 0 || selectedRowIds[0] < 0 || selectedRowIds.length > 1}
-            startIcon={<DeleteIcon />}
-            sx={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-        >
-            Delete
-        </Button>
-    </Grid>
-    <Grid item xs={12} sm={6} md={3}>
-        <Button
-            onClick={handleSaveTask}
-            variant="contained"
-            color="success"
-            disabled={taskName.length === 0}
-            startIcon={<AddIcon />}
-            sx={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-        >
-            Add Task
-        </Button>
-    </Grid>
-</Grid>
+                <Grid item xs={12} sm={6} md={3}>
+                    <Button
+                        onClick={handleAssignToEmployee}
+                        variant="contained"
+                        color="success"
+                        disabled={selectedRowIds.length === 0 || selectedRowIds[0] < 0 || selectedRowIds.length > 1 || taskList.find(task => task.id === selectedRowIds[0])?.assignedEmployeeName !== null}
+                        startIcon={<AddIcon />}
+                        sx={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                    >
+                        Assign To Employee
+                    </Button>
+                </Grid>
+                <Grid item xs={12} sm={6} md={3}>
+                    <Button
+                        onClick={handleOpenSubTaskModal}
+                        variant="contained"
+                        color="secondary"
+                        disabled={selectedRowIds.length === 0 || selectedRowIds[0] < 0 || selectedRowIds.length > 1}
+                        startIcon={<AddIcon />}
+                        sx={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                    >
+                        Add/Check SubTasks
+                    </Button>
+                </Grid>
+                <Grid item xs={12} sm={6} md={3}>
+                    <Button
+                        onClick={handleDeleteTask}
+                        variant="contained"
+                        color="error"
+                        disabled={selectedRowIds.length === 0 || selectedRowIds[0] < 0 || selectedRowIds.length > 1}
+                        startIcon={<DeleteIcon />}
+                        sx={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                    >
+                        Delete
+                    </Button>
+                </Grid>
+                <Grid item xs={12} sm={6} md={3}>
+                    <Button
+                        onClick={handleSaveTask}
+                        variant="contained"
+                        color="success"
+                        disabled={taskName.length === 0}
+                        startIcon={<AddIcon />}
+                        sx={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                    >
+                        Add Task
+                    </Button>
+                </Grid>
+            </Grid>
 
 
 
@@ -374,7 +374,7 @@ const SideBarTask = () => {
                         Add Task
                     </Typography>
                 </Grid>
-                <Grid item xs={4}>
+                <Grid item xs={12} sm={12} md={12} lg={6}>
                     <TextField
                         label="Task Name"
                         name="taskName"
@@ -478,8 +478,6 @@ const SideBarTask = () => {
                     </Button>
                 </DialogActions>
             </Dialog>
-
-
 
         </div>
     );

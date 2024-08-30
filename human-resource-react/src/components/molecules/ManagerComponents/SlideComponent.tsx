@@ -5,7 +5,7 @@ import SlideCard from './SlideCard';
 import { useDispatch } from 'react-redux';
 import { fetchGetAllSlides } from '../../../store/feature/slideSlice';
 
-const SlideComponent = () => {
+const SlideComponent = (props: { open: boolean}) => {
     const slides = useAppSelector((state) => state.slide.slides);
     const token = useAppSelector((state) => state.auth.token);
     const dispatch: HumanResources = useDispatch();
@@ -32,16 +32,8 @@ const SlideComponent = () => {
                 {slides.map((slide) => (
                     <Grid item xs={12} sm={12} md={6} lg={4} key={slide.id}>
                         <SlideCard
-                            id={slide.id}
-                            mobileImageUrls={slide.mobileImageUrls}
-                            desktopImageUrls={slide.desktopImageUrls}
-                            sehir={slide.sehir}
-                            ilce={slide.ilce}
-                            mahalle={slide.mahalle}
-                            projeksiyon={slide.projeksiyon}
-                            konsept={slide.konsept}
-                            companyId={slide.companyId}
-                            companyName={slide.companyName}
+                            slide={slide}
+                            open={props.open}
                         />
                     </Grid>
                 ))}

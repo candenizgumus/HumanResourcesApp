@@ -1,16 +1,5 @@
-import React, { useState } from 'react';
-import {
-    Button,
-    Grid,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogTitle,
-    TextField,
-    Snackbar,
-    Box,
-    Typography
-} from "@mui/material";
+import React, { useEffect, useState } from 'react';
+import { Button, Grid,Typography, Dialog, DialogActions, DialogContent, DialogTitle, TextField, Snackbar, Box } from "@mui/material";
 import Card from '@mui/material/Card';
 import { styled } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
@@ -39,7 +28,7 @@ const CustomCard = styled(Card)(({ theme }) => ({
 
 }));
 
-const SlideCard = (props: ISlide) => {
+const SlideCard = (props: {slide:ISlide, open: boolean}) => {
     const navigate = useNavigate();
     const [openGetLinkModal, setOpenGetLinkModal] = useState(false);
     const [userName, setUserName] = useState('');
@@ -49,9 +38,19 @@ const SlideCard = (props: ISlide) => {
     const dispatch = useDispatch<HumanResources>();
     const [companyName, setCompanyName] = useState('');
 
+    const [isMobile, setIsMobile] = useState(window.matchMedia('(max-width: 768px)').matches);
+    useEffect(() => {
+        const handleResize = () => {
+            setIsMobile(window.matchMedia('(max-width: 768px)').matches);
+        };
 
+        window.addEventListener('resize', handleResize);
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
     const handleClick = () => {
-        navigate(`/slides/${encodeURIComponent(props.id)}`);
+        navigate(`/slides/${encodeURIComponent(props.slide.id)}`);
     };
 
     const copyToClipboard = async (text: string) => {
@@ -64,7 +63,7 @@ const SlideCard = (props: ISlide) => {
     };
 
     const handleGetLink = () => {
-        const link = `${RestApis.baseUrl}/slides/${encodeURIComponent(user.companyId)}/${encodeURIComponent(props.id)}/${encodeURIComponent(userName)}`;
+        const link = `${RestApis.baseUrl}/slides/${encodeURIComponent(user.companyId)}/${encodeURIComponent(props.slide.id)}/${encodeURIComponent(userName)}`;
         copyToClipboard(link);
         setOpenGetLinkModal(false);
     };
@@ -81,7 +80,7 @@ const SlideCard = (props: ISlide) => {
             confirmButtonText: "Yes, delete it!"
         });
         if (result.isConfirmed) {
-            dispatch(fetchDeleteSlide({token : token, slideId : props.id})).then( () => {
+            dispatch(fetchDeleteSlide({token : token, slideId : props.slide.id})).then( () => {
                 dispatch(fetchGetAllSlides(token)).unwrap();
             })
         }
@@ -92,21 +91,23 @@ const SlideCard = (props: ISlide) => {
 
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column',padding: '10px', borderRadius: '5px', height: '100%', boxShadow:'0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19)'}}>
-            <Typography variant="h6" sx={{ textAlign: 'center'  }}>{props.id}</Typography>
+            <Typography variant="h6" sx={{ textAlign: 'center'  }}>{props.slide.id}</Typography>
             <CustomCard onClick={handleClick}>
-                <img src={RestApis.staticUploads + props.desktopImageUrls[0]} alt="Slide" style={{ width: '100%', objectFit: 'cover' }} />
+                <img src={RestApis.staticUploads + props.slide.desktopImageUrls[0]} alt="Slide" style={{ width: '100%', objectFit: 'cover' }} />
             </CustomCard>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px' }}>
                 <Button variant="contained" color="success" sx={{
                         flex: 1,
                         margin: '5px',
                         maxWidth: { xs: '100%', sm: '150px' },
+                        display: isMobile && props.open ? 'none' : 'block'
                     }} startIcon={<ContentCopyIcon />} onClick={() => setOpenGetLinkModal(true)}>
                     Get Link
                 </Button>
                 <Button variant="contained" color="error" sx={{
                         flex: 1,
                         margin: '5px',
+                        display: isMobile && props.open ? 'none' : 'block',
                         maxWidth: { xs: '100%', sm: '150px' },
                     }} startIcon={<DeleteIcon />} onClick={handleDeleteSlide}>
                     Delete
@@ -118,6 +119,7 @@ const SlideCard = (props: ISlide) => {
                 <DialogTitle>Get Link</DialogTitle>
                 <DialogContent>
                     <TextField
+                        sx={{ marginTop: '10px' }}
                         label="Name"
                         name="name"
                         value={userName}

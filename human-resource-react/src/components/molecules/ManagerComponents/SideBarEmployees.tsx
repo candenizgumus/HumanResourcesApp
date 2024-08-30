@@ -155,9 +155,9 @@ export default function SideBarEmployees() {
 
     useEffect(() => {
         dispatch(fetchGetDefinitions({
-                token: token,
-                definitionType: EDefinitionType.EMPLOYEE_TYPE
-            })
+            token: token,
+            definitionType: EDefinitionType.EMPLOYEE_TYPE
+        })
         ).then(() => {
             dispatch(fetchGetAllUsersOfManager({
                 token: token,
@@ -393,77 +393,91 @@ export default function SideBarEmployees() {
                 }}
                 rowSelectionModel={selectedRowIds}
             />
-            <Grid sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-start', alignItems: 'center', marginTop: '2%', marginBottom: '2%' }}>
-                <Button
-                    onClick={handleActivateEmployee}
-                    variant="contained"
-                    color="success"
-                    disabled={isActivating || selectedRowIds.length === 0}
-                    sx={{ marginRight: '1%', width: '200px' }}
-                    startIcon={<Icons.ActivateIcon />}
-                >
-                    Activate
-                </Button>
-                <Button
-                    onClick={handleDeleteEmployee}
-                    variant="contained"
-                    color="error"
-                    disabled={isDeleting || selectedRowIds.length === 0}
-                    sx={{ marginRight: '1%', width: '200px' }}
-                    startIcon={<Icons.DeleteIcon />}
-                >
-                    Delete
-                </Button>
-                <Button
-                    onClick={handleOnClickEditEmployee}
-                    variant="contained"
-                    color="secondary"
-                    disabled={selectedRowIds.length > 1 || selectedRowIds.length === 0}
-                    sx={{ marginRight: '1%', width: '200px' }}
-                    startIcon={<Icons.EditIcon />}
-                >
-                    Edit Employee
-                </Button>
-                <Button
-                    onClick={handleOnClickAddDocument}
-                    variant="contained"
-                    color="success"
-                    disabled={selectedRowIds.length > 1 || selectedRowIds.length === 0}
-                    sx={{ marginRight: '1%', width: '200px' }}
-                    startIcon={<Icons.AddDocumentIcon />}
-                >
-                    Add Document
-                </Button>
-                <Button
-                    onClick={openAddBonus}
-                    variant="contained"
-                    color="success"
-                    disabled={selectedRowIds.length > 1 || selectedRowIds.length === 0}
-                    sx={{ marginRight: '1%', width: '200px' }}
-                    startIcon={<Icons.BonusIcon />}
-                >
-                    Add Bonus
-                </Button>
-                <Button
-                    onClick={handleSetShifts}
-                    variant="contained"
-                    color="success"
-                    disabled={selectedRowIds.length > 1 || selectedRowIds.length === 0}
-                    sx={{ marginRight: '1%', width: '200px' }}
-                    startIcon={<Icons.SetShiftIcon />}
-                >
-                    Set Shifts
-                </Button>
-                <Button
-                    onClick={handleAssignItem}
-                    variant="contained"
-                    color="success"
-                    disabled={selectedRowIds.length > 1 || selectedRowIds.length === 0}
-                    sx={{ marginRight: '1%', width: '200px' }}
-                    startIcon={<Icons.AssignItemIcon />}
-                >
-                    Assign Item
-                </Button>
+            <Grid container spacing={2} sx={{ flexGrow: 1, justifyContent: 'flex-start', alignItems: 'stretch', marginTop: '2%', marginBottom: '2%' }}>
+                <Grid item xs={12} sm={12} md={12} lg={2}>
+                    <Button
+                        onClick={handleActivateEmployee}
+                        variant="contained"
+                        color="success"
+                        disabled={isActivating || selectedRowIds.length === 0}
+                        sx={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                        startIcon={<Icons.ActivateIcon />}
+                    >
+                        Activate
+                    </Button>
+                </Grid>
+                <Grid item xs={12} sm={12} md={12} lg={2}>
+                    <Button
+                        onClick={handleDeleteEmployee}
+                        variant="contained"
+                        color="error"
+                        disabled={isDeleting || selectedRowIds.length === 0}
+                        sx={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                        startIcon={<Icons.DeleteIcon />}
+                    >
+                        Delete
+                    </Button>
+                </Grid>
+                <Grid item xs={12} sm={12} md={12} lg={2}>
+                    <Button
+                        onClick={handleOnClickEditEmployee}
+                        variant="contained"
+                        color="secondary"
+                        disabled={selectedRowIds.length > 1 || selectedRowIds.length === 0}
+                        sx={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                        startIcon={<Icons.EditIcon />}
+                    >
+                        Edit Employee
+                    </Button>
+                </Grid>
+                <Grid item xs={12} sm={12} md={12} lg={2}>
+                    <Button
+                        onClick={handleOnClickAddDocument}
+                        variant="contained"
+                        color="success"
+                        disabled={selectedRowIds.length > 1 || selectedRowIds.length === 0}
+                        sx={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                        startIcon={<Icons.AddDocumentIcon />}
+                    >
+                        Add Document
+                    </Button>
+                </Grid>
+                <Grid item xs={12} sm={12} md={12} lg={2}>
+                    <Button
+                        onClick={openAddBonus}
+                        variant="contained"
+                        color="success"
+                        disabled={selectedRowIds.length > 1 || selectedRowIds.length === 0}
+                        sx={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                        startIcon={<Icons.BonusIcon />}
+                    >
+                        Add Bonus
+                    </Button>
+                </Grid>
+                <Grid item xs={12} sm={12} md={12} lg={2}>
+                    <Button
+                        onClick={handleSetShifts}
+                        variant="contained"
+                        color="success"
+                        disabled={selectedRowIds.length > 1 || selectedRowIds.length === 0}
+                        sx={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                        startIcon={<Icons.SetShiftIcon />}
+                    >
+                        Set Shifts
+                    </Button>
+                </Grid>
+                <Grid item xs={12} sm={12} md={12} lg={2}>
+                    <Button
+                        onClick={handleAssignItem}
+                        variant="contained"
+                        color="success"
+                        disabled={selectedRowIds.length > 1 || selectedRowIds.length === 0}
+                        sx={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                        startIcon={<Icons.AssignItemIcon />}
+                    >
+                        Assign Item
+                    </Button>
+                </Grid>
             </Grid>
             <AddDocument open={openAddDocument} onClose={handleCloseAddDocument} />
             <AddBonus

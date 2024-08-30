@@ -25,7 +25,7 @@ import SideBarTask from "../molecules/ManagerComponents/SideBarTask";
 import  UploadFile  from "../molecules/ManagerComponents/UploadFile"
 import SlideComponent from "../molecules/ManagerComponents/SlideComponent";
 import SideBarSlideDatas from "../molecules/ManagerComponents/SideBarSlideDatas";
-export const ManagerMenuContentRenderer = () => {
+export const ManagerMenuContentRenderer = (props:{open:boolean}) => {
     const page = useAppSelector((state) => state.auth.pageState);
 
     return (
@@ -58,7 +58,7 @@ export const ManagerMenuContentRenderer = () => {
                 {page === 'Assign Item' && <AddCompanyItemAssignment/>}
                 {page === 'Task' && <SideBarTask/>}
                 {page === 'Create Slide' && <UploadFile/>}
-                {page === 'Slides' && <SlideComponent/>}
+                {page === 'Slides' && <SlideComponent open/>}
                 {page === 'Slide Datas' && <SideBarSlideDatas/>}
             </Grid>
         </>

@@ -1,10 +1,7 @@
 package com.humanresourcesapp.controllers;
 
 import com.humanresourcesapp.dto.requests.TimeDataSaveRequestDto;
-import com.humanresourcesapp.entities.PersonalDocument;
 import com.humanresourcesapp.entities.Slide;
-import com.humanresourcesapp.exception.ErrorType;
-import com.humanresourcesapp.exception.HumanResourcesAppException;
 import com.humanresourcesapp.services.SlideService;
 import com.humanresourcesapp.services.TimeDataService;
 import lombok.RequiredArgsConstructor;
@@ -13,26 +10,12 @@ import java.util.HashMap;
 import java.util.Map;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.lang.Nullable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.FileOutputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.UUID;
-import java.io.File;
-import java.nio.file.*;
 import java.util.List;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
 
 import static com.humanresourcesapp.constants.Endpoints.*;
 
@@ -118,8 +101,6 @@ public class SlideController {
         String slideId =  payload.get("slideId").toString();
 
         String userIp = payload.get("userIp").toString();
-
-
 
         // Store the image times in the database
         timeDataService.save(TimeDataSaveRequestDto.builder()

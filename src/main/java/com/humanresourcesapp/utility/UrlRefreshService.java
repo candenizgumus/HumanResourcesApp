@@ -36,7 +36,7 @@ public class UrlRefreshService {
             {
                 String newKey = s3Service.createPresignedGetUrl(s3Buckets.getCustomer(), "profile-images/%s/%s".formatted(user.getId(), user.getProfileImageId()));
                 user.setPhoto(newKey);
-                System.out.println(" User: " + newKey);
+
                 userService.save(user);
 
             }
@@ -48,7 +48,7 @@ public class UrlRefreshService {
             {
                 String newKey = s3Service.createPresignedGetUrl(s3Buckets.getCustomer(), "company-images/%s/%s".formatted(company.getName()+"-"+company.getId(), company.getCompanyImageId()));
                 company.setLogo(newKey);
-                System.out.println("Company: " + newKey);
+
                 companyService.update(company);
             }
         });

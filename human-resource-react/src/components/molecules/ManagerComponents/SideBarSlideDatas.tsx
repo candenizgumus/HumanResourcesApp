@@ -28,7 +28,13 @@ const columns: GridColDef[] = [
 
     { field: "userName", headerName: "Username", flex: 1, headerAlign: "center" },
     { field: "slideId", headerName: "Slide Id", flex: 1, headerAlign: "center" },
-    { field: "pageNumber", headerName: "Page Number", flex: 2, headerAlign: "center" },
+    { field: "pageNumber", headerName: "Page Number", flex: 2, headerAlign: "center"
+    ,
+
+        renderCell: (params) => (
+            <div>{(Number((params.value)) +1)}</div> //To fix page number from data
+        ),
+    },
     {
         field: "timeSpent",
         headerName: "Time Spent",
@@ -74,6 +80,7 @@ const SideBarSlideDatas = () => {
         dispatch(fetchGetUsernamesSlides({token, userName: selectedUsername})).then(data => {
             setSlideIds(data.payload)
         })
+        setSelectedSlideId(0)
     }, [selectedUsername]);
 
     useEffect(() => {
@@ -110,7 +117,7 @@ const SideBarSlideDatas = () => {
                     "& .MuiDataGrid-cell": {
                         textAlign: "center",
                     },
-                    height: '814px',
+                    height: '668px',
                     mt: 3
                 }}
             />

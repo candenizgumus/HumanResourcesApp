@@ -52,7 +52,7 @@ public class SlideController {
     public ResponseEntity<?> uploadZipFile(@RequestParam(value = "fileMobile", required = false) MultipartFile fileMobile,
                                            @RequestParam(value = "fileDesktop", required = false) MultipartFile fileDesktop) {
         try {
-            System.out.println("Uploading zip file...");
+
 
             // Check if files are not null and process them
             List<String> mobileImages = fileMobile != null ? slideService.getImages(fileMobile) : Collections.emptyList();
@@ -101,14 +101,14 @@ public class SlideController {
     public ResponseEntity<String> storeTimeData(@RequestBody Map<String, Object> payload) {
         // Cast imageTimes to the correct type
         Map<String, Double> imageTimes = (Map<String, Double>) payload.get("imageTimes");
-        System.out.println(imageTimes);
+
 
         String userName = payload.get("userName").toString();
-        System.out.println(userName);
+
         String slideId =  payload.get("slideId").toString();
-        System.out.println(slideId);
+
         String userIp = payload.get("userIp").toString();
-        System.out.println(userIp);
+
 
 
         // Store the image times in the database

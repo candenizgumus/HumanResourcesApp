@@ -47,14 +47,14 @@ public class SlideService {
         List<String> imageUrls = new ArrayList<>();
         try {
             // Debugging: Log the zip file path
-            System.out.println("Saving zip file to: " + zipFilePath.toString());
+
 
             Files.createDirectories(zipFilePath.getParent());
             Files.write(zipFilePath, file.getBytes());
 
             // Debugging: Check if the file was written correctly
             if (!Files.exists(zipFilePath) || Files.size(zipFilePath) == 0) {
-                System.out.println("Failed to write the zip file or file is empty.");
+
                 throw new HumanResourcesAppException(ErrorType.FILE_UPLOAD_FAILED);
             }
             UUID fileName = UUID.randomUUID();
@@ -79,24 +79,24 @@ public class SlideService {
     }
 
     public List<File> extractImagesFromZip(String zipFilePath, UUID fileName) throws IOException {
-        System.out.println("Extracting images from zip file: " + zipFilePath + " ...");
+
         File dir = new File(UPLOAD_DIR + fileName);
         if (!dir.exists() && !dir.mkdirs()) {
             throw new IOException("Failed to create directory: " + dir.getAbsolutePath());
         }
-        System.out.println("Extracting images to: " + dir.getAbsolutePath());
+
         List<File> imageFiles = new ArrayList<>();
 
         try (ZipInputStream zis = new ZipInputStream(Files.newInputStream(Paths.get(zipFilePath)))) {
-            System.out.println("Available bytes: " +zis.available());
+
             ZipEntry entry;
             while ((entry = zis.getNextEntry()) != null) {
-                System.out.println("Extracting: " + entry.getName());
+
                 if (!entry.isDirectory() && (entry.getName().endsWith(".png") || entry.getName().endsWith(".jpg"))) {
                     File newFile = new File(dir, entry.getName());
                     // Use NIO Files API to copy the file
                     Files.copy(zis, newFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-                    System.out.println("File saved: " + newFile.getAbsolutePath());
+
                     imageFiles.add(newFile);
                 }
             }

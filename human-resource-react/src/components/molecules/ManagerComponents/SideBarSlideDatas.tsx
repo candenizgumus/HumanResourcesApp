@@ -123,7 +123,7 @@ const SideBarSlideDatas = () => {
             />
 
             <Grid container spacing={2} >
-                <Grid item xs={3} sx={{ mt: 3 }}>
+                <Grid item xs={12} sm={12} md={12} lg={6} sx={{ mt: 3 }}>
                     <FormControl variant="outlined" fullWidth={true}>
                         <InputLabel>{'Please Select Username'}</InputLabel>
                         <Select
@@ -139,7 +139,7 @@ const SideBarSlideDatas = () => {
                         </Select>
                     </FormControl>
                 </Grid>
-                <Grid item xs={3} sx={{ mt: 3 }}>
+                <Grid item xs={12} sm={12} md={12} lg={6} sx={{ mt: 3 }}>
                     <FormControl disabled={selectedUsername === ''} variant="outlined" fullWidth={true}>
                         <InputLabel>{'Please Select Slide Id'}</InputLabel>
                         <Select

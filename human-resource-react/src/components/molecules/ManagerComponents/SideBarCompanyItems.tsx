@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import {TextField, Grid, Button, Typography, Paper} from '@mui/material';
+import { TextField, Grid, Button, Typography, Paper } from '@mui/material';
 import { HumanResources, useAppSelector } from "../../../store";
 import { useDispatch } from "react-redux";
-import {DataGrid, GridColDef, GridRowSelectionModel, GridToolbar} from "@mui/x-data-grid";
+import { DataGrid, GridColDef, GridRowSelectionModel, GridToolbar } from "@mui/x-data-grid";
 import Swal from "sweetalert2";
 import {
     fetchCancelItemAssignmentByManager,
@@ -13,9 +13,9 @@ import {
 import { ICompanyItem } from "../../../models/ICompanyItem";
 import { DeleteIcon, AddIcon, CancelIcon } from '../../atoms/icons';
 import AddCompanyItemDialog from './AddCompanyItem';
-import {ICompanyItemAssignment} from "../../../models/ICompanyItemAssignment";
+import { ICompanyItemAssignment } from "../../../models/ICompanyItemAssignment";
 import { myLightColour } from '../../../util/MyColours';
-import {Line} from "recharts";
+import { Line } from "recharts";
 import Divider from "@mui/material/Divider";
 
 const itemColumns: GridColDef[] = [
@@ -132,8 +132,8 @@ const SideBarCompanyItems: React.FC = () => {
                     }).then(() => {
                         dispatch(fetchCompanyItemAssignments(
                             token)).then(data => {
-                            setCompanyItemAssignments(data.payload)
-                        })
+                                setCompanyItemAssignments(data.payload)
+                            })
                     })
                 });
         });
@@ -219,33 +219,30 @@ const SideBarCompanyItems: React.FC = () => {
                     height: '407px'
                 }}
             />
-            <Grid sx={{
-                flexGrow: 1,
-                display: 'flex',
-                justifyContent: 'flex-start',
-                alignItems: 'center',
-                marginTop: '2%',
-                marginBottom: '2%'
-            }}>
-                <Button
-                    onClick={handleOnClickAddCompanyItem}
-                    variant="contained"
-                    color="success"
-                    startIcon={<AddIcon />}
-                    sx={{ marginRight: '1%', width: '200px' }}
-                >
-                    Add
-                </Button>
-                <Button
-                    onClick={handleDelete}
-                    variant="contained"
-                    color="error"
-                    disabled={loading || selectedRowIds.length === 0}
-                    startIcon={<DeleteIcon />}
-                    sx={{ marginRight: '1%', width: '200px' }}
-                >
-                    Delete
-                </Button>
+            <Grid container spacing={2} sx={{ flexGrow: 1, justifyContent: 'flex-start', alignItems: 'stretch', marginTop: '2%', marginBottom: '2%' }}>
+                <Grid item xs={12} sm={6} md={3}>
+                    <Button
+                        onClick={handleOnClickAddCompanyItem}
+                        variant="contained"
+                        color="success"
+                        startIcon={<AddIcon />}
+                        sx={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                    >
+                        Add
+                    </Button>
+                </Grid>
+                <Grid item xs={12} sm={6} md={3}>
+                    <Button
+                        onClick={handleDelete}
+                        variant="contained"
+                        color="error"
+                        disabled={loading || selectedRowIds.length === 0}
+                        startIcon={<DeleteIcon />}
+                        sx={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                    >
+                        Delete
+                    </Button>
+                </Grid>
             </Grid>
             <AddCompanyItemDialog open={dialogOpen} onClose={handleDialogClose} />
             <Divider sx={{ my: 2, backgroundColor: 'rgba(0, 0, 0, 0.87)' }} />
@@ -288,24 +285,19 @@ const SideBarCompanyItems: React.FC = () => {
                 }}
                 rowSelectionModel={selectedRowIdsAssignment}
             />
-            <Grid sx={{
-                flexGrow: 1,
-                display: 'flex',
-                justifyContent: 'flex-start',
-                alignItems: 'center',
-                marginTop: '2%',
-                marginBottom: '2%'
-            }}>
-                <Button
-                    onClick={handleCancellation}
-                    variant="contained"
-                    color="warning"
-                    disabled={loading || selectedRowIdsAssignment.length === 0 || hasCanceledRow}
-                    startIcon={<CancelIcon />}
-                    sx={{ marginRight: '1%', width: 'calc(200px * 2 + 1%)' }}
-                >
-                    Cancel Item Assignment
-                </Button>
+            <Grid container spacing={2} sx={{ flexGrow: 1, justifyContent: 'flex-start', alignItems: 'stretch', marginTop: '2%', marginBottom: '2%' }}>
+                <Grid item xs={12} sm={12} md={6} lg={4}>
+                    <Button
+                        onClick={handleCancellation}
+                        variant="contained"
+                        color="warning"
+                        disabled={loading || selectedRowIdsAssignment.length === 0 || hasCanceledRow}
+                        startIcon={<CancelIcon />}
+                        sx={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                    >
+                        Cancel Item Assignment
+                    </Button>
+                </Grid>
             </Grid>
         </div>
     );

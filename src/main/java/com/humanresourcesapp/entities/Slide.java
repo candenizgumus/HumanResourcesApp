@@ -33,4 +33,6 @@ public class Slide {
     private String mahalle;
     private String projeksiyon;
     private String konsept;
+    private Long companyId;
+
 }

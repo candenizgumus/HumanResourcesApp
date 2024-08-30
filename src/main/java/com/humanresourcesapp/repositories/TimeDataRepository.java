@@ -9,8 +9,8 @@ import java.util.List;
 
 @Repository
 public interface TimeDataRepository extends JpaRepository<TimeData, Long> {
-    @Query("SELECT DISTINCT t.userName FROM TimeData t")
-    List<String> findAllDistinctUsernames();
+    @Query("SELECT DISTINCT t.userName FROM TimeData t WHERE t.companyId= :companyId")
+    List<String> findAllDistinctUsernames(Long companyId);
 
     @Query("SELECT DISTINCT t.slideId FROM TimeData t WHERE t.userName = :username")
     List<Long> findAllUsernamesSlides(String username);

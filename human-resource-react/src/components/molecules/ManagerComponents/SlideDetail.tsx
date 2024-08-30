@@ -1,18 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { Container, CssBaseline, Box, CircularProgress } from '@mui/material';
-import Carousel from 'react-material-ui-carousel';
+import Slider from 'react-slick';
 import ThemeElement from '../../atoms/ThemeElement';
 import RestApis from '../../../config/RestApis';
 import { fetchGetIp, fetchGetSlideById, fetchStoreTimeData, ISlide } from '../../../store/feature/slideSlice';
-import { HumanResources, useAppSelector } from '../../../store';
+import { HumanResources } from '../../../store';
 import { useDispatch } from 'react-redux';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 
 function UserStoryDetailPage() {
     const [isMobile, setIsMobile] = useState(window.matchMedia('(max-width: 768px)').matches);
     const [userIP, setUserIP] = useState('');
     const [imageTimes, setImageTimes] = useState<Record<number, number>>({});
-    const [currentImage, setCurrentImage] = useState<number | null>(null);
+    const [currentImage, setCurrentImage] = useState<number | undefined>(0);
     const [startTime, setStartTime] = useState(Date.now());
     const [loading, setLoading] = useState(true);
     const dispatch: HumanResources = useDispatch();
@@ -36,39 +38,47 @@ function UserStoryDetailPage() {
         };
     }, []);
 
-    useEffect(() => {
-        window.scrollTo(0, 0);
-    }, []);
-
-    const handleImageChange = (now?: number, previous?: number) => {
+    const handleImageChange = (now?: number) => {
         const endTime = Date.now();
-        const timeSpent = (endTime - startTime) / 1000; // in seconds
-
-        if (currentImage !== null && previous !== undefined) {
-            setImageTimes((prevTimes) => ({
-                ...prevTimes,
-                [previous]: (prevTimes[previous] || 0) + timeSpent,
-            }));
+        const timeSpent = (endTime - startTime) / 1000; // Calculate time spent in seconds
+    
+        console.log(`Image transition from ${currentImage} to ${now}`);
+        console.log(`Time spent on image ${currentImage}: ${timeSpent} seconds`);
+    
+        if (currentImage !== undefined) {
+            setImageTimes((prevTimes) => {
+                const updatedTimes = {
+                    ...prevTimes,
+                    [currentImage]: (prevTimes[currentImage] || 0) + timeSpent,
+                };
+                console.log('Updated image times:', updatedTimes);
+                return updatedTimes;
+            });
         }
-        setCurrentImage(now !== undefined ? now : null);
+    
+        setCurrentImage(now);
         setStartTime(Date.now());
     };
+    
 
     useEffect(() => {
         const sendTimeData = async () => {
             try {
-                await dispatch(fetchStoreTimeData({ imageTimes, userIP, userName, slideId })).unwrap();
+                console.log('Sending time data:', { imageTimes, userIP, userName, slideId });
+                const response = await dispatch(fetchStoreTimeData({ imageTimes, userIP, userName, slideId })).unwrap();
+                console.log('Time data sent successfully:', response);
             } catch (error) {
                 console.error('Error sending time data:', error);
             }
         };
-
+    
         window.addEventListener('beforeunload', sendTimeData);
-
+    
         return () => {
             window.removeEventListener('beforeunload', sendTimeData);
         };
     }, [imageTimes, userIP, dispatch, userName]);
+    
 
     useEffect(() => {
         dispatch(fetchGetSlideById(Number(slideId))).unwrap().then((slide) => {
@@ -79,6 +89,15 @@ function UserStoryDetailPage() {
             setLoading(false);
         });
     }, [dispatch, slideId]);
+
+    const sliderSettings = {
+        dots: true,
+        infinite: true,
+        speed: 500,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        afterChange: (current: number) => handleImageChange(current),
+    };
 
     if (loading) {
         return (
@@ -112,35 +131,33 @@ function UserStoryDetailPage() {
                 <CssBaseline />
                 <Box>
                     {isMobile ? (
-                        <Box sx={{ width: 'auto', margin: 'auto' }}>
+                        <Box>
                             {slide.mobileImageUrls.length > 0 ? (
-                                <Carousel onChange={handleImageChange} sx={{ height: 'auto' }}  autoPlay={false}>
+                                <Slider {...sliderSettings}>
                                     {slide.mobileImageUrls.map((image: string, index: number) => (
                                         <img
                                             key={index}
                                             src={RestApis.staticUploads + image}
                                             alt={`Slide ${index + 1}`}
-                                            style={{ width: '100%', height: 'auto' }}
                                         />
                                     ))}
-                                </Carousel>
+                                </Slider>
                             ) : (
                                 <div>No images uploaded</div>
                             )}
                         </Box>
                     ) : (
-                        <Box sx={{ width: 'auto', margin: 'auto' }}>
+                        <Box>
                             {slide.desktopImageUrls.length > 0 ? (
-                                <Carousel onChange={handleImageChange} sx={{ height: 'auto' }} autoPlay={false}>
+                                <Slider {...sliderSettings}>
                                     {slide.desktopImageUrls.map((image: string, index: number) => (
                                         <img
                                             key={index}
                                             src={RestApis.staticUploads + image}
                                             alt={`Slide ${index + 1}`}
-                                            style={{ width: '100%', height: 'auto' }}
                                         />
                                     ))}
-                                </Carousel>
+                                </Slider>
                             ) : (
                                 <div>No images uploaded</div>
                             )}

@@ -1,12 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Grid, Dialog, DialogActions, DialogContent, DialogTitle, TextField, Snackbar, Box } from "@mui/material";
+import { Button, Grid,Typography, Dialog, DialogActions, DialogContent, DialogTitle, TextField, Snackbar, Box } from "@mui/material";
 import Card from '@mui/material/Card';
 import { styled } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
 import { Delete as DeleteIcon } from '@mui/icons-material';
-import { ISlide } from '../../../store/feature/slideSlice';
+import {fetchDeleteSlide, fetchGetAllSlides, ISlide} from '../../../store/feature/slideSlice';
 import RestApis from "../../../config/RestApis";
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import {HumanResources, useAppSelector} from "../../../store";
+import {fetchFindCompanyNameAndManagerNameOfUser} from "../../../store/feature/authSlice";
+import {useDispatch} from "react-redux";
+import Swal from "sweetalert2";
+import {myErrorColour, myLightColour} from "../../../util/MyColours";
+import {fetchDeleteTask, fetchGetTasks} from "../../../store/feature/TaskSlice";
 const CustomCard = styled(Card)(({ theme }) => ({
     height: '100%',
     display: 'flex',
@@ -27,6 +33,11 @@ const SlideCard = (props: {slide:ISlide, open: boolean}) => {
     const [openGetLinkModal, setOpenGetLinkModal] = useState(false);
     const [userName, setUserName] = useState('');
     const [openSnackbar, setOpenSnackbar] = useState(false);
+    const user = useAppSelector(state => state.auth.user);
+    const token = useAppSelector(state => state.auth.token);
+    const dispatch = useDispatch<HumanResources>();
+    const [companyName, setCompanyName] = useState('');
+
     const [isMobile, setIsMobile] = useState(window.matchMedia('(max-width: 768px)').matches);
     useEffect(() => {
         const handleResize = () => {
@@ -52,17 +63,35 @@ const SlideCard = (props: {slide:ISlide, open: boolean}) => {
     };
 
     const handleGetLink = () => {
-        const link = `${RestApis.baseUrl}/slides/${encodeURIComponent(props.slide.companyId)}/${encodeURIComponent(props.slide.companyName)}/${encodeURIComponent(props.slide.id)}/${encodeURIComponent(userName)}`;
+        const link = `${RestApis.baseUrl}/slides/${encodeURIComponent(user.companyId)}/${encodeURIComponent(props.slide.id)}/${encodeURIComponent(userName)}`;
         copyToClipboard(link);
         setOpenGetLinkModal(false);
     };
 
-    const handleDeleteSlide = () => {
-        
+    const handleDeleteSlide = async () => {
+
+        const result =  await Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: myLightColour,
+            cancelButtonColor: myErrorColour,
+            confirmButtonText: "Yes, delete it!"
+        });
+        if (result.isConfirmed) {
+            dispatch(fetchDeleteSlide({token : token, slideId : props.slide.id})).then( () => {
+                dispatch(fetchGetAllSlides(token)).unwrap();
+            })
+        }
+
+
+
     }
 
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column',padding: '10px', borderRadius: '5px', height: '100%', boxShadow:'0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19)'}}>
+            <Typography variant="h6" sx={{ textAlign: 'center'  }}>{props.slide.id}</Typography>
             <CustomCard onClick={handleClick}>
                 <img src={RestApis.staticUploads + props.slide.desktopImageUrls[0]} alt="Slide" style={{ width: '100%', objectFit: 'cover' }} />
             </CustomCard>

@@ -39,8 +39,8 @@ public class SlideController {
             List<String> mobileImages = fileMobile != null ? slideService.getImages(fileMobile) : Collections.emptyList();
             List<String> desktopImages = fileDesktop != null ? slideService.getImages(fileDesktop) : Collections.emptyList();
 
-            String mobileImagesPath =  mobileImages.getFirst().split("/")[1];
-            String desktopImagesPath = desktopImages.getFirst().split("/")[1];
+            String mobileImagesPath =  mobileImages.getFirst().split("/")[2];
+            String desktopImagesPath = desktopImages.getFirst().split("/")[2];
             // Save images and return response
             Slide slide = slideService.save(mobileImages, desktopImages, mobileImagesPath, desktopImagesPath);
             return ResponseEntity.ok(slide);
@@ -56,6 +56,11 @@ public class SlideController {
         return slideService.deleteDirectory(directoryPath);
     }
 
+    @DeleteMapping(DELETE)
+    @PreAuthorize("hasAnyAuthority('MANAGER')")
+    public ResponseEntity<Boolean> delete(Long id) {
+        return ResponseEntity.ok(slideService.delete(id));
+    }
 
     @PostMapping(GET_ALL)
     @PreAuthorize("hasAnyAuthority('MANAGER','ADMIN','EMPLOYEE')")

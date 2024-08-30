@@ -4,8 +4,12 @@ import com.humanresourcesapp.dto.requests.TimeDataGetRequestDto;
 import com.humanresourcesapp.dto.requests.TimeDataSaveRequestDto;
 import com.humanresourcesapp.dto.responses.TimeDatasResponseDto;
 import com.humanresourcesapp.entities.TimeData;
+import com.humanresourcesapp.entities.User;
 import com.humanresourcesapp.entities.enums.EStatus;
+import com.humanresourcesapp.exception.ErrorType;
+import com.humanresourcesapp.exception.HumanResourcesAppException;
 import com.humanresourcesapp.repositories.TimeDataRepository;
+import com.humanresourcesapp.utility.UserInfoSecurityContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,16 +19,20 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class TimeDataService {
+public class TimeDataService
+{
     private final TimeDataRepository timeDataRepository;
+    private final UserService userService;
 
-    public boolean save(TimeDataSaveRequestDto dto) {
-         timeDataRepository.save(TimeData.builder()
+    public boolean save(TimeDataSaveRequestDto dto)
+    {
+        timeDataRepository.save(TimeData.builder()
                 .userName(dto.userName())
-                        .imageTimes(dto.imageTimes())
-                                .slideId(dto.slideId())
-                        .userIp(dto.userIp())
-                         .status(EStatus.ACTIVE)
+                .imageTimes(dto.imageTimes())
+                .slideId(dto.slideId())
+                .userIp(dto.userIp())
+                .companyId(dto.companyId())
+                .status(EStatus.ACTIVE)
                 .build());
         return true;
     }
@@ -39,14 +47,20 @@ public class TimeDataService {
         return timeDataRepository.findAllUsernamesSlides(username);
     }
 
-    public List<TimeDatasResponseDto> getAllByUsernameAndSlideId(TimeDataGetRequestDto dto) {
-        List<TimeData> timeDatas = timeDataRepository.findAllByUserNameAndSlideId(dto.userName(), dto.slideId());
+    public List<TimeDatasResponseDto> getAllByUsernameAndSlideId(TimeDataGetRequestDto dto)
+    {
+        String email = UserInfoSecurityContext.getUserInfoFromSecurityContext();
+        User manager = userService.findByEmail(email).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
+
+        List<TimeData> timeDatas = timeDataRepository.findAllByUserNameAndSlideIdAndCompanyId(dto.userName(), dto.slideId(), manager.getCompanyId());
 
         // Yeni bir harita oluşturarak, her bir sayfa numarası için toplam zamanı hesaplayalım
         Map<String, Double> combinedImageTimes = new HashMap<>();
 
-        timeDatas.forEach(timeData -> {
-            timeData.getImageTimes().forEach((pageNumber, timeSpent) -> {
+        timeDatas.forEach(timeData ->
+        {
+            timeData.getImageTimes().forEach((pageNumber, timeSpent) ->
+            {
                 combinedImageTimes.merge(pageNumber, timeSpent, Double::sum);
             });
         });
@@ -64,7 +78,8 @@ public class TimeDataService {
         List<TimeDatasResponseDto> imageTimeDtos = new ArrayList<>();
         AtomicLong id = new AtomicLong(1L);
         // Her bir TimeData nesnesi için
-        combinedImageTimes.forEach((pageNumber, timeSpent) -> {
+        combinedImageTimes.forEach((pageNumber, timeSpent) ->
+        {
             imageTimeDtos.add(new TimeDatasResponseDto(
                     id.getAndIncrement(),
                     combinedTimeData.getUserName(),
@@ -84,4 +99,8 @@ public class TimeDataService {
     }
 
 
+    public void deleteTimeDataBySlideId(Long id)
+    {
+        timeDataRepository.deleteAllBySlideId(id);
+    }
 }

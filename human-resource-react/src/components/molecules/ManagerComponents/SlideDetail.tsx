@@ -19,8 +19,9 @@ function UserStoryDetailPage() {
     const [startTime, setStartTime] = useState(Date.now());
     const [loading, setLoading] = useState(true);
     const dispatch: HumanResources = useDispatch();
-    const { slideId: slideIdParam, userName: userNameParam } = useParams();
+    const { slideId: slideIdParam, userName: userNameParam, companyId: companyIdParam } = useParams();
     const userName = userNameParam || ''; // Default value to avoid undefined
+    const companyId = Number(companyIdParam) || 0; // Default value to avoid undefined
     const slideId = Number(slideIdParam) || 0;
     const [slide, setSlide] = useState<ISlide | null>(null);
 
@@ -74,7 +75,7 @@ function UserStoryDetailPage() {
 
                 try {
                     console.log('Sending time data:', { imageTimes, userIP, userName, slideId });
-                    const response = await dispatch(fetchStoreTimeData({ imageTimes, userIP, userName, slideId })).unwrap();
+                    const response = await dispatch(fetchStoreTimeData({ imageTimes, userIP, userName, slideId,companyId })).unwrap();
                     console.log('Time data sent successfully:', response);
                 } catch (error) {
                     console.error('Error sending time data:', error);
@@ -134,7 +135,7 @@ function UserStoryDetailPage() {
             </IconButton>
         );
     };
-    
+
     // Custom Prev Arrow
     const CustomPrevArrow = ({ onClick }: { onClick: () => void }) => {
         return (
@@ -157,7 +158,7 @@ function UserStoryDetailPage() {
             </IconButton>
         );
     };
-    
+
     const sliderSettings = {
         dots: true,
         infinite: true,

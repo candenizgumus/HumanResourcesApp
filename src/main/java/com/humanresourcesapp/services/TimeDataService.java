@@ -37,9 +37,11 @@ public class TimeDataService
         return true;
     }
 
-    public List<String> findAllDistinctUsernames()
+        public List<String> findAllDistinctUsernames()
     {
-        return timeDataRepository.findAllDistinctUsernames();
+        String email = UserInfoSecurityContext.getUserInfoFromSecurityContext();
+        User manager = userService.findByEmail(email).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
+        return timeDataRepository.findAllDistinctUsernames(manager.getCompanyId());
     }
 
     public List<Long> getUsernamesSlides(String username)

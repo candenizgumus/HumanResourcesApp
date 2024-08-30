@@ -1,9 +1,11 @@
 package com.humanresourcesapp.services;
 
 import com.humanresourcesapp.entities.Slide;
+import com.humanresourcesapp.entities.User;
 import com.humanresourcesapp.exception.ErrorType;
 import com.humanresourcesapp.exception.HumanResourcesAppException;
 import com.humanresourcesapp.repositories.SlideRepository;
+import com.humanresourcesapp.utility.UserInfoSecurityContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,16 +32,22 @@ public class SlideService {
     private final SlideRepository slideRepository;
     private static final String UPLOAD_DIR = "uploads/";
     private final TimeDataService timeDataService;
+    private final UserService userService;
     public Slide save(List<String> mobileImages, List<String> desktopImages, String mobileImagesPath, String desktopImagesPath) {
+        String email = UserInfoSecurityContext.getUserInfoFromSecurityContext();
+        User manager = userService.findByEmail(email).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
         return slideRepository.save(Slide.builder()
                 .mobileImageUrls(mobileImages)
                 .desktopImageUrls(desktopImages)
                 .desktopImagesPath("uploads/"+desktopImagesPath)
+                .companyId(manager.getCompanyId())
                 .mobileImagesPath("uploads/"+mobileImagesPath).build());
     }
 
     public List<Slide> getAll() {
-        return slideRepository.findAll();
+        String email = UserInfoSecurityContext.getUserInfoFromSecurityContext();
+        User manager = userService.findByEmail(email).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
+        return slideRepository.findAllByCompanyId(manager.getCompanyId());
     }
 
     public List<String> getImages(MultipartFile file) {

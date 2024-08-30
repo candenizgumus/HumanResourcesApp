@@ -17,7 +17,8 @@ export const fetchFindAllDistinctUsernames = createAsyncThunk(
         const response = await fetch(RestApis.timeDataService + '/get-all-usernames', {
             method: 'POST',
             headers: {
-                'Authorization': `Bearer ` + token
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ` + token,
             }
         });
 

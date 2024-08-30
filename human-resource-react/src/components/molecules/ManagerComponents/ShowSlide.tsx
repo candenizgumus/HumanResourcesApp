@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Container, CssBaseline, Box, CircularProgress } from '@mui/material';
+import { Container, CssBaseline, Box, CircularProgress, IconButton } from '@mui/material';
 import Slider from 'react-slick';
 import ThemeElement from '../../atoms/ThemeElement';
 import RestApis from '../../../config/RestApis';
@@ -9,6 +9,7 @@ import { HumanResources } from '../../../store';
 import { useDispatch } from 'react-redux';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import { ArrowBack, ArrowForward } from '@mui/icons-material';
 
 function UserStoryDetailPage() {
     const [isMobile, setIsMobile] = useState(window.matchMedia('(max-width: 768px)').matches);
@@ -43,49 +44,59 @@ function UserStoryDetailPage() {
         });
     }, [dispatch, slideId]);
 
-    const NextArrow = (props: any) => {
-        const { className, style, onClick } = props;
+    const CustomNextArrow = ({ onClick }: { onClick: () => void }) => {
         return (
-            <div
-                className={className}
-                style={{
-                    ...style,
-                    display: 'block',
-                    background: 'rgba(0, 0, 0, 0.5)', // Yarı transparan yeşil arka plan
-                    right: '10px',
-                    zIndex: 1,
-                }}
+            <IconButton
                 onClick={onClick}
-            />
+                sx={{
+                    position: 'absolute',
+                    top: '50%',
+                    right: '10px', // Adjust this value to move the arrow further away from the edge
+                    transform: 'translateY(-50%)',
+                    backgroundColor: 'rgba(0, 0, 0, 0.3)', // Semi-transparent background
+                    color: 'white',
+                    zIndex: 1,
+                    '&:hover': {
+                        backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                    },
+                }}
+            >
+                <ArrowForward />
+            </IconButton>
         );
     };
-
-    const PrevArrow = (props: any) => {
-        const { className, style, onClick } = props;
+    
+    // Custom Prev Arrow
+    const CustomPrevArrow = ({ onClick }: { onClick: () => void }) => {
         return (
-            <div
-                className={className}
-                style={{
-                    ...style,
-                    display: 'block',
-                    background: 'rgba(0, 0, 0, 0.5)', // Yarı transparan yeşil arka plan
-                    left: '10px',
-                    zIndex: 1,
-                }}
+            <IconButton
                 onClick={onClick}
-            />
+                sx={{
+                    position: 'absolute',
+                    top: '50%',
+                    left: '10px', // Adjust this value to move the arrow further away from the edge
+                    transform: 'translateY(-50%)',
+                    backgroundColor: 'rgba(0, 0, 0, 0.3)', // Semi-transparent background
+                    color: 'white',
+                    zIndex: 1,
+                    '&:hover': {
+                        backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                    },
+                }}
+            >
+                <ArrowBack />
+            </IconButton>
         );
     };
-
+    
     const sliderSettings = {
         dots: true,
         infinite: true,
         speed: 500,
         slidesToShow: 1,
         slidesToScroll: 1,
-        nextArrow: <NextArrow />,
-        prevArrow: <PrevArrow />,
-
+        nextArrow: <CustomNextArrow onClick={() => {}} />, // Placeholder onClick handler
+        prevArrow: <CustomPrevArrow onClick={() => {}} />, // Placeholder onClick handler
     };
 
     if (loading) {

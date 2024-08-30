@@ -8,7 +8,8 @@ public record TimeDataSaveRequestDto(
         String userName,
         Long slideId,
         Map<String, Double> imageTimes,  // Changed to Map<String, Double>
-        String userIp
+        String userIp,
+        Long companyId
 ) {
 }
 

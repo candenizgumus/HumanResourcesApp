@@ -28,6 +28,7 @@ import java.util.zip.ZipInputStream;
 public class SlideService {
     private final SlideRepository slideRepository;
     private static final String UPLOAD_DIR = "uploads/";
+    private final TimeDataService timeDataService;
     public Slide save(List<String> mobileImages, List<String> desktopImages, String mobileImagesPath, String desktopImagesPath) {
         return slideRepository.save(Slide.builder()
                 .mobileImageUrls(mobileImages)
@@ -138,5 +139,16 @@ public class SlideService {
             }
         }
         return directoryToBeDeleted.delete();
+    }
+
+    public Boolean delete(Long id)
+    {
+
+        Slide slide = slideRepository.findById(id).orElseThrow(() -> new HumanResourcesAppException(ErrorType.SLIDE_NOT_FOUND));
+        deleteDirectory(slide.getDesktopImagesPath());
+        deleteDirectory(slide.getMobileImagesPath());
+        slideRepository.deleteById(id);
+        timeDataService.deleteTimeDataBySlideId(id);
+        return true;
     }
 }

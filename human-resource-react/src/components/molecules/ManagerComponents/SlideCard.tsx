@@ -75,7 +75,7 @@ const SlideCard = (props: {slide:ISlide, open: boolean}) => {
 
     const handleGetLink = () => {
 
-        const link = `${RestApis.baseUrl}/slides/${encodeURIComponent(user.companyId)}/${encodeURIComponent(props.slide.id)}/${encodeURIComponent(userName)}`;
+        const link = `${RestApis.baseUrl}/slides/${encodeURIComponent(props.slide.id)}/${encodeURIComponent(user.companyId)}/${encodeURIComponent(userName)}`;
         copyToClipboard(link);
         setOpenGetLinkModal(false);
     };

@@ -267,7 +267,7 @@ export default function AdminPage() {
                         ))}
                     </List>
                 </Drawer>
-                <Main sx={{ minHeight: '100vh'}} open={open} onClick={handleDrawerClose}>
+                <Main sx={{ minHeight: '100vh'}} open={open}>
                     <DrawerHeader />
                     <Grid container spacing={2}>
                         {pageState === 'Dashboard' ? <ManagerHomeContent open={open} /> : <ManagerMenuContentRenderer open={open} />}

@@ -41,10 +41,10 @@ function UserStoryDetailPage() {
     const handleImageChange = (now?: number) => {
         const endTime = Date.now();
         const timeSpent = (endTime - startTime) / 1000; // Calculate time spent in seconds
-    
+
         console.log(`Image transition from ${currentImage} to ${now}`);
         console.log(`Time spent on image ${currentImage}: ${timeSpent} seconds`);
-    
+
         if (currentImage !== undefined) {
             setImageTimes((prevTimes) => {
                 const updatedTimes = {
@@ -55,30 +55,52 @@ function UserStoryDetailPage() {
                 return updatedTimes;
             });
         }
-    
+
         setCurrentImage(now);
         setStartTime(Date.now());
     };
-    
 
     useEffect(() => {
         const sendTimeData = async () => {
-            try {
-                console.log('Sending time data:', { imageTimes, userIP, userName, slideId });
-                const response = await dispatch(fetchStoreTimeData({ imageTimes, userIP, userName, slideId })).unwrap();
-                console.log('Time data sent successfully:', response);
-            } catch (error) {
-                console.error('Error sending time data:', error);
+            if (currentImage !== undefined) {
+                const endTime = Date.now();
+                const timeSpent = (endTime - startTime) / 1000;
+
+                setImageTimes((prevTimes) => ({
+                    ...prevTimes,
+                    [currentImage]: (prevTimes[currentImage] || 0) + timeSpent,
+                }));
+
+                try {
+                    console.log('Sending time data:', { imageTimes, userIP, userName, slideId });
+                    const response = await dispatch(fetchStoreTimeData({ imageTimes, userIP, userName, slideId })).unwrap();
+                    console.log('Time data sent successfully:', response);
+                } catch (error) {
+                    console.error('Error sending time data:', error);
+                }
             }
         };
-    
-        window.addEventListener('beforeunload', sendTimeData);
-    
-        return () => {
-            window.removeEventListener('beforeunload', sendTimeData);
+
+        const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+            sendTimeData();
+            // Eğer kullanıcıyı sayfa kapatma konusunda uyarmak isterseniz aşağıdaki satırı ekleyebilirsiniz.
+            // e.returnValue = '';
         };
-    }, [imageTimes, userIP, dispatch, userName]);
-    
+
+        const handleVisibilityChange = () => {
+            if (document.visibilityState === 'hidden') {
+                sendTimeData();
+            }
+        };
+
+        window.addEventListener('beforeunload', handleBeforeUnload);
+        document.addEventListener('visibilitychange', handleVisibilityChange);
+
+        return () => {
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+            document.removeEventListener('visibilitychange', handleVisibilityChange);
+        };
+    }, [imageTimes, userIP, dispatch, userName, currentImage, startTime, slideId]);
 
     useEffect(() => {
         dispatch(fetchGetSlideById(Number(slideId))).unwrap().then((slide) => {
@@ -90,6 +112,40 @@ function UserStoryDetailPage() {
         });
     }, [dispatch, slideId]);
 
+    const NextArrow = (props: any) => {
+        const { className, style, onClick } = props;
+        return (
+            <div
+                className={className}
+                style={{
+                    ...style,
+                    display: 'block',
+                    background: 'rgba(0, 0, 0, 0.5)', // Yarı transparan yeşil arka plan
+                    right: '10px',
+                    zIndex: 1,
+                }}
+                onClick={onClick}
+            />
+        );
+    };
+
+    const PrevArrow = (props: any) => {
+        const { className, style, onClick } = props;
+        return (
+            <div
+                className={className}
+                style={{
+                    ...style,
+                    display: 'block',
+                    background: 'rgba(0, 0, 0, 0.5)', // Yarı transparan yeşil arka plan
+                    left: '10px',
+                    zIndex: 1,
+                }}
+                onClick={onClick}
+            />
+        );
+    };
+
     const sliderSettings = {
         dots: true,
         infinite: true,
@@ -97,6 +153,8 @@ function UserStoryDetailPage() {
         slidesToShow: 1,
         slidesToScroll: 1,
         afterChange: (current: number) => handleImageChange(current),
+        nextArrow: <NextArrow />,
+        prevArrow: <PrevArrow />,
     };
 
     if (loading) {

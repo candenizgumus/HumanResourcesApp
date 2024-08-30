@@ -37,7 +37,7 @@ import {
     PersonAdd,
     PointOfSale,
     AdminPanelSettings,
-    Weekend, Laptop, Dashboard, DuoTwoTone, Task
+    Weekend, Laptop, Dashboard, DuoTwoTone, Task, Dataset
 } from "@mui/icons-material";
 import AddCommentIcon from '@mui/icons-material/AddComment';
 import { ManagerHomeContent } from "../../components/molecules/ManagerComponents/ManagerHomeContent";
@@ -217,7 +217,7 @@ export default function AdminPage() {
                         </IconButton>
                     </DrawerHeader>
                     <List sx={{ bgcolor: 'primary.main', minHeight: 'calc(100vh - 65px)', paddingTop: '0' }}>
-                        {['Dashboard', 'Employees', 'Add Employee', 'Create Manager', 'Create Definition', 'Profile', 'Company', 'Add Comment', 'Holidays', 'Notifications', 'Expenditure', 'Leaves', 'Payments', 'Personal Documents', 'Bonus', 'Company Items', 'Task', 'Create Slide', 'Slides'].map((text, index) => (
+                        {['Dashboard', 'Employees', 'Add Employee', 'Create Manager', 'Create Definition', 'Profile', 'Company', 'Add Comment', 'Holidays', 'Notifications', 'Expenditure', 'Leaves', 'Payments', 'Personal Documents', 'Bonus', 'Company Items', 'Task', 'Create Slide', 'Slides', 'Slide Datas'].map((text, index) => (
                             <ListItem key={text} disablePadding>
                                 <ListItemButton
                                     selected={selectedIndex2 === index}
@@ -259,6 +259,7 @@ export default function AdminPage() {
                                         {index === 16 && <Task />}
                                         {index === 17 && <CreateNewFolderIcon />}
                                         {index === 18 && <FolderCopyIcon />}
+                                        {index === 19 && <Dataset />}
                                     </ListItemIcon>
                                     <ListItemText primary={text} />
                                 </ListItemButton>

@@ -1,7 +1,7 @@
 const server_loadbalancer = 'https://easyhr.store';
 const server_local = 'http://localhost:9090';
 const server_local_frontend = 'http://localhost:3000';
-const server = server_local;
+const server = server_local; //DONT FORGET THIS
 const apis = {
     authService: server+'/dev/v1/auth',
     bonusService: server+'/dev/v1/bonus',
@@ -26,8 +26,9 @@ const apis = {
     userService: server+'/dev/v1/user',
     tasksService: server+'/dev/v1/tasks',
     slideService: server+'/dev/v1/slides',
+    timeDataService: server+'/dev/v1/timedata',
     staticUploads: server,
-    baseUrl : server_local_frontend
+    baseUrl : server_local_frontend //DONT FORGET THIS
 }
 
 export default apis;

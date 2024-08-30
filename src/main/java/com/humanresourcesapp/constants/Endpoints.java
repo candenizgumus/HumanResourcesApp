@@ -47,6 +47,7 @@ public class Endpoints
     public static final String S3 ="/s3";
     public static final String TASKS ="/tasks";
     public static final String SUBTASKS ="/subtasks";
+    public static final String TIMEDATA ="/timedata";
 
     //methods
     public static final String SAVE = "/save";
@@ -143,4 +144,7 @@ public class Endpoints
     public static final String CANCEL_SUBTASK = "/cancel-subtask";
     public static final String COMPLETE_SUBTASK = "/complete-subtask";
     public static final String COMPLETE_TASK = "/complete-task";
+    public static final String GET_ALL_USERNAMES = "/get-all-usernames";
+    public static final String GET_USERNAMES_SLIDES = "/get-usernames-slides";
+    public static final String GET_ALL_BY_USERNAME_SLIDEID = "/get-all-by-username-slideid";
 }

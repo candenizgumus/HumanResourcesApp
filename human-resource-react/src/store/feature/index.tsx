@@ -15,7 +15,7 @@ import shiftSlice from "./shiftSlice";
 import definitionSlice from "./definitionSlice";
 import emailSlice from "./emailSlice";
 import taskSlice from "./TaskSlice";
-
+import timeDataSlice from "./timeDataSlice";
 import slideSlice from "./slideSlice";
 
 
@@ -38,5 +38,6 @@ export{
     definitionSlice,
     emailSlice,
     taskSlice,
-    slideSlice
+    slideSlice,
+    timeDataSlice
 }

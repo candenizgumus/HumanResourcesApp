@@ -4,7 +4,7 @@ import {
     passwordResetSlice,
     notificationSlice, expenditureSlice, personalDocumentSlice,
     leaveSlice, bonusSlice, paymentSlice, shiftSlice,
-    definitionSlice, emailSlice, taskSlice, slideSlice
+    definitionSlice, emailSlice, taskSlice, slideSlice, timeDataSlice
 } from "./feature";
 
 
@@ -30,7 +30,8 @@ const store = configureStore({
         definition: definitionSlice,
         email: emailSlice,
         slide: slideSlice,
-        task: taskSlice
+        task: taskSlice,
+        timeData: timeDataSlice
 
     }
 });

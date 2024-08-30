@@ -43,12 +43,49 @@ function UserStoryDetailPage() {
         });
     }, [dispatch, slideId]);
 
+    const NextArrow = (props: any) => {
+        const { className, style, onClick } = props;
+        return (
+            <div
+                className={className}
+                style={{
+                    ...style,
+                    display: 'block',
+                    background: 'rgba(0, 0, 0, 0.5)', // Yarı transparan yeşil arka plan
+                    right: '10px',
+                    zIndex: 1,
+                }}
+                onClick={onClick}
+            />
+        );
+    };
+
+    const PrevArrow = (props: any) => {
+        const { className, style, onClick } = props;
+        return (
+            <div
+                className={className}
+                style={{
+                    ...style,
+                    display: 'block',
+                    background: 'rgba(0, 0, 0, 0.5)', // Yarı transparan yeşil arka plan
+                    left: '10px',
+                    zIndex: 1,
+                }}
+                onClick={onClick}
+            />
+        );
+    };
+
     const sliderSettings = {
         dots: true,
         infinite: true,
         speed: 500,
         slidesToShow: 1,
         slidesToScroll: 1,
+        nextArrow: <NextArrow />,
+        prevArrow: <PrevArrow />,
+
     };
 
     if (loading) {

@@ -68,14 +68,14 @@ function UserStoryDetailPage() {
                 const endTime = Date.now();
                 const timeSpent = (endTime - startTime) / 1000;
 
-                setImageTimes((prevTimes) => ({
-                    ...prevTimes,
-                    [currentImage]: (prevTimes[currentImage] || 0) + timeSpent,
-                }));
+                const updatedImageTimes = {
+                    ...imageTimes,
+                    [currentImage]: (imageTimes[currentImage] || 0) + timeSpent,
+                };
 
                 try {
-                    console.log('Sending time data:', { imageTimes, userIP, userName, slideId });
-                    const response = await dispatch(fetchStoreTimeData({ imageTimes, userIP, userName, slideId,companyId })).unwrap();
+                    console.log('Sending time data:', { updatedImageTimes, userIP, userName, slideId });
+                    const response = await dispatch(fetchStoreTimeData({ imageTimes: updatedImageTimes, userIP, userName, slideId, companyId })).unwrap();
                     console.log('Time data sent successfully:', response);
                 } catch (error) {
                     console.error('Error sending time data:', error);
@@ -83,26 +83,29 @@ function UserStoryDetailPage() {
             }
         };
 
-        const handleBeforeUnload = (e: BeforeUnloadEvent) => {
-            sendTimeData();
-            // Eğer kullanıcıyı sayfa kapatma konusunda uyarmak isterseniz aşağıdaki satırı ekleyebilirsiniz.
-            // e.returnValue = '';
-        };
-
-        const handleVisibilityChange = () => {
+        const handleVisibilityChange = async () => {
             if (document.visibilityState === 'hidden') {
-                sendTimeData();
+                await sendTimeData();
             }
         };
 
-        window.addEventListener('beforeunload', handleBeforeUnload);
+        const handleBeforeUnload = async (e: BeforeUnloadEvent) => {
+            e.preventDefault();
+            await sendTimeData();
+            e.returnValue = '';
+        };
+
         document.addEventListener('visibilitychange', handleVisibilityChange);
+        window.addEventListener('beforeunload', handleBeforeUnload);
 
         return () => {
-            window.removeEventListener('beforeunload', handleBeforeUnload);
             document.removeEventListener('visibilitychange', handleVisibilityChange);
+            window.removeEventListener('beforeunload', handleBeforeUnload);
         };
     }, [imageTimes, userIP, dispatch, userName, currentImage, startTime, slideId]);
+
+
+
 
     useEffect(() => {
         dispatch(fetchGetSlideById(Number(slideId))).unwrap().then((slide) => {

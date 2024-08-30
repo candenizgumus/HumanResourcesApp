@@ -79,9 +79,10 @@ const FileUpload: React.FC = () => {
           type="submit"
           variant="contained"
           color="primary"
-          disabled={loading}
+          disabled={loading || !fileMobile || !fileDesktop}
           sx={{ mt: 3 }}
           fullWidth
+
         >
           Upload
         </Button>

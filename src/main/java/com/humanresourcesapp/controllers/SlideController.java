@@ -1,7 +1,10 @@
 package com.humanresourcesapp.controllers;
 
 import com.humanresourcesapp.dto.requests.TimeDataSaveRequestDto;
+import com.humanresourcesapp.entities.PersonalDocument;
 import com.humanresourcesapp.entities.Slide;
+import com.humanresourcesapp.exception.ErrorType;
+import com.humanresourcesapp.exception.HumanResourcesAppException;
 import com.humanresourcesapp.services.SlideService;
 import com.humanresourcesapp.services.TimeDataService;
 import lombok.RequiredArgsConstructor;
@@ -102,12 +105,16 @@ public class SlideController {
 
         String userIp = payload.get("userIp").toString();
 
+        String companyId = payload.get("companyId").toString();
+
         // Store the image times in the database
         timeDataService.save(TimeDataSaveRequestDto.builder()
                 .userName(userName)
                 .imageTimes(imageTimes)
                 .slideId(Long.parseLong(slideId))
+                        .companyId(Long.parseLong(companyId))
                 .userIp(userIp).build());
+
         return ResponseEntity.ok("Data stored successfully");
     }
 

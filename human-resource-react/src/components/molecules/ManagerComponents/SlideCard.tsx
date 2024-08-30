@@ -1,59 +1,31 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
+import { Button, Grid, Dialog, DialogActions, DialogContent, DialogTitle, TextField, Snackbar, Box } from "@mui/material";
 import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchCreateUserStories, fetchGetUserStories, IUserStoryResponse } from '../../../store/feature/userStorySlice';
-import { RootState } from '../../../store';
-import type { HumanResources } from '../../../store';
-import Divider from '@mui/material/Divider';
 import { useNavigate } from 'react-router-dom';
+import { Delete as DeleteIcon } from '@mui/icons-material';
 import { ISlide } from '../../../store/feature/slideSlice';
 import RestApis from "../../../config/RestApis";
-import ThemeElement from '../../atoms/ThemeElement';
-import {
-    Button,
-    Grid,
-    TextField,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogTitle,
-    Autocomplete,
-    Box,
-    Snackbar,
-} from "@mui/material";
-import RestApi from "../../../config/RestApis";
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 const CustomCard = styled(Card)(({ theme }) => ({
-    display: 'flex',
-    flexDirection: 'column',
     height: '100%',
-    maxWidth: 345,
-    margin: 'auto',
-}));
-
-const CustomCardMedia = styled(CardMedia)(({ theme }) => ({
-    height: 200,
-}));
-
-const CardContentWrapper = styled('div')({
     display: 'flex',
     flexDirection: 'column',
-    flexGrow: 1,
-});
+    margin: 'auto',
 
-const CustomTypography = styled(Typography)(({ theme }) => ({
-    textAlign: 'center',
-    color: theme.palette.text.primary,
+        cursor: 'pointer',
+        transition: 'transform 0.2s ease-in-out',
+        marginTop:'10px',
+        '&:hover': {
+            transform: 'scale(1.01)'
+        }
+
 }));
 
 const SlideCard = (props: ISlide) => {
     const navigate = useNavigate();
     const [openGetLinkModal, setOpenGetLinkModal] = useState(false);
     const [userName, setUserName] = useState('');
-    const [generatedLink, setGeneratedLink] = useState('');
     const [openSnackbar, setOpenSnackbar] = useState(false);
 
     const handleClick = () => {
@@ -63,74 +35,66 @@ const SlideCard = (props: ISlide) => {
     const copyToClipboard = async (text: string) => {
         try {
             await navigator.clipboard.writeText(text);
-            setOpenSnackbar(true)
+            setOpenSnackbar(true);
         } catch (err) {
-            console.error("Kopyalama başarısız:", err);
+            console.error("Copy failed:", err);
         }
     };
 
     const handleGetLink = () => {
-        copyToClipboard(RestApi.baseUrl + `/slides/${encodeURIComponent(props.id)}/${encodeURIComponent(userName)}`)
+        const link = `${RestApis.baseUrl}/slides/${encodeURIComponent(props.companyId)}/${encodeURIComponent(props.companyName)}/${encodeURIComponent(props.id)}/${encodeURIComponent(userName)}`;
+        copyToClipboard(link);
         setOpenGetLinkModal(false);
     };
 
-    const handleCloseGetLinkModal = () => {
-        setOpenGetLinkModal(false);
-        setGeneratedLink('');
-        setUserName('');
-    };
-
+    const handleDeleteSlide = () => {
+        
+    }
 
     return (
-        <ThemeElement children={
-            <>
-                <Grid item xs={12} sm={6} md={4}>
-                    <Grid key={props.id} onClick={handleClick} sx={{
-                        cursor: 'pointer',
-                        transition: 'transform 0.2s ease-in-out',
-                        '&:hover': {
-                            transform: 'scale(1.01)'
-                        }
-                    }}>
-                        <CustomCard>
-                            <img src={RestApis.staticUploads + props.mobileImageUrls[0]} />
-                        </CustomCard>
-                    </Grid>
-                    <Button sx={{ textAlign: 'center', marginTop: '10px' }} variant="contained" color='primary' fullWidth onClick={() => setOpenGetLinkModal(true)}>Get Link</Button>
-                </Grid>
-                <Dialog open={openGetLinkModal} onClose={handleCloseGetLinkModal} fullWidth maxWidth='sm'>
-                    <DialogTitle>Get Link</DialogTitle>
-                    <DialogContent>
-                        <Box mt={2}>
-                            <Grid item mt={2}>
-                                <TextField
-                                    label="Name"
-                                    name="name"
-                                    value={userName}
-                                    inputProps={{ maxLength: 20 }}
-                                    onChange={e => setUserName(e.target.value)}
-                                    required
-                                    fullWidth
-                                />
-                            </Grid>
+        <Box sx={{ display: 'flex', flexDirection: 'column',padding: '10px', borderRadius: '5px', height: '100%', boxShadow:'0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19)'}}>
+            <CustomCard onClick={handleClick}>
+                <img src={RestApis.staticUploads + props.desktopImageUrls[0]} alt="Slide" style={{ width: '100%', objectFit: 'cover' }} />
+            </CustomCard>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px' }}>
+                <Button variant="contained" color="success" sx={{
+                        flex: 1,
+                        margin: '5px',
+                        maxWidth: { xs: '100%', sm: '150px' },
+                    }} startIcon={<ContentCopyIcon />} onClick={() => setOpenGetLinkModal(true)}>
+                    Get Link
+                </Button>
+                <Button variant="contained" color="error" sx={{
+                        flex: 1,
+                        margin: '5px',
+                        maxWidth: { xs: '100%', sm: '150px' },
+                    }} startIcon={<DeleteIcon />} onClick={handleDeleteSlide}>
+                    Delete
+                </Button>
+            </Box>
 
-                        </Box>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={handleCloseGetLinkModal} color="error" variant="contained"
-                            sx={{ marginRight: '17px', width: '150px' }}>
-                            Cancel
-                        </Button>
-                        <Button onClick={handleGetLink} color="success" variant="contained" disabled={userName.length === 0}
-                            sx={{ marginRight: '17px', width: '150px' }}>
-                            Click to Copy
-                        </Button>
-                    </DialogActions>
-                </Dialog>
-                <Snackbar open={openSnackbar} autoHideDuration={6000} color='success' onClose={() => setOpenSnackbar(false)} message={"Link copied to clipboard"} />
-            </>
-        } />
-    )
+            {/* Dialog and Snackbar components here */}
+            <Dialog open={openGetLinkModal} onClose={() => setOpenGetLinkModal(false)} fullWidth maxWidth='sm'>
+                <DialogTitle>Get Link</DialogTitle>
+                <DialogContent>
+                    <TextField
+                        label="Name"
+                        name="name"
+                        value={userName}
+                        inputProps={{ maxLength: 20 }}
+                        onChange={e => setUserName(e.target.value)}
+                        required
+                        fullWidth
+                    />
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setOpenGetLinkModal(false)} color="error" variant="contained">Cancel</Button>
+                    <Button onClick={handleGetLink} color="success" variant="contained" disabled={userName.length === 0}>Click to Copy</Button>
+                </DialogActions>
+            </Dialog>
+            <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={() => setOpenSnackbar(false)} message={"Link copied to clipboard"} />
+        </Box>
+    );
 };
 
 export default SlideCard;

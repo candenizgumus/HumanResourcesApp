@@ -14,9 +14,11 @@ const initialSlideState: ISlideState = {
 };
 
 export interface ISlide {
-    id : number,
-    mobileImageUrls : string[],
-    desktopImageUrls : string[],
+    id: number,
+    companyId: number,
+    companyName: string,
+    mobileImageUrls: string[],
+    desktopImageUrls: string[],
     sehir: string,
     ilce: string,
     mahalle: string,
@@ -26,7 +28,7 @@ export interface ISlide {
 
 interface ISlidePayload {
     token: string;
-    formData : FormData
+    formData: FormData
 }
 
 export const fetchUploadFile = createAsyncThunk(
@@ -92,7 +94,7 @@ export interface IStoreTimeData {
 }
 export const fetchStoreTimeData = createAsyncThunk(
     'slide/fetchStoreTimeData',
-    async (payload:IStoreTimeData) => {
+    async (payload: IStoreTimeData) => {
         const response = await fetch(RestApis.slideService + '/store-time-data', {
             method: 'POST',
             headers: {
@@ -140,14 +142,14 @@ const slideSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            .addCase(fetchUploadFile.fulfilled, (state, action:PayloadAction<ISlide>) => {
+            .addCase(fetchUploadFile.fulfilled, (state, action: PayloadAction<ISlide>) => {
                 state.images = action.payload;
             })
-            .addCase(fetchGetAllSlides.fulfilled, (state, action:PayloadAction<ISlide[]>) => {
+            .addCase(fetchGetAllSlides.fulfilled, (state, action: PayloadAction<ISlide[]>) => {
                 state.slides = action.payload;
             })
     },
 });
 
-export const {  } = slideSlice.actions;
+export const { } = slideSlice.actions;
 export default slideSlice.reducer;

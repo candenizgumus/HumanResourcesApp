@@ -21,7 +21,7 @@ import {
 } from "../../../store/feature/authSlice";
 import Swal from "sweetalert2";
 
-import {AddIcon, DeleteIcon} from "../../atoms/icons";
+import { AddIcon, DeleteIcon } from "../../atoms/icons";
 import { myErrorColour, myLightColour } from "../../../util/MyColours";
 import {
     fetchAssignTaskToEmployee, fetchDeleteSubTask, fetchDeleteTask,
@@ -87,18 +87,18 @@ const SideBarTask = () => {
 
     const closeSubTaskModal = () => {
         setOpenSubTaskModal(false);
-       dispatch(fetchGetTasks({
-           token: token,
-           page: 0,
-           pageSize: 100,
-           searchText: searchText,
-       }))
+        dispatch(fetchGetTasks({
+            token: token,
+            page: 0,
+            pageSize: 100,
+            searchText: searchText,
+        }))
 
     };
     const handleOpenSubTaskModal = () => {
 
         setOpenSubTaskModal(true)
-        dispatch(fetchGetSubTasksOfSelectedTask({token : token , taskId : selectedRowIds[0]}))
+        dispatch(fetchGetSubTasksOfSelectedTask({ token: token, taskId: selectedRowIds[0] }))
     }
 
     const handleEmployeeChange = (event: any, selectedEmployee: any) => {
@@ -112,8 +112,8 @@ const SideBarTask = () => {
 
     const handleDeleteClick = (id: number) => {
 
-        dispatch(fetchDeleteSubTask({token : token , id : id})).then(() => {
-            dispatch (fetchGetSubTasksOfSelectedTask({token : token , taskId : selectedRowIds[0]}))
+        dispatch(fetchDeleteSubTask({ token: token, id: id })).then(() => {
+            dispatch(fetchGetSubTasksOfSelectedTask({ token: token, taskId: selectedRowIds[0] }))
         })
 
     };
@@ -130,7 +130,7 @@ const SideBarTask = () => {
             setOpenAssignToEmployeeModal(false);
             return
         }
-        dispatch(fetchAssignTaskToEmployee({token : token , taskId : selectedRowIds[0] , employeeId : selectedEmployee.id})).unwrap();
+        dispatch(fetchAssignTaskToEmployee({ token: token, taskId: selectedRowIds[0], employeeId: selectedEmployee.id })).unwrap();
         Swal.fire({
             title: "Saved!",
             text: "Your assignment has been saved.",
@@ -153,7 +153,7 @@ const SideBarTask = () => {
 
     }
     const handleSaveTask = async () => {
-        await dispatch(fetchSaveTask({token : token , taskName : taskName})).unwrap();
+        await dispatch(fetchSaveTask({ token: token, taskName: taskName })).unwrap();
         Swal.fire({
             title: "Saved!",
             text: "Your task has been saved.",
@@ -186,7 +186,7 @@ const SideBarTask = () => {
             confirmButtonText: "Yes, delete it!"
         });
         if (result.isConfirmed) {
-            await dispatch(fetchDeleteTask({token : token , taskId : selectedRowIds[0]})).unwrap();
+            await dispatch(fetchDeleteTask({ token: token, taskId: selectedRowIds[0] })).unwrap();
             dispatch(fetchGetTasks({
                 token: token,
                 page: 0,
@@ -199,8 +199,8 @@ const SideBarTask = () => {
 
     const handleSaveSubTask = async () => {
         setIsAddSubtaskTrue(true)
-        await dispatch(fetchSaveSubtask({token : token , subTaskName : subTaskName , taskId : selectedRowIds[0]}))
-        await dispatch(fetchGetSubTasksOfSelectedTask({token : token , taskId : selectedRowIds[0]})).unwrap();
+        await dispatch(fetchSaveSubtask({ token: token, subTaskName: subTaskName, taskId: selectedRowIds[0] }))
+        await dispatch(fetchGetSubTasksOfSelectedTask({ token: token, taskId: selectedRowIds[0] })).unwrap();
         setIsAddSubtaskTrue(false)
         setSubTaskName('')
 
@@ -258,9 +258,10 @@ const SideBarTask = () => {
 
 
     const columnSubTasks: GridColDef[] = [
-        { field: 'name', headerName: 'Task Name', flex: 1 , headerAlign: "center" },
-        { field: 'isCompleted', headerName: 'Completion', flex: 1 , headerAlign: "center" },
-        { field: 'delete', headerName: 'Edit', flex: 0.3 , headerAlign: "center",
+        { field: 'name', headerName: 'Task Name', flex: 1, headerAlign: "center" },
+        { field: 'isCompleted', headerName: 'Completion', flex: 1, headerAlign: "center" },
+        {
+            field: 'delete', headerName: 'Edit', flex: 0.3, headerAlign: "center",
             renderCell: (params) => {
                 return (
                     <Box width="100%" display="flex" justifyContent="center">
@@ -314,41 +315,60 @@ const SideBarTask = () => {
                     height: '407px'
                 }}
             />
-            <Grid sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-start', alignItems: 'center', marginTop: '2%', marginBottom: '2%' }}>
-               <Button
-                    onClick={handleAssignToEmployee}
-                    variant="contained"
-                    color="success"
-                    disabled={selectedRowIds.length === 0 || selectedRowIds[0] <0 || selectedRowIds.length > 1 || taskList.find(task => task.id === selectedRowIds[0])?.assignedEmployeeName !== null }
-                    startIcon={<AddIcon />}
-                    sx={{ marginRight: '1%'}}
-                >
-                    Assign To Employee
-                </Button>
-                <Button
-                    onClick={handleOpenSubTaskModal}
-                    variant="contained"
-                    color="secondary"
-                    disabled={selectedRowIds.length === 0 || selectedRowIds[0] <0 || selectedRowIds.length > 1}
-                    startIcon={<AddIcon />}
-                    sx={{ marginRight: '1%' }}
-                >
-                    Add/Check SubTasks
-                </Button>
+            <Grid container spacing={2} sx={{ flexGrow: 1, justifyContent: 'flex-start', alignItems: 'stretch', marginTop: '2%', marginBottom: '2%' }}>
+    <Grid item xs={12} sm={6} md={3}>
+        <Button
+            onClick={handleAssignToEmployee}
+            variant="contained"
+            color="success"
+            disabled={selectedRowIds.length === 0 || selectedRowIds[0] < 0 || selectedRowIds.length > 1 || taskList.find(task => task.id === selectedRowIds[0])?.assignedEmployeeName !== null}
+            startIcon={<AddIcon />}
+            sx={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+        >
+            Assign To Employee
+        </Button>
+    </Grid>
+    <Grid item xs={12} sm={6} md={3}>
+        <Button
+            onClick={handleOpenSubTaskModal}
+            variant="contained"
+            color="secondary"
+            disabled={selectedRowIds.length === 0 || selectedRowIds[0] < 0 || selectedRowIds.length > 1}
+            startIcon={<AddIcon />}
+            sx={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+        >
+            Add/Check SubTasks
+        </Button>
+    </Grid>
+    <Grid item xs={12} sm={6} md={3}>
+        <Button
+            onClick={handleDeleteTask}
+            variant="contained"
+            color="error"
+            disabled={selectedRowIds.length === 0 || selectedRowIds[0] < 0 || selectedRowIds.length > 1}
+            startIcon={<DeleteIcon />}
+            sx={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+        >
+            Delete
+        </Button>
+    </Grid>
+    <Grid item xs={12} sm={6} md={3}>
+        <Button
+            onClick={handleSaveTask}
+            variant="contained"
+            color="success"
+            disabled={taskName.length === 0}
+            startIcon={<AddIcon />}
+            sx={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+        >
+            Add Task
+        </Button>
+    </Grid>
+</Grid>
 
-                <Button
-                    onClick={handleDeleteTask}
-                    variant="contained"
-                    color="error"
-                    disabled={selectedRowIds.length === 0 || selectedRowIds[0] <0 || selectedRowIds.length > 1}
-                    startIcon={<DeleteIcon />}
-                    sx={{ marginRight: '1%' }}
-                >
-                    Delete
-                </Button>
-            </Grid>
 
-            <Grid container spacing={2}  direction="row">
+
+            <Grid container spacing={2} direction="row">
                 <Grid item xs={12}>
                     <Typography variant="h6" sx={{ fontWeight: "bold" }}>
                         Add Task
@@ -365,18 +385,7 @@ const SideBarTask = () => {
                         inputProps={{ maxLength: 100 }}
                     />
                 </Grid>
-                <Grid item xs={2}>
-                    <Button
-                        onClick={handleSaveTask}
-                        variant="contained"
-                        color="success"
-                        disabled={taskName.length === 0 }
-                        startIcon={<AddIcon />}
-                        sx={{ marginRight: '1%', width: '200px' }}
-                    >
-                        Add
-                    </Button>
-                </Grid>
+
             </Grid>
 
 
@@ -404,17 +413,17 @@ const SideBarTask = () => {
                     </Box>
                     {loading && (
                         <Box display="flex" justifyContent="center" alignItems="center" mb={2}>
-                            <CircularProgress/>
+                            <CircularProgress />
                         </Box>
                     )}
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleCloseAssignLeaveModal} color="error" variant="contained"
-                            sx={{marginRight: '17px', width: '100px'}}>
+                        sx={{ marginRight: '17px', width: '100px' }}>
                         Cancel
                     </Button>
                     <Button onClick={handleAssignEmployee} color="success" variant="contained"
-                            sx={{marginRight: '17px', width: '100px'}}>
+                        sx={{ marginRight: '17px', width: '100px' }}>
                         Save
                     </Button>
                 </DialogActions>
@@ -442,7 +451,7 @@ const SideBarTask = () => {
                                     textAlign: "center",
                                 },
                                 height: '375px',
-                                marginBottom:"50px"
+                                marginBottom: "50px"
                             }}
                         />
 
@@ -451,19 +460,19 @@ const SideBarTask = () => {
                 </DialogContent>
                 <DialogActions>
 
-                        <TextField
-                            label="SubTask"
-                            name="subTask"
-                            value={subTaskName}
-                            onChange={e => setSubTaskName(e.target.value)}
-                            fullWidth
-                            required
+                    <TextField
+                        label="SubTask"
+                        name="subTask"
+                        value={subTaskName}
+                        onChange={e => setSubTaskName(e.target.value)}
+                        fullWidth
+                        required
 
-                            inputProps={{ maxLength: 100 }}
-                        />
+                        inputProps={{ maxLength: 100 }}
+                    />
 
                     <Button disabled={subTaskName.length === 0 || taskList.find(task => task.id === selectedRowIds[0])?.completionDate !== null || isAddSubtaskTrue} onClick={handleSaveSubTask} color="success" variant="contained"
-                            sx={{marginRight: '17px', width: '100px'}}>
+                        sx={{ marginRight: '17px', width: '100px' }}>
 
                         Add SubTask
                     </Button>

@@ -1,5 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import { Button, Grid,Typography, Dialog, DialogActions, DialogContent, DialogTitle, TextField, Snackbar, Box } from "@mui/material";
+import React, { useState, useEffect } from 'react';
+import {
+    Button,
+    Grid,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    TextField,
+    Snackbar,
+    Box,
+    Typography
+} from "@mui/material";
 import Card from '@mui/material/Card';
 import { styled } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
@@ -63,6 +74,7 @@ const SlideCard = (props: {slide:ISlide, open: boolean}) => {
     };
 
     const handleGetLink = () => {
+
         const link = `${RestApis.baseUrl}/slides/${encodeURIComponent(user.companyId)}/${encodeURIComponent(props.slide.id)}/${encodeURIComponent(userName)}`;
         copyToClipboard(link);
         setOpenGetLinkModal(false);

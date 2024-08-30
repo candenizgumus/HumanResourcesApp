@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -141,14 +142,16 @@ public class SlideService {
         return directoryToBeDeleted.delete();
     }
 
+    @Transactional
     public Boolean delete(Long id)
     {
 
         Slide slide = slideRepository.findById(id).orElseThrow(() -> new HumanResourcesAppException(ErrorType.SLIDE_NOT_FOUND));
         deleteDirectory(slide.getDesktopImagesPath());
         deleteDirectory(slide.getMobileImagesPath());
-        slideRepository.deleteById(id);
         timeDataService.deleteTimeDataBySlideId(id);
+        slideRepository.deleteById(id);
+
         return true;
     }
 }

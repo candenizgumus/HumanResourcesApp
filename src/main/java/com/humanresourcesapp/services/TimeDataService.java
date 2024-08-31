@@ -29,7 +29,7 @@ public class TimeDataService
         timeDataRepository.save(TimeData.builder()
                 .userName(dto.userName())
                 .imageTimes(dto.imageTimes())
-                .slideId(dto.slideId())
+                .slideId(UUID.fromString(dto.slideId()))
                 .userIp(dto.userIp())
                 .companyId(dto.companyId())
                 .status(EStatus.ACTIVE)
@@ -44,9 +44,13 @@ public class TimeDataService
         return timeDataRepository.findAllDistinctUsernames(manager.getCompanyId());
     }
 
-    public List<Long> getUsernamesSlides(String username)
+    public List<String> getUsernamesSlides(String username)
     {
-        return timeDataRepository.findAllUsernamesSlides(username);
+        List<String> slideIds = new ArrayList<>();
+        timeDataRepository.findAllUsernamesSlides(username).forEach(slideId -> {
+            slideIds.add(String.valueOf(slideId));
+        });
+        return slideIds;
     }
 
     public List<TimeDatasResponseDto> getAllByUsernameAndSlideId(TimeDataGetRequestDto dto)
@@ -54,7 +58,7 @@ public class TimeDataService
         String email = UserInfoSecurityContext.getUserInfoFromSecurityContext();
         User manager = userService.findByEmail(email).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
 
-        List<TimeData> timeDatas = timeDataRepository.findAllByUserNameAndSlideIdAndCompanyId(dto.userName(), dto.slideId(), manager.getCompanyId());
+        List<TimeData> timeDatas = timeDataRepository.findAllByUserNameAndSlideIdAndCompanyId(dto.userName(), UUID.fromString(dto.slideId()), manager.getCompanyId());
 
         // Yeni bir harita oluşturarak, her bir sayfa numarası için toplam zamanı hesaplayalım
         Map<String, Double> combinedImageTimes = new HashMap<>();
@@ -70,7 +74,7 @@ public class TimeDataService
         // Yeni TimeData nesnesi oluşturup, topladığımız değerleri bu nesneye atayabiliriz
         TimeData combinedTimeData = TimeData.builder()
                 .userName(dto.userName())
-                .slideId(dto.slideId())
+                .slideId(UUID.fromString(dto.slideId()))
                 .imageTimes(combinedImageTimes)
                 .userIp(timeDatas.getFirst().getUserIp())
                 .createdAt(timeDatas.getFirst().getCreatedAt())
@@ -85,7 +89,7 @@ public class TimeDataService
             imageTimeDtos.add(new TimeDatasResponseDto(
                     id.getAndIncrement(),
                     combinedTimeData.getUserName(),
-                    combinedTimeData.getSlideId(),
+                    combinedTimeData.getSlideId().toString(),
                     pageNumber,
                     timeSpent,
                     combinedTimeData.getUserIp(),
@@ -101,8 +105,8 @@ public class TimeDataService
     }
 
 
-    public void deleteTimeDataBySlideId(Long id)
+    public void deleteTimeDataBySlideId(String id)
     {
-        timeDataRepository.deleteAllBySlideId(id);
+        timeDataRepository.deleteAllBySlideId(UUID.fromString(id));
     }
 }

@@ -61,7 +61,7 @@ public class SlideController {
 
     @DeleteMapping(DELETE)
     @PreAuthorize("hasAnyAuthority('MANAGER')")
-    public ResponseEntity<Boolean> delete(Long id) {
+    public ResponseEntity<Boolean> delete(String id) {
         return ResponseEntity.ok(slideService.delete(id));
     }
 
@@ -74,7 +74,7 @@ public class SlideController {
 
     @PostMapping(GET_BY_ID)
     @CrossOrigin("*")
-    public ResponseEntity<Slide> getById(Long id) {
+    public ResponseEntity<Slide> getById(String id) {
         return ResponseEntity.ok(slideService.getById(id));
     }
 
@@ -111,7 +111,7 @@ public class SlideController {
         timeDataService.save(TimeDataSaveRequestDto.builder()
                 .userName(userName)
                 .imageTimes(imageTimes)
-                .slideId(Long.parseLong(slideId))
+                .slideId(slideId)
                         .companyId(Long.parseLong(companyId))
                 .userIp(userIp).build());
 

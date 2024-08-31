@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import {
     DataGrid,
     GridColDef,
@@ -16,13 +16,13 @@ import {
     Autocomplete,
     Box,
 } from "@mui/material";
-import {HumanResources, useAppSelector} from "../../../store";
-import {useDispatch} from "react-redux";
+import { HumanResources, useAppSelector } from "../../../store";
+import { useDispatch } from "react-redux";
 import Swal from "sweetalert2";
-import {DatePicker} from "@mui/x-date-pickers/DatePicker";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
-import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
-import {LocalizationProvider} from '@mui/x-date-pickers';
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from '@mui/x-date-pickers';
 import MyDropzone from "../../atoms/DropZone";
 import DownloadButtonFromS3 from "../../atoms/DownloadButtonFromS3";
 import {
@@ -33,12 +33,12 @@ import {
     fetchGetLeaveById,
     fetchUpdateLeave,
 } from "../../../store/feature/leaveSlice";
-import {ApproveIcon, DeclineIcon, CancelIcon, EditIcon, AddIcon} from "../../atoms/icons";
-import {fetchGetDefinitions} from "../../../store/feature/definitionSlice";
-import {clearToken, fetchGetAllUsersOfManager} from "../../../store/feature/authSlice";
-import {EDefinitionType} from "../../../models/IDefinitionType";
-import {idID} from "@mui/material/locale";
-import {myErrorColour, myLightColour} from "../../../util/MyColours";
+import { ApproveIcon, DeclineIcon, CancelIcon, EditIcon, AddIcon } from "../../atoms/icons";
+import { fetchGetDefinitions } from "../../../store/feature/definitionSlice";
+import { clearToken, fetchGetAllUsersOfManager } from "../../../store/feature/authSlice";
+import { EDefinitionType } from "../../../models/IDefinitionType";
+import { idID } from "@mui/material/locale";
+import { myErrorColour, myLightColour } from "../../../util/MyColours";
 
 const SideBarManagerLeaves = () => {
     const [selectedRowIds, setSelectedRowIds] = useState<number[]>([]);
@@ -68,16 +68,16 @@ const SideBarManagerLeaves = () => {
 
 
     const columns: GridColDef[] = [
-        {field: "fullName", headerName: "Name", flex: 1, headerAlign: "center"},
-        {field: "email", headerName: "Email", flex: 1, headerAlign: "center"},
-        {field: "description", headerName: "Description", flex: 2, headerAlign: "center"},
+        { field: "fullName", headerName: "Name", flex: 1, headerAlign: "center" },
+        { field: "email", headerName: "Email", flex: 1, headerAlign: "center" },
+        { field: "description", headerName: "Description", flex: 2, headerAlign: "center" },
 
-        {field: "startDate", headerName: "Start Date", flex: 1, headerAlign: "center"},
-        {field: "endDate", headerName: "End Date", flex: 1, headerAlign: "center"},
-        {field: "leaveType", headerName: "Leave Type", flex: 1, headerAlign: "center"},
-        {field: "isLeaveApproved", headerName: "Approval Status", headerAlign: "center", flex: 1},
-        {field: "approveDate", headerName: "Approval Date", flex: 1, headerAlign: "center"},
-        {field: "status", headerName: "Status", flex: 1, headerAlign: "center"},
+        { field: "startDate", headerName: "Start Date", flex: 1, headerAlign: "center" },
+        { field: "endDate", headerName: "End Date", flex: 1, headerAlign: "center" },
+        { field: "leaveType", headerName: "Leave Type", flex: 1, headerAlign: "center" },
+        { field: "isLeaveApproved", headerName: "Approval Status", headerAlign: "center", flex: 1 },
+        { field: "approveDate", headerName: "Approval Date", flex: 1, headerAlign: "center" },
+        { field: "status", headerName: "Status", flex: 1, headerAlign: "center" },
         {
             field: "attachedFile", headerName: "Document", headerAlign: "center", flex: 1,
             renderCell: (params) => (
@@ -88,7 +88,7 @@ const SideBarManagerLeaves = () => {
                     width: '100%',
                     height: '100%'
                 }}>
-                    {params.value && <DownloadButtonFromS3 fileKey={params.value}/>}
+                    {params.value && <DownloadButtonFromS3 fileKey={params.value} />}
                 </div>
             )
         },
@@ -102,18 +102,18 @@ const SideBarManagerLeaves = () => {
                 pageSize: 100,
                 searchText: searchText,
             })).then(() => {
-            dispatch(fetchGetDefinitions({
-                token: token,
-                definitionType: EDefinitionType.LEAVE_TYPE
-            })).then(() => {
-                dispatch(fetchGetAllUsersOfManager({
+                dispatch(fetchGetDefinitions({
                     token: token,
-                    page: 0,
-                    pageSize: 100,
-                    searchText: searchText,
-                }))
+                    definitionType: EDefinitionType.LEAVE_TYPE
+                })).then(() => {
+                    dispatch(fetchGetAllUsersOfManager({
+                        token: token,
+                        page: 0,
+                        pageSize: 100,
+                        searchText: searchText,
+                    }))
+                })
             })
-        })
             .catch(() => {
                 dispatch(clearToken());
             });
@@ -660,15 +660,15 @@ const SideBarManagerLeaves = () => {
     }
 
     return (
-        <div style={{height: "auto", width: "inherit"}}>
+        <div style={{ height: "auto", width: "inherit" }}>
             <TextField
                 label="Search By Description"
                 variant="outlined"
                 onChange={(event) => setSearchText(event.target.value)}
                 value={searchText}
-                style={{marginBottom: "1%", marginTop: "1%"}}
+                style={{ marginBottom: "1%", marginTop: "1%" }}
                 fullWidth
-                inputProps={{maxLength: 50}}
+                inputProps={{ maxLength: 50 }}
             />
             <DataGrid
                 slots={{
@@ -678,7 +678,7 @@ const SideBarManagerLeaves = () => {
                 columns={columns}
                 initialState={{
                     pagination: {
-                        paginationModel: {page: 1, pageSize: 5},
+                        paginationModel: { page: 1, pageSize: 5 },
                     },
                 }}
                 getRowClassName={(params) =>
@@ -710,86 +710,83 @@ const SideBarManagerLeaves = () => {
                 }}
                 rowSelectionModel={selectedRowIds}
             />
-            <Grid sx={{
-                flexGrow: 1,
-                display: 'flex',
-                justifyContent: 'flex-start',
-                alignItems: 'center',
-                marginTop: '2%',
-                marginBottom: '2%'
-            }}>
-                <Button
-                    onClick={handleApprove}
-                    variant="contained"
-                    color="success"
-                    disabled={loading || selectedRowIds.length === 0}
-                    startIcon={<ApproveIcon/>}
-                    sx={{marginRight: '1%', width: '200px'}}
-                >
-                    Approve
-                </Button>
-                <Button
-                    onClick={handleReject}
-                    variant="contained"
-                    color="error"
-                    disabled={loading || selectedRowIds.length === 0}
-                    startIcon={<DeclineIcon/>}
-                    sx={{marginRight: '1%', width: '200px'}}
-                >
-                    Reject
-                </Button>
-                <Button
-                    onClick={handleCancel}
-                    variant="contained"
-                    color="warning"
-                    disabled={loading || selectedRowIds.length === 0}
-                    startIcon={<CancelIcon/>}
-                    sx={{marginRight: '1%', width: '200px'}}
-                >
-                    Cancel
-                </Button>
-                <Button
-                    onClick={handleEditLeave}
-                    variant="contained"
-                    color="secondary"
-                    disabled={loading || selectedRowIds.length === 0}
-                    startIcon={<EditIcon/>}
-                    sx={{marginRight: '1%', width: '200px'}}
-                >
-                    Edit
-                </Button>
-            </Grid>
-            <Grid sx={{
-                flexGrow: 1,
-                display: 'flex',
-                justifyContent: 'flex-start',
-                alignItems: 'center',
-                marginTop: '2%',
-                marginBottom: '2%'
-            }}>
-                <Button
-                    variant="contained"
-                    color="secondary"
-                    onClick={handleUpdateAnnualLeaveDays}
-                    startIcon={<EditIcon/>}
-                    sx={{ marginRight: '1%', width: 'calc(200px * 2 + 1%)' }}
-                >
-                    Update Annual Leave Days
-                </Button>
-                <Button
-                    variant="contained"
-                    color="success"
-                    onClick={handleAssignLeave}
-                    startIcon={<AddIcon/>}
-                    sx={{marginRight: '1%', width: '200px'}}
-                    disabled={selectedRowIds.length === 0 || selectedRowIds.length > 1}
-                >
-                    Assign Leave
-                </Button>
+            <Grid container spacing={2} sx={{ flexGrow: 1, justifyContent: 'flex-start', alignItems: 'stretch', marginTop: '2%', marginBottom: '2%' }}>
+                <Grid item xs={12} sm={6} md={3} lg={2}>
+                    <Button
+                        onClick={handleApprove}
+                        variant="contained"
+                        color="success"
+                        disabled={loading || selectedRowIds.length === 0}
+                        startIcon={<ApproveIcon />}
+                        sx={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                    >
+                        Approve
+                    </Button>
+                </Grid>
+                <Grid item xs={12} sm={6} md={3} lg={2}>
+                    <Button
+                        onClick={handleReject}
+                        variant="contained"
+                        color="error"
+                        disabled={loading || selectedRowIds.length === 0}
+                        startIcon={<DeclineIcon />}
+                        sx={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                    >
+                        Reject
+                    </Button>
+                </Grid>
+                <Grid item xs={12} sm={6} md={3} lg={2}>
+                    <Button
+                        onClick={handleCancel}
+                        variant="contained"
+                        color="warning"
+                        disabled={loading || selectedRowIds.length === 0}
+                        startIcon={<CancelIcon />}
+                        sx={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                    >
+                        Cancel
+                    </Button>
+                </Grid>
+                <Grid item xs={12} sm={6} md={3} lg={2}>
+                    <Button
+                        onClick={handleEditLeave}
+                        variant="contained"
+                        color="secondary"
+                        disabled={loading || selectedRowIds.length === 0}
+                        startIcon={<EditIcon />}
+                        sx={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                    >
+                        Edit
+                    </Button>
+                </Grid>
+                <Grid item xs={12} sm={6} md={3} lg={2}>
+                    <Button
+                        variant="contained"
+                        color="secondary"
+                        onClick={handleUpdateAnnualLeaveDays}
+                        startIcon={<EditIcon />}
+                        sx={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                    >
+                        Update Annual Leave
+                    </Button>
+                </Grid>
+                <Grid item xs={12} sm={6} md={3} lg={2}>
+                    <Button
+                        variant="contained"
+                        color="success"
+                        onClick={handleAssignLeave}
+                        startIcon={<AddIcon />}
+                        sx={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                        disabled={selectedRowIds.length === 0 || selectedRowIds.length > 1}
+                    >
+                        Assign Leave
+                    </Button>
+                </Grid>
             </Grid>
 
+
             <Dialog open={openChangeAnnualLeaveDayModal} onClose={handleCloseChangeAnnualLeaveDayModal} fullWidth
-                    maxWidth='sm'>
+                maxWidth='sm'>
                 <DialogTitle>Update Annual Leave Days</DialogTitle>
                 <DialogContent>
                     <Box mt={2}>
@@ -820,11 +817,11 @@ const SideBarManagerLeaves = () => {
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleCloseChangeAnnualLeaveDayModal} color="error" variant="contained"
-                            sx={{marginRight: '17px', width: '100px'}}>
+                        sx={{ marginRight: '17px', width: '100px' }}>
                         Cancel
                     </Button>
                     <Button onClick={handleSaveLeaveDays} color="success" variant="contained"
-                            sx={{marginRight: '17px', width: '100px'}}>
+                        sx={{ marginRight: '17px', width: '100px' }}>
                         Save
                     </Button>
                 </DialogActions>
@@ -865,7 +862,7 @@ const SideBarManagerLeaves = () => {
                                             label="Leave Start Date"
                                             value={startDate ? dayjs(startDate) : null}
                                             onChange={(newValue) => setStartDate(newValue ? newValue.toDate() : null)}
-                                            sx={{width: '100%'}}
+                                            sx={{ width: '100%' }}
                                         />
                                     </LocalizationProvider>
                                 </Grid>
@@ -876,7 +873,7 @@ const SideBarManagerLeaves = () => {
                                             label="Leave End Date"
                                             value={endDate ? dayjs(endDate) : null}
                                             onChange={(newValue) => setEndDate(newValue ? newValue.toDate() : null)}
-                                            sx={{width: '100%'}}
+                                            sx={{ width: '100%' }}
                                         />
                                     </LocalizationProvider>
                                 </Grid>
@@ -888,7 +885,7 @@ const SideBarManagerLeaves = () => {
                                         onChange={e => setLeaveType(e.target.value)}
                                         required
                                         fullWidth
-                                        SelectProps={{native: true}}
+                                        SelectProps={{ native: true }}
                                     >
                                         {Object.values(leaveTypes).map(type => (
                                             <option key={type.name} value={type.id}>{type.name}</option>
@@ -906,17 +903,17 @@ const SideBarManagerLeaves = () => {
                     </Box>
                     {loading && (
                         <Box display="flex" justifyContent="center" alignItems="center" mb={2}>
-                            <CircularProgress/>
+                            <CircularProgress />
                         </Box>
                     )}
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleCloseAssignLeaveModal} color="error" variant="contained"
-                            sx={{marginRight: '17px', width: '100px'}}>
+                        sx={{ marginRight: '17px', width: '100px' }}>
                         Cancel
                     </Button>
                     <Button onClick={handleSaveLeave} color="success" variant="contained"
-                            sx={{marginRight: '17px', width: '100px'}}>
+                        sx={{ marginRight: '17px', width: '100px' }}>
                         Save
                     </Button>
                 </DialogActions>
@@ -944,7 +941,7 @@ const SideBarManagerLeaves = () => {
                                             label="Leave Start Date"
                                             value={dayjs(updateStartDate)}
                                             onChange={(newValue) => setUpdateStartDate(newValue ? newValue.toDate() : selectedLeave.startDate)}
-                                            sx={{width: '100%'}}
+                                            sx={{ width: '100%' }}
                                         />
                                     </LocalizationProvider>
                                 </Grid>
@@ -955,7 +952,7 @@ const SideBarManagerLeaves = () => {
                                             label="Leave End Date"
                                             value={dayjs(updateEndDate)}
                                             onChange={(newValue) => setUpdateEndDate(newValue ? newValue.toDate() : selectedLeave.startDate)}
-                                            sx={{width: '100%'}}
+                                            sx={{ width: '100%' }}
                                         />
                                     </LocalizationProvider>
                                 </Grid>
@@ -967,7 +964,7 @@ const SideBarManagerLeaves = () => {
                                         onChange={e => setLeaveType(e.target.value)}
                                         required
                                         fullWidth
-                                        SelectProps={{native: true}}
+                                        SelectProps={{ native: true }}
                                     >
                                         {Object.values(leaveTypes).map(type => (
                                             <option key={type.name} value={type.name}>{type.name}</option>
@@ -979,17 +976,17 @@ const SideBarManagerLeaves = () => {
                     </Box>
                     {loading && (
                         <Box display="flex" justifyContent="center" alignItems="center" mb={2}>
-                            <CircularProgress/>
+                            <CircularProgress />
                         </Box>
                     )}
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleCloseEditLeaveModal} color="error" variant="contained"
-                            sx={{marginRight: '17px', width: '100px'}}>
+                        sx={{ marginRight: '17px', width: '100px' }}>
                         Cancel
                     </Button>
                     <Button onClick={handleUpdateLeave} color="success" variant="contained"
-                            sx={{marginRight: '17px', width: '100px'}}>
+                        sx={{ marginRight: '17px', width: '100px' }}>
                         Save
                     </Button>
                 </DialogActions>

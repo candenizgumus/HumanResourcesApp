@@ -118,13 +118,18 @@ export default function AdminPage() {
     const [selectedIndex2, setSelectedIndex2] = useState(0);
     const page = useAppSelector((state) => state.auth.pageState);
     const user = useAppSelector((state) => state.auth.user);
-    const isBigForScreen = useMediaQuery('(max-width:1200px)');
+    const isBigForScreen1 = useMediaQuery('(max-width:1400px)');
+    const isBigForScreen2 = useMediaQuery('(max-width:1250px)');
+    const isMobile = useMediaQuery('(max-width:600px)');
     const handleDrawerOpen = () => {
         setOpen(true);
     };
 
     const handleDrawerClose = () => {
         setOpen(false);
+    };
+    const handleDrawerCloseOnMobile = () => {
+        if(isBigForScreen2){handleDrawerClose()}
     };
     const navigateToHome = () => {
         setSelectedIndex2(0);
@@ -163,26 +168,26 @@ export default function AdminPage() {
                         >
                             <MenuIcon />
                         </IconButton>
-                        {(open && isBigForScreen) ? null : (
+                        {(open && isBigForScreen2) ? null : (
                             <Typography variant="h6" sx={logoStyle}>
                                 <Button onClick={navigateToHome} color="inherit">
                                     <img src={logo} alt="logo" style={{ height: '52px' }} />
                                 </Button>
                             </Typography>
                         )}
-                        {(open && isBigForScreen) ? null : (
+                        {isMobile ? null : (
                             <Typography
-                                sx={{
-                                    position: 'absolute',
-                                    left: '50%',
-                                    transform: 'translateX(-50%)',
-                                    fontSize: '20px',
-                                }}
-                            >
-                                {page ? page : 'Dashboard'}
-                            </Typography>
+                            sx={{
+                                position: 'absolute',
+                                left: '50%',
+                                transform: 'translateX(-50%)',
+                                fontSize:  isBigForScreen1 ? '15px' : '20px',
+                            }}
+                        >
+                            {page ? page : 'Dashboard'}
+                        </Typography>
                         )}
-                        {!isBigForScreen && (
+                        {!isBigForScreen2 && (
                             <Box>
                                 <Typography variant="h5" component="div" >
                                     Hello, <strong>{user.name ? user.name : 'admin'}</strong>!
@@ -192,7 +197,7 @@ export default function AdminPage() {
                                 </Typography>
                             </Box>
                         )}
-                        {(open && isBigForScreen) ? null : (
+                        {(open && isBigForScreen2) ? null : (
                             <NotificationIcon />
                         )}
                         <NavbarProfile />
@@ -267,7 +272,7 @@ export default function AdminPage() {
                         ))}
                     </List>
                 </Drawer>
-                <Main sx={{ minHeight: '100vh'}} open={open}>
+                <Main sx={{ minHeight: '100vh'}} open={open} onClick={handleDrawerCloseOnMobile}>
                     <DrawerHeader />
                     <Grid container spacing={2}>
                         {pageState === 'Dashboard' ? <ManagerHomeContent open={open} /> : <ManagerMenuContentRenderer open={open} />}

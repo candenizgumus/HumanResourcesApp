@@ -60,7 +60,7 @@ const SideBarSlideDatas = () => {
     const [loading, setLoading] = useState(false);
     const [isActivating, setIsActivating] = useState(false);
     const [slideIds, setSlideIds] = useState<number[]>([]);
-    const [selectedSlideId, setSelectedSlideId] = useState(0)
+    const [selectedSlideId, setSelectedSlideId] = useState('')
     const timeDatas = useAppSelector((state) => state.timeData.timeDatas);
 
     useEffect(() => {
@@ -80,11 +80,11 @@ const SideBarSlideDatas = () => {
         dispatch(fetchGetUsernamesSlides({token, userName: selectedUsername})).then(data => {
             setSlideIds(data.payload)
         })
-        setSelectedSlideId(0)
+        setSelectedSlideId('')
     }, [selectedUsername]);
 
     useEffect(() => {
-        if (selectedSlideId !== 0) {
+        if (selectedSlideId) {
             dispatch(fetchGetAllTimeDatasByUsernameAndSlideId({token, userName: selectedUsername, slideId: selectedSlideId}))
         }
 
@@ -122,40 +122,53 @@ const SideBarSlideDatas = () => {
                 }}
             />
 
-            <Grid container spacing={2} >
-                <Grid item xs={12} sm={12} md={12} lg={6} sx={{ mt: 3 }}>
-                    <FormControl variant="outlined" fullWidth={true}>
-                        <InputLabel>{'Please Select Username'}</InputLabel>
-                        <Select
-                            value={selectedUsername}
-                            onChange={event => setSelectedUsername(event.target.value as string)}
-                            label="Usernames"
-                        >
-                            {Object.values(userNames).map(name => (
-                                <MenuItem key={name} value={name}>
-                                    {name}
-                                </MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
-                </Grid>
-                <Grid item xs={12} sm={12} md={12} lg={6} sx={{ mt: 3 }}>
-                    <FormControl disabled={selectedUsername === ''} variant="outlined" fullWidth={true}>
-                        <InputLabel>{'Please Select Slide Id'}</InputLabel>
-                        <Select
-                            value={selectedSlideId}
-                            onChange={event => setSelectedSlideId(Number(event.target.value))}
-                            label="Slide Ids"
-                        >
-                            {Object.values(slideIds).map(name => (
-                                <MenuItem key={name} value={name}>
-                                    {name}
-                                </MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
-                </Grid>
-            </Grid>
+<Grid container spacing={2}>
+    <Grid item xs={12} sm={12} md={12} lg={6} sx={{ mt: 3 }}>
+        <FormControl variant="outlined" fullWidth={true}>
+            <InputLabel>{'Please Select Username'}</InputLabel>
+            <Select
+                value={selectedUsername}
+                onChange={event => setSelectedUsername(event.target.value as string)}
+                label="Usernames"
+            >
+                {Object.values(userNames).length === 0 ? (
+                    <MenuItem disabled>
+                        {'No usernames available'}
+                    </MenuItem>
+                ) : (
+                    Object.values(userNames).map(name => (
+                        <MenuItem key={name} value={name}>
+                            {name}
+                        </MenuItem>
+                    ))
+                )}
+            </Select>
+        </FormControl>
+    </Grid>
+    <Grid item xs={12} sm={12} md={12} lg={6} sx={{ mt: 3 }}>
+        <FormControl disabled={selectedUsername === ''} variant="outlined" fullWidth={true}>
+            <InputLabel>{'Please Select Slide Id'}</InputLabel>
+            <Select
+                value={selectedSlideId}
+                onChange={event => setSelectedSlideId(event.target.value)}
+                label="Slide Ids"
+            >
+                {Object.values(slideIds).length === 0 ? (
+                    <MenuItem disabled>
+                        {'No slide IDs available'}
+                    </MenuItem>
+                ) : (
+                    Object.values(slideIds).map(id => (
+                        <MenuItem key={id} value={id}>
+                            {id}
+                        </MenuItem>
+                    ))
+                )}
+            </Select>
+        </FormControl>
+    </Grid>
+</Grid>
+
         </div>
     );
 

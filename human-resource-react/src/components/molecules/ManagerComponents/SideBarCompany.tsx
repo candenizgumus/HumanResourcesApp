@@ -20,7 +20,7 @@ import styled from "@emotion/styled";
 import { IFile } from "../../../models/IFile";
 import { CloudUpload } from "@mui/icons-material";
 import { myErrorColour, myLightColour } from '../../../util/MyColours';
-import {ICountries} from "../../../models/ICountries";
+import { ICountries } from "../../../models/ICountries";
 
 const SideBarCompany: React.FC = () => {
 
@@ -141,7 +141,7 @@ const SideBarCompany: React.FC = () => {
 
     return (
 
-        <Grid container spacing={2}>
+        <Grid container spacing={2} sx={{ flexGrow: 1, justifyContent: 'flex-start', alignItems: 'stretch', margin: '0', padding: '0' }}>
             <Grid item xs={12}>
                 <Box
                     component="form"
@@ -201,78 +201,67 @@ const SideBarCompany: React.FC = () => {
 
             </Grid>
             <Grid item xs={6}>
-                <Box
-                    component="form"
-                    onSubmit={handleSubmit}
-                    sx={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: 2,
-                        maxWidth: 800,
-                        margin: 'auto',
-                        padding: 2,
-                    }}
-                >
-
-                    <TextField
-                        label='Company Name'
-                        name="name"
-                        value={name}
-                        onChange={event => setName(event.target.value)}
-                        fullWidth
-                        required
-                        inputProps={{ maxLength: 50 }}
-                    />
-                    <TextField
-                        label='Description'
-                        name="description"
-                        value={description}
-                        onChange={event => setDescription(event.target.value)}
-                        fullWidth
-                        required
-                        inputProps={{ maxLength: 50 }}
-                    />
-
-                    <FormControl variant="outlined">
-                        <InputLabel>{'Please Select Your Country'}</InputLabel>
-                        <Select
+                <Grid container spacing={2} sx={{ flexGrow: 1, justifyContent: 'flex-start', alignItems: 'stretch' }}>
+                    <Grid item xs={12}>
+                        <TextField
+                            label='Company Name'
+                            name="name"
+                            value={name}
+                            onChange={event => setName(event.target.value)}
+                            fullWidth
                             required
-                            value={country}
-                            onChange={event => setCountry(event.target.value as string)}
-                            label="Country"
-                        >
-                            {Object.values(ICountries).map(country => (
-                                <MenuItem key={country.valueOf()} value={country.valueOf()}>
-                                    {country.valueOf()}
-                                </MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
-                    <Button onClick={updateCompany} sx={{ mt: 5 }} type="button" variant="contained" color="success">
-                        Update Company
-                    </Button>
-                </Box>
+                            inputProps={{ maxLength: 50 }}
+                        />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <TextField
+                            label='Description'
+                            name="description"
+                            value={description}
+                            onChange={event => setDescription(event.target.value)}
+                            fullWidth
+                            required
+                            inputProps={{ maxLength: 50 }}
+                        />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <FormControl variant="outlined" sx={{ width: '100%' }}>
+                            <InputLabel>{'Please Select Your Country'}</InputLabel>
+                            <Select
+                                required
+                                value={country}
+                                onChange={event => setCountry(event.target.value as string)}
+                                label="Country"
+                                
+                            >
+                                {Object.values(ICountries).map(country => (
+                                    <MenuItem key={country.valueOf()} value={country.valueOf()}>
+                                        {country.valueOf()}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Button onClick={updateCompany} sx={{ width: '100%' }} type="button" variant="contained" color="success">
+                            Update Company
+                        </Button>
+                    </Grid>
+                </Grid>
             </Grid>
             <Grid item xs={6}>
-                <Box
-                    sx={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: 2,
-                        maxWidth: 800,
-                        margin: 'auto',
-                        padding: 2,
-                    }}
-                >
-                    <TextField
-                        label='Number Of Employees'
-                        name="numberOfEmployee"
-                        value={numberOfEmployee}
-                        fullWidth
-                        disabled={true}
+                <Grid container spacing={2} sx={{ flexGrow: 1, justifyContent: 'flex-start', alignItems: 'stretch' }}>
+                    <Grid item xs={12}>
+                        <TextField
+                            label='Number Of Employees'
+                            name="numberOfEmployee"
+                            value={numberOfEmployee}
+                            fullWidth
+                            disabled={true}
 
-                    />
-                </Box>
+                        />
+                    </Grid>
+                </Grid>
             </Grid>
         </Grid>
     );

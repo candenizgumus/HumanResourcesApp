@@ -5,7 +5,7 @@ import SlideCard from './SlideCard';
 import { useDispatch } from 'react-redux';
 import { fetchGetAllSlides } from '../../../store/feature/slideSlice';
 
-const SlideComponent = (props: { open: boolean}) => {
+const SideBarSlides = (props: { open: boolean}) => {
     const slides = useAppSelector((state) => state.slide.slides);
     const token = useAppSelector((state) => state.auth.token);
     const dispatch: HumanResources = useDispatch();
@@ -42,4 +42,4 @@ const SlideComponent = (props: { open: boolean}) => {
     );
 };
 
-export default SlideComponent;
+export default SideBarSlides;

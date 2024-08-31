@@ -14,7 +14,7 @@ const initialSlideState: ISlideState = {
 };
 
 export interface ISlide {
-    id: number,
+    id: string,
     companyId: number,
     companyName: string,
     mobileImageUrls: string[],
@@ -90,7 +90,7 @@ export interface IStoreTimeData {
     userIP: string,
     imageTimes: {},
     userName: string,
-    slideId: number,
+    slideId: string,
     companyId:number
 }
 export const fetchStoreTimeData = createAsyncThunk(
@@ -121,7 +121,7 @@ export const fetchStoreTimeData = createAsyncThunk(
 
 export const fetchGetSlideById = createAsyncThunk(
     'slide/fetchGetSlideById',
-    async (slideId: number) => {
+    async (slideId: string) => {
         const response = await fetch(RestApis.slideService + '/get-by-id?id=' + slideId, {
             method: 'POST',
             headers: {
@@ -139,7 +139,7 @@ export const fetchGetSlideById = createAsyncThunk(
 
 export interface IfetchDeleteSlide {
     token: string,
-    slideId: number,
+    slideId: string,
 }
 export const fetchDeleteSlide = createAsyncThunk(
     'slide/fetchDeleteSlide',

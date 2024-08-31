@@ -1,17 +1,17 @@
-import React, {useState, ChangeEvent, useEffect} from 'react';
-import {TextField, Button, Box, FormControl, InputLabel, Select, MenuItem, Grid} from '@mui/material';
-import {useDispatch} from 'react-redux';
+import React, { useState, ChangeEvent, useEffect } from 'react';
+import { TextField, Button, Box, FormControl, InputLabel, Select, MenuItem, Grid } from '@mui/material';
+import { useDispatch } from 'react-redux';
 import {
     fetchDeleteDefinition,
     fetchGetDefinitionsWithPage,
     fetchSaveDefinition
 } from '../../store/feature/definitionSlice';
-import {EDefinitionType} from '../../models/IDefinitionType';
+import { EDefinitionType } from '../../models/IDefinitionType';
 import Swal from "sweetalert2";
-import {HumanResources, useAppSelector} from '../../store';
-import {DataGrid, GridColDef, GridRowSelectionModel, GridToolbar} from "@mui/x-data-grid";
-import {AddIcon, DeleteIcon} from '../atoms/icons';
-import {myErrorColour, myLightColour} from '../../util/MyColours';
+import { HumanResources, useAppSelector } from '../../store';
+import { DataGrid, GridColDef, GridRowSelectionModel, GridToolbar } from "@mui/x-data-grid";
+import { AddIcon, DeleteIcon } from '../atoms/icons';
+import { myErrorColour, myLightColour } from '../../util/MyColours';
 
 
 const UserForm: React.FC = () => {
@@ -29,8 +29,8 @@ const UserForm: React.FC = () => {
 
     // Conditionally include the "Predefined" column
     const columns: GridColDef[] = [
-        {field: "name", headerName: "Name", flex: 1, headerAlign: "center"},
-        {field: "definitionType", headerName: "Type", flex: 1, headerAlign: "center"},
+        { field: "name", headerName: "Name", flex: 1, headerAlign: "center" },
+        { field: "definitionType", headerName: "Type", flex: 1, headerAlign: "center" },
         ...(user?.userType === 'MANAGER' ? [
             {
                 field: "companyId",
@@ -167,15 +167,15 @@ const UserForm: React.FC = () => {
     };
 
     return (
-        <div style={{height: 'auto', width: "inherit"}}>
+        <div style={{ height: 'auto', width: "inherit" }}>
             <TextField
                 label="Search By Name"
                 variant="outlined"
                 onChange={(event) => setSearchText(event.target.value)}
                 value={searchText}
-                style={{marginBottom: "1%", marginTop: "1%"}}
+                style={{ marginBottom: "1%", marginTop: "1%" }}
                 fullWidth
-                inputProps={{maxLength: 50}}
+                inputProps={{ maxLength: 50 }}
             />
             <DataGrid
                 paginationMode="server"
@@ -216,38 +216,35 @@ const UserForm: React.FC = () => {
                 }}
                 rowSelectionModel={selectedRowIds}
             />
-            <Grid sx={{
-                flexGrow: 1,
-                display: 'flex',
-                justifyContent: 'flex-start',
-                alignItems: 'center',
-                marginTop: '2%',
-                marginBottom: '2%'
-            }}>
-                <Button
-                    onClick={handleDeleteClick}
-                    variant="contained"
-                    color="error"
-                    disabled={selectedRowIds.length === 0}
-                    startIcon={<DeleteIcon/>}
-                    sx={{marginRight: '1%', width: '200px'}}
-                >
-                    Delete
-                </Button>
-                <Button
-                    onClick={handleCreateClick}
-                    variant="contained"
-                    color="success"
-                    disabled={loading || name === ''}
-                    startIcon={<AddIcon/>}
-                    sx={{marginRight: '1%', width: '200px'}}
-                >
-                    Create
-                </Button>
+            <Grid container spacing={2} sx={{ flexGrow: 1, justifyContent: 'flex-start', alignItems: 'stretch', marginTop: '2%', marginBottom: '2%' }}>
+                <Grid item xs={12} sm={6} md={3} lg={2}>
+                    <Button
+                        onClick={handleDeleteClick}
+                        variant="contained"
+                        color="error"
+                        disabled={selectedRowIds.length === 0}
+                        startIcon={<DeleteIcon />}
+                        sx={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                    >
+                        Delete
+                    </Button>
+                </Grid>
+                <Grid item xs={12} sm={6} md={3} lg={2}>
+                    <Button
+                        onClick={handleCreateClick}
+                        variant="contained"
+                        color="success"
+                        disabled={loading || name === ''}
+                        startIcon={<AddIcon />}
+                        sx={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                    >
+                        Create
+                    </Button>
+                </Grid>
             </Grid>
-            <Grid item xs={12}>
-                <Grid container spacing={2}>
-                    <Grid item xs={6}>
+
+                <Grid container spacing={2} sx={{ flexGrow: 1, justifyContent: 'flex-start', alignItems: 'stretch', marginTop: '2%', marginBottom: '2%' }}>
+                    <Grid item xs={12} sm={6} md={6} lg={6}>
                         <FormControl fullWidth required>
                             <InputLabel>Definition Type</InputLabel>
                             <Select
@@ -262,7 +259,7 @@ const UserForm: React.FC = () => {
                             </Select>
                         </FormControl>
                     </Grid>
-                    <Grid item xs={6}>
+                    <Grid item xs={12} sm={6} md={6} lg={6}>
                         <TextField
                             label="Definition Name"
                             name="name"
@@ -270,11 +267,10 @@ const UserForm: React.FC = () => {
                             onChange={e => setName(e.target.value)}
                             required
                             fullWidth
-                            inputProps={{maxLength: 64}}
+                            inputProps={{ maxLength: 64 }}
                         />
                     </Grid>
                 </Grid>
-            </Grid>
         </div>
     );
 };

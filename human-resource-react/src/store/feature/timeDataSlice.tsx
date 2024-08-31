@@ -51,7 +51,7 @@ export const fetchGetUsernamesSlides = createAsyncThunk(
 export interface IfetchGetAllTimeDatasByUsernameAndSlideId {
     token: string,
     userName: string,
-    slideId: number,
+    slideId: string,
 
 }
 

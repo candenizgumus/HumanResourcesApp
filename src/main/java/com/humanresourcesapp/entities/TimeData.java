@@ -5,6 +5,7 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.util.Map;
+import java.util.UUID;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -19,7 +20,7 @@ public class TimeData extends BaseEntity {
     @Column(name = "id")
     private Long id;
     String userName;
-    Long slideId;
+    UUID slideId;
     @ElementCollection
     Map<String, Double> imageTimes;
     String userIp;

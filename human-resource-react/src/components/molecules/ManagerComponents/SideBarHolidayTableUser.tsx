@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import {DataGrid, GridColDef, GridRowSelectionModel, GridToolbar} from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridRowSelectionModel, GridToolbar } from '@mui/x-data-grid';
 import { HumanResources, RootState, useAppSelector } from '../../../store';
 import {
     fetchChangeHolidayStatus,
@@ -128,12 +128,12 @@ export default function SideBarHolidayTableUser() {
                 .then(() => {
                     dispatch(fetchHolidaysEmployee(token));
                 }).then(() => {
-                Swal.fire({
-                    icon: 'success',
-                    text: 'Status has been changed',
-                    confirmButtonColor: myLightColour,
-                    cancelButtonColor: myErrorColour,
-                })
+                    Swal.fire({
+                        icon: 'success',
+                        text: 'Status has been changed',
+                        confirmButtonColor: myLightColour,
+                        cancelButtonColor: myErrorColour,
+                    })
                 })
         });
         setSelectedRowIds([]);
@@ -176,7 +176,7 @@ export default function SideBarHolidayTableUser() {
             startDate: holidayStartDate,
             endDate: holidayEndDate,
             token,
-            holidayId:selectedHolidayId
+            holidayId: selectedHolidayId
         }))
             .then(data => {
                 if (data.payload.message) {
@@ -231,37 +231,43 @@ export default function SideBarHolidayTableUser() {
                 }}
                 rowSelectionModel={selectedRowIds}
             />
-            <Grid sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-start', alignItems: 'center', marginTop: '2%', marginBottom: '2%' }}>
-                <Button
-                    onClick={handleConfirmDeletion}
-                    variant="contained"
-                    color="error"
-                    sx={{ marginRight: '1%', width: '200px' }}
-                    startIcon={<DeleteIcon />}
-                    disabled={selectedRowIds.length === 0}
-                >
-                    Delete
-                </Button>
-                <Button
-                    onClick={handleConfirmChangeStatus}
-                    variant="contained"
-                    color="warning"
-                    sx={{ marginRight: '1%', width: '200px' }}
-                    startIcon={<EditIcon />}
-                    disabled={selectedRowIds.length === 0}
-                >
-                    Change Status
-                </Button>
-                <Button
-                    variant="contained"
-                    color="success"
-                    disabled={holidayStartDate === null || holidayEndDate === null || holidayName === '' || holidayType === ''}
-                    onClick={handleSubmit}
-                    sx={{ marginRight: '1%', width: '200px' }}
-                    startIcon={<AddIcon />}
-                >
-                    Create/Add
-                </Button>
+            <Grid container spacing={2} sx={{ flexGrow: 1, justifyContent: 'flex-start', alignItems: 'stretch', marginTop: '2%', marginBottom: '2%' }}>
+                <Grid item xs={12} sm={6} md={3} lg={2}>
+                    <Button
+                        onClick={handleConfirmDeletion}
+                        variant="contained"
+                        color="error"
+                        sx={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                        startIcon={<DeleteIcon />}
+                        disabled={selectedRowIds.length === 0}
+                    >
+                        Delete
+                    </Button>
+                </Grid>
+                <Grid item xs={12} sm={6} md={3} lg={2}>
+                    <Button
+                        onClick={handleConfirmChangeStatus}
+                        variant="contained"
+                        color="warning"
+                        sx={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                        startIcon={<EditIcon />}
+                        disabled={selectedRowIds.length === 0}
+                    >
+                        Change Status
+                    </Button>
+                </Grid>
+                <Grid item xs={12} sm={6} md={3} lg={2}>
+                    <Button
+                        variant="contained"
+                        color="success"
+                        disabled={holidayStartDate === null || holidayEndDate === null || holidayName === '' || holidayType === ''}
+                        onClick={handleSubmit}
+                        sx={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                        startIcon={<AddIcon />}
+                    >
+                        Create/Add
+                    </Button>
+                </Grid>
             </Grid>
             <Grid item xs={12}>
                 <Grid container spacing={2}>
@@ -270,7 +276,7 @@ export default function SideBarHolidayTableUser() {
                             Add From Menu
                         </Typography>
                     </Grid>
-                    <Grid item xs={6}>
+                    <Grid item xs={12} sm={6} md={6} lg={6}>
                         <FormControl fullWidth>
                             <InputLabel>Select Holiday</InputLabel>
                             <Select
@@ -295,7 +301,7 @@ export default function SideBarHolidayTableUser() {
                             Create Custom
                         </Typography>
                     </Grid>
-                    <Grid item xs={6}>
+                    <Grid item xs={12} sm={6} md={6} lg={6}>
                         <TextField
                             label="Holiday Name"
                             value={holidayName}
@@ -306,7 +312,7 @@ export default function SideBarHolidayTableUser() {
                             inputProps={{ maxLength: 50 }}
                         />
                     </Grid>
-                    <Grid item xs={6}>
+                    <Grid item xs={12} sm={6} md={6} lg={6}>
                         <FormControl fullWidth required>
                             <InputLabel>Holiday Type</InputLabel>
                             <Select
@@ -321,7 +327,7 @@ export default function SideBarHolidayTableUser() {
                             </Select>
                         </FormControl>
                     </Grid>
-                    <Grid item xs={6}>
+                    <Grid item xs={12} sm={6} md={6} lg={6}>
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DatePicker
                                 label="Holiday Start Date"
@@ -332,7 +338,7 @@ export default function SideBarHolidayTableUser() {
                             />
                         </LocalizationProvider>
                     </Grid>
-                    <Grid item xs={6}>
+                    <Grid item xs={12} sm={6} md={6} lg={6}>
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DatePicker
                                 label="Holiday End Date"

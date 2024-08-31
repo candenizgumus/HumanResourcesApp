@@ -54,7 +54,7 @@ const RouterPage = () => {
                     <Route path={'/password-reset'} element={<PasswordResetPage />} />
                     <Route path="/user-stories/:companyName" element={<UserStoryDetailPage />} />
                     <Route path="/slides/:slideId/:companyId/:userName" element={<SlideDetail />} />
-                    <Route path="/slides/:slideId" element={<ShowSlide />} />
+                    {/*<Route path="/slides/:slideId" element={<ShowSlide />} />*/}
                 </Routes>
             </Suspense>
         </Router>

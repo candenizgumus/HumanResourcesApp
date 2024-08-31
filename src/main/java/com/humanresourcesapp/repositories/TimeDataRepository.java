@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.UUID;
 
 @Repository
 public interface TimeDataRepository extends JpaRepository<TimeData, Long> {
@@ -13,10 +14,10 @@ public interface TimeDataRepository extends JpaRepository<TimeData, Long> {
     List<String> findAllDistinctUsernames(Long companyId);
 
     @Query("SELECT DISTINCT t.slideId FROM TimeData t WHERE t.userName = :username")
-    List<Long> findAllUsernamesSlides(String username);
+    List<UUID> findAllUsernamesSlides(String username);
 
-    List<TimeData> findAllByUserNameAndSlideIdAndCompanyId(String username,Long slideId,Long companyId);
+    List<TimeData> findAllByUserNameAndSlideIdAndCompanyId(String username,UUID slideId,Long companyId);
 
 
-    void deleteAllBySlideId(Long id);
+    void deleteAllBySlideId(UUID id);
 }

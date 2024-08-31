@@ -22,7 +22,7 @@ function UserStoryDetailPage() {
     const { slideId: slideIdParam, userName: userNameParam, companyId: companyIdParam } = useParams();
     const userName = userNameParam || ''; // Default value to avoid undefined
     const companyId = Number(companyIdParam) || 0; // Default value to avoid undefined
-    const slideId = Number(slideIdParam) || 0;
+    const slideId = slideIdParam || '';
     const [slide, setSlide] = useState<ISlide | null>(null);
 
     useEffect(() => {
@@ -108,7 +108,7 @@ function UserStoryDetailPage() {
 
 
     useEffect(() => {
-        dispatch(fetchGetSlideById(Number(slideId))).unwrap().then((slide) => {
+        dispatch(fetchGetSlideById(slideId)).unwrap().then((slide) => {
             setSlide(slide);
             setLoading(false);
         }).catch((error) => {

@@ -121,8 +121,8 @@ public class SlideService {
         return imageFiles;
     }
 
-    public Slide getById( Long id) {
-        return slideRepository.findById(id).orElseThrow(() -> new HumanResourcesAppException(ErrorType.SLIDE_NOT_FOUND));
+    public Slide getById( String id) {
+        return slideRepository.findById(UUID.fromString(id)).orElseThrow(() -> new HumanResourcesAppException(ErrorType.SLIDE_NOT_FOUND));
     }
 
     public ResponseEntity<String> deleteDirectory(String directoryPath) {
@@ -151,14 +151,14 @@ public class SlideService {
     }
 
     @Transactional
-    public Boolean delete(Long id)
+    public Boolean delete(String id)
     {
 
-        Slide slide = slideRepository.findById(id).orElseThrow(() -> new HumanResourcesAppException(ErrorType.SLIDE_NOT_FOUND));
+        Slide slide = slideRepository.findById(UUID.fromString(id)).orElseThrow(() -> new HumanResourcesAppException(ErrorType.SLIDE_NOT_FOUND));
         deleteDirectory(slide.getDesktopImagesPath());
         deleteDirectory(slide.getMobileImagesPath());
         timeDataService.deleteTimeDataBySlideId(id);
-        slideRepository.deleteById(id);
+        slideRepository.deleteById(UUID.fromString(id));
 
         return true;
     }

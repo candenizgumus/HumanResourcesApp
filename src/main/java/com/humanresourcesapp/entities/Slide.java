@@ -18,22 +18,19 @@ import java.util.UUID;
 @Table(name = "slides")
 public class Slide {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id", updatable = false, nullable = false)
-    private UUID id;
-
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    Long id;
     @ElementCollection
     private List<String> mobileImageUrls;
     @ElementCollection
     private List<String> desktopImageUrls;
-
     String mobileImagesPath;
     String desktopImagesPath;
-    private String sehir;
-    private String ilce;
-    private String mahalle;
-    private String projeksiyon;
-    private String konsept;
+    private String city;
+    private String district;
+    private String neighborhood;
+    private String projection;
+    private String concept;
     private Long companyId;
 
 }

@@ -29,7 +29,7 @@ public class TimeDataController
 
     @PostMapping(GET_USERNAMES_SLIDES)
     @PreAuthorize("hasAnyAuthority('MANAGER')")
-    public ResponseEntity<List<String>> getUsernamesSlides(String userName) {
+    public ResponseEntity<List<Long>> getUsernamesSlides(String userName) {
         return ResponseEntity.ok(timeDataService.getUsernamesSlides(userName));
     }
 

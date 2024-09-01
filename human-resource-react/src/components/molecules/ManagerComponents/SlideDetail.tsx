@@ -14,6 +14,9 @@ import { ArrowBack, ArrowForward } from '@mui/icons-material';
 import { NavBar } from '../PreAuthorizedPageComponents/NavBar';
 import FooterElement from '../PreAuthorizedPageComponents/FooterElement';
 import SliderMessage from '../../atoms/SliderMessage';
+import EncoderDecoder from "../../../util/EncoderDecoder";
+import Swal from "sweetalert2";
+import {myErrorColour, myLightColour} from "../../../util/MyColours";
 
 const Root = styled('div')(({ theme }) => ({
     display: 'flex',
@@ -42,15 +45,14 @@ function UserStoryDetailPage() {
     const dispatch: HumanResources = useDispatch();
     const { slideId: slideIdParam, userName: userNameParam, companyId: companyIdParam } = useParams();
     const userName = userNameParam || ''; // Default value to avoid undefined
-    const companyId = Number(companyIdParam) || 0; // Default value to avoid undefined
-    const slideId = slideIdParam || '';
+    const companyId = companyIdParam || ''; // Default value to avoid undefined
+    const slideId = slideIdParam || ''; // Default value to avoid undefined
     const [slide, setSlide] = useState<ISlide | null>(null);
     const [scrolled, setScrolled] = useState(false);
     const handleScroll = () => {
         const offset = window.scrollY;
         setScrolled(offset > 0);
     };
-
     useEffect(() => {
         window.addEventListener('scroll', handleScroll);
         return () => {
@@ -107,9 +109,27 @@ function UserStoryDetailPage() {
                 };
 
                 try {
-                    console.log('Sending time data:', { updatedImageTimes, userIP, userName, slideId });
-                    const response = await dispatch(fetchStoreTimeData({ imageTimes: updatedImageTimes, userIP, userName, slideId, companyId })).unwrap();
-                    console.log('Time data sent successfully:', response);
+
+                    try {
+                        const slideIdDecoded = EncoderDecoder.decode(slideId);
+                        const companyIdDecoded = EncoderDecoder.decode(companyId);
+                        const userNameDecoded = EncoderDecoder.decodeString(userName);
+
+                        console.log('Sending time data:', { updatedImageTimes, userIP, userName, slideId });
+                        const response = await dispatch(fetchStoreTimeData({ imageTimes: updatedImageTimes, userIP, userName:userNameDecoded, slideId: slideIdDecoded, companyId: companyIdDecoded })).unwrap();
+                        console.log('Time data sent successfully:', response);
+                        // Devam eden işlemler
+                    } catch (error) {
+                        Swal.fire({
+                            title: "Error!",
+                            text: "There is error occured.",
+                            icon: "error",
+                            confirmButtonText: "OK",
+                            confirmButtonColor: myLightColour,
+                        });
+
+                    }
+
                 } catch (error) {
                     console.error('Error sending time data:', error);
                 }
@@ -141,7 +161,8 @@ function UserStoryDetailPage() {
 
 
     useEffect(() => {
-        dispatch(fetchGetSlideById(slideId)).unwrap().then((slide) => {
+        const decodedSlideId = EncoderDecoder.decode(slideId);
+        dispatch(fetchGetSlideById(decodedSlideId)).unwrap().then((slide) => {
             setSlide(slide);
             setLoading(false);
         }).catch((error) => {

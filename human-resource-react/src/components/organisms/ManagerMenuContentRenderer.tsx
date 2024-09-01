@@ -62,7 +62,7 @@ export const ManagerMenuContentRenderer = (props: { open: boolean }) => {
                 {page === 'Slides' && <SlideComponent open={props.open} />}
                 {page === 'Slide Datas' && <SideBarSlideDatas />}
                 {page.startsWith('Slide:') && (
-                    <ShowSlide slideId={page.split(':')[1]} />
+                    <ShowSlide slideId={(Number)(page.split(':')[1])} />
                 )}
 
             </Grid>

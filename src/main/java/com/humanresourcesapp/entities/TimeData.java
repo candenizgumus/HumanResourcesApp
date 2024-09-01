@@ -20,7 +20,7 @@ public class TimeData extends BaseEntity {
     @Column(name = "id")
     private Long id;
     String userName;
-    UUID slideId;
+    Long slideId;
     @ElementCollection
     Map<String, Double> imageTimes;
     String userIp;

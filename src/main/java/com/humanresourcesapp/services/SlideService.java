@@ -1,5 +1,6 @@
 package com.humanresourcesapp.services;
 
+import com.humanresourcesapp.dto.requests.SlideRequestDto;
 import com.humanresourcesapp.entities.Slide;
 import com.humanresourcesapp.entities.User;
 import com.humanresourcesapp.exception.ErrorType;
@@ -49,10 +50,10 @@ public class SlideService {
                 .mobileImagesPath("uploads/"+mobileImagesPath).build());
     }
 
-    public List<Slide> getAll() {
+    public List<Slide> getAll(SlideRequestDto dto) {
         String email = UserInfoSecurityContext.getUserInfoFromSecurityContext();
         User manager = userService.findByEmail(email).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
-        return slideRepository.findAllByCompanyId(manager.getCompanyId());
+        return slideRepository.findAllByCityContainingIgnoreCaseAndDistrictContainingIgnoreCaseAndNeighborhoodContainingIgnoreCaseAndProjectionContainingIgnoreCaseAndConceptContainingIgnoreCaseAndCompanyId(dto.city(),dto.district(),dto.neighborhood(),dto.projection(),dto.concept(),manager.getCompanyId());
     }
 
     public List<String> getImages(MultipartFile file) {

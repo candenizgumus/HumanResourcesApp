@@ -19,11 +19,11 @@ export interface ISlide {
     companyName: string,
     mobileImageUrls: string[],
     desktopImageUrls: string[],
-    sehir: string,
-    ilce: string,
-    mahalle: string,
-    projeksiyon: string,
-    konsept: string
+    city: string,
+    district: string,
+    neighborhood: string,
+    projection: string,
+    concept: string
 }
 
 interface ISlidePayload {
@@ -50,15 +50,30 @@ export const fetchUploadFile = createAsyncThunk(
     }
 );
 
+interface IfetchGetAllSlides {
+    token: string;
+    city: string,
+    district: string,
+    neighborhood: string,
+    projection: string,
+    concept: string
+}
 export const fetchGetAllSlides = createAsyncThunk(
     'slide/fetchGetAllSlides',
-    async (token: string) => {
+    async (payload: IfetchGetAllSlides) => {
         const response = await fetch(RestApis.slideService + '/get-all', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ` + token
+                'Authorization': `Bearer ` + payload.token
             },
+            body: JSON.stringify({
+                city: payload.city,
+                district: payload.district,
+                neighborhood: payload.neighborhood,
+                projection: payload.projection,
+                concept: payload.concept
+            })
         });
 
         if (!response.ok) {

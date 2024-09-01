@@ -194,17 +194,17 @@ const SideBarManagerBonus = () => {
                 }}
             />
             <Grid container spacing={2} sx={{ flexGrow: 1, justifyContent: 'flex-start', alignItems: 'stretch', marginTop: '2%', marginBottom: '2%' }}>
-                <Grid item xs={12} sm={12} md={4} lg={3}>
-                <Button
-                    onClick={handleDelete}
-                    variant="contained"
-                    color="error"
-                    disabled={isActivating || selectedRowIds.length === 0}
-                    startIcon={<DeleteIcon />}
-                    sx={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-                >
-                    Delete
-                </Button>
+                <Grid item xs={12} sm={6} md={3} lg={2}>
+                    <Button
+                        onClick={handleDelete}
+                        variant="contained"
+                        color="error"
+                        disabled={selectedRowIds.length === 0}
+                        startIcon={<DeleteIcon />}
+                        sx={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                    >
+                        Delete
+                    </Button>
                 </Grid>
             </Grid>
         </div>

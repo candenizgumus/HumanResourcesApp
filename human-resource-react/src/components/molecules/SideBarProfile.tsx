@@ -1,11 +1,11 @@
 import React, { useState, ChangeEvent, FormEvent, useEffect } from 'react';
-import { TextField, Button, Box, Grid, InputLabel, Select, MenuItem, FormControl, Avatar, Typography } from '@mui/material';
+import { TextField, Button, Box, Grid, InputLabel, Select, MenuItem, FormControl, Avatar, Typography, CssBaseline } from '@mui/material';
 import { HumanResources, useAppSelector } from "../../store";
 import { IUser } from "../../models/IUser";
 import {
     fetchFindCompanyNameAndManagerNameOfUser,
     fetchFindUserByToken,
-     fetchUpdateUser
+    fetchUpdateUser
 } from "../../store/feature/authSlice";
 import { useDispatch } from "react-redux";
 
@@ -22,6 +22,7 @@ import { IUpdateUserProfile } from '../../models/IUpdateUserProfile';
 import { fetchGetDefinitions, IDefinition } from '../../store/feature/definitionSlice';
 import { EDefinitionType } from '../../models/IDefinitionType';
 import { myErrorColour, myLightColour } from '../../util/MyColours';
+import ThemeElement from '../atoms/ThemeElement';
 
 
 const SideBarProfile = () => {
@@ -265,9 +266,8 @@ const SideBarProfile = () => {
 
     console.log(user);
     return (
-
-
-        <Grid container spacing={2}>
+        <ThemeElement children={
+        <Grid container spacing={2} sx={{ flexGrow: 1, justifyContent: 'flex-start', alignItems: 'stretch', padding: '2%' }}>
             <Grid item xs={12}>
                 <Box
                     component="form"
@@ -317,7 +317,7 @@ const SideBarProfile = () => {
                     />
                 </Box>
             </Grid>
-            <Grid sx={{ justifyContent: 'center' ,marginY: 3, marginLeft:0.8}} container spacing={2}>
+            <Grid sx={{ justifyContent: 'center', marginY: 3, marginLeft: 0.8 }} container spacing={2}>
                 <Grid >
                     {error && (
                         <Typography color="error">{error}</Typography>
@@ -336,217 +336,218 @@ const SideBarProfile = () => {
                     </Button>
                 </Grid>
             </Grid>
-            <Grid item xs={6}>
-                <Box
-                    component="form"
-                    sx={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: 2,
-                        maxWidth: 800,
-                        margin: 'auto',
-                        padding: 2,
-                    }}
-                >
-
-                    <TextField
-                        label='Name'
-                        name="name"
-                        value={formState.name}
-                        onChange={handleChange}
-                        fullWidth
-                        required
-                        inputProps={{ maxLength: 50 }}
-
-                    />
-                    <TextField
-                        label='Surname'
-                        name="surname"
-                        value={formState.surname}
-                        onChange={handleChange}
-                        fullWidth
-                        required
-                        inputProps={{ maxLength: 50 }}
-                    />
-                    <TextField
-                        label='Phone'
-                        name="phone"
-                        value={formState.phone}
-                        onChange={handleChange}
-                        fullWidth
-                        required
-                        type={"tel"}
-                        inputProps={{ maxLength: 50 }}
-                    />
-
-                    <TextField
-                        label='Title'
-                        name="title"
-                        value={formState.title}
-                        onChange={handleChange}
-                        fullWidth
-                        required
-                        inputProps={{ maxLength: 50 }}
-                    />
-                    <TextField
-                        label='Location'
-                        name="location"
-                        value={formState.location}
-                        onChange={handleChange}
-                        fullWidth
-                        required
-                        inputProps={{ maxLength: 50 }}
-                    />
-
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <DatePicker
-                            label="Birth Date"
-                            value={birthDate ? dayjs(birthDate) : null}
-                            onChange={(newValue) => setBirthDate(newValue ? newValue.toDate() : null)}
+            <Grid item xs={12} sm={6} md={6} lg={6}>
+                <Grid container spacing={2} sx={{ flexGrow: 1, justifyContent: 'flex-start', alignItems: 'stretch' }}>
+                    <Grid item xs={12}>
+                        <TextField
+                            label='Name'
+                            name="name"
+                            value={formState.name}
+                            onChange={handleChange}
+                            fullWidth
+                            required
+                            inputProps={{ maxLength: 50 }}
 
                         />
-                    </LocalizationProvider>
-
-                    <FormControl variant="outlined">
-                        <InputLabel>{'Please Select Your Position'}</InputLabel>
-                        <Select
-                            value={selectedPosition}
-                            onChange={event => setSelectedPosition(event.target.value as string)}
-                            label="Position"
-                        >
-                            {Object.values(positions).map(position => (
-                                <MenuItem key={position.name} value={position.name}>
-                                    {position.name}
-                                </MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
-                    <Button onClick={updateUserProfile} sx={{ mt: 5 }} type="button" variant="contained" color="success">
-                        Update Profile
-                    </Button>
-                </Box>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <TextField
+                            label='Surname'
+                            name="surname"
+                            value={formState.surname}
+                            onChange={handleChange}
+                            fullWidth
+                            required
+                            inputProps={{ maxLength: 50 }}
+                        />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <TextField
+                            label='Phone'
+                            name="phone"
+                            value={formState.phone}
+                            onChange={handleChange}
+                            fullWidth
+                            required
+                            type={"tel"}
+                            inputProps={{ maxLength: 50 }}
+                        />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <TextField
+                            label='Title'
+                            name="title"
+                            value={formState.title}
+                            onChange={handleChange}
+                            fullWidth
+                            required
+                            inputProps={{ maxLength: 50 }}
+                        />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <TextField
+                            label='Location'
+                            name="location"
+                            value={formState.location}
+                            onChange={handleChange}
+                            fullWidth
+                            required
+                            inputProps={{ maxLength: 50 }}
+                        />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <DatePicker
+                                label="Birth Date"
+                                value={birthDate ? dayjs(birthDate) : null}
+                                onChange={(newValue) => setBirthDate(newValue ? newValue.toDate() : null)}
+                                sx={{ width: '100%' }}
+                            />
+                        </LocalizationProvider>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <FormControl variant="outlined" sx={{ width: '100%' }}>
+                            <InputLabel>{'Please Select Your Position'}</InputLabel>
+                            <Select
+                                value={selectedPosition}
+                                onChange={event => setSelectedPosition(event.target.value as string)}
+                                label="Position"
+                            >
+                                {Object.values(positions).map(position => (
+                                    <MenuItem key={position.name} value={position.name}>
+                                        {position.name}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Button onClick={updateUserProfile} sx={{ width: '100%' }} type="button" variant="contained" color="success">
+                            Update Profile
+                        </Button>
+                    </Grid>
+                </Grid>
             </Grid>
-            <Grid item xs={6}>
-                <Box
-                    component="form"
-                    sx={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: 2,
-                        maxWidth: 800,
-                        margin: 'auto',
-                        padding: 2,
-                    }}
-                >
+            <Grid item xs={12} sm={6} md={6} lg={6}>
+                <Grid container spacing={2} sx={{ flexGrow: 1, justifyContent: 'flex-start', alignItems: 'stretch'}}>
+                    <Grid item xs={12}>
+                        <TextField
+                            label="Email"
+                            name="email"
+                            value={user.email}
+                            fullWidth
+                            disabled
+                        />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <TextField
+                            label="User Type"
+                            name="userType"
+                            value={userType}
+                            fullWidth
+                            disabled
+                        />
+                    </Grid>
 
-                    <TextField
-                        label="Email"
-                        name="email"
-                        value={user.email}
-                        fullWidth
-                        disabled
-                    />
-                    <TextField
-                        label="User Type"
-                        name="userType"
-                        value={userType}
-                        fullWidth
-                        disabled
-                    />
-                    
                     {
                         user.employeeType && (
-                            <TextField
-                                label="Employe Type"
-                                name="employeeTypeDefinitionId"
-                                value={user.employeeType}
-                                fullWidth
-                                disabled
-                            />
+                            <Grid item xs={12}>
+                                <TextField
+                                    label="Employe Type"
+                                    name="employeeTypeDefinitionId"
+                                    value={user.employeeType}
+                                    fullWidth
+                                    disabled
+                                />
+                            </Grid>
                         )
                     }
                     {
                         user.sector && (
-                            <TextField
-                                label="Sector"
-                                name="sector"
-                                value={sector}
-                                fullWidth
-                                disabled
-                            />
+                            <Grid item xs={12}>
+                                <TextField
+                                    label="Sector"
+                                    name="sector"
+                                    value={sector}
+                                    fullWidth
+                                    disabled
+                                />
+                            </Grid>
                         )
                     }
 
                     {
                         user.companyId &&
                         (
-                            <TextField
-                                label="Company Name"
-                                name="companyName"
-                                value={companyName}
-                                fullWidth
-                                disabled
-                            />
+                            <Grid item xs={12}>
+                                <TextField
+                                    label="Company Name"
+                                    name="companyName"
+                                    value={companyName}
+                                    fullWidth
+                                    disabled
+                                />
+                            </Grid>
                         )
                     }
                     {
                         user.subscriptionType && (
-                            <TextField
-                                label="Subscription Type"
-                                name="subscriptionType"
-                                value={subscriptionType}
-                                fullWidth
-                                disabled
-                            />
+                            <Grid item xs={12}>
+                                <TextField
+                                    label="Subscription Type"
+                                    name="subscriptionType"
+                                    value={subscriptionType}
+                                    fullWidth
+                                    disabled
+                                />
+                            </Grid>
                         )
                     }
                     {
                         user.subscriptionStartDate && (
-                            <TextField
-                                label="Subscription Start Date"
-                                name="subscriptionStartDate"
-                                value={subscriptionStartDate}
-                                fullWidth
-                                disabled
-                            />
+                            <Grid item xs={12}>
+                                <TextField
+                                    label="Subscription Start Date"
+                                    name="subscriptionStartDate"
+                                    value={subscriptionStartDate}
+                                    fullWidth
+                                    disabled
+                                />
+                            </Grid>
                         )
                     }
 
                     {
                         user.subscriptionEndDate && (
-                            <TextField
-                                label="Subscription End Date"
-                                name="subscriptionEndDate"
-                                value={subscriptionEndDate}
-                                fullWidth
-                                disabled
-                            />
+                            <Grid item xs={12}>
+                                <TextField
+                                    label="Subscription End Date"
+                                    name="subscriptionEndDate"
+                                    value={subscriptionEndDate}
+                                    fullWidth
+                                    disabled
+                                />
+                            </Grid>
                         )
                     }
 
                     {
                         user.hireDate && (
-                            <TextField
-                                label="Hired Date"
-                                name="hireDate"
-                                value={hireDate}
-                                fullWidth
-                                disabled
-                            />
+                            <Grid item xs={12}>
+                                <TextField
+                                    label="Hired Date"
+                                    name="hireDate"
+                                    value={hireDate}
+                                    fullWidth
+                                    disabled
+                                />
+                            </Grid>
                         )
                     }
-
-
-                </Box>
+                </Grid>
             </Grid>
-        </Grid>
-
-
-
-
-
-
-
+        </Grid >
+        } />
     );
 };
 

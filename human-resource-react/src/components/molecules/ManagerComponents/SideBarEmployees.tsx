@@ -394,7 +394,7 @@ export default function SideBarEmployees() {
                 rowSelectionModel={selectedRowIds}
             />
             <Grid container spacing={2} sx={{ flexGrow: 1, justifyContent: 'flex-start', alignItems: 'stretch', marginTop: '2%', marginBottom: '2%' }}>
-                <Grid item xs={12} sm={12} md={12} lg={2}>
+                <Grid item xs={12} sm={6} md={3} lg={2}>
                     <Button
                         onClick={handleActivateEmployee}
                         variant="contained"
@@ -406,7 +406,7 @@ export default function SideBarEmployees() {
                         Activate
                     </Button>
                 </Grid>
-                <Grid item xs={12} sm={12} md={12} lg={2}>
+                <Grid item xs={12} sm={6} md={3} lg={2}>
                     <Button
                         onClick={handleDeleteEmployee}
                         variant="contained"
@@ -418,7 +418,7 @@ export default function SideBarEmployees() {
                         Delete
                     </Button>
                 </Grid>
-                <Grid item xs={12} sm={12} md={12} lg={2}>
+                <Grid item xs={12} sm={6} md={3} lg={2}>
                     <Button
                         onClick={handleOnClickEditEmployee}
                         variant="contained"
@@ -430,7 +430,7 @@ export default function SideBarEmployees() {
                         Edit Employee
                     </Button>
                 </Grid>
-                <Grid item xs={12} sm={12} md={12} lg={2}>
+                <Grid item xs={12} sm={6} md={3} lg={2}>
                     <Button
                         onClick={handleOnClickAddDocument}
                         variant="contained"
@@ -442,7 +442,7 @@ export default function SideBarEmployees() {
                         Add Document
                     </Button>
                 </Grid>
-                <Grid item xs={12} sm={12} md={12} lg={2}>
+                <Grid item xs={12} sm={6} md={3} lg={2}>
                     <Button
                         onClick={openAddBonus}
                         variant="contained"
@@ -454,7 +454,7 @@ export default function SideBarEmployees() {
                         Add Bonus
                     </Button>
                 </Grid>
-                <Grid item xs={12} sm={12} md={12} lg={2}>
+                <Grid item xs={12} sm={6} md={3} lg={2}>
                     <Button
                         onClick={handleSetShifts}
                         variant="contained"
@@ -466,7 +466,7 @@ export default function SideBarEmployees() {
                         Set Shifts
                     </Button>
                 </Grid>
-                <Grid item xs={12} sm={12} md={12} lg={2}>
+                <Grid item xs={12} sm={6} md={3} lg={2}>
                     <Button
                         onClick={handleAssignItem}
                         variant="contained"

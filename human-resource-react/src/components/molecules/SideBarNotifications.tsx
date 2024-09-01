@@ -250,27 +250,31 @@ export default function NotificationsPage() {
                 }}
                 rowSelectionModel={selectedRowIds}
             />
-            <Grid sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-start', alignItems: 'center', marginTop: '2%', marginBottom: '2%' }}>
-                <Button
-                    onClick={handleDeleteClick}
-                    variant="contained"
-                    color="error"
-                    disabled={selectedRowIds.length === 0}
-                    startIcon={<Icons.DeleteIcon />}
-                    sx={{ marginRight: '1%', width:'200px' }}
-                >
-                    Delete
-                </Button>
-                <Button
-                    onClick={handleMarkAsReadClick}
-                    variant="contained"
-                    color="secondary"
-                    disabled={selectedRowIds.length === 0 || allSelectedRead} // Disable if all selected are read
-                    startIcon={<Icons.MarkAsReadIcon />}
-                    sx={{ marginRight: '1%', width:'200px' }}
-                >
-                    Mark as Read
-                </Button>
+            <Grid container spacing={2} sx={{ flexGrow: 1, justifyContent: 'flex-start', alignItems: 'stretch', marginTop: '2%', marginBottom: '2%' }}>
+                <Grid item xs={12} sm={6} md={3} lg={2}>
+                    <Button
+                        onClick={handleDeleteClick}
+                        variant="contained"
+                        color="error"
+                        disabled={selectedRowIds.length === 0}
+                        startIcon={<Icons.DeleteIcon />}
+                        sx={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                    >
+                        Delete
+                    </Button>
+                </Grid>
+                <Grid item xs={12} sm={6} md={3} lg={2}>
+                    <Button
+                        onClick={handleMarkAsReadClick}
+                        variant="contained"
+                        color="secondary"
+                        disabled={selectedRowIds.length === 0 || allSelectedRead} // Disable if all selected are read
+                        startIcon={<Icons.MarkAsReadIcon />}
+                        sx={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                    >
+                        Mark as Read
+                    </Button>
+                </Grid>
             </Grid>
         </div>
     );

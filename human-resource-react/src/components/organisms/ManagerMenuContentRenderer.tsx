@@ -1,5 +1,5 @@
-import { Grid} from "@mui/material";
-import { useAppSelector} from "../../store";
+import { Grid } from "@mui/material";
+import { useAppSelector } from "../../store";
 import SideBarProfile from "../molecules/SideBarProfile";
 import SideBarAddEmployee from "../molecules/ManagerComponents/SideBarAddEmployee";
 import SideBarEmployees from "../molecules/ManagerComponents/SideBarEmployees";
@@ -16,50 +16,55 @@ import PersonalDocumetList from "../molecules/ManagerComponents/SideBarPersonalD
 import SideBarManagerBonus from "../molecules/ManagerComponents/SideBarManagerBonus";
 import SideBarCreateManager from "../molecules/ManagerComponents/SideBarCreateManager";
 import SideBarCreateDefinition from "../molecules/SideBarCreateDefinition";
-import {SetShifts} from "../molecules/ManagerComponents/SetShifts";
+import { SetShifts } from "../molecules/ManagerComponents/SetShifts";
 import SideBarCompanyItems from "../molecules/ManagerComponents/SideBarCompanyItems";
-import {EmployeeHomeContent} from "../molecules/EmployeeComponents/EmployeeHomeContent";
+import { EmployeeHomeContent } from "../molecules/EmployeeComponents/EmployeeHomeContent";
 import DeactivateAccount from "../molecules/DeactivateAccount";
 import AddCompanyItemAssignment from "../molecules/ManagerComponents/AddCompanyItemAssignment";
 import SideBarTask from "../molecules/ManagerComponents/SideBarTask";
-import  UploadFile  from "../molecules/ManagerComponents/UploadFile"
-import SlideComponent from "../molecules/ManagerComponents/SlideComponent";
+import UploadFile from "../molecules/ManagerComponents/SideBarUploadFileForSlide"
+import SlideComponent from "../molecules/ManagerComponents/SideBarSlides";
 import SideBarSlideDatas from "../molecules/ManagerComponents/SideBarSlideDatas";
-export const ManagerMenuContentRenderer = (props:{open:boolean}) => {
+import ShowSlide from "../molecules/ManagerComponents/SideBarDisplaySlide"
+export const ManagerMenuContentRenderer = (props: { open: boolean }) => {
     const page = useAppSelector((state) => state.auth.pageState);
 
     return (
         <>
             <Grid item xs={12}>
                 {page === 'Holidays' && <SideBarHolidayTableUser />}
-                {page === 'Profile' && <SideBarProfile/>}
-                {page === 'Add Employee' && <SideBarAddEmployee/>}
-                {page === 'Employees' && <SideBarEmployees/>}
-                {page === 'Notifications' && <SideBarNotifications/>}
-                {page === 'Company' && <SideBarCompany/>}
-                {page === 'Add Comment' && <SideBarCreateComment/>}
-                {page === 'Expenditure' && <SideBarManagerExpenditures/>}
-                {page === 'Change Password' && <ChangePassword/>}
-                {page === 'Edit Employee' && <EditEmployee/>}
+                {page === 'Profile' && <SideBarProfile />}
+                {page === 'Add Employee' && <SideBarAddEmployee />}
+                {page === 'Employees' && <SideBarEmployees />}
+                {page === 'Notifications' && <SideBarNotifications />}
+                {page === 'Company' && <SideBarCompany />}
+                {page === 'Add Comment' && <SideBarCreateComment />}
+                {page === 'Expenditure' && <SideBarManagerExpenditures />}
+                {page === 'Change Password' && <ChangePassword />}
+                {page === 'Edit Employee' && <EditEmployee />}
                 {// page === 'Add Document' && <AddDocument/>
                 }
-                {page === 'Leaves' && <SideBarManagerLeaves/>}
-                {page === 'Payments' && <SideBarPayments/>}
-                {page === 'Personal Documents' && <PersonalDocumetList/>}
-                {page === 'Bonus' && <SideBarManagerBonus/>}
-                {page === 'Create Manager' && <SideBarCreateManager/>}
-                {page === 'Shift' && <SetShifts/>}
+                {page === 'Leaves' && <SideBarManagerLeaves />}
+                {page === 'Payments' && <SideBarPayments />}
+                {page === 'Personal Documents' && <PersonalDocumetList />}
+                {page === 'Bonus' && <SideBarManagerBonus />}
+                {page === 'Create Manager' && <SideBarCreateManager />}
+                {page === 'Shift' && <SetShifts />}
                 {// page === 'Add Item' && <AddCompanyItem/>
                 }
-                {page === 'Company Items' && <SideBarCompanyItems/>}
-                {page === 'Create Definition' && <SideBarCreateDefinition/>}
-                {page === 'Dashboard' && <EmployeeHomeContent open={false}/>}
-                {page === 'Deactivate Account' && <DeactivateAccount/>}
-                {page === 'Assign Item' && <AddCompanyItemAssignment/>}
-                {page === 'Task' && <SideBarTask/>}
-                {page === 'Create Slide' && <UploadFile/>}
-                {page === 'Slides' && <SlideComponent open/>}
-                {page === 'Slide Datas' && <SideBarSlideDatas/>}
+                {page === 'Company Items' && <SideBarCompanyItems />}
+                {page === 'Create Definition' && <SideBarCreateDefinition />}
+                {page === 'Dashboard' && <EmployeeHomeContent open={false} />}
+                {page === 'Deactivate Account' && <DeactivateAccount />}
+                {page === 'Assign Item' && <AddCompanyItemAssignment />}
+                {page === 'Task' && <SideBarTask />}
+                {page === 'Create Slide' && <UploadFile />}
+                {page === 'Slides' && <SlideComponent open={props.open} />}
+                {page === 'Slide Datas' && <SideBarSlideDatas />}
+                {page.startsWith('Slide:') && (
+                    <ShowSlide slideId={page.split(':')[1]} />
+                )}
+
             </Grid>
         </>
     );

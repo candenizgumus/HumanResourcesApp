@@ -385,37 +385,43 @@ const SideBarManagerExpenditures = () => {
                 rowSelectionModel={selectedRowIds}
             />
 
-            <Grid sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-start', alignItems: 'center', marginTop: '2%', marginBottom: '2%' }}>
-                <Button
-                    onClick={handleApprove}
-                    variant="contained"
-                    color="success"
-                    disabled={loading || selectedRowIds.length === 0}
-                    startIcon={<ApproveIcon />}
-                    sx={{ marginRight: '1%', width: '200px' }}
-                >
-                    Approve
-                </Button>
-                <Button
-                    onClick={handleReject}
-                    variant="contained"
-                    color="error"
-                    disabled={isActivating || selectedRowIds.length === 0}
-                    startIcon={<DeclineIcon />}
-                    sx={{ marginRight: '1%', width: '200px' }}
-                >
-                    Reject
-                </Button>
-                <Button
-                    onClick={handleCancel}
-                    variant="contained"
-                    color="warning"
-                    disabled={isActivating || selectedRowIds.length === 0}
-                    startIcon={<CancelIcon />}
-                    sx={{ marginRight: '1%', width: '200px' }}
-                >
-                    Cancel
-                </Button>
+            <Grid container spacing={2} sx={{ flexGrow: 1, justifyContent: 'flex-start', alignItems: 'stretch', marginTop: '2%', marginBottom: '2%' }}>
+                <Grid item xs={12} sm={6} md={3} lg={2}>
+                    <Button
+                        onClick={handleApprove}
+                        variant="contained"
+                        color="success"
+                        disabled={loading || selectedRowIds.length === 0}
+                        startIcon={<ApproveIcon />}
+                        sx={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                    >
+                        Approve
+                    </Button>
+                </Grid>
+                <Grid item xs={12} sm={6} md={3} lg={2}>
+                    <Button
+                        onClick={handleReject}
+                        variant="contained"
+                        color="error"
+                        disabled={isActivating || selectedRowIds.length === 0}
+                        startIcon={<DeclineIcon />}
+                        sx={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                    >
+                        Reject
+                    </Button>
+                </Grid>
+                <Grid item xs={12} sm={6} md={3} lg={2}>
+                    <Button
+                        onClick={handleCancel}
+                        variant="contained"
+                        color="warning"
+                        disabled={isActivating || selectedRowIds.length === 0}
+                        startIcon={<CancelIcon />}
+                        sx={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                    >
+                        Cancel
+                    </Button>
+                </Grid>
             </Grid>
         </div>
     );

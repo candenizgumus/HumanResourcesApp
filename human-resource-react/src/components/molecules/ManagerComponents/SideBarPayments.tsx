@@ -239,36 +239,39 @@ export default function SideBarPayments() {
                 rowSelectionModel={selectedRowIds}
             />
 
-            <Grid sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-start', alignItems: 'center', marginTop: '2%', marginBottom: '2%' }}>
-                <Button
-                    onClick={handleDelete}
-                    variant="contained"
-                    color="error"
-                    disabled={selectedRowIds.length === 0 || loading}
-                    startIcon={<DeleteIcon />}
-                    sx={{ marginRight: '1%', width: '200px' }}
-                >
-                    Delete
-                </Button>
-                <Button
-                    onClick={handleSavePayment}
-                    variant="contained"
-                    color="success"
-                    disabled={payment === 0 || description.length === 0 || paymentDate === null || isActivating}
-                    startIcon={<AddIcon />}
-                    sx={{ marginRight: '1%', width: '200px' }}
-                >
-                    Add
-                </Button>
+            <Grid container spacing={2} sx={{ flexGrow: 1, justifyContent: 'flex-start', alignItems: 'stretch', marginTop: '2%', marginBottom: '2%' }}>
+                <Grid item xs={12} sm={6} md={3} lg={2}>
+                    <Button
+                        onClick={handleDelete}
+                        variant="contained"
+                        color="error"
+                        disabled={selectedRowIds.length === 0 || loading}
+                        startIcon={<DeleteIcon />}
+                        sx={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                    >
+                        Delete
+                    </Button>
+                </Grid>
+                <Grid item xs={12} sm={6} md={3} lg={2}>
+                    <Button
+                        onClick={handleSavePayment}
+                        variant="contained"
+                        color="success"
+                        disabled={payment === 0 || description.length === 0 || paymentDate === null || isActivating}
+                        startIcon={<AddIcon />}
+                        sx={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                    >
+                        Add
+                    </Button>
+                </Grid>
             </Grid>
-
-            <Grid container spacing={2}  direction="row">
-            <Grid item xs={12}>
+            <Grid container spacing={2} sx={{ flexGrow: 1, justifyContent: 'flex-start', alignItems: 'stretch', marginTop: '2%', marginBottom: '2%' }}>
+                <Grid item xs={12}>
                     <Typography variant="h6" sx={{ fontWeight: "bold" }}>
                         Add Payment
                     </Typography>
                 </Grid>
-                <Grid item xs={4}>
+                <Grid item xs={12} sm={6} md={6} lg={6}>
                     <TextField
                         label="Description"
                         name="description"
@@ -280,7 +283,7 @@ export default function SideBarPayments() {
                     />
                 </Grid>
 
-                <Grid item xs={4}>
+                <Grid item xs={12} sm={6} md={6} lg={6}>
                     <FormControl fullWidth>
                         <InputLabel htmlFor="outlined-adornment-amount">Payment Amount</InputLabel>
                         <OutlinedInput
@@ -295,7 +298,7 @@ export default function SideBarPayments() {
                         />
                     </FormControl>
                 </Grid>
-                <Grid item xs={4}>
+                <Grid item xs={12} sm={6} md={6} lg={6}>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DatePicker
                             label="Payment Date"

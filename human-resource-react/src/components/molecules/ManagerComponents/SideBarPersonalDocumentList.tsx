@@ -6,7 +6,7 @@ import {
     fetchDeletePersonalDocument,
     fetchPersonalDocuments,
 } from "../../../store/feature/personalDocumentSlice";
-import {DataGrid, GridColDef, GridRowSelectionModel, GridToolbar} from "@mui/x-data-grid";
+import { DataGrid, GridColDef, GridRowSelectionModel, GridToolbar } from "@mui/x-data-grid";
 import DownloadButtonFromS3 from "../../atoms/DownloadButtonFromS3";
 import Swal from "sweetalert2";
 import { IPersonalDocument } from "../../../models/IPersonalDocument";
@@ -138,17 +138,19 @@ const SideBarPersonalDocumentList: React.FC = () => {
                 }}
                 rowSelectionModel={selectedRowIds}
             />
-            <Grid sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-start', alignItems: 'center', marginTop: '2%', marginBottom: '2%' }}>
-                <Button
-                    onClick={handleDelete}
-                    variant="contained"
-                    color="error"
-                    disabled={selectedRowIds.length === 0}
-                    startIcon={<DeleteIcon />}
-                    sx={{ marginRight: '1%', width: '200px' }}
-                >
-                    Delete
-                </Button>
+            <Grid container spacing={2} sx={{ flexGrow: 1, justifyContent: 'flex-start', alignItems: 'stretch', marginTop: '2%', marginBottom: '2%' }}>
+                <Grid item xs={12} sm={6} md={3} lg={2}>
+                    <Button
+                        onClick={handleDelete}
+                        variant="contained"
+                        color="error"
+                        disabled={selectedRowIds.length === 0}
+                        startIcon={<DeleteIcon />}
+                        sx={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                    >
+                        Delete
+                    </Button>
+                </Grid>
             </Grid>
         </div>
 

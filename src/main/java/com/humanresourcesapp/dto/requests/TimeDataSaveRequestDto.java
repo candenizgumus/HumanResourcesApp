@@ -6,7 +6,7 @@ import java.util.Map;
 @Builder
 public record TimeDataSaveRequestDto(
         String userName,
-        Long slideId,
+        String slideId,
         Map<String, Double> imageTimes,  // Changed to Map<String, Double>
         String userIp,
         Long companyId

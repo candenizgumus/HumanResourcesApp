@@ -11,15 +11,13 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { ArrowBack, ArrowForward } from '@mui/icons-material';
 
-function UserStoryDetailPage() {
+function ShowSlide(props: { slideId: string}) {
     const [isMobile, setIsMobile] = useState(window.matchMedia('(max-width: 768px)').matches);
     const [imageTimes, setImageTimes] = useState<Record<number, number>>({});
     const [currentImage, setCurrentImage] = useState<number | undefined>(undefined);
     const [startTime, setStartTime] = useState(Date.now());
     const [loading, setLoading] = useState(true);
     const dispatch: HumanResources = useDispatch();
-    const { slideId: slideIdParam, userName: userNameParam } = useParams();
-    const slideId = Number(slideIdParam) || 0;
     const [slide, setSlide] = useState<ISlide | null>(null);
 
 
@@ -35,14 +33,14 @@ function UserStoryDetailPage() {
     }, []);
 
     useEffect(() => {
-        dispatch(fetchGetSlideById(Number(slideId))).unwrap().then((slide) => {
+        dispatch(fetchGetSlideById(props.slideId)).unwrap().then((slide) => {
             setSlide(slide);
             setLoading(false);
         }).catch((error) => {
             console.error('Error fetching slide:', error);
             setLoading(false);
         });
-    }, [dispatch, slideId]);
+    }, [dispatch, props.slideId]);
 
     const CustomNextArrow = ({ onClick }: { onClick: () => void }) => {
         return (
@@ -129,7 +127,7 @@ function UserStoryDetailPage() {
         <ThemeElement>
             <Container>
                 <CssBaseline />
-                <Box>
+                <Box sx={{boxShadow: '0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19)'}}>
                     {isMobile ? (
                         <Box>
                             {slide.mobileImageUrls.length > 0 ? (
@@ -169,4 +167,4 @@ function UserStoryDetailPage() {
     );
 }
 
-export default UserStoryDetailPage;
+export default ShowSlide;

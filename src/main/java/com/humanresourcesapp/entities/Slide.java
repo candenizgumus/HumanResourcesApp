@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @Builder
@@ -17,9 +18,9 @@ import java.util.List;
 @Table(name = "slides")
 public class Slide {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id", updatable = false, nullable = false)
+    private UUID id;
 
     @ElementCollection
     private List<String> mobileImageUrls;

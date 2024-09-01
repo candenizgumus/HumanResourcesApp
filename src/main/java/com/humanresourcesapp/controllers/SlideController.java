@@ -61,7 +61,7 @@ public class SlideController {
 
     @DeleteMapping(DELETE)
     @PreAuthorize("hasAnyAuthority('MANAGER')")
-    public ResponseEntity<Boolean> delete(Long id) {
+    public ResponseEntity<Boolean> delete(String id) {
         return ResponseEntity.ok(slideService.delete(id));
     }
 
@@ -74,15 +74,19 @@ public class SlideController {
 
     @PostMapping(GET_BY_ID)
     @CrossOrigin("*")
-    public ResponseEntity<Slide> getById(Long id) {
+    public ResponseEntity<Slide> getById(String id) {
         return ResponseEntity.ok(slideService.getById(id));
     }
 
     @GetMapping("/get-ip")
     @CrossOrigin("*")
-    public ResponseEntity<Map<String, String> >getUserIP(HttpServletRequest request) {
+    public ResponseEntity<Map<String, String>> getUserIP(HttpServletRequest request) {
         String ipAddress = request.getHeader("X-Forwarded-For");
-        if (ipAddress == null || ipAddress.isEmpty()) {
+
+        // If there are multiple IPs, the user's IP is the first one in the list
+        if (ipAddress != null && !ipAddress.isEmpty()) {
+            ipAddress = ipAddress.split(",")[0].trim();
+        } else {
             ipAddress = request.getRemoteAddr();
         }
 
@@ -91,6 +95,7 @@ public class SlideController {
 
         return ResponseEntity.ok(response);
     }
+
 
     @PostMapping("/store-time-data")
     @CrossOrigin("*")
@@ -111,7 +116,7 @@ public class SlideController {
         timeDataService.save(TimeDataSaveRequestDto.builder()
                 .userName(userName)
                 .imageTimes(imageTimes)
-                .slideId(Long.parseLong(slideId))
+                .slideId(slideId)
                         .companyId(Long.parseLong(companyId))
                 .userIp(userIp).build());
 

@@ -219,7 +219,7 @@ const SideBarAddEmployee: React.FC = () => {
     return (
 
 
-        <Grid container spacing={2}>
+        <Grid container spacing={2} sx={{ flexGrow: 1, justifyContent: 'flex-start', alignItems: 'stretch', margin:'0', padding:'0'}}>
             <Grid item xs={12}>
                 <Box
                     component="form"
@@ -266,7 +266,6 @@ const SideBarAddEmployee: React.FC = () => {
                         onChange={handleFileChange}
                     />
                 </Box>
-
             </Grid>
             <Grid sx={{ justifyContent: 'center', marginY: 3, marginLeft: 0.8 }} container spacing={2}>
                 <Grid>
@@ -275,20 +274,8 @@ const SideBarAddEmployee: React.FC = () => {
                     )}
                 </Grid>
             </Grid>
-            <Grid item xs={6}>
-                <Box
-                    component="form"
-                    onSubmit={handleSubmit}
-                    sx={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: 2,
-                        maxWidth: 800,
-                        margin: 'auto',
-                        padding: 2,
-                    }}
-                >
-
+            <Grid container spacing={2} sx={{ flexGrow: 1, justifyContent: 'flex-start', alignItems: 'stretch', padding:'2%' }}>
+                <Grid item xs={12} sm={6} md={6} lg={6}>
                     <TextField
                         label='Name'
                         name="name"
@@ -298,6 +285,8 @@ const SideBarAddEmployee: React.FC = () => {
                         required
                         inputProps={{ maxLength: 50 }}
                     />
+                </Grid>
+                <Grid item xs={12} sm={6} md={6} lg={6}>
                     <TextField
                         label='Surname'
                         name="surname"
@@ -307,6 +296,8 @@ const SideBarAddEmployee: React.FC = () => {
                         required
                         inputProps={{ maxLength: 50 }}
                     />
+                </Grid>
+                <Grid item xs={12} sm={6} md={6} lg={6}>
                     <TextField
                         label='E-mail'
                         name="email"
@@ -316,6 +307,8 @@ const SideBarAddEmployee: React.FC = () => {
                         required
                         inputProps={{ maxLength: 50 }}
                     />
+                </Grid>
+                <Grid item xs={12} sm={6} md={6} lg={6}>
                     <TextField
                         label='Phone'
                         name="phone"
@@ -326,6 +319,8 @@ const SideBarAddEmployee: React.FC = () => {
                         type={"number"}
                         inputProps={{ maxLength: 50 }}
                     />
+                </Grid>
+                <Grid item xs={12} sm={6} md={6} lg={6}>
 
                     <TextField
                         label='Title'
@@ -336,6 +331,8 @@ const SideBarAddEmployee: React.FC = () => {
                         required
                         inputProps={{ maxLength: 50 }}
                     />
+                </Grid>
+                <Grid item xs={12} sm={6} md={6} lg={6}>
                     <TextField
                         label='Location'
                         name="location"
@@ -345,23 +342,9 @@ const SideBarAddEmployee: React.FC = () => {
                         required
                         inputProps={{ maxLength: 50 }}
                     />
-                    <Button onClick={addEmployee} sx={{ mt: 5 }} type="button" variant="contained" color="success" disabled={loading}>
-                        {loading ? "SAVING..." : "ADD EMPLOYEE"}
-                    </Button>
-                </Box>
-            </Grid>
-            <Grid item xs={6}>
-                <Box
-                    sx={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: 2,
-                        maxWidth: 800,
-                        margin: 'auto',
-                        padding: 2,
-                    }}
-                >
-                    <FormControl required variant="outlined">
+                </Grid>
+                <Grid item xs={12} sm={6} md={6} lg={6}>
+                    <FormControl required variant="outlined" sx={{width: '100%'}}>
                         <InputLabel>{'Please Select Position'}</InputLabel>
                         <Select
                             value={selectedPosition}
@@ -375,8 +358,9 @@ const SideBarAddEmployee: React.FC = () => {
                             ))}
                         </Select>
                     </FormControl>
-
-                    <FormControl required variant="outlined">
+                </Grid>
+                <Grid item xs={12} sm={6} md={6} lg={6}>
+                    <FormControl required variant="outlined" sx={{width: '100%'}}>
                         <InputLabel>{'Please Select Employee Type'}</InputLabel>
                         <Select
                             value={selectedEmployeeType}
@@ -390,16 +374,22 @@ const SideBarAddEmployee: React.FC = () => {
                             ))}
                         </Select>
                     </FormControl>
+                </Grid>
+                <Grid item xs={12} sm={6} md={6} lg={6}>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DatePicker
+                        sx={{width: '100%'}}
                             label="Hire Date"
                             value={birthDate ? dayjs(hireDate) : null}
                             onChange={(newValue) => setHireDate(newValue ? newValue.toDate() : null)}
 
                         />
                     </LocalizationProvider>
+                </Grid>
+                <Grid item xs={12} sm={6} md={6} lg={6}>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DatePicker
+                        sx={{width: '100%'}}
                             label="Birth Date"
                             value={birthDate ? dayjs(birthDate) : null}
 
@@ -407,6 +397,8 @@ const SideBarAddEmployee: React.FC = () => {
 
                         />
                     </LocalizationProvider>
+                </Grid>
+                <Grid item xs={12} sm={6} md={6} lg={6}>
                     <FormControl fullWidth >
                         <InputLabel htmlFor="outlined-adornment-amount">Salary</InputLabel>
                         <OutlinedInput
@@ -420,18 +412,17 @@ const SideBarAddEmployee: React.FC = () => {
                             }}
                         />
                     </FormControl>
-
-
-                </Box>
+                </Grid>
+                
+            </Grid>
+            <Grid container spacing={2} sx={{ flexGrow: 1, alignItems: 'stretch',justifyContent: 'flex-start', padding:'2%' }}>
+                <Grid item xs={12} sm={6} md={6} lg={6}>
+                    <Button onClick={addEmployee} fullWidth type="button" variant="contained" color="success" disabled={loading}>
+                        {loading ? "SAVING..." : "ADD EMPLOYEE"}
+                    </Button>
+                </Grid>
             </Grid>
         </Grid>
-
-
-
-
-
-
-
     );
 };
 

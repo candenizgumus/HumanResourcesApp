@@ -1,5 +1,6 @@
 package com.humanresourcesapp.services;
 
+import com.humanresourcesapp.dto.requests.AddSubscriptionTimeRequestDto;
 import com.humanresourcesapp.dto.requests.AuthLoginRequestDto;
 import com.humanresourcesapp.dto.requests.DeactivateAccountRequestDto;
 import com.humanresourcesapp.dto.requests.PasswordChangeRequestDto;
@@ -27,8 +28,11 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -146,4 +150,80 @@ public class AuthService implements UserDetailsService
         userService.save(user);
         return true;
     }
+
+    public Boolean addSubscriptionTime(AddSubscriptionTimeRequestDto dto)
+    {
+
+        User manager = userService.findByAuthId(dto.managerId());
+        List<User> userList = userService.findAllByCompanyId(manager.getCompanyId());
+        if (dto.subscriptionType().equals("Yearly"))
+        {
+            userList.forEach(user -> {
+                if (!user.getStatus().equals(EStatus.DELETED))
+                {
+                    user.setStatus(EStatus.ACTIVE);
+                }
+
+                if (LocalDate.now().isAfter(user.getSubscriptionEndDate()))
+                {
+                    user.setSubscriptionEndDate(LocalDate.now().plusYears(1));
+                }else
+                {
+                    user.setSubscriptionEndDate(user.getSubscriptionEndDate().plusYears(1));
+                }
+                userService.save(user);
+            });
+
+            List<Long> authIdList = userList.stream().map(User::getAuthId).toList();
+            authRepository.findAllByIdIn(authIdList).forEach(auths -> {
+                if (!auths.getStatus().equals(EStatus.DELETED))
+                {
+                    auths.setStatus(EStatus.ACTIVE);
+                }
+                if (LocalDate.now().isAfter(auths.getSubscriptionEndDate()))
+                {
+                    auths.setSubscriptionEndDate(LocalDate.now().plusYears(1));
+                }else
+                {
+                    auths.setSubscriptionEndDate(auths.getSubscriptionEndDate().plusYears(1));
+                }
+                authRepository.save(auths);
+            });
+        }
+        if (dto.subscriptionType().equals("Monthly"))
+        {
+            userList.forEach(user -> {
+                if (!user.getStatus().equals(EStatus.DELETED))
+                {
+                    user.setStatus(EStatus.ACTIVE);
+                }
+                if (LocalDate.now().isAfter(user.getSubscriptionEndDate()))
+                {
+                    user.setSubscriptionEndDate(LocalDate.now().plusMonths(1));
+                }else
+                {
+                    user.setSubscriptionEndDate(user.getSubscriptionEndDate().plusMonths(1));
+                }
+                userService.save(user);
+            });
+
+            List<Long> authIdList = userList.stream().map(User::getAuthId).toList();
+            authRepository.findAllByIdIn(authIdList).forEach(auths -> {
+                if (!auths.getStatus().equals(EStatus.DELETED))
+                {
+                    auths.setStatus(EStatus.ACTIVE);
+                }
+                if (LocalDate.now().isAfter(auths.getSubscriptionEndDate()))
+                {
+                    auths.setSubscriptionEndDate(LocalDate.now().plusMonths(1));
+                }else
+                {
+                    auths.setSubscriptionEndDate(auths.getSubscriptionEndDate().plusMonths(1));
+                }
+                authRepository.save(auths);
+            });
+        }
+        return true;
+    }
+
 }

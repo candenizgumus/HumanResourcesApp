@@ -59,4 +59,6 @@ public interface UserRepository extends JpaRepository<User,Long>
     Optional<User> findFirstUserByCompanyId(@Param("companyId") Long companyId);
 
     List<User> findAllByUserTypeAndStatusAndCompanyId(EUserType userType, EStatus status, Long companyId);
+
+
 }

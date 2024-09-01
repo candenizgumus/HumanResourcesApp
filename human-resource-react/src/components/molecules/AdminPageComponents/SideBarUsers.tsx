@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import {
     DataGrid,
     GridColDef,
@@ -15,22 +15,24 @@ import {
     TextField, Typography
 
 } from "@mui/material";
-import { HumanResources, useAppSelector } from "../../../store";
-import { useDispatch } from "react-redux";
+import {HumanResources, useAppSelector} from "../../../store";
+import {useDispatch} from "react-redux";
 import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
 import {
-    clearToken,
+    clearToken, fetchAddSubscriptionTime,
     fetchGetAllUsers,
     fetchGetStatus,
     fetchGetUserCount,
     fetchUpdateUserByAdmin
 } from "../../../store/feature/authSlice";
 import Swal from "sweetalert2";
-import { IUser } from "../../../models/IUser";
+import {IUser} from "../../../models/IUser";
 import CircularProgress from '@mui/material/CircularProgress';
 import {ICompany} from "../../../models/ICompany";
 import {fetchGetCompanies} from "../../../store/feature/companySlice";
-
+import {TimeIcon} from "@mui/x-date-pickers";
+import {myErrorColour, myLightColour} from "../../../util/MyColours";
+import {fetchApproveOffers, fetchGetOfferCount, fetchGetOffers} from "../../../store/feature/offerSlice";
 
 
 const style = {
@@ -79,7 +81,7 @@ export default function SideBarUsers() {
                 text: 'Please select exactly one company to edit.',
                 showConfirmButton: false,
                 timer: 1500
-              });
+            });
         }
     };
 
@@ -102,7 +104,7 @@ export default function SideBarUsers() {
                     text: 'User updated successfully.',
                     showConfirmButton: false,
                     timer: 1500
-                  });
+                });
                 // Fetch updated companies
                 await dispatch(fetchGetAllUsers({
                     token: token,
@@ -118,6 +120,55 @@ export default function SideBarUsers() {
             }
         }
     };
+
+    const handleAddSubscriptionTime = async () => {
+
+        const result = await Swal.fire({
+            title: "Choose Subscription Type",
+            showCancelButton: true,
+            confirmButtonText: "Confirm",
+            input: "radio",
+            confirmButtonColor: myLightColour,
+            cancelButtonColor: myErrorColour,
+            inputOptions: {
+                "0": "Monthly",
+                "1": "Yearly",
+            },
+            preConfirm: (value) => {
+                if (!value) {
+                    Swal.showValidationMessage("You need to select something!");
+                    return
+                }
+                return value === "0" ? "Monthly" : "Yearly";
+            },
+
+        });
+
+        if (result.isConfirmed) {
+
+            await dispatch(
+                fetchAddSubscriptionTime({token,managerId: selectedRowIds[0], subscriptionType: result.value})
+            );
+
+
+            await Swal.fire({
+                title: "Success",
+                text: "Subscription time added successfully",
+                icon: "success",
+                confirmButtonText: "OK",
+                confirmButtonColor: myLightColour,
+                cancelButtonColor: myErrorColour,
+            });
+
+            await dispatch(fetchGetAllUsers({
+                token: token,
+                page: paginationModel.page,
+                pageSize: paginationModel.pageSize,
+                searchText: searchText,
+            }));
+
+        }
+    }
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -127,7 +178,12 @@ export default function SideBarUsers() {
                     pageSize: paginationModel.pageSize,
                     searchText: searchText,
                 }));
-                await dispatch(fetchGetCompanies({token : token , page : 0, pageSize : 100000, searchText : ''})).then(data => setCompanyList(data.payload))
+                await dispatch(fetchGetCompanies({
+                    token: token,
+                    page: 0,
+                    pageSize: 100000,
+                    searchText: ''
+                })).then(data => setCompanyList(data.payload))
 
                 const count = await dispatch(fetchGetUserCount({
                     token: token,
@@ -147,7 +203,8 @@ export default function SideBarUsers() {
 
 
     const columns: GridColDef[] = [
-        { field: "companyId", headerName: "Company Name", flex: 1, headerAlign: "center",
+        {
+            field: "companyId", headerName: "Company Name", flex: 1, headerAlign: "center",
 
             renderCell: (params) => (
                 <>
@@ -156,16 +213,22 @@ export default function SideBarUsers() {
 
             ),
         },
-        { field: "name", headerName: "First name", flex: 1, headerAlign: "center" },
-        { field: "surname", headerName: "Last name", flex: 1, headerAlign: "center" },
-        { field: "email", headerName: "Email", headerAlign: "center", flex: 2 },
-        { field: "phone", headerName: "Phone", sortable: false, headerAlign: "center", flex: 1 },
-        { field: "sector", headerName: "Sector", type: "string", flex: 2, headerAlign: "center" },
-        { field: "userType", headerName: "User Type", flex: 1, headerAlign: "center" },
-        { field: "subscriptionType", headerName: "Sub. Type", flex: 1, headerAlign: "center" },
-        { field: "subscriptionStartDate", headerName: "Sub. Start Date", type: "string", flex: 1, headerAlign: "center" },
-        { field: "subscriptionEndDate", headerName: "Sub. End Date", type: "string", flex: 1, headerAlign: "center" },
-        { field: "status", headerName: "Status", type: "string", flex: 1, headerAlign: "center" },
+        {field: "name", headerName: "First name", flex: 1, headerAlign: "center"},
+        {field: "surname", headerName: "Last name", flex: 1, headerAlign: "center"},
+        {field: "email", headerName: "Email", headerAlign: "center", flex: 2},
+        {field: "phone", headerName: "Phone", sortable: false, headerAlign: "center", flex: 1},
+        {field: "sector", headerName: "Sector", type: "string", flex: 2, headerAlign: "center"},
+        {field: "userType", headerName: "User Type", flex: 1, headerAlign: "center"},
+        {field: "subscriptionType", headerName: "Sub. Type", flex: 1, headerAlign: "center"},
+        {
+            field: "subscriptionStartDate",
+            headerName: "Sub. Start Date",
+            type: "string",
+            flex: 1,
+            headerAlign: "center"
+        },
+        {field: "subscriptionEndDate", headerName: "Sub. End Date", type: "string", flex: 1, headerAlign: "center"},
+        {field: "status", headerName: "Status", type: "string", flex: 1, headerAlign: "center"},
         {
             field: "photo",
             headerName: "Photo",
@@ -173,8 +236,14 @@ export default function SideBarUsers() {
             headerAlign: "center",
             sortable: false,
             renderCell: (params) => (
-                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '100%' }}>
-                    <Avatar alt={params.row.name} src={params.value} />
+                <div style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    width: '100%',
+                    height: '100%'
+                }}>
+                    <Avatar alt={params.row.name} src={params.value}/>
                 </div>
             ),
         },
@@ -189,14 +258,14 @@ export default function SideBarUsers() {
     };
 
     return (
-        <div style={{ height: 'auto', width: "inherit" }}>
+        <div style={{height: 'auto', width: "inherit"}}>
             <TextField
                 label="Search By Email"
                 variant="outlined"
                 onChange={(event) => setSearchText(event.target.value)}
                 value={searchText}
-                style={{ marginBottom: "1%", marginTop: "1%" }}
-                inputProps={{ maxLength: 50 }}
+                style={{marginBottom: "1%", marginTop: "1%"}}
+                inputProps={{maxLength: 50}}
                 fullWidth
             />
             <DataGrid
@@ -231,19 +300,36 @@ export default function SideBarUsers() {
                     height: '407px'
                 }}
             />
-            <Grid sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-start', alignItems: 'center', marginTop: '2%', marginBottom: '2%' }}>
+            <Grid sx={{
+                flexGrow: 1,
+                display: 'flex',
+                justifyContent: 'flex-start',
+                alignItems: 'center',
+                marginTop: '2%',
+                marginBottom: '2%'
+            }}>
                 <Button
                     onClick={handleEditClick}
                     variant="contained"
                     color="secondary"
-                    startIcon={<DriveFileRenameOutlineIcon />}
+                    startIcon={<DriveFileRenameOutlineIcon/>}
                     disabled={loading || selectedRowIds.length !== 1}
-                    sx={{ marginRight: '1%', width: '200px' }}
+                    sx={{marginRight: '1%', width: '200px'}}
                 >
                     Edit
                 </Button>
+                <Button
+                    onClick={handleAddSubscriptionTime}
+                    variant="contained"
+                    color="secondary"
+                    startIcon={<TimeIcon/>}
+                    disabled={loading || selectedRowIds.length !== 1 || userList.find((user) => user.id === selectedRowIds[0])?.userType !== 'MANAGER'}
+                    sx={{marginRight: '1%'}}
+                >
+                    Add Subscription Time
+                </Button>
             </Grid>
-            
+
             <Dialog open={open} onClose={handleClose} fullWidth maxWidth='sm'>
                 <DialogTitle>Edit User</DialogTitle>
                 <DialogContent>
@@ -251,41 +337,47 @@ export default function SideBarUsers() {
                         {selectedUser && (
                             <>
                                 <Grid item mt={2}>
-                                    <TextField sx={{ marginTop: "25px" }}
-                                        label="Name"
-                                        name="name"
-                                        variant="outlined"
-                                        value={selectedUser.name}
-                                        onChange={e => setSelectedUser({ ...selectedUser, name: e.target.value })}
-                                        fullWidth
-                                        style={{ marginBottom: "10px" }}
+                                    <TextField sx={{marginTop: "25px"}}
+                                               label="Name"
+                                               name="name"
+                                               variant="outlined"
+                                               value={selectedUser.name}
+                                               onChange={e => setSelectedUser({
+                                                   ...selectedUser,
+                                                   name: e.target.value
+                                               })}
+                                               fullWidth
+                                               style={{marginBottom: "10px"}}
                                     />
                                     <TextField
                                         label="Surname"
                                         name="surname"
                                         variant="outlined"
                                         value={selectedUser.surname}
-                                        onChange={e => setSelectedUser({ ...selectedUser, surname: e.target.value })}
+                                        onChange={e => setSelectedUser({...selectedUser, surname: e.target.value})}
                                         fullWidth
-                                        style={{ marginBottom: "10px" }}
+                                        style={{marginBottom: "10px"}}
                                     />
                                     <TextField
                                         label="Phone"
                                         name="phone"
                                         variant="outlined"
                                         value={selectedUser.phone}
-                                        onChange={e => setSelectedUser({ ...selectedUser, phone: e.target.value })}
+                                        onChange={e => setSelectedUser({...selectedUser, phone: e.target.value})}
                                         fullWidth
-                                        style={{ marginBottom: "10px" }}
+                                        style={{marginBottom: "10px"}}
                                     />
-                                    <FormControl sx={{ marginBottom: "25px" }} fullWidth>
+                                    <FormControl sx={{marginBottom: "25px"}} fullWidth>
                                         <InputLabel id="demo-simple-select-label">Status</InputLabel>
                                         <Select
                                             labelId="demo-simple-select-label"
                                             id="demo-simple-select"
                                             value={selectedUser.status}
                                             label="Status"
-                                            onChange={e => setSelectedUser({ ...selectedUser, status: e.target.value })}
+                                            onChange={e => setSelectedUser({
+                                                ...selectedUser,
+                                                status: e.target.value
+                                            })}
                                         >
                                             {
                                                 statusList.map((status) => (
@@ -301,15 +393,17 @@ export default function SideBarUsers() {
                     </Box>
                     {loading && (
                         <Box display="flex" justifyContent="center" alignItems="center" mb={2}>
-                            <CircularProgress />
+                            <CircularProgress/>
                         </Box>
                     )}
                 </DialogContent>
                 <DialogActions>
-                    <Button variant="contained" onClick={handleClose} color="error" sx={{ marginRight: '17px', width: '100px' }}>
+                    <Button variant="contained" onClick={handleClose} color="error"
+                            sx={{marginRight: '17px', width: '100px'}}>
                         Cancel
                     </Button>
-                    <Button variant="contained" disabled={loading} onClick={handleUpdateUserByAdmin} color="success" sx={{ marginRight: '17px', width: '100px' }}>
+                    <Button variant="contained" disabled={loading} onClick={handleUpdateUserByAdmin} color="success"
+                            sx={{marginRight: '17px', width: '100px'}}>
                         Update
                     </Button>
                 </DialogActions>

@@ -147,4 +147,5 @@ public class Endpoints
     public static final String GET_ALL_USERNAMES = "/get-all-usernames";
     public static final String GET_USERNAMES_SLIDES = "/get-usernames-slides";
     public static final String GET_ALL_BY_USERNAME_SLIDEID = "/get-all-by-username-slideid";
+    public static final String ADD_SUBSCRIPTION_TIME = "/add-subscription-time";
 }

@@ -670,7 +670,31 @@ export const fetchManagerAndCompanyNameOfEmployee = createAsyncThunk(
     }
 );
 
+interface IfetchAddSubscriptionTime {
+    token: string;
+    subscriptionType: string
+    managerId: number
 
+}
+export const fetchAddSubscriptionTime = createAsyncThunk(
+    'auth/fetchAddSubscriptionTime',
+    async (payload: IfetchAddSubscriptionTime, { dispatch }) => {
+
+        const response = await fetch(RestApis.authService+'/add-subscription-time', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ` + payload.token
+            },body: JSON.stringify({
+                'managerId': payload.managerId,
+                'subscriptionType': payload.subscriptionType
+            })
+        });
+
+        return await response.json();
+
+    }
+);
 
 const authSlice = createSlice({
     name: 'auth',

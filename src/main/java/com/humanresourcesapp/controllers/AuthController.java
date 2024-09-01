@@ -2,6 +2,7 @@ package com.humanresourcesapp.controllers;
 
 import static com.humanresourcesapp.constants.Endpoints.*;
 
+import com.humanresourcesapp.dto.requests.AddSubscriptionTimeRequestDto;
 import com.humanresourcesapp.dto.requests.AuthLoginRequestDto;
 import com.humanresourcesapp.dto.requests.DeactivateAccountRequestDto;
 import com.humanresourcesapp.dto.requests.PasswordChangeRequestDto;
@@ -85,6 +86,15 @@ public class AuthController
     public ResponseEntity<Boolean> deactivateAccount(@RequestBody DeactivateAccountRequestDto dto)
     {
         return ResponseEntity.ok(authService.deactivateAccount(dto));
+
+    }
+
+    @PutMapping(ADD_SUBSCRIPTION_TIME)
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @CrossOrigin("*")
+    public ResponseEntity<Boolean> addSubscriptionTime(@RequestBody AddSubscriptionTimeRequestDto dto)
+    {
+        return ResponseEntity.ok(authService.addSubscriptionTime(dto));
 
     }
 

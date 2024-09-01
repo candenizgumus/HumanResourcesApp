@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import {
   Typography,
   Container,
@@ -42,6 +42,7 @@ function AboutUsPage() {
     // Scroll to the top of the page when the component mounts
     window.scrollTo(0, 0);
   }, []);
+
   // Define the handler function
   const handleCardClick = (url: string) => {
     window.open(url, '_blank');
@@ -55,134 +56,43 @@ function AboutUsPage() {
         <HeaderElement headline='About Us' text='We are a group of developers dedicated to building the best solutions for our customers.' />
         <Body>
           <Container maxWidth="lg">
-            <Box py={5}>
+            <Grid item xs={12} sx={{ textAlign: 'center', paddingTop: 2 }}>
               <Typography component="h1" variant="h4" align="center" color="primary.main" gutterBottom sx={{ paddingBottom: 5 }}>
                 Our Team
               </Typography>
-              <Grid container spacing={4} justifyContent="center">
-                {/* Team Member 1 */}
-                <Grid item xs={12} sm={6} md={4} sx={{
-                  transition: 'transform 0.2s ease-in-out',
-                  '&:hover': {
-                    transform: 'scale(1.01)'
-                  }
-                }}>
-                  <ButtonBase onClick={() => handleCardClick('https://github.com/candenizgumus')}>
-                    <Paper elevation={3} sx={{ p: 2, textAlign: 'center' }}>
-                      <Avatar
-                        alt="Can Deniz Gümüş"
-                        src={deniz}
-                        sx={{ width: 80, height: 80, mx: 'auto', mb: 2 }}
-                      />
-                      <Typography variant="h6">Can Deniz Gümüş</Typography>
-                      <Typography variant="body2" color="textSecondary">
-                        Developer
-                      </Typography>
-                      <Typography variant="body1">
-                        Short bio about the team member, their experience, and role in the project.
-                      </Typography>
-                    </Paper>
-                  </ButtonBase>
-                </Grid>
-                {/* Team Member 2 */}
-                <Grid item xs={12} sm={6} md={4} sx={{
-                  transition: 'transform 0.2s ease-in-out',
-                  '&:hover': {
-                    transform: 'scale(1.01)'
-                  }
-                }}>
-                  <ButtonBase onClick={() => handleCardClick('https://github.com/hcaslan')}>
-                    <Paper elevation={3} sx={{ p: 2, textAlign: 'center' }}>
-                      <Avatar
-                        alt="Heval Can Aslan Özen"
-                        src={aslan}
-
-                        sx={{ width: 80, height: 80, mx: 'auto', mb: 2 }}
-                      />
-                      <Typography variant="h6">Heval Can Aslan Özen</Typography>
-                      <Typography variant="body2" color="textSecondary">
-                        Developer
-                      </Typography>
-                      <Typography variant="body1">
-                        Short bio about the team member, their experience, and role in the project.
-                      </Typography>
-                    </Paper>
-                  </ButtonBase>
-                </Grid>
-                {/* Team Member 3 */}
-                <Grid item xs={12} sm={6} md={4} sx={{
-                  transition: 'transform 0.2s ease-in-out',
-                  '&:hover': {
-                    transform: 'scale(1.01)'
-                  }
-                }}>
-                  <ButtonBase onClick={() => handleCardClick('https://github.com/Hicranarslan')}>
-                    <Paper elevation={3} sx={{ p: 2, textAlign: 'center' }}>
-                      <Avatar
-                        alt="Hicran Arslan"
-                        src={hicran}
-                        sx={{ width: 80, height: 80, mx: 'auto', mb: 2 }}
-                      />
-                      <Typography variant="h6">Hicran Arslan</Typography>
-                      <Typography variant="body2" color="textSecondary">
-                        Developer
-                      </Typography>
-                      <Typography variant="body1">
-                        Short bio about the team member, their experience, and role in the project.
-                      </Typography>
-                    </Paper>
-                  </ButtonBase>
-                </Grid>
-                {/* Team Member 4 */}
-                <Grid item xs={12} sm={6} md={4} sx={{
-                  transition: 'transform 0.2s ease-in-out',
-                  '&:hover': {
-                    transform: 'scale(1.01)'
-                  }
-                }}>
-                  <ButtonBase onClick={() => handleCardClick('https://github.com/keremoktener')}>
-                    <Paper elevation={3} sx={{ p: 2, textAlign: 'center' }}>
-                      <Avatar
-                        alt="Kenan Kerem Öktener"
-                        src={kerem}
-                        sx={{ width: 80, height: 80, mx: 'auto', mb: 2 }}
-                      />
-                      <Typography variant="h6">Kenan Kerem Öktener</Typography>
-                      <Typography variant="body2" color="textSecondary">
-                        Developer
-                      </Typography>
-                      <Typography variant="body1">
-                        Short bio about the team member, their experience, and role in the project.
-                      </Typography>
-                    </Paper>
-                  </ButtonBase>
-                </Grid>
-                {/* Team Member 5 */}
-                <Grid item xs={12} sm={6} md={4} sx={{
-                  transition: 'transform 0.2s ease-in-out',
-                  '&:hover': {
-                    transform: 'scale(1.01)'
-                  }
-                }}>
-                  <ButtonBase onClick={() => handleCardClick('https://github.com/EmirEsen')}>
-                    <Paper elevation={3} sx={{ p: 2, textAlign: 'center' }}>
-                      <Avatar
-                        alt="Sami Emir Esen"
-                        src={emir}
-                        sx={{ width: 80, height: 80, mx: 'auto', mb: 2 }}
-                      />
-                      <Typography variant="h6">Sami Emir Esen</Typography>
-                      <Typography variant="body2" color="textSecondary">
-                        Developer
-                      </Typography>
-                      <Typography variant="body1">
-                        Short bio about the team member, their experience, and role in the project.
-                      </Typography>
-                    </Paper>
-                  </ButtonBase>
-                </Grid>
+            </Grid>
+            <Grid item xs={12} sx={{ textAlign: 'center', paddingTop: 2 }}>
+              <Grid container spacing={4} display=' flex' justifyContent="center" alignItems="center">
+                {/* Team Member Cards */}
+                {[{ name: 'Can Deniz Gümüş', image: deniz, role: 'Full-Stack Java Developer & Game Developer', github: 'https://github.com/candenizgumus' },
+                  { name: 'Heval Can Aslan Özen', image: aslan, role: 'Full Stack Developer', github: 'https://github.com/hcaslan' },
+                  { name: 'Hicran Arslan', image: hicran, role: 'Software Developer', github: 'https://github.com/Hicranarslan' },
+                  { name: 'Kenan Kerem Öktener', image: kerem, role: 'Developer', github: 'https://github.com/keremoktener' },
+                  { name: 'Sami Emir Esen', image: emir, role: 'Software Engineer', github: 'https://github.com/EmirEsen' }]
+                  .map((member, index) => (
+                    <Grid item xs={12} sm={6} md={4} key={index} sx={{
+                      transition: 'transform 0.2s ease-in-out',
+                      '&:hover': {
+                        transform: 'scale(1.01)'
+                      }
+                    }}>
+                      <ButtonBase onClick={() => handleCardClick(member.github)}>
+                        <Paper elevation={3} sx={{ p: 2, textAlign: 'center', width: '350px', height: '200px', margin: '0 auto' }}>
+                          <Avatar
+                            alt={member.name}
+                            src={member.image}
+                            sx={{ width: 80, height: 80, mx: 'auto', mb: 2 }}
+                          />
+                          <Typography variant="h6">{member.name}</Typography>
+                          <Typography variant="body2" color="textSecondary">
+                            {member.role}
+                          </Typography>
+                        </Paper>
+                      </ButtonBase>
+                    </Grid>
+                  ))}
               </Grid>
-            </Box>
+            </Grid>
           </Container>
         </Body>
         <Footer>

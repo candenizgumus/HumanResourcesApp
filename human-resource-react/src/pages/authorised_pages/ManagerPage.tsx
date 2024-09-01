@@ -44,6 +44,7 @@ import { ManagerHomeContent } from "../../components/molecules/ManagerComponents
 import HikingIcon from '@mui/icons-material/Hiking';
 import { useState } from "react";
 import logo from '../../images/logo-full-white.png';
+import logoDark from '../../images/logo-full-dark.png';
 import { AddDocumentIcon } from "../../components/atoms/icons";
 import { myLightColour } from "../../util/MyColours";
 import ThemeElement from '../../components/atoms/ThemeElement';
@@ -129,16 +130,20 @@ export default function AdminPage() {
         setOpen(false);
     };
     const handleDrawerCloseOnMobile = () => {
-        if(isBigForScreen2){handleDrawerClose()}
+        if (isBigForScreen2) { handleDrawerClose() }
     };
     const navigateToHome = () => {
         setSelectedIndex2(0);
         dispatch(changePageState('Dashboard'));
+        if(isMobile)
+            setOpen(false);
     };
 
     const handleListItemClick = (text: string) => {
         setSelectedIndex(text);
         dispatch(changePageState(text));
+        if(isMobile)
+            setOpen(false);
     };
 
 
@@ -177,15 +182,15 @@ export default function AdminPage() {
                         )}
                         {isMobile ? null : (
                             <Typography
-                            sx={{
-                                position: 'absolute',
-                                left: '50%',
-                                transform: 'translateX(-50%)',
-                                fontSize:  isBigForScreen1 ? '15px' : '20px',
-                            }}
-                        >
-                            {page ? page : 'Dashboard'}
-                        </Typography>
+                                sx={{
+                                    position: 'absolute',
+                                    left: '50%',
+                                    transform: 'translateX(-50%)',
+                                    fontSize: isBigForScreen1 ? '15px' : '20px',
+                                }}
+                            >
+                                {page ? page : 'Dashboard'}
+                            </Typography>
                         )}
                         {!isBigForScreen2 && (
                             <Box>
@@ -272,13 +277,18 @@ export default function AdminPage() {
                         ))}
                     </List>
                 </Drawer>
-                <Main sx={{ minHeight: '100vh'}} open={open} onClick={handleDrawerCloseOnMobile}>
+                <Main sx={{ minHeight: '100vh' }} open={open} onClick={handleDrawerCloseOnMobile}>
                     <DrawerHeader />
-                    <Grid container spacing={2}>
-                        {pageState === 'Dashboard' ? <ManagerHomeContent open={open} /> : <ManagerMenuContentRenderer open={open} />}
-                    </Grid>
+                    {open && isMobile ?  
+                        <Grid sx={{minHeight: 'calc(100vh - 128px)', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                            <img src={logoDark} alt="logo" style={{ height: '122px' }} />
+                        </Grid>
+                        :
+                        <Grid container spacing={2}>
+                            {pageState === 'Dashboard' ? <ManagerHomeContent open={open} /> : <ManagerMenuContentRenderer open={open} />}
+                        </Grid>
+                    }
                 </Main>
-
             </Box>
         } />
     );

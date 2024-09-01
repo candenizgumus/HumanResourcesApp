@@ -8,6 +8,7 @@ import logoLight from '../../../images/logo-full-light.png';
 import logo_hd from '../../../images/logo-full-light.png';
 
 import ThemeElement from '../../atoms/ThemeElement';
+import { Padding } from '@mui/icons-material';
 
 export const NavBar = () => {
     const navigate = useNavigate();
@@ -87,6 +88,24 @@ export const NavBar = () => {
         transition: 'color 0.3s ease',
     };
 
+    const drawerListItemStyle = {
+        textAlign: 'center',
+        padding: '10px',
+        color: scrolled ? 'myLightColour.main' : 'primary.main',
+        borderRadius: '5px',
+        backgroundColor: scrolled ? 'primary.main' : 'myLightColour.main',
+    };
+
+    const drawerListItemLoginButtonStyle = {
+        textAlign: 'center',
+        padding: '10px',
+        color: scrolled ? 'primary.main' : 'myLightColour.main',
+        border: '2px solid',
+        borderRadius: '5px',
+        borderColor: scrolled ? 'primary.main' : 'myLightColour.main',
+        backgroundColor: scrolled ? 'myBackgroundColour.main' : 'primary.main',
+    }
+
     const menuIconStyle = {
         color: scrolled ? 'primary.main' : 'myBackgroundColour.main',
         transition: 'color 0.3s ease',
@@ -112,19 +131,14 @@ export const NavBar = () => {
                     </Typography>
                     {isBigForScreen ? (
                         <>
-                            <IconButton
-                                edge="start"
-                                color="inherit"
-                                aria-label="menu"
-                                onClick={() => toggleDrawer(true)}
-                            >
+                            <IconButton edge="end" color="inherit" aria-label="menu" onClick={() => toggleDrawer(true)}>
                                 <MenuIcon sx={{color: scrolled ? 'primary.main' : 'myLightColour.main'}}/>
                             </IconButton>
                             <Drawer anchor="right" open={drawerOpen} onClose={() => toggleDrawer(false)}>
-                                <List>
+                                <List sx={{ backgroundColor: scrolled ? 'myBackgroundColour.main' : 'primary.main', height: '100vh', paddingRight: '10px' }}>
                                     {menuItems.map((item, index) => (
-                                        <ListItem button key={index} onClick={item.onClick}>
-                                            <ListItemText primary={item.label} />
+                                        <ListItem button key={index} onClick={item.onClick} sx={{marginBottom: '10px'}}>
+                                            <ListItemText primary={item.label} sx={item.label==='Login' ? drawerListItemLoginButtonStyle : drawerListItemStyle}/>
                                         </ListItem>
                                     ))}
                                 </List>

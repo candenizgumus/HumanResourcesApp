@@ -28,6 +28,7 @@ const columns: GridColDef[] = [
 
     { field: "userName", headerName: "Username", flex: 1, headerAlign: "center" },
     { field: "slideId", headerName: "Slide Id", flex: 1, headerAlign: "center" },
+    { field: "visitCount", headerName: "Visit Count", flex: 1, headerAlign: "center" },
     { field: "pageNumber", headerName: "Page Number", flex: 2, headerAlign: "center"
     ,
 

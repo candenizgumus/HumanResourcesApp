@@ -80,9 +80,13 @@ public class SlideController {
 
     @GetMapping("/get-ip")
     @CrossOrigin("*")
-    public ResponseEntity<Map<String, String> >getUserIP(HttpServletRequest request) {
+    public ResponseEntity<Map<String, String>> getUserIP(HttpServletRequest request) {
         String ipAddress = request.getHeader("X-Forwarded-For");
-        if (ipAddress == null || ipAddress.isEmpty()) {
+
+        // If there are multiple IPs, the user's IP is the first one in the list
+        if (ipAddress != null && !ipAddress.isEmpty()) {
+            ipAddress = ipAddress.split(",")[0].trim();
+        } else {
             ipAddress = request.getRemoteAddr();
         }
 
@@ -91,6 +95,7 @@ public class SlideController {
 
         return ResponseEntity.ok(response);
     }
+
 
     @PostMapping("/store-time-data")
     @CrossOrigin("*")

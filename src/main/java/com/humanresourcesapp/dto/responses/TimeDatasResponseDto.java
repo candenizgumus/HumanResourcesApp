@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 public record TimeDatasResponseDto(
         Long id,
         String userName,
+        Integer visitCount,
         String slideId,
         String pageNumber,
         Double timeSpent,

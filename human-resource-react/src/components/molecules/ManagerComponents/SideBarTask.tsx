@@ -316,7 +316,7 @@ const SideBarTask = () => {
                 }}
             />
             <Grid container spacing={2} sx={{ flexGrow: 1, justifyContent: 'flex-start', alignItems: 'stretch', marginTop: '2%', marginBottom: '2%' }}>
-                <Grid item xs={12} sm={6} md={3}>
+                <Grid item xs={12} sm={6} md={3} lg={2}>
                     <Button
                         onClick={handleAssignToEmployee}
                         variant="contained"
@@ -328,7 +328,7 @@ const SideBarTask = () => {
                         Assign To Employee
                     </Button>
                 </Grid>
-                <Grid item xs={12} sm={6} md={3}>
+                <Grid item xs={12} sm={6} md={3} lg={2}>
                     <Button
                         onClick={handleOpenSubTaskModal}
                         variant="contained"
@@ -340,7 +340,7 @@ const SideBarTask = () => {
                         Add/Check SubTasks
                     </Button>
                 </Grid>
-                <Grid item xs={12} sm={6} md={3}>
+                <Grid item xs={12} sm={6} md={3} lg={2}>
                     <Button
                         onClick={handleDeleteTask}
                         variant="contained"
@@ -352,7 +352,7 @@ const SideBarTask = () => {
                         Delete
                     </Button>
                 </Grid>
-                <Grid item xs={12} sm={6} md={3}>
+                <Grid item xs={12} sm={6} md={3} lg={2}>
                     <Button
                         onClick={handleSaveTask}
                         variant="contained"
@@ -374,7 +374,7 @@ const SideBarTask = () => {
                         Add Task
                     </Typography>
                 </Grid>
-                <Grid item xs={12} sm={12} md={12} lg={6}>
+                <Grid item xs={12} sm={12} md={6} lg={6}>
                     <TextField
                         label="Task Name"
                         name="taskName"

@@ -25,7 +25,7 @@ import SideBarTask from "../molecules/ManagerComponents/SideBarTask";
 import UploadFile from "../molecules/ManagerComponents/SideBarUploadFileForSlide"
 import SlideComponent from "../molecules/ManagerComponents/SideBarSlides";
 import SideBarSlideDatas from "../molecules/ManagerComponents/SideBarSlideDatas";
-import ShowSlide from "../molecules/ManagerComponents/ShowSlide"
+import ShowSlide from "../molecules/ManagerComponents/SideBarDisplaySlide"
 export const ManagerMenuContentRenderer = (props: { open: boolean }) => {
     const page = useAppSelector((state) => state.auth.pageState);
 

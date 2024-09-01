@@ -16,7 +16,7 @@ import FooterElement from '../PreAuthorizedPageComponents/FooterElement';
 import SliderMessage from '../../atoms/SliderMessage';
 import EncoderDecoder from "../../../util/EncoderDecoder";
 import Swal from "sweetalert2";
-import {myErrorColour, myLightColour} from "../../../util/MyColours";
+import { myErrorColour, myLightColour } from "../../../util/MyColours";
 
 const Root = styled('div')(({ theme }) => ({
     display: 'flex',
@@ -107,22 +107,22 @@ function UserStoryDetailPage() {
                     ...imageTimes,
                     [currentImage]: (imageTimes[currentImage] || 0) + timeSpent,
                 };
-                    try {
-                        const slideIdDecoded = EncoderDecoder.decode(slideId);
-                        const companyIdDecoded = EncoderDecoder.decode(companyId);
-                        const userNameDecoded = EncoderDecoder.decodeString(userName);
+                try {
+                    const slideIdDecoded = EncoderDecoder.decode(slideId);
+                    const companyIdDecoded = EncoderDecoder.decode(companyId);
+                    const userNameDecoded = EncoderDecoder.decodeString(userName);
 
-                        console.log('Sending time data:', { updatedImageTimes, userIP, userName, slideId });
-                        await dispatch(fetchStoreTimeData({ imageTimes: updatedImageTimes, userIP, userName:userNameDecoded, slideId: slideIdDecoded, companyId: companyIdDecoded }));
-                    } catch (error) {
-                        Swal.fire({
-                            title: "Error!",
-                            text: "There is error occured...",
-                            icon: "error",
-                            confirmButtonText: "OK",
-                            confirmButtonColor: myLightColour,
-                        });
-                    }
+                    console.log('Sending time data:', { updatedImageTimes, userIP, userName, slideId });
+                    await dispatch(fetchStoreTimeData({ imageTimes: updatedImageTimes, userIP, userName: userNameDecoded, slideId: slideIdDecoded, companyId: companyIdDecoded }));
+                } catch (error) {
+                    Swal.fire({
+                        title: "Error!",
+                        text: "There is error occured...",
+                        icon: "error",
+                        confirmButtonText: "OK",
+                        confirmButtonColor: myLightColour,
+                    });
+                }
             }
         };
 
@@ -160,7 +160,7 @@ function UserStoryDetailPage() {
                 console.error('Error fetching slide:', error);
                 setLoading(false);
             });
-        }catch (error) {
+        } catch (error) {
             Swal.fire({
                 title: "Error!",
                 text: "There is error occured.",
@@ -219,6 +219,17 @@ function UserStoryDetailPage() {
         );
     };
 
+    useEffect(() => {
+        // Add numbers to the dots after component mounts
+        const slickDots = document.querySelectorAll('.slick-dots li');
+        slickDots.forEach((dot, index) => {
+            const numberSpan = document.createElement('span');
+            numberSpan.textContent = (index + 1).toString(); // Add numbers 1, 2, 3, etc.
+            numberSpan.classList.add('dot-number'); // Add a class for custom styling
+            dot.appendChild(numberSpan); // Append the number to each dot
+        });
+    }, [slide]);
+
     const sliderSettings = {
         dots: true,
         infinite: true,
@@ -265,8 +276,8 @@ function UserStoryDetailPage() {
                     <Container maxWidth="lg" sx={{ bgcolor: 'myBackgroundColour.main' }}>
                         <Box sx={{ boxShadow: '0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19)' }}>
                             {isMobile ? (<>
-                                <SliderMessage message="You can slide to view other pages!" position={true} color={true} margin={20}/>
-                                <SliderMessage message="Scroll down to use the navigation buttons below the slider!" position={false} color={true} margin={20}/>
+                                <SliderMessage message="You can slide to view other pages!" position={true} color={true} margin={20} />
+                                <SliderMessage message="Scroll down to use the navigation buttons below the slider!" position={false} color={true} margin={20} />
                                 <Box sx={{
                                     position: 'relative', marginBottom: '70px', '.slick-dots': { bottom: '-60px' }, '& .slick-dots li button': {
                                         borderRadius: '50%', // Make dots circular
@@ -285,6 +296,17 @@ function UserStoryDetailPage() {
                                         backgroundColor: 'red', // Color of the active dot
                                         opacity: 1,
                                     },
+                                    // Additional styles for dot numbers
+                                        '& .slick-dots li .dot-number': {
+                                            position: 'absolute',
+                                            top: '50%',
+                                            left: '50%',
+                                            transform: 'translate(-50%, -50%)', // Center the number
+                                            color: 'white', // Number color
+                                            fontSize: '12px', // Adjust font size
+                                            pointerEvents: 'none', // Ensure numbers don't block clicks
+                                            zIndex: 0, // Ensure number is below the button
+                                        },
                                 }}>
                                     {slide.mobileImageUrls.length > 0 ? (
                                         <Slider {...sliderSettings}>
@@ -301,24 +323,41 @@ function UserStoryDetailPage() {
                                     )}
                                 </Box></>
                             ) : (
-                                <Box sx={{position: 'relative', marginTop: '3%', '.slick-dots': { bottom: '-60px' }, '& .slick-dots li button': {
-                                        borderRadius: '50%', // Make dots circular
-                                        backgroundColor: 'black', // Default dot color
-                                        opacity: 0.5,
-                                        '&:before': {
-                                            content: '""',
-                                            display: 'block',
-                                            width: '100%',
-                                            height: '100%',
-                                            borderRadius: '50%',
-                                            backgroundColor: 'black', // Dot color
+                                <Box
+                                    sx={{
+                                        position: 'relative',
+                                        marginTop: '3%',
+                                        '.slick-dots': { bottom: '-60px' },
+                                        '& .slick-dots li button': {
+                                            borderRadius: '50%', // Make dots circular
+                                            backgroundColor: 'black', // Default dot color
+                                            opacity: 0.5,
+                                            '&:before': {
+                                                content: '""',
+                                                display: 'block',
+                                                width: '100%',
+                                                height: '100%',
+                                                borderRadius: '50%',
+                                                backgroundColor: 'black', // Dot color
+                                            },
                                         },
-                                    },
-                                    '& .slick-dots li.slick-active button:before': {
-                                        backgroundColor: 'red', // Color of the active dot
-                                        opacity: 1,
-                                    },
-                                }}>
+                                        '& .slick-dots li.slick-active button:before': {
+                                            backgroundColor: 'red', // Color of the active dot
+                                            opacity: 1,
+                                        },
+                                        // Additional styles for dot numbers
+                                        '& .slick-dots li .dot-number': {
+                                            position: 'absolute',
+                                            top: '50%',
+                                            left: '50%',
+                                            transform: 'translate(-50%, -50%)', // Center the number
+                                            color: 'white', // Number color
+                                            fontSize: '12px', // Adjust font size
+                                            pointerEvents: 'none', // Ensure numbers don't block clicks
+                                            zIndex: 0, // Ensure number is below the button
+                                        },
+                                    }}
+                                >
                                     {slide.desktopImageUrls.length > 0 ? (
                                         <Slider {...sliderSettings}>
                                             {slide.desktopImageUrls.map((image: string, index: number) => (

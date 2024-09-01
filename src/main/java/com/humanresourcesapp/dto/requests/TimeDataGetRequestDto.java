@@ -1,7 +1,7 @@
 package com.humanresourcesapp.dto.requests;
 
 public record TimeDataGetRequestDto(
-        String slideId,
+        Long slideId,
         String userName
 )
 {

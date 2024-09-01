@@ -27,9 +27,9 @@ import {
 const columns: GridColDef[] = [
 
     { field: "userName", headerName: "Username", flex: 1, headerAlign: "center" },
-    { field: "slideId", headerName: "Slide Id", flex: 1, headerAlign: "center" },
+    { field: "slideId", headerName: "Slide Id", flex: 1.5, headerAlign: "center" },
     { field: "visitCount", headerName: "Visit Count", flex: 1, headerAlign: "center" },
-    { field: "pageNumber", headerName: "Page Number", flex: 2, headerAlign: "center"
+    { field: "pageNumber", headerName: "Page Number", flex: 1, headerAlign: "center"
     ,
 
         renderCell: (params) => (
@@ -45,7 +45,7 @@ const columns: GridColDef[] = [
             <div>{(params.value).toFixed(2)} sec</div>
         ),
     },
-    { field: "userIp", headerName: "Ip", flex: 2, headerAlign: "center" },
+    { field: "userIp", headerName: "Ip", flex: 1, headerAlign: "center" },
     { field: "createdAt", headerName: "Created At", flex: 2, headerAlign: "center" },
 
 ];
@@ -61,7 +61,7 @@ const SideBarSlideDatas = () => {
     const [loading, setLoading] = useState(false);
     const [isActivating, setIsActivating] = useState(false);
     const [slideIds, setSlideIds] = useState<number[]>([]);
-    const [selectedSlideId, setSelectedSlideId] = useState('')
+    const [selectedSlideId, setSelectedSlideId] = useState(0)
     const timeDatas = useAppSelector((state) => state.timeData.timeDatas);
 
     useEffect(() => {
@@ -81,7 +81,7 @@ const SideBarSlideDatas = () => {
         dispatch(fetchGetUsernamesSlides({token, userName: selectedUsername})).then(data => {
             setSlideIds(data.payload)
         })
-        setSelectedSlideId('')
+        setSelectedSlideId(0)
     }, [selectedUsername]);
 
     useEffect(() => {
@@ -151,7 +151,7 @@ const SideBarSlideDatas = () => {
             <InputLabel>{'Please Select Slide Id'}</InputLabel>
             <Select
                 value={selectedSlideId}
-                onChange={event => setSelectedSlideId(event.target.value)}
+                onChange={event => setSelectedSlideId((Number)(event.target.value))}
                 label="Slide Ids"
             >
                 {Object.values(slideIds).length === 0 ? (

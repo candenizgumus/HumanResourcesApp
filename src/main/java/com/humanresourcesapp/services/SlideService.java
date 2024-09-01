@@ -33,11 +33,16 @@ public class SlideService {
     private static final String UPLOAD_DIR = "uploads/";
     private final TimeDataService timeDataService;
     private final UserService userService;
-    public Slide save(List<String> mobileImages, List<String> desktopImages, String mobileImagesPath, String desktopImagesPath) {
+    public Slide save(List<String> mobileImages, List<String> desktopImages, String mobileImagesPath, String desktopImagesPath,String city,String district,String neighbourhood,String projection, String concept) {
         String email = UserInfoSecurityContext.getUserInfoFromSecurityContext();
         User manager = userService.findByEmail(email).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
         return slideRepository.save(Slide.builder()
                 .mobileImageUrls(mobileImages)
+                        .city(city)
+                        .district(district)
+                        .neighborhood(neighbourhood)
+                        .projection(projection)
+                        .concept(concept)
                 .desktopImageUrls(desktopImages)
                 .desktopImagesPath("uploads/"+desktopImagesPath)
                 .companyId(manager.getCompanyId())
@@ -121,8 +126,8 @@ public class SlideService {
         return imageFiles;
     }
 
-    public Slide getById( String id) {
-        return slideRepository.findById(UUID.fromString(id)).orElseThrow(() -> new HumanResourcesAppException(ErrorType.SLIDE_NOT_FOUND));
+    public Slide getById( Long id) {
+        return slideRepository.findById(id).orElseThrow(() -> new HumanResourcesAppException(ErrorType.SLIDE_NOT_FOUND));
     }
 
     public ResponseEntity<String> deleteDirectory(String directoryPath) {
@@ -151,14 +156,14 @@ public class SlideService {
     }
 
     @Transactional
-    public Boolean delete(String id)
+    public Boolean delete(Long id)
     {
 
-        Slide slide = slideRepository.findById(UUID.fromString(id)).orElseThrow(() -> new HumanResourcesAppException(ErrorType.SLIDE_NOT_FOUND));
+        Slide slide = slideRepository.findById(id).orElseThrow(() -> new HumanResourcesAppException(ErrorType.SLIDE_NOT_FOUND));
         deleteDirectory(slide.getDesktopImagesPath());
         deleteDirectory(slide.getMobileImagesPath());
         timeDataService.deleteTimeDataBySlideId(id);
-        slideRepository.deleteById(UUID.fromString(id));
+        slideRepository.deleteById(id);
 
         return true;
     }

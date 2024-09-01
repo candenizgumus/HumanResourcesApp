@@ -14,10 +14,10 @@ public interface TimeDataRepository extends JpaRepository<TimeData, Long> {
     List<String> findAllDistinctUsernames(Long companyId);
 
     @Query("SELECT DISTINCT t.slideId FROM TimeData t WHERE t.userName = :username")
-    List<UUID> findAllUsernamesSlides(String username);
+    List<Long> findAllUsernamesSlides(String username);
 
-    List<TimeData> findAllByUserNameAndSlideIdAndCompanyId(String username,UUID slideId,Long companyId);
+    List<TimeData> findAllByUserNameAndSlideIdAndCompanyId(String username,Long slideId,Long companyId);
 
 
-    void deleteAllBySlideId(UUID id);
+    void deleteAllBySlideId(Long id);
 }

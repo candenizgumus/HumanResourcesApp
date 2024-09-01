@@ -35,7 +35,14 @@ public class SlideController {
     @PostMapping("/upload")
     @PreAuthorize("hasAnyAuthority('MANAGER','ADMIN','EMPLOYEE')")
     public ResponseEntity<?> uploadZipFile(@RequestParam(value = "fileMobile", required = false) MultipartFile fileMobile,
-                                           @RequestParam(value = "fileDesktop", required = false) MultipartFile fileDesktop) {
+                                           @RequestParam(value = "fileDesktop", required = false) MultipartFile fileDesktop,
+                                           @RequestParam(value = "city", required = false) String city,
+                                           @RequestParam(value = "district", required = false) String district,
+                                           @RequestParam(value = "neighborhood", required = false) String neighborhood,
+                                           @RequestParam(value = "projection", required = false) String projection,
+                                           @RequestParam(value = "concept", required = false) String concept
+
+    ) {
         try {
 
             // Check if files are not null and process them
@@ -45,7 +52,7 @@ public class SlideController {
             String mobileImagesPath =  mobileImages.getFirst().split("/")[2];
             String desktopImagesPath = desktopImages.getFirst().split("/")[2];
             // Save images and return response
-            Slide slide = slideService.save(mobileImages, desktopImages, mobileImagesPath, desktopImagesPath);
+            Slide slide = slideService.save(mobileImages, desktopImages, mobileImagesPath, desktopImagesPath,city,district,neighborhood,projection,concept);
             return ResponseEntity.ok(slide);
         } catch (Exception e) {
             // Handle exceptions and return appropriate response
@@ -61,7 +68,7 @@ public class SlideController {
 
     @DeleteMapping(DELETE)
     @PreAuthorize("hasAnyAuthority('MANAGER')")
-    public ResponseEntity<Boolean> delete(String id) {
+    public ResponseEntity<Boolean> delete(Long id) {
         return ResponseEntity.ok(slideService.delete(id));
     }
 
@@ -74,7 +81,7 @@ public class SlideController {
 
     @PostMapping(GET_BY_ID)
     @CrossOrigin("*")
-    public ResponseEntity<Slide> getById(String id) {
+    public ResponseEntity<Slide> getById(Long id) {
         return ResponseEntity.ok(slideService.getById(id));
     }
 
@@ -106,7 +113,7 @@ public class SlideController {
 
         String userName = payload.get("userName").toString();
 
-        String slideId =  payload.get("slideId").toString();
+        String slideId = payload.get("slideId").toString();
 
         String userIp = payload.get("userIp").toString();
 
@@ -116,7 +123,7 @@ public class SlideController {
         timeDataService.save(TimeDataSaveRequestDto.builder()
                 .userName(userName)
                 .imageTimes(imageTimes)
-                .slideId(slideId)
+                .slideId(Long.parseLong(slideId))
                         .companyId(Long.parseLong(companyId))
                 .userIp(userIp).build());
 

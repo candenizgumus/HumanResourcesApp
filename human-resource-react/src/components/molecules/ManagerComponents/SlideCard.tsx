@@ -25,6 +25,7 @@ import Swal from "sweetalert2";
 import { myErrorColour, myLightColour } from "../../../util/MyColours";
 import { fetchDeleteTask, fetchGetTasks } from "../../../store/feature/TaskSlice";
 import { ActivateIcon } from '../../atoms/icons';
+import EncoderDecoder from "../../../util/EncoderDecoder";
 const CustomCard = styled(Card)(({ theme }) => ({
     height: '100%',
     display: 'flex',
@@ -71,7 +72,7 @@ const SlideCard = (props: { slide: ISlide, open: boolean }) => {
 
     const copyToClipboard = async (text: string) => {
         try {
-            await navigator.clipboard.writeText(text);
+            await navigator.clipboard.writeText(String(text));
             setOpenSnackbar(true);
         } catch (err) {
             console.error("Copy failed:", err);
@@ -87,7 +88,7 @@ const SlideCard = (props: { slide: ISlide, open: boolean }) => {
 
     const handleGetLink = () => {
 
-        const link = `${RestApis.baseUrl}/slides/${encodeURIComponent(props.slide.id)}/${encodeURIComponent(user.companyId)}/${encodeURIComponent(userName)}`;
+        const link = `${RestApis.baseUrl}/slides/${encodeURIComponent(EncoderDecoder.encode(props.slide.id))}/${encodeURIComponent(EncoderDecoder.encode(user.companyId))}/${encodeURIComponent(EncoderDecoder.encodeString(userName))}`;
         setMessage("Link copied to clipboard")
         copyToClipboard(link);
         setOpenGetLinkModal(false);
@@ -96,7 +97,7 @@ const SlideCard = (props: { slide: ISlide, open: boolean }) => {
     const handleGetId = () => {
         const id = props.slide.id;
         setMessage("ID copied to clipboard")
-        copyToClipboard(id);
+        copyToClipboard(String(id));
     };
 
     const handleDeleteSlide = async () => {
@@ -166,7 +167,7 @@ const SlideCard = (props: { slide: ISlide, open: boolean }) => {
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={() => setOpenGetLinkModal(false)} color="error" variant="contained">Cancel</Button>
-                    <Button onClick={handleGetLink} color="success" variant="contained" disabled={userName.length === 0}>Click to Copy</Button>
+                    <Button onClick={handleGetLink} color="success" variant="contained" disabled={userName.length === 0}>Click to Copy Link</Button>
                 </DialogActions>
             </Dialog>
             <Snackbar

@@ -11,7 +11,7 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { ArrowBack, ArrowForward } from '@mui/icons-material';
 
-function ShowSlide(props: { slideId: string}) {
+function ShowSlide(props: { slideId: number}) {
     const [isMobile, setIsMobile] = useState(window.matchMedia('(max-width: 768px)').matches);
     const [imageTimes, setImageTimes] = useState<Record<number, number>>({});
     const [currentImage, setCurrentImage] = useState<number | undefined>(undefined);

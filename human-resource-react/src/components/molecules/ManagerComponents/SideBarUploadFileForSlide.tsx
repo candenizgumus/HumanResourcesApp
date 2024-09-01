@@ -32,9 +32,22 @@ const FileUpload: React.FC = () => {
       const formData = new FormData();
       formData.append("fileMobile", fileMobile);
       formData.append("fileDesktop", fileDesktop);
+      formData.append("city", city);
+      formData.append("district", district);
+      formData.append("neighborhood", neighborhood);
+      formData.append("projection", projection);
+      formData.append("concept", concept);
 
       const result = await dispatch(fetchUploadFile({ token, formData })).unwrap();
       setMessage("Upload successful! " + (result.message || "Slides created."));
+      setFileMobile(null)
+      setFileDesktop(null)
+      setCity('')
+      setDistrict('')
+      setNeighborhood('')
+      setProjection('')
+      setConcept('')
+
     } catch (error) {
       setMessage("Failed to upload files. Please try again.");
       console.error(error);
@@ -153,7 +166,7 @@ const FileUpload: React.FC = () => {
               type="submit"
               variant="contained"
               color="primary"
-              disabled={loading || !fileMobile || !fileDesktop}
+              disabled={loading || !fileMobile || !fileDesktop || !city || !district || !neighborhood || !projection || !concept}
               sx={{ mt: 3 }}
               fullWidth
           >

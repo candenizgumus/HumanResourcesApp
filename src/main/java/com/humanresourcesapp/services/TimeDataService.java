@@ -31,7 +31,7 @@ public class TimeDataService
         timeDataRepository.save(TimeData.builder()
                 .userName(dto.userName())
                 .imageTimes(dto.imageTimes())
-                .slideId(UUID.fromString(dto.slideId()))
+                .slideId(dto.slideId())
                 .userIp(dto.userIp())
                 .companyId(dto.companyId())
                 .status(EStatus.ACTIVE)
@@ -46,11 +46,11 @@ public class TimeDataService
         return timeDataRepository.findAllDistinctUsernames(manager.getCompanyId());
     }
 
-    public List<String> getUsernamesSlides(String username)
+    public List<Long> getUsernamesSlides(String username)
     {
-        List<String> slideIds = new ArrayList<>();
+        List<Long> slideIds = new ArrayList<>();
         timeDataRepository.findAllUsernamesSlides(username).forEach(slideId -> {
-            slideIds.add(String.valueOf(slideId));
+            slideIds.add(slideId);
         });
         return slideIds;
     }
@@ -62,7 +62,7 @@ public class TimeDataService
 
         List<TimeData> timeDatas = timeDataRepository.findAllByUserNameAndSlideIdAndCompanyId(
                 dto.userName(),
-                UUID.fromString(dto.slideId()),
+                dto.slideId(),
                 manager.getCompanyId()
         );
 
@@ -80,7 +80,7 @@ public class TimeDataService
         // Yeni TimeData nesnesi oluşturuyoruz
         TimeData combinedTimeData = TimeData.builder()
                 .userName(dto.userName())
-                .slideId(UUID.fromString(dto.slideId()))
+                .slideId(dto.slideId())
                 .imageTimes(combinedImageTimes)
                 .userIp(timeDatas.get(0).getUserIp())
                 .createdAt(timeDatas.get(0).getCreatedAt())
@@ -114,8 +114,8 @@ public class TimeDataService
 
 
 
-    public void deleteTimeDataBySlideId(String id)
+    public void deleteTimeDataBySlideId(Long id)
     {
-        timeDataRepository.deleteAllBySlideId(UUID.fromString(id));
+        timeDataRepository.deleteAllBySlideId(id);
     }
 }

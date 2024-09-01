@@ -161,14 +161,25 @@ function UserStoryDetailPage() {
 
 
     useEffect(() => {
-        const decodedSlideId = EncoderDecoder.decode(slideId);
-        dispatch(fetchGetSlideById(decodedSlideId)).unwrap().then((slide) => {
-            setSlide(slide);
-            setLoading(false);
-        }).catch((error) => {
-            console.error('Error fetching slide:', error);
-            setLoading(false);
-        });
+        try {
+            const decodedSlideId = EncoderDecoder.decode(slideId);
+            dispatch(fetchGetSlideById(decodedSlideId)).unwrap().then((slide) => {
+                setSlide(slide);
+                setLoading(false);
+            }).catch((error) => {
+                console.error('Error fetching slide:', error);
+                setLoading(false);
+            });
+        }catch (error) {
+            Swal.fire({
+                title: "Error!",
+                text: "There is error occured.",
+                icon: "error",
+                confirmButtonText: "OK",
+                confirmButtonColor: myLightColour,
+            });
+        }
+
     }, [dispatch, slideId]);
 
     const CustomNextArrow = ({ onClick }: { onClick: () => void }) => {

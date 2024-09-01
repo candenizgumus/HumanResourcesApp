@@ -107,32 +107,22 @@ function UserStoryDetailPage() {
                     ...imageTimes,
                     [currentImage]: (imageTimes[currentImage] || 0) + timeSpent,
                 };
-
-                try {
-
                     try {
                         const slideIdDecoded = EncoderDecoder.decode(slideId);
                         const companyIdDecoded = EncoderDecoder.decode(companyId);
                         const userNameDecoded = EncoderDecoder.decodeString(userName);
 
                         console.log('Sending time data:', { updatedImageTimes, userIP, userName, slideId });
-                        const response = await dispatch(fetchStoreTimeData({ imageTimes: updatedImageTimes, userIP, userName:userNameDecoded, slideId: slideIdDecoded, companyId: companyIdDecoded })).unwrap();
-                        console.log('Time data sent successfully:', response);
-                        // Devam eden işlemler
+                        await dispatch(fetchStoreTimeData({ imageTimes: updatedImageTimes, userIP, userName:userNameDecoded, slideId: slideIdDecoded, companyId: companyIdDecoded }));
                     } catch (error) {
                         Swal.fire({
                             title: "Error!",
-                            text: "There is error occured.",
+                            text: "There is error occured...",
                             icon: "error",
                             confirmButtonText: "OK",
                             confirmButtonColor: myLightColour,
                         });
-
                     }
-
-                } catch (error) {
-                    console.error('Error sending time data:', error);
-                }
             }
         };
 
@@ -275,8 +265,8 @@ function UserStoryDetailPage() {
                     <Container maxWidth="lg" sx={{ bgcolor: 'myBackgroundColour.main' }}>
                         <Box sx={{ boxShadow: '0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19)' }}>
                             {isMobile ? (<>
-                                <SliderMessage message="You can slide to view other pages!" position={true} />
-                                <SliderMessage message="Scroll down to use the navigation buttons below the slider!" position={false} />
+                                <SliderMessage message="You can slide to view other pages!" position={true} color={true} margin={20}/>
+                                <SliderMessage message="Scroll down to use the navigation buttons below the slider!" position={false} color={true} margin={20}/>
                                 <Box sx={{
                                     position: 'relative', marginBottom: '70px', '.slick-dots': { bottom: '-60px' }, '& .slick-dots li button': {
                                         borderRadius: '50%', // Make dots circular

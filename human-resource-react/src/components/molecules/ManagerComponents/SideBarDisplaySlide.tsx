@@ -10,6 +10,7 @@ import { useDispatch } from 'react-redux';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { ArrowBack, ArrowForward } from '@mui/icons-material';
+import SliderMessage from '../../atoms/SliderMessage';
 
 function ShowSlide(props: { slideId: number}) {
     const [isMobile, setIsMobile] = useState(window.matchMedia('(max-width: 768px)').matches);
@@ -49,10 +50,11 @@ function ShowSlide(props: { slideId: number}) {
                 sx={{
                     position: 'absolute',
                     top: '50%',
-                    right: '10px', // Adjust this value to move the arrow further away from the edge
+                    right: '-50px', // Adjust this value to move the arrow further away from the edge
                     transform: 'translateY(-50%)',
                     backgroundColor: 'rgba(0, 0, 0, 0.3)', // Semi-transparent background
                     color: 'white',
+                    display: isMobile ? 'none' : '',
                     zIndex: 1,
                     '&:hover': {
                         backgroundColor: 'rgba(0, 0, 0, 0.7)',
@@ -63,7 +65,7 @@ function ShowSlide(props: { slideId: number}) {
             </IconButton>
         );
     };
-    
+
     // Custom Prev Arrow
     const CustomPrevArrow = ({ onClick }: { onClick: () => void }) => {
         return (
@@ -72,11 +74,12 @@ function ShowSlide(props: { slideId: number}) {
                 sx={{
                     position: 'absolute',
                     top: '50%',
-                    left: '10px', // Adjust this value to move the arrow further away from the edge
+                    left: '-50px', // Adjust this value to move the arrow further away from the edge
                     transform: 'translateY(-50%)',
                     backgroundColor: 'rgba(0, 0, 0, 0.3)', // Semi-transparent background
                     color: 'white',
                     zIndex: 1,
+                    display: isMobile ? 'none' : '',
                     '&:hover': {
                         backgroundColor: 'rgba(0, 0, 0, 0.7)',
                     },
@@ -125,44 +128,81 @@ function ShowSlide(props: { slideId: number}) {
 
     return (
         <ThemeElement>
-            <Container>
-                <CssBaseline />
-                <Box sx={{boxShadow: '0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19)'}}>
-                    {isMobile ? (
-                        <Box>
-                            {slide.mobileImageUrls.length > 0 ? (
-                                <Slider {...sliderSettings}>
-                                    {slide.mobileImageUrls.map((image: string, index: number) => (
-                                        <img
-                                            key={index}
-                                            src={RestApis.staticUploads + image}
-                                            alt={`Slide ${index + 1}`}
-                                        />
-                                    ))}
-                                </Slider>
+                    <Container maxWidth="lg">
+                        <CssBaseline />
+                        <Box sx={{ boxShadow: '0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19)' }}>
+                            {isMobile ? (<>
+                                <SliderMessage message="You can slide to view other pages!" position={true} color={false} margin={90} />
+                                <SliderMessage message="Scroll down to use the navigation buttons below the slider!" position={false} color={false} margin={30}/>
+                                <Box sx={{
+                                    position: 'relative', marginBottom: '70px', '.slick-dots': { bottom: '-60px' }, '& .slick-dots li button': {
+                                        borderRadius: '50%', // Make dots circular
+                                        backgroundColor: 'black', // Default dot color
+                                        opacity: 0.5,
+                                        '&:before': {
+                                            content: '""',
+                                            display: 'block',
+                                            width: '100%',
+                                            height: '100%',
+                                            borderRadius: '50%',
+                                            backgroundColor: 'black', // Dot color
+                                        },
+                                    },
+                                    '& .slick-dots li.slick-active button:before': {
+                                        backgroundColor: 'red', // Color of the active dot
+                                        opacity: 1,
+                                    },
+                                }}>
+                                    {slide.mobileImageUrls.length > 0 ? (
+                                        <Slider {...sliderSettings}>
+                                            {slide.mobileImageUrls.map((image: string, index: number) => (
+                                                <img
+                                                    key={index}
+                                                    src={RestApis.staticUploads + image}
+                                                    alt={`Slide ${index + 1}`}
+                                                />
+                                            ))}
+                                        </Slider>
+                                    ) : (
+                                        <div>No images uploaded</div>
+                                    )}
+                                </Box></>
                             ) : (
-                                <div>No images uploaded</div>
+                                <Box sx={{position: 'relative', marginTop: '3%', '.slick-dots': { bottom: '-60px' }, '& .slick-dots li button': {
+                                        borderRadius: '50%', // Make dots circular
+                                        backgroundColor: 'black', // Default dot color
+                                        opacity: 0.5,
+                                        '&:before': {
+                                            content: '""',
+                                            display: 'block',
+                                            width: '100%',
+                                            height: '100%',
+                                            borderRadius: '50%',
+                                            backgroundColor: 'black', // Dot color
+                                        },
+                                    },
+                                    '& .slick-dots li.slick-active button:before': {
+                                        backgroundColor: 'red', // Color of the active dot
+                                        opacity: 1,
+                                    },
+                                }}>
+                                    {slide.desktopImageUrls.length > 0 ? (
+                                        <Slider {...sliderSettings}>
+                                            {slide.desktopImageUrls.map((image: string, index: number) => (
+                                                <img
+                                                    key={index}
+                                                    src={RestApis.staticUploads + image}
+                                                    alt={`Slide ${index + 1}`}
+                                                />
+                                            ))}
+                                        </Slider>
+                                    ) : (
+                                        <div>No images uploaded</div>
+                                    )}
+                                </Box>
                             )}
                         </Box>
-                    ) : (
-                        <Box>
-                            {slide.desktopImageUrls.length > 0 ? (
-                                <Slider {...sliderSettings}>
-                                    {slide.desktopImageUrls.map((image: string, index: number) => (
-                                        <img
-                                            key={index}
-                                            src={RestApis.staticUploads + image}
-                                            alt={`Slide ${index + 1}`}
-                                        />
-                                    ))}
-                                </Slider>
-                            ) : (
-                                <div>No images uploaded</div>
-                            )}
-                        </Box>
-                    )}
-                </Box>
-            </Container>
+                    </Container>
         </ThemeElement>
     );
 }

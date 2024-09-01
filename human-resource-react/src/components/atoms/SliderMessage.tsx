@@ -2,29 +2,30 @@ import React, { useState, useEffect } from 'react';
 import { useMediaQuery } from '@mui/material';
 import { Slide } from '@mui/material';
 
-const SliderMessage = (props:{message: string, position: boolean}) => {
+const SliderMessage = (props:{message: string, position: boolean, color: boolean, margin: number}) => {
   const [showMessage, setShowMessage] = useState(true);
   const isMobile = useMediaQuery('(max-width: 600px)');
 
   const styles = {
     messageContainer: {
       position: 'fixed' as 'fixed',
-      top: props.position ? '20px' : '',
-      bottom: props.position ? '' : '20px',
+      top: props.position ? `${props.margin}px` : '',
+      bottom: props.position ? '' : `${props.margin}px`,
       left: '20px',
       right: '20px',
       borderRadius: 8,
-      backgroundColor: 'rgba(0, 0, 0, 0.8)',
-      color: 'white',
+      backgroundColor: props.color ? 'rgba(0, 0, 0, 0.8)' : 'rgba(255, 255, 255, 0.8)',
+      color: props.color ? 'white' : 'black',
       textAlign: 'center' as 'center',
       padding: '10px',
-      zIndex:  1000,
+      zIndex: 1000,
     },
     messageText: {
       margin: 0,
       paddingBottom: '10px',
     },
   };
+  
 
   useEffect(() => {
     if (isMobile) {

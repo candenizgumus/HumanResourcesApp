@@ -41,7 +41,7 @@ const CustomCard = styled(Card)(({ theme }) => ({
 
 }));
 
-const SlideCard = (props: { slide: ISlide, open: boolean }) => {
+const SlideCard = (props: { slide: ISlide, open: boolean, fetchMethod: () => void }) => {
     const navigate = useNavigate();
     const [openGetLinkModal, setOpenGetLinkModal] = useState(false);
     const [userName, setUserName] = useState('');
@@ -54,7 +54,7 @@ const SlideCard = (props: { slide: ISlide, open: boolean }) => {
     const [isMobile, setIsMobile] = useState(window.matchMedia('(max-width: 768px)').matches);
     const [displayExtras, setDisplayExtras] = useState(isMobile);
 
-    
+
     useEffect(() => {
         const handleResize = () => {
             setIsMobile(window.matchMedia('(max-width: 768px)').matches);
@@ -113,7 +113,7 @@ const SlideCard = (props: { slide: ISlide, open: boolean }) => {
         });
         if (result.isConfirmed) {
             dispatch(fetchDeleteSlide({ token: token, slideId: props.slide.id })).then(() => {
-                dispatch(fetchGetAllSlides(token)).unwrap();
+               props.fetchMethod();
             })
         }
 

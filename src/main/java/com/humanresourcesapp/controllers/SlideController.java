@@ -1,5 +1,6 @@
 package com.humanresourcesapp.controllers;
 
+import com.humanresourcesapp.dto.requests.SlideRequestDto;
 import com.humanresourcesapp.dto.requests.TimeDataSaveRequestDto;
 import com.humanresourcesapp.entities.PersonalDocument;
 import com.humanresourcesapp.entities.Slide;
@@ -75,8 +76,8 @@ public class SlideController {
     @PostMapping(GET_ALL)
     @PreAuthorize("hasAnyAuthority('MANAGER','ADMIN','EMPLOYEE')")
     @CrossOrigin("*")
-    public ResponseEntity<List<Slide>> getAll() {
-        return ResponseEntity.ok(slideService.getAll());
+    public ResponseEntity<List<Slide>> getAll(@RequestBody SlideRequestDto dto) {
+        return ResponseEntity.ok(slideService.getAll(dto));
     }
 
     @PostMapping(GET_BY_ID)

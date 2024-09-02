@@ -9,12 +9,6 @@ import List from '@mui/material/List';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import NotificationsIcon from '@mui/icons-material/Notifications';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import CreateNewFolderIcon from '@mui/icons-material/CreateNewFolder';
-import FolderCopyIcon from '@mui/icons-material/FolderCopy';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
@@ -25,7 +19,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { changePageState } from '../../store/feature/authSlice';
 import { NotificationIcon } from "../../components/atoms/NotificationIcon";
 import { useNavigate } from 'react-router-dom';
-import DesignServicesIcon from '@mui/icons-material/DesignServices';
 import NavbarProfile from "../../components/atoms/NavbarProfile";
 import { ManagerMenuContentRenderer } from "../../components/organisms/ManagerMenuContentRenderer";
 import {
@@ -36,12 +29,10 @@ import {
     Person,
     PersonAdd,
     PointOfSale,
-    AdminPanelSettings,
+    AdminPanelSettings, CreateNewFolder, ChevronRight, ChevronLeft, Notifications, FolderCopy, Menu, DesignServices, AddComment, Hiking, LibraryAdd, CollectionsBookmark,
     Weekend, Laptop, Dashboard, DuoTwoTone, Task, Dataset
 } from "@mui/icons-material";
-import AddCommentIcon from '@mui/icons-material/AddComment';
 import { ManagerHomeContent } from "../../components/molecules/ManagerComponents/ManagerHomeContent";
-import HikingIcon from '@mui/icons-material/Hiking';
 import { useState } from "react";
 import logo from '../../images/logo-full-white.png';
 import logoDark from '../../images/logo-full-dark.png';
@@ -171,7 +162,7 @@ export default function AdminPage() {
                             edge="start"
                             sx={{ mr: 2, ...(open && { display: 'none' }) }}
                         >
-                            <MenuIcon />
+                            <Menu />
                         </IconButton>
                         {(open && isBigForScreen2) ? null : (
                             <Typography variant="h6" sx={logoStyle}>
@@ -223,7 +214,7 @@ export default function AdminPage() {
                 >
                     <DrawerHeader sx={{ bgcolor: 'primary.main' }}>
                         <IconButton onClick={handleDrawerClose} sx={{ color: 'white' }}>
-                            {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+                            {theme.direction === 'ltr' ? <ChevronLeft /> : <ChevronRight />}
                         </IconButton>
                     </DrawerHeader>
                     <List sx={{ bgcolor: 'primary.main', minHeight: 'calc(100vh - 65px)', paddingTop: '0' }}>
@@ -254,21 +245,21 @@ export default function AdminPage() {
                                         {index === 1 && <Person />}
                                         {index === 2 && <PersonAdd />}
                                         {index === 3 && <AdminPanelSettings />}
-                                        {index === 4 && <DesignServicesIcon />}
+                                        {index === 4 && <DesignServices />}
                                         {index === 5 && <AccountBox />}
                                         {index === 6 && <Apartment />}
-                                        {index === 7 && <AddCommentIcon />}
+                                        {index === 7 && <AddComment />}
                                         {index === 8 && <Weekend />}
-                                        {index === 9 && <NotificationsIcon />}
+                                        {index === 9 && <Notifications />}
                                         {index === 10 && <PointOfSale />}
-                                        {index === 11 && <HikingIcon />}
+                                        {index === 11 && <Hiking />}
                                         {index === 12 && <Payments />}
                                         {index === 13 && <AddDocumentIcon />}
                                         {index === 14 && <Paid />}
                                         {index === 15 && <Laptop />}
                                         {index === 16 && <Task />}
-                                        {index === 17 && <CreateNewFolderIcon />}
-                                        {index === 18 && <FolderCopyIcon />}
+                                        {index === 17 && <LibraryAdd />}
+                                        {index === 18 && <CollectionsBookmark />}
                                         {index === 19 && <Dataset />}
                                     </ListItemIcon>
                                     <ListItemText primary={text} />
@@ -279,7 +270,7 @@ export default function AdminPage() {
                 </Drawer>
                 <Main sx={{ minHeight: '100vh' }} open={open} onClick={handleDrawerCloseOnMobile}>
                     <DrawerHeader />
-                    {open && isMobile ?  
+                    {open && isMobile ?
                         <Grid sx={{minHeight: 'calc(100vh - 128px)', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                             <img src={logoDark} alt="logo" style={{ height: '122px' }} />
                         </Grid>

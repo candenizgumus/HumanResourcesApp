@@ -5,6 +5,7 @@ import { fetchUploadFile } from "../../../store/feature/slideSlice";
 import { HumanResources, useAppSelector } from "../../../store";
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import {Cloud, CloudUpload} from "@mui/icons-material";
+import FileUploadComponent from "../../atoms/FileUploadComponent";
 
 const FileUpload: React.FC = () => {
   const [fileMobile, setFileMobile] = useState<File | null>(null);
@@ -13,6 +14,7 @@ const FileUpload: React.FC = () => {
   const token = useAppSelector((state) => state.auth.token);
   const dispatch = useDispatch<HumanResources>();
   const [loading, setLoading] = useState(false);
+  const [resetFiles, setResetFiles] = useState<boolean>(false);
 
   const[city, setCity] = useState('');
   const[district, setDistrict] = useState('');
@@ -40,8 +42,7 @@ const FileUpload: React.FC = () => {
 
       const result = await dispatch(fetchUploadFile({ token, formData })).unwrap();
       setMessage("Upload successful! " + (result.message || "Slides created."));
-      setFileMobile(null)
-      setFileDesktop(null)
+      setResetFiles(true);
       setCity('')
       setDistrict('')
       setNeighborhood('')
@@ -68,50 +69,20 @@ const FileUpload: React.FC = () => {
     }
   };
 
+  React.useEffect(() => {
+    if (resetFiles) {
+      setResetFiles(false);
+    }
+  }, [resetFiles]);
+
   return (
       <Container maxWidth="sm" sx={{ mt: 5 }}>
         <Typography sx={{ textAlign: 'center' ,fontWeight: 'bold'}} variant="h4" component="h2" gutterBottom>
           Upload .zip Files
         </Typography>
         <Box component="form" onSubmit={handleSubmit} noValidate>
-          <Box sx={{ mt: 3 }}>
-            <Typography variant="body1" gutterBottom>
-              Mobile File:
-            </Typography>
-            <Box sx={{ display: 'flex', alignItems: 'center', mt: 1, border: '3px dashed grey', p: 2, borderRadius: 1 }}>
-              <IconButton color="primary" component="label">
-                <CloudUpload />
-                <input
-                    type="file"
-                    onChange={handleFileChangeMobile}
-                    accept=".zip"
-                    hidden
-                />
-              </IconButton>
-              <Typography variant="body2" sx={{ ml: 2 }}>
-                {fileMobile ? fileMobile.name : "No file selected"}
-              </Typography>
-            </Box>
-          </Box>
-          <Box sx={{ mt: 3 }}>
-            <Typography variant="body1" gutterBottom>
-              Desktop File:
-            </Typography>
-            <Box sx={{ display: 'flex', alignItems: 'center', mt: 1, border: '3px dashed grey', p: 2, borderRadius: 1 }}>
-              <IconButton color="primary" component="label">
-                <CloudUpload />
-                <input
-                    type="file"
-                    onChange={handleFileChangeDesktop}
-                    accept=".zip"
-                    hidden
-                />
-              </IconButton>
-              <Typography variant="body2" sx={{ ml: 2 }}>
-                {fileDesktop ? fileDesktop.name : "No file selected"}
-              </Typography>
-            </Box>
-          </Box>
+          <FileUploadComponent message="Mobile File:" onFileChange={setFileMobile} reset={resetFiles}/>
+          <FileUploadComponent message="Desktop File:" onFileChange={setFileDesktop} reset={resetFiles}/>
           <TextField
 
               label="City"

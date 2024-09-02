@@ -9,7 +9,8 @@ import {
     TextField,
     Snackbar,
     Box,
-    Typography
+    Typography,
+    Tooltip
 } from "@mui/material";
 import Card from '@mui/material/Card';
 import { styled } from '@mui/material/styles';
@@ -22,7 +23,7 @@ import { HumanResources, useAppSelector } from "../../../store";
 import { changePageState, fetchFindCompanyNameAndManagerNameOfUser } from "../../../store/feature/authSlice";
 import { useDispatch } from "react-redux";
 import Swal from "sweetalert2";
-import {myBackgroundColour, myErrorColour, myLightColour} from "../../../util/MyColours";
+import { myBackgroundColour, myErrorColour, myLightColour } from "../../../util/MyColours";
 import { fetchDeleteTask, fetchGetTasks } from "../../../store/feature/TaskSlice";
 import { ActivateIcon } from '../../atoms/icons';
 import EncoderDecoder from "../../../util/EncoderDecoder";
@@ -56,7 +57,9 @@ const SlideCard = (props: { slide: ISlide, open: boolean, fetchMethod: () => voi
     const [message, setMessage] = useState('');
     const [isMobile, setIsMobile] = useState(window.matchMedia('(max-width: 768px)').matches);
     const [displayExtras, setDisplayExtras] = useState(isMobile);
-
+    //For Tooltip
+    const [cursorPosition, setCursorPosition] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
+    const [tooltipText, setTooltipText] = useState<string | null>(null);
 
     useEffect(() => {
         const handleResize = () => {
@@ -83,7 +86,7 @@ const SlideCard = (props: { slide: ISlide, open: boolean, fetchMethod: () => voi
     };
 
     useEffect(() => {
-        if(isMobile && props.open)
+        if (isMobile && props.open)
             setDisplayExtras(false);
         else
             setDisplayExtras(true);
@@ -116,7 +119,7 @@ const SlideCard = (props: { slide: ISlide, open: boolean, fetchMethod: () => voi
         });
         if (result.isConfirmed) {
             dispatch(fetchDeleteSlide({ token: token, slideId: props.slide.id })).then(() => {
-               props.fetchMethod();
+                props.fetchMethod();
             })
         }
 
@@ -124,59 +127,111 @@ const SlideCard = (props: { slide: ISlide, open: boolean, fetchMethod: () => voi
 
     }
 
+    
+
+    const handleMouseMove = (event: React.MouseEvent<HTMLElement>, text: string) => {
+        setCursorPosition({ x: event.clientX, y: event.clientY });
+        setTooltipText(text);
+    };
+
+    const handleMouseLeave = () => {
+        setTooltipText(null);
+    };
+
+    const textItems = [
+        { label: 'Id', value: props.slide.id.toString() },
+        { label: 'City', value: props.slide.city },
+        { label: 'District', value: props.slide.district },
+        { label: 'N.hood', value: props.slide.neighborhood },
+        { label: 'Projection', value: props.slide.projection },
+        { label: 'Concept', value: props.slide.concept },
+    ];
+
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', padding: '10px', borderRadius: '5px', height: '100%', boxShadow: '0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19)' }}>
-            <Typography variant="subtitle1" sx={{ textAlign: 'center',display: displayExtras ? 'block' : 'none'}} >
-            </Typography>
-            <Grid container spacing={2}>
+            <Grid container spacing={2} >
                 <Grid item xs={12}>
                     <CustomCard onClick={handleClick}>
-                        <img src={RestApis.staticUploads + props.slide.desktopImageUrls[0]} alt="Slide" style={{ width: '100%', objectFit: 'cover'  }} />
+                        <img src={RestApis.staticUploads + props.slide.desktopImageUrls[0]} alt="Slide" style={{ width: '100%', objectFit: 'cover' }} />
                     </CustomCard>
                 </Grid>
             </Grid>
-            <Box sx={{ display: 'flex', flexDirection: 'column', marginTop: '10px' }}>
-                <Grid container spacing={2}>
-                    <Grid item xs={12}>
-                        <Grid container spacing={2}>
-                            <Grid item xs={4} sx={{ overflow: 'auto' }}>
-                                <Typography sx={{ mb: 1.5, fontStyle: 'italic', fontSize: '12px' }} variant="body2">
-                                    <strong>Id:</strong> {props.slide.id}
-                                </Typography>
-                                <Typography sx={{ mb: 1.5, fontStyle: 'italic', fontSize: '12px' }} variant="body2">
-                                    <strong>City:</strong> {props.slide.city}
-                                </Typography>
-                                <Typography sx={{ mb: 1.5, fontStyle: 'italic', fontSize: '12px' }} variant="body2">
-                                    <strong>District:</strong> {props.slide.district}
-                                </Typography>
-                            </Grid>
-                            <Grid item xs={8} sx={{ overflow: 'auto' }}>
-                                <Typography sx={{ mb: 1.5, fontStyle: 'italic', fontSize: '12px' }} variant="body2">
-                                    <strong>N.hood:</strong> {props.slide.neighborhood}
-                                </Typography>
-                                <Typography sx={{ mb: 1.5, fontStyle: 'italic', fontSize: '12px' }} variant="body2">
-                                    <strong>Projection:</strong> {props.slide.projection}
-                                </Typography>
-                                <Typography sx={{ mb: 1.5, fontStyle: 'italic', fontSize: '12px' }} variant="body2">
-                                    <strong>Concept:</strong> {props.slide.concept}
+
+            <Grid container spacing={2} sx={{ marginTop: '10px', justifyContent: 'flex-end' }}>
+                <Grid item xs={12}>
+                    <Grid container spacing={2}>
+                        {textItems.slice(0, 3).map((item, index) => (
+                            <Grid item xs={6} sx={{ overflow: 'unset' }} key={index}>
+                                <Typography
+                                    sx={{
+                                        mb: 1.5,
+                                        fontStyle: 'italic',
+                                        fontSize: '12px',
+                                        whiteSpace: 'nowrap',
+                                        overflow: 'hidden',
+                                        textOverflow: 'ellipsis',
+                                    }}
+                                    variant="body2"
+                                    onMouseMove={(e) => handleMouseMove(e, item.value)}
+                                    onMouseLeave={handleMouseLeave}
+                                >
+                                    <strong>{item.label}:</strong> {item.value}
                                 </Typography>
                             </Grid>
+                        ))}
+                        {textItems.slice(3).map((item, index) => (
+                            <Grid item xs={6} sx={{ overflow: 'auto' }} key={index + 3}>
+                                <Typography
+                                    sx={{
+                                        mb: 1.5,
+                                        fontStyle: 'italic',
+                                        fontSize: '12px',
+                                        whiteSpace: 'nowrap',
+                                        overflow: 'hidden',
+                                        textOverflow: 'ellipsis',
+                                    }}
+                                    variant="body2"
+                                    onMouseMove={(e) => handleMouseMove(e, item.value)}
+                                    onMouseLeave={handleMouseLeave}
+                                >
+                                    <strong>{item.label}:</strong> {item.value}
+                                </Typography>
+                            </Grid>
+                        ))}
+                    </Grid>
+                    {tooltipText && (
+                        <Box
+                            sx={{
+                                position: 'fixed',
+                                top: cursorPosition.y + 10,
+                                left: cursorPosition.x + 10,
+                                backgroundColor: 'rgba(0, 0, 0, 0.75)',
+                                color: 'white',
+                                padding: '5px 10px',
+                                borderRadius: '4px',
+                                zIndex: 9999,
+                                pointerEvents: 'none',
+                                whiteSpace: 'nowrap',
+                            }}
+                        >
+                            {tooltipText}
+                        </Box>
+                    )}
+
+                    <Grid container spacing={2} sx={{ marginTop: '10px', justifyContent: 'flex-end' }}>
+                        <Grid item xs={6}>
+                            <Button fullWidth variant="contained" color="primary" startIcon={<ContentCopyIcon />} onClick={() => setOpenGetLinkModal(true)}>
+                                Get Link
+                            </Button>
                         </Grid>
-                        <Grid container spacing={2} sx={{ marginTop: '10px', justifyContent: 'flex-end' }}>
-                            <Grid item xs={6}>
-                                <Button fullWidth variant="contained" color="primary" sx={{ margin: '5px' }} startIcon={<ContentCopyIcon />} onClick={() => setOpenGetLinkModal(true)}>
-                                    Get Link
-                                </Button>
-                            </Grid>
-                            <Grid item xs={6}>
-                                <Button fullWidth variant="contained" color="error" sx={{ margin: '5px' }} startIcon={<DeleteIcon />} onClick={handleDeleteSlide}>
-                                    Delete
-                                </Button>
-                            </Grid>
+                        <Grid item xs={6}>
+                            <Button fullWidth variant="contained" color="error" startIcon={<DeleteIcon />} onClick={handleDeleteSlide}>
+                                Delete
+                            </Button>
                         </Grid>
                     </Grid>
                 </Grid>
-            </Box>
+            </Grid>
 
 
             {/* Dialog and Snackbar components here */}
@@ -209,8 +264,8 @@ const SlideCard = (props: { slide: ISlide, open: boolean, fetchMethod: () => voi
                             color: "white",
                             fontWeight: "bold",
                             textAlign: "center",
-                            display: "flex",        
-                            alignItems: "center",    
+                            display: "flex",
+                            alignItems: "center",
                             justifyContent: "center",
                         }}
                     >

@@ -32,17 +32,10 @@ public class SlideController {
 
     private final SlideService slideService;
     private final TimeDataService timeDataService;
-
-    @PostMapping("/upload")
+    @PostMapping("/upload-file-for-slide")
     @PreAuthorize("hasAnyAuthority('MANAGER','ADMIN','EMPLOYEE')")
     public ResponseEntity<?> uploadZipFile(@RequestParam(value = "fileMobile", required = false) MultipartFile fileMobile,
-                                           @RequestParam(value = "fileDesktop", required = false) MultipartFile fileDesktop,
-                                           @RequestParam(value = "city", required = false) String city,
-                                           @RequestParam(value = "district", required = false) String district,
-                                           @RequestParam(value = "neighborhood", required = false) String neighborhood,
-                                           @RequestParam(value = "projection", required = false) String projection,
-                                           @RequestParam(value = "concept", required = false) String concept
-
+                                           @RequestParam(value = "fileDesktop", required = false) MultipartFile fileDesktop
     ) {
         try {
 
@@ -53,7 +46,31 @@ public class SlideController {
             String mobileImagesPath =  mobileImages.getFirst().split("/")[2];
             String desktopImagesPath = desktopImages.getFirst().split("/")[2];
             // Save images and return response
-            Slide slide = slideService.save(mobileImages, desktopImages, mobileImagesPath, desktopImagesPath,city,district,neighborhood,projection,concept);
+            Slide slide = slideService.saveWithoutDescription(mobileImages, desktopImages, mobileImagesPath, desktopImagesPath);
+            return ResponseEntity.ok(slide);
+        } catch (Exception e) {
+            // Handle exceptions and return appropriate response
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error processing files");
+        }
+    }
+    @PostMapping("/create-slide")
+    @PreAuthorize("hasAnyAuthority('MANAGER','ADMIN','EMPLOYEE')")
+    public ResponseEntity<?> createSlide(@RequestParam(value = "mobileImageUrls", required = false)  List<String> mobileImageUrls,
+                                           @RequestParam(value = "desktopImageUrls", required = false)  List<String> desktopImageUrls,
+                                           @RequestParam(value = "city", required = false) String city,
+                                           @RequestParam(value = "district", required = false) String district,
+                                           @RequestParam(value = "neighborhood", required = false) String neighborhood,
+                                           @RequestParam(value = "projection", required = false) String projection,
+                                           @RequestParam(value = "concept", required = false) String concept
+
+    ) {
+        try {
+
+            String mobileImagesPath =  mobileImageUrls.getFirst().split("/")[2];
+            String desktopImagesPath = desktopImageUrls.getFirst().split("/")[2];
+            // Save images and return response
+            Slide slide = slideService.saveWithDescription(mobileImageUrls, desktopImageUrls, mobileImagesPath, desktopImagesPath,city,district,neighborhood,projection,concept);
             return ResponseEntity.ok(slide);
         } catch (Exception e) {
             // Handle exceptions and return appropriate response

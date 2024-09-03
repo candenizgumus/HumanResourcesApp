@@ -34,16 +34,27 @@ public class SlideService {
     private static final String UPLOAD_DIR = "uploads/";
     private final TimeDataService timeDataService;
     private final UserService userService;
-    public Slide save(List<String> mobileImages, List<String> desktopImages, String mobileImagesPath, String desktopImagesPath,String city,String district,String neighbourhood,String projection, String concept) {
+    public Slide saveWithoutDescription(List<String> mobileImages, List<String> desktopImages, String mobileImagesPath, String desktopImagesPath) {
         String email = UserInfoSecurityContext.getUserInfoFromSecurityContext();
         User manager = userService.findByEmail(email).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
         return slideRepository.save(Slide.builder()
                 .mobileImageUrls(mobileImages)
-                        .city(city)
-                        .district(district)
-                        .neighborhood(neighbourhood)
-                        .projection(projection)
-                        .concept(concept)
+                .desktopImageUrls(desktopImages)
+                .desktopImagesPath("uploads/"+desktopImagesPath)
+                .companyId(manager.getCompanyId())
+                .mobileImagesPath("uploads/"+mobileImagesPath).build());
+    }
+
+    public Slide saveWithDescription(List<String> mobileImages, List<String> desktopImages, String mobileImagesPath, String desktopImagesPath,String city,String district,String neighbourhood,String projection, String concept) {
+        String email = UserInfoSecurityContext.getUserInfoFromSecurityContext();
+        User manager = userService.findByEmail(email).orElseThrow(() -> new HumanResourcesAppException(ErrorType.USER_NOT_FOUND));
+        return slideRepository.save(Slide.builder()
+                .mobileImageUrls(mobileImages)
+                .city(city)
+                .district(district)
+                .neighborhood(neighbourhood)
+                .projection(projection)
+                .concept(concept)
                 .desktopImageUrls(desktopImages)
                 .desktopImagesPath("uploads/"+desktopImagesPath)
                 .companyId(manager.getCompanyId())

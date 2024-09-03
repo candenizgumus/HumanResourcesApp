@@ -34,7 +34,26 @@ interface ISlidePayload {
 export const fetchUploadFile = createAsyncThunk(
     'slide/fetchUploadFile',
     async (payload: ISlidePayload) => {
-        const response = await fetch(RestApis.slideService + '/upload', {
+        const response = await fetch(RestApis.slideService + '/create-slide', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${payload.token}`
+            },
+            body: payload.formData
+        });
+
+        if (!response.ok) {
+            throw new Error('File upload failed');
+        }
+
+        return await response.json();
+    }
+);
+
+export const fetchUploadFileForSlide = createAsyncThunk(
+    'slide/fetchUploadFileForSlide',
+    async (payload: ISlidePayload) => {
+        const response = await fetch(RestApis.slideService + '/upload-file-for-slide', {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${payload.token}`

@@ -21,6 +21,7 @@ import { IFile } from "../../../models/IFile";
 import { CloudUpload } from "@mui/icons-material";
 import { myErrorColour, myLightColour } from '../../../util/MyColours';
 import { ICountries } from "../../../models/ICountries";
+import {useTranslation} from "react-i18next";
 
 const SideBarCompany: React.FC = () => {
 
@@ -36,7 +37,7 @@ const SideBarCompany: React.FC = () => {
     const [formState, setFormState] = useState<IFile>({
         photo: null
     });
-
+    const {t} = useTranslation();
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         // Handle form submission
@@ -204,7 +205,7 @@ const SideBarCompany: React.FC = () => {
                 <Grid container spacing={2} sx={{ flexGrow: 1, justifyContent: 'flex-start', alignItems: 'stretch' }}>
                     <Grid item xs={12}>
                         <TextField
-                            label='Company Name'
+                            label={t('Company Name')}
                             name="name"
                             value={name}
                             onChange={event => setName(event.target.value)}
@@ -215,7 +216,7 @@ const SideBarCompany: React.FC = () => {
                     </Grid>
                     <Grid item xs={12}>
                         <TextField
-                            label='Description'
+                            label={t('Description')}
                             name="description"
                             value={description}
                             onChange={event => setDescription(event.target.value)}
@@ -226,7 +227,7 @@ const SideBarCompany: React.FC = () => {
                     </Grid>
                     <Grid item xs={12}>
                         <FormControl variant="outlined" sx={{ width: '100%' }}>
-                            <InputLabel>{'Please Select Your Country'}</InputLabel>
+                            <InputLabel>{t('Please Select Your Country')}</InputLabel>
                             <Select
                                 required
                                 value={country}
@@ -244,7 +245,7 @@ const SideBarCompany: React.FC = () => {
                     </Grid>
                     <Grid item xs={12}>
                         <Button onClick={updateCompany} sx={{ width: '100%' }} type="button" variant="contained" color="success">
-                            Update Company
+                            {t('Update Company')}
                         </Button>
                     </Grid>
                 </Grid>
@@ -253,7 +254,7 @@ const SideBarCompany: React.FC = () => {
                 <Grid container spacing={2} sx={{ flexGrow: 1, justifyContent: 'flex-start', alignItems: 'stretch' }}>
                     <Grid item xs={12}>
                         <TextField
-                            label='Number Of Employees'
+                            label={t('Number of Employees')}
                             name="numberOfEmployee"
                             value={numberOfEmployee}
                             fullWidth

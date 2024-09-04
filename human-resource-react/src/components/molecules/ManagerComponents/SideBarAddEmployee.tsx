@@ -29,6 +29,7 @@ import { IFile } from "../../../models/IFile";
 import { CloudUploadIcon } from "../../atoms/icons";
 import { uploadPlayerProfileImage } from "../../../store/feature/awsSlice";
 import { myErrorColour, myLightColour } from '../../../util/MyColours';
+import {useTranslation} from "react-i18next";
 
 
 
@@ -57,7 +58,7 @@ const SideBarAddEmployee: React.FC = () => {
     const [formState, setFormState] = useState<IFile>({
         photo: null
     });
-
+    const {t} = useTranslation();
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         // Handle form submission
@@ -277,7 +278,7 @@ const SideBarAddEmployee: React.FC = () => {
             <Grid container spacing={2} sx={{ flexGrow: 1, justifyContent: 'flex-start', alignItems: 'stretch', padding:'2%' }}>
                 <Grid item xs={12} sm={6} md={6} lg={6}>
                     <TextField
-                        label='Name'
+                        label={t("Name")}
                         name="name"
                         value={name}
                         onChange={event => setName(event.target.value)}
@@ -288,7 +289,7 @@ const SideBarAddEmployee: React.FC = () => {
                 </Grid>
                 <Grid item xs={12} sm={6} md={6} lg={6}>
                     <TextField
-                        label='Surname'
+                        label={t("Surname")}
                         name="surname"
                         value={surname}
                         onChange={event => setSurname(event.target.value)}
@@ -310,7 +311,7 @@ const SideBarAddEmployee: React.FC = () => {
                 </Grid>
                 <Grid item xs={12} sm={6} md={6} lg={6}>
                     <TextField
-                        label='Phone'
+                        label={t("Phone")}
                         name="phone"
                         value={phone}
                         onChange={event => setPhone(event.target.value)}
@@ -323,7 +324,7 @@ const SideBarAddEmployee: React.FC = () => {
                 <Grid item xs={12} sm={6} md={6} lg={6}>
 
                     <TextField
-                        label='Title'
+                        label={t("Title")}
                         name="title"
                         value={title}
                         onChange={event => setTitle(event.target.value)}
@@ -334,7 +335,7 @@ const SideBarAddEmployee: React.FC = () => {
                 </Grid>
                 <Grid item xs={12} sm={6} md={6} lg={6}>
                     <TextField
-                        label='Location'
+                        label={t("Location")}
                         name="location"
                         value={location}
                         onChange={event => setLocation(event.target.value)}
@@ -345,7 +346,7 @@ const SideBarAddEmployee: React.FC = () => {
                 </Grid>
                 <Grid item xs={12} sm={6} md={6} lg={6}>
                     <FormControl required variant="outlined" sx={{width: '100%'}}>
-                        <InputLabel>{'Please Select Position'}</InputLabel>
+                        <InputLabel>{t('Please Select Your Position')}</InputLabel>
                         <Select
                             value={selectedPosition}
                             onChange={event => setSelectedPosition(event.target.value as string)}
@@ -361,8 +362,9 @@ const SideBarAddEmployee: React.FC = () => {
                 </Grid>
                 <Grid item xs={12} sm={6} md={6} lg={6}>
                     <FormControl required variant="outlined" sx={{width: '100%'}}>
-                        <InputLabel>{'Please Select Employee Type'}</InputLabel>
+                        <InputLabel>{t('Please Select Employee Type')}</InputLabel>
                         <Select
+                            required={true}
                             value={selectedEmployeeType}
                             onChange={event => setSelectedEmployeeType(event.target.value as string)}
                             label="Employee Type"
@@ -379,7 +381,7 @@ const SideBarAddEmployee: React.FC = () => {
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DatePicker
                         sx={{width: '100%'}}
-                            label="Hire Date"
+                            label={t("Hired Date")}
                             value={birthDate ? dayjs(hireDate) : null}
                             onChange={(newValue) => setHireDate(newValue ? newValue.toDate() : null)}
 
@@ -390,7 +392,8 @@ const SideBarAddEmployee: React.FC = () => {
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DatePicker
                         sx={{width: '100%'}}
-                            label="Birth Date"
+                            label={t("Birth Date")}
+
                             value={birthDate ? dayjs(birthDate) : null}
 
                             onChange={(newValue) => setBirthDate(newValue ? newValue.toDate() : null)}
@@ -400,9 +403,10 @@ const SideBarAddEmployee: React.FC = () => {
                 </Grid>
                 <Grid item xs={12} sm={6} md={6} lg={6}>
                     <FormControl fullWidth >
-                        <InputLabel htmlFor="outlined-adornment-amount">Salary</InputLabel>
+                        <InputLabel htmlFor="outlined-adornment-amount">{t("Salary")}</InputLabel>
                         <OutlinedInput
                             id="outlined-adornment-amount"
+                            required={true}
                             startAdornment={<InputAdornment position="start">$</InputAdornment>}
                             label="Salary"
                             value={salary ?? ''} // Set the value of the input
@@ -418,7 +422,7 @@ const SideBarAddEmployee: React.FC = () => {
             <Grid container spacing={2} sx={{ flexGrow: 1, alignItems: 'stretch',justifyContent: 'flex-start', padding:'2%' }}>
                 <Grid item xs={12} sm={6} md={6} lg={6}>
                     <Button onClick={addEmployee} fullWidth type="button" variant="contained" color="success" disabled={loading}>
-                        {loading ? "SAVING..." : "ADD EMPLOYEE"}
+                        {loading ? t("Uploading...") : t("Add Employee")}
                     </Button>
                 </Grid>
             </Grid>

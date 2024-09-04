@@ -29,6 +29,7 @@ import { EDefinitionType } from "../../../models/IDefinitionType";
 import AddDocument from "./AddDocument";
 import AddBonus from "./AddBonus";
 import { myErrorColour, myLightColour } from "../../../util/MyColours";
+import {useTranslation} from "react-i18next";
 
 
 export default function SideBarEmployees() {
@@ -48,7 +49,7 @@ export default function SideBarEmployees() {
     const [bonusDate, setBonusDate] = useState<Date | null>(null);
     const [isDeleting, setIsDeleting] = useState(false);
     const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
-
+    const {t} = useTranslation();
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
@@ -356,7 +357,7 @@ export default function SideBarEmployees() {
     return (
         <div style={{ height: "auto", width: "inherit" }}>
             <TextField
-                label="Search By Email"
+                label={t("Search by Email")}
                 variant="outlined"
                 onChange={(event) => setSearchText(event.target.value)}
                 value={searchText}
@@ -403,7 +404,7 @@ export default function SideBarEmployees() {
                         sx={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                         startIcon={<Icons.ActivateIcon />}
                     >
-                        Activate
+                        {t("Activate")}
                     </Button>
                 </Grid>
                 <Grid item xs={12} sm={6} md={3} lg={2}>
@@ -415,7 +416,7 @@ export default function SideBarEmployees() {
                         sx={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                         startIcon={<Icons.DeleteIcon />}
                     >
-                        Delete
+                        {t("Delete")}
                     </Button>
                 </Grid>
                 <Grid item xs={12} sm={6} md={3} lg={2}>
@@ -427,7 +428,7 @@ export default function SideBarEmployees() {
                         sx={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                         startIcon={<Icons.EditIcon />}
                     >
-                        Edit Employee
+                        {t("Edit Employee")}
                     </Button>
                 </Grid>
                 <Grid item xs={12} sm={6} md={3} lg={2}>
@@ -439,7 +440,7 @@ export default function SideBarEmployees() {
                         sx={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                         startIcon={<Icons.AddDocumentIcon />}
                     >
-                        Add Document
+                        {t("Add Document")}
                     </Button>
                 </Grid>
                 <Grid item xs={12} sm={6} md={3} lg={2}>
@@ -451,7 +452,7 @@ export default function SideBarEmployees() {
                         sx={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                         startIcon={<Icons.BonusIcon />}
                     >
-                        Add Bonus
+                        {t("Add Bonus")}
                     </Button>
                 </Grid>
                 <Grid item xs={12} sm={6} md={3} lg={2}>
@@ -463,7 +464,7 @@ export default function SideBarEmployees() {
                         sx={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                         startIcon={<Icons.SetShiftIcon />}
                     >
-                        Set Shifts
+                        {t("Set Shifts")}
                     </Button>
                 </Grid>
                 <Grid item xs={12} sm={6} md={3} lg={2}>
@@ -475,7 +476,7 @@ export default function SideBarEmployees() {
                         sx={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                         startIcon={<Icons.AssignItemIcon />}
                     >
-                        Assign Item
+                        {t("Assign Item")}
                     </Button>
                 </Grid>
             </Grid>

@@ -7,6 +7,7 @@ import Swal from "sweetalert2";
 import { IUserType } from '../../../models/IUserType';
 import { AddIcon } from '../../atoms/icons';
 import { myErrorColour, myLightColour } from '../../../util/MyColours';
+import {useTranslation} from "react-i18next";
 
 const UserForm: React.FC = () => {
   const dispatch = useDispatch<HumanResources>();
@@ -14,7 +15,7 @@ const UserForm: React.FC = () => {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [accepted, setAccepted] = useState(false);
-
+  const {t} = useTranslation();
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     setLoading(true);
     e.preventDefault();
@@ -84,7 +85,7 @@ const UserForm: React.FC = () => {
         }}
       >
         <Typography variant="h6">
-          Warning: Creating a manager account can have serious security implications. Please ensure you understand the consequences before proceeding.
+          {t("Warning: Creating a manager account can have serious security implications. Please ensure you understand the consequences before proceeding.")}
         </Typography>
       </Box>
       <TextField
@@ -97,7 +98,7 @@ const UserForm: React.FC = () => {
         inputProps={{ maxLength: 64 }}
       />
       <TextField
-        label="Password"
+        label={t("Password")}
         name="password"
         type="password"
         value={password}
@@ -112,10 +113,10 @@ const UserForm: React.FC = () => {
             onChange={e => setAccepted(e.target.checked)}
           />
         }
-        label="I understand the consequences of creating a manager account."
+        label={t("I understand the consequences of creating a manager account.")}
       />
       <Button type="submit" variant="contained" color="success" disabled={loading || !accepted} startIcon={<AddIcon />}>
-        {loading ? "Processing..." : "Create"}
+        {loading ? t("Uploading...") : t("Create")}
       </Button>
     </Box>
   );

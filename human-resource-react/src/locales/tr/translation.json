@@ -22,5 +22,25 @@
   "MANAGER": "YONETICI",
   "EMPLOYEE": "PERSONEL",
   "Upload Image": "Resim Yukle",
-  "Uploading...": "Yukleniyor..."
+  "Uploading...": "Yukleniyor...",
+  "Description": "Aciklama",
+  "Please Select Your Country": "Lokasyonu Seciniz",
+  "Update Company": "Sirketi Guncelle",
+  "Number of Employees": "Personel Sayisi",
+  "Activate": "Aktive Et",
+  "Delete": "Sil",
+  "Edit Employee": "Personeli Duzenle",
+  "Add Document": "Belge Ekle",
+  "Add Bonus": "Prim Ekle",
+  "Set Shifts": "Vardiya Duzenle",
+  "Assign Item": "Zimmet Ata",
+  "Search by Email": "Email ile Ara",
+  "Please Select Employee Type": "Personel Tipini Seciniz",
+  "Salary": "Maas",
+  "Add Employee": "Personeli Ekle",
+  "Password": "Sifre",
+  "Create": "Olustur",
+  "I understand the consequences of creating a manager account.": "Yonetici hesabini olusturmak için sartlari kabul ediyorum.",
+  "Warning: Creating a manager account can have serious security implications. Please ensure you understand the consequences before proceeding.": "Uyarı: Yönetici hesabı oluşturmanın ciddi güvenlik sonuçları olabilir. Lütfen devam etmeden önce sonuçları anladığınızdan emin olun."
+
 }

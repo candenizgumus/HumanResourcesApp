@@ -18,7 +18,7 @@ import FeatureShift from "./pre_autorize_pages/features/FeatureShift"
 import EmployeePage from "./authorised_pages/EmployeePage";
 import UserStoryDetailPage from "../pages/pre_autorize_pages/UserStoryDetailPage"
 import SlideDetail from "../components/molecules/ManagerComponents/SlideDetail"
-import ShowSlide from "../components/molecules/ManagerComponents/SideBarDisplaySlide"
+import '../util/i18n';
 const AdminPage = lazy(() => import('./authorised_pages/AdminPage'));
 const ManagerPage = lazy(() => import('./authorised_pages/ManagerPage'));
 

@@ -23,6 +23,8 @@ import { fetchGetDefinitions, IDefinition } from '../../store/feature/definition
 import { EDefinitionType } from '../../models/IDefinitionType';
 import { myErrorColour, myLightColour } from '../../util/MyColours';
 import ThemeElement from '../atoms/ThemeElement';
+import {useTranslation} from "react-i18next";
+import {changeLanguage} from "i18next";
 
 
 const SideBarProfile = () => {
@@ -51,6 +53,7 @@ const SideBarProfile = () => {
     const [isUploading, setIsUploading] = useState(false);
     const [isSelected, setIsSelected] = useState(false);
     const [birthDate, setBirthDate] = useState<Date | null>(null);
+    const { t } = useTranslation();
 
     const [formState, setFormState] = useState<IUpdateUserProfile>({
         name: user.name,
@@ -116,6 +119,7 @@ const SideBarProfile = () => {
 
     useEffect(() => {
         setUserInfos();
+
     }, [token]);
 
     useEffect(() => {
@@ -331,7 +335,7 @@ const SideBarProfile = () => {
                         onClick={updatePhoto}
                         disabled={isUploading || !isSelected}
                     >
-                        {isUploading ? 'Uploading...' : 'Upload Image'}
+                        {isUploading ? t('Uploading...') : t('Upload Image')}
 
                     </Button>
                 </Grid>
@@ -340,7 +344,7 @@ const SideBarProfile = () => {
                 <Grid container spacing={2} sx={{ flexGrow: 1, justifyContent: 'flex-start', alignItems: 'stretch' }}>
                     <Grid item xs={12}>
                         <TextField
-                            label='Name'
+                            label={t('Name')}
                             name="name"
                             value={formState.name}
                             onChange={handleChange}
@@ -352,7 +356,7 @@ const SideBarProfile = () => {
                     </Grid>
                     <Grid item xs={12}>
                         <TextField
-                            label='Surname'
+                            label={t('Surname')}
                             name="surname"
                             value={formState.surname}
                             onChange={handleChange}
@@ -363,7 +367,7 @@ const SideBarProfile = () => {
                     </Grid>
                     <Grid item xs={12}>
                         <TextField
-                            label='Phone'
+                            label={t('Phone')}
                             name="phone"
                             value={formState.phone}
                             onChange={handleChange}
@@ -375,7 +379,7 @@ const SideBarProfile = () => {
                     </Grid>
                     <Grid item xs={12}>
                         <TextField
-                            label='Title'
+                            label={t('Title')}
                             name="title"
                             value={formState.title}
                             onChange={handleChange}
@@ -386,7 +390,7 @@ const SideBarProfile = () => {
                     </Grid>
                     <Grid item xs={12}>
                         <TextField
-                            label='Location'
+                            label={t('Location')}
                             name="location"
                             value={formState.location}
                             onChange={handleChange}
@@ -398,7 +402,7 @@ const SideBarProfile = () => {
                     <Grid item xs={12}>
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DatePicker
-                                label="Birth Date"
+                                label={t('Birth Date')}
                                 value={birthDate ? dayjs(birthDate) : null}
                                 onChange={(newValue) => setBirthDate(newValue ? newValue.toDate() : null)}
                                 sx={{ width: '100%' }}
@@ -407,7 +411,7 @@ const SideBarProfile = () => {
                     </Grid>
                     <Grid item xs={12}>
                         <FormControl variant="outlined" sx={{ width: '100%' }}>
-                            <InputLabel>{'Please Select Your Position'}</InputLabel>
+                            <InputLabel>{t('Please Select Your Position')}</InputLabel>
                             <Select
                                 value={selectedPosition}
                                 onChange={event => setSelectedPosition(event.target.value as string)}
@@ -423,7 +427,7 @@ const SideBarProfile = () => {
                     </Grid>
                     <Grid item xs={12}>
                         <Button onClick={updateUserProfile} sx={{ width: '100%' }} type="button" variant="contained" color="success">
-                            Update Profile
+                            {t('Update Profile')}
                         </Button>
                     </Grid>
                 </Grid>
@@ -441,9 +445,9 @@ const SideBarProfile = () => {
                     </Grid>
                     <Grid item xs={12}>
                         <TextField
-                            label="User Type"
+                            label={t('User Type')}
                             name="userType"
-                            value={userType}
+                            value={t(userType)}
                             fullWidth
                             disabled
                         />
@@ -453,7 +457,7 @@ const SideBarProfile = () => {
                         user.employeeType && (
                             <Grid item xs={12}>
                                 <TextField
-                                    label="Employe Type"
+                                    label={t('Employee Type')}
                                     name="employeeTypeDefinitionId"
                                     value={user.employeeType}
                                     fullWidth
@@ -466,7 +470,7 @@ const SideBarProfile = () => {
                         user.sector && (
                             <Grid item xs={12}>
                                 <TextField
-                                    label="Sector"
+                                    label={t('Sector')}
                                     name="sector"
                                     value={sector}
                                     fullWidth
@@ -481,7 +485,7 @@ const SideBarProfile = () => {
                         (
                             <Grid item xs={12}>
                                 <TextField
-                                    label="Company Name"
+                                    label={t('Company Name')}
                                     name="companyName"
                                     value={companyName}
                                     fullWidth
@@ -494,9 +498,9 @@ const SideBarProfile = () => {
                         user.subscriptionType && (
                             <Grid item xs={12}>
                                 <TextField
-                                    label="Subscription Type"
+                                    label={t('Subscription Type')}
                                     name="subscriptionType"
-                                    value={subscriptionType}
+                                    value={t(subscriptionType)}
                                     fullWidth
                                     disabled
                                 />
@@ -507,7 +511,7 @@ const SideBarProfile = () => {
                         user.subscriptionStartDate && (
                             <Grid item xs={12}>
                                 <TextField
-                                    label="Subscription Start Date"
+                                    label={t('Subscription Start Date')}
                                     name="subscriptionStartDate"
                                     value={subscriptionStartDate}
                                     fullWidth
@@ -521,7 +525,7 @@ const SideBarProfile = () => {
                         user.subscriptionEndDate && (
                             <Grid item xs={12}>
                                 <TextField
-                                    label="Subscription End Date"
+                                    label={t('Subscription End Date')}
                                     name="subscriptionEndDate"
                                     value={subscriptionEndDate}
                                     fullWidth
@@ -535,7 +539,7 @@ const SideBarProfile = () => {
                         user.hireDate && (
                             <Grid item xs={12}>
                                 <TextField
-                                    label="Hired Date"
+                                    label={t('Hired Date')}
                                     name="hireDate"
                                     value={hireDate}
                                     fullWidth

@@ -27,7 +27,6 @@ import static com.humanresourcesapp.constants.Endpoints.*;
 @RequiredArgsConstructor
 @RequestMapping(ROOT+"/slides")
 @RestController
-@CrossOrigin("*")
 public class SlideController {
 
     private final SlideService slideService;
@@ -92,19 +91,16 @@ public class SlideController {
 
     @PostMapping(GET_ALL)
     @PreAuthorize("hasAnyAuthority('MANAGER','ADMIN','EMPLOYEE')")
-    @CrossOrigin("*")
     public ResponseEntity<List<Slide>> getAll(@RequestBody SlideRequestDto dto) {
         return ResponseEntity.ok(slideService.getAll(dto));
     }
 
     @PostMapping(GET_BY_ID)
-    @CrossOrigin("*")
     public ResponseEntity<Slide> getById(Long id) {
         return ResponseEntity.ok(slideService.getById(id));
     }
 
     @GetMapping("/get-ip")
-    @CrossOrigin("*")
     public ResponseEntity<Map<String, String>> getUserIP(HttpServletRequest request) {
         String ipAddress = request.getHeader("X-Forwarded-For");
 
@@ -123,7 +119,6 @@ public class SlideController {
 
 
     @PostMapping("/store-time-data")
-    @CrossOrigin("*")
     public ResponseEntity<String> storeTimeData(@RequestBody Map<String, Object> payload) {
         // Cast imageTimes to the correct type
         Map<String, Double> imageTimes = (Map<String, Double>) payload.get("imageTimes");

@@ -8,14 +8,14 @@ spring:
     gateway:
       routes:
         - id: humanresourceapp
-          uri: http://34.118.236.86:9090/
+          uri: http://34.118.237.3:9090/
           predicates:
             - Path=/dev/v1/**
         - id: humanresourceapp
-          uri: http://34.118.236.86:9090/
+          uri: http://34.118.237.3:9090/
           predicates:
             - Path=/uploads/**
         - id: humanresourceappreact
-          uri: http://34.118.237.159:80 #hedef adres
+          uri: http://34.118.226.187:80 #hedef adres
           predicates:
             - Path=/**

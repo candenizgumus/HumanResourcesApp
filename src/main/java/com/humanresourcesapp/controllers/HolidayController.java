@@ -15,7 +15,6 @@ import static com.humanresourcesapp.constants.Endpoints.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(ROOT+HOLIDAY)
-@CrossOrigin("*")
 public class HolidayController {
     private final HolidayService holidayService;
 

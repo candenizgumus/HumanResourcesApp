@@ -16,7 +16,6 @@ import static com.humanresourcesapp.constants.Endpoints.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(ROOT+BREAK)
-@CrossOrigin("*")
 public class BreakController {
     private final BreakService breakService;
 

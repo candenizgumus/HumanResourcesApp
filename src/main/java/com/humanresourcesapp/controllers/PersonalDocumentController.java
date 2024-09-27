@@ -21,7 +21,6 @@ import static com.humanresourcesapp.constants.Endpoints.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(ROOT + PERSONAL_DOCUMENT)
-@CrossOrigin("*")
 public class PersonalDocumentController {
     private final PersonalDocumentService personalDocumentService;
 

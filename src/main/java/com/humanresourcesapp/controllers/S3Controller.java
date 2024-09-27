@@ -16,7 +16,6 @@ import static com.humanresourcesapp.constants.Endpoints.*;
 @RestController
 @RequestMapping(ROOT+S3)
 @RequiredArgsConstructor
-@CrossOrigin("*")
 public class S3Controller
 {
     private final S3Service s3Service;

@@ -30,7 +30,6 @@ import java.time.LocalDate;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(ROOT+AUTH)
-@CrossOrigin("*")
 public class AuthController
 {
     private final AuthService authService;
@@ -73,7 +72,6 @@ public class AuthController
 
     @PutMapping(CHANGE_PASSWORD)
     @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','EMPLOYEE')")
-    @CrossOrigin("*")
     public ResponseEntity<Boolean> changePassword(@RequestBody PasswordChangeRequestDto dto)
     {
        return ResponseEntity.ok(authService.changePassword(dto));
@@ -82,7 +80,6 @@ public class AuthController
 
     @PutMapping(DEACTIVATE_ACCOUNT)
     @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','EMPLOYEE')")
-    @CrossOrigin("*")
     public ResponseEntity<Boolean> deactivateAccount(@RequestBody DeactivateAccountRequestDto dto)
     {
         return ResponseEntity.ok(authService.deactivateAccount(dto));
@@ -91,7 +88,6 @@ public class AuthController
 
     @PutMapping(ADD_SUBSCRIPTION_TIME)
     @PreAuthorize("hasAnyAuthority('ADMIN')")
-    @CrossOrigin("*")
     public ResponseEntity<Boolean> addSubscriptionTime(@RequestBody AddSubscriptionTimeRequestDto dto)
     {
         return ResponseEntity.ok(authService.addSubscriptionTime(dto));

@@ -19,7 +19,6 @@ import static com.humanresourcesapp.constants.Endpoints.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(ROOT+OFFER)
-@CrossOrigin("*")
 public class OfferController
 {
     private final OfferService offerService;

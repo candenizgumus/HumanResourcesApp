@@ -16,7 +16,6 @@ import static com.humanresourcesapp.constants.Endpoints.*;
 @RestController
 @RequestMapping(ROOT+LEAVE)
 @RequiredArgsConstructor
-@CrossOrigin("*")
 public class LeaveController {
     private final LeaveService leaveService;
 

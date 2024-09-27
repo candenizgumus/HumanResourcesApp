@@ -21,7 +21,6 @@ import static com.humanresourcesapp.constants.Endpoints.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(ROOT + COMPANY_ITEM_ASSIGNMENT)
-@CrossOrigin("*")
 public class CompanyItemAssignmentController {
     private final CompanyItemAssignmentService companyItemAssignmentService;
 

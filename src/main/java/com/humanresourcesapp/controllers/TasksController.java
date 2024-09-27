@@ -20,7 +20,6 @@ import static com.humanresourcesapp.constants.Endpoints.*;
 @RestController
 @RequestMapping(ROOT+TASKS)
 @RequiredArgsConstructor
-@CrossOrigin("*")
 public class TasksController
 {
     private final TasksService tasksService;

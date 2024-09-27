@@ -21,7 +21,6 @@ import java.util.List;
 @RestController
 @RequestMapping(ROOT+EXPENDITURE)
 @RequiredArgsConstructor
-@CrossOrigin("*")
 public class ExpenditureController
 {
     private final ExpenditureService expenditureService;

@@ -16,7 +16,6 @@ import java.util.List;
 @RestController
 @RequestMapping(ROOT+TIMEDATA)
 @RequiredArgsConstructor
-@CrossOrigin("*")
 public class TimeDataController
 {
     private final TimeDataService timeDataService;

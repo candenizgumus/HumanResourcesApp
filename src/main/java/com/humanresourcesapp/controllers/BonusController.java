@@ -16,7 +16,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping(ROOT+BONUS)
 @RestController
-@CrossOrigin("*")
 public class BonusController
 {
     private final BonusService bonusService;

@@ -16,7 +16,6 @@ import static com.humanresourcesapp.constants.Endpoints.*;
 @RestController
 @RequestMapping(ROOT+PAYMENT)
 @RequiredArgsConstructor
-@CrossOrigin("*")
 public class PaymentController
 {
     private final PaymentService paymentService;

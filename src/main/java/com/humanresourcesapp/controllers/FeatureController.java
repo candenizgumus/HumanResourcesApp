@@ -18,12 +18,10 @@ import static com.humanresourcesapp.constants.Endpoints.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(ROOT+FEATURE)
-@CrossOrigin("*")
 public class FeatureController {
     private final FeatureService featureService;
 
     @PostMapping(SAVE)
-    @CrossOrigin("*")
     @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<Feature> save(@RequestBody FeatureSaveRequest dto) {
 

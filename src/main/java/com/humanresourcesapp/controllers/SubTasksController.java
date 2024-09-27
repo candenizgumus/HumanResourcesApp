@@ -11,7 +11,6 @@ import static com.humanresourcesapp.constants.Endpoints.*;
 @RestController
 @RequestMapping(ROOT+SUBTASKS)
 @RequiredArgsConstructor
-@CrossOrigin("*")
 public class SubTasksController
 {
     private final SubTasksService subTasksService;

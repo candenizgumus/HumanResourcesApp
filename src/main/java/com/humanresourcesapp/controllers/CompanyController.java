@@ -22,7 +22,6 @@ import static com.humanresourcesapp.constants.Endpoints.*;
 @RequestMapping(ROOT+COMPANY)
 @RequiredArgsConstructor
 @RestController
-@CrossOrigin("*")
 public class CompanyController
 {
     private final CompanyService companyService;

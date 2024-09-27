@@ -18,14 +18,12 @@ import static com.humanresourcesapp.constants.Endpoints.*;
 @RestController
 @RequestMapping(ROOT+EMAIL)
 @RequiredArgsConstructor
-@CrossOrigin("*")
 public class EmailController
 {
     private final EmailService emailService;
     private final OfferService offerService;
 
     @PostMapping(SAVE)
-    @CrossOrigin("*")
     @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<Boolean> sendOfferToCustomer(@RequestBody SendOfferToCustomerRequestDto dto){
 
@@ -38,7 +36,6 @@ public class EmailController
     }
 
     @PostMapping("/send-email")
-    @CrossOrigin("*")
     @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<Boolean> sendEmail(@RequestBody MailModel mailModel)
     {

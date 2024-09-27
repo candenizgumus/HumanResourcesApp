@@ -16,7 +16,6 @@ import static com.humanresourcesapp.constants.Endpoints.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(ROOT+SHIFT)
-@CrossOrigin("*")
 public class ShiftController {
     private final ShiftService shiftService;
     @PostMapping(SAVE)

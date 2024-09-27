@@ -11,7 +11,6 @@ import static com.humanresourcesapp.constants.Endpoints.*;
 @RestController
 @RequestMapping(ROOT+PASSWORD_RESET)
 @RequiredArgsConstructor
-@CrossOrigin("*")
 public class PasswordResetController {
     private final PasswordResetService passwordResetService;
 
